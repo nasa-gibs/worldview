@@ -52,3 +52,14 @@ export const notificationWarnings = {
   palette: PALETTE_WARNING,
   rotate: ROTATE_WARNING,
 };
+
+export const GDAL_WASM_PATH = 'gdal3js';
+
+export const DRIVER_DICT = {
+  tiff: 'GTiff',
+  tif: 'GTiff',
+  jpg: 'JPEG',
+  jpeg: 'JPEG',
+  png: 'PNG',
+};
+

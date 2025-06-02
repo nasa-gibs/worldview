@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
   imageSizeValid,
   getDimensions,
-  getDownloadUrl,
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
+  snapshot,
 } from '../../modules/image-download/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
@@ -34,11 +32,9 @@ function ImageDownloadPanel(props) {
     isWorldfile,
     resolution,
     getLayers,
-    url,
     lonlats,
     projection,
     date,
-    markerCoordinates,
     onPanelChange,
     fileTypeOptions,
     fileTypes,
@@ -52,6 +48,7 @@ function ImageDownloadPanel(props) {
     firstLabel,
     geoLatLong,
     onLatLongChange,
+    boundaries,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -59,7 +56,6 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
 
   useEffect(() => {
     const layerList = getLayers();
@@ -70,26 +66,23 @@ function ImageDownloadPanel(props) {
     setShowGranuleWarning(isTruncated);
   }, []);
 
-  const onDownload = (width, height) => {
-    const time = new Date(date.getTime());
-
+  const onDownload = async (width, height) => {
+    const calcWidth = boundaries[2] - boundaries[0];
+    const calcHeight = boundaries[3] - boundaries[1];
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
-    const dlURL = getDownloadUrl(
-      url,
-      projection,
-      layerDefs,
-      lonlats,
-      { width, height },
-      time,
-      currFileType,
-      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
-      markerCoordinates,
-      activePalettes,
-    );
+    const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
+    const snapshotOptions = {
+      format: snapshotFormat,
+      resolution: 600,
+      width: calcWidth,
+      height: calcHeight,
+      xOffset: boundaries[0],
+      yOffset: boundaries[1],
+      map,
+      worldfile: currIsWorldfile,
+    };
+    const dlURL = await snapshot(snapshotOptions);
 
-    window.open(dlURL, '_blank');
     googleTagManager.pushEvent({
       event: 'image_download',
       layers: {
@@ -262,6 +255,7 @@ ImageDownloadPanel.propTypes = {
   worldFileOptions: PropTypes.bool,
   geoLatLong: PropTypes.array,
   onLatLongChange: PropTypes.func,
+  boundaries: PropTypes.array,
 };
 
 export default ImageDownloadPanel;

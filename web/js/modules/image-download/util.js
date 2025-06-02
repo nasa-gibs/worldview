@@ -1,11 +1,15 @@
+import html2canvas from 'html2canvas';
 import {
   get as lodashGet,
 } from 'lodash';
-import { transform } from 'ol/proj';
+import JSZip from 'jszip';
+import { transform, getPointResolution } from 'ol/proj';
+import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
 import { CRS } from '../map/constants';
+import { GDAL_WASM_PATH, DRIVER_DICT } from './constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -39,7 +43,7 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opacities) {
+const imageUtilProcessKMZOrbitTracks = (layersArray, layerWraps, opacities) => {
   const processedLayersArray = [...layersArray];
   const processedLayerWraps = [...layerWraps];
   const processedOpacities = [...opacities];
@@ -360,6 +364,391 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
     params.push(`MARKER=${coords.join(',')}`);
   }
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
+}
+
+/**
+ * Convert a PNG image to a georeferenced KML file
+ * @param {Blob} pngBlob - The input PNG Blob
+ * @param {Object} options - Additional options for georeferencing
+ * @param {Array} options.bbox - Bounding box [minX, minY, maxX, maxY] in map units
+ * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
+ * @param {String} options.name - Optional name for the KML overlay (default: 'Image Overlay')
+ * @param {String} options.description - Optional description for the KML overlay
+ * @returns {Promise<Blob>} - A promise that resolves to the KML Blob
+ */
+export function convertPngToKml(pngBlob, options) {
+  return new Promise((resolve, reject) => {
+    try {
+      // Validate input
+      if (!(pngBlob instanceof Blob)) reject(new Error('Input must be a Blob'));
+
+      // KML requires coordinates in EPSG:4326 (WGS84)
+      if (options.crs !== 'EPSG:4326') reject(new Error('KML requires WGS84 coordinates'));
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        try {
+          // Extract the base64 part of the data URL
+          const dataUrl = reader.result;
+          const base64Data = dataUrl.split(',')[1];
+
+          const [minX, minY, maxX, maxY] = options.bbox;
+
+          // Create the KML document
+          const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+            <kml xmlns="http://www.opengis.net/kml/2.2">
+              <Document>
+                <name>${options.name || 'Image Overlay'}</name>
+                <GroundOverlay>
+                  <name>${options.name || 'Image Overlay'}</name>
+                  ${options.description ? `<description>${options.description}</description>` : ''}
+                  <Icon>
+                    <href>data:image/png;base64,${base64Data}</href>
+                  </Icon>
+                  <LatLonBox>
+                    <north>${maxY}</north>
+                    <south>${minY}</south>
+                    <east>${maxX}</east>
+                    <west>${minX}</west>
+                    <rotation>0</rotation>
+                  </LatLonBox>
+                </GroundOverlay>
+              </Document>
+            </kml>`;
+          // Create the KML Blob
+          const kmlBlob = new Blob([kmlContent], { type: 'application/vnd.google-earth.kml+xml' });
+          resolve(kmlBlob);
+        } catch (error) {
+          console.error('Error creating KML content:', error);
+          reject(error);
+        }
+      };
+
+      reader.onerror = () => reject(new Error('Failed to read image data'));
+
+      reader.readAsDataURL(pngBlob);
+    } catch (error) {
+      console.error('Error creating KML:', error);
+      reject(error);
+    }
+  });
+}
+
+/**
+ * Convert a input Blob to a properly georeferenced GeoTIFF Blob
+ * @param {Blob} pngBlob - The input TIFF Blob
+ * @param {Object} options - Additional options for georeferencing
+ * @param {Array} options.bbox - Bounding box [minX, minY, maxX, maxY] in map units
+ * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
+ * @param {Number} options.resolution - Image resolution in DPI
+ * @param {Number} options.captureWidth - Width of the output image in pixels
+ * @param {Number} options.captureHeight - Height of the output image in pixels
+ * @param {String} options.inputFormat - Input image format (default: 'png')
+ * @param {String} options.outputFormat - Output image format (default: 'tif')
+ * @param {Boolean} options.worldfile - Whether to create a worldfile
+ * @param {String} options.name - Optional name for the output file
+ * @param {String} options.description - Optional description for the output file
+ * @returns {Promise<Blob>} - A promise that resolves to the GeoTIFF Blob
+ */
+export async function georeference (inputBlob, options) {
+  let {
+    outputFormat = 'tif',
+  } = options;
+  const {
+    inputFormat = 'png',
+    crs = 'EPSG:4326',
+    captureHeight,
+    captureWidth,
+  } = options;
+  if (outputFormat === 'tiff' || outputFormat === 'geotiff') outputFormat = 'tif'; // Normalize tiff to tif for consistency
+  if (outputFormat === 'jpeg') outputFormat = 'jpg'; // Normalize jpg to jpeg for consistency
+  if (outputFormat === 'kml') {
+    const blob = await convertPngToKml(inputBlob, options);
+
+    return [
+      {
+        name: 'image.kml',
+        blob,
+      },
+    ];
+  }
+  const worldfile = options.worldfile ? 'YES' : 'NO';
+
+  const file = new File([inputBlob], `image.${inputFormat}`, { type: `image/${inputFormat}` });
+  const gdal = await initGdalJs({ path: GDAL_WASM_PATH, useWorker: true });
+  const openResult = await gdal.open(file);
+  const dataset = openResult.datasets[0];
+
+  const width = captureWidth || dataset.info.size[0];
+  const height = captureHeight || dataset.info.size[1];
+  const bbox = options.bbox.map((coord) => `${coord}`);
+  const driver = DRIVER_DICT[outputFormat];
+
+  const translateOpts = [
+    '-strict',
+    '-of', driver, // Output format
+    '-a_srs', crs, // Set the spatial reference system
+    '-outsize', `${width}`, `${height}`, // Set the output size
+    '-r', 'average', // Resampling method
+    '-a_ullr', bbox[0], bbox[3], bbox[2], bbox[1], // Set the bounding box
+  ];
+  if (driver !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
+
+  const translate = await gdal.gdal_translate(dataset, translateOpts);
+
+  gdal.close(dataset);
+
+  const files = translate.all.map((p) => ({ path: p.local }));
+  const imageFilePath = files.find((f) => f.path.endsWith(`.${outputFormat}`))?.path;
+  const worldFilePath = files.find((f) => f.path.endsWith('.wld'))?.path;
+  const imageFileBytes = await gdal.getFileBytes(imageFilePath);
+  const imageFileName = imageFilePath.split('/').pop();
+  const imageFileBlob = new Blob([imageFileBytes]);
+  const output = [
+    {
+      name: imageFileName,
+      blob: imageFileBlob,
+    },
+  ];
+  if (worldFilePath) {
+    const worldfileBytes = await gdal.getFileBytes(worldFilePath);
+    const worldFileName = worldFilePath.split('/').pop();
+    const worldFileBlob = new Blob([worldfileBytes], { type: 'text/plain' });
+    output.push({
+      name: worldFileName,
+      blob: worldFileBlob,
+    });
+  }
+
+  return output;
+}
+
+/**
+ * Convert map units (meters per pixel) to image resolution (DPI)
+ * @param {Number} metersPerPixel - Ground resolution in meters per pixel
+ * @param {Number} [latitude=0] - Latitude in degrees (needed for geographic projections)
+ * @returns {Number} - Image resolution in DPI
+ */
+export function convertMetersPerPixelToResolution (metersPerPixel) {
+  // Standard constants
+  const INCHES_PER_METER = 39.3701; // 1 meter = 39.3701 inches
+  const STANDARD_DPI = 96; // Base screen resolution
+
+  if (metersPerPixel <= 0) {
+    console.warn('Invalid meters per pixel value:', metersPerPixel);
+    return STANDARD_DPI;
+  }
+
+  // For very high resolution (small meters per pixel), cap the result
+  // to avoid unreasonably large DPI values
+  const minimumMetersPerPixel = 0.01;
+  const effectiveMetersPerPixel = Math.max(metersPerPixel, minimumMetersPerPixel);
+
+  // Calculate raw DPI value
+  const pixelsPerMeter = 1 / effectiveMetersPerPixel;
+  const dpi = pixelsPerMeter * INCHES_PER_METER;
+
+  // Round to a reasonable value to avoid strange numbers
+  // Find the closest standard resolution
+  const standardResolutions = [72, 96, 150, 300, 600, 1200, 2400, 4800];
+
+  let closestDPI = STANDARD_DPI;
+  let minDiff = Infinity;
+
+  standardResolutions.forEach((standardDPI) => {
+    const diff = Math.abs(dpi - standardDPI);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestDPI = standardDPI;
+    }
+  });
+
+  return closestDPI;
+}
+
+/**
+ * Calculate ground resolution from map state and target DPI
+ * @param {Number} dpi - Target resolution in DPI
+ * @param {Object} projection - Map projection
+ * @param {Number} mapResolution - Current map resolution
+ * @param {Array} center - Map center coordinates
+ * @returns {Number} - Ground resolution in meters per pixel
+ */
+export function calculateGroundResolution (dpi, projection, mapResolution, center) {
+  // Scale factor based on ratio of target DPI to standard DPI
+  const scaleFactor = dpi / 96;
+
+  // Get scaled resolution in map units
+  const scaledResolution = getPointResolution(
+    projection,
+    mapResolution / scaleFactor,
+    center,
+  );
+
+  // Calculate resulting resolution in map units
+  const resolutionInMapUnits = scaledResolution * scaleFactor;
+
+  // Convert to meters if needed
+  const units = projection.getUnits();
+  let resolutionInMeters = resolutionInMapUnits;
+
+  if (units === 'degrees') {
+    // For geographic projections, convert degrees to meters
+    const latitude = center[1];
+    const metersPerDegree = 111319.9 * Math.cos((latitude * Math.PI) / 180);
+    resolutionInMeters = resolutionInMapUnits * metersPerDegree;
+  }
+
+  return resolutionInMeters;
+}
+
+export function snapshot (options) {
+  document.body.style.cursor = 'wait';
+  return new Promise((resolve, reject) => {
+    const {
+      format,
+      resolution,
+      width,
+      height,
+      xOffset,
+      yOffset,
+      map,
+      worldfile,
+    } = options;
+    const view = map.getView();
+
+    // Save original map size
+    const mapElement = map.getTargetElement();
+    const originalStyleWidth = mapElement.style.width;
+    const originalStyleHeight = mapElement.style.height;
+
+    // Save original viewport size
+    const [originalWidth, originalHeight] = map.getSize();
+    const viewResolution = map.getView().getResolution();
+
+    // Calculate geographic extent
+    const topLeft = map.getCoordinateFromPixel([xOffset, yOffset]);
+    const topRight = map.getCoordinateFromPixel([xOffset + width, yOffset]);
+    const bottomLeft = map.getCoordinateFromPixel([xOffset, yOffset + height]);
+    const bottomRight = map.getCoordinateFromPixel([xOffset + width, yOffset + height]);
+
+    // Calculate bounds
+    const minX = Math.min(topLeft[0], bottomLeft[0]);
+    const maxX = Math.max(topRight[0], bottomRight[0]);
+    const minY = Math.min(bottomLeft[1], bottomRight[1]);
+    const maxY = Math.max(topLeft[1], topRight[1]);
+    const bbox = [minX, minY, maxX, maxY];
+
+    // Calculate scale factor based on resolution
+    const scaleFactor = resolution / 96;
+
+    // Scale the entire map up to the target resolution
+    const scaledMapWidth = originalWidth * scaleFactor;
+    const scaledMapHeight = originalHeight * scaleFactor;
+
+    // Calculate scaled positions for cropping
+    const scaledXOffset = xOffset * scaleFactor;
+    const scaledYOffset = yOffset * scaleFactor;
+    const scaledWidth = width * scaleFactor;
+    const scaledHeight = height * scaleFactor;
+    const scaledResolution = viewResolution / scaleFactor;
+
+    map.once('rendercomplete', async () => {
+      try {
+        // Create our output canvas with exact dimensions we want
+        const outputCanvas = document.createElement('canvas');
+        outputCanvas.width = scaledWidth;
+        outputCanvas.height = scaledHeight;
+        const ctx = outputCanvas.getContext('2d');
+
+        // Capture the map at its new scaled size
+        const capturedCanvas = await html2canvas(map.getViewport(), {
+          backgroundColor: null,
+          useCORS: true,
+          allowTaint: true,
+          scrollX: 0,
+          scrollY: 0,
+          scale: 1, // No additional scaling since we already scaled the map
+          logging: false,
+          imageTimeout: 0,
+          removeContainer: true,
+        });
+
+        // Draw only the selected region to our output canvas
+        ctx.drawImage(
+          capturedCanvas,
+          scaledXOffset, // source x
+          scaledYOffset, // source y
+          scaledWidth, // source width
+          scaledHeight, // source height
+          0, // dest x
+          0, // dest y
+          scaledWidth, // dest width
+          scaledHeight, // dest height
+        );
+
+        // Reset map to original size
+        mapElement.style.width = originalStyleWidth;
+        mapElement.style.height = originalStyleHeight;
+        map.updateSize();
+        view.setResolution(viewResolution);
+
+        outputCanvas.toBlob(async (pngBlob) => {
+          const zip = new JSZip();
+          const crs = map.getView().getProjection().getCode();
+          const georeferencedOutput = await georeference(pngBlob, {
+            bbox,
+            crs,
+            resolution,
+            captureWidth: scaledWidth,
+            captureHeight: scaledHeight,
+            inputFormat: 'png',
+            outputFormat: format === 'kmz' ? 'kml' : format,
+            worldfile,
+            name: 'Worldview Snapshot',
+            description: 'Snapshot created with NASA Worldview',
+          });
+
+          georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
+          const zipBlob = await zip.generateAsync({
+            type: 'blob',
+            compression: 'DEFLATE',
+            compressionOptions: { level: 9 },
+            mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
+          });
+
+          const url = URL.createObjectURL(zipBlob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`;
+          link.click();
+
+          resolve(url);
+          URL.revokeObjectURL(url);
+          document.body.style.cursor = 'auto';
+        }, 'image/png', 1);
+      } catch (error) {
+        // Reset map size in case of error
+        mapElement.style.width = originalStyleWidth;
+        mapElement.style.height = originalStyleHeight;
+        map.updateSize();
+        view.setResolution(viewResolution);
+
+        console.error('Error creating screenshot:', error);
+        document.body.style.cursor = 'auto';
+        reject(error);
+      }
+    });
+
+    // Resize the map container
+    mapElement.style.width = `${scaledMapWidth}px`;
+    mapElement.style.height = `${scaledMapHeight}px`;
+    map.updateSize();
+    view.setResolution(scaledResolution);
+
+    map.renderSync();
+  });
 }
 
 export function imageUtilGetConversionFactor(proj) {
