@@ -77,7 +77,7 @@
     "upload": "node tasks/util/upload.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.1",
+    "@babel/core": "^7.27.3",
     "@babel/eslint-parser": "^7.27.1",
     "@babel/plugin-transform-class-properties": "^7.27.1",
     "@babel/plugin-transform-private-methods": "^7.27.1",
@@ -100,7 +100,7 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-import-resolver-webpack": "^0.13.10",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^28.10.0",
+    "eslint-plugin-jest": "^28.12.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^17.18.0",
     "eslint-plugin-no-storage": "^1.0.2",
@@ -119,7 +119,7 @@
     "node-ssh": "^13.2.1",
     "npm-run-all": "^4.1.5",
     "patch-package": "^8.0.0",
-    "postcss": "^8.5.2",
+    "postcss": "^8.5.4",
     "postcss-loader": "^8.1.1",
     "react-refresh": "^0.17.0",
     "react-test-renderer": "^18.3.1",
@@ -129,7 +129,7 @@
     "sass-loader": "^16.0.4",
     "shelljs": "^0.10.0",
     "showdown": "^2.1.0",
-    "stylelint": "^16.19.0",
+    "stylelint": "^16.20.0",
     "stylelint-config-standard-scss": "^15.0.1",
     "stylelint-high-performance-animation": "^1.11.0",
     "tar": "^7.4.3",
@@ -142,12 +142,12 @@
     "webpack-dev-server": "^5.2.1",
     "xml-js": "^1.6.11",
     "xml2js": "^0.6.2",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "dependencies": {
     "@edsc/earthdata-react-icons": "^0.0.2",
-    "@elastic/react-search-ui": "^1.23.1",
-    "@elastic/react-search-ui-views": "^1.23.1",
+    "@elastic/react-search-ui": "^1.24.0",
+    "@elastic/react-search-ui-views": "^1.24.0",
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",

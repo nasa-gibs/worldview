@@ -3,13 +3,14 @@ const path = require('path')
 const convert = require('xml-js')
 const { promisify } = require('util')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [config] [inputDir] [outputDir] [layersDir]')
   .option('config', {
     demandOption: true,
