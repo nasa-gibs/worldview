@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -9,7 +10,7 @@ const copyFile = promisify(fs.copyFile)
 
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .option('inputDir', {
     demandOption: true,
