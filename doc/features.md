@@ -63,4 +63,4 @@ to disable this feature, set:
 ## Charting Mode
 
 This feature queries GIBS ImageStat to collect data across a time range for a selected layer, then creates a visualization of that data via a line chart. To enable,
-edit `config/default/common/features.json` and set `"charting"` to `true` to enable the 'Start Charting' button on the bottom of the layer list sidebar (enabled by default).
+edit `config/default/common/features.json` and set `"charting"` to `true`, which will populate the 'Start Charting' button on the bottom of the layer list sidebar (enabled by default).
