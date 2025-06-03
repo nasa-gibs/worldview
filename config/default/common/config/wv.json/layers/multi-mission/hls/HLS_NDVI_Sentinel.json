@@ -7,7 +7,7 @@
         "title": "Vegetation Index (NDVI) *BETA*",
         "subtitle": "Sentinel-2 / MSI",
         "description": "multi-mission/hls/HLS_NDVI_Sentinel",
-        "tags": "corrected surface Sentinel msi s30 ndvi 2A 2B 2C",
+        "tags": "surface Sentinel msi s30 ndvi 2A 2B 2C",
         "group": "overlays",
         "layergroup": "Vegetation Indices",
         "format": "image/png",

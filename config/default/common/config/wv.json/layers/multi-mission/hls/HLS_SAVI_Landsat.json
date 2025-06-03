@@ -7,7 +7,7 @@
       "title": "Soil Adjusted Vegetation Index (SAVI) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_SAVI_Landsat",
-      "tags": "corrected surface landsat oli l30 savi",
+      "tags": "surface landsat oli l30 savi",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",

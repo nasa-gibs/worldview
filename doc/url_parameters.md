@@ -33,6 +33,12 @@
 | `ca` | boolean | <i>`true`</i> or <i>`false`</i> | Determines if the A or B state is active. If this parameter exists at all, compare mode will be active. If `ca=true`, Compare mode will be active in the A state. |
 | `cm`                 | string      | _`swipe`_ , _`spy`_ or _`opacity`_                     | If comparison mode is active (`ca=true\|false`) the `cm` parameter will determine which comparison mode to use. Default mode is `swipe`.                                                                                                                                                                        |
 | `cv`                 | Number      | **`0`** to **`100`**                                   | If `ca='true\|false'`, The `cv` parameter is used to determine the location of the swiper or the value of opacity depending on the selected mode. Default is `50` which will place the swiper on the middle of any screen. This parameter is irrelevant when the `spy` mode is active (`cm=spy`).                |
+| `cha` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, charting mode will be active. |
+| `chl` | string | <i>`layer_id`</i> | Currently selected layer for charting mode, where `layer_id` is the identifier of the layer as defined in the configuration file. |
+| `chc` | string | <i>`coordinates`</i> | A pair of coordinates in the format `x1,y1,x2,y2` for where the area of interest selection is placed for charting mode. |
+| `cht` | date | <i>`YYYY-MM-DDThh:mm:ssZ`</i> | The charting mode chart start day & time. |
+| `cht2` | date | <i>`YYYY-MM-DDThh:mm:ssZ`</i> | The charting mode chart end day & time. If not present, but `cht` is present, charting timespan is considered to be a single date span. |
+| `chch` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, charting mode chart will be requested and shown on page load. |
 | `download` | string | *`product_id`* | If any value is set, the data download tab will be activated. If a product identifier is set, the corresponding will be selected. |
 | `r` | number | <b>`-180.0000`</b> to <b>`180.0000`</b> | The degree of map rotation. Only applies when `arctic` or `antarctic` projection is selected. |
 | `df` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, distraction free mode will be activated. Distraction free mode is disabled by default and can be toggled from the Information toolbar menu. |

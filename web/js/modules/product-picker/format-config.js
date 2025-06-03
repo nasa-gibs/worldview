@@ -99,6 +99,13 @@ function setTypeProp(layer) {
   return layer;
 }
 
+function setChartableProp(layer) {
+  if (!(Object.prototype.hasOwnProperty.call(layer, 'palette') && Object.prototype.hasOwnProperty.call(layer, 'colormapType') && layer.colormapType === 'continuous' && layer.layerPeriod === 'Daily') || layer.disableCharting) {
+    return;
+  }
+  layer.analysis = ['Chartable (Raster-based)'];
+}
+
 /**
  * Derive and format facet props from config
  * @param {*} config
@@ -111,6 +118,7 @@ export default function buildLayerFacetProps(config, selectedDate) {
     setCoverageFacetProp(layer, selectedDate);
     setLayerProp(layer, 'sources', layer.subtitle);
     setTypeProp(layer);
+    setChartableProp(layer);
     if (layer.daynight && layer.daynight.length) {
       if (typeof layer.daynight === 'string') {
         layer.daynight = [layer.daynight];

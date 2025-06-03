@@ -7,7 +7,7 @@
         "title": "Vegetation Index (NDVI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDVI_Landsat",
-        "tags": "corrected surface landsat oli l30 ndvi",
+        "tags": "surface landsat oli l30 ndvi",
         "group": "overlays",
         "layergroup": "Vegetation Indices",
         "format": "image/png",
