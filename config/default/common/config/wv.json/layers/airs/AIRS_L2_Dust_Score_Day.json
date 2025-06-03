@@ -5,7 +5,8 @@
       "description": "airs/AIRS_L2_Dust_Score_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Dust"
+      "layergroup": "Dust",
+      "wrapadjacentdays": true
     }
   }
 }

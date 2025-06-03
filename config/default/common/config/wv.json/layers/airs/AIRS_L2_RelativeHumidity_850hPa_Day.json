@@ -5,7 +5,8 @@
       "description": "airs/AIRS_L2_RelativeHumidity_850hPa_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Relative Humidity"
+      "layergroup": "Relative Humidity",
+      "wrapadjacentdays": true
     }
   }
 }
