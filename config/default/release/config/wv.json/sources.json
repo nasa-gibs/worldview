@@ -144,7 +144,7 @@
       }
     },
     "DDV": {
-      "url": "https://dev-titiler-cmr.delta-backend.com/",
+      "url": "https://staging.openveda.cloud/api/titiler-cmr/",
       "matrixSets": {
         "31.25m": {
           "id": "31.25m",
