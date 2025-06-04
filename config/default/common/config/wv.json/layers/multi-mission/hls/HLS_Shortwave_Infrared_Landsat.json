@@ -7,7 +7,7 @@
       "title": "Reflectance (Shortwave Infrared, Bands 7-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Landsat",
-      "tags": "surface oli l30 swir",
+      "tags": "surface oli l30 swir false color",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",

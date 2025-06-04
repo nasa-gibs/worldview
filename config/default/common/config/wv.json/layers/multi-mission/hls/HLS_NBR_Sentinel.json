@@ -9,7 +9,7 @@
       "description": "multi-mission/hls/HLS_NBR_Sentinel",
       "tags": "surface Sentinel msi s30 nbr 2A 2B 2C",
       "group": "overlays",
-      "layergroup": "Land Surface Reflectance",
+      "layergroup": "Vegetation Indices",
       "format": "image/png",
       "type": "titiler",
       "period": "daily",

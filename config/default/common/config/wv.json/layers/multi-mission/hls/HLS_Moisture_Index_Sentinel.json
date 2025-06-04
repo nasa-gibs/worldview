@@ -9,7 +9,7 @@
         "description": "multi-mission/hls/HLS_Moisture_Index_Sentinel",
         "tags": "surface Sentinel msi s30 ndmi 2A 2B 2C",
         "group": "overlays",
-        "layergroup": "Land Surface Reflectance",
+        "layergroup": "Moisture Indices",
         "format": "image/png",
         "type": "titiler",
         "period": "daily",
