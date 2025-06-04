@@ -11,6 +11,7 @@
         "googleTagManager": true,
         "vismetadata": {
             "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
+            "cmrVisualizationsUrl": "https://cmr.uat.earthdata.nasa.gov/search/visualizations",
             "daacMap": {
                 "ASIPS": "Atmosphere SIPS",
                 "GES_DISC":	"GES DISC",
