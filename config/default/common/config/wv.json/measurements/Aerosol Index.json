@@ -3,7 +3,7 @@
         "Aerosol Index": {
             "id": "aerosol-index",
             "title":    "Aerosol Index",
-            "subtitle": "Aura/OMI, Suomi NPP/OMPS, TEMPO",
+            "subtitle": "Aura/OMI, Suomi NPP/OMPS, NOAA-20/OMPS, NOAA-21/OMPS, TEMPO",
             "sources": {
                 "Aura/OMI": {
                     "id": "aura-omi",
@@ -25,6 +25,28 @@
                         "OMPS_Aerosol_Index",
                         "OMPS_Aerosol_Index_PyroCumuloNimbus",
                         "OrbitTracks_Suomi_NPP_Ascending"
+                    ]
+                },
+                "NOAA-20/OMPS": {
+                    "id": "noaa20-omps",
+                    "title": "NOAA-20/OMPS",
+                    "description": "omps/AerosolIndex",
+                    "image": "",
+                    "settings": [
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
+                        "OrbitTracks_NOAA-20_Ascending"
+                    ]
+                },
+                "NOAA-21/OMPS": {
+                    "id": "noaa21-omps",
+                    "title": "NOAA-21/OMPS",
+                    "description": "omps/AerosolIndex",
+                    "image": "",
+                    "settings": [
+                        "OMPS_NOAA21_NadirMapper_AerosolIndex_380",
+                        "OMPS_NOAA21_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
+                        "OrbitTracks_NOAA-21_Ascending"
                     ]
                 },
                 "TEMPO": {
