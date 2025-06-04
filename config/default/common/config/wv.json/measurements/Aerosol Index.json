@@ -35,8 +35,6 @@
                     "settings": [
                         "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
                         "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
-                        "OMPS_NOAA20_NadirMapper_AerosolIndex_360",
-                        "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_360",
                         "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
@@ -48,8 +46,6 @@
                     "settings": [
                         "OMPS_NOAA21_NadirMapper_AerosolIndex_380",
                         "OMPS_NOAA21_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
-                        "OMPS_NOAA21_NadirMapper_AerosolIndex_360",
-                        "OMPS_NOAA21_NadirMapper_AerosolIndex_PyroCumuloNimbus_360",
                         "OrbitTracks_NOAA-21_Ascending"
                     ]
                 },
