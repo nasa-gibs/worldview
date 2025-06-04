@@ -4,7 +4,7 @@
       "id": "OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
       "enableCMRDataFinder": true,
       "description": "multi-mission/opera/OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
-      "tags": "podaac PO.DAAC DSWx flood opera",
+      "tags": "podaac PO.DAAC DSWx flood opera HLS landsat sentinel-2",
       "group": "overlays",
       "layergroup": "Surface Water Extent"
     }

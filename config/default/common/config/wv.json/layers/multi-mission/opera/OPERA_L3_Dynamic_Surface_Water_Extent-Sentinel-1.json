@@ -1,0 +1,13 @@
+{
+  "layers": {
+    "OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1": {
+      "id": "OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
+      "subtitle": "DSWx-S1",
+      "enableCMRDataFinder": true,
+      "description": "multi-mission/opera/OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
+      "tags": "podaac PO.DAAC DSWx flood opera sentinel-1",
+      "group": "overlays",
+      "layergroup": "Surface Water Extent"
+    }
+  }
+}

@@ -14,6 +14,7 @@
 		"HLS_False_Color_Vegetation_Landsat",
 		"HLS_False_Color_Urban_Landsat",
 		"HLS_Shortwave_Infrared_Landsat",
+		"OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
 		"OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
 		"OPERA_L3_DIST-ALERT-HLS_Color_Index",
     "HLS_NDVI_Landsat",
