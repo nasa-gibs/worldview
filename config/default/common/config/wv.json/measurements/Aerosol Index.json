@@ -38,17 +38,6 @@
                         "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
-                "NOAA-21/OMPS": {
-                    "id": "noaa21-omps",
-                    "title": "NOAA-21/OMPS",
-                    "description": "omps/AerosolIndex",
-                    "image": "",
-                    "settings": [
-                        "OMPS_NOAA21_NadirMapper_AerosolIndex_380",
-                        "OMPS_NOAA21_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
-                        "OrbitTracks_NOAA-21_Ascending"
-                    ]
-                },
                 "TEMPO": {
                     "id": "tempo",
                     "title": "TEMPO",
