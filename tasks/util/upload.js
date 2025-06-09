@@ -2,6 +2,7 @@ const fs = require('fs')
 const os = require('os')
 const path = require('path')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 const shell = require('shelljs')
 const { NodeSSH } = require('node-ssh')
 
@@ -12,7 +13,7 @@ function error (msg) {
   throw new Error(`${prog}: error: ${msg}`)
 }
 
-const { argv } = yargs
+const { argv } = yargs(hideBin(process.argv))
   .usage('$0 [options] <name>')
   .option('d', {
     alias: 'dist',

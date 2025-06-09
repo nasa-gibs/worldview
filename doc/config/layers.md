@@ -99,6 +99,7 @@ Example:
 * **disableSnapshot**: Disable Worldview Snapshots (WVS) for layer.
 * **disableSmartHandoff**: Disable data download capability for a layer.
 * **disableCustomPalettes**: Disable the option to change the layer's palette (for vector layers).
+* **disableCharting**: Disable the ability for the layer to be charted using charting mode.
 * **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 * **wrapX**: Wrap the layer across the anti-meridian.
 * **palette**: To display a color palette legend, a `palette` object should exist with the following properties:

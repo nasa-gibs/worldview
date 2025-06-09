@@ -5,7 +5,8 @@
       "description": "airs/AIRS_L2_Temperature_500hPa_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Temperature"
+      "layergroup": "Temperature",
+      "wrapadjacentdays": true
     }
   }
 }

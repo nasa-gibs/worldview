@@ -5,7 +5,8 @@
       "description": "airs/AIRS_L2_Cloud_Top_Height_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Cloud Top Height"
+      "layergroup": "Cloud Top Height",
+      "wrapadjacentdays": true
     }
   }
 }
