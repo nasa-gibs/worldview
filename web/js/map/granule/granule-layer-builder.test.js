@@ -1,6 +1,5 @@
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock-jest';
 import fixtures from '../../fixtures';
 import layerbuilder from '../layerbuilder';
 import granuleLayerBuilder from './granule-layer-builder';
@@ -9,11 +8,9 @@ import granuleLayerBuilder from './granule-layer-builder';
 // import { ADD_GRANULE_LAYER_DATES } from '../../modules/layers/constants';
 
 const mockBaseCmrApi = 'mock.cmr.api/';
-const queryString = '?bounding_box=-180%2C-65%2C180%2C65&shortName=VJ102IMG&day_night_flag=DAY&temporal=2019-09-23T20%3A54%3A00.000Z%2C2019-09-24T12%3A54%3A00.000Z&pageSize=500';
+const queryString = '?bounding_box=-180%2C-65%2C180%2C65&shortName=VJ102IMG&day_night_flag=day&temporal=2019-09-23T20%3A54%3A00.000Z%2C2019-09-24T12%3A54%3A00.000Z&pageSize=500';
+const queryString2 = '?bounding_box=-180%2C-65%2C180%2C65&shortName=VJ102IMG_NRT&day_night_flag=day&temporal=2019-09-23T20%3A54%3A00.000Z%2C2019-09-24T12%3A54%3A00.000Z&pageSize=500';
 const cmrGranules = require('../../../mock/cmr_granules.json');
-
-fetchMock.mock(`${mockBaseCmrApi}granules.json${queryString}`, cmrGranules)
-  .mock('*', 404);
 
 const mockStore = configureMockStore([thunk]);
 const config = fixtures.config();
@@ -42,6 +39,20 @@ describe('granule layer builder', () => {
     const { createLayerWMTS } = layerbuilder(config, cache, store);
     const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
     createGranuleLayer = getGranuleLayer;
+    fetch.resetMocks();
+    fetch.mockResponse((req) => {
+      if (req.url === `${mockBaseCmrApi}granules.json${queryString}` || req.url === `${mockBaseCmrApi}granules.json${queryString2}`) {
+        console.log('@@@@@@@@@@', cmrGranules);
+        return Promise.resolve({
+          status: 200,
+          body: cmrGranules,
+        });
+      }
+      return Promise.resolve({
+        status: 404,
+        body: JSON.stringify({ error: 'Not found' }),
+      });
+    });
   });
 
   // TODO: fix fetchMock in jest v28+

@@ -363,6 +363,9 @@ fixtures.config = function() {
         endDate: '2019-09-24T23:54:00Z',
         source: 'GIBS:geographic:nrt',
         matrixSet: '250m',
+        daynight: [
+          'day',
+        ],
         conceptIds: [
           {
             shortName: 'VJ102IMG_NRT',
