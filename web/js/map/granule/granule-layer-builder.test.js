@@ -42,7 +42,6 @@ describe('granule layer builder', () => {
     fetch.resetMocks();
     fetch.mockResponse((req) => {
       if (req.url === `${mockBaseCmrApi}granules.json${queryString}` || req.url === `${mockBaseCmrApi}granules.json${queryString2}`) {
-        console.log('@@@@@@@@@@', cmrGranules);
         return Promise.resolve({
           status: 200,
           body: cmrGranules,
