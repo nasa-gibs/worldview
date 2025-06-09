@@ -1,7 +1,8 @@
 module.exports = {
   setupFiles: [
     'jest-canvas-mock',
-    'jsdom-worker'
+    'jsdom-worker',
+    './setupJest.js'
   ],
   moduleDirectories: [
     'node_modules'

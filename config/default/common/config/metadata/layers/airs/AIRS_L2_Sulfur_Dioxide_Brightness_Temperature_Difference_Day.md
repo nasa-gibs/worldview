@@ -5,8 +5,8 @@ Sulfur dioxide (SO2) brightness temperature difference is calculated by subtract
 
 #### Data Product
 Image initially produced with NRT data. Science quality image replaces NRT when available.<br>
-Near Real-Time Product: `AIRS2SUP_NRT` (AIRS-Only Level 2 Near Real-Time Product Version 7)<br>
-Science Quality Product: `AIRS2SUP` (AIRS-Only Level 2 Standard Product Version 6)<br>
+Near Real-Time Product: `AIRS2SUP_NRT` (Aqua/AIRS L2 Near Real Time (NRT) Support Retrieval (AIRS-only) V7.0 at GES DISC)<br>
+Science Quality Product: `AIRS2SUP` (qua/AIRS L2 Support Retrieval (AIRS-only) V7.0 at GES DISC)<br>
 Field Name: `BT_diff_SO2b`<br>
 Resolution: 13.5 km/pixel at nadir
 
@@ -16,4 +16,4 @@ Overpasses: Twice daily (day and night)<br>
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
-Data Product: AIRS2SUP_NRT [doi:10.5067/MOQOVNHNERGG](https://doi.org/10.5067/MOQOVNHNERGG); AIRS2SUP [doi:10.5067/Aqua/AIRS/DATA208](https://doi.org/10.5067/Aqua/AIRS/DATA208)
+Data Product: AIRS2SUP_NRT [doi:10.5067/MOQOVNHNERGG](https://doi.org/10.5067/MOQOVNHNERGG); AIRS2SUP [doi:10.5067/APJ6EEN0PD0Z](https://doi.org/10.5067/APJ6EEN0PD0Z)

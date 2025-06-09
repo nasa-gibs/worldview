@@ -1,12 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 const console = require('console')
 const axios = require('axios').default
 
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .option('features', {
     demandOption: true,

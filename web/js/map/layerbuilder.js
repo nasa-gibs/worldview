@@ -10,8 +10,6 @@ import { get } from 'ol/proj';
 import { TileGrid as OlTileGridTileGrid, createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import GeoJSON from 'ol/format/GeoJSON';
-import axios from 'axios';
-import qs from 'qs';
 import SourceVectorTile from 'ol/source/VectorTile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
@@ -867,98 +865,6 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const registerSearch = async (def, options, state) => {
-    const { date } = state;
-    let requestDate;
-    if (options.group === 'activeB') {
-      requestDate = date.selectedB;
-    } else {
-      requestDate = date.selected;
-    }
-
-    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
-    const layerID = def.id;
-    const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
-    const {
-      r,
-      g,
-      b,
-      expression,
-      assets = [],
-    } = def.bandCombo;
-    const bandCombo = [r, g, b, ...assets].filter((band) => band);
-
-    const landsatLayers = [
-      'HLS_Customizable_Landsat',
-      'HLS_False_Color_Landsat',
-      'HLS_False_Color_Urban_Landsat',
-      'HLS_False_Color_Vegetation_Landsat',
-      'HLS_Shortwave_Infrared_Landsat',
-      'HLS_NDVI_Landsat',
-      'HLS_NDWI_Landsat',
-      'HLS_NDSI_Landsat',
-      'HLS_Moisture_Index_Landsat',
-      'HLS_EVI_Landsat',
-      'HLS_SAVI_Landsat',
-      'HLS_MSAVI_Landsat',
-      'HLS_NBR2_Landsat',
-      'HLS_NBR_Landsat',
-      'HLS_TVI_Landsat',
-    ];
-
-    const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
-
-    const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
-
-    const collectionsFilter = {
-      op: '=',
-      args: [{ property: 'collection' }, collectionID],
-    };
-
-    const temporalFilter = {
-      op: 't_intersects',
-      args: [{ property: 'datetime' }, { interval: temporalRange }],
-    };
-
-    const searchBody = {
-      'filter-lang': 'cql2-json',
-      context: 'on',
-      filter: {
-        op: 'and',
-        args: [
-          collectionsFilter,
-          temporalFilter,
-        ],
-      },
-    };
-
-    const mosaicResponse = await axios
-      .post(`${BASE_URL}/mosaic/register`, searchBody)
-      .then((res) => res.data);
-
-    const tilesHref = mosaicResponse.links.find(
-      (link) => link.rel === 'tilejson',
-    ).href;
-
-    const params = {
-      post_process: 'swir',
-      assets: bandCombo,
-      expression,
-    };
-
-    const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
-
-    const tilejsonResponse = await axios
-      .get(tilesHref, {
-        params: new URLSearchParams(queryString),
-      })
-      .then((res) => res.data);
-
-    const { name } = tilejsonResponse;
-
-    return name;
-  };
-
   const createTitilerLayer = async (def, options, day, state) => {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
@@ -1042,22 +948,30 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const source = config.sources[def.source];
 
-    const searchID = await registerSearch(def, options, state);
-
     const tileUrlFunction = (tileCoord) => {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
       const y = tileCoord[2];
 
+      const dateTimeTile = state.date.selected?.toISOString().split('T');
+      dateTimeTile.pop();
+      dateTimeTile.push('00:00:00Z');
+      const zeroedDateTile = dateTimeTile.join('T');
+      dateTimeTile.pop();
+      dateTimeTile.push('23:59:59Z');
+      const lastDateTile = dateTimeTile.join('T');
+
       const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
 
-      const params = assets.map((asset) => `assets=${asset}`);
+      const params = assets.map((asset) => `bands=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
       params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
+      params.push(`bands_regex=${def?.bandCombo?.bands_regex}`);
+      params.push(`color_formula=${def?.bandCombo?.color_formula}`);
 
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}@1x?concept_id=${def.collectionConceptID}&datetime=${zeroedDateTile}/${lastDateTile}&post_process=swir&backend=rasterio&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };

@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 const console = require('console')
 const axios = require('axios').default
 const convert = require('xml-js')
@@ -10,7 +11,7 @@ const stream = require('stream')
 const finished = promisify(stream.finished)
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .option('config', {
     demandOption: true,

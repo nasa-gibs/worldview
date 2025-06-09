@@ -7,4 +7,4 @@ References: [GHRC: RSS Monthly 1-Deg Microwave Total Precipitable Water NetCDF V
 [RSS: AMSR2/AMSRE](http://www.remss.com/missions/amsr);
 [RSS: SSMI/SSMIS](http://www.remss.com/missions/ssmi/);
 [GCOM-W1: AMSR2](https://suzaku.eorc.jaxa.jp/GCOM_W/w_amsr2/whats_amsr2.html);
-[WindSat Quick Guide by NASA / SPoRT](https://weather.msfc.nasa.gov/sport/survey/windSat/WindSat_Reference_Guide.pdf)
+[WindSat Quick Guide by NASA / SPoRT](https://weather.ndc.nasa.gov/sport/survey/windSat/WindSat_Reference_Guide.pdf)

@@ -5,7 +5,8 @@
       "description": "airs/AIRS_L2_Sulfur_Dioxide_Brightness_Temperature_Difference_Day",
       "tags": "SO2 Bt sulphur dioxide",
       "group": "overlays",
-      "layergroup": "Sulfur Dioxide"
+      "layergroup": "Sulfur Dioxide",
+      "wrapadjacentdays": true
     }
   }
 }

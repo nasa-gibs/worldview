@@ -16,5 +16,5 @@ Overpasses: Twice daily (day and night)<br>
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
 #### References
-Data Product: AIRS2RET_NRT [doi:10.5067/RAEHAOH4VZM5](https://doi.org/10.5067/RAEHAOH4VZM5); AIRS2RET [doi:10.5067/Aqua/AIRS/DATA202](https://doi.org/10.5067/Aqua/AIRS/DATA202)
+Data Product: AIRS2RET_NRT [doi:10.5067/RAEHAOH4VZM5](https://doi.org/10.5067/RAEHAOH4VZM5);  AIRS2RET [doi:10.5067/VP1M6OG1X7M1](https://doi.org/10.5067/VP1M6OG1X7M1)
 
