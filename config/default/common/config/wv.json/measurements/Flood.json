@@ -3,7 +3,7 @@
         "Flood": {
             "id": "flood",
             "title":    "Flood",
-            "subtitle": "Terra and Aqua/MODIS, DSWx-HLS",
+            "subtitle": "Terra and Aqua/MODIS, NOAA-20 and NOAA-21/VIIRS, DSWx-HLS",
             "sources": {
                 "Terra and Aqua/MODIS": {
                     "id": "terra-aqua-modis",
@@ -13,6 +13,16 @@
                     "settings": [
                         "MODIS_Combined_Flood_2-Day",
                         "MODIS_Combined_Flood_3-Day"
+                    ]
+                },
+                "NOAA-20 and NOAA-21/VIIRS": {
+                    "id": "noaa20-noaa21-viirs",
+                    "title": "TNOAA-20 and NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_Combined_Flood_2-Day",
+                        "VIIRS_Combined_Flood_3-Day"
                     ]
                 },
                 "DSWx-HLS": {
