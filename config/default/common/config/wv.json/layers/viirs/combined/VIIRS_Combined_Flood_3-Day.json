@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_Combined_Flood_3-Day": {
+      "id": "VIIRS_Combined_Flood_3-Day",
+      "description": "viirs/combined/VIIRS_Combined_Flood_3-Day",
+      "tags": "floods vcdwd",
+      "group": "overlays",
+      "layergroup": "Flood"
+    }
+  }
+}
