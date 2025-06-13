@@ -1122,6 +1122,7 @@ export default function mapLayerBuilder(config, cache, store) {
       vectorStyle,
       matrixSet,
       matrixSetLimits,
+      maxZoom = 22,
     } = def;
 
     const projection = get(crs);
@@ -1129,7 +1130,7 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: projection.getExtent(),
       tileSize: [512, 512],
       maxResolution: 180 / 256,
-      maxZoom: 22,
+      maxZoom,
     });
 
     const configSource = config.sources[def.source];

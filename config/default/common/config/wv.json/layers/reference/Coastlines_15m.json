@@ -13,6 +13,7 @@
       "disableSnapshot": true,
       "layergroup": "Reference",
       "wrapX": true,
+      "maxZoom": 19,
       "noTransition": true,
       "serviceName": "VectorTileServer",
       "tiles": [
