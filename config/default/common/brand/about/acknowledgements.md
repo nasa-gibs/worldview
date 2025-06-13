@@ -75,6 +75,7 @@
                 target="_blank" rel="noopener noreferrer">Learn more about “Best Available” Layers from GIBS</a>.</p>
 <p>Other layers and information are provided by:</p>
 <ul>
+        <li>Dynamically generated, customizable Harmonized Landsat Sentinel-2 (HLS) imagery are provided through the <a href="https://www.earthdata.nasa.gov/about/impact" target="_blank" rel="noopener noreferrer">NASA Interagency Implementation and Advanced Concepts Team (IMPACT)</a>.</li>
         <li>GeoColor imagery layers from GOES-East and GOES-West are provided by <a
                         href="https://www.star.nesdis.noaa.gov/goes/" target="_blank"
                         rel="noopener noreferrer">NOAA/NESDIS/STAR</a> .</li>
