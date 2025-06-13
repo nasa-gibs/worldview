@@ -6,8 +6,8 @@ test('triggers an event', () => {
   events.on('test', listener1);
   events.on('test', listener2);
   events.trigger('test', 'a', 2);
-  expect(listener1).toBeCalledWith('a', 2);
-  expect(listener2).toBeCalledWith('a', 2);
+  expect(listener1).toHaveBeenCalledWith('a', 2);
+  expect(listener2).toHaveBeenCalledWith('a', 2);
 });
 
 test('null listener', () => {

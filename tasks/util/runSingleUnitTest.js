@@ -23,9 +23,9 @@ if (filesContainingTag.length === 0) {
 }
 
 try {
-  const testPathPattern = filesContainingTag.map(file => `"${file.replace(/\\/g, '\\\\')}"`).join('|')
+  const testPathPatterns = filesContainingTag.map(file => `"${file.replace(/\\/g, '\\\\')}"`).join('|')
   const testNamePattern = tag
-  const command = `jest --testPathPattern="${testPathPattern}" --testNamePattern="${testNamePattern}"`
+  const command = `jest --testPathPatterns="${testPathPatterns}" --testNamePattern="${testNamePattern}"`
   execSync(command, { stdio: 'inherit' })
 } catch (error) {
   throw new Error(error.status)
