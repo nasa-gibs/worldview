@@ -31,6 +31,17 @@
             {
                 "id": "Reference_Labels_15m",
                 "hidden": "true"
+            },
+            {
+              "id": "Coastlines_15m_polar"
+            },
+            {
+              "id": "Reference_Features_15m_arctic",
+              "hidden": "true"
+            },
+            {
+              "id": "Reference_Labels_15m_arctic",
+              "hidden": "true"
             }
         ]
     }
