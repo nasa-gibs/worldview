@@ -1,0 +1,33 @@
+{
+  "layers": {
+    "STAQS_G-III_Flight_Track": {
+      "id": "STAQS_G-III_Flight_Track",
+      "title": "JSC G-III Flight Track (Per Flight)",
+      "subtitle": "STAQS/JSC G-III",
+      "description": "staqs/STAQS_G-III_Flight_Track",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector staqs",
+      "ongoing": false,
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "layergroup": "Field Campaign Flight Track",
+      "vectorStyle": {
+        "id": "STAQS_G-III_Flight_Track",
+        "geographic": {
+          "id": "STAQS_G-III_Flight_Track"
+        }
+      },
+      "palette": {
+        "id": "STAQS_G-III_Flight_Track",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "GPS_Alt_m_",
+        "order": "descending"
+      }
+    }
+  }
+}
