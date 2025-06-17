@@ -7,7 +7,7 @@
       "title": "Modified Soil Adjusted Vegetation Index (MSAVI) *BETA*",
       "subtitle": "Sentinel-2 / MSI",
       "description": "multi-mission/hls/HLS_MSAVI_Sentinel",
-      "tags": "corrected surface Sentinel msi s30 msavi 2A 2B 2C",
+      "tags": "surface Sentinel msi s30 msavi 2A 2B 2C",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
@@ -19,7 +19,8 @@
         "assets": ["B05", "B04"],
         "expression": "(2*B05+1-sqrt((2*B05+1)**2-8*(B05-B04)))/2",
         "rescale": "-1,1",
-        "colormap_name": "brbg"
+        "colormap_name": "brbg",
+        "bands_regex": "B[0-9][0-9A-Za-z]"
       },
       "disableSnapshot": true,
       "minZoom": 7,

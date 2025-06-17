@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Night_CH1_CH3": {
+      "id": "CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Night_CH1_CH3",
+      "description": "calipso/CALIPSO_Imaging_Infrared_Radiometer_Brightness_Temperature_Difference_Night_CH1_CH3",
+      "group": "overlays",
+      "layergroup": "Brightness Temperature"
+    }
+  }
+}

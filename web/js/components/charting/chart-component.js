@@ -247,13 +247,13 @@ function ChartComponent (props) {
               <b>
                 {` ${endDate} `}
               </b>
-              has been reduced from
+              have been reduced from
               <b>
-                {` ${numRangeDays} `}
+                {` ${numRangeDays} days `}
               </b>
               to
               <b>
-                {` ${STEP_NUM}`}
+                {` ${STEP_NUM} days`}
               </b>
               .
             </i>

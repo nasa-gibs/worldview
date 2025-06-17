@@ -628,6 +628,11 @@ div#group-overlays-checkbox-case {
 
 #charting-stats-modal {
   width: 300px;
+  margin: 0 !important;
+
+  .modal-header {
+    cursor: move;
+  }
 
   .modal-title {
     margin-right: 10px;
@@ -660,10 +665,13 @@ div#group-overlays-checkbox-case {
   font-weight: bold;
 }
 
+.charting-chart-container .charting-disclaimer {
+  padding: 18px;
+}
+
 .charting-disclaimer {
   line-height: 1.3em;
   text-align: left;
-  padding: 18px;
 }
 
 .charting-disclaimer-pre {
@@ -716,6 +724,11 @@ div#group-overlays-checkbox-case {
 
 #charting-chart {
   max-width: 850px;
+  margin: 0 !important;
+
+  .modal-header {
+    cursor: move;
+  }
 }
 
 button#charting-simple-stats-button {

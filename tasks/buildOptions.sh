@@ -142,6 +142,7 @@ else
         --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
         --inputDir "$BUILD_DIR/colormaps" \
         --outputDir "$BUILD_DIR/config/palettes" \
+        --layersDir "$BUILD_DIR/_wmts" \
         --mode "$MODE"`
   fi
 

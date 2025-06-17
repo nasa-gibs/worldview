@@ -1,7 +1,6 @@
 import { TextEncoder, TextDecoder } from 'util';
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock-jest';
 import * as actions from './actions';
 import * as constants from './constants';
 
@@ -13,19 +12,12 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const ERROR_MESSAGE = 'There was an error';
 describe('Notification fetch action', () => {
-  afterEach(() => {
-    fetchMock.restore();
+  beforeEach(() => {
+    fetch.resetMocks();
   });
   test('triggers start and success action types [notifications-actions-success]', () => {
     const loc = 'mock/';
-    fetchMock.getOnce(loc, {
-      body: constants.MOCK_RESPONSE,
-      headers: {
-        'content-type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    });
+    fetch.mockResponseOnce(JSON.stringify(constants.MOCK_RESPONSE));
     const expectedActions = [
       { type: constants.REQUEST_NOTIFICATIONS_START },
       {
@@ -42,9 +34,7 @@ describe('Notification fetch action', () => {
   });
   test(`creates ${constants.REQUEST_NOTIFICATIONS_FAILURE} Action [notifications-actions-failure]`, () => {
     const loc = 'mock/';
-    fetchMock.mock(loc, {
-      throws: ERROR_MESSAGE,
-    });
+    fetch.mockRejectOnce(ERROR_MESSAGE);
     const expectedActions = [
       { type: constants.REQUEST_NOTIFICATIONS_START },
       {

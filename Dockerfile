@@ -1,25 +1,8 @@
-FROM almalinux:9.1
+FROM mcr.microsoft.com/playwright:noble
 
-RUN dnf install -y epel-release && \
-    dnf --enablerepo=crb install giflib-devel -y && \
-    dnf install -y \
-    "@Development Tools" \
-    cairo-devel \
-    firefox \
-    httpd \
-    libjpeg-turbo-devel \
-    java-1.8.0-openjdk \
-    git \
-    stow \
-    which \
-    xorg-x11-server-Xvfb \
-    wget \
-    libffi-devel \
-    openssl-devel \
-    xz
 RUN mkdir -p /usr/local/nvm
 ENV NVM_DIR=/usr/local/nvm
-ENV NODE_VERSION=22.14.0
+ENV NODE_VERSION=22.15.0
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash && \
     . "$NVM_DIR/nvm.sh" && \
     nvm install v${NODE_VERSION} && \
@@ -27,8 +10,6 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | b
     nvm alias default v${NODE_VERSION}
 
 ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-
-FROM mcr.microsoft.com/playwright:focal
 
 WORKDIR /build
 

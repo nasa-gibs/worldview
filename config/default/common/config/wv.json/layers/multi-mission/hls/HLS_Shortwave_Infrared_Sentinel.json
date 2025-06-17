@@ -7,7 +7,7 @@
       "title": "Reflectance (Shortwave Infrared, Bands 12-8A-4) *BETA*",
       "subtitle": "Sentinel-2 / MSI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Sentinel",
-      "tags": "corrected surface oli sentinel msi s30 swir 2A 2B 2C",
+      "tags": "surface oli sentinel msi s30 swir 2A 2B 2C",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
@@ -18,7 +18,9 @@
       "bandCombo": {
         "r": "B12",
         "g": "B8A",
-        "b": "B04"
+        "b": "B04",
+        "color_formula": "Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35",
+        "bands_regex": "B[0-9][0-9A-Za-z]"
       },
       "wrapX": false,
       "disableSnapshot": true,

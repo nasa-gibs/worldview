@@ -88,14 +88,26 @@ const FooterContent = React.forwardRef((props, ref) => {
       <div className="product-buttons">
         {!isMobile && !isCompareActive && chartFeature
           && (
-          <Button
-            id="chart-toggle-button"
-            aria-label={chartBtnText}
-            className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-            style={!chartFeature ? { display: 'none' } : null}
-            onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
-            text={chartBtnText}
-          />
+          <>
+            <Button
+              id="chart-toggle-button"
+              aria-label={chartBtnText}
+              className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+              style={!chartFeature ? { display: 'none' } : null}
+              onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
+              text={chartBtnText}
+            />
+            {!chartingModeAccessible
+            && (
+              <UncontrolledTooltip
+                id="center-align-tooltip"
+                placement="bottom"
+                target="chart-toggle-button"
+              >
+                Add a layer with a color palette to create a time series chart of a single variable
+              </UncontrolledTooltip>
+            )}
+          </>
           )}
         {!isChartingActive
           && (
@@ -193,7 +205,7 @@ const mapDispatchToProps = (dispatch) => ({
     // This is the charting tool info window from the wireframes
     dispatch(
       openCustomContent('CHARTING_INFO_MODAL', {
-        headerText: 'Charting Tool',
+        headerText: 'Charting Tool - BETA',
         backdrop: false,
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',

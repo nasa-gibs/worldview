@@ -39,6 +39,8 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
+const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process & try again.';
 
 function ChartingModeOptions(props) {
   const {
@@ -78,6 +80,7 @@ function ChartingModeOptions(props) {
     sidebarHeight,
     viewExtent,
     maxExtent,
+    date,
   } = props;
 
   if (!olMap) return null;
@@ -127,24 +130,16 @@ function ChartingModeOptions(props) {
   const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
   const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
 
-  /**
-   * Filters the layers array & returns those with visible set to 'true'.
-   */
-  function getLiveLayers() {
-    return activeLayers.filter((obj) => obj.visible === true);
-  }
-
   function formatDateString(dateObj) {
     const date = new Date(dateObj);
-    const year = date.getFullYear();
-    const month = date.toLocaleString('default', { month: 'short' });
-    const day = `0${date.getDate()}`.slice(-2);
+    const year = date.getUTCFullYear();
+    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
   function getActiveChartingLayer() {
-    const liveLayers = getLiveLayers();
-    const filteredLayerList = liveLayers.filter((layer) => layer.id === activeLayer);
+    const filteredLayerList = activeLayers.filter((layer) => layer.id === activeLayer);
     if (filteredLayerList.length > 0) {
       return filteredLayerList[0];
     }
@@ -154,6 +149,28 @@ function ChartingModeOptions(props) {
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
+
+  useEffect(() => {
+    const filteredLayers = activeLayers.filter((layer) => layer.id === activeLayer);
+    const dateEarliest = activeLayer && filteredLayers.length > 0 && filteredLayers[0].startDate
+      ? new Date(filteredLayers[0].startDate)
+      : date.selected;
+    const dateLatest = activeLayer && filteredLayers.length > 0 && filteredLayers[0].endDate
+      ? new Date(filteredLayers[0].endDate)
+      : date.appNow;
+    let timeSpanFixedStartDate = timeSpanStartDate;
+    let timeSpanFixedEndDate = timeSpanEndDate;
+    if (dateEarliest > timeSpanStartDate || dateEarliest > timeSpanEndDate) {
+      timeSpanFixedStartDate = dateEarliest;
+      timeSpanFixedEndDate = util.dateAdd(dateEarliest, 'day', 10);
+    }
+    if (dateLatest < timeSpanStartDate || dateLatest < timeSpanEndDate) {
+      timeSpanFixedStartDate = util.dateAdd(dateLatest, 'day', -10);
+      timeSpanFixedEndDate = dateLatest;
+    }
+    onUpdateStartDate(timeSpanFixedStartDate);
+    onUpdateEndDate(timeSpanFixedEndDate);
+  }, [timeSpanStartDate, timeSpanEndDate, activeLayer]);
 
   useEffect(() => {
     if (!init) {
@@ -170,6 +187,9 @@ function ChartingModeOptions(props) {
     isMounted.current = true;
     onUpdateStartDate(initialStartDate);
     onUpdateEndDate(initialEndDate);
+    if (!aoiCoordinates || aoiCoordinates.length === 0) {
+      debouncedUpdateAOICoordinates([...bottomLeftLatLong, ...topRightLatLong]);
+    }
     if (maxExtent) {
       let inLeftWing;
       let inRightWing;
@@ -193,11 +213,11 @@ function ChartingModeOptions(props) {
     }
   }, [fromButton]);
 
-  function formatDateForImageStat(dateStr) {
-    const dateParts = dateStr.split(' ');
-    const year = dateParts[0];
-    const month = `0${new Date(Date.parse(dateStr)).getMonth() + 1}`.slice(-2);
-    const day = dateParts[2];
+  function formatDateForImageStat(dateObj) {
+    const date = new Date(dateObj);
+    const year = date.getUTCFullYear();
+    const month = `0${date.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${date.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
@@ -232,8 +252,8 @@ function ChartingModeOptions(props) {
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
   function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(primaryDate);
-    const endDateForImageStat = formatDateForImageStat(secondaryDate);
+    const startDateForImageStat = formatDateForImageStat(initialStartDate);
+    const endDateForImageStat = formatDateForImageStat(initialEndDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
@@ -280,21 +300,34 @@ function ChartingModeOptions(props) {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
       // This is the response when the imageStat server fails
+      if (!data || data === 'null') {
+        return {
+          ok: false,
+          error: NO_DATA_ERROR_MESSAGE,
+        };
+      }
       if (data === 'Internal Server Error') {
         return {
           ok: false,
-          body: data,
+          error: SERVER_ERROR_MESSAGE,
+        };
+      }
+      const parsedData = JSON.parse(data);
+      if (parsedData.status === 204) {
+        return {
+          ok: false,
+          error: NO_DATA_ERROR_MESSAGE,
         };
       }
 
       return {
         ok: true,
-        body: JSON.parse(data),
+        body: parsedData,
       };
     } catch (error) {
       return {
         ok: false,
-        error,
+        error: SERVER_ERROR_MESSAGE,
       };
     }
   }
@@ -351,7 +384,7 @@ function ChartingModeOptions(props) {
 
       if (!data.ok) {
         updateChartRequestStatus(false);
-        openChartingErrorModal('An error has occurred while requesting the charting data. Please try again in a few minutes.');
+        openChartingErrorModal(data.error);
         return;
       }
 
@@ -405,13 +438,11 @@ function ChartingModeOptions(props) {
 
   function onDateIconClick() {
     const layerInfo = getActiveChartingLayer();
-    const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-    const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
+    const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
+    const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
     const dateModalInput = {
       layerStartDate,
       layerEndDate,
-      timeSpanStartDate: primaryDate,
-      timeSpanEndDate: secondaryDate,
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
@@ -428,8 +459,8 @@ function ChartingModeOptions(props) {
     if (isPostRender) return;
     const layerInfo = getActiveChartingLayer();
     if (layerInfo) {
-      const layerStartDate = new Date(layerInfo.dateRanges[0].startDate);
-      const layerEndDate = new Date(layerInfo.dateRanges[layerInfo.dateRanges.length - 1].endDate);
+      const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
+      const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
       const startDate = initialStartDate < layerStartDate ? layerStartDate : initialStartDate;
       const endDate = initialEndDate > layerEndDate ? layerEndDate : initialEndDate;
       onUpdateStartDate(startDate);
@@ -440,6 +471,7 @@ function ChartingModeOptions(props) {
       const topRight = getLatLongFromPixelValue(x2, y);
       setBottomLeftLatLong(bottomLeft);
       setTopRightLatLong(topRight);
+      debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
       if (maxExtent) {
         const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
         const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
@@ -698,8 +730,15 @@ const mapStateToProps = (state) => {
     isOpen, id,
   } = modal;
   const projections = Object.keys(config.projections).map((key) => config.projections[key].crs);
-  const timelineStartDate = date.selected < date.selectedB ? date.selected : date.selectedB;
-  const timelineEndDate = date.selected < date.selectedB ? date.selectedB : date.selected;
+  const dateSelected = date.selected;
+  const dateTenBefore = util.dateAdd(dateSelected, 'day', -10);
+  const dateTenAfter = util.dateAdd(dateSelected, 'day', 10);
+  const timelineStartDate = date.appNow < dateTenAfter
+    ? dateTenBefore
+    : dateSelected;
+  const timelineEndDate = date.appNow < dateTenAfter
+    ? dateSelected
+    : dateTenAfter;
   const olMap = map.ui.selected;
   const mapView = olMap?.getView();
   const viewExtent = mapView?.calculateExtent(olMap.getSize());
@@ -716,8 +755,8 @@ const mapStateToProps = (state) => {
     projections,
     renderedPalettes,
     timeSpanSelection,
-    timeSpanEndDate,
     timeSpanStartDate,
+    timeSpanEndDate,
     timelineStartDate,
     timelineEndDate,
     screenWidth,
@@ -728,6 +767,7 @@ const mapStateToProps = (state) => {
     modalId: id,
     viewExtent,
     maxExtent,
+    date,
   };
 };
 
@@ -761,8 +801,7 @@ const mapDispatchToProps = (dispatch) => ({
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
         bodyComponentProps: {
-          layerStartDate: dateObj.layerStartDate,
-          layerEndDate: dateObj.layerEndDate,
+          ...dateObj,
           timeSpanSelection,
         },
       }),
@@ -779,6 +818,13 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: SimpleStatistics,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'stats-dialog',
+        isDraggable: true,
+        dragHandle: '.modal-header',
+        offsetLeft: 'calc(50% - 150px)',
+        offsetTop: 50,
+        width: 300,
+        height: 360,
+        stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           data,
@@ -794,6 +840,13 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartComponent,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-dialog',
+        isDraggable: true,
+        dragHandle: '.modal-header',
+        offsetLeft: 'calc(50% - 425px)',
+        offsetTop: 50,
+        width: 850,
+        height: 420,
+        stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
@@ -807,7 +860,7 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: 'Charting Error',
         backdrop: false,
         bodyComponent: ChartingError,
-        wrapClassName: 'clickable-behind-modal',
+        wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-error',
         bodyComponentProps: {
           msg,
@@ -863,4 +916,5 @@ ChartingModeOptions.propTypes = {
   sidebarHeight: PropTypes.number,
   viewExtent: PropTypes.array,
   maxExtent: PropTypes.array,
+  date: PropTypes.object,
 };

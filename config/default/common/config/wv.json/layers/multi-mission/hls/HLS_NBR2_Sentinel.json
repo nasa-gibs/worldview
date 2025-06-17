@@ -7,7 +7,7 @@
       "title": "Normalized Burn Ratio 2 (NBR2) *BETA*",
       "subtitle": "Sentinel-2 / MSI",
       "description": "multi-mission/hls/HLS_NBR2_Sentinel",
-      "tags": "corrected surface Sentinel msi s30 nbr2 2A 2B 2C",
+      "tags": "surface Sentinel msi s30 nbr2 2A 2B 2C",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
@@ -19,7 +19,8 @@
         "assets": ["B06", "B07"],
         "expression": "(B06-B07)/(B06+B07)",
         "rescale": "-1,1",
-        "colormap_name": "puor"
+        "colormap_name": "puor",
+        "bands_regex": "B[0-9][0-9A-Za-z]"
       },
       "disableSnapshot": true,
       "minZoom": 7,

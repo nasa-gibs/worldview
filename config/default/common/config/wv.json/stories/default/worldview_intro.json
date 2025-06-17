@@ -9,12 +9,12 @@
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
-          "title": "Getting Started with Worldview (December 2021 Video Tutorial)",
-          "link": "https://youtu.be/uMkuiRJr_-E"
+          "title": "Expand Your View of Earth with NASA Worldview (April 2025 Webinar Video)",
+          "link": "https://www.youtube.com/watch?v=YXt5EQhjAik"
         },
         {
-          "title": "NASA Worldview - Explore the Earth from Past to Present with Global Satellite Observations (May 2021 Webinar Video)",
-          "link": "https://youtu.be/WqkX-b-jYGI"
+          "title": "Getting Started with Worldview (December 2021 Video Tutorial)",
+          "link": "https://youtu.be/uMkuiRJr_-E"
         }
       ],
       "steps": [
@@ -66,6 +66,12 @@
                 "title": "Comparison",
                 "content": "Compare imagery from two different dates, or two sets of imagery from the same date or even two sets of imagery from different dates!",
                 "placementBeacon": "top"
+              },
+              {
+                "target": "#chart-toggle-button",
+                "title": "Time-Series Charts and Statistics",
+                "content": "Select a layer with a color palette to create single variable time-series line charts and simple statistics for an area of interest.",
+                "placementBeacon": "bottom"
               },
               {
                 "target": "#date-selector-main",

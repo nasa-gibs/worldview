@@ -7,7 +7,7 @@
         "title": "Snow Index (NDSI) *BETA*",
         "subtitle": "Sentinel-2A, 2B, & 2C / MSI",
         "description": "multi-mission/hls/HLS_NDSI_Sentinel",
-        "tags": "corrected surface Sentinel msi s30 ndsi",
+        "tags": "surface Sentinel msi s30 ndsi",
         "group": "overlays",
         "layergroup": "Snow Indices",
         "format": "image/png",
@@ -19,7 +19,8 @@
             "assets": ["B03", "B11"],
             "expression": "(B03-B11)/(B03+B11)",
             "rescale": "-1,1",
-            "colormap_name": "winter_r"
+            "colormap_name": "winter_r",
+            "bands_regex": "B[0-9][0-9A-Za-z]"
         },
         "disableSnapshot": true,
         "minZoom": 7,

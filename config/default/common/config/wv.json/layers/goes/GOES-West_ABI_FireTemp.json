@@ -4,7 +4,7 @@
       "id": "GOES-West_ABI_FireTemp",
       "description": "goes/GOES-West_ABI_FireTemp",
       "group": "overlays",
-      "tags": "geostationary geo",
+      "tags": "geostationary geo GOES-18",
       "layergroup": "Geostationary",
       "wrapX": true,
       "availability": {

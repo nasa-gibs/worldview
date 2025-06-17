@@ -1,7 +1,6 @@
 import { TextEncoder, TextDecoder } from 'util';
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock-jest';
 import { assign, cloneDeep } from 'lodash';
 import update from 'immutability-helper';
 import {
@@ -33,19 +32,11 @@ const ERROR_MESSAGE = 'There was an error';
 
 describe('Palette terra-aod fetching with requestPalette action [palettes-actions-request-palette]', () => {
   const mockStore = configureMockStore(middlewares);
-  afterEach(() => {
-    fetchMock.restore();
+  beforeEach(() => {
+    fetch.resetMocks();
   });
-  const loc = 'config/palettes/terra-aod.json';
   test(`test ${REQUEST_PALETTE_SUCCESS}`, () => {
-    fetchMock.getOnce(loc, {
-      body: JSON.stringify(config.palettes.rendered['terra-aod']),
-      headers: {
-        'content-type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    });
+    fetch.mockResponseOnce(JSON.stringify(config.palettes.rendered['terra-aod']));
     const expectedActions = [
       { type: REQUEST_PALETTE_START, id: 'terra-aod' },
       {
@@ -60,9 +51,7 @@ describe('Palette terra-aod fetching with requestPalette action [palettes-action
     });
   });
   test(`Test ${REQUEST_PALETTE_FAILURE} [palettes-actions-failure]`, () => {
-    fetchMock.mock(loc, {
-      throws: ERROR_MESSAGE,
-    });
+    fetch.mockReject(ERROR_MESSAGE);
     const expectedActions = [
       { type: REQUEST_PALETTE_START, id: 'terra-aod' },
       {
@@ -84,8 +73,8 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
   const stateWithLayers = update(state, {
     layers: { active: { $set: layers } },
   });
-  afterEach(() => {
-    fetchMock.restore();
+  beforeEach(() => {
+    fetch.resetMocks();
   });
   test(`test ${setThresholdRangeAndSquash} action with min equal to 1`, () => {
     const store = mockStore(stateWithLayers);

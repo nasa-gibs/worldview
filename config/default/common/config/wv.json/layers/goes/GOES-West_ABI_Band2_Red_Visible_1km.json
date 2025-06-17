@@ -4,7 +4,7 @@
       "id": "GOES-West_ABI_Band2_Red_Visible_1km",
       "description": "goes/GOES-West_ABI_Band2_Red_Visible_1km",
       "group": "overlays",
-      "tags": "geostationary geo",
+      "tags": "geostationary geo GOES-18",
       "layergroup": "Geostationary",
       "wrapX": true,
       "availability": {
