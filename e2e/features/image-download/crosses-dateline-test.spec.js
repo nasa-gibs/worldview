@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
-const { closeModal } = require('../../test-utils/hooks/wvHooks')
+const { closeModal, acceptModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 
@@ -30,6 +30,7 @@ test('Dateline alert notification with previous day message if crosses previous 
   await page.goto(crossesPrevDayURLParams)
   await closeModal(page)
   await page.locator('#wv-image-button').click()
+  await acceptModal(page)
   const datelineAlert = page.locator('#snapshot-dateline-alert')
   const datelineAlertMessage = page.locator('#snapshot-dateline-alert .wv-alert-message')
   await expect(datelineAlert).toBeVisible()
@@ -40,6 +41,7 @@ test('Dateline alert notification with next day message if crosses next day date
   await page.goto(crossesNextDayURLParams)
   await closeModal(page)
   await page.locator('#wv-image-button').click()
+  await acceptModal(page)
   const datelineAlert = page.locator('#snapshot-dateline-alert')
   const datelineAlertMessage = page.locator('#snapshot-dateline-alert .wv-alert-message')
   await expect(datelineAlert).toBeVisible()

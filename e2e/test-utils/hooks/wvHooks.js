@@ -178,6 +178,13 @@ const closeModal = async (page) => {
   }
 }
 
+const acceptModal = async (page) => {
+  const acceptButton = await page.locator('.accept-notify')
+  if (await acceptButton.count() > 0) {
+    await acceptButton.click()
+  }
+}
+
 module.exports = {
   assertCategories,
   assertDefaultLayers,
@@ -185,6 +192,7 @@ module.exports = {
   clickDownload,
   closeImageDownloadPanel,
   closeModal,
+  acceptModal,
   createAreaMeasurement,
   createDistanceMeasurement,
   dateSelectorMonthDay,
