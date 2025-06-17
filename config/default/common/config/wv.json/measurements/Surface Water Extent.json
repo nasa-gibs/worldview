@@ -12,7 +12,6 @@
                 "image": "",
                 "settings": [
                     "OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
-                    "OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
                     "OrbitTracks_Landsat-8_Descending",
                     "OrbitTracks_Sentinel-2A_Descending",
                     "OrbitTracks_Sentinel-2B_Descending"
