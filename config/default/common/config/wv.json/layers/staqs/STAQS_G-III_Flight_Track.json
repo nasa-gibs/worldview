@@ -11,6 +11,7 @@
       "ongoing": false,
       "disableCharting": true,
       "disableSnapshot": true,
+      "disableCustomPalettes": true,
       "layergroup": "Field Campaign Flight Track",
       "vectorStyle": {
         "id": "STAQS_G-III_Flight_Track",

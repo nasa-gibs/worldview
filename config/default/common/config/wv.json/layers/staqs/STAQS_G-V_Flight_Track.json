@@ -7,7 +7,7 @@
       "description": "staqs/STAQS_G-V_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector satqs",
+      "tags": "vector staqs",
       "ongoing": false,
       "disableCharting": true,
       "disableSnapshot": true,
