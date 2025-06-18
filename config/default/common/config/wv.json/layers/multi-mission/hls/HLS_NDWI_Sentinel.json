@@ -9,7 +9,7 @@
         "description": "multi-mission/hls/HLS_NDWI_Sentinel",
         "tags": "surface Sentinel msi s30 ndwi 2A 2B 2C",
         "group": "overlays",
-        "layergroup": "Land Surface Reflectance",
+        "layergroup": "Water Indices",
         "format": "image/png",
         "type": "titiler",
         "period": "daily",

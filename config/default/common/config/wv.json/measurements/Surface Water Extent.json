@@ -16,8 +16,20 @@
                     "OrbitTracks_Sentinel-2A_Descending",
                     "OrbitTracks_Sentinel-2B_Descending"
                 ]
+              },
+                "DSWx-S1": {
+                "id": "dswx-s1",
+                "title": "DSWx-S1",
+                "description": "",
+                "image": "",
+                "settings": [
+                    "OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
+                    "OrbitTracks_Sentinel-1A_Descending",
+                    "OrbitTracks_Sentinel-1B_Descending"
+                ]
+              }
+
             }
           }
       }
   }
-}

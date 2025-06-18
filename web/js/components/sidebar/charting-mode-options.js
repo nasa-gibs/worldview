@@ -13,6 +13,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import { Vector as OlVectorSource } from 'ol/source';
+import googleTagManager from 'googleTagManager';
 import CustomButton from '../util/button';
 import Crop from '../util/image-crop';
 import util from '../../util/util';
@@ -371,6 +372,13 @@ function ChartingModeOptions(props) {
       openChartingErrorModal('No valid layer detected for request.');
       return;
     }
+    googleTagManager.pushEvent({
+      event: 'chart_generated',
+      charting: {
+        layer_id: layerInfo.id,
+        date_type: timeSpanSelection,
+      },
+    });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
       const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);

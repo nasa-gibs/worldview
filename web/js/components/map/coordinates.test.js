@@ -51,5 +51,5 @@ test('change format from latlon-dd to latlon-dm', () => {
   const instance = component.getInstance();
 
   instance.changeFormat();
-  expect(callback).toBeCalledWith('latlon-dm');
+  expect(callback).toHaveBeenCalledWith('latlon-dm');
 });
