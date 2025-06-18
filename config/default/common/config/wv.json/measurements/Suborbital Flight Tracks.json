@@ -1,0 +1,30 @@
+{
+  "measurements": {
+      "Suborbital Flight Tracks": {
+          "id": "Suborbital Flight Tracks",
+          "title":    "Suborbital Flight Tracks",
+          "subtitle": "Aircraft",
+          "sources": {
+              "STAQS": {
+                  "id": "staqs",
+                  "title": "STAQS",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "STAQS_G-V_Flight_Track",
+                  "STAQS_G-III_Flight_Track"
+                  ]
+              },
+              "AJAX": {
+                  "id": "ajax",
+                  "title": "AJAX",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "AJAX_Alpha_Jet_Ozone"
+                  ]
+              }
+          }
+      }
+  }
+}
