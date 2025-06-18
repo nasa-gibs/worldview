@@ -13,7 +13,6 @@
                     "Carbon Monoxide",
                     "Corrected Reflectance",
                     "Dust",
-                    "Field Campaign Flight Tracks",
                     "Fires and Thermal Anomalies",
                     "Human Built-up And Settlement Extent",
                     "Land Surface Reflectance",
@@ -26,6 +25,7 @@
                     "Population Density",
                     "Radiance",
                     "Settlements",
+                    "Suborbital Flight Tracks",
                     "Sulfur Dioxide",
                     "Urban Extents",
                     "Volcano Hazard"

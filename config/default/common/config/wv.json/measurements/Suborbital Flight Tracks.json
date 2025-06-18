@@ -1,8 +1,8 @@
 {
   "measurements": {
-      "Field Campaign Flight Tracks": {
-          "id": "Field Campaign Flight Tracks",
-          "title":    "Field Campaign Flight Tracks",
+      "Suborbital Flight Tracks": {
+          "id": "Suborbital Flight Tracks",
+          "title":    "Suborbital Flight Tracks",
           "subtitle": "Aircraft",
           "sources": {
               "STAQS": {
