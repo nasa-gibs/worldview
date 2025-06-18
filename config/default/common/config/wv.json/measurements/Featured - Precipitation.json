@@ -11,6 +11,7 @@
               "description": "",
               "image": "",
               "settings": [
+                  "IMERG_Precipitation_Rate_30min",
                   "IMERG_Precipitation_Rate"
               ]
             },

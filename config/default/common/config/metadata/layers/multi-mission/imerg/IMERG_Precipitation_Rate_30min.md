@@ -1,0 +1,7 @@
+The IMERG Precipitation Rate (30-min) layer displays rain rate and snow rate in millimeters per hour (mm/hr) every 30 minutes. It is estimated by the Integrated Multi-satellitE Retrievals for Global Precipitation Measurement (GPM) (IMERG) algorithm.
+
+The IMERG algorithm uses passive-microwave observations from the GPM constellation of satellites, infrared observations from geosynchronous satellites, and calibration data derived from rain gauges. IMERG “morphs” observations to earlier or later times using wind obtained from weather-model analyses. The output field has 0.1 x 0.1 degree latitude-longitude resolution (approximately 11 by 11 km at the Equator). The grid covers the globe, although precipitation cannot always be estimated near the Poles. Within hours of observations being collected, the NASA Precipitation Processing System (PPS) provides Early IMERG estimates, while the higher-quality Final IMERG estimates are produced approximately 4 months later, once calibration datasets become available such as monthly rain-gauge analyses.
+
+The latest imgery will be available appoximately 5 hours prior to the current time and available in 30 minute increments from the 30-minute Early IMERG (GPM_3IMERGHHE) product. This is then replaced by the Final IMERG (GPM_3IMERGHH) data product when they become available.
+
+References: GPM_3IMERGHHE [doi:10.5067/GPM/IMERG/3B-HH-E/07](https://doi.org/10.5067/GPM/IMERG/3B-HH-E/07) and GPM_3IMERGHH [doi:10.5067/GPM/IMERG/3B-HH/07](https://doi.org/10.5067/GPM/IMERG/3B-HH/07)
