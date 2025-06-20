@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { mockEvents } = require('../../test-utils/global-variables/querystrings')
-const { closeModal } = require('../../test-utils/hooks/wvHooks')
+const { closeModal, acceptModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -72,6 +72,7 @@ test('Selecting event shows track points and markers which are not visible when 
 test('Clicking an event in the list selects the event', async () => {
   const { firstEvent, selectedFirstEvent } = selectors
   await firstEvent.click()
+  await acceptModal(page)
   await page.waitForTimeout(6000)
   await expect(selectedFirstEvent).toBeVisible()
 })

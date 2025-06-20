@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour, activeAnimationWidget, animationGeostationary } = require('../../test-utils/global-variables/querystrings')
-const { closeModal } = require('../../test-utils/hooks/wvHooks')
+const { closeModal, acceptModal } = require('../../test-utils/hooks/wvHooks')
 
 let page
 let selectors
@@ -64,6 +64,7 @@ test('Disable playback when max frames exceeded', async () => {
   const { playButton, yearStartInput } = selectors
   await page.goto(animationGeostationary)
   await closeModal(page)
+  await acceptModal(page)
   const animateYearDown = page.locator('.wv-date-range-selector > div > div > div:nth-child(3) > svg.downarrow').first()
   const animateYearUp = page.locator('.wv-date-range-selector > div > div > div > svg.uparrow').first()
   await animateYearDown.click()

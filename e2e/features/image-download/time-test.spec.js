@@ -4,7 +4,8 @@ const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
   clickDownload,
-  closeModal
+  closeModal,
+  acceptModal
 } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
@@ -29,6 +30,7 @@ test('Image for today', async () => {
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
+  await acceptModal(page)
   await clickDownload(page)
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
   expect(urlAttribute).toContain('TIME=2018-06-01')
@@ -40,6 +42,7 @@ test('Image for yesterday', async () => {
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
+  await acceptModal(page)
   await clickDownload(page)
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
   expect(urlAttribute).toContain('TIME=2018-05-31')
@@ -51,6 +54,7 @@ test('Image for 2018-05-15', async () => {
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
+  await acceptModal(page)
   await clickDownload(page)
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
   expect(urlAttribute).toContain('TIME=2018-05-15')
