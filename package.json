@@ -100,7 +100,7 @@
     "eslint-config-standard": "^17.1.0",
     "eslint-import-resolver-webpack": "^0.13.10",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^28.13.5",
+    "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^17.20.0",
     "eslint-plugin-no-storage": "^1.0.2",
