@@ -299,6 +299,9 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
 export const applyStyle = (def, olVectorLayer, state, options) => {
   const { config } = state;
   const { vectorStyles } = config;
+  if (def.size && def.size >= 5) {
+    def.vectorStyle.id += `_size${def.size}`;
+  }
   const vectorStyleId = def.vectorStyle.id;
 
   if (!vectorStyles || !vectorStyleId) {

@@ -846,7 +846,7 @@ export function serializeLayers(layers, state, groupName) {
         value: bandComboString,
       });
     }
-    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
+    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled || def.size || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
@@ -913,6 +913,7 @@ const getLayerSpec = (attributes) => {
   let custom;
   let disabled;
   let count;
+  let size;
   let bandCombo;
 
   lodashEach(attributes, (attr) => {
@@ -1008,6 +1009,9 @@ const getLayerSpec = (attributes) => {
     if (attr.id === 'count') {
       count = Number(attr.value);
     }
+    if (attr.id === 'size') {
+      size = attr.value;
+    }
   });
 
   return {
@@ -1015,6 +1019,7 @@ const getLayerSpec = (attributes) => {
     opacity,
     count,
     bandCombo,
+    size,
 
     // only include palette attributes if Array.length condition
     // is true: https://stackoverflow.com/a/40560953/4589331
