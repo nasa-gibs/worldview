@@ -1,0 +1,11 @@
+The Synergistic TEMPO (Tropospheric Emissions: Monitoring of Pollution) Air Quality Science (STAQS) mission G-V Flight Tracks provide the locations of where the NASA JSC G-V aircraft collected measurements to support the STAQS field campaign. The G-V was equipped with a remote sensing payload, including the Geostationary Coastal and Air Pollution Events (GeoCAPE) Airborne Simulator (GCAS) and the combined High Spectral Resolution Lidar-2 (HSRL-2) and Ozone Differential Absorption Lidar (DIAL). The aircraft provided repeated high-resolution mapping of NO2, HCHO, ozone, and aerosols up to 3x per day over targeted cities to capture the evolution of air quality throughout the day.
+
+NASA’s Synergistic TEMPO Air Quality Science (STAQS) mission integrated TEMPO satellite observations with traditional air quality monitoring to improve understanding of air quality science. STAQS was conducted during summer 2023, targeting urban areas, including Los Angeles, New York City, and Chicago. The STAQS measurement strategy featured two aircraft equipped with remote sensing payloads, ground-based tropospheric ozone profiles from the NASA Tropospheric Ozone Lidar Network (TOLNet), NO2, HCHO, ozone measurements from Pandora spectrometers, and leveraged existing ground networks.
+
+The primary goal of STAQS was to improve our current understanding of air quality science under the TEMPO field of regard. Further goals included evaluating TEMPO level 2 data products, interpreting the temporal and spatial evolution of air quality events tracked by TEMPO, improving temporal estimates of anthropogenic, biogenic, and greenhouse gas emissions, and assessing the benefit of assimilating TEMPO data into chemical transport models. STAQS measurements have been used in TEMPO validation, which contributed to the TEMPO team achieving provisional validation status for the HCHO, NO2, and ozone products.
+
+References: [STAQS Data in Action](https://asdc.larc.nasa.gov/micro-article/introduction-to-the-synergistic-tempo-air-quality-science-staqs-field-campaign)
+
+STAQS at the ASDC: [doi:10.5067/SUBORBITAL/STAQS/DATA001](https://asdc.larc.nasa.gov/project/STAQS)
+
+TEMPO at the ASDC: [ASDC TEMPO Project Page](https://asdc.larc.nasa.gov/project/TEMPO)
