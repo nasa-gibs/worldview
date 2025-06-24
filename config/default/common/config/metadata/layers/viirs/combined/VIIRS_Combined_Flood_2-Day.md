@@ -35,4 +35,4 @@ References:
 
 Daily product: VCDWD_L3_NRT [doi:10.5067/VIIRS/VCDWD_L3_NRT.0021](https://doi.org/10.5067/VIIRS/VCDWD_L3_NRT.002)
 
-Hourly update product: VCDWDG_L3_NRT, [doi:10.5067/VIIRS/VCDWDG_L3_NRT.002](https://doi.org/10.5067/VIIRS/VCDWDG_L3_NRT.002)
+Hourly update product: VCDWDG_L3_NRT [doi:10.5067/VIIRS/VCDWDG_L3_NRT.002](https://doi.org/10.5067/VIIRS/VCDWDG_L3_NRT.002)
