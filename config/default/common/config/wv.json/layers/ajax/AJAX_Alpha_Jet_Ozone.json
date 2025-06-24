@@ -9,6 +9,7 @@
       "type": "vector",
       "tags": "vector alpha jet ozone california nevada",
       "ongoing": false,
+      "dataAvailability": "dd",
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,

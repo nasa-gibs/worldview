@@ -9,6 +9,7 @@
       "type": "vector",
       "tags": "vector staqs",
       "ongoing": false,
+      "dataAvailability": "dd",
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
