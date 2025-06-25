@@ -3,7 +3,7 @@
       "Surface Water Extent": {
           "id": "surface-water-extent",
           "title":    "Surface Water Extent",
-          "subtitle": "DSWx-HLS",
+          "subtitle": "DSWx-HLS, DSWx-S1",
           "sources": {
             "DSWx-HLS": {
                 "id": "dswx-hls",
