@@ -1,8 +1,8 @@
 {
     "measurements": {
-        "Flood": {
-            "id": "flood",
-            "title":    "Flood",
+        "Flood and Surface Water Extent - Featured": {
+            "id": "flood-surface-water-extent",
+            "title":    "Flood and Surface Water Extent",
             "subtitle": "Terra and Aqua/MODIS, NOAA-20 and NOAA-21/VIIRS, DSWx-HLS, DSWx-S1",
             "sources": {
                 "Terra and Aqua/MODIS": {
