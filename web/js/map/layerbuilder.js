@@ -285,6 +285,7 @@ export default function mapLayerBuilder(config, cache, store) {
       source: new Static({
         url: projectionURL,
         projection: crs,
+        interpolate: false,
         imageExtent: maxExtent,
       }),
     });
@@ -467,6 +468,7 @@ export default function mapLayerBuilder(config, cache, store) {
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
+      interpolate: false,
       transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
       tileGrid: new OlTileGridWMTS(tileGridOptions),
@@ -561,6 +563,7 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapX: true,
       style: 'default',
       crossOrigin: 'anonymous',
+      interpolate: false,
       params: parameters,
       transition: 0,
       tileGrid: new OlTileGridTileGrid({
@@ -1036,6 +1039,7 @@ export default function mapLayerBuilder(config, cache, store) {
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
+      interpolate: false,
     };
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
@@ -1081,6 +1085,7 @@ export default function mapLayerBuilder(config, cache, store) {
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
+      interpolate: false,
       maxZoom: def.maxZoom,
     };
 
@@ -1219,6 +1224,7 @@ export default function mapLayerBuilder(config, cache, store) {
         layer: layerName,
         crossOrigin: 'anonymous',
         format,
+        interpolate: false,
         wrapX: false,
         projection: 'EPSG:3857',
         maxZoom: 21,
