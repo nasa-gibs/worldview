@@ -6,7 +6,7 @@
       "tags": "AOD",
       "group": "overlays",
       "wrapadjacentdays": true,
-      "layergroup": "Aerosol Optical Depth"
+      "layergroup": "Aerosol Extinction"
     }
   }
 }
