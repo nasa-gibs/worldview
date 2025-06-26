@@ -7,13 +7,13 @@
       "description": "staqs/STAQS_G-V_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector staqs",
+      "tags": "vector staqs suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
-      "layergroup": "Field Campaign Flight Track",
+      "layergroup": "Suborbital Flight Track",
       "vectorStyle": {
         "id": "STAQS_G-V_Flight_Track",
         "geographic": {
