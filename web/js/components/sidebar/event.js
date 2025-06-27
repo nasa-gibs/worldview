@@ -63,7 +63,7 @@ function Event (props) {
       googleTagManager.pushEvent({
         event: 'natural_event_selected',
         natural_events: {
-          category: event.categories[0].title,
+          category: event.categories[0].id,
         },
       });
     }
@@ -195,7 +195,7 @@ function Event (props) {
         onEventHighlight(false);
       }}
     >
-      <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
+      <EventIcon id={`${event.id}-list`} category={event.categories[0].id} />
       <h4
         className="title"
       >
