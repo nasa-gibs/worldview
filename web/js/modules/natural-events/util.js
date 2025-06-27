@@ -165,10 +165,10 @@ export function getDefaultEventDate({ geometry, categories }) {
   if (geometry.length < 2) {
     return date;
   }
-  const category = categories.title || categories[0].title;
+  const category = categories.id || categories[0].id;
   const today = toEventDateString(util.now());
   // For storms that happened today, get previous date
-  if (date === today && category === 'Severe Storms') {
+  if (date === today && category === 'severeStorms') {
     [date] = geometry[1].date.split('T');
   }
   return date;

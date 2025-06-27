@@ -78,11 +78,11 @@ function Events(props) {
           {showDates && `${startDate} - ${endDate}`}
         </div>
         <div className="filter-icons">
-          {selectedCategories.map(({ title }) => (
+          {selectedCategories.map(({ title, id }) => (
             <EventIcon
               id="filter-"
-              key={title}
-              category={title}
+              key={id}
+              category={id}
               title={title}
             />
           ))}

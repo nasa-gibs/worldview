@@ -27,8 +27,8 @@ import EventMarkers from './event-markers';
 import { fly } from '../util';
 
 const zoomLevelReference = {
-  Wildfires: 8,
-  Volcanoes: 6,
+  wildfires: 8,
+  volcanoes: 6,
 };
 
 /* For Wildfires that didn't happen today, move the timeline forward a day
@@ -40,7 +40,7 @@ const getUseDate = (event, date) => {
   const today = toEventDateString(util.now());
   const yesterday = toEventDateString(util.yesterday());
   const recentDate = date === today || date === yesterday;
-  const isWildfireEvent = event.categories[0].title === 'Wildfires';
+  const isWildfireEvent = event.categories[0].id === 'wildfires';
   const parsedDate = util.parseDateUTC(date);
   return isWildfireEvent && !recentDate ? util.dateAdd(parsedDate, 'day', 1) : parsedDate;
 };
@@ -172,7 +172,7 @@ class NaturalEvents extends React.Component {
   zoomToEvent = function(event, date, isSameEventID) {
     const { proj, map, isKioskModeActive } = this.props;
     const { crs } = proj.selected;
-    const category = event.categories[0].title;
+    const category = event.categories[0].id;
     const zoom = isSameEventID ? map.getView().getZoom() : zoomLevelReference[category];
     const geometry = event.geometry.find((geom) => geom.date.split('T')[0] === date);
 
