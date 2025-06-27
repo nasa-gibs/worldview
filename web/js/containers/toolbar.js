@@ -21,7 +21,7 @@ import {
   requestNotifications,
   setNotifications,
 } from '../modules/notifications/actions';
-import { refreshPalettes } from '../modules/palettes/actions';
+import { clearCustomsSnapshot, refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
   showLayers, hideLayers,
@@ -136,6 +136,7 @@ class toolbarContainer extends Component {
     const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
+    await this.getPromise(hasCustomPalette, 'palette', clearCustomsSnapshot, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     await openModal(
@@ -452,6 +453,7 @@ const mapStateToProps = (state) => {
   const { activeTab } = sidebar;
   const isDataDownloadTabActive = activeTab === 'download';
   const { isOpen: modalIsOpen } = modal;
+  const filteredLayers = activeLayersForProj.filter((layer) => !(layer.colormapType === 'classification' && layer.type !== 'vector'));
 
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modalIsOpen && modal.id === 'TOOLBAR_SNAPSHOT';
@@ -475,7 +477,7 @@ const mapStateToProps = (state) => {
     isMobile,
     isRotated: Boolean(map.rotation !== 0),
     hasCustomPalette: hasCustomPaletteInActiveProjection(
-      activeLayersForProj,
+      filteredLayers,
       activePalettes,
     ),
     modalIsOpen,
