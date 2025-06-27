@@ -6,7 +6,25 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Cloud Top Height",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "projections": {
+        "arctic": {
+          "id": "AIRS_L2_Cloud_Top_Height_Polar",
+          "layer": "AIRS_L2_Cloud_Top_Height_Polar",
+          "subtitle": "Aqua / AIRS",
+          "type": "wmts",
+          "source": "GIBS:arctic",
+          "matrixSet": "1km"
+        },
+        "antarctic": {
+          "id": "AIRS_L2_Cloud_Top_Height_Polar",
+          "layer": "AIRS_L2_Cloud_Top_Height_Polar",
+          "subtitle": "Aqua / AIRS",
+          "type": "wmts",
+          "source": "GIBS:antarctic",
+          "matrixSet": "1km"
+        }
+      }
     }
   }
 }

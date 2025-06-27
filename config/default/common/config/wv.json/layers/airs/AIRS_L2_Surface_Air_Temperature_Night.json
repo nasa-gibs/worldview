@@ -5,7 +5,25 @@
       "description": "airs/AIRS_L2_Surface_Air_Temperature_Night",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Temperature"
+      "layergroup": "Temperature",
+      "projections": {
+          "arctic": {
+            "id": "AIRS_L2_Surface_Air_Temperature_Polar",
+            "layer": "AIRS_L2_Surface_Air_Temperature_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:arctic",
+            "matrixSet": "1km"
+          },
+          "antarctic": {
+            "id": "AIRS_L2_Surface_Air_Temperature_Polar",
+            "layer": "AIRS_L2_Surface_Air_Temperature_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:antarctic",
+            "matrixSet": "1km"
+          }
+        }
     }
   }
 }

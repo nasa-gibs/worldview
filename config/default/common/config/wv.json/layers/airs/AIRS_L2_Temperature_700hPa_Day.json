@@ -6,7 +6,25 @@
       "tags": "",
       "group": "overlays",
       "layergroup": "Temperature",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": true,
+      "projections": {
+          "arctic": {
+            "id": "AIRS_L2_Temperature_700hPa_Polar",
+            "layer": "AIRS_L2_Temperature_700hPa_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:arctic",
+            "matrixSet": "1km"
+          },
+          "antarctic": {
+            "id": "AIRS_L2_Temperature_700hPa_Polar",
+            "layer": "AIRS_L2_Temperature_700hPa_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:antarctic",
+            "matrixSet": "1km"
+          }
+        }
     }
   }
 }
