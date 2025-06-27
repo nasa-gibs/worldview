@@ -195,7 +195,11 @@ function Event (props) {
         onEventHighlight(false);
       }}
     >
-      <EventIcon id={`${event.id}-list`} category={event.categories[0].id} />
+      <EventIcon
+        id={`${event.id}-list`}
+        category={event.categories[0].id}
+        title={event.categories[0].title}
+      />
       <h4
         className="title"
       >
