@@ -19,9 +19,11 @@ export default function EventIcon (props) {
       {!hideTooltip && (
         <UncontrolledTooltip
           id={`center-align-tooltip ${category}-${id}`}
+          className="event-icon-tooltip"
           placement="top"
           target={id + category}
           fade={false}
+          autohide={false}
         >
           {title || category}
         </UncontrolledTooltip>

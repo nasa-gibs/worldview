@@ -261,6 +261,10 @@ class EventMarkers extends React.Component {
         map.removeOverlay(marker.pin);
       }
     });
+    const markerTooltips = document.getElementsByClassName('event-icon-tooltip');
+    Object.values(markerTooltips).forEach((tooltip) => {
+      tooltip.remove();
+    });
     this.setState({ markers: [] });
   }
 
