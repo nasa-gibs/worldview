@@ -5,25 +5,7 @@
       "description": "airs/AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Night",
       "tags": "CH4",
       "group": "overlays",
-      "layergroup": "Methane",
-      "projections": {
-          "arctic": {
-            "id": "AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Polar",
-            "layer": "AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Polar",
-            "subtitle": "Aqua / AIRS",
-            "type": "wmts",
-            "source": "GIBS:arctic",
-            "matrixSet": "1km"
-          },
-          "antarctic": {
-            "id": "AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Polar",
-            "layer": "AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Polar",
-            "subtitle": "Aqua / AIRS",
-            "type": "wmts",
-            "source": "GIBS:antarctic",
-            "matrixSet": "1km"
-          }
-        }
+      "layergroup": "Methane"
     }
   }
 }
