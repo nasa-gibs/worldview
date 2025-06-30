@@ -11,7 +11,7 @@ export default function EventIcon (props) {
   } = props;
 
   return (
-    <>
+    <div>
       <i
         id={id + category}
         className={`event-icon event-icon-${category}`}
@@ -26,7 +26,7 @@ export default function EventIcon (props) {
           {title || category}
         </UncontrolledTooltip>
       )}
-    </>
+    </div>
   );
 }
 
