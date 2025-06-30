@@ -165,11 +165,9 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
 /**
  * Action to remove custom palettes
  *
- * @param {String} layerId
- * @param {Number} index | Palette index value for multi-paletted layers
- * @param {String} groupName | layer group string
+ * @param {Boolean} keepDisabledClassification | Optionally keep disabled classification colormaps
  */
-export function clearCustoms() {
+export function clearCustoms(keepDisabledClassification) {
   return (dispatch, getState) => {
     const state = getState();
     const { palettes, compare } = state;
@@ -184,13 +182,22 @@ export function clearCustoms() {
         if (colormap.max || colormap.min || colormap.squash) {
           dispatch(setThresholdRangeAndSquash(key, props, index, groupName));
         }
-        if (colormap.disabled) {
+        if (colormap.disabled && !keepDisabledClassification) {
           dispatch(setToggledClassification(key, undefined, index, groupName));
         }
       });
     });
   };
 }
+
+/**
+ * Helper function for snapshot functionality to prevent removing disabled colormaps
+ *
+ */
+export function clearCustomsSnapshot() {
+  return (dispatch) => dispatch(clearCustoms(true));
+}
+
 /**
  * Action signifying custom palettes have been loaded
  *
