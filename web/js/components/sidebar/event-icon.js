@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustomTooltip from '../util/custom-tooltip';
+import { UncontrolledTooltip } from 'reactstrap';
 
 export default function EventIcon (props) {
   const {
@@ -8,23 +8,27 @@ export default function EventIcon (props) {
     category,
     title,
     hideTooltip,
-    isSelected,
   } = props;
 
-  const slug = category.toLowerCase().split(' ').join('-');
-
   return (
-    <CustomTooltip
-      id={`${slug}-${id}`}
-      text={title || category}
-      hideTooltip={hideTooltip}
-      isSelected={isSelected}
-    >
+    <div>
       <i
-        id={id + slug}
-        className={`event-icon event-icon-${slug}`}
+        id={id + category}
+        className={`event-icon event-icon-${category}`}
       />
-    </CustomTooltip>
+      {!hideTooltip && (
+        <UncontrolledTooltip
+          id={`center-align-tooltip ${category}-${id}`}
+          className="event-icon-tooltip"
+          placement="top"
+          target={id + category}
+          fade={false}
+          autohide={false}
+        >
+          {title || category}
+        </UncontrolledTooltip>
+      )}
+    </div>
   );
 }
 
@@ -33,5 +37,4 @@ EventIcon.propTypes = {
   category: PropTypes.string,
   hideTooltip: PropTypes.bool,
   title: PropTypes.string,
-  isSelected: PropTypes.bool,
 };
