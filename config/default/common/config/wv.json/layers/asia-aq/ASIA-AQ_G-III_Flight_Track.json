@@ -1,13 +1,13 @@
 {
   "layers": {
-    "STAQS_G-V_Flight_Track": {
-      "id": "STAQS_G-V_Flight_Track",
-      "title": "JSC G-V Flight Track (Per Flight)",
-      "subtitle": "STAQS/JSC G-V",
-      "description": "staqs/STAQS_G-V_Flight_Track",
+    "ASIA-AQ_G-III_Flight_Track": {
+      "id": "ASIA-AQ_G-III_Flight_Track",
+      "title": "LaRC G-III Flight Track (Per Flight)",
+      "subtitle": "ASIA-AQ/LaRC G-III",
+      "description": "asia-aq/ASIA-AQ_G-III_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector staqs",
+      "tags": "vector GeoCAPE GCAS HSRL-2 Philippines Taiwan South Korea Thailand",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
@@ -15,19 +15,19 @@
       "disableCustomPalettes": true,
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
-        "id": "STAQS_G-V_Flight_Track",
+        "id": "ASIA-AQ_G-III_Flight_Track",
         "geographic": {
-          "id": "STAQS_G-V_Flight_Track"
+          "id": "ASIA-AQ_G-III_Flight_Track"
         }
       },
       "palette": {
-        "id": "STAQS_G-V_Flight_Track",
+        "id": "ASIA-AQ_G-III_Flight_Track",
         "immutable": true
       },
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "GPS_Alt_m_",
+        "property": "G_Alt_m_",
         "order": "descending"
       }
     }
