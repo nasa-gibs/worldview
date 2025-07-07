@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "VIIRS_SNPP_EVI_8Day": {
+      "id": "VIIRS_SNPP_EVI_8Day",
+      "description": "viirs/snpp/VIIRS_SNPP_EVI_8Day",
+      "group": "overlays",
+      "layergroup": "Vegetation Indices"
+    }
+  }
+}

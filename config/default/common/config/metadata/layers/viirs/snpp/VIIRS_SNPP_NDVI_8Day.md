@@ -1,0 +1,5 @@
+The Normalized Difference Vegetation Index (NDVI) layer is a measure of the greenness and health of vegetation. The index is calculated based on how much red and near-infrared light is reflected by plant leaves. The index values range from -0.2 to 1 where higher values (0.3 to 1) indicate areas covered by green, leafy vegetation and lower values (0 to 0.3) indicate areas where there is little or no vegetation. Areas with a lot of green leaf growth, indicates the presence of chlorophyll which reflects more infrared light and less visible light, are depicted in dark green colors, areas with some green leaf growth are in light greens, and  areas with little to no vegetation growth are depicted in tan colors.
+
+The VIIRS rolling 8-day NDVI layer is available only as a near real-time, rolling 8-day product (VNP13A4N) from the Terra satellite. The imagery resolution is 500 m, and the temporal resolution is an 8-day product which is updated daily.
+
+References: VNP13A4N [doi:10.5067/VIIRS/VNP13A4N.002](https://doi.org/10.5067/VIIRS/VNP13A4N.002)
