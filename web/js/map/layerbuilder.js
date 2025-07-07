@@ -1086,17 +1086,22 @@ export default function mapLayerBuilder(config, cache, store) {
       declutter: true,
       renderMode: 'hybrid',
     });
-    await olmsApplyStyle(layer, vectorStyle.url, {
-      resolutions: tileGrid.getResolutions(),
-      transformRequest(url, type) {
-        if (type === 'Source') {
-          return new Request(
-            url.replace('/VectorTileServer', '/VectorTileServer/'),
-          );
-        }
-      },
-    });
-    await applyBackground(layer, vectorStyle.url);
+
+    if (!vectorStyle.url) {
+      applyStyle(def, layer, state, options);
+    } else {
+      await olmsApplyStyle(layer, vectorStyle.url, {
+        resolutions: tileGrid.getResolutions(),
+        transformRequest(url, type) {
+          if (type === 'Source') {
+            return new Request(
+              url.replace('/VectorTileServer', '/VectorTileServer/'),
+            );
+          }
+        },
+      });
+      await applyBackground(layer, vectorStyle.url);
+    }
 
     return layer;
   };
