@@ -15,6 +15,8 @@ import {
   BULK_PALETTE_PRELOADING_SUCCESS,
   CLEAR_CUSTOM,
   SET_DISABLED_CLASSIFICATION,
+  SET_SIZE,
+  CLEAR_SIZE,
 } from './constants';
 import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 
@@ -70,6 +72,8 @@ export function paletteReducer(state = defaultPaletteState, action) {
     case SET_CUSTOM:
     case SET_DISABLED_CLASSIFICATION:
     case CLEAR_CUSTOM:
+    case SET_SIZE:
+    case CLEAR_SIZE:
       return lodashAssign({}, state, {
         [groupName]: action.palettes || {},
       });
