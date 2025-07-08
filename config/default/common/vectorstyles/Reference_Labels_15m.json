@@ -5,7 +5,7 @@
   "sources": {
     "esri": {
       "type": "vector",
-      "url": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/",
+      "url": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer",
       "tiles": [
         "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/tile/{z}/{y}/{x}.pbf"
       ]
