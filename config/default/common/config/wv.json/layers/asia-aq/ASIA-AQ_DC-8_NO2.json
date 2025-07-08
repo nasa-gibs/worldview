@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "ASIA-AQ_DC-8_NO2": {
+      "id": "ASIA-AQ_DC-8_NO2",
+      "title": "Nitrogen Dioxide and Flight Track (Per Flight)",
+      "subtitle": "ASIA-AQ/NASA DC-8",
+      "description": "asia-aq/ASIA-AQ_DC-8_NO2",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector no2 CANOE Philippines Taiwan South Korea Thailand",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Nitrogen Dioxide",
+      "vectorStyle": {
+        "id": "ASIA-AQ_DC-8_NO2",
+        "geographic": {
+          "id": "ASIA-AQ_DC-8_NO2"
+        }
+      },
+      "palette": {
+        "id": "ASIA-AQ_DC-8_NO2",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "MSL_GPS_AI",
+        "order": "descending"
+      }
+    }
+  }
+}
