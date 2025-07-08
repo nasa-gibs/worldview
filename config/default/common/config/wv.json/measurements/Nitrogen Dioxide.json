@@ -3,7 +3,7 @@
         "Nitrogen Dioxide": {
             "id": "nitrogen-dioxide",
             "title":    "Nitrogen Dioxide",
-            "subtitle": "Aura/OMI, TEMPO, SEDAC",
+            "subtitle": "Aura/OMI, TEMPO, ASIA-AQ, SEDAC",
             "sources": {
                 "Aura/MLS": {
                     "id": "aura-omi",
@@ -27,6 +27,15 @@
                         "TEMPO_L3_NO2_Vertical_Column_Troposphere"
                     ]
                 },
+              "ASIA-AQ": {
+                  "id": "asia-aq",
+                  "title": "ASIA-AQ",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+		         "ASIA-AQ_DC-8_NO2"
+                  ]
+              },
                 "SEDAC": {
                     "id": "sedac",
                     "title": "SEDAC",
