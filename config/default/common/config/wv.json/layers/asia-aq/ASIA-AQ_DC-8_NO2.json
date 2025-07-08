@@ -1,33 +1,33 @@
 {
   "layers": {
-    "STAQS_G-V_Flight_Track": {
-      "id": "STAQS_G-V_Flight_Track",
-      "title": "JSC G-V Flight Track (Per Flight)",
-      "subtitle": "STAQS/JSC G-V",
-      "description": "staqs/STAQS_G-V_Flight_Track",
+    "ASIA-AQ_DC-8_NO2": {
+      "id": "ASIA-AQ_DC-8_NO2",
+      "title": "Nitrogen Dioxide and Flight Track (Per Flight)",
+      "subtitle": "ASIA-AQ/NASA DC-8",
+      "description": "asia-aq/ASIA-AQ_DC-8_NO2",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector staqs",
+      "tags": "vector no2 CANOE Philippines Taiwan South Korea Thailand",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
-      "layergroup": "Suborbital Flight Tracks",
+      "layergroup": "Nitrogen Dioxide",
       "vectorStyle": {
-        "id": "STAQS_G-V_Flight_Track",
+        "id": "ASIA-AQ_DC-8_NO2",
         "geographic": {
-          "id": "STAQS_G-V_Flight_Track"
+          "id": "ASIA-AQ_DC-8_NO2"
         }
       },
       "palette": {
-        "id": "STAQS_G-V_Flight_Track",
+        "id": "ASIA-AQ_DC-8_NO2",
         "immutable": true
       },
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "GPS_Alt_m_",
+        "property": "MSL_GPS_AI",
         "order": "descending"
       }
     }
