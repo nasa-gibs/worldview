@@ -13,7 +13,7 @@
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
-      "layergroup": "Field Campaign Flight Track",
+      "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
         "id": "STAQS_G-V_Flight_Track",
         "geographic": {

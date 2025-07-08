@@ -16,5 +16,7 @@ Spatial Coverage: Global<br>
 Overpasses: Twice daily (day and night)<br>
 Orbit: Sun-synchronous polar; Equatorial crossing local time: Daytime 1:30 pm, Nighttime 1:30 am
 
+Note: For the Arctic (EPSG:3413) and Antarctic (EPSG:3031) projections, there is no differentation between the Day and the Night layers, they both show the same imagery.
+
 #### References
 Data Product: AIRS2SUP_NRT [doi:10.5067/MOQOVNHNERGG](https://doi.org/10.5067/MOQOVNHNERGG); AIRS2SUP [doi:10.5067/APJ6EEN0PD0Z](https://doi.org/10.5067/APJ6EEN0PD0Z)
