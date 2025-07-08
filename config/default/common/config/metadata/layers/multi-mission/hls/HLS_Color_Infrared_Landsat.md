@@ -2,7 +2,7 @@
 
 The dynamically generated Reflectance (Bands 5-4-3, False Color) imagery layer is a false color composite that is used to gauge plant health and assess plant density. Plants reflect in near infrared and green light, while absorbing in red. Areas with better vegetation health appear red, and denser plant growth is a darker red. Cities, urban areas, and exposed ground appear grey or tan and water is blue or black.
 
-The Reflectance imagery layer from Landsat 8 and 9/OLI product (L30) is available through the HLS project from the Operational Land Imager (OLI) aboard the Landsat 8 and 9 satellites. The sensor resolution is 30 m, imagery resolution is 30 m, and the temporal resolution is daily with an 8 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Sentinel-2A and Sentinel-2B imagery layer available.
+The Reflectance imagery layer from Landsat 8 and 9/OLI product (L30) is available through the HLS project from the Operational Land Imager (OLI) aboard the Landsat 8 and 9 satellites. The sensor resolution is 30 m, imagery resolution is 30 m, and the temporal resolution is daily with an 8 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Sentinel-2 imagery layer available.
 
 Landsat 9 launched on September 21, 2021 and was subsequently added to the HLS product, availability of imagery from Landsat 8 and Landsat 9 is as follows:
 - Landsat 8: April 11, 2013 - Present
