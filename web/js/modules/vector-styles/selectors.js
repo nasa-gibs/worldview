@@ -215,7 +215,8 @@ export function setStyleFunction(opts) {
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
-  const styleFunction = stylefunction(layer, glStyle, vectorStyleSource, resolutions);
+  const source = vectorStyleSource || layerId;
+  const styleFunction = stylefunction(layer, glStyle, source, resolutions);
   const selectedFeatures = selected[layerId];
 
   // Process style of feature selected/clicked in UI
@@ -310,7 +311,7 @@ export const applyStyle = (def, olVectorLayer, state, options) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
-  const vectorStyleSource = def.vectorStyle.source || vectorStyleId;
+  const vectorStyleSource = def.vectorStyle.source;
 
   if (!vectorStyles || !vectorStyleId) {
     return;
