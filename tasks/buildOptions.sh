@@ -113,6 +113,7 @@ else
       mkdir -p "$BUILD_DIR/config/wv.json/vectorstyles"
       `node $SCRIPTS_DIR/processVectorStyles.js \
         --inputDir "$BUILD_DIR/gc/vectorstyles" \
+        --wvStylesDir "$SRC_DIR/common/vectorstyles" \
         --outputDir "$BUILD_DIR/config/wv.json/vectorstyles" \
         --mode "$MODE"`
   fi
