@@ -80,6 +80,11 @@ test('Interval state of HOUR restored from permalink', async () => {
 })
 
 test('Interval subdaily default year, month, day, hour, minute, and custom available', async () => {
+  const timelineInterval = await page.locator('#timeline-interval')
+  const istimelineIntervalVisible = await timelineInterval.isVisible()
+  if (!istimelineIntervalVisible) {
+    await page.locator('#timeline-interval-btn-container').click()
+  }
   const yearlyInterval = await page.locator('#interval-years')
   const monthlyInterval = await page.locator('#interval-months')
   const dailyInterval = await page.locator('#interval-days')
