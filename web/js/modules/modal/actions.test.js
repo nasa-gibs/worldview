@@ -1,7 +1,6 @@
 import { TextEncoder, TextDecoder } from 'util';
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock-jest';
 import {
   openBasicContent,
   openCustomContent,
@@ -86,19 +85,12 @@ describe('Modal open actions', () => {
   );
 });
 describe('Template fetching', () => {
-  afterEach(() => {
-    fetchMock.restore();
+  beforeEach(() => {
+    fetch.resetMocks();
   });
   test('triggers start and success action types [modal-actions-success]', () => {
     const loc = 'mock/';
-    fetchMock.getOnce(loc, {
-      body: constants.ABOUT_MOCK_RESPONSE,
-      headers: {
-        'content-type': 'text/html',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type',
-      },
-    });
+    fetch.mockResponseOnce(constants.ABOUT_MOCK_RESPONSE);
     const expectedActions = [
       { type: constants.TEMPLATE_REQUEST_START },
       {
@@ -115,9 +107,7 @@ describe('Template fetching', () => {
   });
   test(`creates ${constants.TEMPLATE_REQUEST_FAILURE} Action [modal-actions-failure]`, () => {
     const loc = 'mock/';
-    fetchMock.mock(loc, {
-      throws: ERROR_MESSAGE,
-    });
+    fetch.mockRejectOnce(ERROR_MESSAGE);
     const expectedActions = [
       { type: constants.TEMPLATE_REQUEST_START },
       {

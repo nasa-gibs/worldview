@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "IMERG_Precipitation_Rate_30min": {
+      "id": "IMERG_Precipitation_Rate_30min",
+      "description": "multi-mission/imerg/IMERG_Precipitation_Rate_30min",
+      "tags": "precipitation",
+      "layergroup": "Precipitation Rate",
+      "group": "overlays"
+    }
+  }
+}

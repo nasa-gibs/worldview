@@ -25,6 +25,7 @@
                 "LPCLOUD":	"LP DAAC",
                 "MOPITT": "MOPITT SIPS",
                 "NSIDC_ECS": "NSIDC DAAC",
+                "NSIDC_CPRD": "NSIDC DAAC",
                 "OB_DAAC": "OB.DAAC",
                 "OB_CLOUD": "OB.DAAC",
                 "OMINRT": "OMI/Ozone SIPS",

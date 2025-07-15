@@ -5,7 +5,8 @@
       "description": "airs/AIRS_L2_Methane_400hPa_Volume_Mixing_Ratio_Day",
       "tags": "CH4",
       "group": "overlays",
-      "layergroup": "Methane"
+      "layergroup": "Methane",
+      "wrapadjacentdays": true
     }
   }
 }

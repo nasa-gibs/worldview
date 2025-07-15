@@ -1,7 +1,6 @@
 import { TextEncoder, TextDecoder } from 'util';
 import configureMockStore from 'redux-mock-store';
 import { thunk } from 'redux-thunk';
-import fetchMock from 'fetch-mock-jest';
 import * as actions from './actions';
 import * as constants from './constants';
 
@@ -14,24 +13,17 @@ const mockStore = configureMockStore(middlewares);
 const ERROR_MESSAGE = 'There was an error';
 // throw new Error(ERROR_MESSAGE);
 describe('Short Link request action', () => {
-  afterEach(() => {
-    fetchMock.restore();
+  beforeEach(() => {
+    fetch.resetMocks();
   });
 
   test(
     `creates ${
-      constants.REQUEST_SHORT_LINK_SUCESSS
+      constants.REQUEST_SHORT_LINK_SUCCESS
     } when short link is complete [link-actions-request-short-link]`,
     () => {
       const loc = 'mock/';
-      fetchMock.getOnce(loc, {
-        body: constants.MOCK_SHORT_LINK_RESPONSE,
-        headers: {
-          'content-type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        },
-      });
+      fetch.mockResponseOnce(JSON.stringify(constants.MOCK_SHORT_LINK_RESPONSE));
       const expectedActions = [
         { type: constants.REQUEST_SHORT_LINK_START },
         {
@@ -49,9 +41,7 @@ describe('Short Link request action', () => {
   );
   test(`creates ${constants.REQUEST_SHORT_LINK_FAILURE} Action [link-actions-failure]`, () => {
     const loc = 'mock/';
-    fetchMock.mock(loc, {
-      throws: ERROR_MESSAGE,
-    });
+    fetch.mockRejectOnce(ERROR_MESSAGE);
     const expectedActions = [
       { type: constants.REQUEST_SHORT_LINK_START },
       {

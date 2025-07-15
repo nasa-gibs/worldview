@@ -255,7 +255,7 @@ module.exports = (page) => ({
   thermAnomVIIRSnight: page.locator('#active-VIIRS_NOAA20_Thermal_Anomalies_375m_Night'),
   notifyMessage: page.locator('.wv-alert .alert-content'),
   filterIcons: page.locator('.filter-icons > div > .event-icon'),
-  dustHazeIcon: page.locator('.filter-icons > div > #filter-dust-and-haze'),
+  dustHazeIcon: page.locator('.filter-icons > div > #filter-dustHaze'),
   volcanoesIcon: page.locator('.filter-icons > div > #filter-volcanoes'),
   wildfiresIcon: page.locator('.filter-icons > div >#filter-wildfires'),
   filterDates: page.locator('.filter-dates'),

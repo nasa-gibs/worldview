@@ -3,7 +3,7 @@
         "Flood": {
             "id": "flood",
             "title":    "Flood",
-            "subtitle": "Terra and Aqua/MODIS, DSWx-HLS",
+            "subtitle": "Terra and Aqua/MODIS, NOAA-20 and NOAA-21/VIIRS, DSWx-HLS, DSWx-S1",
             "sources": {
                 "Terra and Aqua/MODIS": {
                     "id": "terra-aqua-modis",
@@ -13,6 +13,16 @@
                     "settings": [
                         "MODIS_Combined_Flood_2-Day",
                         "MODIS_Combined_Flood_3-Day"
+                    ]
+                },
+                "NOAA-20 and NOAA-21/VIIRS": {
+                    "id": "noaa20-noaa21-viirs",
+                    "title": "NOAA-20 and NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_Combined_Flood_2-Day",
+                        "VIIRS_Combined_Flood_3-Day"
                     ]
                 },
                 "DSWx-HLS": {
@@ -25,6 +35,17 @@
                         "OrbitTracks_Landsat-8_Descending",
                         "OrbitTracks_Sentinel-2A_Descending",
                         "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                },
+                "DSWx-S1": {
+                    "id": "dswx-s1",
+                    "title": "DSWx-s1",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
+                        "OrbitTracks_Sentinel-1A_Descending",
+                        "OrbitTracks_Sentinel-1B_Descending"
                     ]
                 }
             }

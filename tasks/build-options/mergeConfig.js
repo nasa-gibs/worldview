@@ -2,9 +2,10 @@ const { dictMerge } = require('./util')
 const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [inputDir] [outputDir]')
   .option('inputDir', {
     demandOption: true,
