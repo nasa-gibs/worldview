@@ -39,10 +39,11 @@
                 "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/volcanoes"
             },
             {
-                "id": "waterColor",
-                "title": "Water Color",
-                "description": "Related to events that alter the appearance of water: phytoplankton, red tide, algae, sediment, whiting, etc.",
-                "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/waterColor"
+                "id": "floods",
+			    "title": "Floods",
+			    "link": "https://eonet.gsfc.nasa.gov/api/v3/categories/floods",
+			    "description": "Related to aspects of actual flooding--e.g., inundation, water extending beyond river and lake extents.",
+			    "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/floods"
             },
             {
                 "id": "wildfires",
@@ -116,6 +117,14 @@
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -229,36 +238,6 @@
                         false
                     ]
                 ],
-                "Water Color": [
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ],
-                    [
-                        "MODIS_Terra_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ]
-                ],
                 "Severe Storms": [
                     [
                         "Reference_Features_15m",
@@ -351,16 +330,6 @@
                         false
                     ]
                 ],
-                "Floods": [
-                    [
-                        "Reference_Features_15m",
-                        true
-                    ],
-                    [
-                        "Reference_Labels_15m",
-                        true
-                    ]
-                ],
                 "Volcanoes": [
                     [
                         "MODIS_Terra_CorrectedReflectance_TrueColor",
@@ -396,6 +365,14 @@
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -483,6 +460,14 @@
                         false
                     ],
                     [
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
+                        false
+                     ],
+                     [
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
+                        false
+                     ],
+                    [
                         "OMPS_Aerosol_Index_PyroCumuloNimbus",
                         false
                     ],
@@ -504,6 +489,14 @@
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -633,7 +626,7 @@
                         false
                     ]
                 ],
-                "Water Color": [
+                "Floods": [
                     [
                         "Reference_Features_15m",
                         true
@@ -647,7 +640,15 @@
                         true
                     ],
                     [
+                        "MODIS_Terra_CorrectedReflectance_Bands721",
+                        false
+                    ],
+                    [
                         "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "MODIS_Aqua_CorrectedReflectance_Bands721",
                         false
                     ],
                     [
@@ -655,7 +656,15 @@
                         false
                     ],
                     [
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
+                        false
+                    ],
+                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1",
                         false
                     ],
                     [
@@ -663,23 +672,43 @@
                         false
                     ],
                     [
-                        "MODIS_Terra_L2_Chlorophyll_A",
+                        "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
                         false
                     ],
                     [
-                        "MODIS_Aqua_L2_Chlorophyll_A",
+                        "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Chlorophyll_a",
+                        "MODIS_Combined_Flood_3-Day",
                         false
                     ],
                     [
-                        "VIIRS_NOAA20_Chlorophyll_a",
+                        "MODIS_Combined_Flood_2-Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_L2_Chlorophyll_A",
+                        "VIIRS_Combined_Flood_3-Day",
+                        true
+                    ],
+                    [
+                        "VIIRS_Combined_Flood_2-Day",
+                        true
+                    ],
+                       [
+                        "IMERG_Precipitation_Rate",
+                        true
+                    ],
+                    [
+                        "IMERG_Precipitation_Rate_30min",
+                        false
+                    ],
+                    [
+                        "OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
+                        false
+                    ],
+                    [
+                        "OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
                         false
                     ]
                 ],
@@ -730,6 +759,10 @@
                     ],
                     [
                         "IMERG_Precipitation_Rate",
+                        true
+                    ],
+                    [
+                        "IMERG_Precipitation_Rate_30min",
                         true
                     ]
                 ],
@@ -797,6 +830,10 @@
                     [
                         "IMERG_Precipitation_Rate",
                         false
+                    ],
+                     [
+                        "IMERG_Precipitation_Rate_30min",
+                        false
                     ]
                 ],
                 "Volcanoes": [
@@ -829,6 +866,22 @@
                         false
                     ],
                     [
+                        "OMPS_NOAA20_SO2_Upper_Troposphere_and_Stratosphere",
+                        false
+                    ],
+                    [
+                        "OMPS_NOAA20_SO2_Middle_Troposphere",
+                        false
+                    ],
+                    [
+                        "OMPS_NOAA20_SO2_Lower_Troposphere",
+                        true
+                    ],
+                    [
+                        "OMPS_NOAA20_SO2_Planetary_Boundary_Layer",
+                        false
+                    ],
+                    [
                         "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
                         false
                     ],
@@ -858,6 +911,14 @@
                     ],
                     [
                         "MODIS_Aqua_Thermal_Anomalies_Night",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -1009,10 +1070,6 @@
                         false
                     ],
                     [
-                        "MOPITT_CO_Daily_Total_Column_L2",
-                        false
-                    ],
-                    [
                         "OMI_Nitrogen_Dioxide_Tropo_Column",
                         false
                     ],
@@ -1030,6 +1087,10 @@
                     ],
                     [
                         "OMPS_Aerosol_Index",
+                        false
+                    ],
+                    [
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
                         false
                     ]
                 ]
@@ -1083,6 +1144,14 @@
                     [
                         "MODIS_Terra_Thermal_Anomalies_Night",
                         true
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
+                        false
                     ],
                     [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
