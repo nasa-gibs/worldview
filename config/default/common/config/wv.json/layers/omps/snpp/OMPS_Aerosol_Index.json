@@ -2,7 +2,7 @@
   "layers": {
     "OMPS_Aerosol_Index": {
       "id": "OMPS_Aerosol_Index",
-      "description": "omps/OMPS_Aerosol_Index",
+      "description": "omps/snpp/OMPS_Aerosol_Index",
       "tags": "ai",
       "group": "overlays",
       "wrapadjacentdays": true,
