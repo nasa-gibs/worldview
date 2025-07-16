@@ -60,7 +60,7 @@ test('Clicking a measurement shows choices, indicates unavailability', async () 
   // const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
   await expect(modisAvailableCoverage).toBeVisible()
   // await expect(maiacAvailableCoverage).toBeVisible()
-  await expect(sourceTabs).toHaveCount(11)
+  await expect(sourceTabs).toHaveCount(12)
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage class', async () => {
