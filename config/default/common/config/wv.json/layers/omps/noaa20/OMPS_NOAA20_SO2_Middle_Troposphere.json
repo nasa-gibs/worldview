@@ -2,7 +2,7 @@
   "layers": {
     "OMPS_NOAA20_SO2_Middle_Troposphere": {
       "id": "OMPS_NOAA20_SO2_Middle_Troposphere",
-      "description": "omps/OMPS_NOAA20_SO2_Middle_Troposphere",
+      "description": "omps/noaa20/OMPS_NOAA20_SO2_Middle_Troposphere",
       "tags": "SO2, sulphur",
       "group": "overlays",
       "wrapadjacentdays": true,

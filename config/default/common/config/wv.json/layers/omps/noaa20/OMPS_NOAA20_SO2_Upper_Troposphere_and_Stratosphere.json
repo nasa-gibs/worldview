@@ -2,7 +2,7 @@
   "layers": {
     "OMPS_NOAA20_SO2_Upper_Troposphere_and_Stratosphere": {
       "id": "OMPS_NOAA20_SO2_Upper_Troposphere_and_Stratosphere",
-      "description": "omps/OMPS_NOAA20_SO2_Upper_Troposphere_and_Stratosphere",
+      "description": "omps/noaa20/OMPS_NOAA20_SO2_Upper_Troposphere_and_Stratosphere",
       "tags": "SO2, sulphur",
       "group": "overlays",
       "wrapadjacentdays": true,

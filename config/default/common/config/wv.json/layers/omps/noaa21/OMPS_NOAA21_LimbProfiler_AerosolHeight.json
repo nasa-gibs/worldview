@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OMPS_NOAA21_LimbProfiler_AerosolHeight": {
+      "id": "OMPS_NOAA21_LimbProfiler_AerosolHeight",
+      "description": "omps/noaa21/OMPS_NOAA21_LimbProfiler_AerosolHeight",
+      "tags": "AOD",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Aerosol Extinction"
+    }
+  }
+}
