@@ -159,7 +159,7 @@
     "bluebird": "3.7.2",
     "bootstrap": "^5.3.7",
     "cachai": "^1.0.2",
-    "compression": "^1.8.0",
+    "compression": "^1.8.1",
     "coordinate-parser": "^1.0.7",
     "copy-to-clipboard": "^3.3.3",
     "dom-scroll-into-view": "^2.0.1",
