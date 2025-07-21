@@ -11,4 +11,6 @@ Water will appear black. Sediments in water appear dark blue.
 
 The sensor resolution is 30 m with an imagery resolution is 31.25 m.
 
+Note: There is a mismatch between the imagery and the version badge information - the imagery is at version 3.1 but the version badge states that it is version 3.
+
 References: GWELDYR [doi:10.5067/MEaSUREs/GWELD/GWELDYR.031](https://doi.org/10.5067/MEaSUREs/GWELD/GWELDYR.031)
