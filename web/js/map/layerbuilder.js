@@ -1,5 +1,3 @@
-/* eslint-disable import/no-duplicates */
-/* eslint-disable no-multi-assign */
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -33,7 +31,7 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
-import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { datesInDateRanges, prevDateInDateRange, nearestInterval } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -45,7 +43,6 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
@@ -1054,6 +1051,7 @@ export default function mapLayerBuilder(config, cache, store) {
       vectorStyle,
       matrixSet,
       matrixSetLimits,
+      maxZoom = 22,
     } = def;
 
     const projection = get(crs);
@@ -1061,7 +1059,7 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: projection.getExtent(),
       tileSize: [512, 512],
       maxResolution: 180 / 256,
-      maxZoom: 22,
+      maxZoom,
     });
 
     const configSource = config.sources[def.source];

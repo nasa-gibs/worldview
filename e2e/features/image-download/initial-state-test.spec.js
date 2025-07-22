@@ -6,7 +6,8 @@ const {
   openImageDownloadPanel,
   closeImageDownloadPanel,
   switchProjections,
-  closeModal
+  closeModal,
+  acceptModal
 } = require('../../test-utils/hooks/wvHooks')
 
 let page
@@ -34,6 +35,7 @@ test('Check resolutions', async () => {
   await page.goto(skipTour)
   await closeModal(page)
   await openImageDownloadPanel(page)
+  await acceptModal(page)
   await expect(imageResolution).toContainText(expectedResolutions)
 })
 

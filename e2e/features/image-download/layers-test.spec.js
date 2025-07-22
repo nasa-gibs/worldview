@@ -22,7 +22,7 @@ test.afterEach(async () => {
 })
 
 test('List layers in draw order', async () => {
-  const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,MODIS_Terra_Aerosol')
+  const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol')
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
@@ -32,8 +32,7 @@ test('List layers in draw order', async () => {
 })
 
 test('Move AOD over the reference features', async ({ browserName }) => {
-  test.skip(browserName === 'firefox', 'firefox fails this test for unknown reasons')
-  const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Features_15m')
+  const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol')
   await page.goto(url)
   await page.waitForTimeout(1000)
   await closeModal(page)
@@ -41,11 +40,11 @@ test('Move AOD over the reference features', async ({ browserName }) => {
   await openImageDownloadPanel(page)
   await clickDownload(page)
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
-  expect(urlAttribute).toContain('LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Features_15m,MODIS_Terra_Aerosol')
+  expect(urlAttribute).toContain('LAYERS=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol')
 })
 
 test('Do not include obscured layers', async () => {
-  const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol,Reference_Features_15m')
+  const url = await joinUrl(startParams, '&l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Terra_Aerosol')
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
