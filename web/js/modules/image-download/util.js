@@ -3,6 +3,7 @@ import {
   get as lodashGet,
 } from 'lodash';
 import JSZip from 'jszip';
+import canvasSize from 'canvas-size';
 import { transform } from 'ol/proj';
 import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
@@ -547,8 +548,11 @@ export function calculateScaleFactorFromSpatialResolution (targetMetersPerPixel,
   return (currentResolutionInMeters / targetMetersPerPixel) / 96;
 }
 
-export function snapshot (options) {
-  // document.body.style.cursor = 'wait';
+export async function snapshot (options) {
+  document.body.style.cursor = 'wait';
+
+  const maxArea = await canvasSize.maxArea();
+
   return new Promise((resolve, reject) => {
     const {
       format,
@@ -594,11 +598,16 @@ export function snapshot (options) {
       center,
     );
 
-    console.log({ scaleFactor }); // eslint-disable-line no-console
-
     // Scale the entire map up to the target resolution
     const scaledMapWidth = originalWidth * scaleFactor;
     const scaledMapHeight = originalHeight * scaleFactor;
+    const maxHeight = maxArea.height;
+    const maxWidth = maxArea.width;
+    const devicePixelRatio = window.devicePixelRatio || 1;
+    const scaledMapWidthWithDPR = scaledMapWidth * devicePixelRatio;
+    const scaledMapHeightWithDPR = scaledMapHeight * devicePixelRatio;
+
+    if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxArea.width}x${maxArea.height}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
 
     // Calculate scaled positions for cropping
     const scaledXOffset = xOffset * scaleFactor;
@@ -684,10 +693,9 @@ export function snapshot (options) {
         }, 'image/png', 1);
       } catch (error) {
         // Reset map size in case of error
-        // mapElement.style.width = originalStyleWidth;
-        // mapElement.style.height = originalStyleHeight;
-        // map.updateSize();
-        // mapElement.style.transform = 'scale(1)';
+        mapElement.style.width = originalStyleWidth;
+        mapElement.style.height = originalStyleHeight;
+        map.updateSize();
         view.setResolution(viewResolution);
 
         console.error('Error creating screenshot:', error);
@@ -701,12 +709,8 @@ export function snapshot (options) {
     // Resize the map container
     mapElement.style.width = `${scaledMapWidth}px`;
     mapElement.style.height = `${scaledMapHeight}px`;
-    // mapElement.style.transform = `scale(${scaleFactor})`;
-    // map.setSize([scaledMapWidth, scaledMapHeight]);
     map.updateSize();
     view.setResolution(scaledResolution);
-    // const scaledZoom = view.getZoomForResolution(scaledResolution);
-    // view.setZoom(scaledZoom);
     map.render();
   });
 }
