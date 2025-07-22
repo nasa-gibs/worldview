@@ -3,7 +3,7 @@ import {
   get as lodashGet,
 } from 'lodash';
 import JSZip from 'jszip';
-import { transform, getPointResolution } from 'ol/proj';
+import { transform } from 'ol/proj';
 import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
@@ -441,7 +441,7 @@ export function convertPngToKml(pngBlob, options) {
  * @param {Object} options - Additional options for georeferencing
  * @param {Array} options.bbox - Bounding box [minX, minY, maxX, maxY] in map units
  * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
- * @param {Number} options.resolution - Image resolution in DPI
+ * @param {Number} options.metersPerPixel - Ground resolution in meters per pixel
  * @param {Number} options.captureWidth - Width of the output image in pixels
  * @param {Number} options.captureHeight - Height of the output image in pixels
  * @param {String} options.inputFormat - Input image format (default: 'png')
@@ -525,90 +525,34 @@ export async function georeference (inputBlob, options) {
 }
 
 /**
- * Convert map units (meters per pixel) to image resolution (DPI)
- * @param {Number} metersPerPixel - Ground resolution in meters per pixel
- * @param {Number} [latitude=0] - Latitude in degrees (needed for geographic projections)
- * @returns {Number} - Image resolution in DPI
- */
-export function convertMetersPerPixelToResolution (metersPerPixel) {
-  // Standard constants
-  const INCHES_PER_METER = 39.3701; // 1 meter = 39.3701 inches
-  const STANDARD_DPI = 96; // Base screen resolution
-
-  if (metersPerPixel <= 0) {
-    console.warn('Invalid meters per pixel value:', metersPerPixel);
-    return STANDARD_DPI;
-  }
-
-  // For very high resolution (small meters per pixel), cap the result
-  // to avoid unreasonably large DPI values
-  const minimumMetersPerPixel = 0.01;
-  const effectiveMetersPerPixel = Math.max(metersPerPixel, minimumMetersPerPixel);
-
-  // Calculate raw DPI value
-  const pixelsPerMeter = 1 / effectiveMetersPerPixel;
-  const dpi = pixelsPerMeter * INCHES_PER_METER;
-
-  // Round to a reasonable value to avoid strange numbers
-  // Find the closest standard resolution
-  const standardResolutions = [72, 96, 150, 300, 600, 1200, 2400, 4800];
-
-  let closestDPI = STANDARD_DPI;
-  let minDiff = Infinity;
-
-  standardResolutions.forEach((standardDPI) => {
-    const diff = Math.abs(dpi - standardDPI);
-    if (diff < minDiff) {
-      minDiff = diff;
-      closestDPI = standardDPI;
-    }
-  });
-
-  return closestDPI;
-}
-
-/**
- * Calculate ground resolution from map state and target DPI
- * @param {Number} dpi - Target resolution in DPI
+ * Calculate ground resolution from map state and target spatial resolution
+ * @param {Number} targetMetersPerPixel - Target spatial resolution in meters per pixel
  * @param {Object} projection - Map projection
  * @param {Number} mapResolution - Current map resolution
  * @param {Array} center - Map center coordinates
- * @returns {Number} - Ground resolution in meters per pixel
+ * @returns {Number} - Scale factor to apply to map
  */
-export function calculateGroundResolution (dpi, projection, mapResolution, center) {
-  // Scale factor based on ratio of target DPI to standard DPI
-  const scaleFactor = dpi / 96;
-
-  // Get scaled resolution in map units
-  const scaledResolution = getPointResolution(
-    projection,
-    mapResolution / scaleFactor,
-    center,
-  );
-
-  // Calculate resulting resolution in map units
-  const resolutionInMapUnits = scaledResolution * scaleFactor;
-
-  // Convert to meters if needed
+export function calculateScaleFactorFromSpatialResolution (targetMetersPerPixel, projection, mapResolution, center) {
   const units = projection.getUnits();
-  let resolutionInMeters = resolutionInMapUnits;
+  let currentResolutionInMeters = mapResolution;
 
   if (units === 'degrees') {
     // For geographic projections, convert degrees to meters
     const latitude = center[1];
     const metersPerDegree = 111319.9 * Math.cos((latitude * Math.PI) / 180);
-    resolutionInMeters = resolutionInMapUnits * metersPerDegree;
+    currentResolutionInMeters = mapResolution * metersPerDegree;
   }
 
-  return resolutionInMeters;
+  // Calculate scale factor needed to achieve target resolution
+  return (currentResolutionInMeters / targetMetersPerPixel) / 96;
 }
 
 export function snapshot (options) {
-  document.body.style.cursor = 'wait';
+  // document.body.style.cursor = 'wait';
   return new Promise((resolve, reject) => {
     const {
       format,
-      resolution,
+      metersPerPixel,
       width,
       height,
       xOffset,
@@ -640,8 +584,17 @@ export function snapshot (options) {
     const maxY = Math.max(topLeft[1], topRight[1]);
     const bbox = [minX, minY, maxX, maxY];
 
-    // Calculate scale factor based on resolution
-    const scaleFactor = resolution / 96;
+    // Calculate scale factor based on target spatial resolution
+    const projection = view.getProjection();
+    const center = view.getCenter();
+    const scaleFactor = calculateScaleFactorFromSpatialResolution(
+      metersPerPixel,
+      projection,
+      viewResolution,
+      center,
+    );
+
+    console.log({ scaleFactor }); // eslint-disable-line no-console
 
     // Scale the entire map up to the target resolution
     const scaledMapWidth = originalWidth * scaleFactor;
@@ -654,16 +607,17 @@ export function snapshot (options) {
     const scaledHeight = height * scaleFactor;
     const scaledResolution = viewResolution / scaleFactor;
 
-    map.once('rendercomplete', async () => {
+    const handleRenderComplete = async () => {
       try {
         // Create our output canvas with exact dimensions we want
         const outputCanvas = document.createElement('canvas');
         outputCanvas.width = scaledWidth;
         outputCanvas.height = scaledHeight;
         const ctx = outputCanvas.getContext('2d');
+        const viewport = map.getViewport();
 
         // Capture the map at its new scaled size
-        const capturedCanvas = await html2canvas(map.getViewport(), {
+        const capturedCanvas = await html2canvas(viewport, {
           backgroundColor: null,
           useCORS: true,
           allowTaint: true,
@@ -700,7 +654,7 @@ export function snapshot (options) {
           const georeferencedOutput = await georeference(pngBlob, {
             bbox,
             crs,
-            resolution,
+            metersPerPixel,
             captureWidth: scaledWidth,
             captureHeight: scaledHeight,
             inputFormat: 'png',
@@ -730,24 +684,30 @@ export function snapshot (options) {
         }, 'image/png', 1);
       } catch (error) {
         // Reset map size in case of error
-        mapElement.style.width = originalStyleWidth;
-        mapElement.style.height = originalStyleHeight;
-        map.updateSize();
+        // mapElement.style.width = originalStyleWidth;
+        // mapElement.style.height = originalStyleHeight;
+        // map.updateSize();
+        // mapElement.style.transform = 'scale(1)';
         view.setResolution(viewResolution);
 
         console.error('Error creating screenshot:', error);
         document.body.style.cursor = 'auto';
         reject(error);
       }
-    });
+    };
+
+    map.once('rendercomplete', handleRenderComplete);
 
     // Resize the map container
     mapElement.style.width = `${scaledMapWidth}px`;
     mapElement.style.height = `${scaledMapHeight}px`;
+    // mapElement.style.transform = `scale(${scaleFactor})`;
+    // map.setSize([scaledMapWidth, scaledMapHeight]);
     map.updateSize();
     view.setResolution(scaledResolution);
-
-    map.renderSync();
+    // const scaledZoom = view.getZoomForResolution(scaledResolution);
+    // view.setZoom(scaledZoom);
+    map.render();
   });
 }
 

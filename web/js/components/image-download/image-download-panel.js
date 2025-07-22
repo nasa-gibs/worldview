@@ -73,7 +73,7 @@ function ImageDownloadPanel(props) {
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
     const snapshotOptions = {
       format: snapshotFormat,
-      resolution: 600,
+      metersPerPixel: Number(currResolution),
       width: calcWidth,
       height: calcHeight,
       xOffset: boundaries[0],
