@@ -4,6 +4,7 @@ const yargs = require('yargs')
 const { hideBin } = require('yargs/helpers')
 const console = require('console')
 const axios = require('axios').default
+const xml2js = require('xml2js')
 
 const prog = path.basename(__filename)
 
@@ -26,6 +27,12 @@ const options = yargs(hideBin(process.argv))
     alias: 'm',
     type: 'string',
     description: 'layer-metadata/all.json file'
+  })
+  .option('mode', {
+    demandOption: true,
+    alias: 'mo',
+    type: 'string',
+    description: 'mode'
   })
   .epilog('Creates a layer-metadata file containing all layers')
 
@@ -57,7 +64,7 @@ if (fs.existsSync(layerOrderFile)) {
 const outputFile = argv.layerMetadata
 
 const metadataConfig = features.features.vismetadata
-const url = metadataConfig.url
+const { url, cmrVisualizationsUrl } = metadataConfig
 const daacMap = metadataConfig.daacMap || {}
 const layerMetadata = {}
 
@@ -107,6 +114,7 @@ const skipLayers = [
 // NOTE: Only using these properties at this time
 const useKeys = [
   'conceptIds',
+  'ConceptIds',
   'dataCenter',
   'daynight',
   'orbitTracks',
@@ -114,17 +122,21 @@ const useKeys = [
   'ongoing',
   'layerPeriod',
   'title',
-  'subtitle'
+  'Title',
+  'subtitle',
+  'Subtitle',
+  'What'
 ]
 
-async function main (url) {
+async function main (url, cmrVisualizationsUrl) {
   layerOrder = layerOrder.layerOrder
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
   for (const layerId of layerOrder) {
     if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
-      await getMetadata(layerId, url)
+      if (argv.mode === 'verbose') console.warn(`${prog}: Fetching metadata for ${layerId}`)
+      await getMetadata(layerId, url, cmrVisualizationsUrl)
     }
   }
 
@@ -141,10 +153,11 @@ async function main (url) {
 }
 
 async function getDAAC (metadata) {
-  if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
+  const conceptIds = metadata.conceptIds || metadata.ConceptIds
+  if (!Array.isArray(conceptIds) || !conceptIds.length) {
     return metadata
   }
-  for (const collection of metadata.conceptIds) {
+  for (const collection of conceptIds) {
     const origDataCenter = collection.dataCenter
     const dataCenter = daacMap[origDataCenter]
     if (!dataCenter) {
@@ -160,36 +173,64 @@ async function getDAAC (metadata) {
   return metadata
 }
 
-async function getMetadata (layerId, baseUrl, count) {
+async function getMetadata (layerId, baseUrl, ummVisUrl, count) {
   if (count) console.warn(`retry #${count} for ${layerId}`)
-  return axios({
-    method: 'get',
-    url: `${baseUrl}${layerId}.json`,
-    responseType: 'json',
-    timeout: 10000
-  }).then(async (response) => {
-    const metadata = response.data
+  const searchReq = await fetch(`${ummVisUrl}?identifier=${layerId}`, { signal: AbortSignal.timeout(10000) })
+  const searchText = await searchReq?.text?.() || ''
+  const parser = new xml2js.Parser()
+  const searchJson = await parser.parseStringPromise(searchText)
+  const location = searchJson?.results?.references?.[0]?.reference?.[0]?.location?.[0]
+  if (location) {
+    const ummVisReq = await fetch(location, { signal: AbortSignal.timeout(10000) })
+    const metadata = await ummVisReq.json()
     layerMetadata[layerId] = await getDAAC(metadata)
     let metadataKeys = Object.keys(layerMetadata[layerId])
     metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
     for (const key of metadataKeys) {
       delete layerMetadata[layerId][key]
     }
-  }).catch((error) => {
-    handleException(error, layerId, url, count)
-  })
+    // Convert keys to camelCase
+    for (const key in layerMetadata[layerId]) {
+      const firstUppercaseCharacter = key.match(/^[A-Z]/g)?.[0]
+      if (firstUppercaseCharacter) {
+        const newKey = key.replace(firstUppercaseCharacter, firstUppercaseCharacter.toLowerCase())
+        layerMetadata[layerId][newKey] = layerMetadata[layerId][key]
+        delete layerMetadata[layerId][key]
+      }
+    }
+    if (argv.mode === 'verbose') console.warn(layerMetadata[layerId])
+  } else {
+    return axios({
+      method: 'get',
+      url: `${baseUrl}${layerId}.json`,
+      responseType: 'json',
+      timeout: 10000
+    }).then(async (response) => {
+      const metadata = response.data
+      layerMetadata[layerId] = await getDAAC(metadata)
+      let metadataKeys = Object.keys(layerMetadata[layerId])
+      metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
+      for (const key of metadataKeys) {
+        delete layerMetadata[layerId][key]
+      }
+      if (argv.mode === 'verbose') console.warn(layerMetadata[layerId])
+    }).catch((error) => {
+      if (argv.mode === 'verbose') console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
+      handleException(error, layerId, url, ummVisUrl, count)
+    })
+  }
 }
 
-async function handleException (error, layerId, url, count) {
+async function handleException (error, layerId, url, ummVisUrl, count) {
   if (!count) count = 0
   count++
   if (count <= 5) {
-    await getMetadata(layerId, url, count)
+    await getMetadata(layerId, url, ummVisUrl, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
   }
 }
 
-main(url).catch((err) => {
+main(url, cmrVisualizationsUrl).catch((err) => {
   console.error(err.stack)
 })
