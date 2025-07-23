@@ -553,166 +553,164 @@ export async function snapshot (options) {
 
   const maxArea = await canvasSize.maxArea();
 
-  return new Promise((resolve, reject) => {
-    const {
-      format,
-      metersPerPixel,
-      width,
-      height,
-      xOffset,
-      yOffset,
-      map,
-      worldfile,
-    } = options;
-    const view = map.getView();
+  const {
+    format,
+    metersPerPixel,
+    width,
+    height,
+    xOffset,
+    yOffset,
+    map,
+    worldfile,
+  } = options;
+  const view = map.getView();
 
-    // Save original map size
-    const mapElement = map.getTargetElement();
-    const originalStyleWidth = mapElement.style.width;
-    const originalStyleHeight = mapElement.style.height;
+  // Save original map size
+  const mapElement = map.getTargetElement();
+  const originalStyleWidth = mapElement.style.width;
+  const originalStyleHeight = mapElement.style.height;
 
-    // Save original viewport size
-    const [originalWidth, originalHeight] = map.getSize();
-    const viewResolution = map.getView().getResolution();
+  // Save original viewport size
+  const [originalWidth, originalHeight] = map.getSize();
+  const viewResolution = map.getView().getResolution();
 
-    // Calculate geographic extent
-    const topLeft = map.getCoordinateFromPixel([xOffset, yOffset]);
-    const topRight = map.getCoordinateFromPixel([xOffset + width, yOffset]);
-    const bottomLeft = map.getCoordinateFromPixel([xOffset, yOffset + height]);
-    const bottomRight = map.getCoordinateFromPixel([xOffset + width, yOffset + height]);
+  // Calculate geographic extent
+  const topLeft = map.getCoordinateFromPixel([xOffset, yOffset]);
+  const topRight = map.getCoordinateFromPixel([xOffset + width, yOffset]);
+  const bottomLeft = map.getCoordinateFromPixel([xOffset, yOffset + height]);
+  const bottomRight = map.getCoordinateFromPixel([xOffset + width, yOffset + height]);
 
-    // Calculate bounds
-    const minX = Math.min(topLeft[0], bottomLeft[0]);
-    const maxX = Math.max(topRight[0], bottomRight[0]);
-    const minY = Math.min(bottomLeft[1], bottomRight[1]);
-    const maxY = Math.max(topLeft[1], topRight[1]);
-    const bbox = [minX, minY, maxX, maxY];
+  // Calculate bounds
+  const minX = Math.min(topLeft[0], bottomLeft[0]);
+  const maxX = Math.max(topRight[0], bottomRight[0]);
+  const minY = Math.min(bottomLeft[1], bottomRight[1]);
+  const maxY = Math.max(topLeft[1], topRight[1]);
+  const bbox = [minX, minY, maxX, maxY];
 
-    // Calculate scale factor based on target spatial resolution
-    const projection = view.getProjection();
-    const center = view.getCenter();
-    const scaleFactor = calculateScaleFactorFromSpatialResolution(
-      metersPerPixel,
-      projection,
-      viewResolution,
-      center,
-    );
+  // Calculate scale factor based on target spatial resolution
+  const projection = view.getProjection();
+  const center = view.getCenter();
+  const scaleFactor = calculateScaleFactorFromSpatialResolution(
+    metersPerPixel,
+    projection,
+    viewResolution,
+    center,
+  );
 
-    // Scale the entire map up to the target resolution
-    const scaledMapWidth = originalWidth * scaleFactor;
-    const scaledMapHeight = originalHeight * scaleFactor;
-    const maxHeight = maxArea.height;
-    const maxWidth = maxArea.width;
-    const devicePixelRatio = window.devicePixelRatio || 1;
-    const scaledMapWidthWithDPR = scaledMapWidth * devicePixelRatio;
-    const scaledMapHeightWithDPR = scaledMapHeight * devicePixelRatio;
+  // Scale the entire map up to the target resolution
+  const scaledMapWidth = originalWidth * scaleFactor;
+  const scaledMapHeight = originalHeight * scaleFactor;
+  const maxHeight = maxArea.height;
+  const maxWidth = maxArea.width;
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scaledMapWidthWithDPR = scaledMapWidth * devicePixelRatio;
+  const scaledMapHeightWithDPR = scaledMapHeight * devicePixelRatio;
 
-    if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxArea.width}x${maxArea.height}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
+  if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxArea.width}x${maxArea.height}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
 
-    // Calculate scaled positions for cropping
-    const scaledXOffset = xOffset * scaleFactor;
-    const scaledYOffset = yOffset * scaleFactor;
-    const scaledWidth = width * scaleFactor;
-    const scaledHeight = height * scaleFactor;
-    const scaledResolution = viewResolution / scaleFactor;
+  // Calculate scaled positions for cropping
+  const scaledXOffset = xOffset * scaleFactor;
+  const scaledYOffset = yOffset * scaleFactor;
+  const scaledWidth = width * scaleFactor;
+  const scaledHeight = height * scaleFactor;
+  const scaledResolution = viewResolution / scaleFactor;
 
-    const handleRenderComplete = async () => {
-      try {
-        // Create our output canvas with exact dimensions we want
-        const outputCanvas = document.createElement('canvas');
-        outputCanvas.width = scaledWidth;
-        outputCanvas.height = scaledHeight;
-        const ctx = outputCanvas.getContext('2d');
-        const viewport = map.getViewport();
+  const handleRenderComplete = async () => {
+    try {
+      // Create our output canvas with exact dimensions we want
+      const outputCanvas = document.createElement('canvas');
+      outputCanvas.width = scaledWidth;
+      outputCanvas.height = scaledHeight;
+      const ctx = outputCanvas.getContext('2d');
+      const viewport = map.getViewport();
 
-        // Capture the map at its new scaled size
-        const capturedCanvas = await html2canvas(viewport, {
-          backgroundColor: null,
-          useCORS: true,
-          allowTaint: true,
-          scrollX: 0,
-          scrollY: 0,
-          scale: 1, // No additional scaling since we already scaled the map
-          logging: false,
-          imageTimeout: 0,
-          removeContainer: true,
+      // Capture the map at its new scaled size
+      const capturedCanvas = await html2canvas(viewport, {
+        backgroundColor: null,
+        useCORS: true,
+        allowTaint: true,
+        scrollX: 0,
+        scrollY: 0,
+        scale: 1, // No additional scaling since we already scaled the map
+        logging: false,
+        imageTimeout: 0,
+        removeContainer: true,
+      });
+
+      // Draw only the selected region to our output canvas
+      ctx.drawImage(
+        capturedCanvas,
+        scaledXOffset, // source x
+        scaledYOffset, // source y
+        scaledWidth, // source width
+        scaledHeight, // source height
+        0, // dest x
+        0, // dest y
+        scaledWidth, // dest width
+        scaledHeight, // dest height
+      );
+
+      // Reset map to original size
+      mapElement.style.width = originalStyleWidth;
+      mapElement.style.height = originalStyleHeight;
+      map.updateSize();
+      view.setResolution(viewResolution);
+
+      outputCanvas.toBlob(async (pngBlob) => {
+        const zip = new JSZip();
+        const crs = map.getView().getProjection().getCode();
+        const georeferencedOutput = await georeference(pngBlob, {
+          bbox,
+          crs,
+          metersPerPixel,
+          captureWidth: scaledWidth,
+          captureHeight: scaledHeight,
+          inputFormat: 'png',
+          outputFormat: format === 'kmz' ? 'kml' : format,
+          worldfile,
+          name: 'Worldview Snapshot',
+          description: 'Snapshot created with NASA Worldview',
         });
 
-        // Draw only the selected region to our output canvas
-        ctx.drawImage(
-          capturedCanvas,
-          scaledXOffset, // source x
-          scaledYOffset, // source y
-          scaledWidth, // source width
-          scaledHeight, // source height
-          0, // dest x
-          0, // dest y
-          scaledWidth, // dest width
-          scaledHeight, // dest height
-        );
+        georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
+        const zipBlob = await zip.generateAsync({
+          type: 'blob',
+          compression: 'DEFLATE',
+          compressionOptions: { level: 9 },
+          mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
+        });
 
-        // Reset map to original size
-        mapElement.style.width = originalStyleWidth;
-        mapElement.style.height = originalStyleHeight;
-        map.updateSize();
-        view.setResolution(viewResolution);
+        const url = URL.createObjectURL(zipBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`;
+        link.click();
 
-        outputCanvas.toBlob(async (pngBlob) => {
-          const zip = new JSZip();
-          const crs = map.getView().getProjection().getCode();
-          const georeferencedOutput = await georeference(pngBlob, {
-            bbox,
-            crs,
-            metersPerPixel,
-            captureWidth: scaledWidth,
-            captureHeight: scaledHeight,
-            inputFormat: 'png',
-            outputFormat: format === 'kmz' ? 'kml' : format,
-            worldfile,
-            name: 'Worldview Snapshot',
-            description: 'Snapshot created with NASA Worldview',
-          });
-
-          georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
-          const zipBlob = await zip.generateAsync({
-            type: 'blob',
-            compression: 'DEFLATE',
-            compressionOptions: { level: 9 },
-            mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
-          });
-
-          const url = URL.createObjectURL(zipBlob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`;
-          link.click();
-
-          resolve(url);
-          URL.revokeObjectURL(url);
-          document.body.style.cursor = 'auto';
-        }, 'image/png', 1);
-      } catch (error) {
-        // Reset map size in case of error
-        mapElement.style.width = originalStyleWidth;
-        mapElement.style.height = originalStyleHeight;
-        map.updateSize();
-        view.setResolution(viewResolution);
-
-        console.error('Error creating screenshot:', error);
         document.body.style.cursor = 'auto';
-        reject(error);
-      }
-    };
+        URL.revokeObjectURL(url);
+        return url;
+      }, 'image/png', 1);
+    } catch (error) {
+      // Reset map size in case of error
+      mapElement.style.width = originalStyleWidth;
+      mapElement.style.height = originalStyleHeight;
+      map.updateSize();
+      view.setResolution(viewResolution);
 
-    map.once('rendercomplete', handleRenderComplete);
+      console.error('Error creating screenshot:', error);
+      document.body.style.cursor = 'auto';
+      throw error;
+    }
+  };
 
-    // Resize the map container
-    mapElement.style.width = `${scaledMapWidth}px`;
-    mapElement.style.height = `${scaledMapHeight}px`;
-    map.updateSize();
-    view.setResolution(scaledResolution);
-    map.render();
-  });
+  map.once('rendercomplete', handleRenderComplete);
+
+  // Resize the map container
+  mapElement.style.width = `${scaledMapWidth}px`;
+  mapElement.style.height = `${scaledMapHeight}px`;
+  map.updateSize();
+  view.setResolution(scaledResolution);
+  map.render();
 }
 
 export function imageUtilGetConversionFactor(proj) {
