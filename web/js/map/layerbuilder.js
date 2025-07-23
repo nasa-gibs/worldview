@@ -215,6 +215,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const layer = new ImageLayer({
       source: new Static({
+        interpolate: false,
         url: projectionURL,
         projection: crs,
         imageExtent: maxExtent,
@@ -374,6 +375,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
+      interpolate: false,
       url: sourceURL + urlParameters,
       layer: layer || id,
       cacheSize: 4096,
@@ -461,6 +463,7 @@ export default function mapLayerBuilder(config, cache, store) {
     urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const sourceOptions = {
+      interpolate: false,
       url: source.url + urlParameters,
       cacheSize: 4096,
       wrapX: true,
@@ -977,6 +980,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const xyzSourceOptions = {
+      interpolate: false,
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
