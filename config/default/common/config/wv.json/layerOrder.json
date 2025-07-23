@@ -105,6 +105,7 @@
 		"TEMPO_L3_Ozone_UV_Aerosol_Index",
 		"VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
 		"VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+		"VIIRS_SNPP_GapFilled_BRDF_Corrected_DayNightBand_Radiance",
 		"VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
 		"VIIRS_SNPP_DayNightBand_AtSensor_M15",
 		"VIIRS_SNPP_DayNightBand_ENCC",
