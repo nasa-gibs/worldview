@@ -18,6 +18,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'getcapabilities input directory'
   })
+  .option('wvStylesDir', {
+    demandOption: true,
+    alias: 'w',
+    type: 'string',
+    description: 'worldview hosted styles directory'
+  })
   .option('outputDir', {
     demandOption: true,
     alias: 'o',
@@ -32,13 +38,16 @@ if (!argv.inputDir && !argv.outputDir) {
 }
 
 const inputDir = argv.inputDir
+const wvStylesDir = argv.wvStylesDir
 const outputDir = argv.outputDir
 
 async function main () {
   let fileCount = 0
   let errorCount = 0
 
-  for (const file of fs.readdirSync(inputDir)) {
+  const files = [...fs.readdirSync(inputDir), ...fs.readdirSync(wvStylesDir)]
+
+  for (const file of files) {
     try {
       fileCount += 1
       await copyFileAsync(file)
@@ -62,7 +71,10 @@ async function copyFileAsync (file) {
     const vectorLayerId = vectorLayerFilename.split('.json', 1)[0]
     responseData.vectorStyles = {}
     responseData.vectorStyles[vectorLayerId] = {}
-    const initialData = JSON.parse(await readFile(`${inputDir}/${file}`, 'utf-8'))
+    const data = await readFile(`${inputDir}/${file}`, 'utf-8').catch(() => {
+      return readFile(`${wvStylesDir}/${file}`, 'utf-8')
+    })
+    const initialData = JSON.parse(data)
     for (const i in initialData) {
       responseData.vectorStyles[vectorLayerId][i] = initialData[i]
     }

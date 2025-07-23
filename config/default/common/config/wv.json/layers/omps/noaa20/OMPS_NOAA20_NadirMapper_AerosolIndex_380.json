@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OMPS_NOAA20_NadirMapper_AerosolIndex_380": {
+      "id": "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
+      "description": "omps/noaa20/OMPS_NOAA20_NadirMapper_AerosolIndex_380",
+      "tags": "ai",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Aerosol Index"
+    }
+  }
+}
