@@ -7,7 +7,10 @@ import {
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
   snapshot,
+  getDownloadUrl,
 } from '../../modules/image-download/util';
+import { getActivePalettes } from '../../modules/palettes/selectors';
+import { useSelector } from 'react-redux';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
@@ -49,6 +52,8 @@ function ImageDownloadPanel(props) {
     geoLatLong,
     onLatLongChange,
     boundaries,
+    url,
+    markerCoordinates,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -56,6 +61,7 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
+  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
 
   useEffect(() => {
     const layerList = getLayers();
@@ -80,8 +86,26 @@ function ImageDownloadPanel(props) {
       yOffset: boundaries[1],
       map,
       worldfile: currIsWorldfile,
+      projection,
     };
-    const dlURL = await snapshot(snapshotOptions);
+    snapshot(snapshotOptions);
+
+    const time = new Date(date.getTime());
+
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
+    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const dlURL = getDownloadUrl(
+      url,
+      projection,
+      layerDefs,
+      lonlats,
+      { width, height },
+      time,
+      currFileType,
+      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
+      markerCoordinates,
+      activePalettes,
+    );
 
     googleTagManager.pushEvent({
       event: 'image_download',
@@ -173,12 +197,15 @@ function ImageDownloadPanel(props) {
     <>
       {crossesDatelineAlert()}
       <div className="wv-re-pick-wrapper wv-image">
-        <div
+        <a
           id="wv-image-download-url"
-          style={{ display: 'none' }}
           // eslint-disable-next-line react/no-unknown-property
-          url={debugUrl}
-        />
+          href={debugUrl}
+          className="wv-image-download-url"
+          download={`debugSnapshot.${currFileType.split('/').at(-1)}`}
+        >
+          Download Image
+        </a>
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"

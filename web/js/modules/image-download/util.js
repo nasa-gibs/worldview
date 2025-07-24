@@ -545,7 +545,7 @@ export function calculateScaleFactorFromSpatialResolution (targetMetersPerPixel,
   }
 
   // Calculate scale factor needed to achieve target resolution
-  return (currentResolutionInMeters / targetMetersPerPixel) / 96;
+  return currentResolutionInMeters / targetMetersPerPixel;
 }
 
 export async function snapshot (options) {
@@ -562,6 +562,7 @@ export async function snapshot (options) {
     yOffset,
     map,
     worldfile,
+    projection: proj,
   } = options;
   const view = map.getView();
 
@@ -590,6 +591,7 @@ export async function snapshot (options) {
   // Calculate scale factor based on target spatial resolution
   const projection = view.getProjection();
   const center = view.getCenter();
+  // const targetResolution = proj.selected.resolutions[metersPerPixel];
   const scaleFactor = calculateScaleFactorFromSpatialResolution(
     metersPerPixel,
     projection,
@@ -619,10 +621,24 @@ export async function snapshot (options) {
     try {
       // Create our output canvas with exact dimensions we want
       const outputCanvas = document.createElement('canvas');
-      outputCanvas.width = scaledWidth;
-      outputCanvas.height = scaledHeight;
-      const ctx = outputCanvas.getContext('2d');
+      // outputCanvas.width = scaledWidth;
+      // outputCanvas.height = scaledHeight;
       const viewport = map.getViewport();
+      const dpr = window.devicePixelRatio || 1;
+
+      // Set the "actual" size of the outputCanvas
+      outputCanvas.width = scaledWidth * dpr;
+      outputCanvas.height = scaledHeight * dpr;
+
+      const ctx = outputCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
+
+      // Scale the context to ensure correct drawing operations
+      ctx.scale(dpr, dpr);
+
+      // Set the "drawn" size of the outputCanvas
+      outputCanvas.style.width = `${scaledWidth}px`;
+      outputCanvas.style.height = `${scaledHeight}px`;
 
       // Capture the map at its new scaled size
       const capturedCanvas = await html2canvas(viewport, {
@@ -631,7 +647,7 @@ export async function snapshot (options) {
         allowTaint: true,
         scrollX: 0,
         scrollY: 0,
-        scale: 1, // No additional scaling since we already scaled the map
+        scale: dpr, // No additional scaling since we already scaled the map
         logging: false,
         imageTimeout: 0,
         removeContainer: true,
@@ -640,10 +656,10 @@ export async function snapshot (options) {
       // Draw only the selected region to our output canvas
       ctx.drawImage(
         capturedCanvas,
-        scaledXOffset, // source x
-        scaledYOffset, // source y
-        scaledWidth, // source width
-        scaledHeight, // source height
+        scaledXOffset * dpr, // source x
+        scaledYOffset * dpr, // source y
+        scaledWidth * dpr, // source width
+        scaledHeight * dpr, // source height
         0, // dest x
         0, // dest y
         scaledWidth, // dest width
