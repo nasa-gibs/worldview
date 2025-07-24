@@ -1,0 +1,7 @@
+The Black Marble Gap-Filled BRDF Corrected Nighttime Lights (Day/Night Band) layer is a daily, moonlight- and atmosphere-corrected night time lights layer. It is created from NASA’s Black Marble daily at-sensor top-of-atmosphere nighttime radiance product (VNP46A1), daily DNB BRDF/Albedo Model Parameters (VNP43LGDNBA1), daily surface reflectance (VNPPLG09GA), and daily Aerosol Optical Thickness (VNP04LGA). It is displayed as a grayscale image. The layer is expressed in radiance units (nW/(cm<sup>2</sup> sr))  with log10 conversion.
+
+The VIIRS DNB’s ultra-sensitivity in lowlight conditions enable us to generate a set of science-quality nighttime products that manifest substantial improvements in sensor resolution and calibration when compared to the previous era of Defense Meteorological Satellite Program/Operational Linescan System’s (DMSP/OLS) nighttime lights image products. Such improvements allow the VIIRS DNB products to better monitor both the magnitude and signature of nighttime phenomena, and anthropogenic sources of light emissions.
+
+The Black Marble Gap-Filled BRDF Corrected Nighttime Lights (Day/Night Band) layer is available in near real-time from the Visible Infrared Imaging Radiometer Suite (VIIRS) aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The sensor resolution is 750 m at nadir, imagery resolution is 500 m, and the temporal resolution is daily.
+
+References: VNP46A2_NRT [doi:10.5067/VIIRS/VNP46A2_NRT.002](https://doi.org/10.5067/VIIRS/VNP46A2_NRT.002)

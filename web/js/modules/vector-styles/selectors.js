@@ -158,7 +158,17 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
  * @param {Object} state | The entire state of the application
  * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
  */
-export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, options, state, styleSelection = false) {
+export function setStyleFunction(opts) {
+  let { layer } = opts;
+  const {
+    def,
+    vectorStyleId,
+    vectorStyles,
+    options,
+    state,
+    vectorStyleSource,
+    styleSelection = false,
+  } = opts;
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return;
   const { proj } = state;
@@ -205,7 +215,8 @@ export function setStyleFunction(def, vectorStyleId, vectorStyles, layer, option
     ? lodashFind(layer.getLayers().getArray(), 'isVector')
     : layer;
 
-  const styleFunction = stylefunction(layer, glStyle, layerId, resolutions);
+  const source = vectorStyleSource || layerId;
+  const styleFunction = stylefunction(layer, glStyle, source, resolutions);
   const selectedFeatures = selected[layerId];
 
   // Process style of feature selected/clicked in UI
@@ -300,10 +311,21 @@ export const applyStyle = (def, olVectorLayer, state, options) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
+  const vectorStyleSource = def.vectorStyle.source;
 
   if (!vectorStyles || !vectorStyleId) {
     return;
   }
+  const opts = {
+    def,
+    vectorStyleId,
+    vectorStyles,
+    layer: olVectorLayer,
+    options,
+    state,
+    vectorStyleSource,
+    styleSelection: false,
+  };
 
-  setStyleFunction(def, vectorStyleId, vectorStyles, olVectorLayer, options, state);
+  setStyleFunction(opts);
 };
