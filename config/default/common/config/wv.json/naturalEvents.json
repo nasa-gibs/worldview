@@ -38,7 +38,7 @@
                 "description": "Related to both the physical effects of an eruption (rock, ash, lava) and the atmospheric (ash and gas plumes).",
                 "layers": "https://eonet.gsfc.nasa.gov/api/v3/layers/volcanoes"
             },
-             {
+            {
                 "id": "waterColor",
                 "title": "Water Color",
                 "description": "Related to events that alter the appearance of water: phytoplankton, red tide, algae, sediment, whiting, etc.",
