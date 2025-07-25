@@ -1,5 +1,6 @@
 import * as olExtent from 'ol/extent';
 import ImageLayer from 'ol/layer/Image';
+import OlMap from 'ol/Map';
 import {
   each as lodashEach,
   isUndefined as lodashIsUndefined,
@@ -7,7 +8,6 @@ import {
   get as lodashGet,
   isEqual as lodashIsEqual,
 } from 'lodash';
-import OlRendererCanvasTileLayer from 'ol/renderer/canvas/TileLayer';
 import Promise from 'bluebird';
 import { encode } from '../link/util';
 import { getActiveVisibleLayersAtDate } from '../layers/selectors';
@@ -146,110 +146,50 @@ export function getMapParameterSetup(
   };
 }
 
-/**
- * Calculate the current extent from the map's extent (boundaries) &
- * the viewport extent (boundaries).
- *
- * @method calculateExtent
- * @param  {array} layerExtent     The layer extent
- * @param  {array} map             The current map
- * @return {array}                An extent array. Used to calculate
- * the extent for prev, next & current day
- */
-function calculateExtent(layerExtent, map) {
-  const viewportExtent = map.getView().calculateExtent();
-  const visibleExtent = olExtent.getIntersection(viewportExtent, layerExtent);
-
-  if (map.proj === 'geographic') {
-    if (layerExtent[1] < -180) {
-    // Previous day
-      visibleExtent[1] += 360;
-      visibleExtent[3] += 360;
-    } else if (layerExtent[1] > 180) {
-    // Next day
-      visibleExtent[1] -= 360;
-      visibleExtent[3] -= 360;
-    }
-  }
-
-  // eslint-disable-next-line no-restricted-globals
-  if (!isFinite(visibleExtent[0])) {
-    return null;
-  }
-  return visibleExtent;
-}
+let preloadMap;
 
 /**
  * Returns a promise of the layer tilegrid.
  *
  * @method promiseTileLayer
  * @param  {object} layer      _ol_layer_Tile_
- * @param  {array} extent      An array of map boundaries [180, -90, 250, 90]
  * @param  {object} viewState  Contains center, projection, resolution, rotation and zoom parameters
  * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
  * @return {object}            promise
  */
-function promiseTileLayer(layer, extent, map) {
-  let tileSource;
-  let currentZ;
-  let i;
-  let tileGrid;
+function promiseTileLayer(layer, map) {
+  let i = 0;
+  return new Promise((resolve) => {
+    if (!preloadMap) {
+      const mapContainerEl = document.getElementById('wv-map');
+      const mapEl = document.createElement('div');
+      const id = 'wv-map-preload';
 
-  return new Promise((resolve, reject) => {
-    if (!extent) {
-      resolve('resolve tile layer');
-      return;
+      mapEl.setAttribute('id', id);
+      mapEl.style.display = 'none';
+      mapContainerEl.insertAdjacentElement('afterbegin', mapEl);
+
+      preloadMap = new OlMap({
+        view: map.getView(),
+        target: id,
+      });
     }
-    // OL object describing the current map frame
-    const { pixelRatio, viewState } = map.frameState_;
-    const { projection, resolution } = viewState;
-    const { zDirection } = new OlRendererCanvasTileLayer(layer);
-    tileSource = layer.getSource();
-    tileGrid = tileSource.getTileGridForProjection(projection);
-    currentZ = tileGrid.getZForResolution(resolution, zDirection);
-    i = 0;
-
 
     const onLoad = function onLoad (e) {
-      if (e.type === 'tileloadend') {
-        i -= 1;
-        if (i === 0) {
-          // eslint-disable-next-line no-use-before-define
-          complete();
-        }
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(`No response for tile request ${layer.wv.key}`);
-        // some gibs data is not accurate and rejecting here
-        // will break the animation if tile doesn't exist
-        // eslint-disable-next-line no-use-before-define
-        complete();
+      i -= 1;
+      preloadMap.removeLayer(layer);
+      if (i === 0) {
+        preloadMap.un('loadend', onLoad);
+        resolve();
       }
     };
 
-    const complete = function () {
-      tileSource.un('tileloadend', onLoad);
-      tileSource.un('tileloaderror', onLoad);
-      resolve();
-    };
-
-    const loadTile = function ([one, two, three]) {
-      const tile = tileSource.getTile(one, two, three, pixelRatio, projection);
-      try {
-        tile.load();
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(`Could not load tile with coords: [${one}, ${two}, ${three}] for extent [${extent}]`);
-        // eslint-disable-next-line no-console
-        console.error(e);
-      }
-      if (tile.state === 2) resolve();
+    if (!preloadMap.getLayers().getArray().includes(layer)) {
       i += 1;
-      tileSource.on('tileloadend', onLoad);
-      tileSource.on('tileloaderror', onLoad);
-    };
-
-    tileGrid.forEachTileCoord(extent, currentZ, loadTile);
+      preloadMap.addLayer(layer);
+      layer.setVisible(true);
+      preloadMap.on('loadend', onLoad);
+    }
   });
 }
 
@@ -272,9 +212,7 @@ function promiseLayerGroup(layerGroup, map) {
     const layerPromiseArray = layers.map((layer) => {
       // TODO #3688 figure out why vector layers cause preloadinig issues
       if (layer.isVector || layer instanceof ImageLayer) return Promise.resolve();
-      const layerExtent = layer.getExtent();
-      const extent = calculateExtent(layerExtent, map);
-      return promiseTileLayer(layer, extent, map);
+      return promiseTileLayer(layer, map);
     });
 
     Promise.all(layerPromiseArray).then(resolve);
@@ -300,8 +238,11 @@ export async function promiseImageryForTime(state, date, activeString) {
     }
     const options = { date, group: activeString };
     const key = layerKey(layer, options, state);
-    const layerGroup = cache.getItem(key) || await createLayer(layer, options);
-    return promiseLayerGroup(layerGroup, selected);
+    const cachedItem = cache.getItem(key);
+    const layerGroup = cachedItem || await createLayer(layer, options);
+    if (!cachedItem) {
+      return promiseLayerGroup(layerGroup, selected);
+    }
   }));
   selected.getView().changed();
   return date;
