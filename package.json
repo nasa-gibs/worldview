@@ -149,7 +149,7 @@
     "@edsc/earthdata-react-icons": "^0.0.2",
     "@elastic/react-search-ui": "^1.24.1",
     "@elastic/react-search-ui-views": "^1.24.1",
-    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
     "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
