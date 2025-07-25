@@ -133,6 +133,13 @@ function InfoList (props) {
         id: 'source_code_info_item',
         href: 'https://github.com/nasa-gibs/worldview',
       },
+      {
+        text: 'API Access',
+        iconClass: 'ui-icon',
+        iconName: 'satellite',
+        id: 'api_access_info_item',
+        href: 'https://nasa-gibs.github.io/gibs-api-docs/',
+      },
     ];
 
     if (feedbackEnabled) {
