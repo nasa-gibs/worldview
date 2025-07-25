@@ -736,10 +736,6 @@
                         true
                     ],
                     [
-                        "IMERG_Precipitation_Rate_30min",
-                        false
-                    ],
-                    [
                         "OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
                         false
                     ],
@@ -845,7 +841,7 @@
                     ],
                     [
                         "IMERG_Precipitation_Rate",
-                        true
+                        false
                     ],
                     [
                         "IMERG_Precipitation_Rate_30min",
