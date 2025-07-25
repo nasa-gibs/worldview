@@ -268,6 +268,7 @@ module.exports = (page) => ({
   snowSwitch: page.locator('#snow-switch'),
   volcanoesSwitch: page.locator('#volcanoes-switch'),
   watercolorSwitch: page.locator('#waterColor-switch'),
+  floodsSwitch: page.locator('#floods-switch'),
   wildfiresSwitch: page.locator('#wildfires-switch'),
   mapExtentFilterCheckbox: page.locator('#map-extent-filter'),
   startInputYear: page.locator('#year-event-filter-start'),

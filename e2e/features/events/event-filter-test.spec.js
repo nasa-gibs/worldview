@@ -42,7 +42,7 @@ test('Default filtering includes last 120 days and all categories', async () => 
   await page.goto(fixedAppNow)
   await closeModal(page)
   await eventsTab.click()
-  await expect(filterIcons).toHaveCount(8)
+  await expect(filterIcons).toHaveCount(9)
   await expect(filterDates).toContainText('2011 SEP 02 - 2011 DEC 31')
 })
 
@@ -56,6 +56,7 @@ test('Filter modal inputs are correct', async () => {
     snowSwitch,
     volcanoesSwitch,
     watercolorSwitch,
+    floodsSwitch,
     wildfiresSwitch,
     mapExtentFilterCheckbox
   } = selectors
@@ -68,6 +69,7 @@ test('Filter modal inputs are correct', async () => {
   await expect(snowSwitch).toBeChecked()
   await expect(volcanoesSwitch).toBeChecked()
   await expect(watercolorSwitch).toBeChecked()
+  await expect(floodsSwitch).toBeChecked()
   await expect(wildfiresSwitch).toBeChecked()
   await expect(mapExtentFilterCheckbox).not.toBeChecked()
 })
@@ -75,7 +77,7 @@ test('Filter modal inputs are correct', async () => {
 test('URL params for categories, dates, and extent filtering are present', async () => {
   const currentUrl = await page.url()
   expect(currentUrl).toContain('e=true')
-  expect(currentUrl).toContain('efc=dustHaze,manmade,seaLakeIce,severeStorms,snow,volcanoes,waterColor,wildfires')
+  expect(currentUrl).toContain('efc=dustHaze,manmade,seaLakeIce,severeStorms,snow,volcanoes,waterColor,floods,wildfires')
   expect(currentUrl).toContain('efd=2011-09-02,2011-12-31')
   expect(currentUrl).toContain('efs=true')
 })
@@ -93,6 +95,7 @@ test('Loading from permalink sets all criteria properly', async () => {
     snowSwitch,
     volcanoesSwitch,
     watercolorSwitch,
+    floodsSwitch,
     wildfiresSwitch,
     wildfiresIcon
   } = selectors
@@ -119,6 +122,7 @@ test('Loading from permalink sets all criteria properly', async () => {
   await expect(snowSwitch).not.toBeChecked()
   await expect(volcanoesSwitch).not.toBeChecked()
   await expect(watercolorSwitch).not.toBeChecked()
+  await expect(floodsSwitch).not.toBeChecked()
   await expect(wildfiresSwitch).toBeChecked()
   await expect(mapExtentFilterCheckbox).toBeChecked()
 })
@@ -165,6 +169,7 @@ test('Opening modal after cancelling changed values shows previous unchanged val
     snowSwitch,
     volcanoesSwitch,
     watercolorSwitch,
+    floodsSwitch,
     wildfiresSwitch,
     mapExtentFilterCheckbox
   } = selectors
@@ -177,6 +182,7 @@ test('Opening modal after cancelling changed values shows previous unchanged val
   await expect(snowSwitch).not.toBeChecked()
   await expect(volcanoesSwitch).not.toBeChecked()
   await expect(watercolorSwitch).not.toBeChecked()
+  await expect(floodsSwitch).not.toBeChecked()
   await expect(wildfiresSwitch).toBeChecked()
   await expect(mapExtentFilterCheckbox).toBeChecked()
 })
@@ -225,7 +231,7 @@ test('Event Selected, No Filter Params: Shows only day of event, all categories,
   await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
   await filterButton.click()
   await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
-  await expect(filterIcons).toHaveCount(8)
+  await expect(filterIcons).toHaveCount(9)
   await expect(mapExtentFilterCheckbox).not.toBeChecked()
   await page.locator('.modal-close-btn').click()
 })
