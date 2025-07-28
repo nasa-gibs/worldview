@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "ARCSIX_G-III_Flight_Track": {
+      "id": "ARCSIX_G-III_Flight_Track",
+      "title": "NASA LaRC G-III Flight Track (Per Flight)",
+      "subtitle": "ARCSIX/NASA LaRC G-III",
+      "description": "arcsix/ARCSIX_G-III_Flight_Track",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector Arctic Greenland Thule Pituffik THAAO HALO AVAPS",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "ARCSIX_G-III_Flight_Track",
+        "geographic": {
+          "id": "ARCSIX_G-III_Flight_Track"
+        }
+      },
+      "palette": {
+        "id": "ARCSIX_G-III_Flight_Track",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "alt",
+        "order": "descending"
+      }
+    }
+  }
+}
