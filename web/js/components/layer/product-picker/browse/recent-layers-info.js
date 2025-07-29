@@ -5,7 +5,7 @@ import { recentLayerInfo } from '../../../../modules/product-picker/util';
 export default function RecentLayersInfo (props) {
   return (
     <div className="no-results">
-      <FontAwesomeIcon icon="clock" />
+      <FontAwesomeIcon icon="clock" widthAuto />
       <h3> Recently Used Layers </h3>
       <p>
         {recentLayerInfo}

@@ -125,8 +125,8 @@ function DesktopAnimationWidget(props) {
             subDailyMode={subDailyMode}
             isDisabled={isPlaying}
           />
-          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} />
-          <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} />
+          <FontAwesomeIcon icon="chevron-down" className="wv-minimize" onClick={toggleCollapse} widthAuto />
+          <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} widthAuto />
         </div>
       </div>
     </Draggable>

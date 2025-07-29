@@ -10,7 +10,7 @@ function TemperatureUnitButtons({ changeTemperatureUnit, globalTemperatureUnit }
       <h3 className="wv-header">
         Temperature Unit
         {' '}
-        <span><FontAwesomeIcon id="temperature-unit-buttons-info-icon" icon="info-circle" /></span>
+        <span><FontAwesomeIcon id="temperature-unit-buttons-info-icon" icon="info-circle" widthAuto /></span>
         <UncontrolledTooltip
           id="temperature-setting-tooltip"
           target="temperature-unit-buttons-info-icon"

@@ -45,6 +45,7 @@ function RecentLayersList(props) {
           className="tooltip-icon"
           size="lg"
           icon="question-circle"
+          widthAuto
         />
         <Button id="clear-recent-layers" size="sm" onClick={clearRecentLayers}>
           Clear List

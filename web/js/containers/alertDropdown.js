@@ -20,9 +20,10 @@ export default function AlertDropdown(isTourActive) {
           icon="exclamation-triangle"
           className="wv-alert-icon"
           size="1x"
+          widthAuto
         />
         Multiple Layer Alerts
-        {dropdownOpen ? <FontAwesomeIcon icon="fa-solid fa-caret-down" /> : <FontAwesomeIcon icon="fa-solid fa-caret-up" />}
+        {dropdownOpen ? <FontAwesomeIcon icon="fa-solid fa-caret-down" widthAuto /> : <FontAwesomeIcon icon="fa-solid fa-caret-up" widthAuto />}
       </button>
       <div ref={containerRef} hidden={!(dropdownOpen || notifications === 1)} id="wv-alert-container" className="wv-alert-container">
         <FeatureAlert />

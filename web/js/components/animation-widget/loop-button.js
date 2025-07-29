@@ -32,7 +32,7 @@ function LoopButton({ looping, onLoop, isMobile }) {
             {labelText}
           </UncontrolledTooltip>
         )}
-      <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" />
+      <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" widthAuto />
     </a>
   );
 }

@@ -613,6 +613,7 @@ function ChartingModeOptions(props) {
           <FontAwesomeIcon
             icon="info-circle"
             onClick={openChartingInfoModal}
+            widthAuto
           />
           <UncontrolledTooltip
             id="center-align-tooltip"
