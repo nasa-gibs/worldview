@@ -86,7 +86,6 @@ function ImageDownloadPanel(props) {
       yOffset: boundaries[1],
       map,
       worldfile: currIsWorldfile,
-      projection,
     };
     snapshot(snapshotOptions);
 

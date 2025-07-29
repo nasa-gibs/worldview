@@ -562,7 +562,6 @@ export async function snapshot (options) {
     yOffset,
     map,
     worldfile,
-    projection: proj,
   } = options;
   const view = map.getView();
 
