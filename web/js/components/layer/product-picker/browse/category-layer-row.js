@@ -217,8 +217,8 @@ class CategoryLayerRow extends React.Component {
           <h3>{measurement.title}</h3>
           {measurement.subtitle && !isSelected && <h5>{measurement.subtitle}</h5>}
           {isSelected
-            ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" />
-            : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" />}
+            ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" widthAuto />
+            : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" widthAuto />}
         </div>
         {isSelected ? this.renderContent() : ''}
       </div>

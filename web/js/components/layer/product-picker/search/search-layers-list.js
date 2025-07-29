@@ -128,7 +128,7 @@ class SearchLayerList extends React.Component {
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
-          <FontAwesomeIcon icon="meteor" size="5x" />
+          <FontAwesomeIcon icon="meteor" size="5x" widthAuto />
           <h3> No layers found! </h3>
         </div>
       );

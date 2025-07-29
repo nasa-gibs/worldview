@@ -9,7 +9,7 @@ function BODY_COMPONENT() {
   return (
     <>
       <div className="error-header">
-        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" size="3x" />
+        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" size="3x" widthAuto />
         An unexpected error has occurred!
       </div>
       <div className="error-body">

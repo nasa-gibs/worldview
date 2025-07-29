@@ -13,7 +13,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
       <h3 className="wv-header">
         Coordinate Format (latitude, longitude)
         {' '}
-        <span><FontAwesomeIcon id="coordinate-format-buttons-info-icon" icon="info-circle" /></span>
+        <span><FontAwesomeIcon id="coordinate-format-buttons-info-icon" icon="info-circle" widthAuto /></span>
         <UncontrolledTooltip
           id="coordinate-setting-tooltip"
           target="coordinate-format-buttons-info-icon"

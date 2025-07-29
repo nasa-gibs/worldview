@@ -109,7 +109,7 @@ function BrowseLayers (props) {
       : 'layer-category-navigation');
     const recentTab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
-        <FontAwesomeIcon icon="clock" />
+        <FontAwesomeIcon icon="clock" widthAuto />
         Recent
       </NavLink>
     );
@@ -156,6 +156,7 @@ function BrowseLayers (props) {
             id="recent-tooltip-target"
             className="recent-tooltip-icon"
             icon="question-circle"
+            widthAuto
           />
           <Button
             id="clear-recent-layers"
@@ -178,7 +179,7 @@ function BrowseLayers (props) {
           className="categories-dropdown"
         >
           <DropdownToggle caret>
-            {categoryType === 'recent' && (<FontAwesomeIcon icon="clock" />)}
+            {categoryType === 'recent' && (<FontAwesomeIcon icon="clock" widthAuto />)}
             {categoryType}
           </DropdownToggle>
           <DropdownMenu className="categories-dropdown-menu">

@@ -169,7 +169,7 @@ function Event (props) {
                 e.stopPropagation();
               }}
             >
-              <FontAwesomeIcon icon="external-link-alt" />
+              <FontAwesomeIcon icon="external-link-alt" widthAuto />
               {` ${source.title}`}
             </a>
           );

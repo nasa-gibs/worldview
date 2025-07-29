@@ -19,7 +19,7 @@ export default class ResolutionTable extends React.Component {
           id="wv-image-size"
           className="wv-image-size wv-image-size-invalid grid-child"
         >
-          <FontAwesomeIcon icon="times" fixedWidth />
+          <FontAwesomeIcon icon="times" fixedWidth widthAuto />
           <span>{`~${fileSize}MB`}</span>
         </div>
       );
