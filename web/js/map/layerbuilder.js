@@ -77,6 +77,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
     return new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
       layers: [layer, layerNext, layerPrior],
     });
   };
@@ -214,6 +215,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const projectionURL = `images/map/bluemarble-${id}.jpg`;
 
     const layer = new ImageLayer({
+      className: `wv-layer-static-${id}`,
       source: new Static({
         interpolate: false,
         url: projectionURL,
@@ -396,6 +398,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({
+      className: `wv-layer-${id}`,
       extent: polygon ? granuleExtent : extent,
       preload: 0,
       source: tileSource,
@@ -485,6 +488,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceTileWMS(sourceOptions);
 
     const layer = new OlLayerTile({
+      className: `wv-layer-${def.id}`,
       preload: 0,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
@@ -648,6 +652,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const layer = new OlLayerVector({
+      className: `wv-layer-${def.id}`,
       extent: layerExtent,
       source: vectorSource,
       style (feature, resolution) {
@@ -716,6 +721,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
+        className: `wv-layer-group-${def.id}`,
         layers: [layer, wmsLayer],
       });
       wmsLayer.wv = attributes;
@@ -834,6 +840,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const layer = new LayerVectorTile({
+      className: `wv-layer-${def.id}`,
       renderOrder: orderFunction,
       extent: layerExtent,
       source: tileSource,
@@ -851,6 +858,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
+        className: `wv-layer-group-${def.id}`,
         layers: [layer, wmsLayer],
       });
       wmsLayer.wv = attributes;
@@ -1003,6 +1011,7 @@ export default function mapLayerBuilder(config, cache, store) {
       maxZoom: def.minZoom,
     });
     const layerGroup = new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
       layers: [footprintLayer, layer],
     });
 
@@ -1026,6 +1035,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const xyzSourceOptions = {
+      interpolate: false,
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
@@ -1139,6 +1149,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
 
       const sourceOptions = {
+        interpolate: false,
         url: `${configSource.url}/${layerName}/{z}/{x}/{y}`,
         layer: layerName,
         crossOrigin: 'anonymous',
@@ -1155,7 +1166,10 @@ export default function mapLayerBuilder(config, cache, store) {
         extent: shifted ? RIGHT_WING_EXTENT : extent,
       });
     });
-    const layer = new OlLayerGroup({ layers });
+    const layer = new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
+      layers,
+    });
     return layer;
   };
 
