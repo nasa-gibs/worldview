@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
@@ -10,7 +11,6 @@ import {
   getDownloadUrl,
 } from '../../modules/image-download/util';
 import { getActivePalettes } from '../../modules/palettes/selectors';
-import { useSelector } from 'react-redux';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
