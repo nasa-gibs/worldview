@@ -43,7 +43,7 @@ function PresetConsoleCommands () {
     <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-3">
       <div className="d-flex flex-row justify-content-center align-items-center">
         <h5 className="h5 fw-bold d-inline-block me-1">Preset Console Commands</h5>
-        <span><FontAwesomeIcon id="console-test-info-icon" icon="info-circle" className="pb-2" /></span>
+        <span><FontAwesomeIcon id="console-test-info-icon" icon="info-circle" className="pb-2" widthAuto /></span>
         <UncontrolledTooltip
           id="console-test-tooltip"
           target="console-test-info-icon"

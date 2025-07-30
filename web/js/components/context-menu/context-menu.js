@@ -73,7 +73,7 @@ function RightClickMenu(props) {
     const oppositeUnit = unitOfMeasure === 'km' ? 'mi' : 'km';
     return {
       oppositeUnit,
-      fontAwesomeTag: <FontAwesomeIcon icon={faToggle} />,
+      fontAwesomeTag: <FontAwesomeIcon icon={faToggle} widthAuto />,
     };
   };
 

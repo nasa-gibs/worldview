@@ -237,6 +237,7 @@ function ChartComponent (props) {
               icon="exclamation-triangle"
               className="wv-alert-icon"
               size="1x"
+              widthAuto
             />
             <i className="charting-disclaimer-block">
               As part of this beta feature release, the number of data points plotted between

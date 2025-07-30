@@ -408,7 +408,7 @@ class SmartHandoff extends Component {
                     />
                     <label id={labelId} htmlFor={inputId}>
                       {label}
-                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" />
+                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" widthAuto />
                     </label>
 
                     {this.renderCollectionTooltip(collection, labelId)}

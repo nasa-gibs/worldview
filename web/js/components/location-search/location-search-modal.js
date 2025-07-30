@@ -329,7 +329,7 @@ class LocationSearchModal extends Component {
         className={buttonId}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="map-marker-alt" size="1x" />
+        <FontAwesomeIcon icon="map-marker-alt" size="1x" widthAuto />
       </Button>
     );
   };

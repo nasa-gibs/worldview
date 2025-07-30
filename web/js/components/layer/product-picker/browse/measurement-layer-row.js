@@ -59,8 +59,8 @@ function MeasurementLayerRow (props) {
         label={title}
         classNames="settings-check"
       >
-        {layerIsUnavailable && (<FontAwesomeIcon icon="ban" id="availability-info" />)}
-        {layerNotices && (<FontAwesomeIcon icon="exclamation-triangle" id="notice-info" />)}
+        {layerIsUnavailable && (<FontAwesomeIcon icon="ban" id="availability-info" widthAuto />)}
+        {layerNotices && (<FontAwesomeIcon icon="exclamation-triangle" id="notice-info" widthAuto />)}
         {(layerNotices || layerIsUnavailable) && (
           <UncontrolledTooltip
             id="center-align-tooltip"

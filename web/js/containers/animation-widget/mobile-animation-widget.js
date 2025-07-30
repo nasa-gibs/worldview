@@ -89,7 +89,7 @@ function MobileAnimationWidget (props) {
           onClick={toggleCollapse}
           id="mobile-animation-close"
         >
-          <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} />
+          <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} widthAuto />
         </span>
       </div>
       <div className="mobile-animation-warning-message-container">

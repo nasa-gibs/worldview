@@ -320,6 +320,7 @@ function LayerRow (props) {
         <FontAwesomeIcon
           className="layer-group-more"
           icon="ellipsis-v"
+          widthAuto
         />
       </DropdownToggle>
       <DropdownMenu container="body" className="layer-options-dropdown-menu">
@@ -363,7 +364,7 @@ function LayerRow (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={removeLayerBtnId}>
           {removeLayerBtnTitle}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="times" fixedWidth />
+        <FontAwesomeIcon icon="times" fixedWidth widthAuto />
       </a>
       )}
       <a
@@ -376,7 +377,7 @@ function LayerRow (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerOptionsBtnId}>
           {layerOptionsBtnTitle}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" />
+        <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" widthAuto />
       </a>
       <a
         id={layerInfoBtnId}
@@ -388,7 +389,7 @@ function LayerRow (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerInfoBtnId}>
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" />
+        <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" widthAuto />
       </a>
     </>
   );
@@ -412,7 +413,7 @@ function LayerRow (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerVectorBtnId}>
           {title}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="hand-pointer" fixedWidth />
+        <FontAwesomeIcon icon="hand-pointer" fixedWidth widthAuto />
       </div>
     );
   };
@@ -513,7 +514,7 @@ function LayerRow (props) {
             {visibilityTitle}
           </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" />
+          <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" widthAuto />
         </a>
       )}
       {isChartingActive && (
@@ -536,11 +537,13 @@ function LayerRow (props) {
                 <FontAwesomeIcon
                   icon={faCircleDot}
                   className="charting-indicator"
+                  widthAuto
                 />
               ) : (
                 <FontAwesomeIcon
                   icon={faCircle}
                   className="charting-indicator"
+                  widthAuto
                 />
               )}
             </a>

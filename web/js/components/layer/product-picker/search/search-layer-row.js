@@ -170,6 +170,7 @@ class SearchLayerRow extends React.Component {
                   id={`${encodedId}-notice-info`}
                   className="layer-notice-icon"
                   icon="exclamation-triangle"
+                  widthAuto
                 />
                 <UncontrolledTooltip
                   id="center-align-tooltip"
@@ -195,7 +196,7 @@ class SearchLayerRow extends React.Component {
               title="Remove from recent layers list."
               onClick={(e) => clearSingleRecentLayer(e, layer)}
             >
-              <FontAwesomeIcon icon="trash" />
+              <FontAwesomeIcon icon="trash" widthAuto />
             </Button>
           )}
         </div>

@@ -70,6 +70,7 @@ export default class AlertUtil extends React.Component {
             icon={icon || 'exclamation-triangle'}
             className="wv-alert-icon"
             size="1x"
+            widthAuto
           />
           <div className="alert-text">
             <p className="wv-alert-title">
@@ -86,7 +87,7 @@ export default class AlertUtil extends React.Component {
             className="close-alert"
             onClick={() => this.closeAlert()}
           >
-            <FontAwesomeIcon icon="times" className="exit" size="1x" />
+            <FontAwesomeIcon icon="times" className="exit" size="1x" widthAuto />
           </div>
         )}
       </Alert>

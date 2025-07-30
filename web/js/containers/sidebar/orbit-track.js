@@ -47,7 +47,7 @@ function OrbitTrack(props) {
   return (
     <div className={containerClasses}>
       {palette}
-      <FontAwesomeIcon icon="satellite" />
+      <FontAwesomeIcon icon="satellite" widthAuto />
       <span className="wv-orbit-track-label">
         {getOrbitTrackTitle(trackLayer)}
       </span>

@@ -122,7 +122,7 @@ export default function GranuleCount (props) {
           <span className="granule-size fade-in">{`(${sizeText})`}</span>
         )}
         <span className="help-link" onClick={showGranuleHelpModal}>
-          <FontAwesomeIcon icon="question-circle" />
+          <FontAwesomeIcon icon="question-circle" widthAuto />
         </span>
       </>
     );

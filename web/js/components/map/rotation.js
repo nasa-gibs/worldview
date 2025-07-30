@@ -71,7 +71,7 @@ function Rotation() {
           placement="left"
           target=".wv-map-rotate-left"
         />
-        <FontAwesomeIcon icon="undo" className="cursor-pointer" />
+        <FontAwesomeIcon icon="undo" className="cursor-pointer" widthAuto />
       </button>
 
       <button
@@ -105,7 +105,7 @@ function Rotation() {
           placement="left"
           target=".wv-map-rotate-right"
         />
-        <FontAwesomeIcon icon="redo" className="cursor-pointer" />
+        <FontAwesomeIcon icon="redo" className="cursor-pointer" widthAuto />
       </button>
     </div>
   );

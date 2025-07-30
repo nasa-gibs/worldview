@@ -98,7 +98,7 @@ function Events(props) {
         block
         disabled={isLoading}
       >
-        <FontAwesomeIcon icon="filter" />
+        <FontAwesomeIcon icon="filter" widthAuto />
       </Button>
     </div>
   );
@@ -145,7 +145,7 @@ function Events(props) {
           {isLoading || hasRequestError ? (
             // notranslate included below to prevent Google Translate extension from crashing the page
             <div className="events-loading-text notranslate">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
+              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
               {errorOrLoadingText}
             </div>
           ) : renderEventList()}
