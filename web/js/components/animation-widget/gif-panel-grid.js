@@ -17,7 +17,7 @@ export default class GifPanelGrid extends React.Component {
     if (!valid) {
       return (
         <div id="gif-size" className="gif-size gif-size-invalid grid-child">
-          <FontAwesomeIcon icon="times" fixedWidth />
+          <FontAwesomeIcon icon="times" fixedWidth widthAuto />
           <span>{`${maxGifSize} MB ~${roundedSize} MB`}</span>
         </div>
       );

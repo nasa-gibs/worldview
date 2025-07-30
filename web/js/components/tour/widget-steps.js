@@ -37,7 +37,7 @@ function Steps(props) {
         aria-label="Previous"
         onClick={decreaseStep}
       >
-        <FontAwesomeIcon icon="arrow-circle-left" />
+        <FontAwesomeIcon icon="arrow-circle-left" widthAuto />
       </a>
       <div className="step-counter">
         <p>
@@ -54,8 +54,8 @@ function Steps(props) {
         onClick={incrementStep}
       >
         {currentStep === totalSteps
-          ? <FontAwesomeIcon icon="check-circle" />
-          : <FontAwesomeIcon icon="arrow-circle-right" />}
+          ? <FontAwesomeIcon icon="check-circle" widthAuto />
+          : <FontAwesomeIcon icon="arrow-circle-right" widthAuto />}
       </a>
     </div>
   );

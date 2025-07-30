@@ -126,7 +126,7 @@ export default function MeasureTooltip(props) {
         <span dangerouslySetInnerHTML={{ __html: tooltipValue }} />
         {!active && (
           <span className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
-            <FontAwesomeIcon icon="times" fixedWidth />
+            <FontAwesomeIcon icon="times" fixedWidth widthAuto />
           </span>
         )}
       </div>

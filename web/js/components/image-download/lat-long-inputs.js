@@ -104,7 +104,7 @@ function LatLongSelect(props) {
           title="Hide coordinates"
           className="wv-image-collapse-latlong"
         >
-          <FontAwesomeIcon icon="caret-right" size="lg" rotation={showCoordinates ? 90 : 0} />
+          <FontAwesomeIcon icon="caret-right" size="lg" rotation={showCoordinates ? 90 : 0} widthAuto />
         </span>
       </div>
       {showCoordinates && (

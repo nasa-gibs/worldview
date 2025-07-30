@@ -145,7 +145,7 @@ function EventFilterModalBody (props) {
             onCheck={() => setListAll(!listAll)}
             checked={!listAll}
           />
-          <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" />
+          <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" widthAuto />
           <UncontrolledTooltip
             id="center-align-tooltip"
             placement="right"
@@ -164,7 +164,7 @@ function EventFilterModalBody (props) {
         onCheck={() => toggleShowAllTracks(!showAllTracksData)}
         checked={showAllTracksData}
       />
-      <FontAwesomeIcon id="bbox-show-all-tracks" icon="info-circle" />
+      <FontAwesomeIcon id="bbox-show-all-tracks" icon="info-circle" widthAuto />
       <UncontrolledTooltip
         id="center-align-tooltip"
         placement="right"

@@ -26,7 +26,7 @@ function NotificationBlock(props) {
         /* eslint react/no-array-index-key: 1 */
           <li key={type + i} className={activeClass}>
             <h2>
-              <FontAwesomeIcon icon={listIcons[type]} />
+              <FontAwesomeIcon icon={listIcons[type]} widthAuto />
               <span>{`Posted ${date}`}</span>
             </h2>
             <p dangerouslySetInnerHTML={{ __html: notification.message }} />

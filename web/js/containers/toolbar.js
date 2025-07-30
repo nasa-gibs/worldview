@@ -211,7 +211,7 @@ class toolbarContainer extends Component {
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="share-square" size={faSize} />
+        <FontAwesomeIcon icon="share-square" size={faSize} widthAuto />
       </Button>
     );
   }
@@ -247,7 +247,7 @@ class toolbarContainer extends Component {
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="globe-asia" size={faSize} />
+        <FontAwesomeIcon icon="globe-asia" size={faSize} widthAuto />
       </Button>
     );
   }
@@ -295,7 +295,7 @@ class toolbarContainer extends Component {
           style={mobileWvToolbarButtonStyle}
         >
           {this.renderTooltip(buttonId, labelText)}
-          <FontAwesomeIcon icon="search-location" size={faSize} />
+          <FontAwesomeIcon icon="search-location" size={faSize} widthAuto />
         </Button>
       </div>
     );
@@ -334,7 +334,7 @@ class toolbarContainer extends Component {
           onClick={this.openImageDownload}
           style={mobileWVImageButtonStyle}
         >
-          <FontAwesomeIcon icon="camera" size={faSize} />
+          <FontAwesomeIcon icon="camera" size={faSize} widthAuto />
         </Button>
       </div>
 
@@ -372,7 +372,7 @@ class toolbarContainer extends Component {
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="info-circle" size={faSize} />
+        <FontAwesomeIcon icon="info-circle" size={faSize} widthAuto />
       </Button>
     );
   }
@@ -398,7 +398,7 @@ class toolbarContainer extends Component {
         style={mobileButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} />
+        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} widthAuto />
       </Button>
     );
   }

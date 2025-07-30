@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "ARCSIX_P-3B_Flight_Track": {
+      "id": "ARCSIX_P-3B_Flight_Track",
+      "title": "NASA P-3B Flight Track (Per Flight)",
+      "subtitle": "ARCSIX/NASA P-3B",
+      "description": "arcsix/ARCSIX_P-3B_Flight_Track",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector Arctic Greenland Thule Pituffik THAAO",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "ARCSIX_P-3B_Flight_Track",
+        "geographic": {
+          "id": "ARCSIX_P-3B_Flight_Track"
+        }
+      },
+      "palette": {
+        "id": "ARCSIX_P-3B_Flight_Track",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "alt",
+        "order": "descending"
+      }
+    }
+  }
+}

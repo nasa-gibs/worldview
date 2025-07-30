@@ -34,8 +34,8 @@ function PlayButton({
         </UncontrolledTooltip>
       )}
       {playing
-        ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" />
-        : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" />}
+        ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" widthAuto />
+        : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" widthAuto />}
     </a>
   );
 }

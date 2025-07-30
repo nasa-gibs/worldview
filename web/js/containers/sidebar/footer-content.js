@@ -134,7 +134,7 @@ const FooterContent = React.forwardRef((props, ref) => {
             <span>
               {`Showing the first ${numEvents} events`}
             </span>
-            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" />
+            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" widthAuto />
             <UncontrolledTooltip
               placement="right"
               target="filter-info-icon"

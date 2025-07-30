@@ -3,7 +3,7 @@
       "Suborbital Flight Tracks": {
           "id": "Suborbital Flight Tracks",
           "title":    "Suborbital Flight Tracks",
-          "subtitle": "AJAX, ASIA-AQ, STAQS",
+          "subtitle": "AJAX ARCSIX, ASIA-AQ, STAQS",
           "sources": {
               "AJAX": {
                   "id": "ajax",
@@ -12,6 +12,17 @@
                   "image": "",
                   "settings": [
                   "AJAX_Alpha_Jet_Ozone"
+                  ]
+              },
+              "ARCSIX": {
+                  "id": "arcsix",
+                  "title": "ARCSIX",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "ARCSIX_SPEC-Learjet_Flight_Track",
+		          "ARCSIX_G-III_Flight_Track",
+		          "ARCSIX_P-3B_Flight_Track"
                   ]
               },
               "ASIA-AQ": {

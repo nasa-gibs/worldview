@@ -26,6 +26,7 @@ import { CRS } from '../../modules/map/constants';
 const icons = [
   'dustHaze',
   'manmade',
+  'floods',
   'seaLakeIce',
   'severeStorms',
   'snow',

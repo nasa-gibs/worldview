@@ -5,13 +5,13 @@
 
    For example:
       import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-      <FontAwesomeIcon icon="times" fixedWidth />
+      <FontAwesomeIcon icon="times" fixedWidth widthAuto />
 
   Icons that belong to a package other than '@fortawesome/free-solid-svg-icons'
   need to be defined as an array of strings where thee first element is the
   package abbreviation.  For example an icon from '@fortawesome/free-brands-svg-icons'
   becomes:
-      <FontAwesomeIcon icon={['fab', 'facebook-f']} />
+      <FontAwesomeIcon icon={['fab', 'facebook-f']} widthAuto />
 
 */
 
