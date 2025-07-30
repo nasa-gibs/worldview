@@ -42,7 +42,7 @@ function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
           labelText={labelText}
           target={buttonId}
         />
-        <FontAwesomeIcon icon="external-link-alt" size="2x" fixedWidth />
+        <FontAwesomeIcon icon="external-link-alt" size="2x" fixedWidth widthAuto />
       </Button>
     );
   };
@@ -58,7 +58,7 @@ function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
           <>
             <div onClick={handleOverlayClick} className="embed-overlay-bg" />
             <div className="embed-overlay-btn">
-              <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth />
+              <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth widthAuto />
               <p>Click anywhere to interact</p>
             </div>
           </>

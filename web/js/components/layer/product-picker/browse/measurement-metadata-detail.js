@@ -117,7 +117,7 @@ function MeasurementMetadataDetail (props) {
   if (!isMobile && !source) {
     return (
       <div className="no-results">
-        <FontAwesomeIcon icon="map" />
+        <FontAwesomeIcon icon="map" widthAuto />
         <h3>{categoryTitle}</h3>
         <h5> Select a measurement to view details here!</h5>
       </div>
@@ -128,7 +128,7 @@ function MeasurementMetadataDetail (props) {
   if (!metadataPath && !layers.length) {
     return (
       <div className="no-results">
-        <FontAwesomeIcon icon="meteor" />
+        <FontAwesomeIcon icon="meteor" widthAuto />
         <h3> No metadata found. </h3>
       </div>
     );

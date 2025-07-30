@@ -38,7 +38,7 @@ class LayerMetadataDetail extends React.Component {
       ? (<RecentLayersInfo />)
       : (
         <div className="no-results">
-          <FontAwesomeIcon icon="globe-americas" />
+          <FontAwesomeIcon icon="globe-americas" widthAuto />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
@@ -71,7 +71,7 @@ class LayerMetadataDetail extends React.Component {
           )}
         <div className="text-center">
           <Button className={btnClass} onClick={this.toggleLayer}>
-            <FontAwesomeIcon icon={btnIconClass} />
+            <FontAwesomeIcon icon={btnIconClass} widthAuto />
             {buttonText}
           </Button>
         </div>

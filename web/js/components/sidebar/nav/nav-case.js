@@ -109,6 +109,7 @@ function NavCase (props) {
           icon={fontAwesomeStyle}
           aria-label="Hide sidebar"
           style={collapseIconMobile}
+          widthAuto
         />
         <UncontrolledTooltip id="center-align-tooltip" placement="right" target="toggleIconHolder">
           Hide sidebar

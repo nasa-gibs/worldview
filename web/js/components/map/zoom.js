@@ -31,7 +31,7 @@ function Zoom({
           target=".wv-map-zoom-in"
         />
         )}
-        <FontAwesomeIcon icon="plus" />
+        <FontAwesomeIcon icon="plus" widthAuto />
       </button>
       <button
         type="button"
@@ -48,7 +48,7 @@ function Zoom({
           target=".wv-map-zoom-out"
         />
         )}
-        <FontAwesomeIcon icon="minus" />
+        <FontAwesomeIcon icon="minus" widthAuto />
       </button>
     </div>
   );
