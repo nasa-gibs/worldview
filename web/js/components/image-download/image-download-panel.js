@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
@@ -7,7 +8,9 @@ import {
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
   snapshot,
+  getDownloadUrl,
 } from '../../modules/image-download/util';
+import { getActivePalettes } from '../../modules/palettes/selectors';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
@@ -25,6 +28,17 @@ const RESOLUTION_KEY = {
   20: '5km',
   40: '10km',
 };
+
+// const SCALE_KEY = {
+//   30: 0.125,
+//   60: 0.25,
+//   125: 0.5,
+//   250: 1,
+//   500: 2,
+//   1000: 4,
+//   5000: 20,
+//   10000: 40,
+// };
 
 function ImageDownloadPanel(props) {
   const {
@@ -49,6 +63,8 @@ function ImageDownloadPanel(props) {
     geoLatLong,
     onLatLongChange,
     boundaries,
+    url,
+    markerCoordinates,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -56,6 +72,7 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
+  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
 
   useEffect(() => {
     const layerList = getLayers();
@@ -67,21 +84,33 @@ function ImageDownloadPanel(props) {
   }, []);
 
   const onDownload = async (width, height) => {
-    const calcWidth = boundaries[2] - boundaries[0];
-    const calcHeight = boundaries[3] - boundaries[1];
     const layerList = getLayers();
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
     const snapshotOptions = {
       format: snapshotFormat,
-      resolution: 600,
-      width: calcWidth,
-      height: calcHeight,
-      xOffset: boundaries[0],
-      yOffset: boundaries[1],
+      metersPerPixel: Number(currResolution),
+      pixelBbox: boundaries,
       map,
       worldfile: currIsWorldfile,
     };
-    const dlURL = await snapshot(snapshotOptions);
+    snapshot(snapshotOptions);
+
+    const time = new Date(date.getTime());
+
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
+    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const dlURL = getDownloadUrl(
+      url,
+      projection,
+      layerDefs,
+      lonlats,
+      { width, height },
+      time,
+      currFileType,
+      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
+      markerCoordinates,
+      activePalettes,
+    );
 
     googleTagManager.pushEvent({
       event: 'image_download',
@@ -162,7 +191,8 @@ function ImageDownloadPanel(props) {
   );
 
   const { crs } = projection.selected;
-  const dimensions = getDimensions(projection.id, lonlats, currResolution);
+  // console.log({ currResolution }); // eslint-disable-line no-console
+  const dimensions = getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
   const filetypeSelect = _renderFileTypeSelect();
@@ -173,12 +203,14 @@ function ImageDownloadPanel(props) {
     <>
       {crossesDatelineAlert()}
       <div className="wv-re-pick-wrapper wv-image">
-        <div
+        <a
           id="wv-image-download-url"
-          style={{ display: 'none' }}
-          // eslint-disable-next-line react/no-unknown-property
-          url={debugUrl}
-        />
+          href={debugUrl}
+          className="wv-image-download-url"
+          download={`debugSnapshot.${currFileType.split('/').at(-1)}`}
+        >
+          Download Image
+        </a>
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"
@@ -227,7 +259,7 @@ ImageDownloadPanel.defaultProps = {
   firstLabel: 'Resolution (per pixel)',
   isWorldfile: false,
   maxImageSize: '8200px x 8200px',
-  resolution: '1',
+  resolution: 250,
   secondLabel: 'Format',
   worldFileOptions: true,
 };
@@ -247,7 +279,7 @@ ImageDownloadPanel.propTypes = {
   onPanelChange: PropTypes.func,
   projection: PropTypes.object,
   date: PropTypes.object,
-  resolution: PropTypes.string,
+  resolution: PropTypes.number,
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,
