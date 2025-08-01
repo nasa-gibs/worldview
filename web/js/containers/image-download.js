@@ -9,7 +9,7 @@ import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
   getAlertMessageIfCrossesDateline,
-  imageUtilCalculateResolution,
+  // imageUtilCalculateResolution,
   imageUtilGetPixelValuesFromCoords,
 } from '../modules/image-download/util';
 import util from '../util/util';
