@@ -123,7 +123,7 @@
     "postcss": "^8.5.6",
     "postcss-loader": "^8.1.1",
     "react-refresh": "^0.17.0",
-    "react-test-renderer": "^18.3.1",
+    "react-test-renderer": "^19.1.1",
     "redux-mock-store": "^1.5.5",
     "run-script-os": "^1.1.6",
     "sass": "^1.89.1",
