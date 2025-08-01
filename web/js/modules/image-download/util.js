@@ -762,70 +762,76 @@ function createViewFitCalback (options) {
   const mapElement = map.getTargetElement();
 
   const viewFitCallback = () => {
-    const viewResolution = view.getResolution();
+    try {
+      const viewResolution = view.getResolution();
 
-    // Calculate scale factor based on target spatial resolution
-    const projection = view.getProjection();
-    const center = view.getCenter();
-    const scaleFactor = calculateScaleFactor(
-      metersPerPixel,
-      projection,
-      viewResolution,
-      center,
-    );
+      // Calculate scale factor based on target spatial resolution
+      const projection = view.getProjection();
+      const center = view.getCenter();
+      const scaleFactor = calculateScaleFactor(
+        metersPerPixel,
+        projection,
+        viewResolution,
+        center,
+      );
 
-    // Scale the entire map up to the target resolution
-    const scaledMapWidth = originalWidth * scaleFactor;
-    const scaledMapHeight = originalHeight * scaleFactor;
-    const devicePixelRatio = window.devicePixelRatio || 1;
-    const scaledMapWidthWithDPR = scaledMapWidth * devicePixelRatio;
-    const scaledMapHeightWithDPR = scaledMapHeight * devicePixelRatio;
+      // Scale the entire map up to the target resolution
+      const scaledMapWidth = originalWidth * scaleFactor;
+      const scaledMapHeight = originalHeight * scaleFactor;
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const scaledMapWidthWithDPR = scaledMapWidth * devicePixelRatio;
+      const scaledMapHeightWithDPR = scaledMapHeight * devicePixelRatio;
 
-    if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
+      if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
 
-    const topLeft = olExtent.getTopLeft(bbox);
-    const bottomLeft = olExtent.getBottomLeft(bbox);
-    // const bottomRight = olExtent.getBottomRight(bbox);
-    const topRight = olExtent.getTopRight(bbox);
+      const topLeft = olExtent.getTopLeft(bbox);
+      const bottomLeft = olExtent.getBottomLeft(bbox);
+      const topRight = olExtent.getTopRight(bbox);
 
-    const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
-    const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
-    // const aoiPixelBottomRight = map.getPixelFromCoordinate(bottomRight);
-    const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
+      const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
+      const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
+      const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
 
-    const aoiPixelXOffset = aoiPixelTopLeft[0];
-    const aoiPixelYOffset = aoiPixelTopLeft[1];
-    const aoiPixelWidth = Math.abs(aoiPixelTopRight[0] - aoiPixelTopLeft[0]);
-    const aoiPixelHeight = Math.abs(aoiPixelBottomLeft[1] - aoiPixelTopLeft[1]);
+      const aoiPixelXOffset = aoiPixelTopLeft[0];
+      const aoiPixelYOffset = aoiPixelTopLeft[1];
+      const aoiPixelWidth = Math.abs(aoiPixelTopRight[0] - aoiPixelTopLeft[0]);
+      const aoiPixelHeight = Math.abs(aoiPixelBottomLeft[1] - aoiPixelTopLeft[1]);
 
-    // Calculate scaled positions for cropping
-    const scaledXOffset = aoiPixelXOffset * scaleFactor;
-    const scaledYOffset = aoiPixelYOffset * scaleFactor;
-    const scaledWidth = aoiPixelWidth * scaleFactor;
-    const scaledHeight = aoiPixelHeight * scaleFactor;
-    const scaledResolution = viewResolution / scaleFactor;
+      // Calculate scaled positions for cropping
+      const scaledXOffset = aoiPixelXOffset * scaleFactor;
+      const scaledYOffset = aoiPixelYOffset * scaleFactor;
+      const scaledWidth = aoiPixelWidth * scaleFactor;
+      const scaledHeight = aoiPixelHeight * scaleFactor;
+      const scaledResolution = viewResolution / scaleFactor;
 
-    const renderCompleteOptions = {
-      map,
-      bbox,
-      scaledWidth,
-      scaledHeight,
-      scaledXOffset,
-      scaledYOffset,
-      metersPerPixel,
-      format,
-      worldfile,
-      restoreMap,
-    };
+      const renderCompleteOptions = {
+        map,
+        bbox,
+        scaledWidth,
+        scaledHeight,
+        scaledXOffset,
+        scaledYOffset,
+        metersPerPixel,
+        format,
+        worldfile,
+        restoreMap,
+      };
 
-    map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
+      map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
 
-    // Resize the map container
-    mapElement.style.width = `${scaledMapWidth}px`;
-    mapElement.style.height = `${scaledMapHeight}px`;
-    map.updateSize();
-    view.setResolution(scaledResolution);
-    map.render();
+      // Resize the map container
+      mapElement.style.width = `${scaledMapWidth}px`;
+      mapElement.style.height = `${scaledMapHeight}px`;
+      map.updateSize();
+      view.setResolution(scaledResolution);
+      map.render();
+    } catch (error) {
+      restoreMap();
+
+      console.error('Error configuring map:', error);
+      document.body.style.cursor = 'auto';
+      throw error;
+    }
   };
 
   return viewFitCallback;
