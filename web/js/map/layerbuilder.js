@@ -1,5 +1,3 @@
-/* eslint-disable import/no-duplicates */
-/* eslint-disable no-multi-assign */
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -33,7 +31,7 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
-import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { datesInDateRanges, prevDateInDateRange, nearestInterval } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -45,7 +43,6 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
@@ -363,6 +360,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
     const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+    const calcMatrixIds = matrixIds || resolutions.map((set, index) => index);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -370,22 +368,23 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: shifted ? RIGHT_WING_EXTENT : extent,
       sizes,
       resolutions,
-      matrixIds: matrixIds || resolutions.map((set, index) => index),
+      matrixIds: calcMatrixIds,
       tileSize: tileSize[0],
     };
 
+    const tileGrid = new OlTileGridWMTS(tileGridOptions);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
       interpolate: false,
-      url: sourceURL + urlParameters,
+      url: `${sourceURL}${urlParameters}`,
       layer: layer || id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
       transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
-      tileGrid: new OlTileGridWMTS(tileGridOptions),
+      tileGrid,
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };

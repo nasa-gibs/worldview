@@ -29,6 +29,17 @@ const RESOLUTION_KEY = {
   40: '10km',
 };
 
+const SCALE_KEY = {
+  30: 0.125,
+  60: 0.25,
+  125: 0.5,
+  250: 1,
+  500: 2,
+  1000: 4,
+  5000: 20,
+  10000: 40,
+};
+
 function ImageDownloadPanel(props) {
   const {
     fileType,
@@ -73,17 +84,12 @@ function ImageDownloadPanel(props) {
   }, []);
 
   const onDownload = async (width, height) => {
-    const calcWidth = boundaries[2] - boundaries[0];
-    const calcHeight = boundaries[3] - boundaries[1];
     const layerList = getLayers();
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
     const snapshotOptions = {
       format: snapshotFormat,
       metersPerPixel: Number(currResolution),
-      width: calcWidth,
-      height: calcHeight,
-      xOffset: boundaries[0],
-      yOffset: boundaries[1],
+      pixelBbox: boundaries,
       map,
       worldfile: currIsWorldfile,
     };
@@ -185,7 +191,8 @@ function ImageDownloadPanel(props) {
   );
 
   const { crs } = projection.selected;
-  const dimensions = getDimensions(projection.id, lonlats, currResolution);
+  // console.log({ currResolution }); // eslint-disable-line no-console
+  const dimensions = getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
   const filetypeSelect = _renderFileTypeSelect();
@@ -198,7 +205,6 @@ function ImageDownloadPanel(props) {
       <div className="wv-re-pick-wrapper wv-image">
         <a
           id="wv-image-download-url"
-          // eslint-disable-next-line react/no-unknown-property
           href={debugUrl}
           className="wv-image-download-url"
           download={`debugSnapshot.${currFileType.split('/').at(-1)}`}
@@ -253,7 +259,7 @@ ImageDownloadPanel.defaultProps = {
   firstLabel: 'Resolution (per pixel)',
   isWorldfile: false,
   maxImageSize: '8200px x 8200px',
-  resolution: '1',
+  resolution: 250,
   secondLabel: 'Format',
   worldFileOptions: true,
 };
@@ -273,7 +279,7 @@ ImageDownloadPanel.propTypes = {
   onPanelChange: PropTypes.func,
   projection: PropTypes.object,
   date: PropTypes.object,
-  resolution: PropTypes.string,
+  resolution: PropTypes.number,
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,

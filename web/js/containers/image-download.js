@@ -165,12 +165,14 @@ class ImageDownloadContainer extends Component {
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const mapView = map.ui.selected.getView();
-    const newResolution = resolution
-      || imageUtilCalculateResolution(
-        Math.round(mapView.getZoom()),
-        isGeoProjection,
-        proj.selected.resolutions,
-      );
+    // console.log({ resolution }); // eslint-disable-line no-console
+    // const newResolution = resolution
+    //   || imageUtilCalculateResolution(
+    //     Math.round(mapView.getZoom()),
+    //     isGeoProjection,
+    //     proj.selected.resolutions,
+    //   );
+    const newResolution = resolution || 250;
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
     const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
     const normalizedTopRightLatLong = getNormalizedCoordinate(topRightLatLong);
