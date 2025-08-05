@@ -3,7 +3,7 @@
         "Outgoing Radiation": {
             "id": "outgoing-radiation",
             "title":    "Outgoing Radiation",
-            "subtitle": "Aqua/AIRS",
+            "subtitle": "Aqua/AIRS, PREFIRE/TIRS",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
@@ -19,6 +19,16 @@
                       "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Daily_Night",
                       "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Monthly_Day",
                       "AIRS_L3_Clear_Sky_Outgoing_Longwave_Radiation_Monthly_Night"
+                    ]
+                },
+                "PREFIRE/TIRS": {
+                    "id": "prefire-tirs",
+                    "title": "PREFIRE/TIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "PREFIRE_SAT1_Outgoing_Longwave_Radiative_Flux",
+		                "PREFIRE_SAT2_Outgoing_Longwave_Radiative_Flux"
                     ]
                 }
             }
