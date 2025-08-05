@@ -12,8 +12,8 @@ import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
 import Crop from '../components/util/image-crop';
 import {
-  resolutionsGeo,
-  resolutionsPolar,
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
 } from '../modules/image-download/constants';
 import {
   imageUtilCalculateResolution,
@@ -110,7 +110,7 @@ class GIF extends Component {
       x, y, x2, y2,
     } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
-    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
+    const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
       map.ui.selected,
