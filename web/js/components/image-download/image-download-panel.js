@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
@@ -10,7 +9,6 @@ import {
   GRANULE_LIMIT,
   snapshot,
 } from '../../modules/image-download/util';
-import { getActivePalettes } from '../../modules/palettes/selectors';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
@@ -60,7 +58,7 @@ function ImageDownloadPanel(props) {
   const [maxHeight, setMaxHeight] = useState(0);
 
   useEffect(() => {
-    const divElem = document.querySelector("body > div");
+    const divElem = document.querySelector('body > div');
     const resizeHandler = async () => {
       const { height, width } = await estimateMaxImageSize(map, Number(currResolution));
       setMaxHeight(height);
