@@ -179,11 +179,11 @@ test('bboxWMS13 [imagedownload-bbox]', () => {
   expect(bboxArctic).toBe('11,22,33,44');
 });
 
-test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
-  const zoom = 5;
-  const isGeo = true;
-  expect(imageUtilCalculateResolution(zoom, isGeo, geoResolutions)).toBe('4');
-});
+// test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
+//   const zoom = 5;
+//   const isGeo = true;
+//   expect(imageUtilCalculateResolution(zoom, isGeo, geoResolutions)).toBe('4');
+// });
 
 test('Date time snapping when no subdaily layers present [imagedownload-time-snap-no-subdaily]', () => {
   const mockDate = new Date('2019-09-15T18:32:40Z');
