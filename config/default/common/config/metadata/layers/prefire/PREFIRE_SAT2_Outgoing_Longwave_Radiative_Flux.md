@@ -1,4 +1,4 @@
-The Far Infrared Outgoing Longwave Radiaton (OLR) Flux layer displays broadband flux measurements (W/m<sup>2</sup>) collected by the Thermal Infrared Spectrometer (TIRS-PREFIRE) aboard the PREFIRE-SAT2 CubeSat.
+The Far Infrared Outgoing Longwave Radiation (OLR) Flux layer displays broadband flux measurements (W/m<sup>2</sup>) collected by the Thermal Infrared Spectrometer (TIRS-PREFIRE) aboard the PREFIRE-SAT2 CubeSat.
 
 Polar Radiant Energy in the Far InfraRed Experiment (PREFIRE) Spectral Flux from PREFIRE Satellite 2 COG (PREFIRE_SAT2_2B-FLX_COG) is derived from data collected by the PREFIRE Thermal Infrared Spectrometer (TIRS-PREFIRE) aboard PREFIRE-SAT2. Dual CubeSats each carry a PREFIRE TIRS-PREFIRE, a push broom spectrometer with 63 channels measuring mid- and far-infrared (FIR) radiation from approximately 5 to 53 µm. Most polar emissions are in the FIR but have not been measured on a large scale. PREFIRE aims to fill knowledge gaps in the global energy budget by more accurately characterizing polar emissions. This information will then be assimilated into global circulation and other models to predict future conditions more accurately.
 
