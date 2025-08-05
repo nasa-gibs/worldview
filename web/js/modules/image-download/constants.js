@@ -3,25 +3,25 @@ export const UPDATE_FILE_TYPE = 'IMAGE-DOWNLOAD/UPDATE_FILE_TYPE';
 export const UPDATE_WORLDFILE = 'IMAGE-DOWNLOAD/UPDATE_WORLDFILE';
 export const UPDATE_RESOLUTION = 'IMAGE-DOWNLOAD/UPDATE_RESOLUTION';
 
-export const resolutionsGeo = {
+export const RESOLUTIONS_GEO = {
   values: [
-    { value: '30', text: '30m' },
-    { value: '60', text: '60m' },
-    { value: '125', text: '125m' },
-    { value: '250', text: '250m' },
-    { value: '500', text: '500m' },
-    { value: '1000', text: '1km' },
-    { value: '5000', text: '5km' },
-    { value: '10000', text: '10km' },
+    { value: 30, text: '30m' },
+    { value: 60, text: '60m' },
+    { value: 125, text: '125m' },
+    { value: 250, text: '250m' },
+    { value: 500, text: '500m' },
+    { value: 1000, text: '1km' },
+    { value: 5000, text: '5km' },
+    { value: 10000, text: '10km' },
   ],
 };
-export const resolutionsPolar = {
+export const RESOLUTIONS_POLAR = {
   values: [
-    { value: '250', text: '250m' },
-    { value: '500', text: '500m' },
-    { value: '1000', text: '1km' },
-    { value: '5000', text: '5km' },
-    { value: '10000', text: '10km' },
+    { value: 250, text: '250m' },
+    { value: 500, text: '500m' },
+    { value: 1000, text: '1km' },
+    { value: 5000, text: '5km' },
+    { value: 10000, text: '10km' },
   ],
 };
 export const fileTypesGeo = {

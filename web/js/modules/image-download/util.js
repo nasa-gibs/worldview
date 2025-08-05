@@ -4,14 +4,19 @@ import {
 } from 'lodash';
 import JSZip from 'jszip';
 import canvasSize from 'canvas-size';
-import { transform } from 'ol/proj';
+import { transform, get } from 'ol/proj';
 import * as olExtent from 'ol/extent';
 import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
 import { CRS } from '../map/constants';
-import { GDAL_WASM_PATH, DRIVER_DICT } from './constants';
+import {
+  GDAL_WASM_PATH,
+  DRIVER_DICT,
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
+} from './constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -88,7 +93,7 @@ const imageUtilProcessKMZOrbitTracks = (layersArray, layerWraps, opacities) => {
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities) {
+const imageUtilProcessWrap = (fileType, layersArray, layerWraps, opacities) => {
   if (fileType === 'application/vnd.google-earth.kmz') {
     return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities);
   }
@@ -105,6 +110,21 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
     : resolution / GEO_ESTIMATION_CONSTANT;
 }
 
+function getMetersPerUnit(projection, center = [0, 0]) {
+  const units = projection.getUnits();
+  let metersPerUnit = projection.getMetersPerUnit();
+
+  if (units === 'degrees') metersPerUnit *= Math.cos((center[1] * Math.PI) / 180);
+
+  return metersPerUnit;
+}
+
+function convertResolutionToMetersPerPixel(resolution, projection, center = [0, 0]) {
+  const metersPerUnit = getMetersPerUnit(projection, center);
+
+  return resolution * metersPerUnit;
+}
+
 /*
  * Estimate appropriate Resolution based on zoom
  * This is only run if user has not already selected
@@ -112,31 +132,32 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
  */
 export function imageUtilCalculateResolution(
   zoom,
-  isGeoProjection,
-  resolutions,
+  proj,
+  center,
 ) {
   let resolution;
+  const isGeoProjection = proj.id === 'geographic';
+  const { crs, resolutions } = proj.selected;
+  const projection = get(crs);
   const nZoomLevels = resolutions.length;
   const currentZoom = zoom < 0 ? 0 : zoom;
   const curResolution = currentZoom >= nZoomLevels
     ? resolutions[nZoomLevels - 1]
     : resolutions[currentZoom];
 
-  // Estimate the option value used by "wv-image-resolution"
-  const resolutionEstimate = imageUtilEstimateResolution(
-    curResolution,
-    isGeoProjection,
-  );
+  const currResolutionInMeters = convertResolutionToMetersPerPixel(curResolution, projection, center);
+
+  const getResolutions = (config) => config.values.map((res) => res.value);
 
   // Find the closest match of resolution within the available values
   const possibleResolutions = isGeoProjection
-    ? [0.125, 0.25, 0.5, 1, 2, 4, 20, 40]
-    : [1, 2, 4, 20, 40];
+    ? getResolutions(RESOLUTIONS_GEO)
+    : getResolutions(RESOLUTIONS_POLAR);
   let bestDiff = Infinity;
   let bestIdx = -1;
   let currDiff = 0;
   for (let i = 0; i < possibleResolutions.length; i += 1) {
-    currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
+    currDiff = Math.abs(possibleResolutions[i] - currResolutionInMeters);
     if (currDiff < bestDiff) {
       resolution = possibleResolutions[i];
       bestDiff = currDiff;
@@ -170,7 +191,7 @@ export function imageUtilCalculateResolution(
       }
     }
   }
-  return resolution.toString();
+  return resolution;
 }
 
 /*
@@ -300,6 +321,36 @@ export function getTruncatedGranuleDates(layerDefs) {
     truncated: false,
     value: '',
   });
+}
+
+/**
+ * Calculate ground resolution from map state and target spatial resolution
+ * @param {Number} targetMetersPerPixel - Target spatial resolution in meters per pixel
+ * @param {Object} projection - Map projection
+ * @param {Number} mapResolution - Current map resolution
+ * @param {Array} center - Map center coordinates
+ * @returns {Number} - Scale factor to apply to map
+ */
+function calculateScaleFactor(targetMetersPerPixel, projection, mapResolution, center) {
+  const currentResolutionInMeters = convertResolutionToMetersPerPixel(mapResolution, projection, center);
+
+  // Calculate scale factor needed to achieve target resolution
+  return currentResolutionInMeters / targetMetersPerPixel;
+}
+
+export const estimateMaxCanvasSize = () => canvasSize.maxArea();
+
+export async function estimateMaxImageSize() {
+  const { height: maxHeight, width: maxWidth } = await estimateMaxCanvasSize();
+
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const aoiMaxHeight = maxHeight / devicePixelRatio;
+  const aoiMaxWidth = maxWidth / devicePixelRatio;
+
+  return {
+    height: Math.floor(aoiMaxHeight),
+    width: Math.floor(aoiMaxWidth),
+  };
 }
 
 /**
@@ -527,29 +578,6 @@ export async function georeference (inputBlob, options) {
 }
 
 /**
- * Calculate ground resolution from map state and target spatial resolution
- * @param {Number} targetMetersPerPixel - Target spatial resolution in meters per pixel
- * @param {Object} projection - Map projection
- * @param {Number} mapResolution - Current map resolution
- * @param {Array} center - Map center coordinates
- * @returns {Number} - Scale factor to apply to map
- */
-function calculateScaleFactor (targetMetersPerPixel, projection, mapResolution, center) {
-  const units = projection.getUnits();
-  let currentResolutionInMeters = mapResolution;
-
-  if (units === 'degrees') {
-    // For geographic projections, convert degrees to meters
-    const latitude = center[1];
-    const metersPerDegree = 111319.9 * Math.cos((latitude * Math.PI) / 180);
-    currentResolutionInMeters = mapResolution * metersPerDegree;
-  }
-
-  // Calculate scale factor needed to achieve target resolution
-  return currentResolutionInMeters / targetMetersPerPixel;
-}
-
-/**
  * Update high-resolution tile grids for a specific layer
  * @param {*} layer - The OpenLayers layer to update
  * @returns {Function} - A function to restore the original tile grids
@@ -565,7 +593,7 @@ function updateHighResTileGrids (layer) {
   const matrixIds = originalTileGrid.getMatrixIds?.();
   const maxResolutions = new Array(resolutions.length)
     .fill(resolutions.at(-1))
-    .map((res, i) => (res >= 1 ? res + (i * (res * 0.000000000001)) : res - (i * (res * 0.000000000001)))); // Ensure unique resolutions see: openlayers/src/ol/tilegrid/TileGrid.js line 90
+    .map((res, i) => res - (i * (res * 0.000000000001))); // Ensure unique resolutions see: openlayers/src/ol/tilegrid/TileGrid.js line 90
   const maxMatrixIds = matrixIds ? new Array(matrixIds.length).fill(matrixIds.at(-1)) : undefined;
 
   const tileGrid = new TileGridConstructor({
@@ -837,23 +865,7 @@ function createViewFitCalback (options) {
   return viewFitCallback;
 }
 
-export async function snapshot (options) {
-  document.body.style.cursor = 'wait';
-
-  const { height: maxHeight, width: maxWidth } = await canvasSize.maxArea();
-
-  const {
-    format,
-    metersPerPixel,
-    pixelBbox,
-    map,
-    worldfile,
-  } = options;
-  const view = map.getView();
-
-  // Save original viewport size
-  const [originalWidth, originalHeight] = map.getSize();
-
+function getExtentFromPixelBbox(pixelBbox, map) {
   const [minPixelX, minPixelY, maxPixelX, maxPixelY] = pixelBbox;
 
   // Calculate geographic extent
@@ -867,8 +879,28 @@ export async function snapshot (options) {
   const maxX = Math.max(topRight[0], bottomRight[0]);
   const minY = Math.min(bottomLeft[1], bottomRight[1]);
   const maxY = Math.max(topLeft[1], topRight[1]);
-  const bbox = [minX, minY, maxX, maxY];
+  const extent = [minX, minY, maxX, maxY];
 
+  return extent;
+}
+
+export async function snapshot (options) {
+  document.body.style.cursor = 'wait';
+
+  const { height: maxHeight, width: maxWidth } = await estimateMaxCanvasSize();
+
+  const {
+    format,
+    metersPerPixel,
+    pixelBbox,
+    map,
+    worldfile,
+  } = options;
+  const view = map.getView();
+
+  // Save original viewport size
+  const [originalWidth, originalHeight] = map.getSize();
+  const bbox = getExtentFromPixelBbox(pixelBbox, map);
   const restoreMap = createMapRestore(map);
 
   const viewFitOptions = {
@@ -918,27 +950,45 @@ export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
   };
 }
 
-export function imageSizeValid(imgHeight, imgWidth, maxSize) {
-  if (imgHeight === 0 && imgWidth === 0) {
-    return false;
-  }
-  if (imgHeight > maxSize || imgWidth > maxSize) {
-    return false;
-  }
+export function imageSizeValid(options) {
+  const {
+    maxHeight,
+    maxWidth,
+    map,
+    resolution,
+    pixelBbox,
+  } = options;
+
+  const imgWidth = Math.abs(pixelBbox[1][0] - pixelBbox[0][0]);
+  const imgHeight = Math.abs(pixelBbox[1][1] - pixelBbox[0][1]);
+  const view = map.getView();
+  const projection = view.getProjection();
+  const center = view.getCenter();
+  const extent = getExtentFromPixelBbox(pixelBbox, map);
+  const viewResolution = view.getResolutionForExtent(extent);
+
+  const scaleFactor = calculateScaleFactor(
+    resolution,
+    projection,
+    viewResolution,
+    center,
+  );
+
+  const mapSize = map.getSize();
+  const [scaledWidth, scaledHeight] = mapSize.map((size) => size * scaleFactor);
+
+  const isZero = imgHeight === 0 && imgWidth === 0;
+  const isTooBig = scaledWidth > maxHeight || scaledHeight > maxWidth;
+
+  if (isZero || isTooBig) return false;
+
   return true;
 }
 
 export function getDimensions(map, bounds, resolution) {
   const projection = map.getView().getProjection();
   const center = map.getView().getCenter();
-  const units = projection.getUnits();
-  let metersPerUnit = projection.getMetersPerUnit();
-
-  if (units === 'degrees') {
-    // For geographic projections, convert degrees to meters
-    const latitude = center[1];
-    metersPerUnit *= Math.cos((latitude * Math.PI) / 180);
-  }
+  const metersPerUnit = getMetersPerUnit(projection, center);
 
   const mapWidth = Math.abs(bounds[1][0] - bounds[0][0]) * metersPerUnit;
   const mapHeight = Math.abs(bounds[1][1] - bounds[0][1]) * metersPerUnit;

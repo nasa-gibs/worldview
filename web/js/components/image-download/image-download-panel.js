@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
   imageSizeValid,
+  estimateMaxImageSize,
   getDimensions,
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
@@ -17,28 +18,16 @@ import AlertUtil from '../util/alert';
 import LatLongSelect from './lat-long-inputs';
 import GlobalSelectCheckbox from './global-select';
 
-const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
-  0.125: '30m',
-  0.25: '60m',
-  0.5: '125m',
-  1: '250m',
-  2: '500m',
-  4: '1km',
-  20: '5km',
-  40: '10km',
+  30: '30m',
+  60: '60m',
+  125: '125m',
+  250: '250m',
+  500: '500m',
+  1_000: '1km',
+  5_000: '5km',
+  10_000: '10km',
 };
-
-// const SCALE_KEY = {
-//   30: 0.125,
-//   60: 0.25,
-//   125: 0.5,
-//   250: 1,
-//   500: 2,
-//   1000: 4,
-//   5000: 20,
-//   10000: 40,
-// };
 
 function ImageDownloadPanel(props) {
   const {
@@ -58,7 +47,6 @@ function ImageDownloadPanel(props) {
     map,
     viewExtent,
     resolutions,
-    maxImageSize,
     firstLabel,
     geoLatLong,
     onLatLongChange,
@@ -73,14 +61,27 @@ function ImageDownloadPanel(props) {
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
   const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
+  const [maxWidth, setMaxWidth] = useState(0);
+  const [maxHeight, setMaxHeight] = useState(0);
 
   useEffect(() => {
+    const divElem = document.querySelector("body > div");
+    const resizeHandler = async () => {
+      const { height, width } = await estimateMaxImageSize(map, Number(currResolution));
+      setMaxHeight(height);
+      setMaxWidth(width);
+    };
     const layerList = getLayers();
     const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
     const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
     const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
+    const resizeObserver = new ResizeObserver(resizeHandler);
+    resizeObserver.observe(divElem);
+    resizeHandler();
 
     setShowGranuleWarning(isTruncated);
+
+    return () => resizeObserver.unobserve(divElem);
   }, []);
 
   const onDownload = async (width, height) => {
@@ -95,22 +96,6 @@ function ImageDownloadPanel(props) {
     };
     snapshot(snapshotOptions);
 
-    const time = new Date(date.getTime());
-
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
-    const dlURL = getDownloadUrl(
-      url,
-      projection,
-      layerDefs,
-      lonlats,
-      { width, height },
-      time,
-      currFileType,
-      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
-      markerCoordinates,
-      activePalettes,
-    );
 
     googleTagManager.pushEvent({
       event: 'image_download',
@@ -123,7 +108,6 @@ function ImageDownloadPanel(props) {
         worldfile: currIsWorldfile,
       },
     });
-    setDebugUrl(dlURL);
   };
 
   const handleChange = (type, value) => {
@@ -203,14 +187,6 @@ function ImageDownloadPanel(props) {
     <>
       {crossesDatelineAlert()}
       <div className="wv-re-pick-wrapper wv-image">
-        <a
-          id="wv-image-download-url"
-          href={debugUrl}
-          className="wv-image-download-url"
-          download={`debugSnapshot.${currFileType.split('/').at(-1)}`}
-        >
-          Download Image
-        </a>
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"
@@ -243,8 +219,14 @@ function ImageDownloadPanel(props) {
           width={width}
           height={height}
           fileSize={((width * height * 24) / 8388608).toFixed(2)}
-          maxImageSize={maxImageSize}
-          validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          maxImageSize={`${maxWidth}px x ${maxHeight}px`}
+          validSize={imageSizeValid({
+            maxHeight,
+            maxWidth,
+            map,
+            resolution: Number(currResolution),
+            pixelBbox: boundaries,
+          })}
           validLayers={layerList.length > 0}
           onClick={onDownload}
         />
@@ -258,7 +240,6 @@ ImageDownloadPanel.defaultProps = {
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
   isWorldfile: false,
-  maxImageSize: '8200px x 8200px',
   resolution: 250,
   secondLabel: 'Format',
   worldFileOptions: true,
@@ -274,7 +255,6 @@ ImageDownloadPanel.propTypes = {
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   map: PropTypes.object,
-  maxImageSize: PropTypes.string,
   markerCoordinates: PropTypes.array,
   onPanelChange: PropTypes.func,
   projection: PropTypes.object,

@@ -9,7 +9,7 @@ import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import {
   getAlertMessageIfCrossesDateline,
-  // imageUtilCalculateResolution,
+  imageUtilCalculateResolution,
   imageUtilGetPixelValuesFromCoords,
 } from '../modules/image-download/util';
 import util from '../util/util';
@@ -19,8 +19,8 @@ import {
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
-  resolutionsGeo,
-  resolutionsPolar,
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
   fileTypesGeo,
   fileTypesPolar,
 } from '../modules/image-download/constants';
@@ -163,16 +163,15 @@ class ImageDownloadContainer extends Component {
     const lonLat2 = olProj.transform(topRightLatLong, CRS.GEOGRAPHIC, crs);
     const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
-    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
+    const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const mapView = map.ui.selected.getView();
-    // console.log({ resolution }); // eslint-disable-line no-console
-    // const newResolution = resolution
-    //   || imageUtilCalculateResolution(
-    //     Math.round(mapView.getZoom()),
-    //     isGeoProjection,
-    //     proj.selected.resolutions,
-    //   );
-    const newResolution = resolution || 250;
+    const center = mapView.getCenter();
+    const newResolution = resolution
+      || imageUtilCalculateResolution(
+        Math.round(mapView.getZoom()),
+        proj,
+        center,
+      );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
     const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
     const normalizedTopRightLatLong = getNormalizedCoordinate(topRightLatLong);
@@ -306,7 +305,7 @@ ImageDownloadContainer.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   markerCoordinates: PropTypes.array,
-  resolution: PropTypes.string,
+  resolution: PropTypes.number,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   boundaries: PropTypes.object,
