@@ -9,7 +9,6 @@ import {
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
   snapshot,
-  getDownloadUrl,
 } from '../../modules/image-download/util';
 import { getActivePalettes } from '../../modules/palettes/selectors';
 import SelectionList from '../util/selector';
@@ -51,16 +50,12 @@ function ImageDownloadPanel(props) {
     geoLatLong,
     onLatLongChange,
     boundaries,
-    url,
-    markerCoordinates,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
   const [currIsWorldfile, setIsWorldfile] = useState(isWorldfile);
   const [currResolution, setResolution] = useState(resolution);
-  const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
   const [maxWidth, setMaxWidth] = useState(0);
   const [maxHeight, setMaxHeight] = useState(0);
 
@@ -84,7 +79,7 @@ function ImageDownloadPanel(props) {
     return () => resizeObserver.unobserve(divElem);
   }, []);
 
-  const onDownload = async (width, height) => {
+  const onDownload = async () => {
     const layerList = getLayers();
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
     const snapshotOptions = {
