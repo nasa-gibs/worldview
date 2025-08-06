@@ -14,11 +14,11 @@ import Crop from '../components/util/image-crop';
 import {
   RESOLUTIONS_GEO,
   RESOLUTIONS_POLAR,
-} from '../modules/image-download/constants';
+} from '../modules/gif-download/constants';
 import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
-} from '../modules/image-download/util';
+} from '../modules/gif-download/util';
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getImageArray from '../modules/animation/selectors';

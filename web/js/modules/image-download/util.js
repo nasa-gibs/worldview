@@ -137,7 +137,7 @@ export function imageUtilCalculateResolution(
 ) {
   let resolution;
   const isGeoProjection = proj.id === 'geographic';
-  const { crs, resolutions } = proj.selected;
+  const { crs, resolutions } = proj.selected || proj;
   const projection = get(crs);
   const nZoomLevels = resolutions.length;
   const currentZoom = zoom < 0 ? 0 : zoom;
@@ -887,7 +887,7 @@ function getExtentFromPixelBbox(pixelBbox, map) {
 export async function snapshot (options) {
   document.body.style.cursor = 'wait';
 
-  const { height: maxHeight, width: maxWidth } = await estimateMaxCanvasSize();
+  const { height: maxHeight = 0, width: maxWidth = 0 } = await estimateMaxCanvasSize();
 
   const {
     format,
