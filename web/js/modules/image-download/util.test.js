@@ -1,24 +1,24 @@
 import {
   bboxWMS13,
-  // imageUtilCalculateResolution,
+  imageUtilCalculateResolution,
   getLatestIntervalTime,
   getDownloadUrl,
 } from './util';
 
-// const geoResolutions = [
-//   0.5625,
-//   0.28125,
-//   0.140625,
-//   0.0703125,
-//   0.03515625,
-//   0.017578125,
-//   0.0087890625,
-//   0.00439453125,
-//   0.002197265625,
-//   0.0010986328125,
-//   0.00054931640625,
-//   0.00027465820313,
-// ];
+const geoResolutions = [
+  0.5625,
+  0.28125,
+  0.140625,
+  0.0703125,
+  0.03515625,
+  0.017578125,
+  0.0087890625,
+  0.00439453125,
+  0.002197265625,
+  0.0010986328125,
+  0.00054931640625,
+  0.00027465820313,
+];
 const mockLayerDefs = [{
   id: 'VIIRS_SNPP_CorrectedReflectance_TrueColor',
   type: 'wmts',
@@ -179,11 +179,18 @@ test('bboxWMS13 [imagedownload-bbox]', () => {
   expect(bboxArctic).toBe('11,22,33,44');
 });
 
-// test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
-//   const zoom = 5;
-//   const isGeo = true;
-//   expect(imageUtilCalculateResolution(zoom, isGeo, geoResolutions)).toBe('4');
-// });
+test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
+  const zoom = 5;
+  const proj = {
+    id: 'geographic',
+    selected: {
+      crs: 'EPSG:4326',
+      resolutions: geoResolutions,
+    },
+  };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(zoom, proj, center)).toBe(1000);
+});
 
 test('Date time snapping when no subdaily layers present [imagedownload-time-snap-no-subdaily]', () => {
   const mockDate = new Date('2019-09-15T18:32:40Z');
