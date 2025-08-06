@@ -639,25 +639,39 @@ function toggleHighResTileGrids (map) {
  * @param {Object} map
  * @returns {Function} - A function to restore the original map state
  */
-function createMapRestore (map, useHighResTileGrids = true) {
+function createMapRestore(map, extent, highResTileGrids = true) {
   const mapElement = map.getTargetElement();
-  const view = map.getView();
+  const originalView = map.getView();
+  const ViewConstructor = originalView.constructor;
+  const newView = new ViewConstructor({
+    center: originalView.getCenter(),
+    resolution: originalView.getResolution(),
+    projection: originalView.getProjection(),
+    zoom: originalView.getZoom(),
+    rotation: originalView.getRotation(),
+    maxZoom: originalView.getMaxZoom(),
+    minZoom: originalView.getMinZoom(),
+    extent: extent || originalView.getExtent(),
+    maxResolution: originalView.getMaxResolution(),
+    minResolution: originalView.getMinResolution(),
+    resolutions: originalView.getResolutions(),
+    multiWorld: false,
+    showFullExtent: true,
+    smoothResolutionConstraint: false,
+  });
+  map.setView(newView);
   const originalStyleWidth = mapElement.style.width;
   const originalStyleHeight = mapElement.style.height;
-  const originalViewResolution = view.getResolution();
-  const originalViewCenter = view.getCenter();
 
-  // Configure all layers to use the high-resolution tile grid (returns a function to restore original sources)
-  const restoreSources = useHighResTileGrids ? toggleHighResTileGrids(map) : () => null;
+  const restoreLayers = highResTileGrids ? toggleHighResTileGrids(map) : () => null;
 
   return () => {
-    // Restore original map size and sources
-    restoreSources();
+    // Restore original map size
+    restoreLayers();
+    map.setView(originalView);
     mapElement.style.width = originalStyleWidth;
     mapElement.style.height = originalStyleHeight;
     map.updateSize();
-    view.setResolution(originalViewResolution);
-    view.setCenter(originalViewCenter);
   };
 }
 
@@ -896,12 +910,12 @@ export async function snapshot (options) {
     map,
     worldfile,
   } = options;
-  const view = map.getView();
 
   // Save original viewport size
   const [originalWidth, originalHeight] = map.getSize();
   const bbox = getExtentFromPixelBbox(pixelBbox, map);
-  const restoreMap = createMapRestore(map);
+  const restoreMap = createMapRestore(map, bbox);
+  const view = map.getView();
 
   const viewFitOptions = {
     map,
