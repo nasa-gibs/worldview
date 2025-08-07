@@ -305,7 +305,7 @@ ImageDownloadContainer.propTypes = {
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
   markerCoordinates: PropTypes.array,
-  resolution: PropTypes.number,
+  resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   boundaries: PropTypes.object,

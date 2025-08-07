@@ -56,6 +56,7 @@ function ImageDownloadPanel(props) {
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
   const [maxWidth, setMaxWidth] = useState(0);
   const [maxHeight, setMaxHeight] = useState(0);
+  const [globalSelected, setGlobalSelected] = useState(false);
 
   useEffect(() => {
     const divElem = document.querySelector('body > div');
@@ -86,6 +87,7 @@ function ImageDownloadPanel(props) {
       pixelBbox: boundaries,
       map,
       worldfile: currIsWorldfile,
+      useHighResTiles: !globalSelected,
     };
     snapshot(snapshotOptions);
 
@@ -204,6 +206,7 @@ function ImageDownloadPanel(props) {
           onLatLongChange={onLatLongChange}
           proj={projection.id}
           map={map}
+          handleChange={(event) => setGlobalSelected(event.target.checked)}
         />
         {showGranuleWarning && (
           <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line

@@ -4,6 +4,7 @@ import {
 } from 'lodash';
 import JSZip from 'jszip';
 import canvasSize from 'canvas-size';
+import { evaluate } from 'mathjs';
 import { transform, get } from 'ol/proj';
 import * as olExtent from 'ol/extent';
 import initGdalJs from 'gdal3.js';
@@ -114,7 +115,7 @@ function getMetersPerUnit(projection, center = [0, 0]) {
   const units = projection.getUnits();
   let metersPerUnit = projection.getMetersPerUnit();
 
-  if (units === 'degrees') metersPerUnit *= Math.cos((center[1] * Math.PI) / 180);
+  if (units === 'degrees') metersPerUnit *= evaluate(`cos((${center[1]} * pi) / ${180})`);
 
   return metersPerUnit;
 }
@@ -122,7 +123,7 @@ function getMetersPerUnit(projection, center = [0, 0]) {
 function convertResolutionToMetersPerPixel(resolution, projection, center = [0, 0]) {
   const metersPerUnit = getMetersPerUnit(projection, center);
 
-  return resolution * metersPerUnit;
+  return evaluate(`${resolution} * ${metersPerUnit}`);
 }
 
 /*
@@ -335,7 +336,7 @@ function calculateScaleFactor(targetMetersPerPixel, projection, mapResolution, c
   const currentResolutionInMeters = convertResolutionToMetersPerPixel(mapResolution, projection, center);
 
   // Calculate scale factor needed to achieve target resolution
-  return currentResolutionInMeters / targetMetersPerPixel;
+  return evaluate(`${currentResolutionInMeters} / ${targetMetersPerPixel}`);
 }
 
 export const estimateMaxCanvasSize = () => canvasSize.maxArea();
@@ -593,7 +594,7 @@ function updateHighResTileGrids (layer) {
   const matrixIds = originalTileGrid.getMatrixIds?.();
   const maxResolutions = new Array(resolutions.length)
     .fill(resolutions.at(-1))
-    .map((res, i) => res - (i * (res * 0.000000000001))); // Ensure unique resolutions see: openlayers/src/ol/tilegrid/TileGrid.js line 90
+    .map((res, i) => evaluate(`${res} - (${i} * (${res} * 0.000000000001))`)); // Ensure unique resolutions see: openlayers/src/ol/tilegrid/TileGrid.js line 90
   const maxMatrixIds = matrixIds ? new Array(matrixIds.length).fill(matrixIds.at(-1)) : undefined;
 
   const tileGrid = new TileGridConstructor({
@@ -697,8 +698,8 @@ function createRenderCompleteCallback (options) {
       const dpr = window.devicePixelRatio || 1;
 
       // Set the "actual" size of the outputCanvas
-      outputCanvas.width = scaledWidth * dpr;
-      outputCanvas.height = scaledHeight * dpr;
+      outputCanvas.width = evaluate(`${scaledWidth} * ${dpr}`);
+      outputCanvas.height = evaluate(`${scaledHeight} * ${dpr}`);
 
       const ctx = outputCanvas.getContext('2d');
       ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
@@ -726,10 +727,10 @@ function createRenderCompleteCallback (options) {
       // Draw only the selected region to our output canvas
       ctx.drawImage(
         capturedCanvas,
-        scaledXOffset * dpr, // source x
-        scaledYOffset * dpr, // source y
-        scaledWidth * dpr, // source width
-        scaledHeight * dpr, // source height
+        evaluate(`${scaledXOffset} * ${dpr}`), // source x
+        evaluate(`${scaledYOffset} * ${dpr}`), // source y
+        evaluate(`${scaledWidth} * ${dpr}`), // source width
+        evaluate(`${scaledHeight} * ${dpr}`), // source height
         0, // dest x
         0, // dest y
         scaledWidth, // dest width
@@ -818,11 +819,11 @@ function createViewFitCalback (options) {
       );
 
       // Scale the entire map up to the target resolution
-      const scaledMapWidth = originalWidth * scaleFactor;
-      const scaledMapHeight = originalHeight * scaleFactor;
+      const scaledMapWidth = evaluate(`${originalWidth} * ${scaleFactor}`);
+      const scaledMapHeight = evaluate(`${originalHeight} * ${scaleFactor}`);
       const devicePixelRatio = window.devicePixelRatio || 1;
-      const scaledMapWidthWithDPR = scaledMapWidth * devicePixelRatio;
-      const scaledMapHeightWithDPR = scaledMapHeight * devicePixelRatio;
+      const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${devicePixelRatio}`);
+      const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${devicePixelRatio}`);
 
       if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
 
@@ -836,15 +837,15 @@ function createViewFitCalback (options) {
 
       const aoiPixelXOffset = aoiPixelTopLeft[0];
       const aoiPixelYOffset = aoiPixelTopLeft[1];
-      const aoiPixelWidth = Math.abs(aoiPixelTopRight[0] - aoiPixelTopLeft[0]);
-      const aoiPixelHeight = Math.abs(aoiPixelBottomLeft[1] - aoiPixelTopLeft[1]);
+      const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
+      const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
 
       // Calculate scaled positions for cropping
-      const scaledXOffset = aoiPixelXOffset * scaleFactor;
-      const scaledYOffset = aoiPixelYOffset * scaleFactor;
-      const scaledWidth = aoiPixelWidth * scaleFactor;
-      const scaledHeight = aoiPixelHeight * scaleFactor;
-      const scaledResolution = viewResolution / scaleFactor;
+      const scaledXOffset = evaluate(`${aoiPixelXOffset} * ${scaleFactor}`);
+      const scaledYOffset = evaluate(`${aoiPixelYOffset} * ${scaleFactor}`);
+      const scaledWidth = evaluate(`${aoiPixelWidth} * ${scaleFactor}`);
+      const scaledHeight = evaluate(`${aoiPixelHeight} * ${scaleFactor}`);
+      const scaledResolution = evaluate(`${viewResolution} / ${scaleFactor}`);
 
       const renderCompleteOptions = {
         map,
@@ -862,8 +863,10 @@ function createViewFitCalback (options) {
       map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
 
       // Resize the map container
+      map.setSize([scaledMapWidth, scaledMapHeight]);
       mapElement.style.width = `${scaledMapWidth}px`;
       mapElement.style.height = `${scaledMapHeight}px`;
+      console.log(map.getSize(), scaledMapWidth, scaledMapHeight);
       map.updateSize();
       view.setResolution(scaledResolution);
       map.render();
@@ -909,12 +912,15 @@ export async function snapshot (options) {
     pixelBbox,
     map,
     worldfile,
+    useHighResTileGrids,
   } = options;
 
   // Save original viewport size
   const [originalWidth, originalHeight] = map.getSize();
   const bbox = getExtentFromPixelBbox(pixelBbox, map);
-  const restoreMap = createMapRestore(map, bbox);
+
+  // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
+  const restoreMap = createMapRestore(map, bbox, useHighResTileGrids);
   const view = map.getView();
 
   const viewFitOptions = {
