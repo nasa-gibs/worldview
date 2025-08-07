@@ -45,9 +45,9 @@ function ChartComponent (props) {
   const format = util.getCoordinateFormat();
 
   const startDateObj = new Date(startDate);
-  const startDateFormatted = `${startDateObj.getFullYear()}-${startDateObj.getMonth() + 1}-${startDateObj.getDate()}`;
+  const startDateFormatted = `${startDateObj.getFullYear()}-${`0${startDateObj.getMonth() + 1}`.slice(-2)}-${`0${startDateObj.getDate()}`.slice(-2)}`;
   const endDateObj = new Date(endDate);
-  const endDateFormatted = `${endDateObj.getFullYear()}-${endDateObj.getMonth() + 1}-${endDateObj.getDate()}`;
+  const endDateFormatted = `${endDateObj.getFullYear()}-${`0${endDateObj.getMonth() + 1}`.slice(-2)}-${`0${endDateObj.getDate()}`.slice(-2)}`;
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
