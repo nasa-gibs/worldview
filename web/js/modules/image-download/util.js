@@ -412,7 +412,6 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   if (markerCoordinates.length > 0) {
     const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
       const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
-      // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
       return validCoords.concat([mCoord[0], mCoord[1]]);
     }, []);
     params.push(`MARKER=${coords.join(',')}`);
@@ -424,7 +423,7 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
  * Convert a PNG image to a georeferenced KML file
  * @param {Blob} pngBlob - The input PNG Blob
  * @param {Object} options - Additional options for georeferencing
- * @param {Array} options.bbox - Bounding box [minX, minY, maxX, maxY] in map units
+ * @param {Array} options.extent - Bounding box [minX, minY, maxX, maxY] in map units
  * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
  * @param {String} options.name - Optional name for the KML overlay (default: 'Image Overlay')
  * @param {String} options.description - Optional description for the KML overlay
@@ -447,7 +446,7 @@ export function convertPngToKml(pngBlob, options) {
           const dataUrl = reader.result;
           const base64Data = dataUrl.split(',')[1];
 
-          const [minX, minY, maxX, maxY] = options.bbox;
+          const [minX, minY, maxX, maxY] = options.extent;
 
           // Create the KML document
           const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
@@ -493,7 +492,7 @@ export function convertPngToKml(pngBlob, options) {
  * Convert a input Blob to a properly georeferenced GeoTIFF Blob
  * @param {Blob} pngBlob - The input TIFF Blob
  * @param {Object} options - Additional options for georeferencing
- * @param {Array} options.bbox - Bounding box [minX, minY, maxX, maxY] in map units
+ * @param {Array} options.extent - Bounding box [minX, minY, maxX, maxY] in map units
  * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
  * @param {Number} options.metersPerPixel - Ground resolution in meters per pixel
  * @param {Number} options.captureWidth - Width of the output image in pixels
@@ -536,7 +535,7 @@ export async function georeference (inputBlob, options) {
 
   const width = captureWidth || dataset.info.size[0];
   const height = captureHeight || dataset.info.size[1];
-  const bbox = options.bbox.map((coord) => `${coord}`);
+  const extent = options.extent.map((coord) => `${coord}`);
   const driver = DRIVER_DICT[outputFormat];
 
   const translateOpts = [
@@ -545,7 +544,7 @@ export async function georeference (inputBlob, options) {
     '-a_srs', crs, // Set the spatial reference system
     '-outsize', `${width}`, `${height}`, // Set the output size
     '-r', 'average', // Resampling method
-    '-a_ullr', bbox[0], bbox[3], bbox[2], bbox[1], // Set the bounding box
+    '-a_ullr', extent[0], extent[3], extent[2], extent[1], // Set the bounding box
   ];
   if (driver !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
 
@@ -679,7 +678,7 @@ function createMapRestore(map, extent, highResTileGrids = true) {
 function createRenderCompleteCallback (options) {
   const {
     map,
-    bbox,
+    extent,
     scaledWidth,
     scaledHeight,
     scaledXOffset,
@@ -692,14 +691,23 @@ function createRenderCompleteCallback (options) {
 
   const handleRenderComplete = async () => {
     try {
+      const mapElement = map.getTargetElement();
+
+      // Account for DOM size differences
+      const [mapWidth, mapHeight] = map.getSize();
+      const { width: mapElWidth, height: mapElHeight } = mapElement.getBoundingClientRect();
+      const deltaWidth = mapElWidth - mapWidth;
+      const deltaHeight = mapElHeight - mapHeight;
+      const adjustedWidth = evaluate(`${scaledWidth} + ${deltaWidth}`);
+      const adjustedHeight = evaluate(`${scaledHeight} + ${deltaHeight}`);
+
       // Create our output canvas with exact dimensions we want
       const outputCanvas = document.createElement('canvas');
-      const viewport = map.getViewport();
       const dpr = window.devicePixelRatio || 1;
 
       // Set the "actual" size of the outputCanvas
-      outputCanvas.width = evaluate(`${scaledWidth} * ${dpr}`);
-      outputCanvas.height = evaluate(`${scaledHeight} * ${dpr}`);
+      outputCanvas.width = evaluate(`${adjustedWidth} * ${dpr}`);
+      outputCanvas.height = evaluate(`${adjustedHeight} * ${dpr}`);
 
       const ctx = outputCanvas.getContext('2d');
       ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
@@ -708,11 +716,11 @@ function createRenderCompleteCallback (options) {
       ctx.scale(dpr, dpr);
 
       // Set the "drawn" size of the outputCanvas
-      outputCanvas.style.width = `${scaledWidth}px`;
-      outputCanvas.style.height = `${scaledHeight}px`;
+      outputCanvas.style.width = `${adjustedWidth}px`;
+      outputCanvas.style.height = `${adjustedHeight}px`;
 
       // Capture the map at its new scaled size
-      const capturedCanvas = await html2canvas(viewport, {
+      const capturedCanvas = await html2canvas(mapElement, {
         backgroundColor: null,
         useCORS: true,
         allowTaint: true,
@@ -729,12 +737,12 @@ function createRenderCompleteCallback (options) {
         capturedCanvas,
         evaluate(`${scaledXOffset} * ${dpr}`), // source x
         evaluate(`${scaledYOffset} * ${dpr}`), // source y
-        evaluate(`${scaledWidth} * ${dpr}`), // source width
-        evaluate(`${scaledHeight} * ${dpr}`), // source height
+        evaluate(`${adjustedWidth} * ${dpr}`), // source width
+        evaluate(`${adjustedHeight} * ${dpr}`), // source height
         0, // dest x
         0, // dest y
-        scaledWidth, // dest width
-        scaledHeight, // dest height
+        adjustedWidth, // dest width
+        adjustedHeight, // dest height
       );
 
       // Reset map to original size
@@ -744,7 +752,7 @@ function createRenderCompleteCallback (options) {
         const zip = new JSZip();
         const crs = map.getView().getProjection().getCode();
         const georeferencedOutput = await georeference(pngBlob, {
-          bbox,
+          extent,
           crs,
           metersPerPixel,
           captureWidth: scaledWidth,
@@ -790,7 +798,7 @@ function createRenderCompleteCallback (options) {
 function createViewFitCalback (options) {
   const {
     map,
-    bbox,
+    extent,
     metersPerPixel,
     format,
     worldfile,
@@ -827,9 +835,9 @@ function createViewFitCalback (options) {
 
       if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
 
-      const topLeft = olExtent.getTopLeft(bbox);
-      const bottomLeft = olExtent.getBottomLeft(bbox);
-      const topRight = olExtent.getTopRight(bbox);
+      const topLeft = olExtent.getTopLeft(extent);
+      const bottomLeft = olExtent.getBottomLeft(extent);
+      const topRight = olExtent.getTopRight(extent);
 
       const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
       const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
@@ -849,7 +857,7 @@ function createViewFitCalback (options) {
 
       const renderCompleteOptions = {
         map,
-        bbox,
+        extent,
         scaledWidth,
         scaledHeight,
         scaledXOffset,
@@ -866,7 +874,6 @@ function createViewFitCalback (options) {
       map.setSize([scaledMapWidth, scaledMapHeight]);
       mapElement.style.width = `${scaledMapWidth}px`;
       mapElement.style.height = `${scaledMapHeight}px`;
-      console.log(map.getSize(), scaledMapWidth, scaledMapHeight);
       map.updateSize();
       view.setResolution(scaledResolution);
       map.render();
@@ -917,15 +924,15 @@ export async function snapshot (options) {
 
   // Save original viewport size
   const [originalWidth, originalHeight] = map.getSize();
-  const bbox = getExtentFromPixelBbox(pixelBbox, map);
+  const extent = getExtentFromPixelBbox(pixelBbox, map);
 
   // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
-  const restoreMap = createMapRestore(map, bbox, useHighResTileGrids);
+  const restoreMap = createMapRestore(map, extent, useHighResTileGrids);
   const view = map.getView();
 
   const viewFitOptions = {
     map,
-    bbox,
+    extent,
     metersPerPixel,
     format,
     worldfile,
@@ -937,7 +944,7 @@ export async function snapshot (options) {
   };
 
   // fit view to the bounding box
-  view.fit(bbox, { callback: createViewFitCalback(viewFitOptions) });
+  view.fit(extent, { callback: createViewFitCalback(viewFitOptions) });
 }
 
 export function imageUtilGetConversionFactor(proj) {

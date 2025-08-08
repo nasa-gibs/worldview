@@ -11,7 +11,7 @@
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
-      "disableSnapshot": true,
+      "disableSnapshot": false,
       "disableCustomPalettes": true,
       "layergroup": "Ozone",
       "vectorStyle": {
