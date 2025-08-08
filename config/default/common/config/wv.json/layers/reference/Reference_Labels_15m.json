@@ -10,7 +10,7 @@
       "tags": "esri world basemap gcs v2, country, countries, state, province, cities, city, towns, town, lakes, lake, parks, park, airports, airport",
       "format": "application/x-protobuf",
       "type": "indexedVector",
-      "disableSnapshot": true,
+      "disableSnapshot": false,
       "layergroup": "Reference",
       "wrapX": true,
       "noTransition": true,

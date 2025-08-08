@@ -4,7 +4,7 @@ import SelectionList from '../util/selector';
 import GifPanelGrid from './gif-panel-grid';
 import Button from '../util/button';
 import Checkbox from '../util/checkbox';
-import { getDimensions } from '../../modules/image-download/util';
+import { getDimensions } from '../../modules/gif-download/util';
 
 const MAX_GIF_SIZE = 250;
 const MAX_IMAGE_DIMENSION_SIZE = 8200;
