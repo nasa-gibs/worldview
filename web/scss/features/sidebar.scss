@@ -652,17 +652,27 @@ div#group-overlays-checkbox-case {
 }
 
 .charting-statistics-row {
-  margin: 0 0 1em;
   padding: 0.25em 0;
+
+  &:not(:last-child) {
+    margin: 0 0 0.85em;
+  }
 }
 
 .charting-statistics-value {
   float: right;
   font-weight: bold;
+  font-family: variables.$wv-monospace-font;
 }
 
 .recharts-legend-item {
   font-weight: bold;
+}
+
+.charting-chart-text {
+  display: inline-block;
+  vertical-align: top;
+  width: 55%;
 }
 
 .charting-chart-container .charting-disclaimer {
@@ -691,6 +701,71 @@ div#group-overlays-checkbox-case {
 
 .charting-disclaimer-block {
   line-height: 20px;
+}
+
+#charting-minimap-container {
+  width: 58%;
+}
+
+#charting-minimap-inner {
+  border: 1px solid rgb(150 150 150);
+  width: 240px;
+  height: 165px;
+  margin: auto;
+}
+
+#charting-coordinates-container {
+  width: 58%;
+  vertical-align: top;
+}
+
+.charting-coordinates-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+
+  & > div {
+    margin: 0 0 .85em;
+    padding: .25em 0;
+  }
+
+  .coordinate-subheader {
+    margin-left: 10px;
+  }
+
+  .coordinate-center {
+    text-align: center;
+  }
+
+  .coordinate-mono {
+    font-weight: bold;
+    font-family: variables.$wv-monospace-font;
+    text-align: right;
+  }
+}
+
+.charting-dates-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "header header";
+
+  .charting-dates-header {
+    grid-area: header;
+  }
+
+  & > div {
+    margin: 0 0 .85em;
+    padding: .25em 0;
+  }
+
+  .dates-center {
+    text-align: center;
+  }
+
+  .dates-mono {
+    font-weight: bold;
+    font-family: variables.$wv-monospace-font;
+    text-align: right;
+  }
 }
 
 .charting-buttons {
@@ -723,7 +798,7 @@ div#group-overlays-checkbox-case {
 }
 
 #charting-chart {
-  max-width: 850px;
+  max-width: 1150px;
   margin: 0 !important;
 
   .modal-header {
@@ -749,16 +824,19 @@ button#charting-simple-stats-button {
   text-decoration: underline !important;
 }
 
-.charting-chart-inner {
-  display: flex;
-  justify-content: space-between;
+.charting-stat-text {
+  display: inline-block;
+  width: 45%;
 }
 
-.charting-stat-text {
-  float: left;
-  margin-left: 20px;
-  padding: 18px;
-  width: 100%;
+.charting-stat-text > div {
+  display: inline-block;
+  margin: 3%;
+  width: 30%;
+}
+
+.charting-stat-text h3, .charting-stat-text2 h3 {
+  text-align: center;
 }
 
 p.recharts-tooltip-label {
