@@ -926,8 +926,10 @@ export async function snapshot (options) {
   const [originalWidth, originalHeight] = map.getSize();
   const extent = getExtentFromPixelBbox(pixelBbox, map);
 
+  const enableHighResTileGrids = useHighResTileGrids || metersPerPixel >= 1000; // KMZ does not support high-res tile grids
+
   // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
-  const restoreMap = createMapRestore(map, extent, useHighResTileGrids);
+  const restoreMap = createMapRestore(map, extent, enableHighResTileGrids);
   const view = map.getView();
 
   const viewFitOptions = {
