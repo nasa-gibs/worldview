@@ -53,7 +53,7 @@ export const notificationWarnings = {
   rotate: ROTATE_WARNING,
 };
 
-export const GDAL_WASM_PATH = 'gdal3js';
+export const GDAL_WASM_PATH = 'build/gdal3js';
 
 export const DRIVER_DICT = {
   tiff: 'GTiff',
