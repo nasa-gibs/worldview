@@ -256,7 +256,7 @@ function ChartComponent (props) {
       });
 
       const minimapView = mapInstanceRef.current.getView();
-      minimapView.fit(boxFeature.getGeometry().getExtent(), { padding: [75, 75, 75, 75] });
+      minimapView.fit(boxFeature.getGeometry().getExtent(), { padding: [70, 70, 70, 70] });
     };
 
     createLayerWrapper();
