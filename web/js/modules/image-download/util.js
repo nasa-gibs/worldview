@@ -778,7 +778,7 @@ function createRenderCompleteCallback (options) {
         link.download = `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`;
         link.click();
 
-        document.body.style.cursor = 'auto';
+        document.querySelectorAll('*').forEach((el) => el.style.cursor = 'auto');
         URL.revokeObjectURL(url);
         return url;
       }, 'image/png', 1);
@@ -787,7 +787,7 @@ function createRenderCompleteCallback (options) {
       restoreMap();
 
       console.error('Error creating screenshot:', error);
-      document.body.style.cursor = 'auto';
+      document.querySelectorAll('*').forEach((el) => el.style.cursor = 'auto');
       throw error;
     }
   };
@@ -795,7 +795,7 @@ function createRenderCompleteCallback (options) {
   return handleRenderComplete;
 }
 
-function createViewFitCalback (options) {
+function createViewFitCallback(options) {
   const {
     map,
     extent,
@@ -812,7 +812,7 @@ function createViewFitCalback (options) {
   const view = map.getView();
   const mapElement = map.getTargetElement();
 
-  const viewFitCallback = () => {
+  const viewFitRenderCallback = () => {
     try {
       const viewResolution = view.getResolution();
 
@@ -881,10 +881,18 @@ function createViewFitCalback (options) {
       restoreMap();
 
       console.error('Error configuring map:', error);
-      document.body.style.cursor = 'auto';
+      document.querySelectorAll('*').forEach((el) => el.style.cursor = 'auto');
       throw error;
     }
   };
+
+  // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
+  const viewFitCallback = (notCancelled) => {
+    if (!notCancelled) console.warn('Snapshot cancelled by user');
+    map.once('rendercomplete', viewFitRenderCallback);
+
+    map.render();
+  }
 
   return viewFitCallback;
 }
@@ -908,7 +916,8 @@ function getExtentFromPixelBbox(pixelBbox, map) {
   return extent;
 }
 
-export async function snapshot (options) {
+export async function snapshot(options) {
+  document.querySelectorAll('*').forEach((el) => el.style.cursor = 'wait');
   document.body.style.cursor = 'wait';
 
   const { height: maxHeight = 0, width: maxWidth = 0 } = await estimateMaxCanvasSize();
@@ -919,15 +928,17 @@ export async function snapshot (options) {
     pixelBbox,
     map,
     worldfile,
-    useHighResTileGrids,
+    useHighResTileGrids = true,
   } = options;
 
   // Save original viewport size
   const [originalWidth, originalHeight] = map.getSize();
   const extent = getExtentFromPixelBbox(pixelBbox, map);
 
+  const enableHighResTileGrids = useHighResTileGrids || metersPerPixel < 1000;
+
   // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
-  const restoreMap = createMapRestore(map, extent, useHighResTileGrids);
+  const restoreMap = createMapRestore(map, extent, enableHighResTileGrids);
   const view = map.getView();
 
   const viewFitOptions = {
@@ -944,7 +955,7 @@ export async function snapshot (options) {
   };
 
   // fit view to the bounding box
-  view.fit(extent, { callback: createViewFitCalback(viewFitOptions) });
+  view.fit(extent, { callback: createViewFitCallback(viewFitOptions) });
 }
 
 export function imageUtilGetConversionFactor(proj) {
