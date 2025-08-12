@@ -778,7 +778,7 @@ function createRenderCompleteCallback (options) {
         link.download = `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`;
         link.click();
 
-        document.querySelectorAll('*').forEach((el) => el.style.cursor = 'auto');
+        document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
         URL.revokeObjectURL(url);
         return url;
       }, 'image/png', 1);
@@ -787,7 +787,7 @@ function createRenderCompleteCallback (options) {
       restoreMap();
 
       console.error('Error creating screenshot:', error);
-      document.querySelectorAll('*').forEach((el) => el.style.cursor = 'auto');
+      document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
       throw error;
     }
   };
@@ -881,7 +881,7 @@ function createViewFitCallback(options) {
       restoreMap();
 
       console.error('Error configuring map:', error);
-      document.querySelectorAll('*').forEach((el) => el.style.cursor = 'auto');
+      document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
       throw error;
     }
   };
@@ -892,7 +892,7 @@ function createViewFitCallback(options) {
     map.once('rendercomplete', viewFitRenderCallback);
 
     map.render();
-  }
+  };
 
   return viewFitCallback;
 }
@@ -917,7 +917,7 @@ function getExtentFromPixelBbox(pixelBbox, map) {
 }
 
 export async function snapshot(options) {
-  document.querySelectorAll('*').forEach((el) => el.style.cursor = 'wait');
+  document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'wait'; }); // Prefer a waiting overlay to this WV-3694
   document.body.style.cursor = 'wait';
 
   const { height: maxHeight = 0, width: maxWidth = 0 } = await estimateMaxCanvasSize();
