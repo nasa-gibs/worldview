@@ -706,6 +706,8 @@ function createRenderCompleteCallback (options) {
       const dpr = window.devicePixelRatio || 1;
 
       // Set the "actual" size of the outputCanvas
+      outputCanvas.style.width = `${adjustedWidth}px`;
+      outputCanvas.style.height = `${adjustedHeight}px`;
       outputCanvas.width = evaluate(`${adjustedWidth} * ${dpr}`);
       outputCanvas.height = evaluate(`${adjustedHeight} * ${dpr}`);
 
@@ -714,10 +716,6 @@ function createRenderCompleteCallback (options) {
 
       // Scale the context to ensure correct drawing operations
       ctx.scale(dpr, dpr);
-
-      // Set the "drawn" size of the outputCanvas
-      outputCanvas.style.width = `${adjustedWidth}px`;
-      outputCanvas.style.height = `${adjustedHeight}px`;
 
       // Capture the map at its new scaled size
       const capturedCanvas = await html2canvas(mapElement, {
@@ -732,17 +730,26 @@ function createRenderCompleteCallback (options) {
         removeContainer: true,
       });
 
-      // Draw only the selected region to our output canvas
-      ctx.drawImage(
-        capturedCanvas,
-        evaluate(`${scaledXOffset} * ${dpr}`), // source x
-        evaluate(`${scaledYOffset} * ${dpr}`), // source y
-        evaluate(`${adjustedWidth} * ${dpr}`), // source width
-        evaluate(`${adjustedHeight} * ${dpr}`), // source height
+      const dprScaledXOffset = evaluate(`${scaledXOffset} * ${dpr}`);
+      const dprScaledYOffset = evaluate(`${scaledYOffset} * ${dpr}`);
+      const dprAdjustedWidth = evaluate(`${adjustedWidth} * ${dpr}`);
+      const dprAdjustedHeight = evaluate(`${adjustedHeight} * ${dpr}`);
+
+      const capturedImageData = capturedCanvas.getContext('2d').getImageData(
+        dprScaledXOffset, // source x
+        dprScaledYOffset, // source y
+        dprAdjustedWidth, // source width
+        dprAdjustedHeight, // source height
+      );
+
+      ctx.putImageData(
+        capturedImageData,
         0, // dest x
         0, // dest y
-        adjustedWidth, // dest width
-        adjustedHeight, // dest height
+        0, // source x
+        0, // source y
+        dprAdjustedWidth, // dest width
+        dprAdjustedHeight, // dest height
       );
 
       // Reset map to original size
