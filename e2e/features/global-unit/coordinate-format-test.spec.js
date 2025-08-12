@@ -27,7 +27,7 @@ test('Open page', async () => {
 
 test('Change coordinates format from coordinate case updates global settings coordinate format', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find button')
-  await page.locator('canvas').click()
+  await page.locator('canvas').first().click()
   await page.locator('#ol-coords-case').click()
   await page.getByRole('button', { name: 'Information' }).click()
   await page.getByRole('button', { name: 'Settings' }).click()
