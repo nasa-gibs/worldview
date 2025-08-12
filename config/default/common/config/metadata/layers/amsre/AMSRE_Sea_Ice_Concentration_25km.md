@@ -6,6 +6,6 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 Data fields: `SI_25km_NH_ICECON_DAY`; `SI_25km_SH_ICECON_DAY`
 
-References: AE_SI25 [doi:10.5067/AMSR-E/AE_SI25.003](https://doi.org/10.5067/AMSR-E/AE_SI25.003)
+References: AE_SI25 [doi:10.5067/QD0EB4TQGG6A](https://doi.org/10.5067/QD0EB4TQGG6A)
 
 
