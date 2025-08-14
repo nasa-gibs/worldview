@@ -306,15 +306,18 @@ class toolbarContainer extends Component {
       faSize,
       isImageDownloadActive,
       isCompareActive,
+      isChartingActive,
       isDistractionFreeModeActive,
       isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
     const labelText = isCompareActive
       ? 'You must exit comparison mode to use the snapshot feature'
-      : !isImageDownloadActive
-        ? 'You must exit data download mode to use the snapshot feature'
-        : 'Take a snapshot';
+      : isChartingActive
+        ? 'You must exit charting mode to use the snapshot feature'
+        : !isImageDownloadActive
+          ? 'You must exit data download mode to use the snapshot feature'
+          : 'Take a snapshot';
     const mobileWVImageButtonStyle = isMobile ? {
       display: 'none',
     } : null;
@@ -427,6 +430,7 @@ const mapStateToProps = (state) => {
   const {
     animation,
     compare,
+    charting,
     events,
     locationSearch,
     map,
@@ -447,6 +451,7 @@ const mapStateToProps = (state) => {
   const isMobile = screenSize.isMobileDevice;
   const faSize = isMobile ? '2x' : '1x';
   const isCompareActive = compare.active;
+  const isChartingActive = charting.active;
   const isLocationSearchExpanded = locationSearch.isExpanded;
   const activePalettes = palettes[activeString];
   const { isAnimatingToEvent } = events;
@@ -467,10 +472,11 @@ const mapStateToProps = (state) => {
     isAnimatingToEvent,
     isAboutOpen: modalAbout.isOpen,
     isCompareActive,
+    isChartingActive,
     isDistractionFreeModeActive,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
-      && !isCompareActive && !isDataDownloadTabActive,
+      && !isCompareActive && !isChartingActive && !isDataDownloadTabActive,
     ),
     isKioskModeActive,
     isLocationSearchExpanded,
@@ -578,6 +584,7 @@ toolbarContainer.propTypes = {
   isAnimatingToEvent: PropTypes.bool,
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,

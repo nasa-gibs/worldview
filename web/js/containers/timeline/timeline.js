@@ -698,8 +698,14 @@ class Timeline extends React.Component {
       isMobile,
       onPauseAnimation,
       onToggleAnimationCollapse,
+      isCompareModeActive,
+      isChartingActive,
+      isDataDownload,
     } = this.props;
 
+    if (isCompareModeActive || isChartingActive || isDataDownload) {
+      return;
+    }
     if (isAnimationWidgetOpen && isMobile) {
       onToggleAnimationCollapse();
       onPauseAnimation();
@@ -1072,6 +1078,7 @@ class Timeline extends React.Component {
       animationDisabled,
       hasSubdailyLayers,
       isCompareModeActive,
+      isChartingActive,
       isDataDownload,
       isEmbedModeActive,
       isKioskModeActive,
@@ -1108,7 +1115,7 @@ class Timeline extends React.Component {
           </div>
         </div>
         <div>
-          {!isCompareModeActive && (
+          {!isCompareModeActive && !isChartingActive && (
           <AnimationButton
             isMobile={isMobile}
             breakpoints={breakpoints}
@@ -1125,9 +1132,11 @@ class Timeline extends React.Component {
             label={
                     isCompareModeActive
                       ? 'Animation feature is deactivated when Compare feature is active'
-                      : isDataDownload
-                        ? 'Animation feature is deactivated when Data Download feature is active'
-                        : ''
+                      : isChartingActive
+                        ? 'Animation feature is deactivated when Charting feature is active'
+                        : isDataDownload
+                          ? 'Animation feature is deactivated when Data Download feature is active'
+                          : ''
                   }
           />
           )}
@@ -1157,6 +1166,7 @@ class Timeline extends React.Component {
       isAnimatingToEvent,
       isAnimationWidgetOpen,
       isCompareModeActive,
+      isChartingActive,
       isDataDownload,
       isDistractionFreeModeActive,
       isEmbedModeActive,
@@ -1272,9 +1282,11 @@ class Timeline extends React.Component {
                       label={
                       isCompareModeActive
                         ? 'Animation feature is deactivated when Compare feature is active'
-                        : isDataDownload
-                          ? 'Animation feature is deactivated when Data Download feature is active'
-                          : ''
+                        : isChartingActive
+                          ? 'Animation feature is deactivated when Charting feature is active'
+                          : isDataDownload
+                            ? 'Animation feature is deactivated when Data Download feature is active'
+                            : ''
                     }
                     />
                   </div>
@@ -1489,6 +1501,7 @@ function mapStateToProps(state) {
   const {
     animation,
     compare,
+    charting,
     config,
     date,
     events,
@@ -1515,6 +1528,7 @@ function mapStateToProps(state) {
   } = date;
   const { isCompareA } = compare;
   const isCompareModeActive = compare.active;
+  const isChartingActive = charting.active;
   const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
   const { isEmbedModeActive } = embed;
   const isMobile = screenSize.isMobileDevice;
@@ -1607,6 +1621,7 @@ function mapStateToProps(state) {
     subDailyLayersList,
     customSelected,
     isCompareModeActive,
+    isChartingActive,
     isAnimatingToEvent,
     hasFutureLayers,
     dateA: getISODateFormatted(selected),
@@ -1635,7 +1650,8 @@ function mapStateToProps(state) {
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_')
       || sidebar.activeTab === 'download'
-      || compare.active,
+      || compare.active
+      || charting.active,
     isDataDownload: sidebar.activeTab === 'download',
     isAnimationPlaying: animation.isPlaying,
     isAnimationCollapsed: animation.isCollapsed,
@@ -1743,6 +1759,7 @@ Timeline.propTypes = {
   isAnimatingToEvent: PropTypes.bool,
   isAnimationWidgetOpen: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isDataDownload: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
