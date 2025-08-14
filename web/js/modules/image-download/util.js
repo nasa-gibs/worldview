@@ -609,6 +609,7 @@ function updateHighResTileGrids (layer) {
     format: originalSource.getFormat?.(),
     projection: originalSource.getProjection?.(),
     tileGrid,
+    tileClass: originalSource.tileClass,
     layer: originalSource.getLayer?.(),
     tileLoadFunction: originalSource.getTileLoadFunction?.(),
     matrixSet: originalSource.getMatrixSet?.(),
