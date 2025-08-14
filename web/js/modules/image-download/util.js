@@ -679,10 +679,6 @@ function createRenderCompleteCallback (options) {
   const {
     map,
     extent,
-    scaledWidth,
-    scaledHeight,
-    scaledXOffset,
-    scaledYOffset,
     metersPerPixel,
     format,
     worldfile,
@@ -691,25 +687,28 @@ function createRenderCompleteCallback (options) {
 
   const handleRenderComplete = async () => {
     try {
+      const topLeft = olExtent.getTopLeft(extent);
+      const bottomLeft = olExtent.getBottomLeft(extent);
+      const topRight = olExtent.getTopRight(extent);
+
+      const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
+      const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
+      const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
+
+      const aoiPixelXOffset = aoiPixelTopLeft[0];
+      const aoiPixelYOffset = aoiPixelTopLeft[1];
+      const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
+      const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
+
       const mapElement = map.getTargetElement();
-
-      // Account for DOM size differences
       const [mapWidth, mapHeight] = map.getSize();
-      const { width: mapElWidth, height: mapElHeight } = mapElement.getBoundingClientRect();
-      const deltaWidth = mapElWidth - mapWidth;
-      const deltaHeight = mapElHeight - mapHeight;
-      const adjustedWidth = evaluate(`${scaledWidth} + ${deltaWidth}`);
-      const adjustedHeight = evaluate(`${scaledHeight} + ${deltaHeight}`);
 
-      // Create our output canvas with exact dimensions we want
-      const outputCanvas = document.createElement('canvas');
       const dpr = window.devicePixelRatio || 1;
 
-      // Set the "actual" size of the outputCanvas
-      outputCanvas.style.width = `${adjustedWidth}px`;
-      outputCanvas.style.height = `${adjustedHeight}px`;
-      outputCanvas.width = evaluate(`${adjustedWidth} * ${dpr}`);
-      outputCanvas.height = evaluate(`${adjustedHeight} * ${dpr}`);
+      // Create our output canvas with exact dimensions we want
+      const outputWidth = evaluate(`${aoiPixelWidth} * ${dpr}`);
+      const outputHeight = evaluate(`${aoiPixelHeight} * ${dpr}`);
+      const outputCanvas = new OffscreenCanvas(outputWidth, outputHeight);
 
       const ctx = outputCanvas.getContext('2d');
       ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
@@ -717,29 +716,34 @@ function createRenderCompleteCallback (options) {
       // Scale the context to ensure correct drawing operations
       ctx.scale(dpr, dpr);
 
+      const capturedCanvas = new OffscreenCanvas(mapWidth * dpr, mapHeight * dpr);
+
       // Capture the map at its new scaled size
-      const capturedCanvas = await html2canvas(mapElement, {
+      await html2canvas(mapElement, {
+        canvas: capturedCanvas,
         backgroundColor: null,
         useCORS: true,
         allowTaint: true,
         scrollX: 0,
         scrollY: 0,
-        scale: dpr, // No additional scaling since we already scaled the map
+        scale: dpr,
         logging: false,
         imageTimeout: 0,
         removeContainer: true,
       });
 
-      const dprScaledXOffset = evaluate(`${scaledXOffset} * ${dpr}`);
-      const dprScaledYOffset = evaluate(`${scaledYOffset} * ${dpr}`);
-      const dprAdjustedWidth = evaluate(`${adjustedWidth} * ${dpr}`);
-      const dprAdjustedHeight = evaluate(`${adjustedHeight} * ${dpr}`);
+      const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
+      const sourceY = evaluate(`${aoiPixelYOffset} * ${dpr}`);
+      const sourceWidth = outputCanvas.width; // Use the actual width of the output canvas
+      const sourceHeight = outputCanvas.height; // Use the actual height of the output canvas
 
-      const capturedImageData = capturedCanvas.getContext('2d').getImageData(
-        dprScaledXOffset, // source x
-        dprScaledYOffset, // source y
-        dprAdjustedWidth, // source width
-        dprAdjustedHeight, // source height
+      const capturedCtx = capturedCanvas.getContext('2d');
+      capturedCtx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
+      const capturedImageData = capturedCtx.getImageData(
+        Math.round(sourceX), // source x
+        sourceY, // source y
+        sourceWidth, // source width
+        sourceHeight, // source height
       );
 
       ctx.putImageData(
@@ -748,29 +752,34 @@ function createRenderCompleteCallback (options) {
         0, // dest y
         0, // source x
         0, // source y
-        dprAdjustedWidth, // dest width
-        dprAdjustedHeight, // dest height
+        sourceWidth, // dest width
+        sourceHeight, // dest height
       );
 
       // Reset map to original size
       restoreMap();
 
-      outputCanvas.toBlob(async (pngBlob) => {
-        const zip = new JSZip();
-        const crs = map.getView().getProjection().getCode();
-        const georeferencedOutput = await georeference(pngBlob, {
-          extent,
-          crs,
-          metersPerPixel,
-          captureWidth: scaledWidth,
-          captureHeight: scaledHeight,
-          inputFormat: 'png',
-          outputFormat: format === 'kmz' ? 'kml' : format,
-          worldfile,
-          name: 'Worldview Snapshot',
-          description: 'Snapshot created with NASA Worldview',
-        });
+      const pngBlob = await outputCanvas.convertToBlob({
+        type: 'image/png',
+        quality: 1, // Maximum quality
+      });
 
+      const crs = map.getView().getProjection().getCode();
+      const georeferencedOutput = await georeference(pngBlob, {
+        extent,
+        crs,
+        metersPerPixel,
+        captureWidth: outputWidth / dpr,
+        captureHeight: outputHeight / dpr,
+        inputFormat: 'png',
+        outputFormat: format === 'kmz' ? 'kml' : format,
+        worldfile,
+        name: 'Worldview Snapshot',
+        description: 'Snapshot created with NASA Worldview',
+      });
+
+      if (worldfile || format === 'kmz') {
+        const zip = new JSZip();
         georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
         const zipBlob = await zip.generateAsync({
           type: 'blob',
@@ -787,8 +796,18 @@ function createRenderCompleteCallback (options) {
 
         document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
         URL.revokeObjectURL(url);
-        return url;
-      }, 'image/png', 1);
+      } else {
+        const { blob } = georeferencedOutput[0];
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `screenshot${crs}.${format}`;
+        link.click();
+
+        document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
+        URL.revokeObjectURL(url);
+      }
     } catch (error) {
       // Reset map size in case of error
       restoreMap();
@@ -842,33 +861,11 @@ function createViewFitCallback(options) {
 
       if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
 
-      const topLeft = olExtent.getTopLeft(extent);
-      const bottomLeft = olExtent.getBottomLeft(extent);
-      const topRight = olExtent.getTopRight(extent);
-
-      const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
-      const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
-      const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
-
-      const aoiPixelXOffset = aoiPixelTopLeft[0];
-      const aoiPixelYOffset = aoiPixelTopLeft[1];
-      const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
-      const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
-
-      // Calculate scaled positions for cropping
-      const scaledXOffset = evaluate(`${aoiPixelXOffset} * ${scaleFactor}`);
-      const scaledYOffset = evaluate(`${aoiPixelYOffset} * ${scaleFactor}`);
-      const scaledWidth = evaluate(`${aoiPixelWidth} * ${scaleFactor}`);
-      const scaledHeight = evaluate(`${aoiPixelHeight} * ${scaleFactor}`);
       const scaledResolution = evaluate(`${viewResolution} / ${scaleFactor}`);
 
       const renderCompleteOptions = {
         map,
         extent,
-        scaledWidth,
-        scaledHeight,
-        scaledXOffset,
-        scaledYOffset,
         metersPerPixel,
         format,
         worldfile,
