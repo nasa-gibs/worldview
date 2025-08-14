@@ -597,6 +597,7 @@ function updateHighResTileGrids (layer) {
   const maxMatrixIds = matrixIds ? new Array(matrixIds.length).fill(matrixIds.at(-1)) : undefined;
 
   const tileGrid = new TileGridConstructor({
+    ...originalTileGrid,
     origin: originalTileGrid.getOrigin(),
     extent: originalTileGrid.getExtent(),
     resolutions: maxResolutions,
@@ -605,11 +606,11 @@ function updateHighResTileGrids (layer) {
   });
 
   const sourceOptions = {
+    ...originalSource,
     urls: originalSource.getUrls?.(),
     format: originalSource.getFormat?.(),
     projection: originalSource.getProjection?.(),
     tileGrid,
-    tileClass: originalSource.tileClass,
     layer: originalSource.getLayer?.(),
     tileLoadFunction: originalSource.getTileLoadFunction?.(),
     matrixSet: originalSource.getMatrixSet?.(),
