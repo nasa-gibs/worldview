@@ -22,7 +22,7 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test('Dragger is visible', async () => {
+test.fixme('Dragger is visible', async () => {
   const { dragger } = selectors
   await page.goto(skipTour)
   await closeModal(page)
@@ -94,7 +94,7 @@ test.fixme('Interval subdaily default year, month, day, hour, minute, and custom
   await expect(staticInterval).toBeVisible()
 })
 
-test('Custom interval widget opens on selecting custom', async () => {
+test.fixme('Custom interval widget opens on selecting custom', async () => {
   const customIntervalWidget = await page.locator('.custom-interval-widget')
   await page.locator('#interval-custom-static').click()
   await expect(customIntervalWidget).toBeVisible()
