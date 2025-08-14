@@ -411,6 +411,7 @@ function ChartingModeOptions(props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
+        const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
         displayChart({
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
@@ -420,7 +421,7 @@ function ChartingModeOptions(props) {
           endDate: secondaryDate,
           numRangeDays,
           isTruncated: numRangeDays > STEP_NUM,
-          STEP_NUM,
+          numPoints,
         });
         updateChartRequestStatus(false);
       } else {
