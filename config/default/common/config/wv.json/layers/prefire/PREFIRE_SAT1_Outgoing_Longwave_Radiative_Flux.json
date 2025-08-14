@@ -5,7 +5,8 @@
       "description": "prefire/PREFIRE_SAT1_Outgoing_Longwave_Radiative_Flux",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Outgoing Radiation"
+      "layergroup": "Outgoing Radiation",
+      "dataAvailability": "dd"
     }
   }
 }
