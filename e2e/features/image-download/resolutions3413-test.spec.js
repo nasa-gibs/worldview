@@ -84,7 +84,7 @@ test('Last zoom level is 250m', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Confirm bounding box integrity', async () => {
+test.fixme('Confirm bounding box integrity', async () => {
   await openImageDownloadPanel(page)
   await clickDownload(page)
   const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')

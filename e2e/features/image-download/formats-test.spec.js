@@ -31,7 +31,7 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test.skip('JPEG is the default', async () => {
+test.fixme('JPEG is the default', async () => {
   const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
@@ -43,7 +43,7 @@ test.skip('JPEG is the default', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Add a worldfile', async () => {
+test.fixme('Add a worldfile', async () => {
   await openImageDownloadPanel(page)
   await selectOption(page, '#wv-image-worldfile', 1)
   await clickDownload(page)
@@ -53,7 +53,7 @@ test.skip('Add a worldfile', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Select PNG', async () => {
+test.fixme('Select PNG', async () => {
   await openImageDownloadPanel(page)
   await selectOption(page, '#wv-image-format', 1)
   await clickDownload(page)
@@ -62,7 +62,7 @@ test.skip('Select PNG', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Switch to geographic, select KMZ, switch to arctic, is PNG', async () => {
+test.fixme('Switch to geographic, select KMZ, switch to arctic, is PNG', async () => {
   await switchProjections(page, 'geographic')
   await openImageDownloadPanel(page)
   await selectOption(page, '#wv-image-format', 3)

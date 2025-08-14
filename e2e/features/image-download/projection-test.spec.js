@@ -27,7 +27,7 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test.skip('Geographic is EPSG:4326', async () => {
+test.fixme('Geographic is EPSG:4326', async () => {
   const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
@@ -38,7 +38,7 @@ test.skip('Geographic is EPSG:4326', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Arctic is EPSG:3413', async () => {
+test.fixme('Arctic is EPSG:3413', async () => {
   await switchProjections(page, 'arctic')
   await openImageDownloadPanel(page)
   await clickDownload(page)
@@ -47,7 +47,7 @@ test.skip('Arctic is EPSG:3413', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Antarctic is EPSG:3031', async () => {
+test.fixme('Antarctic is EPSG:3031', async () => {
   await switchProjections(page, 'antarctic')
   await openImageDownloadPanel(page)
   await clickDownload(page)

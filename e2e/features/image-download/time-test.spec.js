@@ -24,7 +24,7 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test.skip('Image for today', async () => {
+test.fixme('Image for today', async () => {
   const url = await joinUrl(startParams, '&now=2018-06-01T3')
   await page.goto(url)
   await closeModal(page)
@@ -35,7 +35,7 @@ test.skip('Image for today', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Image for yesterday', async () => {
+test.fixme('Image for yesterday', async () => {
   const url = await joinUrl(startParams, '&now=2018-06-01T0')
   await page.goto(url)
   await closeModal(page)
@@ -46,7 +46,7 @@ test.skip('Image for yesterday', async () => {
   await closeImageDownloadPanel(page)
 })
 
-test.skip('Image for 2018-05-15', async () => {
+test.fixme('Image for 2018-05-15', async () => {
   const url = await joinUrl(startParams, '&t=2018-05-15')
   await page.goto(url)
   await closeModal(page)
