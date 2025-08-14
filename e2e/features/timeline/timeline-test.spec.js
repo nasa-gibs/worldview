@@ -79,7 +79,7 @@ test('Interval state of HOUR restored from permalink', async () => {
   await expect(currentInteval).toContainText('1 hour')
 })
 
-test.fixme('Interval subdaily default year, month, day, hour, minute, and custom available', async ({ browserName }) => {
+test.fixme('Interval subdaily default year, month, day, hour, minute, and custom available', async () => {
   const yearlyInterval = await page.locator('#interval-years')
   const monthlyInterval = await page.locator('#interval-months')
   const dailyInterval = await page.locator('#interval-days')
