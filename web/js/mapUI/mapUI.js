@@ -101,8 +101,7 @@ function MapUI(props) {
   const [vectorActions, setVectorActions] = useState({});
   const [preloadAction, setPreloadAction] = useState({});
 
-  // eslint-disable-next-line no-unused-vars
-  const [devTestMode, setDevTestMode] = useState(false);
+  const devTestMode = false;
 
   const subscribeToStore = function(action) {
     switch (action.type) {

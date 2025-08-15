@@ -85,22 +85,7 @@ module.exports = {
     devMiddleware: {
       writeToDisk: true
     },
-    static: [
-      {
-        directory: path.join(__dirname, 'web'),
-        publicPath: '/'
-      },
-      {
-        directory: path.join(__dirname, 'web/build'),
-        publicPath: '/'
-      }
-    ],
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      '.wasm': {
-        'Content-Type': 'application/wasm'
-      }
-    },
+    static: path.join(__dirname, 'web'),
     compress: true,
     port: 3000,
     hot: true,

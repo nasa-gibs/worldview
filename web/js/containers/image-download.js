@@ -19,8 +19,8 @@ import {
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
-  resolutionsGeo,
-  resolutionsPolar,
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
   fileTypesGeo,
   fileTypesPolar,
 } from '../modules/image-download/constants';
@@ -163,13 +163,14 @@ class ImageDownloadContainer extends Component {
     const lonLat2 = olProj.transform(topRightLatLong, CRS.GEOGRAPHIC, crs);
     const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
-    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
+    const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const mapView = map.ui.selected.getView();
+    const center = mapView.getCenter();
     const newResolution = resolution
       || imageUtilCalculateResolution(
         Math.round(mapView.getZoom()),
-        isGeoProjection,
-        proj.selected.resolutions,
+        proj,
+        center,
       );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
     const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);

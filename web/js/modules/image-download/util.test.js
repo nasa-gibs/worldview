@@ -181,8 +181,15 @@ test('bboxWMS13 [imagedownload-bbox]', () => {
 
 test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
   const zoom = 5;
-  const isGeo = true;
-  expect(imageUtilCalculateResolution(zoom, isGeo, geoResolutions)).toBe('4');
+  const proj = {
+    id: 'geographic',
+    selected: {
+      crs: 'EPSG:4326',
+      resolutions: geoResolutions,
+    },
+  };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(zoom, proj, center)).toBe(1000);
 });
 
 test('Date time snapping when no subdaily layers present [imagedownload-time-snap-no-subdaily]', () => {
