@@ -207,7 +207,7 @@
     "simplebar-react": "^3.3.2",
     "stackblur": "^1.0.0",
     "supercluster": "^8.0.1",
-    "tough-cookie": "^5.1.2",
+    "tough-cookie": "^6.0.0",
     "upng-js": "^2.1.0",
     "url-template": "^3.1.1",
     "what-input": "^5.2.12"
