@@ -1,12 +1,10 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Difference Vegetation Index (NDVI) (B8-B4)/(B8+B4) imagery layer is an index for quantifying green vegetation. It reflects the state of vegetation health based on how vegetation reflects light at certain wavelengths. It is calculated using near infrared and red wavelengths.
-
-It is calculated using:
+The dynamically generated Normalized Difference Vegetation Index (NDVI) (B8-B4)/(B8+B4) imagery layer is an index for quantifying green vegetation. NDVI is used to quantify vegetation greenness, understand vegetation density and monitor plant health. In healthy vegetation, chlorophyll strongly absorbs visible light while the structure of leaves strongly reflects near infrared light. NDVI is calculated using the reflectance of the red band (Band 4) and near infrared band (Band 8A) in HLS S30 imagery.
 
 `NDVI = (B8-B4)/(B8+B4)`
 
-The image is applied with a divergent blue-green to brown color palette. It depicts areas with a lot of green leaf growth, indicating the presence of chlorophyll, in dark green colors. Chlorophyll reflects more infrared light and less visible light. Areas with some green leaf growth are in light yellows, and areas with little to no vegetation growth are in shades of brown.
+The image is applied with a divergent blue-green to brown color palette. It depicts areas with a lot of green leaf growth, indicating the presence of chlorophyll, in dark green colors. Chlorophyll reflects more infrared light and less visible light. Areas with some green leaf growth are in light yellows, and areas with little to no vegetation growth are in shades of brown. NDVI values range from -1 to 1. Low NDVI values, at or near 0, generally correspond to barren areas (rock, sand, exposed soil, snow, etc.) while high NDVI values (0.8 to 0.9) represent greener, denser vegetation (forests, croplands, wetlands, etc.).
 
 The Reflectance imagery layer from Sentinel-2/MSI product (S30) is available through the HLS project from the Multi-Spectral Instrument (MSI) aboard the European Union’s Copernicus Sentinel-2A, Sentinel-2B, and Sentinel-2C satellites. The sensor resolution is 10, 20, and 60 m, imagery resolution is resampled to 30 m, and the temporal resolution is daily with a 5 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Landsat 8 and 9 imagery layer available.
 

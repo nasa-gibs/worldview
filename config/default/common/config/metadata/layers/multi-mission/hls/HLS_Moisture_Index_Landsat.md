@@ -1,12 +1,10 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Difference Moisture Index (NDMI) (B5-B6)/(B5+B6) imagery layer is an index to determine vegetation water content and monitor drought. It is calculated using near infrared and shortwave infrared (SWIR) wavelengths.
-
-It is calculated using:
+The dynamically generated Normalized Difference Moisture Index (NDMI) (B5-B6)/(B5+B6) imagery layer is an index to determine vegetation water content and monitor drought. NDMI is sensitive to liquid water content in vegetation and can provide an indicator of vegetation stress due to drought. The water content present in healthy vegetation strongly absorbs shortwave infrared light while the structure of leaves strongly reflects near infrared light. NDMI is calculated using the reflectance of the near infrared band (Band 5) and 1.6 µm shortwave infrared band (Band 6) in HLS L30 imagery.
 
 `NDMI = (B5-B6)/(B5+B6)`
 
-The image is applied with a divergent blue to red color palette. Darker blue colors represent high canopy without water stress, and red colors are areas approaching water stress.
+The image is applied with a divergent blue to red color palette. Darker blue colors represent high canopy without water stress, and red colors are areas approaching water stress. NDMI values range from -1 to 1. Decreasing NDMI values for vegetated areas indicate increasingly less water content and increased stress due to drought with the lowest values generally corresponding to completely senesced vegetation or barren areas (rock, sand, exposed soil, built-up areas, etc.). High NDMI values represent healthy, unstressed vegetation (irrigated croplands, wetlands, lush forests, etc.).
 
 The Reflectance imagery layer from Landsat 8 and 9/OLI product (L30) is available through the HLS project from the Operational Land Imager (OLI) aboard the Landsat 8 and 9 satellites. The sensor resolution is 30 m, imagery resolution is 30 m, and the temporal resolution is daily with an 8 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Sentinel-2 imagery layer available.
 
