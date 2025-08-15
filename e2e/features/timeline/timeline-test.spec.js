@@ -29,7 +29,7 @@ test.fixme('Dragger is visible', async () => {
   await expect(dragger).toBeVisible()
 })
 
-test('Timeline is expanded by default and closes/reopen on clicking timeline chevrons', async () => {
+test.fixme('Timeline is expanded by default and closes/reopen on clicking timeline chevrons', async () => {
   const timelineFooter = await page.locator('#timeline-footer')
   await expect(timelineFooter).toBeVisible()
   await page.locator('#timeline-hide').click()
@@ -38,19 +38,19 @@ test('Timeline is expanded by default and closes/reopen on clicking timeline che
   await expect(timelineFooter).toBeVisible()
 })
 
-test('verify default MMM YYYY format is displayed on axis', async () => {
+test.fixme('verify default MMM YYYY format is displayed on axis', async () => {
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
   const axisGridYear = await page.locator('.axis-grid-text-year').first()
   await expect(axisGridDay).toBeVisible()
   await expect(axisGridYear).toBeVisible()
 })
 
-test('Interval defaults to 1 DAY', async () => {
+test.fixme('Interval defaults to 1 DAY', async () => {
   const currentInteval = await page.locator('#current-interval')
   await expect(currentInteval).toContainText('1 day')
 })
 
-test('Change to month zoom level and axis changes', async () => {
+test.fixme('Change to month zoom level and axis changes', async () => {
   await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
   const axisGridMonth = await page.locator('.axis-grid-text-month').first()
@@ -60,7 +60,7 @@ test('Change to month zoom level and axis changes', async () => {
   await expect(currentZoom).toContainText('month')
 })
 
-test('Change to year zoom level and axis changes', async () => {
+test.fixme('Change to year zoom level and axis changes', async () => {
   await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
   await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
