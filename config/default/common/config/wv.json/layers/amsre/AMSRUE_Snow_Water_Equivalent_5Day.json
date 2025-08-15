@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRUE_Snow_Water_Equivalent_5Day": {
+      "id": "AMSRUE_Snow_Water_Equivalent_5Day",
+      "description": "amsre/AMSRUE_Snow_Water_Equivalent_5Day",
+      "tags": "amsr-ue amsrue swe",
+      "group": "overlays",
+      "layergroup": "Snow Water Equivalent"
+    }
+  }
+}
