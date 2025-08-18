@@ -1,6 +1,6 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Difference Moisture Index (NDMI) (B5-B6)/(B5+B6) imagery layer is an index to determine vegetation water content and monitor drought. NDMI is sensitive to liquid water content in vegetation and can provide an indicator of vegetation stress due to drought. The water content present in healthy vegetation strongly absorbs shortwave infrared light while the structure of leaves strongly reflects near infrared light. NDMI is calculated using the reflectance of the near infrared band (Band 5) and 1.6 µm shortwave infrared band (Band 6) in HLS L30 imagery.
+The dynamically generated Normalized Difference Moisture Index (NDMI) imagery layer is an index to determine vegetation water content and monitor drought. NDMI is sensitive to liquid water content in vegetation and can provide an indicator of vegetation stress due to drought. The water content present in healthy vegetation strongly absorbs shortwave infrared light while the structure of leaves strongly reflects near infrared light. NDMI is calculated using the reflectance of the near infrared band (Band 5) and 1.6 µm shortwave infrared band (Band 6) in HLS L30 imagery.
 
 `NDMI = (B5-B6)/(B5+B6)`
 

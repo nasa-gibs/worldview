@@ -1,6 +1,6 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Difference Vegetation Index (NDVI) (B8-B4)/(B8+B4) imagery layer is an index for quantifying green vegetation. NDVI is used to quantify vegetation greenness, understand vegetation density and monitor plant health. In healthy vegetation, chlorophyll strongly absorbs visible light while the structure of leaves strongly reflects near infrared light. NDVI is calculated using the reflectance of the red band (Band 4) and near infrared band (Band 8A) in HLS S30 imagery.
+The dynamically generated Normalized Difference Vegetation Index (NDVI) imagery layer is an index for quantifying green vegetation. NDVI is used to quantify vegetation greenness, understand vegetation density and monitor plant health. In healthy vegetation, chlorophyll strongly absorbs visible light while the structure of leaves strongly reflects near infrared light. NDVI is calculated using the reflectance of the red band (Band 4) and near infrared band (Band 8A) in HLS S30 imagery.
 
 `NDVI = (B8-B4)/(B8+B4)`
 
