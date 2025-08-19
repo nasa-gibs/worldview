@@ -41,7 +41,7 @@ const sources = {};
 let init = false;
 const STEP_NUM = 31;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
-const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process & try again.';
+const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process.';
 
 function ChartingModeOptions(props) {
   const {
