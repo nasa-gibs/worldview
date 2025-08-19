@@ -1,8 +1,6 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Burn Ratio 2 (NBR2) imagery layer modifies the Normalized Burn Ratio (NBR) to highlight water sensitivity in vegetation and may be useful in post-fire recovery studies. NBR2 is calculated as a ratio between the SWIR values, substituting the SWIR1 band for the NIR band used in NBR.
-
-It is calculated using:
+The dynamically generated Normalized Burn Ratio 2 (NBR2) imagery layer is a variant of the Normalized Burn Ratio (NBR). It is used to highlight water sensitivity in vegetation and can potentially be used to assess post-fire vegetation conditions. The water content present in healthy vegetation, saturated soils, open water bodies, etc. are strongly absorbed by shortwave infrared light at 1.6 µm and 2.1 µm, relatively more so for the latter. The 1.6 µm band is particularly sensitive to moisture content within vegetation and can aid in discriminating between woody and non-woody vegetation types, while the 2.1 µm band provides additional overall sensitivity to moisture in vegetation and soils. NBR2 is calculated using the reflectance of the 1.6 µm shortwave infrared band (Band 6) and the 2.1 µm shortwave infrared band (Band 7) in HLS L30 imagery.
 
 `NBR2 = (SWIR1 – SWIR2) / (SWIR1 + SWIR2)`
 
@@ -10,7 +8,7 @@ Specifically for Landsat 8 and 9:
 
 `NBR2 = (Band 6 – Band 7) / (Band 6 + Band 7)`
 
-The divergent purple to orange color palette depicts vegetated areas in shades of purple and burned areas in shades of orange.
+The divergent purple to orange color palette depicts vegetated areas in shades of purple and burned areas in shades of orange. NBR2 values range from -1 to 1. NBR2 values on this continuum generally provide similar information to the NBR. NBR2 values at 0 and progressively negative indicate increased vegetation damage and soil exposure resulting from fire while increasingly positive NBR2 values after a fire represent lightly damaged to unburned vegetation. NBR2 can aid in identifying small variations in the moisture content, health and stage of recovery for vegetation that has been affected by fire. Additionally, compared to other indices like the NBR, NBR2 can be more ideal for delineating the extent of burned areas and the mosaic of severity within those boundaries for fires occurring in particular biomes where the burn signal may be relatively more subtle. Such examples include grass/shrubland environments where the vegetation outside of the burned areas are senesced or herbaceous wetland areas and coastal marshes characterized by saturated soils.
 
 The Reflectance imagery layer from Landsat 8 and 9/OLI product (L30) is available through the HLS project from the Operational Land Imager (OLI) aboard the Landsat 8 and 9 satellites. The sensor resolution is 30 m, imagery resolution is 30 m, and the temporal resolution is daily with an 8 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Sentinel-2 imagery layer available.
 
