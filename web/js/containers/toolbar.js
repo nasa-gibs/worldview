@@ -220,13 +220,16 @@ class toolbarContainer extends Component {
     const {
       config,
       faSize,
+      isProjectionSwitchActive,
+      isChartingActive,
       isDistractionFreeModeActive,
       openModal,
-      isAnimatingToEvent,
       isMobile,
     } = this.props;
     const buttonId = 'wv-proj-button';
-    const labelText = 'Switch projection';
+    const labelText = isChartingActive
+      ? 'You must exit charting mode to switch projection'
+      : 'Switch projection';
     const onClick = () => openModal(
       'TOOLBAR_PROJECTION',
       CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
@@ -240,10 +243,14 @@ class toolbarContainer extends Component {
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
-        className="wv-toolbar-button"
         aria-label={labelText}
         onClick={onClick}
-        disabled={isAnimatingToEvent}
+        className={
+          isProjectionSwitchActive
+            ? 'wv-toolbar-button'
+            : 'wv-toolbar-button disabled'
+      }
+        disabled={!isProjectionSwitchActive}
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
@@ -469,7 +476,6 @@ const mapStateToProps = (state) => {
     config: state.config,
     faSize,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
-    isAnimatingToEvent,
     isAboutOpen: modalAbout.isOpen,
     isCompareActive,
     isChartingActive,
@@ -477,6 +483,9 @@ const mapStateToProps = (state) => {
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
       && !isCompareActive && !isChartingActive && !isDataDownloadTabActive,
+    ),
+    isProjectionSwitchActive: Boolean(
+      !isAnimatingToEvent && !isChartingActive,
     ),
     isKioskModeActive,
     isLocationSearchExpanded,
@@ -581,7 +590,6 @@ toolbarContainer.propTypes = {
   config: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
-  isAnimatingToEvent: PropTypes.bool,
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isChartingActive: PropTypes.bool,
@@ -589,6 +597,7 @@ toolbarContainer.propTypes = {
   isKioskModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
+  isProjectionSwitchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRotated: PropTypes.bool,
   modalIsOpen: PropTypes.bool,
