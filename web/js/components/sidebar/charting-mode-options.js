@@ -292,14 +292,17 @@ function ChartingModeOptions(props) {
    * @param {String} simpleStatsURI
    */
   async function getImageStatData(simpleStatsURI) {
-    const requestOptions = {
+    // Temporarily commented out to use mock data for testing
+    /* const requestOptions = {
       method: 'GET',
       redirect: 'follow',
-    };
+    }; */
 
     try {
-      const response = await fetch(simpleStatsURI, requestOptions);
-      const data = await response.text();
+      // Temporarily commented out to use mock data for testing
+      /* const response = await fetch(simpleStatsURI, requestOptions);
+      const data = await response.text(); */
+      const data = '{"mean": {"2025-07-20T00:00:00Z": 0.29900813727970316, "2025-07-21T00:00:00Z": 0.33769570377144853, "2025-07-22T00:00:00Z": 0.37272151578094137, "2025-07-23T00:00:00Z": 0.30513256255787974, "2025-07-24T00:00:00Z": 0.3511788493819625, "2025-07-25T00:00:00Z": 0.38383436034664775, "2025-07-26T00:00:00Z": 0.4393722237163022, "2025-07-27T00:00:00Z": 0.4557413906149881, "2025-07-28T00:00:00Z": 0.32508699568577254, "2025-07-29T00:00:00Z": 0.24766032716363848, "2025-07-30T00:00:00Z": 0.29277216137233}, "median": {"2025-07-20T00:00:00Z": "0.2", "2025-07-21T00:00:00Z": "0.2", "2025-07-22T00:00:00Z": "0.25", "2025-07-23T00:00:00Z": "0.225", "2025-07-24T00:00:00Z": "0.275", "2025-07-25T00:00:00Z": "0.325", "2025-07-26T00:00:00Z": "0.3", "2025-07-27T00:00:00Z": "0.35", "2025-07-28T00:00:00Z": "0.25", "2025-07-29T00:00:00Z": "0.175", "2025-07-30T00:00:00Z": "0.225"}, "max": {"2025-07-20T00:00:00Z": 2.425, "2025-07-21T00:00:00Z": 2.625, "2025-07-22T00:00:00Z": 2.65, "2025-07-23T00:00:00Z": 2.325, "2025-07-24T00:00:00Z": 2.125, "2025-07-25T00:00:00Z": 4.9, "2025-07-26T00:00:00Z": 2.425, "2025-07-27T00:00:00Z": 2.125, "2025-07-28T00:00:00Z": 3.6, "2025-07-29T00:00:00Z": 2.35, "2025-07-30T00:00:00Z": 1.775}, "min": {"2025-07-20T00:00:00Z": 0.0, "2025-07-21T00:00:00Z": 0.0, "2025-07-22T00:00:00Z": 0.0, "2025-07-23T00:00:00Z": 0.0, "2025-07-24T00:00:00Z": 0.0, "2025-07-25T00:00:00Z": 0.0, "2025-07-26T00:00:00Z": 0.0, "2025-07-27T00:00:00Z": 0.0, "2025-07-28T00:00:00Z": 0.0, "2025-07-29T00:00:00Z": 0.0, "2025-07-30T00:00:00Z": 0.0}, "stdev": {"2025-07-20T00:00:00Z": 0.3086933026530614, "2025-07-21T00:00:00Z": 0.3769984237594674, "2025-07-22T00:00:00Z": 0.38953595270273295, "2025-07-23T00:00:00Z": 0.31362978920484286, "2025-07-24T00:00:00Z": 0.32869064274051235, "2025-07-25T00:00:00Z": 0.3430434814370445, "2025-07-26T00:00:00Z": 0.4268990303935581, "2025-07-27T00:00:00Z": 0.42487167546122384, "2025-07-28T00:00:00Z": 0.29901418452467227, "2025-07-29T00:00:00Z": 0.2652943403724239, "2025-07-30T00:00:00Z": 0.26869433585823854}, "stderr": "0.0003281055531875992", "hist": [["0.0", "860390"], ["0.49000000000000005", "239464"], ["0.9800000000000001", "51982"], ["1.4700000000000002", "14058"], ["1.9600000000000002", "3709"], ["2.45", "384"], ["2.9400000000000004", "0"], ["3.43", "36"], ["3.9200000000000004", "0"], ["4.41", "52"]]}';
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -421,6 +424,7 @@ function ChartingModeOptions(props) {
           numRangeDays,
           isTruncated: numRangeDays > STEP_NUM,
           STEP_NUM,
+          coordinates: [...bottomLeftLatLong, ...topRightLatLong],
         });
         updateChartRequestStatus(false);
       } else {
@@ -851,9 +855,9 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: 'chart-dialog',
         isDraggable: true,
         dragHandle: '.modal-header',
-        offsetLeft: 'calc(50% - 425px)',
+        offsetLeft: 'calc(50% - 575px)',
         offsetTop: 50,
-        width: 850,
+        width: 1150,
         height: 420,
         stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
