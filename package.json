@@ -224,8 +224,8 @@
     "eslint-config-airbnb": {
       "eslint-plugin-react-hooks": "^5.2.0"
     },
-    "fetch-mock-jest": {
-      "path-to-regexp": "^8.0.0"
+    "patch-package": {
+      "tmp": "^0.2.4"
     }
   },
   "browserslist": [
