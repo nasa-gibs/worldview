@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_DayNightBand": {
+      "id": "VIIRS_SNPP_DayNightBand",
+      "description": "viirs/snpp/VIIRS_SNPP_DayNightBand",
+      "tags": "dnb night s-npp snpp lights city urban nighttime black marble",
+      "layergroup": "Earth at Night",
+      "group": "overlays"
+    }
+  }
+}

@@ -372,60 +372,57 @@ class Sidebar extends React.Component {
             style={productsHolderStyle}
             ref={(el) => { this.sidebarElement = el; }}
           >
-            {!isCollapsed && (
-            <>
-              <NavCase
-                activeTab={activeTab}
-                onTabClick={onTabClick}
-                tabTypes={tabTypes}
-                isMobile={isMobile}
-                toggleSidebar={this.toggleSidebar}
-                isCompareMode={isCompareMode}
-                isDataDisabled={isDataDisabled}
-                isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
-              />
-              <TabContent activeTab={activeTab}>
-                <TabPane tabId="layers">
-                  {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
-                  <AddLayersContent
-                    ref={(el) => { this.addLayersElement = el; }}
-                    isActive={activeTab === 'layers'}
-                    compareState={activeString}
+            <NavCase
+              activeTab={activeTab}
+              onTabClick={onTabClick}
+              tabTypes={tabTypes}
+              isMobile={isMobile}
+              toggleSidebar={this.toggleSidebar}
+              isCompareMode={isCompareMode}
+              isChartMode={isChartMode}
+              isDataDisabled={isDataDisabled}
+              isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
+            />
+            <TabContent activeTab={activeTab}>
+              <TabPane tabId="layers">
+                {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
+                <AddLayersContent
+                  ref={(el) => { this.addLayersElement = el; }}
+                  isActive={activeTab === 'layers'}
+                  compareState={activeString}
+                />
+              </TabPane>
+              {naturalEvents && activeTab === 'events' && (
+                <TabPane tabId="events">
+                  <Events
+                    height={subComponentHeight}
+                    isLoading={isLoadingEvents}
+                    hasRequestError={hasEventRequestError}
+                    eventsData={eventsData}
+                    sources={eventsSources}
                   />
                 </TabPane>
-                {naturalEvents && activeTab === 'events' && (
-                  <TabPane tabId="events">
-                    <Events
-                      height={subComponentHeight}
-                      isLoading={isLoadingEvents}
-                      hasRequestError={hasEventRequestError}
-                      eventsData={eventsData}
-                      sources={eventsSources}
-                    />
-                  </TabPane>
-                )}
-                {smartHandoffs && activeTab === 'download' && (
-                  <TabPane tabId="download">
-                    <SmartHandoff
-                      isActive={activeTab === 'download'}
-                      tabTypes={tabTypes}
-                    />
-                  </TabPane>
-                )}
-                {
-                  !isKioskModeActive && (
-                    <FooterContent
-                      ref={(el) => { this.footerElement = el; }}
-                      tabTypes={tabTypes}
-                      activeTab={activeTab}
-                      chartingModeAccessible={chartingModeAccessible}
-                      sidebarHeight={sidebarHeight}
-                    />
-                  )
-                }
-              </TabContent>
-            </>
-            )}
+              )}
+              {smartHandoffs && activeTab === 'download' && (
+                <TabPane tabId="download">
+                  <SmartHandoff
+                    isActive={activeTab === 'download'}
+                    tabTypes={tabTypes}
+                  />
+                </TabPane>
+              )}
+              {
+                !isKioskModeActive && (
+                  <FooterContent
+                    ref={(el) => { this.footerElement = el; }}
+                    tabTypes={tabTypes}
+                    activeTab={activeTab}
+                    chartingModeAccessible={chartingModeAccessible}
+                    sidebarHeight={sidebarHeight}
+                  />
+                )
+              }
+            </TabContent>
           </div>
         </section>
       </ErrorBoundary>
