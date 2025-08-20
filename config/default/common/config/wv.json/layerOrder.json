@@ -24,6 +24,7 @@
 		"OPERA_L3_Dynamic_Surface_Water_Extent-Sentinel-1",
 		"OPERA_L3_Dynamic_Surface_Water_Extent-HLS",
 		"OPERA_L3_DIST-ALERT-HLS_Color_Index",
+		"OPERA_L3_DIST-ANN-HLS_Color_Index",
     "HLS_NDVI_Landsat",
 		"HLS_NDWI_Landsat",
 		"HLS_NDSI_Landsat",
