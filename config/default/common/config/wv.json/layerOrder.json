@@ -738,6 +738,7 @@
 		"OMPS_Aerosol_Index",
 		"OMPS_Aerosol_Index_PyroCumuloNimbus",
 		"OMPS_Ozone_Total_Column",
+		"TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",
 		"OMPS_NOAA20_SO2_Planetary_Boundary_Layer",
 		"OMPS_NOAA20_SO2_Lower_Troposphere",
 		"OMPS_NOAA20_SO2_Middle_Troposphere",
