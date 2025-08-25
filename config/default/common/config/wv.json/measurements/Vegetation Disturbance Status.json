@@ -3,7 +3,7 @@
         "Vegetation Disturbance Status": {
             "id": "vegetation-disturbance-status",
             "title": "Vegetation Disturbance Status",
-            "subtitle": "DIST-ALERT-HLS",
+            "subtitle": "DIST-ALERT-HLS, DIST-ANN-HLS",
             "sources": {
                 "DIST-ALERT-HLS": {
                     "id": "DIST-ALERT-HLS",
@@ -16,6 +16,15 @@
                         "OrbitTracks_Landsat-9_Descending",
                         "OrbitTracks_Sentinel-2A_Descending",
                         "OrbitTracks_Sentinel-2B_Descending"
+                    ]
+                },
+                "DIST-ANN-HLS": {
+                    "id": "DIST-ANN-HLS",
+                    "title": "DIST-ANN-HLS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OPERA_L3_DIST-ANN-HLS_Color_Index"
                     ]
                 }
             }

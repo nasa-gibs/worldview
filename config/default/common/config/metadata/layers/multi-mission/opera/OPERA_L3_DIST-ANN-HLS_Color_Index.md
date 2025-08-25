@@ -1,0 +1,7 @@
+The Annual OPERA Land Surface Disturbance (DIST-ANN) imagery layer is a Level-3 (L3) product that summarizes the DIST-ALERT data product into an annual vegetation disturbance data product. Vegetation disturbance is mapped when there is an indicated decrease in vegetation cover within an HLS pixel. The spatial resolution is 30 m.
+
+The DIST-ANN product tracks changes at the annual scale, aggregating changes identified in the DIST-ALERT product. Only confirmed disturbances from the associated year are reported together with the date of initial disturbance. As confirmed disturbances are determined using subsequent cloud-free observations to determine if the loss detections persist, the required number of HLS scenes depends on visibility of the target. Due to this dependency, summarizing the DIST-ALERT in the DIST-ANN product will have some latency contingent on the algorithmic calibration and is detailed in the Algorithm Theoretical Basis Document ([ATBD](https://lpdaac.usgs.gov/documents/1835/OPERA_DIST_ATBD__V1.pdf)).
+
+The input dataset for generating each product is the Harmonized Landsat Sentinel-2 (HLS) dataset. The OPERA Land Surface Disturbance (L3) imagery layer is available through the Observational Products for End-Users from Remote Sensing Analysis (OPERA) project.
+
+References: OPERA_L3_DIST-ANN-HLS_V1 [doi:10.5067/SNWG/OPERA_L3_DIST-ANN-HLS_V1.001](https://doi.org/10.5067/SNWG/OPERA_L3_DIST-ANN-HLS_V1.001)

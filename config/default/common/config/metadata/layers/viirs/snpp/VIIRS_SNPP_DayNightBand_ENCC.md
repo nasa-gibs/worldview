@@ -1,5 +1,5 @@
 **8 July 2023 Notice:**
-The Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast) layer is no longer being produced. We are currently investigating alternative sources, but do not have an estimated date for the resumption of the imagery layer. We apologize for the inconvenience. Similar imagery layers are available in Worldview including the Black Marble Nighttime At Sensor Radiance (Day/Night Band) and Black Marble Nighttime Blue/Yellow Composite (Day/Night Band).
+The Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast) layer has been discontinued. Please use other similar imagery layers including the Nighttime Imagery (Day/Night Band), the Black Marble Nighttime At Sensor Radiance (Day/Night Band), and Black Marble Nighttime Blue/Yellow Composite (Day/Night Band) layers.
 
 ---
 
@@ -7,7 +7,7 @@ The Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast) layer sh
 
 The Visible Infrared Imaging Radiometer Suite (VIIRS) Nighttime Imagery (Day/Night Band, Enhanced Near Constant Contrast) layer is mainly a qualitative product and should be strictly used for image display purposes. Each VIIRS Level 1B scan (6-minutes in total length) is individually processed and normalized based on a static set of values that predict the viewing and illumination geometries of each pixel. Because of the confounding factors that influence a VIIRS scan from one night to the next (e.g., more/less cloudy days, with more/less moon illumination conditions), individual ENCC pixel-based values are not comparable over time. For accurate time-series detection (e.g., monitoring short-term increases or reductions in artificial lights at night), users are referred to NASA’s Black Marble standard product suite (VNP46A1/VNP46A2 for Suomi NPP). These standard products correct for short-term variations in lunar and environmental conditions. They also provide the necessary quality assurance (QA) flags and additional layers to identify and isolate potential sources of noise and measurement error (e.g., clouds, moon-light, and snow contaminated pixels) and variations (e.g. lunar and view angles and view time) in a statistically robust fashion.
 
-The current ENCC Nighttime Imagery layer is available from the VIIRS instrument aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite at a daily temporal resolution. The VIIRS Day/Night Band (DNB) sensor resolution is 750 m at nadir and the ENCC imagery layer’s gridded resolution is 15 arc-second (approximately 500 meters at the equator).
+The ENCC Nighttime Imagery layer is available from the VIIRS instrument aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite at a daily temporal resolution. The VIIRS Day/Night Band (DNB) sensor resolution is 750 m at nadir and the ENCC imagery layer’s gridded resolution is 15 arc-second (approximately 500 meters at the equator).
 
 References: [Earthdata - Nighttime Lights](https://www.earthdata.nasa.gov/topics/human-dimensions/nighttime-lights)
 
