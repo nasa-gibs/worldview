@@ -56,7 +56,7 @@ export const layerPixelData = {
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { threshold: 0.90 },
   VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { threshold: 0.90 },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
-  VIIRS_SNPP_NDVI_8Day: { date: '2025-08-24' },
+  VIIRS_SNPP_NDVI_8Day: { threshold: 0.90 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
