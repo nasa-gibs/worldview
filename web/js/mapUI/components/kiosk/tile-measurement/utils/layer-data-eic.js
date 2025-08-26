@@ -25,7 +25,7 @@ export const layersToMeasure = [
   'VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate',
   'VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean',
   'VIIRS_NOAA21_CorrectedReflectance_TrueColor',
-  'VIIRS_SNPP_NDVI_8Day'
+  'VIIRS_SNPP_NDVI_8Day',
 ];
 
 // Object that contains the black pixel % threshold for each layer
