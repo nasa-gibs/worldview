@@ -1083,6 +1083,7 @@ export default function mapLayerBuilder(config, cache, store) {
       source,
       extent: shifted ? RIGHT_WING_EXTENT : extent,
       className: id,
+      declutter: options.group || true,
       renderMode: 'hybrid',
     });
 
