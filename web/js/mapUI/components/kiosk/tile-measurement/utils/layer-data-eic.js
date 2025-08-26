@@ -10,7 +10,7 @@ export const layersToMeasure = [
   'GOES-East_ABI_GeoColor',
   'GOES-West_ABI_GeoColor',
   'Himawari_AHI_Band3_Red_Visible_1km',
-  'AMSRU2_Sea_Ice_Concentration_12km',
+  'VIIRS_SNPP_NDVI_8Day',
   'OMI_Nitrogen_Dioxide_Tropo_Column',
   'VIIRS_SNPP_AOT_Dark_Target_Land_Ocean',
   'VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate',
@@ -40,7 +40,7 @@ export const layerPixelData = {
   'GOES-East_ABI_GeoColor': { threshold: 0.76 },
   'GOES-West_ABI_GeoColor': { threshold: 0.76 },
   Himawari_AHI_Band3_Red_Visible_1km: { threshold: 0.76 },
-  AMSRU2_Sea_Ice_Concentration_12km: { threshold: 0.85 },
+  VIIRS_SNPP_NDVI_8Day: { threshold: 0.90 },
   OMI_Nitrogen_Dioxide_Tropo_Column: { threshold: 0.50 },
   VIIRS_SNPP_AOT_Dark_Target_Land_Ocean: { threshold: 0.95 },
   VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate: { threshold: 0.95 },
@@ -84,6 +84,7 @@ export const bestDates = {
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { date: '2024-10-01' },
   VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { date: '2024-10-01' },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { date: '2024-10-01' },
+  VIIRS_SNPP_NDVI_8Day: { date: '2025-08-24' },
 };
 
 export const travelModeData = {
@@ -109,10 +110,10 @@ export const travelModeData = {
     title: 'Land Surface Temperature',
   },
   8: {
-    title: 'Arctic Sea Ice',
+    title: 'Vegetation Index (NDVI) by Suomi NPP satellite',
   },
   9: {
-    title: 'Antarctic Sea Ice',
+    title: 'Vegetation Index (NDVI) by Suomi NPP satellite',
   },
   10: {
     title: 'Active fires detected by NOAA-20 satellite',
