@@ -1,0 +1,1 @@
+Here we've added Chlorophyll a from VIIRS/Suomi NPP from the daytime overpass, which can be used as a proxy for the amount of organic material in the surface waters. Elevated chlorophyll concentrations (> 1 mg/m<sup>3</sup>) are shown in yellows to reds and occur directly adjacent to the milky sea. This may indicate regions of algal stress where bacteria would proliferate.

@@ -1,0 +1,1 @@
+This is an example of milky seas southeast of Socotra in the Somalia Sea on 17 January 2021. Turn on and off the Chlorophyll a layer to see how the milky sea coincides with warmer waters in cyan.
