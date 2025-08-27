@@ -1,0 +1,1 @@
+Let's investigate this a little further by adding the Sea Surface Temperature (Night, L2) from the VIIRS instrument aboard Suomi NPP. You can see that the eastern edge of the milky sea stops at an area of cooler water shown in yellow which is giving the milky sea its elongated shape.

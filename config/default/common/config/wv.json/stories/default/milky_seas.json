@@ -1,0 +1,105 @@
+{
+  "stories": {
+    "milky_seas": {
+      "id": "milky_seas",
+      "type": "default",
+      "title": "Milky Seas",
+      "description": "Detecting bioluminescence from space",
+      "backgroundImage": "milky-seas-background.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "Honing in on bioluminescent milky seas from space",
+          "link": "https://www.nature.com/articles/s41598-021-94823-z"
+        },
+        {
+          "title": "Chasing the light from elusive ‘milky seas’: CSU researchers light a path toward unraveling mysteries of the ocean from space",
+          "link": "https://engr.source.colostate.edu/chasing-the-light-from-elusive-milky-seas-csu-researchers-light-a-path-toward-unraveling-the-mysteries-of-the-ocean-from-space/"
+        }
+      ],
+      "steps": [
+        {
+          "id": "001",
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-57.214419603201314,-56.1586330775006,166.0807383111483,45.43943822381434&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m(opacity=0.43),BlueMarble_ShadedRelief_Bathymetry&lg=true&t=2021-07-10-T00%3A0%3A00Z"
+        },
+        {
+          "id": "002",
+          "description": "step002.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=34.48090888977883,-32.76592196265217,177.07501974667463,32.11361585313631&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand,VIIRS_NOAA20_DayNightBand(hidden)&lg=true&t=2021-07-07-T00%3A0%3A00Z"
+        },
+        {
+          "id": "003",
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=100.67998184312945,-13.649554035145663,117.25352103649873,-6.108684665604977&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand,VIIRS_NOAA20_DayNightBand(hidden)&lg=true&t=2019-08-04-T00%3A00%3A00Z"
+        },
+        {
+          "id": "004",
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=100.67998184312945,-14.291923420341536,117.25352103649873,-5.466315280409101&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night,VIIRS_SNPP_DayNightBand(hidden)&lg1=true&ca=true&cm=opacity&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
+        },
+        {
+          "id": "005",
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=98.95722025671999,-14.291923420341536,118.97628262290819,-5.466315280409103&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Sea_Surface_Temp_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Sea_Surface_Temp_Night,VIIRS_SNPP_DayNightBand&lg1=true&ca=false&cm=opacity&cv=100&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
+        },
+        {
+          "id": "006",
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=100.16937216323105,-13.757533870159241,117.76413071639713,-6.000704830591397&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A,VIIRS_SNPP_DayNightBand(hidden)&lg1=true&ca=false&cm=opacity&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
+        },
+        {
+          "id": "007",
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=42.55005588597402,-0.8871732496289075,64.1817383317124,8.649374925374037&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand(max=152,squash=true)&lg=true&t=2018-01-20-T00%3A00%3A00Z"
+        },
+        {
+          "id": "008",
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=51.661053118137694,8.779948128908448,62.00120964951609,13.48466259900323&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A(hidden,min=0.0278,squash=true),VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&t=2021-01-17-T00%3A00%3A00Z"
+        },
+        {
+          "id": "009",
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-214.9311655221215,-91.0282937689264,174.18008826559748,91.08546224830255&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand(hidden),VIIRS_NOAA20_DayNightBand(hidden),VIIRS_NOAA21_DayNightBand&lg=true&t=2025-08-24-T00%3A00%3A00Z"
+        }
+      ]
+    }
+  }
+}
