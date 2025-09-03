@@ -8,26 +8,26 @@ const Wait = (props) => {
   const { complete = false, statusText, onCancel } = props;
 
   return createPortal(
-    <div className='wv-snapshot-progress-overlay'>
-      <dialog className='wv-snapshot-progress-dialog' open>
-        <div className='wv-snapshot-progress'>
-          <div className='wv-snapshot-progress-message'>
+    <div className="wv-snapshot-progress-overlay">
+      <dialog className="wv-snapshot-progress-dialog" open>
+        <div className="wv-snapshot-progress">
+          <div className="wv-snapshot-progress-message">
             <span>{statusText}</span>
           </div>
-          <div className='wv-snapshot-progress-actions'>
+          <div className="wv-snapshot-progress-actions">
             {!complete && (
               <Button
                 autoFocus
-                text='Cancel'
+                text="Cancel"
                 onClick={onCancel}
-                className='wv-button-red'
+                className="wv-button-red"
               />
             )}
           </div>
         </div>
       </dialog>
     </div>,
-    document.body
+    document.body,
   );
 };
 

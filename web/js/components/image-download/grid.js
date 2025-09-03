@@ -39,10 +39,10 @@ export default class ResolutionTable extends React.Component {
     const {
       width, height, maxImageSize, onClick, validLayers, validSize, isSnapshotInProgress,
     } = this.props;
-    
+
     const isDownloadDisabled = !validSize || !validLayers || isSnapshotInProgress;
     const buttonText = isSnapshotInProgress ? 'Creating...' : 'Download';
-    
+
     return (
       <div className="wv-image-download-grid">
         <div className="grid-child grid-head">

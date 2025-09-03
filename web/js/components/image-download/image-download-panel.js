@@ -14,7 +14,7 @@ import ResTable from './grid';
 import AlertUtil from '../util/alert';
 import LatLongSelect from './lat-long-inputs';
 import GlobalSelectCheckbox from './global-select';
-import WaitOverlay from './wait'
+import WaitOverlay from './wait';
 
 const RESOLUTION_KEY = {
   30: '30m',
@@ -62,6 +62,12 @@ function ImageDownloadPanel(props) {
   const [snapshotStatus, setSnapshotStatus] = useState('');
   const abortControllerRef = useRef(null);
 
+  const onCancelSnapshot = () => {
+    abortControllerRef.current?.abort();
+    setIsSnapshotInProgress(false);
+    setSnapshotStatus('');
+  };
+
   useEffect(() => {
     const divElem = document.querySelector('body > div');
     const resizeHandler = async () => {
@@ -89,13 +95,13 @@ function ImageDownloadPanel(props) {
   const onDownload = async () => {
     const layerList = getLayers();
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
-    
+
     // Create abort controller for this snapshot operation
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
     setIsSnapshotInProgress(true);
     setSnapshotStatus('Preparing snapshot...');
-    
+
     const snapshotOptions = {
       format: snapshotFormat,
       metersPerPixel: Number(currResolution),
@@ -104,6 +110,7 @@ function ImageDownloadPanel(props) {
       worldfile: currIsWorldfile,
       useHighResTiles: !globalSelected,
       abortSignal: abortController.signal,
+      filename: `snapshot-${date.toISOString()}`,
     };
 
     const timeout = setTimeout(onCancelSnapshot, 300_000);
@@ -132,19 +139,13 @@ function ImageDownloadPanel(props) {
     } finally {
       // Add a delay to show the 'Download complete!' message before clearing UI
       if (snapshotStatus === 'Download complete!') {
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
       clearTimeout(timeout);
       setIsSnapshotInProgress(false);
       setSnapshotStatus('');
       abortControllerRef.current = null;
     }
-  };
-
-  const onCancelSnapshot = () => {
-    abortControllerRef.current?.abort();
-    setIsSnapshotInProgress(false);
-    setSnapshotStatus('');
   };
 
   const handleChange = (type, value) => {
@@ -163,10 +164,10 @@ function ImageDownloadPanel(props) {
   const _renderFileTypeSelect = () => {
     if (fileTypeOptions) {
       return (
-        <div className='wv-image-header'>
+        <div className="wv-image-header">
           <SelectionList
-            id='wv-image-format'
-            optionName='filetype'
+            id="wv-image-format"
+            optionName="filetype"
             value={currFileType}
             optionArray={fileTypes}
             onChange={handleChange}
@@ -181,19 +182,19 @@ function ImageDownloadPanel(props) {
     if (worldFileOptions) {
       const value = currIsWorldfile ? 1 : 0;
       return (
-        <div className='wv-image-header'>
+        <div className="wv-image-header">
           {currFileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>
           ) : (
             <select
-              id='wv-image-worldfile'
+              id="wv-image-worldfile"
               value={value}
               onChange={(e) => handleChange('worldfile', e.target.value)}
             >
-              <option value='0'>No</option>
-              <option value='1'>Yes</option>
+              <option value="0">No</option>
+              <option value="1">Yes</option>
             </select>
           )}
           Worldfile (.zip)
@@ -204,9 +205,9 @@ function ImageDownloadPanel(props) {
 
   const crossesDatelineAlert = () => datelineMessage && (
     <AlertUtil
-      id='snapshot-dateline-alert'
+      id="snapshot-dateline-alert"
       isOpen
-      title='Crosses Dateline Alert'
+      title="Crosses Dateline Alert"
       message={datelineMessage}
     />
   );
@@ -229,13 +230,13 @@ function ImageDownloadPanel(props) {
           onCancel={onCancelSnapshot}
         />
       )}
-      <div className='wv-re-pick-wrapper wv-image'>
-        <div className='wv-image-header'>
+      <div className="wv-re-pick-wrapper wv-image">
+        <div className="wv-image-header">
           <SelectionList
-            id='wv-image-resolution'
+            id="wv-image-resolution"
             optionArray={resolutions}
             value={currResolution}
-            optionName='resolution'
+            optionName="resolution"
             onChange={handleChange}
           />
           {firstLabel}

@@ -475,7 +475,6 @@ export function convertPngToKml(pngBlob, options) {
         } catch (error) {
           console.error('Error creating KML content:', error);
           reject(error);
-          return;
         }
       };
 
@@ -485,7 +484,6 @@ export function convertPngToKml(pngBlob, options) {
     } catch (error) {
       console.error('Error creating KML:', error);
       reject(error);
-      return;
     }
   });
 }
@@ -741,6 +739,7 @@ function createRenderCompleteCallback (options) {
     abortSignal,
     resolve,
     reject,
+    filename,
   } = options;
 
   const handleRenderComplete = async () => {
@@ -865,13 +864,13 @@ function createRenderCompleteCallback (options) {
         // Final check before download
         rejectIfAborted(abortSignal, reject);
 
-        await initiateDownload(zipBlob, `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal, reject);
+        await initiateDownload(zipBlob, `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal, reject);
       } else {
         // Final check before download
         rejectIfAborted(abortSignal, reject);
 
         const { blob } = georeferencedOutput[0];
-        await initiateDownload(blob, `screenshot${crs}.${format}`, abortSignal, reject);
+        await initiateDownload(blob, `${filename}.${format}`, abortSignal, reject);
       }
       resolve('Successfully created screenshot');
     } catch (error) {
@@ -880,7 +879,6 @@ function createRenderCompleteCallback (options) {
 
       console.error('Error creating screenshot:', error);
       reject(error);
-      return;
     }
   };
 
@@ -902,6 +900,7 @@ function createViewFitCallback(options) {
     abortSignal,
     resolve,
     reject,
+    filename,
   } = options;
 
   const view = map.getView();
@@ -945,6 +944,7 @@ function createViewFitCallback(options) {
         abortSignal,
         resolve,
         reject,
+        filename,
       };
 
       map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
@@ -961,7 +961,6 @@ function createViewFitCallback(options) {
 
       console.error('Error configuring map:', error);
       reject(error);
-      return;
     }
   };
 
@@ -1030,6 +1029,7 @@ export async function snapshot(options) {
     worldfile,
     useHighResTileGrids = true,
     abortSignal,
+    filename = 'Worldview Snapshot',
   } = options;
 
   // Check if operation was cancelled before starting
@@ -1071,6 +1071,7 @@ export async function snapshot(options) {
       abortSignal,
       resolve,
       reject,
+      filename,
     };
     // fit view to the bounding box to reduce number of tiles needed to render
     view.fit(extent, { callback: createViewFitCallback(viewFitOptions) });
