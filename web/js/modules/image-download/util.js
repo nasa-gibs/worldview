@@ -475,6 +475,7 @@ export function convertPngToKml(pngBlob, options) {
         } catch (error) {
           console.error('Error creating KML content:', error);
           reject(error);
+          return;
         }
       };
 
@@ -484,6 +485,7 @@ export function convertPngToKml(pngBlob, options) {
     } catch (error) {
       console.error('Error creating KML:', error);
       reject(error);
+      return;
     }
   });
 }
@@ -677,6 +679,57 @@ function createMapRestore(map, extent, highResTileGrids = true) {
   };
 }
 
+function rejectIfAborted(abortSignal, reject, restoreMap) {
+  if (abortSignal?.aborted) {
+    restoreMap?.();
+    reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+  }
+}
+
+/**
+ * Initiates a download and waits for a reasonable delay to simulate download completion
+ * @param {Blob} blob - The blob to download
+ * @param {String} filename - The filename for the download
+ * @param {AbortSignal} abortSignal - Optional abort signal
+ * @returns {Promise} - Resolves when download is initiated and delay is complete
+ */
+async function initiateDownload(blob, filename, abortSignal, parentReject) {
+  // Check if cancelled before starting download
+  rejectIfAborted(abortSignal, parentReject);
+
+  // Wait for download to initiate with cancellation support
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(resolve, 1000);
+
+    if (abortSignal) {
+      const abortHandler = () => {
+        clearTimeout(timeoutId);
+        reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+      };
+
+      if (abortSignal.aborted) {
+        clearTimeout(timeoutId);
+        reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+        return;
+      }
+
+      abortSignal.addEventListener('abort', abortHandler, { once: true });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      // Clean up the event listener when the timeout completes
+      setTimeout(() => {
+        abortSignal.removeEventListener('abort', abortHandler);
+      }, 1000);
+    }
+  });
+}
+
 function createRenderCompleteCallback (options) {
   const {
     map,
@@ -685,10 +738,16 @@ function createRenderCompleteCallback (options) {
     format,
     worldfile,
     restoreMap,
+    abortSignal,
+    resolve,
+    reject,
   } = options;
 
   const handleRenderComplete = async () => {
     try {
+      // Check if operation was cancelled at the start
+      rejectIfAborted(abortSignal, reject, restoreMap);
+
       const topLeft = olExtent.getTopLeft(extent);
       const bottomLeft = olExtent.getBottomLeft(extent);
       const topRight = olExtent.getTopRight(extent);
@@ -719,6 +778,9 @@ function createRenderCompleteCallback (options) {
       ctx.scale(dpr, dpr);
 
       const capturedCanvas = new OffscreenCanvas(mapWidth * dpr, mapHeight * dpr);
+
+      // Check if operation was cancelled before html2canvas
+      rejectIfAborted(abortSignal, reject, restoreMap);
 
       // Capture the map at its new scaled size
       await html2canvas(mapElement, {
@@ -761,12 +823,19 @@ function createRenderCompleteCallback (options) {
       // Reset map to original size
       restoreMap();
 
+      // Check if operation was cancelled before processing image
+      rejectIfAborted(abortSignal, reject);
+
       const pngBlob = await outputCanvas.convertToBlob({
         type: 'image/png',
         quality: 1, // Maximum quality
       });
 
       const crs = map.getView().getProjection().getCode();
+
+      // Check if operation was cancelled before georeferencing
+      rejectIfAborted(abortSignal, reject);
+
       const georeferencedOutput = await georeference(pngBlob, {
         extent,
         crs,
@@ -781,6 +850,9 @@ function createRenderCompleteCallback (options) {
       });
 
       if (worldfile || format === 'kmz') {
+        // Check if operation was cancelled before creating zip
+        rejectIfAborted(abortSignal, reject);
+
         const zip = new JSZip();
         georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
         const zipBlob = await zip.generateAsync({
@@ -790,33 +862,25 @@ function createRenderCompleteCallback (options) {
           mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
         });
 
-        const url = URL.createObjectURL(zipBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`;
-        link.click();
+        // Final check before download
+        rejectIfAborted(abortSignal, reject);
 
-        document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
-        URL.revokeObjectURL(url);
+        await initiateDownload(zipBlob, `screenshot${crs}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal, reject);
       } else {
+        // Final check before download
+        rejectIfAborted(abortSignal, reject);
+
         const { blob } = georeferencedOutput[0];
-        const url = URL.createObjectURL(blob);
-
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `screenshot${crs}.${format}`;
-        link.click();
-
-        document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
-        URL.revokeObjectURL(url);
+        await initiateDownload(blob, `screenshot${crs}.${format}`, abortSignal, reject);
       }
+      resolve('Successfully created screenshot');
     } catch (error) {
       // Reset map size in case of error
       restoreMap();
 
       console.error('Error creating screenshot:', error);
-      document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
-      throw error;
+      reject(error);
+      return;
     }
   };
 
@@ -835,6 +899,9 @@ function createViewFitCallback(options) {
     originalHeight,
     maxWidth,
     maxHeight,
+    abortSignal,
+    resolve,
+    reject,
   } = options;
 
   const view = map.getView();
@@ -842,6 +909,9 @@ function createViewFitCallback(options) {
 
   const viewFitRenderCallback = () => {
     try {
+      // Check if operation was cancelled
+      rejectIfAborted(abortSignal, reject, restoreMap);
+
       const viewResolution = view.getResolution();
 
       // Calculate scale factor based on target spatial resolution
@@ -872,6 +942,9 @@ function createViewFitCallback(options) {
         format,
         worldfile,
         restoreMap,
+        abortSignal,
+        resolve,
+        reject,
       };
 
       map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
@@ -887,16 +960,27 @@ function createViewFitCallback(options) {
       restoreMap();
 
       console.error('Error configuring map:', error);
-      document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'auto'; }); // Prefer a waiting overlay to this WV-3694
-      throw error;
+      reject(error);
+      return;
     }
   };
 
   // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
   const viewFitCallback = (notCancelled) => {
-    if (!notCancelled) console.warn('Snapshot cancelled by user');
-    map.once('rendercomplete', viewFitRenderCallback);
+    if (!notCancelled) {
+      console.warn('Snapshot cancelled by user');
+      restoreMap();
+      return;
+    }
 
+    // Check if operation was cancelled before proceeding
+    if (abortSignal?.aborted) {
+      restoreMap();
+      reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+      return;
+    }
+
+    map.once('rendercomplete', viewFitRenderCallback);
     map.render();
   };
 
@@ -922,10 +1006,20 @@ function getExtentFromPixelBbox(pixelBbox, map) {
   return extent;
 }
 
+/**
+ * Create a snapshot of the map with the given options
+ * @param {Object} options - Snapshot configuration options
+ * @param {String} options.format - Output format (e.g., 'tif', 'png', 'kmz')
+ * @param {Number} options.metersPerPixel - Target spatial resolution in meters per pixel
+ * @param {Array} options.pixelBbox - Pixel bounding box [minX, minY, maxX, maxY]
+ * @param {Object} options.map - OpenLayers map instance
+ * @param {Boolean} options.worldfile - Whether to include a worldfile
+ * @param {Boolean} options.useHighResTileGrids - Whether to use high resolution tile grids
+ * @param {AbortSignal} options.abortSignal - Optional AbortController signal to cancel the operation
+ * @returns {Promise<void>} - Promise that resolves when snapshot is complete
+ * @throws {DOMException} - Throws AbortError if the operation is cancelled
+ */
 export async function snapshot(options) {
-  document.querySelectorAll('*').forEach((el) => { el.style.cursor = 'wait'; }); // Prefer a waiting overlay to this WV-3694
-  document.body.style.cursor = 'wait';
-
   const { height: maxHeight = 0, width: maxWidth = 0 } = await estimateMaxCanvasSize();
 
   const {
@@ -935,7 +1029,13 @@ export async function snapshot(options) {
     map,
     worldfile,
     useHighResTileGrids = true,
+    abortSignal,
   } = options;
+
+  // Check if operation was cancelled before starting
+  if (abortSignal?.aborted) {
+    throw new DOMException('Snapshot operation was cancelled before starting', 'AbortError');
+  }
 
   // Save original viewport size
   const [originalWidth, originalHeight] = map.getSize();
@@ -947,21 +1047,36 @@ export async function snapshot(options) {
   const restoreMap = createMapRestore(map, extent, enableHighResTileGrids);
   const view = map.getView();
 
-  const viewFitOptions = {
-    map,
-    extent,
-    metersPerPixel,
-    format,
-    worldfile,
-    restoreMap,
-    originalWidth,
-    originalHeight,
-    maxWidth,
-    maxHeight,
+  // Add abort event listener to clean up if cancelled
+  const abortHandler = () => {
+    restoreMap();
   };
 
-  // fit view to the bounding box
-  view.fit(extent, { callback: createViewFitCallback(viewFitOptions) });
+  if (abortSignal) {
+    abortSignal.addEventListener('abort', abortHandler);
+  }
+
+  const viewFitPromise = new Promise((resolve, reject) => {
+    const viewFitOptions = {
+      map,
+      extent,
+      metersPerPixel,
+      format,
+      worldfile,
+      restoreMap,
+      originalWidth,
+      originalHeight,
+      maxWidth,
+      maxHeight,
+      abortSignal,
+      resolve,
+      reject,
+    };
+    // fit view to the bounding box to reduce number of tiles needed to render
+    view.fit(extent, { callback: createViewFitCallback(viewFitOptions) });
+  });
+
+  return viewFitPromise;
 }
 
 export function imageUtilGetConversionFactor(proj) {
