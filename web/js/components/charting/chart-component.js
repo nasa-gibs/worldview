@@ -41,7 +41,7 @@ function ChartComponent (props) {
     numRangeDays,
     isTruncated,
     title,
-    STEP_NUM,
+    numPoints,
     coordinates,
     errors,
   } = liveData;
@@ -371,11 +371,11 @@ function ChartComponent (props) {
                 </b>
                 have been reduced from
                 <b>
-                  {` ${numRangeDays} days `}
+                  {` ${numRangeDays} `}
                 </b>
                 to
                 <b>
-                  {` ${STEP_NUM} days`}
+                  {` ${numPoints}`}
                 </b>
                 .
               </i>

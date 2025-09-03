@@ -41,7 +41,7 @@ const sources = {};
 let init = false;
 const STEP_NUM = 31;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
-const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process & try again.';
+const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
 function ChartingModeOptions(props) {
   const {
@@ -440,6 +440,7 @@ function ChartingModeOptions(props) {
         const startDateFormatted = `${startDateObj.getFullYear()}-${`0${startDateObj.getMonth() + 1}`.slice(-2)}-${`0${startDateObj.getDate()}`.slice(-2)}`;
         const endDateObj = new Date(secondaryDate);
         const endDateFormatted = `${endDateObj.getFullYear()}-${`0${endDateObj.getMonth() + 1}`.slice(-2)}-${`0${endDateObj.getDate()}`.slice(-2)}`;
+        const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
         displayChart({
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
@@ -452,7 +453,7 @@ function ChartingModeOptions(props) {
           endDateFormatted,
           numRangeDays,
           isTruncated: numRangeDays > STEP_NUM,
-          STEP_NUM,
+          numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
         });
         updateChartRequestStatus(false);
