@@ -11,6 +11,7 @@ function NavCase (props) {
     tabTypes,
     isMobile,
     isCompareMode,
+    isChartMode,
     isEventsTabDisabledEmbed,
     onTabClick,
     activeTab,
@@ -22,21 +23,23 @@ function NavCase (props) {
     <CustomNavItem
       isMobile={isMobile}
       shouldHideInMobile
-      isDisabled={!!isCompareMode || isDataDisabled}
+      isDisabled={!!isCompareMode || isChartMode || isDataDisabled}
       onTabClick={onTabClick}
       text="Data"
       id="download"
       iconClassName="icon-download"
-      disabled={!!isCompareMode}
+      disabled={!!isCompareMode || isChartMode}
       label={
         isCompareMode
           ? 'You must exit comparison mode to download data'
-          : 'Data Download'
+          : isChartMode
+            ? 'You must exit charting mode to download data'
+            : 'Data Download'
       }
       className={
         activeTab === 'download'
           ? `${tabClasses} third-tab active`
-          : isCompareMode
+          : isCompareMode || isChartMode
             ? `${tabClasses} third-tab disabled`
             : `${tabClasses} third-tab`
       }
@@ -48,20 +51,22 @@ function NavCase (props) {
       id="events"
       isMobile={isMobile}
       shouldHideInMobile={false}
-      isDisabled={!!isCompareMode}
+      isDisabled={!!isCompareMode || !!isChartMode}
       onTabClick={onTabClick}
       text="Events"
       iconClassName="icon-events"
-      disabled={!!isCompareMode}
+      disabled={!!isCompareMode || !!isChartMode}
       label={
         isCompareMode
           ? 'You must exit comparison mode to use the natural events feature'
-          : 'Natural Events'
+          : isChartMode
+            ? 'You must exit charting mode to use the natural events feature'
+            : 'Natural Events'
       }
       className={
         activeTab === 'events'
           ? `${tabClasses} second-tab active`
-          : isCompareMode
+          : isCompareMode || isChartMode
             ? `${tabClasses} second-tab disabled`
             : `${tabClasses} second-tab`
       }
@@ -123,6 +128,7 @@ NavCase.propTypes = {
   activeTab: PropTypes.string,
   isEventsTabDisabledEmbed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
+  isChartMode: PropTypes.bool,
   isDataDisabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   onTabClick: PropTypes.func,

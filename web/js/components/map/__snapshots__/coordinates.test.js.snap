@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`formats coordinate in latlon-dd format 1`] = `"<div id="coords-panel" class="wv-coords-map wv-coords-map-btn"><span class="map-coord">0.0000°, 0.0000°</span><div class="map-coord-format"><span class="map-coord">EPSG:4326</span><div aria-label="Change coordinates format" class="coord-btn"><i class="coord-switch"></i></div></div></div>"`;
 

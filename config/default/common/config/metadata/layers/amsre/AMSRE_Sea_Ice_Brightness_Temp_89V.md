@@ -4,4 +4,4 @@ Onboard NASA's Aqua satellite, the AMSR-E radiometer measured terrestrial, ocean
 
 Data fields: `SI_06km_NH_89V_DAY`; `SI_06km_SH_89V_DAY`
 
-References: AE_SI6 [doi:10.5067/AMSR-E/AE_SI6.003](https://doi.org/10.5067/AMSR-E/AE_SI6.003)
+References: AE_SI6 [doi:10.5067/SVVXO1WXDSLW](https://doi.org/10.5067/SVVXO1WXDSLW)
