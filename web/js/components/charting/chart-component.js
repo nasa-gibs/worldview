@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   LineChart, Line, XAxis, YAxis, Legend, Tooltip,
@@ -13,6 +13,8 @@ import OlFeature from 'ol/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
 import { Vector as OlVectorLayer } from 'ol/layer';
 import { Vector as OlVectorSource } from 'ol/source';
+import { getCenter } from 'ol/extent';
+import { inAndOut } from 'ol/easing';
 import {
   Fill as OlStyleFill,
   Stroke as OlStyleStroke,
@@ -28,6 +30,7 @@ function ChartComponent (props) {
     overviewMapLayerDef,
   } = props;
 
+  const [errorCollapsed, setErrorCollapsed] = useState(true);
   const mapInstanceRef = useRef(null);
 
   const {
@@ -40,14 +43,11 @@ function ChartComponent (props) {
     title,
     STEP_NUM,
     coordinates,
+    errors,
   } = liveData;
 
+  const errorDaysArr = errors?.error_days?.replaceAll(/('|\[|\])/gi, '').split(', ') || [];
   const format = util.getCoordinateFormat();
-
-  const startDateObj = new Date(startDate);
-  const startDateFormatted = `${startDateObj.getFullYear()}-${`0${startDateObj.getMonth() + 1}`.slice(-2)}-${`0${startDateObj.getDate()}`.slice(-2)}`;
-  const endDateObj = new Date(endDate);
-  const endDateFormatted = `${endDateObj.getFullYear()}-${`0${endDateObj.getMonth() + 1}`.slice(-2)}-${`0${endDateObj.getDate()}`.slice(-2)}`;
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -252,11 +252,23 @@ function ChartComponent (props) {
         layers: [copiedLayerGroup, boxLayer],
         target: 'charting-minimap-inner',
         interactions: [],
-        controls: [],
       });
 
       const minimapView = mapInstanceRef.current.getView();
-      minimapView.fit(boxFeature.getGeometry().getExtent(), { padding: [70, 70, 70, 70] });
+      minimapView.fit(boxFeature.getGeometry().getExtent(), { padding: [50, 50, 50, 50] });
+
+      mapInstanceRef.current.on('moveend', () => {
+        const boxCenter = getCenter(boxFeature.getGeometry().getExtent());
+        const minimapCenter = minimapView.getCenter();
+        if (boxCenter[0] === minimapCenter[0] && boxCenter[1] === minimapCenter[1]) {
+          return;
+        }
+        minimapView.animate({
+          center: boxCenter,
+          duration: 350,
+          easing: inAndOut,
+        });
+      });
     };
 
     createLayerWrapper();
@@ -300,40 +312,6 @@ function ChartComponent (props) {
             />
             <Legend formatter={() => `${title}`} />
           </LineChart>
-          <div className="charting-disclaimer">
-            <strong className="charting-disclaimer-pre">Note: </strong>
-            <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
-            {isTruncated
-            && (
-              <div className="charting-disclaimer-lower">
-                <FontAwesomeIcon
-                  icon="exclamation-triangle"
-                  className="wv-alert-icon"
-                  size="1x"
-                  widthAuto
-                />
-                <i className="charting-disclaimer-block">
-                  As part of this beta feature release, the number of data points plotted between
-                  <b>
-                    {` ${startDate} `}
-                  </b>
-                  and
-                  <b>
-                    {` ${endDate} `}
-                  </b>
-                  have been reduced from
-                  <b>
-                    {` ${numRangeDays} days `}
-                  </b>
-                  to
-                  <b>
-                    {` ${STEP_NUM} days`}
-                  </b>
-                  .
-                </i>
-              </div>
-            )}
-          </div>
         </div>
         <div className="charting-stat-text">
           <div id="charting-stats-container">
@@ -349,25 +327,7 @@ function ChartComponent (props) {
           <div id="charting-minimap-container">
             <div id="charting-minimap-inner" />
           </div>
-          <div id="charting-dates-container">
-            <h3>
-              &nbsp;
-            </h3>
-            <br />
-            <div className="charting-dates-inner">
-              <div className="charting-dates-header dates-center">
-                <h3>
-                  <b>
-                    Dates
-                  </b>
-                </h3>
-              </div>
-              <div>Start:</div>
-              <div className="dates-mono">{startDateFormatted}</div>
-              <div>End:</div>
-              <div className="dates-mono">{endDateFormatted}</div>
-            </div>
-          </div>
+          <div />
           <div id="charting-coordinates-container">
             <h3>
               <b>
@@ -387,6 +347,77 @@ function ChartComponent (props) {
               <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[1]}</div>
             </div>
           </div>
+        </div>
+        <div className="charting-disclaimer">
+          <strong className="charting-disclaimer-pre">Note: </strong>
+          <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
+          {isTruncated
+          && (
+            <div className="charting-disclaimer-lower">
+              <FontAwesomeIcon
+                icon="exclamation-triangle"
+                className="wv-alert-icon"
+                size="1x"
+                widthAuto
+              />
+              <i className="charting-disclaimer-block">
+                As part of this beta feature release, the number of data points plotted between
+                <b>
+                  {` ${startDate} `}
+                </b>
+                and
+                <b>
+                  {` ${endDate} `}
+                </b>
+                have been reduced from
+                <b>
+                  {` ${numRangeDays} days `}
+                </b>
+                to
+                <b>
+                  {` ${STEP_NUM} days`}
+                </b>
+                .
+              </i>
+            </div>
+          )}
+          {errors && errors.error_count > 0
+          && (
+            <div className="charting-disclaimer-lower">
+              <FontAwesomeIcon
+                icon="exclamation-triangle"
+                className="wv-alert-icon"
+                size="1x"
+                widthAuto
+              />
+              <i className="charting-disclaimer-block">
+                {`${errors.error_count} `}
+                dates requested have no data, so are not shown in the chart.
+              </i>
+              {!errorCollapsed
+              && (
+                <div className="charting-disclaimer-dates">
+                  <i className="charting-disclaimer-block">
+                    {errorDaysArr.map((date, index) => (
+                      <>
+                        {date.split('T')[0]}
+                        {index < errorDaysArr.length - 1 && ', '}
+                        &nbsp;
+                      </>
+                    ))}
+                  </i>
+                </div>
+              )}
+              <span className="error-expand-button" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+                {errorCollapsed ? 'more' : 'less'}
+                <FontAwesomeIcon
+                  className="layer-group-collapse"
+                  icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
+                  widthAuto
+                />
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </div>

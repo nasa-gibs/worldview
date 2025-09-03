@@ -677,6 +677,8 @@ div#group-overlays-checkbox-case {
 
 .charting-chart-container .charting-disclaimer {
   padding: 18px;
+  margin-top: -50px;
+  width: calc(600px + 18%);
 }
 
 .charting-disclaimer {
@@ -690,6 +692,22 @@ div#group-overlays-checkbox-case {
 
 .charting-disclaimer-lower {
   margin-top: 10px;
+}
+
+.charting-disclaimer-dates {
+  padding-top: 10px;
+  margin-left: 60px;
+}
+
+.error-expand-button {
+  float: right;
+  cursor: pointer;
+  padding: 5px;
+  margin-top: -3px;
+
+  & > svg {
+    margin-left: 10px;
+  }
 }
 
 .wv-alert-icon {
@@ -712,6 +730,17 @@ div#group-overlays-checkbox-case {
   width: 100%;
   height: 165px;
   margin: auto;
+
+  .ol-zoom {
+    right: 8px;
+    left: auto;
+
+    .ol-zoom-in, .ol-zoom-out {
+      color: #c7c7c7;
+      background-color: #434343;
+      border: solid .5px;
+    }
+  }
 }
 
 #charting-coordinates-container {
@@ -803,6 +832,13 @@ div#group-overlays-checkbox-case {
 
   .modal-header {
     cursor: move;
+
+    .charting-chart-subheader {
+      margin-left: 20px;
+      font-weight: normal;
+      font-size: 90%;
+      color: #c7c7c7;
+    }
   }
 }
 
