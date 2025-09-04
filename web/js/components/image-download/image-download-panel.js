@@ -108,7 +108,7 @@ function ImageDownloadPanel(props) {
       pixelBbox: boundaries,
       map,
       worldfile: currIsWorldfile,
-      useHighResTiles: !globalSelected,
+      useHighResTileGrids: !globalSelected,
       abortSignal: abortController.signal,
       filename: `snapshot-${date.toISOString()}`,
     };

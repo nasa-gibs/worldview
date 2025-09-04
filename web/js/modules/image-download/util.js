@@ -1028,7 +1028,7 @@ export async function snapshot(options) {
     pixelBbox,
     map,
     worldfile,
-    useHighResTileGrids = true,
+    useHighResTileGrids,
     abortSignal,
     filename = 'Worldview Snapshot',
   } = options;
