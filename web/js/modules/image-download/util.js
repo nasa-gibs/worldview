@@ -793,9 +793,7 @@ function createRenderCompleteCallback (options) {
         logging: false,
         imageTimeout: 0,
         removeContainer: true,
-        ignoreElements: (element) => { // this is super finicky, maybe prep the mapElement by hiding elements using css
-          return element.classList.contains('ol-overlaycontainer-stopevent');
-        },
+        ignoreElements: (element) => element.classList.contains('ol-overlaycontainer-stopevent'), // this is super finicky, maybe prep the mapElement by hiding elements using css,
       });
 
       const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
