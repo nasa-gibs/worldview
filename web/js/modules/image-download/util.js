@@ -598,23 +598,23 @@ function updateHighResTileGrids (layer) {
 
   const tileGrid = new TileGridConstructor({
     ...originalTileGrid,
-    origin: originalTileGrid.getOrigin(),
-    extent: originalTileGrid.getExtent(),
+    origin: originalTileGrid.getOrigin?.() || originalTileGrid.origin_,
+    extent: originalTileGrid.getExtent?.() || originalTileGrid.extent_,
     resolutions: maxResolutions,
     matrixIds: maxMatrixIds,
-    tileSize: originalTileGrid.getTileSize(),
+    tileSize: originalTileGrid.getTileSize?.() || originalTileGrid.tileSize_,
   });
 
   const sourceOptions = {
     ...originalSource,
-    urls: originalSource.getUrls?.(),
-    format: originalSource.getFormat?.(),
-    projection: originalSource.getProjection?.(),
+    urls: originalSource.getUrls?.() || originalSource.urls_,
+    format: originalSource.getFormat?.() || originalSource.format_,
+    projection: originalSource.getProjection?.() || originalSource.projection_,
     tileGrid,
-    layer: originalSource.getLayer?.(),
-    tileLoadFunction: originalSource.getTileLoadFunction?.(),
-    matrixSet: originalSource.getMatrixSet?.(),
-    dimensions: originalSource.getDimensions?.(),
+    layer: originalSource.getLayer?.() || originalSource.layer_,
+    tileLoadFunction: originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_,
+    matrixSet: originalSource.getMatrixSet?.() || originalSource.matrixSet_,
+    dimensions: originalSource.getDimensions?.() || originalSource.dimensions_,
     crossOrigin: 'anonymous',
   };
 
@@ -793,6 +793,9 @@ function createRenderCompleteCallback (options) {
         logging: false,
         imageTimeout: 0,
         removeContainer: true,
+        ignoreElements: (element) => { // this is super finicky, maybe prep the mapElement by hiding elements using css
+          return element.classList.contains('ol-overlaycontainer-stopevent');
+        },
       });
 
       const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
