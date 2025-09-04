@@ -208,12 +208,34 @@ function ChartComponent (props) {
   function getLineChart(chartData) {
     const chartLineName = getLineNames(chartData);
 
+    function CustomizedDot(props) {
+      const {
+        cx,
+        cy,
+        fill,
+        stroke,
+      } = props;
+      const radius = 1;
+
+      const transformFunc = `translate(${radius + 1} ${radius + 1})`;
+
+      return (
+        <svg x={cx - radius - 1} y={cy - radius - 1}>
+          <g transform={transformFunc}>
+            <circle r={radius + 0.5} fill={stroke} />
+            <circle r={radius - 0.5} fill={fill} />
+          </g>
+        </svg>
+      );
+    }
+
     const chartLinesArr = chartLineName.map((id, index) => (
       <Line
         type="linear"
         key={id}
         dataKey={chartLineName[index]}
         stroke={lineColors[index]}
+        dot={<CustomizedDot />}
       />
     ));
     return chartLinesArr;
