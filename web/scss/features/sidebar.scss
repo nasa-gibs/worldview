@@ -718,7 +718,7 @@ div#group-overlays-checkbox-case {
 }
 
 .charting-disclaimer-block {
-  line-height: 20px;
+  line-height: 35px;
 }
 
 #charting-minimap-container {
@@ -739,6 +739,17 @@ div#group-overlays-checkbox-case {
       color: #c7c7c7;
       background-color: #434343;
       border: solid .5px;
+    }
+
+    .ol-zoom-in {
+      padding-bottom: 1px;
+      padding-left: .5px;
+    }
+
+    .ol-zoom-out {
+      margin-top: -2px;
+      padding-bottom: 2px;
+      padding-left: .5px;
     }
   }
 }
