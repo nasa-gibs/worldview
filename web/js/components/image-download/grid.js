@@ -37,8 +37,12 @@ export default class ResolutionTable extends React.Component {
   render() {
     const imageSize = this.renderImageSize();
     const {
-      width, height, maxImageSize, onClick, validLayers, validSize,
+      width, height, maxImageSize, onClick, validLayers, validSize, isSnapshotInProgress,
     } = this.props;
+
+    const isDownloadDisabled = !validSize || !validLayers || isSnapshotInProgress;
+    const buttonText = isSnapshotInProgress ? 'Creating...' : 'Download';
+
     return (
       <div className="wv-image-download-grid">
         <div className="grid-child grid-head">
@@ -65,11 +69,12 @@ export default class ResolutionTable extends React.Component {
         </div>
         <div className="grid-child wv-image-button">
           <Button
-            text="Download"
+            text={buttonText}
             onClick={() => {
               onClick(width, height);
             }}
-            valid={validSize && validLayers}
+            valid={!isDownloadDisabled}
+            disabled={isDownloadDisabled}
           />
         </div>
       </div>
@@ -84,4 +89,5 @@ ResolutionTable.propTypes = {
   validLayers: PropTypes.bool,
   validSize: PropTypes.bool,
   width: PropTypes.number,
+  isSnapshotInProgress: PropTypes.bool,
 };
