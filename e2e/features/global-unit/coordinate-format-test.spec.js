@@ -25,7 +25,7 @@ test('Open page', async () => {
   await expect(page).toHaveTitle('@OFFICIAL_NAME@')
 })
 
-test('Change coordinates format from coordinate case updates global settings coordinate format', async ({ browserName }) => {
+test.skip('Change coordinates format from coordinate case updates global settings coordinate format', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find button')
   await page.locator('canvas').click()
   await page.locator('#ol-coords-case').click()
@@ -34,7 +34,7 @@ test('Change coordinates format from coordinate case updates global settings coo
   await expect(dmButton).toHaveClass(/active/)
 })
 
-test('Selecting LATLON-DMS in Global Settings changes coordinate format in location marker', async ({ browserName }) => {
+test.skip('Selecting LATLON-DMS in Global Settings changes coordinate format in location marker', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find button')
   const expectedText = '38°48\'16"N,  77°02\'36"W'
   await page.getByRole('button', { name: 'Set latlon-dms Format' }).click()

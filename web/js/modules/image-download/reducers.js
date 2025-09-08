@@ -12,7 +12,7 @@ export const defaultState = {
   fileType: 'image/jpeg',
   boundaries: undefined,
   isWorldfile: false,
-  resolution: '',
+  resolution: undefined,
 };
 
 export function imageDownloadReducer(state = defaultState, action) {

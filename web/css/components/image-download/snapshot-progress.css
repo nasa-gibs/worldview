@@ -1,0 +1,83 @@
+/* Snapshot progress styles */
+.wv-snapshot-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 4px;
+  flex-direction: column;
+}
+
+.wv-snapshot-progress-message {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #495057;
+}
+
+.wv-snapshot-progress-message::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border: 2px solid #007bff;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: wv-snapshot-spin 1s linear infinite;
+}
+
+.wv-snapshot-progress-actions {
+  flex-shrink: 0;
+  padding: 1rem;
+}
+
+@keyframes wv-snapshot-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Update button styles for cancel button */
+.wv-button-red {
+  background-color: #d73527 !important;
+  border-color: #d73527 !important;
+  color: white !important;
+}
+
+.wv-button-red:hover {
+  background-color: #c12e1f !important;
+  border-color: #c12e1f !important;
+}
+
+.wv-button-red:focus {
+  box-shadow: 0 0 0 0.2rem rgba(215, 53, 39, 0.5) !important;
+}
+
+.wv-snapshot-progress-dialog {
+  position: absolute;
+  left: 0;
+  top: 40%;
+  z-index: 9999999999;
+  box-sizing: unset;
+  opacity: 1;
+
+  button {
+    cursor: pointer;
+  }
+
+  ::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0.9;
+  }
+}
+
+::backdrop, .wv-snapshot-progress-overlay {
+  background-color: black;
+  opacity: 0.9;
+  cursor: wait;
+  width: 100%;
+  height: 100%;
+}

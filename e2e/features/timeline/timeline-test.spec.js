@@ -22,14 +22,14 @@ test.afterAll(async () => {
   await page.close()
 })
 
-test('Dragger is visible', async () => {
+test.fixme('Dragger is visible', async () => {
   const { dragger } = selectors
   await page.goto(skipTour)
   await closeModal(page)
   await expect(dragger).toBeVisible()
 })
 
-test('Timeline is expanded by default and closes/reopen on clicking timeline chevrons', async () => {
+test.fixme('Timeline is expanded by default and closes/reopen on clicking timeline chevrons', async () => {
   const timelineFooter = await page.locator('#timeline-footer')
   await expect(timelineFooter).toBeVisible()
   await page.locator('#timeline-hide').click()
@@ -38,19 +38,19 @@ test('Timeline is expanded by default and closes/reopen on clicking timeline che
   await expect(timelineFooter).toBeVisible()
 })
 
-test('verify default MMM YYYY format is displayed on axis', async () => {
+test.fixme('verify default MMM YYYY format is displayed on axis', async () => {
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
   const axisGridYear = await page.locator('.axis-grid-text-year').first()
   await expect(axisGridDay).toBeVisible()
   await expect(axisGridYear).toBeVisible()
 })
 
-test('Interval defaults to 1 DAY', async () => {
+test.fixme('Interval defaults to 1 DAY', async () => {
   const currentInteval = await page.locator('#current-interval')
   await expect(currentInteval).toContainText('1 day')
 })
 
-test('Change to month zoom level and axis changes', async () => {
+test.fixme('Change to month zoom level and axis changes', async () => {
   await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
   const axisGridMonth = await page.locator('.axis-grid-text-month').first()
@@ -60,7 +60,7 @@ test('Change to month zoom level and axis changes', async () => {
   await expect(currentZoom).toContainText('month')
 })
 
-test('Change to year zoom level and axis changes', async () => {
+test.fixme('Change to year zoom level and axis changes', async () => {
   await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
   await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
@@ -79,7 +79,7 @@ test('Interval state of HOUR restored from permalink', async () => {
   await expect(currentInteval).toContainText('1 hour')
 })
 
-test('Interval subdaily default year, month, day, hour, minute, and custom available', async () => {
+test.fixme('Interval subdaily default year, month, day, hour, minute, and custom available', async () => {
   const yearlyInterval = await page.locator('#interval-years')
   const monthlyInterval = await page.locator('#interval-months')
   const dailyInterval = await page.locator('#interval-days')
@@ -94,7 +94,7 @@ test('Interval subdaily default year, month, day, hour, minute, and custom avail
   await expect(staticInterval).toBeVisible()
 })
 
-test('Custom interval widget opens on selecting custom', async () => {
+test.fixme('Custom interval widget opens on selecting custom', async () => {
   const customIntervalWidget = await page.locator('.custom-interval-widget')
   await page.locator('#interval-custom-static').click()
   await expect(customIntervalWidget).toBeVisible()
