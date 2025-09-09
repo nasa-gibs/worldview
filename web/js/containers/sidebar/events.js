@@ -78,11 +78,11 @@ function Events(props) {
           {showDates && `${startDate} - ${endDate}`}
         </div>
         <div className="filter-icons">
-          {selectedCategories.map(({ title }) => (
+          {selectedCategories.map(({ title, id }) => (
             <EventIcon
               id="filter-"
-              key={title}
-              category={title}
+              key={id}
+              category={id}
               title={title}
             />
           ))}
@@ -98,7 +98,7 @@ function Events(props) {
         block
         disabled={isLoading}
       >
-        <FontAwesomeIcon icon="filter" />
+        <FontAwesomeIcon icon="filter" widthAuto />
       </Button>
     </div>
   );
@@ -145,7 +145,7 @@ function Events(props) {
           {isLoading || hasRequestError ? (
             // notranslate included below to prevent Google Translate extension from crashing the page
             <div className="events-loading-text notranslate">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth />)}
+              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
               {errorOrLoadingText}
             </div>
           ) : renderEventList()}

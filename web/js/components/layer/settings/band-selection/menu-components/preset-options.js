@@ -12,6 +12,8 @@ const landsatPresets = [
     r: 'B05',
     g: 'B04',
     b: 'B03',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_False_Color_Landsat_th.jpg',
   },
   {
@@ -20,6 +22,8 @@ const landsatPresets = [
     r: 'B07',
     g: 'B06',
     b: 'B04',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_False_Color_Urban_Landsat_th.jpg',
   },
   {
@@ -28,6 +32,8 @@ const landsatPresets = [
     r: 'B06',
     g: 'B05',
     b: 'B04',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_False_Color_Vegetation_Landsat_th.jpg',
   },
   {
@@ -36,6 +42,8 @@ const landsatPresets = [
     r: 'B07',
     g: 'B05',
     b: 'B04',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_SWIR_Landsat_th.jpg',
   },
   {
@@ -45,6 +53,7 @@ const landsatPresets = [
     expression: '(B05-B04)/(B05+B04)',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_NDVI_Landsat_th.jpg',
   },
   {
@@ -54,6 +63,7 @@ const landsatPresets = [
     expression: '(B03-B05)/(B03+B05)',
     rescale: '-1,1',
     colormap_name: 'gnbu',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_NDWI_Landsat_th.jpg',
   },
   {
@@ -63,6 +73,7 @@ const landsatPresets = [
     expression: '(B03-B06)/(B03+B06)',
     rescale: '-1,1',
     colormap_name: 'winter_r',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_NDSI_Landsat_th.jpg',
   },
   {
@@ -72,6 +83,7 @@ const landsatPresets = [
     expression: '(B05-B06)/(B05+B06)',
     rescale: '-1,1',
     colormap_name: 'bwr_r',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_NDMI_Landsat_th.jpg',
   },
   {
@@ -81,6 +93,7 @@ const landsatPresets = [
     expression: '(2.5*(B05-B04))/(B05+6*B04-7.5*B02+1)',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_EVI_Landsat_th.jpg',
   },
   {
@@ -90,6 +103,7 @@ const landsatPresets = [
     expression: '1.5*((B05-B04)/(B05+B04+0.5))',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_SAVI_Landsat_th.jpg',
   },
   {
@@ -99,6 +113,7 @@ const landsatPresets = [
     expression: '(2*B05+1-sqrt((2*B05+1)**2-8*(B05-B04)))/2',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_MSAVI_Landsat_th.jpg',
   },
   {
@@ -108,6 +123,7 @@ const landsatPresets = [
     expression: '(B05-B07)/(B05+B07)',
     rescale: '-1,1',
     colormap_name: 'puor',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_NBR_Landsat_th.jpg',
   },
   {
@@ -117,6 +133,7 @@ const landsatPresets = [
     expression: '(B06-B07)/(B06+B07)',
     rescale: '-1,1',
     colormap_name: 'puor',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_NBR2_Landsat_th.jpg',
   },
   {
@@ -126,6 +143,7 @@ const landsatPresets = [
     expression: '(120*(B05-B03)-200*(B04-B03))/2',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9]',
     img: 'HLS_TVI_Landsat_th.jpg',
   },
 ];
@@ -137,6 +155,8 @@ const sentinelPresets = [
     r: 'B08',
     g: 'B04',
     b: 'B03',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_False_Color_Sentinel_th.jpg',
   },
   {
@@ -145,6 +165,8 @@ const sentinelPresets = [
     r: 'B12',
     g: 'B11',
     b: 'B04',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_False_Color_Urban_Sentinel_th.jpg',
   },
   {
@@ -153,6 +175,8 @@ const sentinelPresets = [
     r: 'B11',
     g: 'B8A',
     b: 'B04',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_False_Color_Vegetation_Sentinel_th.jpg',
   },
   {
@@ -161,6 +185,8 @@ const sentinelPresets = [
     r: 'B12',
     g: 'B8A',
     b: 'B04',
+    color_formula: 'Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_SWIR_Sentinel_th.jpg',
   },
   {
@@ -170,6 +196,7 @@ const sentinelPresets = [
     expression: '(B08-B04)/(B08+B04)',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     asset_as_band: true,
     img: 'HLS_NDVI_Sentinel_th.jpg',
   },
@@ -180,6 +207,7 @@ const sentinelPresets = [
     expression: '(B03-B08)/(B03+B08)',
     rescale: '-1,1',
     colormap_name: 'gnbu',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     asset_as_band: true,
     img: 'HLS_NDWI_Sentinel_th.jpg',
   },
@@ -190,6 +218,7 @@ const sentinelPresets = [
     expression: '(B03-B11)/(B03+B11)',
     rescale: '-1,1',
     colormap_name: 'winter_r',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     asset_as_band: true,
     img: 'HLS_NDSI_Sentinel_th.jpg',
   },
@@ -200,6 +229,7 @@ const sentinelPresets = [
     expression: '(B8A-B11)/(B8A+B11)',
     rescale: '-1,1',
     colormap_name: 'bwr_r',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     asset_as_band: true,
     img: 'HLS_NDMI_Sentinel_th.jpg',
   },
@@ -210,6 +240,7 @@ const sentinelPresets = [
     expression: '(2.5*(B8A-B04))/(B8A+6*B04-7.5*B02+1)',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_EVI_Sentinel_th.jpg',
   },
   {
@@ -219,6 +250,7 @@ const sentinelPresets = [
     expression: '1.428*((B8A-B04)/(B8A+B04+0.428))',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_SAVI_Sentinel_th.jpg',
   },
   {
@@ -228,6 +260,7 @@ const sentinelPresets = [
     expression: '(2*B8A+1-sqrt((2*B8A+1)**2-8*(B8A-B04)))/2',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_MSAVI_Sentinel_th.jpg',
   },
   {
@@ -237,6 +270,7 @@ const sentinelPresets = [
     expression: '(B8A-B12)/(B8A+B12)',
     rescale: '-1,1',
     colormap_name: 'puor',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_NBR_Sentinel_th.jpg',
   },
   {
@@ -246,6 +280,7 @@ const sentinelPresets = [
     expression: '(B11-B12)/(B11+B12)',
     rescale: '-1,1',
     colormap_name: 'puor',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_NBR2_Sentinel_th.jpg',
   },
   {
@@ -255,6 +290,7 @@ const sentinelPresets = [
     expression: '(120*(B8A-B03)-200*(B04-B03))/2',
     rescale: '-1,1',
     colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
     img: 'HLS_TVI_Sentinel_th.jpg',
   },
 ];
@@ -273,6 +309,8 @@ export default function PresetOptions(props) {
       expression: preset.expression,
       rescale: preset.rescale,
       colormap_name: preset.colormap_name,
+      color_formula: preset.color_formula,
+      bands_regex: preset.bands_regex,
       asset_as_band: preset.asset_as_band,
     });
   };

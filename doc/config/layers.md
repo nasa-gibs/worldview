@@ -98,6 +98,8 @@ Example:
 * **description**: Point to a markdown file within the metadata folder to provide a layer description.
 * **disableSnapshot**: Disable Worldview Snapshots (WVS) for layer.
 * **disableSmartHandoff**: Disable data download capability for a layer.
+* **disableCustomPalettes**: Disable the option to change the layer's palette (for vector layers).
+* **disableCharting**: Disable the ability for the layer to be charted using charting mode.
 * **wrapadjacentdays**: Wrap the layer across the anti-meridian but select the previous day when greater than 180 and the next day when less than -180.
 * **wrapX**: Wrap the layer across the anti-meridian.
 * **palette**: To display a color palette legend, a `palette` object should exist with the following properties:
@@ -114,6 +116,9 @@ Example:
 * **count**: Used to override the default number of granules displayed on the map and in the granule count slider component for granule layers.
 * **dataAvailability**: String - `cmr` or `dd`. Get the layer's data availability from either the CMR API or GIBS DescribeDomains request.
 * **shiftadjacentdays**: Boolean - Whether or not to shift granules across the dateline when they're for an adjacent day. Defaults to `true` when `null` or `undefined`.
+* **renderOrder**: Object - An object describing the method of sorting the features and the property on which to sort the features. Only applicable for layers with `"type": "vector"`:
+  * **property**: String - The feature property to use when sorting the features.
+  * **order**: String - The sorting method. Only `"ascending"` and `"descending"` are valid values. Any other value will result in the features not being sorted.
 
 ## Full Example
 

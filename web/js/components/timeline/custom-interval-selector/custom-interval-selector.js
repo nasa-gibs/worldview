@@ -75,7 +75,7 @@ function CustomIntervalSelector(props) {
           changeZoomLevel={changeZoomLevel}
         />
       </div>
-      <FontAwesomeIcon icon="times" className="wv-close" onClick={closeModal} />
+      <FontAwesomeIcon icon="times" className="wv-close" onClick={closeModal} widthAuto />
     </div>
   );
 }

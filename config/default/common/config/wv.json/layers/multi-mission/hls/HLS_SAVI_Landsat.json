@@ -7,9 +7,9 @@
       "title": "Soil Adjusted Vegetation Index (SAVI) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_SAVI_Landsat",
-      "tags": "corrected surface landsat oli l30 savi",
+      "tags": "surface landsat oli l30 savi",
       "group": "overlays",
-      "layergroup": "Land Surface Reflectance",
+      "layergroup": "Vegetation Indices",
       "format": "image/png",
       "type": "titiler",
       "period": "daily",
@@ -19,7 +19,8 @@
         "assets": ["B05", "B04"],
         "expression": "1.5*((B05-B04)/(B05+B04+0.5))",
         "rescale": "-1,1",
-        "colormap_name": "brbg"
+        "colormap_name": "brbg",
+        "bands_regex": "B[0-9][0-9]"
       },
       "disableSnapshot": true,
       "minZoom": 7,

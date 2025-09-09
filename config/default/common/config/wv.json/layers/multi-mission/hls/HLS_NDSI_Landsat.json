@@ -7,7 +7,7 @@
         "title": "Snow Index (NDSI) *BETA*",
         "subtitle": "Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDSI_Landsat",
-        "tags": "corrected surface landsat oli l30 ndsi",
+        "tags": "surface landsat oli l30 ndsi",
         "group": "overlays",
         "layergroup": "Snow Indices",
         "format": "image/png",
@@ -19,7 +19,8 @@
             "assets": ["B06", "B03"],
             "expression": "(B03-B06)/(B03+B06)",
             "rescale": "-1,1",
-            "colormap_name": "winter_r"
+            "colormap_name": "winter_r",
+            "bands_regex": "B[0-9][0-9]"
         },
         "disableSnapshot": true,
         "minZoom": 7,

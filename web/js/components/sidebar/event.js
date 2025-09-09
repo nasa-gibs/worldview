@@ -63,7 +63,7 @@ function Event (props) {
       googleTagManager.pushEvent({
         event: 'natural_event_selected',
         natural_events: {
-          category: event.categories[0].title,
+          category: event.categories[0].id,
         },
       });
     }
@@ -169,7 +169,7 @@ function Event (props) {
                 e.stopPropagation();
               }}
             >
-              <FontAwesomeIcon icon="external-link-alt" />
+              <FontAwesomeIcon icon="external-link-alt" widthAuto />
               {` ${source.title}`}
             </a>
           );
@@ -195,7 +195,11 @@ function Event (props) {
         onEventHighlight(false);
       }}
     >
-      <EventIcon id={`${event.id}-list`} category={event.categories[0].title} />
+      <EventIcon
+        id={`${event.id}-list`}
+        category={event.categories[0].id}
+        title={event.categories[0].title}
+      />
       <h4
         className="title"
       >

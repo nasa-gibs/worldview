@@ -321,7 +321,7 @@ class CoverageItemList extends Component {
   createEmptyLayersDOMEl = () => (
     <div className="layer-coverage-list-empty">
       <div className="layer-coverage-item-empty">
-        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" />
+        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" widthAuto />
         <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
       </div>
     </div>

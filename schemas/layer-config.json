@@ -307,6 +307,9 @@
         "disableSmartHandoff": {
           "type": "boolean"
         },
+        "disableCharting": {
+          "type": "boolean"
+        },
         "temporal": {
           "type": "string"
         }

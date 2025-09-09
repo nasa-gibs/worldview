@@ -6,7 +6,7 @@ import { mapUtilZoomAction } from '../../map/util';
 import HoverTooltip from '../util/hover-tooltip';
 
 function Zoom({
-  map, zoomLevel, numZoomLevels, isDistractionFreeModeActive, isMobile,
+  map, zoomLevel, numZoomLevels, isDistractionFreeModeActive, isMobile, isChartingActive,
 }) {
   const zoomInDisabled = zoomLevel === numZoomLevels;
   const zoomOutDisabled = zoomLevel === 0;
@@ -14,7 +14,7 @@ function Zoom({
 
   const zoomButtonClass = isMobile ? 'wv-zoom-buttons-mobile' : 'wv-zoom-buttons';
 
-  return !isDistractionFreeModeActive && (
+  return !isDistractionFreeModeActive && !isChartingActive && (
     <div className={zoomButtonClass}>
       <button
         type="button"
@@ -31,7 +31,7 @@ function Zoom({
           target=".wv-map-zoom-in"
         />
         )}
-        <FontAwesomeIcon icon="plus" />
+        <FontAwesomeIcon icon="plus" widthAuto />
       </button>
       <button
         type="button"
@@ -48,7 +48,7 @@ function Zoom({
           target=".wv-map-zoom-out"
         />
         )}
-        <FontAwesomeIcon icon="minus" />
+        <FontAwesomeIcon icon="minus" widthAuto />
       </button>
     </div>
   );
@@ -56,7 +56,7 @@ function Zoom({
 
 const mapStateToProps = (state) => {
   const {
-    screenSize, map, proj, ui,
+    screenSize, map, proj, ui, charting,
   } = state;
   const activeMap = map.ui.selected;
   const isMobile = screenSize.isMobileDevice;
@@ -66,6 +66,7 @@ const mapStateToProps = (state) => {
     numZoomLevels: proj.selected.numZoomLevels,
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isMobile,
+    isChartingActive: charting.active,
   };
 };
 
@@ -73,6 +74,7 @@ Zoom.propTypes = {
   map: PropTypes.object,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   numZoomLevels: PropTypes.number,
   zoomLevel: PropTypes.number,
 };

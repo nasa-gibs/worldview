@@ -5,7 +5,26 @@
       "description": "airs/AIRS_L2_RelativeHumidity_500hPa_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Relative Humidity"
+      "layergroup": "Relative Humidity",
+      "wrapadjacentdays": true,
+      "projections": {
+          "arctic": {
+            "id": "AIRS_L2_RelativeHumidity_500hPa_Polar",
+            "layer": "AIRS_L2_RelativeHumidity_500hPa_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:arctic",
+            "matrixSet": "1km"
+          },
+          "antarctic": {
+            "id": "AIRS_L2_RelativeHumidity_500hPa_Polar",
+            "layer": "AIRS_L2_RelativeHumidity_500hPa_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:antarctic",
+            "matrixSet": "1km"
+          }
+        }
     }
   }
 }

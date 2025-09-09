@@ -14,7 +14,7 @@
         },
         {
           "title": "OPERA - DSWx Product Suite",
-          "link": "https://www.jpl.nasa.gov/go/opera/products/dswx-product-suite"
+          "link": "https://jpl.nasa.gov/go/opera/products/dswx-product-suite"
         }
       ],
       "steps": [
@@ -61,7 +61,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=66.26097333885345,26.790353652558686,70.01383041589206,28.640735154174614&l=Reference_Labels_15m,Coastlines_15m,HLS_Customizable_Landsat(bandCombo=%7B%22r%22%3A%22B07%22;%22g%22%3A%22B05%22;%22b%22%3A%22B04%22%7D),Land_Water_Map&lg=true&l1=Reference_Labels_15m,Coastlines_15m,HLS_Customizable_Landsat(bandCombo=%7B%22r%22%3A%22B07%22;%22g%22%3A%22B05%22;%22b%22%3A%22B04%22%7D),Land_Water_Map&lg1=true&ca=false&t=2023-05-03-T00%3A00%3A00Z&t1=2023-08-07-T00%3A00%3A00Z"
+          "stepLink": "v=66.26097333885345,26.790353652558686,70.01383041589206,28.640735154174614&l=Reference_Labels_15m,Coastlines_15m,HLS_Shortwave_Infrared_Landsat(bandCombo={\"r\"%3A\"B07\";\"g\"%3A\"B05\";\"b\"%3A\"B04\";\"color_formula\"%3A\"Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35\";\"bands_regex\"%3A\"B[0-9][0-9]\"}),Land_Water_Map&lg=true&l1=Reference_Labels_15m,Coastlines_15m,HLS_Shortwave_Infrared_Landsat(bandCombo={\"r\"%3A\"B07\";\"g\"%3A\"B05\";\"b\"%3A\"B04\";\"color_formula\"%3A\"Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35\";\"bands_regex\"%3A\"B[0-9][0-9]\"}),Land_Water_Map&lg1=true&ca=false&t=2023-05-03-T00%3A00%3A00Z&t1=2023-08-07-T00%3A00%3A00Z"
         },
         {
           "id": "006",

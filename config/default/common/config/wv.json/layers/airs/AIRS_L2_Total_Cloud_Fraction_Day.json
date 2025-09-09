@@ -5,7 +5,26 @@
       "description": "airs/AIRS_L2_Total_Cloud_Fraction_Day",
       "tags": "",
       "group": "overlays",
-      "layergroup": "Cloud Fraction"
+      "layergroup": "Cloud Fraction",
+      "wrapadjacentdays": true,
+      "projections": {
+          "arctic": {
+            "id": "AIRS_L2_Total_Cloud_Fraction_Polar",
+            "layer": "AIRS_L2_Total_Cloud_Fraction_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:arctic",
+            "matrixSet": "1km"
+          },
+          "antarctic": {
+            "id": "AIRS_L2_Total_Cloud_Fraction_Polar",
+            "layer": "AIRS_L2_Total_Cloud_Fraction_Polar",
+            "subtitle": "Aqua / AIRS",
+            "type": "wmts",
+            "source": "GIBS:antarctic",
+            "matrixSet": "1km"
+          }
+        }
     }
   }
 }

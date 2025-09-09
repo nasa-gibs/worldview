@@ -4,13 +4,13 @@
       "id": "hls_intro",
       "type": "default",
       "title": "Harmonized Landsat Sentinel-2",
-      "description": "Introducing daily 30 meter resolution imagery!",
+      "description": "Introducing 30-meter resolution imagery every 2-3 days!",
       "backgroundImage": "hls-overview.png",
       "backgroundImageHover": "",
       "readMoreLinks": [
         {
           "title": "Harmonized Landsat Sentinel-2 (HLS)",
-          "link": "https://earthdata.nasa.gov/esds/harmonized-landsat-sentinel-2"
+          "link": "https://www.earthdata.nasa.gov/data/projects/hls"
         },
         {
           "title": "HLSL30 v002 HLS Landsat Operational Land Imager Surface Reflectance and TOA Brightness Daily Global 30m",

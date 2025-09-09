@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380": {
+      "id": "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
+      "description": "omps/noaa20/OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
+      "tags": "ai PyroCb flammagenitus",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Aerosol Index"
+    }
+  }
+}

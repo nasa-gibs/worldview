@@ -47,7 +47,7 @@ export default class VectorMetaTooltip extends React.Component {
         key={elId}
       >
         <div id={elId} className="sub-case">
-          <FontAwesomeIcon icon="info" className="vector-info-icon cursor-pointer" />
+          <FontAwesomeIcon icon="info" className="vector-info-icon cursor-pointer" widthAuto />
         </div>
         <Tooltip
           id="center-align-tooltip"

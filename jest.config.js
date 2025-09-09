@@ -1,17 +1,17 @@
 module.exports = {
   setupFiles: [
     'jest-canvas-mock',
-    'jsdom-worker'
+    'jsdom-worker',
+    './setupJest.js'
   ],
   moduleDirectories: [
     'node_modules'
   ],
   moduleNameMapper: {
-    '^googleTagManager$': '<rootDir>/web/js/components/util/google-tag-manager.js'
+    '^googleTagManager$': '<rootDir>/web/js/components/util/google-tag-manager.js',
+    '^ol-mapbox-style$': '<rootDir>/node_modules/ol-mapbox-style/src/index.js'
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(ol|ol-mapbox-style|quick-lru|geotiff|@mapbox|node-fetch|data-uri-to-buffer|fetch-blob|formdata-polyfill|color-space|color-rgba|color-parse|rbush|quickselect|pbf|earcut)/)'
-  ],
+  transformIgnorePatterns: [],
   testPathIgnorePatterns: [
     '<rootDir>/e2e/'
   ],

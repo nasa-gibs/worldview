@@ -88,7 +88,7 @@ const MeasureButton = function () {
         >
           {labelText}
         </UncontrolledTooltip>
-        <FontAwesomeIcon icon="ruler" size={faSize} />
+        <FontAwesomeIcon icon="ruler" size={faSize} widthAuto />
       </Button>
       )}
     </>

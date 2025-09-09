@@ -32,6 +32,8 @@ export default function BandSelection({ layer }) {
     r: layer.bandCombo.r,
     g: layer.bandCombo.g,
     b: layer.bandCombo.b,
+    color_formula: layer.bandCombo.color_formula,
+    bands_regex: layer.bandCombo.bands_regex,
   });
 
   const confirmSelection = () => {
@@ -65,7 +67,7 @@ export default function BandSelection({ layer }) {
       <div>
         <div className="band-selection-title-row">
           <h3>Select a band for each channel:</h3>
-          <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" /></span>
+          <span><FontAwesomeIcon id="band-selection-title-info-icon" icon="info-circle" widthAuto /></span>
           <UncontrolledTooltip
             id="band-selection-title-tooltip"
             target="band-selection-title-info-icon"

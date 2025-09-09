@@ -1,12 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 const console = require('console')
 const axios = require('axios').default
 
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .option('features', {
     demandOption: true,
@@ -98,7 +99,9 @@ const skipLayers = [
   'AERONET_AOD_500NM',
   'AERONET_ANGSTROM_440-870NM',
   'DAILY_AERONET_AOD_500NM',
-  'DAILY_AERONET_ANGSTROM_440-870NM'
+  'DAILY_AERONET_ANGSTROM_440-870NM',
+  'NOAA_2025_ERI_WMTS',
+  'Reference_Labels_15m_arctic'
 ]
 
 // NOTE: Only using these properties at this time

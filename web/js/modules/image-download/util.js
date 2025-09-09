@@ -190,7 +190,7 @@ export function imageUtilGetLayers(products, proj, activePalettes) {
     }
     const disabled = activePalettes?.[layer.id]?.maps?.[0]?.disabled;
     if (Array.isArray(disabled)) {
-      return `${layerId}(disabled=${disabled.join('-')})`;
+      return `${layerId}%28disabled=${disabled.join('-')}%29`;
     }
     return layerId;
   });

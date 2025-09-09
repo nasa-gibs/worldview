@@ -2,15 +2,14 @@
   "layers": {
     "TEMPO_L3_Cloud_Cloud_Pressure_Total": {
       "id": "TEMPO_L3_Cloud_Cloud_Pressure_Total",
-      "title": "Clouds (L3, Cloud Pressure Total, Subdaily) (BETA)",
+      "title": "Clouds (L3, Cloud Pressure Total, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Cloud_Cloud_Pressure_Total",
       "tags": "",
       "group": "overlays",
       "layergroup": "Cloud Pressure",
       "dataAvailability": "dd",
-      "startDate": "2024-05-13T10:30:00Z",
-      "disableSnapshot": true,
+      "startDate": "2023-08-02T15:00:00Z",
       "shiftadjacentdays": false
     }
   }

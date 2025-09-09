@@ -3,7 +3,7 @@
         "Vegetation Indices": {
             "id": "vegetation-indices",
             "title":    "Vegetation Indices",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Harmonized Landsat Sentinel-2 (HLS), Landsat/WELD, Terra/MISR",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, Harmonized Landsat Sentinel-2 (HLS), Landsat/WELD, Terra/MISR",
             "sources": {
                   "Aqua/MODIS": {
                       "id": "aqua-modis",
@@ -31,9 +31,19 @@
                         "MODIS_Terra_L3_EVI_Monthly"
                     ]
                 },
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "viirs/VegetationIndices",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_NDVI_8Day",
+                        "VIIRS_SNPP_EVI_8Day"
+                    ]
+                },
                 "HLS-Sentinel2": {
                     "id": "HLS: Sentinel-2",
-                    "title": "HLS: Sentinel-2A & 2B/MSI",
+                    "title": "HLS: Sentinel-2/MSI",
                     "description": "multi-mission/hls/Reflectance",
                     "image": "",
                     "settings": [

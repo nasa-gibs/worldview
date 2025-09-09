@@ -2,15 +2,14 @@
   "layers": {
     "TEMPO_L3_Ozone_UV_Aerosol_Index": {
       "id": "TEMPO_L3_Ozone_UV_Aerosol_Index",
-      "title": "Ozone (L3, UV Aerosol Index, Subdaily) (BETA)",
+      "title": "Ozone (L3, UV Aerosol Index, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Ozone_UV_Aerosol_Index",
       "tags": "",
       "group": "overlays",
       "layergroup": "Aerosol Index",
       "dataAvailability": "dd",
-      "startDate": "2024-05-13T10:30:00Z",
-      "disableSnapshot": true,
+      "startDate": "2023-08-02T15:00:00Z",
       "shiftadjacentdays": false
     }
   }

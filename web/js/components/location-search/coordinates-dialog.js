@@ -117,7 +117,7 @@ class CoordinatesDialog extends Component {
               {closeButtonLabelText}
             </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon onClick={this.removeMarker} icon="times" fixedWidth />
+          <FontAwesomeIcon onClick={this.removeMarker} icon="times" fixedWidth widthAuto />
         </span>
         <span
           id={minimizeButtonId}
@@ -136,7 +136,7 @@ class CoordinatesDialog extends Component {
               {minimizeButtonLabelText}
             </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon onClick={this.minimizeDialog} icon="minus" fixedWidth />
+          <FontAwesomeIcon onClick={this.minimizeDialog} icon="minus" fixedWidth widthAuto />
         </span>
       </>
     );
@@ -168,7 +168,7 @@ class CoordinatesDialog extends Component {
             {labelText}
           </UncontrolledTooltip>
         )}
-        <FontAwesomeIcon icon="copy" fixedWidth />
+        <FontAwesomeIcon icon="copy" fixedWidth widthAuto />
       </div>
     );
   };

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
+  <ColorMap title="Flight Track (Per Flight, LandMark20/UNS-1Fw Flight Management System, NASA P-3B, ARCSIX)">
+    <Entries>
+      <ColorMapEntry rgb="146,208,80" sourceValue="200" transparent="false" ref="1" />
+          <ColorMapEntry rgb="0,255,0" transparent="false" value="[1]" ref="2"/>
+          <ColorMapEntry rgb="255,0,0" transparent="false" value="[2]" ref="3"/>
+    </Entries>
+    <Legend type="classification">
+      <LegendEntry rgb="146,208,80" id="1" tooltip="Altitude (m)" label="Altitude (m)" showLabel="true" />
+          <LegendEntry rgb="0,255,0" tooltip="Flight 1" id="2" label="Flight 1" showLabel="true" />
+          <LegendEntry rgb="255,0,0" tooltip="Flight 2" id="3" label="Flight 2" showLabel="true" />
+    </Legend>
+  </ColorMap>
+</ColorMaps>

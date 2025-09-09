@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const { promisify } = require('util')
 const yargs = require('yargs')
+const { hideBin } = require('yargs/helpers')
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -9,13 +10,19 @@ const copyFile = promisify(fs.copyFile)
 
 const prog = path.basename(__filename)
 
-const options = yargs
+const options = yargs(hideBin(process.argv))
   .usage('Usage: $0 [options]')
   .option('inputDir', {
     demandOption: true,
     alias: 'i',
     type: 'string',
     description: 'getcapabilities input directory'
+  })
+  .option('wvStylesDir', {
+    demandOption: true,
+    alias: 'w',
+    type: 'string',
+    description: 'worldview hosted styles directory'
   })
   .option('outputDir', {
     demandOption: true,
@@ -31,13 +38,16 @@ if (!argv.inputDir && !argv.outputDir) {
 }
 
 const inputDir = argv.inputDir
+const wvStylesDir = argv.wvStylesDir
 const outputDir = argv.outputDir
 
 async function main () {
   let fileCount = 0
   let errorCount = 0
 
-  for (const file of fs.readdirSync(inputDir)) {
+  const files = [...fs.readdirSync(inputDir), ...fs.readdirSync(wvStylesDir)]
+
+  for (const file of files) {
     try {
       fileCount += 1
       await copyFileAsync(file)
@@ -61,7 +71,10 @@ async function copyFileAsync (file) {
     const vectorLayerId = vectorLayerFilename.split('.json', 1)[0]
     responseData.vectorStyles = {}
     responseData.vectorStyles[vectorLayerId] = {}
-    const initialData = JSON.parse(await readFile(`${inputDir}/${file}`, 'utf-8'))
+    const data = await readFile(`${inputDir}/${file}`, 'utf-8').catch(() => {
+      return readFile(`${wvStylesDir}/${file}`, 'utf-8')
+    })
+    const initialData = JSON.parse(data)
     for (const i in initialData) {
       responseData.vectorStyles[vectorLayerId][i] = initialData[i]
     }

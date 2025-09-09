@@ -103,6 +103,7 @@ function GifButton(props) {
           id="wv-animation-widget-file-video-icon"
           className="wv-animation-widget-icon"
           icon="file-video"
+          widthAuto
         />
         <UncontrolledTooltip
           placement="right"

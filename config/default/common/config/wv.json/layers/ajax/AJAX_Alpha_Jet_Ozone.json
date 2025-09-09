@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "AJAX_Alpha_Jet_Ozone": {
+      "id": "AJAX_Alpha_Jet_Ozone",
+      "title": "Ozone and Flight Track (Per AJAX Flight)",
+      "subtitle": "AJAX/Alpha Jet",
+      "description": "ajax/AJAX_Alpha_Jet_Ozone",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector alpha jet ozone california nevada",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "AJAX_Alpha_Jet_Ozone",
+        "geographic": {
+          "id": "AJAX_Alpha_Jet_Ozone"
+        }
+      },
+      "palette": {
+        "id": "AJAX_Alpha_Jet_Ozone",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "G_Alt",
+        "order": "descending"
+      }
+    }
+  }
+}

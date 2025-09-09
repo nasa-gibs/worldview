@@ -7,7 +7,7 @@
       "title": "Reflectance (Vegetative Analysis False Color, Bands 6-5-4) *BETA*",
       "subtitle": "Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Vegetation_Landsat",
-      "tags": "corrected surface oli l30",
+      "tags": "surface oli l30",
       "group": "overlays",
       "layergroup": "Land Surface Reflectance",
       "format": "image/png",
@@ -18,7 +18,9 @@
       "bandCombo": {
         "r": "B06",
         "g": "B05",
-        "b": "B04"
+        "b": "B04",
+        "color_formula": "Gamma RGB 2.5 Saturation 1.2 Sigmoidal RGB 10 0.35",
+        "bands_regex": "B[0-9][0-9]"
       },
       "wrapX": false,
       "disableSnapshot": true,

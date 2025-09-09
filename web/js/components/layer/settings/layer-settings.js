@@ -352,7 +352,7 @@ class LayerSettings extends React.Component {
       renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
         ? this.renderCustomPalettes()
         : '';
-    } else if (layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
+    } else if (!layer.disableCustomPalettes && layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
       // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
       // Reference (MGRS/HLS Grid) has no need for palettes
       renderCustomizations = this.renderCustomPalettes();

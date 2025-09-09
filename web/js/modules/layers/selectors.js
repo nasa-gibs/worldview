@@ -140,7 +140,8 @@ export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) =
 const getActiveLayersEmbed = (state, activeString) => {
   const { compare, layers } = state;
   const activeLayers = layers[activeString || compare.activeString].layers;
-  return activeLayers.filter((layer) => layer.visible);
+  const filteredLayers = activeLayers.filter((layer) => layer.visible);
+  return filteredLayers.length !== activeLayers.length ? filteredLayers : activeLayers;
 };
 
 /**
@@ -791,11 +792,11 @@ function getZoomLevel(layer, zoom, proj, sources) {
   // Account for offset between the map's top zoom level and the
   // lowest-resolution TileMatrix in polar layers
   const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
-  const { matrixSet } = layer.projections[proj];
+  const { matrixSet, source } = layer.projections[proj];
+  const resolutions = sources?.[source]?.matrixSets?.[matrixSet]?.resolutions;
 
-  if (matrixSet !== undefined && layer.type !== 'vector') {
-    const { source } = layer.projections[proj];
-    const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
+  if (matrixSet !== undefined && layer.type !== 'vector' && Array.isArray(resolutions)) {
+    const zoomLimit = resolutions.length - 1 + zoomOffset;
     if (zoom > zoomLimit) {
       const overZoomValue = Math.round((zoom - zoomLimit) * 100) / 100;
       return overZoomValue;
@@ -834,10 +835,10 @@ export function getMaxZoomLevelLayerCollection(layers, zoom, proj, sources) {
   let maxZoom;
 
   lodashEach(layers, (layer) => {
-    const { matrixSet } = layer.projections[proj];
-    if (matrixSet !== undefined && layer.type !== 'vector') {
-      const { source } = layer.projections[proj];
-      const zoomLimit = sources[source].matrixSets[matrixSet].resolutions.length - 1 + zoomOffset;
+    const { matrixSet, source } = layer.projections[proj];
+    const resolutions = sources?.[source]?.matrixSets?.[matrixSet]?.resolutions;
+    if (matrixSet !== undefined && layer.type !== 'vector' && Array.isArray(resolutions)) {
+      const zoomLimit = resolutions.length - 1 + zoomOffset;
       if (!maxZoom) {
         maxZoom = zoomLimit;
       }

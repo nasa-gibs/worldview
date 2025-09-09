@@ -74,8 +74,8 @@ function CollapsedAnimationWidget (props) {
             isDisabled={playDisabled}
             isMobile={isMobile}
           />
-          {!isMobile && <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={toggleCollapse} /> }
-          {!isMobile && <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} /> }
+          {!isMobile && <FontAwesomeIcon icon="chevron-up" className="wv-expand" onClick={toggleCollapse} widthAuto /> }
+          {!isMobile && <FontAwesomeIcon icon="times" className="wv-close" onClick={onClose} widthAuto /> }
         </div>
       </div>
     </Draggable>

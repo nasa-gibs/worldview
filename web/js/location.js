@@ -6,6 +6,7 @@ import {
   serializeDate,
   serializeDateWrapper,
   serializeDateBWrapper,
+  serializeDateChartingWrapper,
   tryCatchDate,
   parsePermalinkDate,
   mapLocationToDateState,
@@ -481,6 +482,58 @@ const getParameters = function(config, parameters) {
       options: {
         parse: (param) => (config.initialIsMobile ? 50 : param),
       },
+    },
+    cha: {
+      stateKey: 'charting.active',
+      initialState: false,
+      type: 'bool',
+    },
+    chl: {
+      stateKey: 'charting.activeLayer',
+      initialState: '',
+    },
+    chc: {
+      stateKey: 'charting.aoiCoordinates',
+      initialState: [],
+      type: 'array',
+      options: {
+        parse: (str) => str.split(',').map(parseFloat),
+        serializeNeedsGlobalState: true,
+        serialize: (coordinates) => coordinates.join(','),
+      },
+    },
+    cht: {
+      stateKey: 'charting.timeSpanStartDate',
+      initialState: new Date(initialDate),
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serializeNeedsPrev: true,
+        setAsEmptyItem: true,
+        serialize: serializeDateChartingWrapper,
+        parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
+      },
+    },
+    cht2: {
+      stateKey: 'charting.timeSpanEndDate',
+      initialState: new Date(initialDate),
+      type: 'date',
+      options: {
+        serializeNeedsGlobalState: true,
+        serializeNeedsPrev: true,
+        setAsEmptyItem: true,
+        serialize: (currentItemState, state) => {
+          const isChartingRange = get(state, 'charting.timeSpanSelection') === 'range';
+          const timeSpanEndDate = get(state, 'charting.timeSpanEndDate');
+          return isChartingRange && !!timeSpanEndDate ? serializeDateChartingWrapper(currentItemState, state) : undefined;
+        },
+        parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
+      },
+    },
+    chch: {
+      stateKey: 'charting.isChartOpen',
+      initialState: false,
+      type: 'bool',
     },
     tr: {
       stateKey: 'tour.selected',

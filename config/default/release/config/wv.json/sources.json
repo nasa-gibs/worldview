@@ -24,8 +24,127 @@
     "FIRMS:xyz": {
       "url": "https://firms.modaps.eosdis.nasa.gov/layers"
     },
+    "MAXAR:wmts": {
+      "url": "https://stormscdn.ngs.noaa.gov",
+      "matrixSets": {
+        "GoogleMapsCompatible19": {
+          "id": "GoogleMapsCompatible19",
+          "maxResolution": 0.5625,
+          "resolutions": [
+            0.5625,
+            0.28125,
+            0.140625,
+            0.0703125,
+            0.03515625,
+            0.017578125,
+            0.0087890625,
+            0.00439453125,
+            0.002197265625,
+            0.0010986328125,
+            0.00054931640625,
+            0.000274658203125,
+            0.0001373291015625,
+            6.866455078125e-05,
+            3.4332275390625e-05,
+            1.71661376953125e-05,
+            8.58306884765625e-06,
+            4.291534423828125e-06,
+            2.1457672119140625e-06,
+            1.0728836059570312e-06,
+            5.364418029785156e-07
+          ],
+          "tileSize": [256, 256],
+          "tileMatrices": [
+            {
+              "matrixWidth": 1,
+              "matrixHeight": 1
+            },
+            {
+              "matrixWidth": 2,
+              "matrixHeight": 2
+            },
+            {
+              "matrixWidth": 8,
+              "matrixHeight": 8
+            },
+            {
+              "matrixWidth": 16,
+              "matrixHeight": 16
+            },
+            {
+              "matrixWidth": 32,
+              "matrixHeight": 32
+            },
+            {
+              "matrixWidth": 64,
+              "matrixHeight": 64
+            },
+            {
+              "matrixWidth": 128,
+              "matrixHeight": 128
+            },
+            {
+              "matrixWidth": 256,
+              "matrixHeight": 256
+            },
+            {
+              "matrixWidth": 512,
+              "matrixHeight": 512
+            },
+            {
+              "matrixWidth": 1024,
+              "matrixHeight": 1024
+            },
+            {
+              "matrixWidth": 2048,
+              "matrixHeight": 2048
+            },
+            {
+              "matrixWidth": 4096,
+              "matrixHeight": 4096
+            },
+            {
+              "matrixWidth": 8192,
+              "matrixHeight": 8192
+            },
+            {
+              "matrixWidth": 16384,
+              "matrixHeight": 16384
+            },
+            {
+              "matrixWidth": 32768,
+              "matrixHeight": 32768
+            },
+            {
+              "matrixWidth": 65536,
+              "matrixHeight": 65536
+            },
+            {
+              "matrixWidth": 131072,
+              "matrixHeight": 131072
+            },
+            {
+              "matrixWidth": 262144,
+              "matrixHeight": 262144
+            },
+            {
+              "matrixWidth": 524288,
+              "matrixHeight": 524288
+            },
+            {
+              "matrixWidth": 1048576,
+              "matrixHeight": 1048576
+            },
+            {
+              "matrixWidth": 2097152,
+              "matrixHeight": 2097152
+            }
+          ]
+        }
+      }
+    },
     "DDV": {
-      "url": "https://kv9drwgv6l.execute-api.us-west-2.amazonaws.com/",
+      "url": "https://staging.openveda.cloud/api/titiler-cmr/",
       "matrixSets": {
         "31.25m": {
           "id": "31.25m",
@@ -92,8 +211,11 @@
     "AERONET": {
       "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3"
     },
-    "ESRI": {
+    "ESRI:services": {
       "url": "https://services.arcgisonline.com/ArcGIS/rest/services"
+    },
+    "ESRI:basemaps": {
+      "url": "https://basemaps.arcgis.com/arcgis/rest/services"
     }
   }
 }

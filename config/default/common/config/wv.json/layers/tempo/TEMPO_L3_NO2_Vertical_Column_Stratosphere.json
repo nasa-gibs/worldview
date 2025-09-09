@@ -2,15 +2,14 @@
   "layers": {
     "TEMPO_L3_NO2_Vertical_Column_Stratosphere": {
       "id": "TEMPO_L3_NO2_Vertical_Column_Stratosphere",
-      "title": "Nitrogen Dioxide (L3, Vertical Column Stratosphere, Subdaily) (BETA)",
+      "title": "Nitrogen Dioxide (L3, Vertical Column Stratosphere, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_NO2_Vertical_Column_Stratosphere",
       "tags": "",
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "dataAvailability": "dd",
-      "startDate": "2024-05-13T10:30:00Z",
-      "disableSnapshot": true,
+      "startDate": "2023-08-02T15:00:00Z",
       "shiftadjacentdays": false
     }
   }

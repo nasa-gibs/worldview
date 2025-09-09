@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OMPS_SO2_Upper_Troposphere_and_Stratosphere": {
+      "id": "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
+      "description": "omps/snpp/OMPS_SO2_Upper_Troposphere_and_Stratosphere",
+      "tags": "SO2, sulphur",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Sulfur Dioxide"
+    }
+  }
+}

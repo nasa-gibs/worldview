@@ -110,15 +110,16 @@ class SearchLayerRow extends React.Component {
       layerNotices,
     } = this.props;
     const { showDeleteIcon } = this.state;
-    const { id } = layer;
+    const { id, analysis } = layer;
     const encodedId = util.encodeId(id);
     const isMetadataShowing = selectedLayer && id === selectedLayer.id;
+    const chartableLayer = analysis?.includes('Chartable (Raster-based)');
     const rowClass = isMetadataShowing
       ? 'search-row layers-all-layer selected'
       : 'search-row layers-all-layer';
     const checkboxClass = isEnabled ? 'wv-checkbox checked' : 'wv-checkbox';
     const recentLayerMode = categoryType === 'recent';
-    const headerClassName = layerNotices
+    const headerClassName = layerNotices || chartableLayer
       ? 'layers-all-header notice'
       : 'layers-all-header';
 
@@ -142,24 +143,48 @@ class SearchLayerRow extends React.Component {
             <Check class="check" size="15px" />
           )}
         </div>
-        {layerNotices && (
-          <div className="layer-notice-wrapper">
-            <FontAwesomeIcon
-              id={`${encodedId}-notice-info`}
-              className="layer-notice-icon"
-              icon="exclamation-triangle"
-            />
-            <UncontrolledTooltip
-              id="center-align-tooltip"
-              className="zot-tooltip"
-              placement="top"
-              target={`${encodedId}-notice-info`}
-              trigger="hover"
-              autohide={isMobile}
-              delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
-            >
-              <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
-            </UncontrolledTooltip>
+        {(chartableLayer || layerNotices) && (
+          <div className="layer-notices">
+            {chartableLayer && (
+              <div className="layer-notice-wrapper">
+                <i
+                  id={`${encodedId}-chartable-info`}
+                  className="layer-notice-icon chartable-icon"
+                />
+                <UncontrolledTooltip
+                  id="center-align-tooltip"
+                  className="zot-tooltip"
+                  placement="top"
+                  target={`${encodedId}-chartable-info`}
+                  trigger="hover"
+                  autohide={isMobile}
+                  delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: 'Create time series charts or get statistics for this layer' }} />
+                </UncontrolledTooltip>
+              </div>
+            )}
+            {layerNotices && (
+              <div className="layer-notice-wrapper">
+                <FontAwesomeIcon
+                  id={`${encodedId}-notice-info`}
+                  className="layer-notice-icon"
+                  icon="exclamation-triangle"
+                  widthAuto
+                />
+                <UncontrolledTooltip
+                  id="center-align-tooltip"
+                  className="zot-tooltip"
+                  placement="top"
+                  target={`${encodedId}-notice-info`}
+                  trigger="hover"
+                  autohide={isMobile}
+                  delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
+                >
+                  <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
+                </UncontrolledTooltip>
+              </div>
+            )}
           </div>
         )}
         <div className={headerClassName} onClick={this.onRowClick}>
@@ -171,7 +196,7 @@ class SearchLayerRow extends React.Component {
               title="Remove from recent layers list."
               onClick={(e) => clearSingleRecentLayer(e, layer)}
             >
-              <FontAwesomeIcon icon="trash" />
+              <FontAwesomeIcon icon="trash" widthAuto />
             </Button>
           )}
         </div>

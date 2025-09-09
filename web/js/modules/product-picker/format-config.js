@@ -81,7 +81,8 @@ function setCoverageFacetProp(layer, selectedDate) {
 
 function setTypeProp(layer) {
   const { type } = layer;
-  const rasterTypes = ['wms', 'wmts', 'xyz'];
+  const rasterTypes = ['wms', 'wmts', 'xyz', 'composite:wmts'];
+  const vectorTypes = ['vector', 'indexedVector'];
   if (rasterTypes.includes(type)) {
     layer.type = 'Raster (Mosaicked)';
   }
@@ -91,8 +92,18 @@ function setTypeProp(layer) {
   if (layer.type === 'titiler') {
     layer.type = 'Dynamically-rendered';
   }
+  if (vectorTypes.includes(type)) {
+    layer.type = 'Vector';
+  }
   layer.type = capitalizeFirstLetter(layer.type);
   return layer;
+}
+
+function setChartableProp(layer) {
+  if (!(Object.prototype.hasOwnProperty.call(layer, 'palette') && Object.prototype.hasOwnProperty.call(layer, 'colormapType') && layer.colormapType === 'continuous' && layer.layerPeriod === 'Daily') || layer.disableCharting) {
+    return;
+  }
+  layer.analysis = ['Chartable (Raster-based)'];
 }
 
 /**
@@ -107,6 +118,7 @@ export default function buildLayerFacetProps(config, selectedDate) {
     setCoverageFacetProp(layer, selectedDate);
     setLayerProp(layer, 'sources', layer.subtitle);
     setTypeProp(layer);
+    setChartableProp(layer);
     if (layer.daynight && layer.daynight.length) {
       if (typeof layer.daynight === 'string') {
         layer.daynight = [layer.daynight];

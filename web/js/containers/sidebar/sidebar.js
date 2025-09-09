@@ -57,6 +57,7 @@ class Sidebar extends React.Component {
     this.state = {
       subComponentHeight: 700,
       isEventsTabDisabledEmbed: false,
+      sidebarHeight: 0,
     };
     this.toggleSidebar = this.toggleSidebar.bind(this);
     this.renderSidebarLogo = this.renderSidebarLogo.bind(this);
@@ -89,6 +90,9 @@ class Sidebar extends React.Component {
     const {
       activeTab, requestEvents, selectedMap, mapIsRendered, eventsData, isLoadingEvents,
     } = this.props;
+    const {
+      sidebarHeight,
+    } = this.state;
     const mapChange = mapIsRendered && !lodashEqual(selectedMap, prevProps.selectedMap);
     const mapRenderedChange = mapIsRendered && mapIsRendered !== prevProps.mapIsRendered;
     const tabChange = activeTab !== prevProps.activeTab;
@@ -98,12 +102,16 @@ class Sidebar extends React.Component {
       requestEvents();
     }
     this.updateDimensions();
+    const sidebarHeightNew = lodashGet(this, 'sidebarElement.clientHeight');
+    if (sidebarHeightNew !== sidebarHeight) {
+      this.setState({ sidebarHeight: sidebarHeightNew });
+    }
   }
 
   updateDimensions() {
     const { subComponentHeight } = this.state;
     const {
-      isMobile, screenHeight, isCompareMode,
+      isMobile, screenHeight, isCompareMode, isChartMode,
     } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const addLayersHeight = lodashGet(this, 'addLayersElement.clientHeight') || 30;
@@ -119,6 +127,9 @@ class Sidebar extends React.Component {
         - 10;
     } else {
       newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
+    }
+    if (isChartMode && newHeight > 300) {
+      newHeight -= 130;
     }
     // Issue #1415: This was checking for subComponentHeight !== newHeight.
     // Sometimes it would get stuck in a loop in which the newHeight
@@ -282,6 +293,7 @@ class Sidebar extends React.Component {
     const {
       isEventsTabDisabledEmbed,
       subComponentHeight,
+      sidebarHeight,
     } = this.state;
     const {
       activeTab,
@@ -358,60 +370,59 @@ class Sidebar extends React.Component {
             id="products-holder"
             className="products-holder-case"
             style={productsHolderStyle}
+            ref={(el) => { this.sidebarElement = el; }}
           >
-            {!isCollapsed && (
-            <>
-              <NavCase
-                activeTab={activeTab}
-                onTabClick={onTabClick}
-                tabTypes={tabTypes}
-                isMobile={isMobile}
-                toggleSidebar={this.toggleSidebar}
-                isCompareMode={isCompareMode}
-                isDataDisabled={isDataDisabled}
-                isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
-              />
-              <TabContent activeTab={activeTab}>
-                <TabPane tabId="layers">
-                  {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
-                  <AddLayersContent
-                    ref={(el) => { this.addLayersElement = el; }}
-                    isActive={activeTab === 'layers'}
-                    compareState={activeString}
+            <NavCase
+              activeTab={activeTab}
+              onTabClick={onTabClick}
+              tabTypes={tabTypes}
+              isMobile={isMobile}
+              toggleSidebar={this.toggleSidebar}
+              isCompareMode={isCompareMode}
+              isChartMode={isChartMode}
+              isDataDisabled={isDataDisabled}
+              isEventsTabDisabledEmbed={isEventsTabDisabledEmbed}
+            />
+            <TabContent activeTab={activeTab}>
+              <TabPane tabId="layers">
+                {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
+                <AddLayersContent
+                  ref={(el) => { this.addLayersElement = el; }}
+                  isActive={activeTab === 'layers'}
+                  compareState={activeString}
+                />
+              </TabPane>
+              {naturalEvents && activeTab === 'events' && (
+                <TabPane tabId="events">
+                  <Events
+                    height={subComponentHeight}
+                    isLoading={isLoadingEvents}
+                    hasRequestError={hasEventRequestError}
+                    eventsData={eventsData}
+                    sources={eventsSources}
                   />
                 </TabPane>
-                {naturalEvents && activeTab === 'events' && (
-                  <TabPane tabId="events">
-                    <Events
-                      height={subComponentHeight}
-                      isLoading={isLoadingEvents}
-                      hasRequestError={hasEventRequestError}
-                      eventsData={eventsData}
-                      sources={eventsSources}
-                    />
-                  </TabPane>
-                )}
-                {smartHandoffs && activeTab === 'download' && (
-                  <TabPane tabId="download">
-                    <SmartHandoff
-                      isActive={activeTab === 'download'}
-                      tabTypes={tabTypes}
-                    />
-                  </TabPane>
-                )}
-                {
-                  !isKioskModeActive && (
-                    <FooterContent
-                      ref={(el) => { this.footerElement = el; }}
-                      tabTypes={tabTypes}
-                      activeTab={activeTab}
-                      chartingModeAccessible={chartingModeAccessible}
-                    />
-                  )
-                }
-              </TabContent>
-            </>
-            )}
+              )}
+              {smartHandoffs && activeTab === 'download' && (
+                <TabPane tabId="download">
+                  <SmartHandoff
+                    isActive={activeTab === 'download'}
+                    tabTypes={tabTypes}
+                  />
+                </TabPane>
+              )}
+              {
+                !isKioskModeActive && (
+                  <FooterContent
+                    ref={(el) => { this.footerElement = el; }}
+                    tabTypes={tabTypes}
+                    activeTab={activeTab}
+                    chartingModeAccessible={chartingModeAccessible}
+                    sidebarHeight={sidebarHeight}
+                  />
+                )
+              }
+            </TabContent>
           </div>
         </section>
       </ErrorBoundary>
@@ -438,7 +449,7 @@ const mapStateToProps = (state) => {
     ui,
   } = state;
 
-  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous').length > 0;
+  const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting).length > 0;
   const isLoadingEvents = requestedEvents.isLoading
     || requestedEventSources.isLoading;
   const hasEventRequestError = !!(requestedEvents.error

@@ -8,11 +8,9 @@ import OlImageTile from 'ol/source/ImageTile';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/WebGLTile.js';
 import { get } from 'ol/proj';
-import OlTileGridTileGrid from 'ol/tilegrid/TileGrid';
+import { TileGrid as OlTileGridTileGrid, createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import GeoJSON from 'ol/format/GeoJSON';
-import axios from 'axios';
-import qs from 'qs';
 import SourceVectorTile from 'ol/source/VectorTile';
 import OlLayerVector from 'ol/layer/Vector';
 import OlSourceVector from 'ol/source/Vector';
@@ -26,6 +24,7 @@ import lodashMerge from 'lodash/merge';
 import lodashEach from 'lodash/each';
 import lodashGet from 'lodash/get';
 import lodashCloneDeep from 'lodash/cloneDeep';
+import { applyBackground, applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
@@ -66,15 +65,15 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {*} attributes
    * @param {*} wrapLayer
    */
-  const getLayer = (createLayerFunc, def, options, attributes, wrapLayer) => {
+  const getLayer = async (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
-    const layer = createLayerFunc(def, options, null, state, attributes);
+    const layer = await createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
     if (!wrapLayer) {
       return layer;
     }
-    const layerNext = createLayerFunc(def, options, 1, state, attributes);
-    const layerPrior = createLayerFunc(def, options, -1, state, attributes);
+    const layerNext = await createLayerFunc(def, options, 1, state, attributes);
+    const layerPrior = await createLayerFunc(def, options, -1, state, attributes);
 
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
@@ -138,7 +137,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  const getRequestDates = function(def, options) {
+  const getRequestDates = (def, options) => {
     const state = store.getState();
     const { date } = state;
     const { appNow } = date;
@@ -332,7 +331,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} state
    * @returns {object} OpenLayers WMTS layer
    */
-  function createLayerWMTS (def, options, day, state) {
+  const createLayerWMTS = (def, options, day, state) => {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
@@ -400,7 +399,7 @@ export default function mapLayerBuilder(config, cache, store) {
       preload: 0,
       source: tileSource,
     });
-  }
+  };
 
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
 
@@ -413,7 +412,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param {object} options - Layer options
    * @returns {object} OpenLayers WMS layer
    */
-  const createLayerWMS = function(def, options, day, state) {
+  const createLayerWMS = (def, options, day, state) => {
     const { proj } = state;
     const selectedProj = proj.selected;
     let urlParameters;
@@ -501,7 +500,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
-  const createLayerVectorAeronet = function(def, options, day, state, attributes) {
+  const createLayerVectorAeronet = (def, options, day, state, attributes) => {
     const { proj, animation } = state;
     let date;
     let gridExtent;
@@ -740,7 +739,7 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} state
     * @param {object} attributes
     */
-  const createLayerVector = function(def, options, day, state, attributes) {
+  const createLayerVector = (def, options, day, state, attributes) => {
     if (def.source === 'AERONET') {
       return createLayerVectorAeronet(def, options, day, state, attributes);
     }
@@ -815,7 +814,25 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    const sortMethods = {
+      descending: (a, b) => a - b,
+      ascending: (a, b) => b - a,
+    };
+
+    const orderFunction = (a, b) => {
+      const { renderOrder } = def;
+      if (!renderOrder) return null;
+      const { property, order } = renderOrder;
+      const aProps = a.getProperties();
+      const bProps = b.getProperties();
+      const aValue = aProps?.[property] || 0;
+      const bValue = bProps?.[property] || 0;
+
+      return sortMethods[order]?.(aValue, bValue);
+    };
+
     const layer = new LayerVectorTile({
+      renderOrder: orderFunction,
       extent: layerExtent,
       source: tileSource,
       renderMode: 'vector',
@@ -849,104 +866,12 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
-  const registerSearch = async (def, options, state) => {
-    const { date } = state;
-    let requestDate;
-    if (options.group === 'activeB') {
-      requestDate = date.selectedB;
-    } else {
-      requestDate = date.selected;
-    }
-
-    const formattedDate = util.toISOStringSeconds(requestDate).slice(0, 10);
-    const layerID = def.id;
-    const BASE_URL = 'https://d1nzvsko7rbono.cloudfront.net';
-    const {
-      r,
-      g,
-      b,
-      expression,
-      assets = [],
-    } = def.bandCombo;
-    const bandCombo = [r, g, b, ...assets].filter((band) => band);
-
-    const landsatLayers = [
-      'HLS_Customizable_Landsat',
-      'HLS_False_Color_Landsat',
-      'HLS_False_Color_Urban_Landsat',
-      'HLS_False_Color_Vegetation_Landsat',
-      'HLS_Shortwave_Infrared_Landsat',
-      'HLS_NDVI_Landsat',
-      'HLS_NDWI_Landsat',
-      'HLS_NDSI_Landsat',
-      'HLS_Moisture_Index_Landsat',
-      'HLS_EVI_Landsat',
-      'HLS_SAVI_Landsat',
-      'HLS_MSAVI_Landsat',
-      'HLS_NBR2_Landsat',
-      'HLS_NBR_Landsat',
-      'HLS_TVI_Landsat',
-    ];
-
-    const collectionID = landsatLayers.includes(layerID) ? 'HLSL30' : 'HLSS30';
-
-    const temporalRange = [`${formattedDate}T00:00:00Z`, `${formattedDate}T23:59:59Z`];
-
-    const collectionsFilter = {
-      op: '=',
-      args: [{ property: 'collection' }, collectionID],
-    };
-
-    const temporalFilter = {
-      op: 't_intersects',
-      args: [{ property: 'datetime' }, { interval: temporalRange }],
-    };
-
-    const searchBody = {
-      'filter-lang': 'cql2-json',
-      context: 'on',
-      filter: {
-        op: 'and',
-        args: [
-          collectionsFilter,
-          temporalFilter,
-        ],
-      },
-    };
-
-    const mosaicResponse = await axios
-      .post(`${BASE_URL}/mosaic/register`, searchBody)
-      .then((res) => res.data);
-
-    const tilesHref = mosaicResponse.links.find(
-      (link) => link.rel === 'tilejson',
-    ).href;
-
-    const params = {
-      post_process: 'swir',
-      assets: bandCombo,
-      expression,
-    };
-
-    const queryString = qs.stringify(params, { arrayFormat: 'repeat' });
-
-    const tilejsonResponse = await axios
-      .get(tilesHref, {
-        params: new URLSearchParams(queryString),
-      })
-      .then((res) => res.data);
-
-    const { name } = tilejsonResponse;
-
-    return name;
-  };
-
   const createTitilerLayer = async (def, options, day, state) => {
     const { proj: { selected }, date } = state;
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
     const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
-    const dateTime = state.date.selected?.toISOString().split('T');
+    const dateTime = options.group === 'active' ? date.selected?.toISOString().split('T') : date.selectedB?.toISOString().split('T');
     dateTime.pop();
     dateTime.push('00:00:00.000Z');
     const zeroedDate = dateTime.join('T');
@@ -1024,22 +949,30 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const source = config.sources[def.source];
 
-    const searchID = await registerSearch(def, options, state);
-
     const tileUrlFunction = (tileCoord) => {
       const z = tileCoord[0] - 1;
       const x = tileCoord[1];
       const y = tileCoord[2];
 
+      const dateTimeTile = options.group === 'active' ? date.selected?.toISOString().split('T') : date.selectedB?.toISOString().split('T');
+      dateTimeTile.pop();
+      dateTimeTile.push('00:00:00Z');
+      const zeroedDateTile = dateTimeTile.join('T');
+      dateTimeTile.pop();
+      dateTimeTile.push('23:59:59Z');
+      const lastDateTile = dateTimeTile.join('T');
+
       const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
 
-      const params = assets.map((asset) => `assets=${asset}`);
+      const params = assets.map((asset) => `bands=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
       params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
+      params.push(`bands_regex=${def?.bandCombo?.bands_regex}`);
+      params.push(`color_formula=${def?.bandCombo?.color_formula}`);
 
-      const urlParams = `mosaic/tiles/${searchID}/WGS1984Quad/${z}/${x}/${y}@1x?post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}@1x?concept_id=${def.collectionConceptID}&datetime=${zeroedDateTile}/${lastDateTile}&post_process=swir&backend=rasterio&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };
@@ -1052,7 +985,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
-    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(options.group === 'active' ? date.selected : date.selectedB)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
 
     const layer = new OlLayerTile({
@@ -1098,7 +1031,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
-    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(options.group === 'active' ? date.selected : date.selectedB)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
 
     const layer = new OlLayerTile({
@@ -1122,6 +1055,119 @@ export default function mapLayerBuilder(config, cache, store) {
         url,
       }),
     });
+  };
+
+  const createIndexedVectorLayer = async (def, options, day, state) => {
+    const { proj: { selected } } = state;
+    const { crs } = selected;
+    const { shifted } = options;
+    const {
+      layerName,
+      serviceName,
+      tiles,
+      id,
+      vectorStyle,
+      matrixSet,
+      matrixSetLimits,
+    } = def;
+
+    const projection = get(crs);
+    const tileGrid = createXYZ({
+      extent: projection.getExtent(),
+      tileSize: [512, 512],
+      maxResolution: 180 / 256,
+      maxZoom: 22,
+    });
+
+    const configSource = config.sources[def.source];
+    const configMatrixSet = configSource.matrixSets?.[matrixSet] || {
+      resolutions: tileGrid.getResolutions(),
+      tileSize: tileGrid.getTileSize(),
+    };
+    const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, selected);
+
+    const sourceOptions = {
+      url: `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`,
+      projection,
+      format: new MVT(),
+      tileGrid,
+    };
+    const source = new SourceVectorTile(sourceOptions);
+
+    const layer = new LayerVectorTile({
+      source,
+      extent: shifted ? RIGHT_WING_EXTENT : extent,
+      className: id,
+      declutter: options.group || true,
+      renderMode: 'hybrid',
+    });
+
+    if (!vectorStyle.url) {
+      applyStyle(def, layer, state, options);
+    } else {
+      await olmsApplyStyle(layer, vectorStyle.url, {
+        resolutions: tileGrid.getResolutions(),
+        transformRequest(url, type) {
+          if (type === 'Source') {
+            return new Request(
+              url.replace('/VectorTileServer', '/VectorTileServer/'),
+            );
+          }
+        },
+      });
+      await applyBackground(layer, vectorStyle.url);
+    }
+
+    return layer;
+  };
+
+  const createLayerCompositeWMTS = async (def, options, day, state) => {
+    const { proj } = state;
+    const { shifted, date } = options;
+    const selectedDate = date || getSelectedDate(state);
+    const isoDate = selectedDate.toISOString();
+    const selectedDateString = isoDate.split('T')[0].split('-').join('');
+    const matchedLayers = def.layers.filter((layerName) => layerName.match(/([0-9])+/g)[0] === selectedDateString);
+    // create wmts defs from def.layers
+    const wmtsDefs = matchedLayers.map((layerID) => ({
+      ...def,
+      id: layerID,
+      layerName: layerID,
+      type: 'wmts',
+      layers: undefined,
+    }));
+    // create layers from defs
+    const layers = wmtsDefs.map((wmtsDef) => {
+      const {
+        matrixSet,
+        source,
+        layerName,
+        format,
+        matrixSetLimits,
+      } = wmtsDef;
+      const configSource = config.sources[source];
+      const configMatrixSet = configSource.matrixSets[matrixSet];
+      const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
+
+      const sourceOptions = {
+        url: `${configSource.url}/${layerName}/{z}/{x}/{y}`,
+        layer: layerName,
+        crossOrigin: 'anonymous',
+        format,
+        wrapX: false,
+        projection: 'EPSG:3857',
+        maxZoom: 21,
+      };
+      const tileSource = new OlSourceXYZ(sourceOptions);
+
+      return new OlLayerTile({
+        source: tileSource,
+        className: wmtsDef.id,
+        extent: shifted ? RIGHT_WING_EXTENT : extent,
+      });
+    });
+    const layer = new OlLayerGroup({ layers });
+    return layer;
   };
 
   /**
@@ -1175,19 +1221,25 @@ export default function mapLayerBuilder(config, cache, store) {
       if (!isGranule) {
         switch (def.type) {
           case 'wmts':
-            layer = getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
             break;
           case 'vector':
             layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
             break;
           case 'wms':
-            layer = getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
             break;
           case 'titiler':
             layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
             break;
           case 'xyz':
-            layer = getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'indexedVector':
+            layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
+            break;
+          case 'composite:wmts':
+            layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
             break;
           case 'esri':
             layer = getLayer(createLayerEsri, def, options, attributes, wrapLayer);

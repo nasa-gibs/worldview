@@ -24,16 +24,15 @@ import { getFilteredEvents } from '../../modules/natural-events/selectors';
 import { CRS } from '../../modules/map/constants';
 
 const icons = [
-  'Dust and Haze',
-  'Icebergs',
-  'Manmade',
-  'Sea and Lake Ice',
-  'Severe Storms',
-  'Snow',
-  'Temperature Extremes',
-  'Volcanoes',
-  'Water Color',
-  'Wildfires',
+  'dustHaze',
+  'manmade',
+  'floods',
+  'seaLakeIce',
+  'severeStorms',
+  'snow',
+  'volcanoes',
+  'waterColor',
+  'wildfires',
 ];
 
 const createPin = function(id, category, isSelected, title, hideTooltip) {
@@ -41,11 +40,10 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
   const root = createRoot(overlayEl);
   root.render(
     React.createElement(EventIcon, {
-      category: category.title,
+      category: category.id,
       title,
       id,
       hideTooltip,
-      isSelected,
     }),
   );
   return new OlOverlay({
@@ -174,9 +172,9 @@ class EventMarkers extends React.Component {
       const hideTooltips = isMobile || isAnimatingToEvent;
       let category = event.categories[0];
       // Assign a default category if we don't have an icon
-      category = icons.includes(category.title)
+      category = icons.includes(category.id)
         ? category
-        : { title: 'Default', slug: 'default' };
+        : { title: 'Default', slug: 'default', id: 'default' };
 
       marker.pin = createPin(event.id, category, isSelected, event.title, hideTooltips);
       marker.pin.setPosition(coordinates);
@@ -223,7 +221,7 @@ class EventMarkers extends React.Component {
         googleTagManager.pushEvent({
           event: 'natural_event_selected',
           natural_events: {
-            category: category.title,
+            category: category.id,
           },
         });
       }
@@ -264,8 +262,10 @@ class EventMarkers extends React.Component {
         map.removeOverlay(marker.pin);
       }
     });
-    const markerContainer = document.getElementById('marker-container');
-    markerContainer.remove();
+    const markerTooltips = document.getElementsByClassName('event-icon-tooltip');
+    Object.values(markerTooltips).forEach((tooltip) => {
+      tooltip.remove();
+    });
     this.setState({ markers: [] });
   }
 

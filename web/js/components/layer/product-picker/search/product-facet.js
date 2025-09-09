@@ -41,11 +41,13 @@ function ProductFacet(props) {
         id={`${field}-tooltip-target`}
         className="facet-tooltip"
         icon="info-circle"
+        widthAuto
       />
       <FontAwesomeIcon
         className={`facet-collapse-toggle ${!data.length && 'hidden'}`}
         icon={!collapsed ? 'caret-down' : 'caret-left'}
         onClick={() => toggleCollapse(field)}
+        widthAuto
       />
     </>
   );

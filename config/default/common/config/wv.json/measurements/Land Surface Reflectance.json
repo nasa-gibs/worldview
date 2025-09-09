@@ -94,7 +94,8 @@
 		                "HLS_Shortwave_Infrared_Sentinel",
                         "HLS_MGRS_Granule_Grid",
                         "OrbitTracks_Sentinel-2A_Descending",
-                        "OrbitTracks_Sentinel-2B_Descending"
+                        "OrbitTracks_Sentinel-2B_Descending",
+                        "OrbitTracks_Sentinel-2C_Descending"
                     ]
                 },
                 "HLS-Landsat8": {
