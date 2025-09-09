@@ -1,0 +1,3 @@
+The Soil Moisture (Single Channel Algorithm, Day) layer displays gridded estimates of surface soil moisture in the top 1 cm of soil and is measured in grams per centimeter by volume (g/cm<sup>3</sup>) It is is estimated from AMSR-E/Aqua and AMSR2/GCOM-W1 L2A brightness temperature (Tb) measurements using the Single Channel Algorithm (SCA) approach. Soil moisture estimates are derived from AMSR-E and AMSR2 data which have been spatially resampled by the Japan Aerospace Exploration Agency (JAXA) to intercalibrate, or “unify,” the two sensors.
+
+References: AU_Land [doi:10.5067/IKQ0G7ODMLC7](https://doi.org/10.5067/IKQ0G7ODMLC7)
