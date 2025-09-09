@@ -408,14 +408,14 @@ function ChartComponent (props) {
                   </i>
                 </div>
               )}
-              <span className="error-expand-button" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+              <div className="error-expand-button" onClick={() => setErrorCollapsed(!errorCollapsed)}>
                 {errorCollapsed ? 'more' : 'less'}
                 <FontAwesomeIcon
                   className="layer-group-collapse"
                   icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
                   widthAuto
                 />
-              </span>
+              </div>
             </div>
           )}
         </div>

@@ -677,6 +677,7 @@ div#group-overlays-checkbox-case {
 
 .charting-chart-container .charting-disclaimer {
   padding: 18px;
+  padding-bottom: 1rem;
   margin-top: -50px;
   width: calc(600px + 18%);
 }
@@ -695,15 +696,13 @@ div#group-overlays-checkbox-case {
 }
 
 .charting-disclaimer-dates {
-  padding-top: 10px;
   margin-left: 60px;
 }
 
 .error-expand-button {
-  float: right;
   cursor: pointer;
-  padding: 5px;
-  margin-top: -3px;
+  margin-top: 2px;
+  text-align: center;
 
   & > svg {
     margin-left: 10px;
