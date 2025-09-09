@@ -9,12 +9,12 @@
         "group": "baselayers",
         "layergroup": "Base Layers",
         "format": "image/png",
-        "type": "esri",
+        "type": "esriMapServer",
         "disableSnapshot": true,
         "wrapX": false,
         "projections": {
           "geographic": {
-            "source": "ESRI"
+            "source": "ESRI:services"
           }
         }
       }

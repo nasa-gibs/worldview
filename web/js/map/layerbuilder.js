@@ -1241,8 +1241,8 @@ export default function mapLayerBuilder(config, cache, store) {
           case 'composite:wmts':
             layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
             break;
-          case 'esri':
-            layer = getLayer(createLayerEsri, def, options, attributes, wrapLayer);
+          case 'esriMapServer':
+            layer = await getLayer(createLayerEsri, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
