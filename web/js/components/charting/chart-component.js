@@ -353,7 +353,7 @@ function ChartComponent (props) {
           <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
           {isTruncated
           && (
-            <div className="charting-disclaimer-lower">
+            <div className="charting-disclaimer-upper">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
                 className="wv-alert-icon"
@@ -402,19 +402,21 @@ function ChartComponent (props) {
                       <>
                         {date.split('T')[0]}
                         {index < errorDaysArr.length - 1 && ', '}
-                        &nbsp;
+                        &nbsp;&nbsp;
                       </>
                     ))}
                   </i>
                 </div>
               )}
-              <div className="error-expand-button" onClick={() => setErrorCollapsed(!errorCollapsed)}>
-                {errorCollapsed ? 'more' : 'less'}
-                <FontAwesomeIcon
-                  className="layer-group-collapse"
-                  icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
-                  widthAuto
-                />
+              <div className="error-expand-button">
+                <span className="error-expand-button-inner" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+                  {errorCollapsed ? 'more' : 'less'}
+                  <FontAwesomeIcon
+                    className="layer-group-collapse"
+                    icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
+                    widthAuto
+                  />
+                </span>
               </div>
             </div>
           )}

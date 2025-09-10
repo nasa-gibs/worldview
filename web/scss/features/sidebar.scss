@@ -691,21 +691,42 @@ div#group-overlays-checkbox-case {
   margin-right: 8px;
 }
 
+.charting-disclaimer-upper {
+  margin-top: 18px;
+  position: relative;
+
+  .wv-alert-icon {
+    margin-top: 6px;
+  }
+
+  .charting-disclaimer-block {
+    line-height: 28px;
+  }
+}
+
 .charting-disclaimer-lower {
   margin-top: 10px;
+  position: relative;
 }
 
 .charting-disclaimer-dates {
-  margin-left: 60px;
+  margin-left: 17px;
 }
 
 .error-expand-button {
-  cursor: pointer;
-  margin-top: 2px;
-  text-align: center;
+  margin-top: -3px;
+  margin-bottom: -5px;
 
-  & > svg {
-    margin-left: 10px;
+  .error-expand-button-inner {
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+
+    svg {
+      margin-left: 10px;
+      margin-top: 1px;
+    }
   }
 }
 
@@ -713,11 +734,13 @@ div#group-overlays-checkbox-case {
   color: #d54e21;
   font-size: 1.4em;
   margin: 10px 18px 0 8px;
-  float: left;
+  position: absolute;
 }
 
 .charting-disclaimer-block {
   line-height: 35px;
+  display: block;
+  margin-left: 40px;
 }
 
 #charting-minimap-container {
@@ -733,6 +756,7 @@ div#group-overlays-checkbox-case {
   .ol-zoom {
     right: 8px;
     left: auto;
+    margin-top: 1px;
 
     .ol-zoom-in, .ol-zoom-out {
       color: #c7c7c7;
@@ -769,6 +793,7 @@ div#group-overlays-checkbox-case {
 
   .coordinate-subheader {
     margin-left: 10px;
+    margin-bottom: 13px;
   }
 
   .coordinate-center {
@@ -779,6 +804,7 @@ div#group-overlays-checkbox-case {
     font-weight: bold;
     font-family: variables.$wv-monospace-font;
     text-align: right;
+    margin-left: 15px;
   }
 }
 

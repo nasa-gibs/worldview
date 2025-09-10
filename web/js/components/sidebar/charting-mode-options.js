@@ -88,6 +88,7 @@ function ChartingModeOptions(props) {
 
   const isMounted = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
+  const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
   const [isWithinWings, setIsWithinWings] = useState(false);
   const [boundaries, setBoundaries] = useState({
@@ -436,10 +437,8 @@ function ChartingModeOptions(props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
-        const startDateObj = new Date(primaryDate);
-        const startDateFormatted = `${startDateObj.getFullYear()}-${`0${startDateObj.getMonth() + 1}`.slice(-2)}-${`0${startDateObj.getDate()}`.slice(-2)}`;
-        const endDateObj = new Date(secondaryDate);
-        const endDateFormatted = `${endDateObj.getFullYear()}-${`0${endDateObj.getMonth() + 1}`.slice(-2)}-${`0${endDateObj.getDate()}`.slice(-2)}`;
+        const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
+        const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
         const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
         displayChart({
           title: dataToRender.title,
@@ -468,12 +467,18 @@ function ChartingModeOptions(props) {
   }
 
   useEffect(() => {
+    if (doRenderChart && isPostRender) {
+      onRequestChartClick();
+    }
+  }, [doRenderChart, isPostRender]);
+
+  useEffect(() => {
     const isOpen = (modalId === 'CHARTING-CHART' || modalId === 'CHARTING-STATS-MODAL') && isModalOpen;
     if (isChartOpen && !isOpen && Object.keys(renderedPalettes).length > 0) {
       const layerInfo = getActiveChartingLayer();
       const paletteName = layerInfo.palette.id;
       if (renderedPalettes[paletteName]) {
-        onRequestChartClick();
+        setDoRenderChart(true);
       }
     }
   }, [isChartOpen, renderedPalettes]);
