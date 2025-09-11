@@ -144,7 +144,7 @@ const addLineOverlay = function(map, dateA, dateB) {
   lineCaseEl.appendChild(secondLabel);
   draggerEl.appendChild(draggerCircleEl);
   const root = createRoot(draggerCircleEl);
-  root.render(<FontAwesomeIcon icon="arrows-alt-h" />);
+  root.render(<FontAwesomeIcon icon="arrows-alt-h" widthAuto />);
   lineCaseEl.appendChild(draggerEl);
   mapCase.appendChild(lineCaseEl);
   swipeOffset = percentSwipe

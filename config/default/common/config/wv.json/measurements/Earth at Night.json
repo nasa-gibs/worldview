@@ -3,7 +3,7 @@
         "Earth at Night": {
             "id": "earth-at-night",
             "title":    "Earth at Night",
-            "subtitle": "Suomi NPP/VIIRS, NOAA-20/VIIRS",
+            "subtitle": "Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
@@ -11,8 +11,10 @@
                     "description": "",
                     "image": "",
                     "settings": [
+                        "VIIRS_SNPP_GapFilled_BRDF_Corrected_DayNightBand_Radiance",
                         "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
                         "VIIRS_SNPP_DayNightBand_AtSensor_M15",
+                        "VIIRS_SNPP_DayNightBand",
                         "VIIRS_SNPP_DayNightBand_ENCC",
                         "VIIRS_Night_Lights",
                         "VIIRS_Black_Marble",
@@ -26,7 +28,17 @@
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
-                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15"
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        "VIIRS_NOAA20_DayNightBand"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa-21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_DayNightBand"
                     ]
                 }
             }

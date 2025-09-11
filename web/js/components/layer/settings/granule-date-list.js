@@ -191,7 +191,7 @@ class GranuleDateList extends PureComponent {
         className="granule-date-item-down-button"
         onClick={(e) => this.moveDown(e, index, date)}
       >
-        <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth />
+        <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth widthAuto />
       </button>
     );
     const renderUpBtn = () => index > 0 && (
@@ -200,7 +200,7 @@ class GranuleDateList extends PureComponent {
         className="granule-date-item-up-button"
         onClick={(e) => this.moveUp(e, index, date)}
       >
-        <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth />
+        <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth widthAuto />
       </button>
     );
 

@@ -211,7 +211,7 @@ class toolbarContainer extends Component {
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="share-square" size={faSize} />
+        <FontAwesomeIcon icon="share-square" size={faSize} widthAuto />
       </Button>
     );
   }
@@ -220,13 +220,16 @@ class toolbarContainer extends Component {
     const {
       config,
       faSize,
+      isProjectionSwitchActive,
+      isChartingActive,
       isDistractionFreeModeActive,
       openModal,
-      isAnimatingToEvent,
       isMobile,
     } = this.props;
     const buttonId = 'wv-proj-button';
-    const labelText = 'Switch projection';
+    const labelText = isChartingActive
+      ? 'You must exit charting mode to switch projection'
+      : 'Switch projection';
     const onClick = () => openModal(
       'TOOLBAR_PROJECTION',
       CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
@@ -240,14 +243,18 @@ class toolbarContainer extends Component {
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
-        className="wv-toolbar-button"
         aria-label={labelText}
         onClick={onClick}
-        disabled={isAnimatingToEvent}
+        className={
+          isProjectionSwitchActive
+            ? 'wv-toolbar-button'
+            : 'wv-toolbar-button disabled'
+      }
+        disabled={!isProjectionSwitchActive}
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="globe-asia" size={faSize} />
+        <FontAwesomeIcon icon="globe-asia" size={faSize} widthAuto />
       </Button>
     );
   }
@@ -295,7 +302,7 @@ class toolbarContainer extends Component {
           style={mobileWvToolbarButtonStyle}
         >
           {this.renderTooltip(buttonId, labelText)}
-          <FontAwesomeIcon icon="search-location" size={faSize} />
+          <FontAwesomeIcon icon="search-location" size={faSize} widthAuto />
         </Button>
       </div>
     );
@@ -306,15 +313,18 @@ class toolbarContainer extends Component {
       faSize,
       isImageDownloadActive,
       isCompareActive,
+      isChartingActive,
       isDistractionFreeModeActive,
       isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
     const labelText = isCompareActive
       ? 'You must exit comparison mode to use the snapshot feature'
-      : !isImageDownloadActive
-        ? 'You must exit data download mode to use the snapshot feature'
-        : 'Take a snapshot';
+      : isChartingActive
+        ? 'You must exit charting mode to use the snapshot feature'
+        : !isImageDownloadActive
+          ? 'You must exit data download mode to use the snapshot feature'
+          : 'Take a snapshot';
     const mobileWVImageButtonStyle = isMobile ? {
       display: 'none',
     } : null;
@@ -334,7 +344,7 @@ class toolbarContainer extends Component {
           onClick={this.openImageDownload}
           style={mobileWVImageButtonStyle}
         >
-          <FontAwesomeIcon icon="camera" size={faSize} />
+          <FontAwesomeIcon icon="camera" size={faSize} widthAuto />
         </Button>
       </div>
 
@@ -372,7 +382,7 @@ class toolbarContainer extends Component {
         style={mobileWvToolbarButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon="info-circle" size={faSize} />
+        <FontAwesomeIcon icon="info-circle" size={faSize} widthAuto />
       </Button>
     );
   }
@@ -398,7 +408,7 @@ class toolbarContainer extends Component {
         style={mobileButtonStyle}
       >
         {this.renderTooltip(buttonId, labelText)}
-        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} />
+        <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} widthAuto />
       </Button>
     );
   }
@@ -427,6 +437,7 @@ const mapStateToProps = (state) => {
   const {
     animation,
     compare,
+    charting,
     events,
     locationSearch,
     map,
@@ -447,6 +458,7 @@ const mapStateToProps = (state) => {
   const isMobile = screenSize.isMobileDevice;
   const faSize = isMobile ? '2x' : '1x';
   const isCompareActive = compare.active;
+  const isChartingActive = charting.active;
   const isLocationSearchExpanded = locationSearch.isExpanded;
   const activePalettes = palettes[activeString];
   const { isAnimatingToEvent } = events;
@@ -464,13 +476,16 @@ const mapStateToProps = (state) => {
     config: state.config,
     faSize,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
-    isAnimatingToEvent,
     isAboutOpen: modalAbout.isOpen,
     isCompareActive,
+    isChartingActive,
     isDistractionFreeModeActive,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected')
-      && !isCompareActive && !isDataDownloadTabActive,
+      && !isCompareActive && !isChartingActive && !isDataDownloadTabActive,
+    ),
+    isProjectionSwitchActive: Boolean(
+      !isAnimatingToEvent && !isChartingActive,
     ),
     isKioskModeActive,
     isLocationSearchExpanded,
@@ -575,13 +590,14 @@ toolbarContainer.propTypes = {
   config: PropTypes.object,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
-  isAnimatingToEvent: PropTypes.bool,
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   isLocationSearchExpanded: PropTypes.bool,
   isImageDownloadActive: PropTypes.bool,
+  isProjectionSwitchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRotated: PropTypes.bool,
   modalIsOpen: PropTypes.bool,

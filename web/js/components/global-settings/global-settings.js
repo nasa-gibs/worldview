@@ -39,7 +39,7 @@ function GlobalSettings(props) {
         <h3 className="wv-header">
           Show Antimeridian / Approximate Date Line
           {' '}
-          <span><FontAwesomeIcon id="datelines-toggle" icon="info-circle" /></span>
+          <span><FontAwesomeIcon id="datelines-toggle" icon="info-circle" widthAuto /></span>
           <HoverTooltip
             isMobile={false}
             labelText="For many layers, this line represents the transition of daytime imagery from one day to the next."

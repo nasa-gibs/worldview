@@ -59,7 +59,7 @@ function AnimationButton(props) {
               {labelText}
             </UncontrolledTooltip>
           )}
-        <FontAwesomeIcon icon="video" className="wv-animate" size="2x" />
+        <FontAwesomeIcon icon="video" className="wv-animate" size="2x" widthAuto />
       </div>
     </div>
   );

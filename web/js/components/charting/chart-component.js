@@ -18,7 +18,7 @@ function ChartComponent (props) {
     numRangeDays,
     isTruncated,
     title,
-    STEP_NUM,
+    numPoints,
   } = liveData;
 
   // Arbitrary array of colors to use
@@ -237,6 +237,7 @@ function ChartComponent (props) {
               icon="exclamation-triangle"
               className="wv-alert-icon"
               size="1x"
+              widthAuto
             />
             <i className="charting-disclaimer-block">
               As part of this beta feature release, the number of data points plotted between
@@ -249,11 +250,11 @@ function ChartComponent (props) {
               </b>
               have been reduced from
               <b>
-                {` ${numRangeDays} days `}
+                {` ${numRangeDays} `}
               </b>
               to
               <b>
-                {` ${STEP_NUM} days`}
+                {` ${numPoints}`}
               </b>
               .
             </i>

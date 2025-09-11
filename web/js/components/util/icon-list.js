@@ -40,7 +40,7 @@ export default function IconList(props) {
             onClick={onClickFn}
             disabled={isDisabled}
           >
-            {iconName ? <FontAwesomeIcon icon={iconName} className={iconClass} fixedWidth /> : ''}
+            {iconName ? <FontAwesomeIcon icon={iconName} className={iconClass} fixedWidth widthAuto /> : ''}
             {text || ''}
             {badge ? <Badge pill>{badge}</Badge> : ''}
           </ListGroupItem>

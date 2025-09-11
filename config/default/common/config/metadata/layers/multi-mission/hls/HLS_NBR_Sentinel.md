@@ -1,16 +1,14 @@
 **NOTE: This layer is undergoing beta testing.**
 
-The dynamically generated Normalized Burn Ratio (NBR) imagery layer is used to identify burned areas and provide a measure of burn severity. It is calculated as a ratio between the NIR and SWIR values.
-
-It is calculated using:
+The dynamically generated Normalized Burn Ratio (NBR) imagery layer is used to delineate burned areas and measure the variability of fire effects (burn severity) within those areas. The water content present in healthy vegetation, saturated soils, open water bodies, etc. strongly absorbs shortwave infrared light while the structure of vegetation biomass strongly reflects near infrared light. NBR is calculated using the reflectance of the “narrow” near infrared band (Band 8A) and the 2.1 µm shortwave infrared band (Band 12) in HLS S30 imagery. It is calculated as a ratio between the NIR and SWIR values.
 
 `NBR = (NIR - SWIR) / (NIR + SWIR)`
 
-Specifically for Sentinel-2A and -2B:
+Specifically for Sentinel-2:
 
 `NBR = (Band 8A – Band 12) / (Band 8A + Band 12)`
 
-The divergent purple to orange color palette depicts vegetated areas in shades of purple and burned areas in shades of orange.
+The divergent purple to orange color palette depicts vegetated areas in shades of purple and burned areas in shades of orange. NBR values range from -1 to 1. Decreasing NBR values within burned areas indicate increasing damage to vegetation density and vigor resulting from fire, increasing presence of ash from burned vegetation, and the increasing exposure of bare, dry soils and rocky areas. Recently burned areas present NBR values that are typically 0 to strongly negative. NBR values increasing from 0 to 1 represent increasingly healthy, undamaged vegetation only lightly burned or not at all affected by fire.
 
 The Reflectance imagery layer from Sentinel-2/MSI product (S30) is available through the HLS project from the Multi-Spectral Instrument (MSI) aboard the European Union’s Copernicus Sentinel-2A, Sentinel-2B, and Sentinel-2C satellites. The sensor resolution is 10, 20, and 60 m, imagery resolution is resampled to 30 m, and the temporal resolution is daily with a 5 day revisit time. The imagery is available in Worldview/GIBS approximately 2 - 4 days after satellite overpass. There is a separate combined Landsat 8 and 9 imagery layer available.
 

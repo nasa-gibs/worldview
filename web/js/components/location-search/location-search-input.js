@@ -128,7 +128,7 @@ class SearchBox extends Component {
             {labelText}
           </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon icon="search-location" size="1x" />
+          <FontAwesomeIcon icon="search-location" size="1x" widthAuto />
         </Button>
       </div>
     );
@@ -143,7 +143,7 @@ class SearchBox extends Component {
     return (
       activeAlert && (
         <div className="location-search-input-group-addon location-search-input-alert-icon">
-          <FontAwesomeIcon icon="exclamation-triangle" size="1x" />
+          <FontAwesomeIcon icon="exclamation-triangle" size="1x" widthAuto />
         </div>
       )
     );
@@ -177,7 +177,7 @@ class SearchBox extends Component {
             {labelText}
           </UncontrolledTooltip>
           )}
-          <FontAwesomeIcon icon="times" size="1x" />
+          <FontAwesomeIcon icon="times" size="1x" widthAuto />
         </Button>
       )
     );

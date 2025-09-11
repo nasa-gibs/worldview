@@ -26,7 +26,7 @@ function GranuleCountSlider(props) {
     <div className="layer-granule-count-select settings-component">
       <div className="d-flex">
         <h2 className="wv-header">Granule Count</h2>
-        <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ms-2" />
+        <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ms-2" widthAuto />
         <UncontrolledTooltip
           id="center-align-tooltip"
           placement="right"

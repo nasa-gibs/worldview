@@ -170,7 +170,7 @@ class ProductPickerHeader extends React.Component {
                 >
                   Return to category view
                 </UncontrolledTooltip>
-                <FontAwesomeIcon icon="arrow-left" />
+                <FontAwesomeIcon icon="arrow-left" widthAuto />
               </Button>
               {isBreadCrumb && this.renderBreadCrumb()}
             </>
@@ -199,7 +199,7 @@ class ProductPickerHeader extends React.Component {
               >
                 Filtered layer search
               </UncontrolledTooltip>
-              <FontAwesomeIcon icon="filter" />
+              <FontAwesomeIcon icon="filter" widthAuto />
             </Button>
           )}
 

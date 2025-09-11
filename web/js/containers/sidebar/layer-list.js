@@ -126,6 +126,7 @@ function LayerList(props) {
         <FontAwesomeIcon
           className="layer-group-more"
           icon="ellipsis-v"
+          widthAuto
         />
       </DropdownToggle>
       <DropdownMenu>
@@ -160,6 +161,7 @@ function LayerList(props) {
             className="layer-group-collapse"
             icon={!collapsed ? 'caret-down' : 'caret-left'}
             onClick={() => toggleCollapse(groupId, !collapsed)}
+            widthAuto
           />
         )}
       </div>

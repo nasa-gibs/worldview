@@ -41,7 +41,7 @@ const sources = {};
 let init = false;
 const STEP_NUM = 31;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
-const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location to process & try again.';
+const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
 function ChartingModeOptions(props) {
   const {
@@ -411,6 +411,7 @@ function ChartingModeOptions(props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
+        const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
         displayChart({
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
@@ -420,7 +421,7 @@ function ChartingModeOptions(props) {
           endDate: secondaryDate,
           numRangeDays,
           isTruncated: numRangeDays > STEP_NUM,
-          STEP_NUM,
+          numPoints,
         });
         updateChartRequestStatus(false);
       } else {
@@ -613,6 +614,7 @@ function ChartingModeOptions(props) {
           <FontAwesomeIcon
             icon="info-circle"
             onClick={openChartingInfoModal}
+            widthAuto
           />
           <UncontrolledTooltip
             id="center-align-tooltip"
