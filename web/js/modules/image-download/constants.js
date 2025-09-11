@@ -5,6 +5,8 @@ export const UPDATE_RESOLUTION = 'IMAGE-DOWNLOAD/UPDATE_RESOLUTION';
 
 export const RESOLUTIONS_GEO = {
   values: [
+    { value: 0.075, text: '0.075m' },
+    { value: 0.3, text: '0.3m' },
     { value: 30, text: '30m' },
     { value: 60, text: '60m' },
     { value: 125, text: '125m' },

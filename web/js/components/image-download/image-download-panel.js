@@ -17,6 +17,8 @@ import GlobalSelectCheckbox from './global-select';
 import WaitOverlay from './wait';
 
 const RESOLUTION_KEY = {
+  0.075: '7.5cm',
+  0.3: '30cm',
   30: '30m',
   60: '60m',
   125: '125m',
