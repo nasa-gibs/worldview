@@ -6,7 +6,7 @@ import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
 import OlImageTile from 'ol/source/ImageTile';
 import OlLayerGroup from 'ol/layer/Group';
-import OlLayerTile from 'ol/layer/WebGLTile.js';
+import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
 import { TileGrid as OlTileGridTileGrid, createXYZ } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
