@@ -548,6 +548,12 @@ export async function georeference (inputBlob, options) {
   ];
   if (driver !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
 
+  // For JPEG output, ensure RGB color space by selecting only RGB bands and setting color interpretation
+  if (driver === 'JPEG') {
+    translateOpts.push('-b', '1', '-b', '2', '-b', '3'); // Select only RGB bands, drop alpha
+    translateOpts.push('-colorinterp', 'red,green,blue'); // RGB color interpretation
+  }
+
   const translate = await gdal.gdal_translate(dataset, translateOpts);
 
   gdal.close(dataset);
@@ -808,7 +814,10 @@ function createRenderCompleteCallback (options) {
         sourceY, // source y
         sourceWidth, // source width
         sourceHeight, // source height
+        { colorSpace: 'srgb' },
       );
+
+      ctx.colorSpace = 'srgb';
 
       ctx.putImageData(
         capturedImageData,
