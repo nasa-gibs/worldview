@@ -3,8 +3,8 @@
       "World_Imagery": {
         "id": "World_Imagery",
         "title": "World Imagery",
-        "subtitle": "Esri, Maxar, Earthstar Geographics, and the GIS User Community",
-        "description": "esri/World_Imagery",
+        "subtitle": "Sources: Esri, Maxar, Earthstar Geographics, and the GIS User Community",
+        "description": "reference/esri/World_Imagery",
         "tags": "",
         "group": "baselayers",
         "layergroup": "Base Layers",
@@ -20,4 +20,3 @@
       }
     }
   }
-  
