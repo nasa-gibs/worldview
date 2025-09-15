@@ -568,7 +568,7 @@ export async function georeference (inputBlob, options) {
 
   const files = translate.all.map((p) => ({ path: p.local }));
   const imageFilePath = files.find((f) => f.path.endsWith(`.${outputFormat}`))?.path;
-  const worldFilePath = files.find((f) => (f.path.endsWith('.wld') || f.path.endsWith('.tfw')))?.path;
+  const worldFilePath = files.find((f) => f.path.endsWith('.wld') || f.path.endsWith('.tfw'))?.path;
   const imageFileBytes = await gdal.getFileBytes(imageFilePath);
   const imageFileName = imageFilePath.split('/').pop();
   const imageFileBlob = new Blob([imageFileBytes]);
@@ -587,7 +587,7 @@ export async function georeference (inputBlob, options) {
       blob: worldFileBlob,
     });
   }
-  
+
   return output;
 }
 
