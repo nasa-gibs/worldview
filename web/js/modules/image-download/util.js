@@ -546,12 +546,20 @@ export async function georeference (inputBlob, options) {
     '-r', 'average', // Resampling method
     '-a_ullr', extent[0], extent[3], extent[2], extent[1], // Set the bounding box
   ];
-  if (driver !== 'GTiff') translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
+  if (driver !== 'GTiff') {
+    translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
+  } else {
+    translateOpts.push('-co', `TFW=${worldfile}`); // Create ESRI tfw file
+  }
 
   // For JPEG output, ensure RGB color space by selecting only RGB bands and setting color interpretation
   if (driver === 'JPEG') {
-    translateOpts.push('-b', '1', '-b', '2', '-b', '3'); // Select only RGB bands, drop alpha
-    translateOpts.push('-colorinterp', 'red,green,blue'); // RGB color interpretation
+    const jpegOpts = [
+      '-co', 'QUALITY=100', // Maximum quality
+      '-b', '1', '-b', '2', '-b', '3', // Select only RGB bands, drop alpha
+      '-colorinterp', 'red,green,blue', // RGB color interpretation
+    ];
+    translateOpts.push(...jpegOpts);
   }
 
   const translate = await gdal.gdal_translate(dataset, translateOpts);
@@ -560,7 +568,7 @@ export async function georeference (inputBlob, options) {
 
   const files = translate.all.map((p) => ({ path: p.local }));
   const imageFilePath = files.find((f) => f.path.endsWith(`.${outputFormat}`))?.path;
-  const worldFilePath = files.find((f) => f.path.endsWith('.wld'))?.path;
+  const worldFilePath = files.find((f) => (f.path.endsWith('.wld') || f.path.endsWith('.tfw')))?.path;
   const imageFileBytes = await gdal.getFileBytes(imageFilePath);
   const imageFileName = imageFilePath.split('/').pop();
   const imageFileBlob = new Blob([imageFileBytes]);
@@ -579,7 +587,7 @@ export async function georeference (inputBlob, options) {
       blob: worldFileBlob,
     });
   }
-
+  
   return output;
 }
 
@@ -858,7 +866,7 @@ function createRenderCompleteCallback (options) {
         description: 'Snapshot created with NASA Worldview',
       });
 
-      if (worldfile || format === 'kmz') {
+      if (georeferencedOutput.length > 1 || format === 'kmz') {
         // Check if operation was cancelled before creating zip
         rejectIfAborted(abortSignal, reject);
 
