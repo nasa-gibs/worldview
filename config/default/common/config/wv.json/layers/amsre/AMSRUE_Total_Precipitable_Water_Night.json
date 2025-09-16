@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRUE_Total_Precipitable_Water_Night": {
+      "id": "AMSRUE_Total_Precipitable_Water_Night",
+      "description": "amsre/AMSRUE_Total_Precipitable_Water_Night",
+      "tags": "amsrue amsr-ue",
+      "group": "overlays",
+      "layergroup": "Precipitation Rate"
+    }
+  }
+}

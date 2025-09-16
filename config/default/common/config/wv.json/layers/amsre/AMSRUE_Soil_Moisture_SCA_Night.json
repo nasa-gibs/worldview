@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRUE_Soil_Moisture_SCA_Night": {
+      "id": "AMSRUE_Soil_Moisture_SCA_Night",
+      "description": "amsre/AMSRUE_Soil_Moisture_SCA_Night",
+      "group": "overlays",
+      "tags": "soil moisture sca",
+      "layergroup": "Soil Moisture"
+    }
+  }
+}
