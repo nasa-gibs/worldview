@@ -655,7 +655,7 @@ function toggleHighResTileGrids (map) {
  * @param {Object} map
  * @returns {Function} - A function to restore the original map state
  */
-function createMapRestore(map, extent, highResTileGrids = true) {
+function createMapRestore(map, extent, highResTileGrids) {
   const mapElement = map.getTargetElement();
   const originalView = map.getView();
   const ViewConstructor = originalView.constructor;
@@ -1059,7 +1059,9 @@ export async function snapshot(options) {
   const [originalWidth, originalHeight] = map.getSize();
   const extent = getExtentFromPixelBbox(pixelBbox, map);
 
-  const enableHighResTileGrids = useHighResTileGrids || metersPerPixel < 1000;
+  const enableHighResTileGrids = useHighResTileGrids && metersPerPixel < 1000;
+
+  console.log({ enableHighResTileGrids }); // eslint-disable-line no-console
 
   // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
   const restoreMap = createMapRestore(map, extent, enableHighResTileGrids);
