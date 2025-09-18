@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "SPEXONE_PACE_True_Color": {
+      "id": "SPEXONE_PACE_True_Color",
+      "description": "spexone/SPEXONE_PACE_True_Color",
+      "tags": "natural color spexone pace plankton ocean",
+      "group": "overlays",
+      "layergroup": "Corrected Reflectance",
+      "wrapadjacentdays": true
+    }
+  }
+}
