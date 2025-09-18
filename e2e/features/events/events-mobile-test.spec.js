@@ -1,4 +1,3 @@
-
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { mockEvents, stormEventSelected } = require('../../test-utils/global-variables/querystrings')

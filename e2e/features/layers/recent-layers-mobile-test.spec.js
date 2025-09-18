@@ -1,4 +1,3 @@
-
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { assertCategories, closeModal } = require('../../test-utils/hooks/wvHooks')

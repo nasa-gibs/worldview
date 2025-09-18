@@ -1,4 +1,3 @@
-
 const { test, expect } = require('@playwright/test')
 const { skipTour, referenceLayersOnly } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
