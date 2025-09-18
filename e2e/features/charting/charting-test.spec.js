@@ -1,4 +1,4 @@
-// @ts-check
+
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive, multipleDataLayers, referenceLayersOnly } = require('../../test-utils/global-variables/querystrings')

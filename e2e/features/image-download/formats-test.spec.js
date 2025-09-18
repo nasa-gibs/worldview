@@ -15,8 +15,7 @@ let page
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   'v=-1,-1,1,1',
-  't=2018-06-01',
-  'imageDownload='
+  't=2018-06-01'
 ]
 
 test.describe.configure({ mode: 'serial' })

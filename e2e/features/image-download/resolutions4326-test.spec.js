@@ -16,8 +16,7 @@ const startParams = [
   'p=geographic',
   'v=-180,-90,180,90',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
-  't=2018-06-01',
-  'imageDownload='
+  't=2018-06-01'
 ]
 
 test.describe.configure({ mode: 'serial' })
@@ -120,19 +119,30 @@ test('Last zoom level is 30m', async () => {
 test('Confirm bounding box integrity by testing snapshot functionality', async () => {
   await openImageDownloadPanel(page)
 
+  const downloadPromise = page.waitForEvent('download')
+
   // Verify the bounding box display is present
-  const bboxDisplay = page.locator('.image-coordinates-panel')
+  const bboxDisplay = page.locator('.wv-image-input-case')
   await expect(bboxDisplay).toBeVisible()
 
   // Start download and verify progress indicator appears
   await clickDownload(page)
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
+  const progressDialog = page.locator('.wv-snapshot-progress-overlay')
+  await expect(progressDialog).toBeVisible()
 
-  // Wait for completion or cancel after reasonable time
-  await Promise.race([
-    page.locator('.wv-snapshot-progress-dialog').waitFor({ state: 'hidden', timeout: 30000 }),
-    page.locator('button:text("Cancel")').click()
-  ])
+  const cancelButton = page.locator('button.wv-button.wv-button-red')
+  await expect(cancelButton).toBeVisible()
+
+  // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
+  try {
+    await Promise.race([
+      downloadPromise,
+      progressDialog.waitFor({ state: 'detached', timeout: 200_000 }),
+      cancelButton.click()
+    ])
+  } catch (e) {
+    throw new Error('Snapshot download did not complete or progress dialog did not disappear in time')
+  }
 
   await closeImageDownloadPanel(page)
 })

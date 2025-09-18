@@ -13,8 +13,7 @@ let page
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   'v=-1,-1,1,1',
-  't=2018-06-01',
-  'imageDownload='
+  't=2018-06-01'
 ]
 const downloadDir = 'test-downloads'
 
@@ -51,7 +50,7 @@ test('download button downloads an image', async () => {
   // Assert that the file exists
   expect(fs.existsSync(filePath)).toBeTruthy()
 
-  // (Optional) Further checks on the downloaded file, e.g., size or content
+  // Check file size is greater than 0
   const fileStats = fs.statSync(filePath)
   expect(fileStats.size).toBeGreaterThan(0)
 
@@ -166,8 +165,7 @@ test('download KMZ format with larger area', async () => {
   const largeAreaParams = [
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
     'v=-10,-10,10,10', // Larger viewport
-    't=2018-06-01',
-    'imageDownload='
+    't=2018-06-01'
   ]
 
   const url = await joinUrl(largeAreaParams, null)
@@ -206,8 +204,7 @@ test('download with different date and layers', async () => {
   const multiLayerParams = [
     'l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor',
     'v=-5,-5,5,5',
-    't=2020-01-15',
-    'imageDownload='
+    't=2020-01-15'
   ]
 
   const url = await joinUrl(multiLayerParams, null)
@@ -239,8 +236,7 @@ test('download Arctic projection with PNG format', async () => {
     'p=arctic',
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
     'v=-1000000,-1000000,1000000,1000000',
-    't=2018-06-01',
-    'imageDownload='
+    't=2018-06-01'
   ]
 
   const url = await joinUrl(arcticParams, null)
@@ -279,8 +275,7 @@ test('download with high resolution (60m)', async () => {
   const highResParams = [
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
     'v=-0.5,-0.5,0.5,0.5', // Small area for high resolution
-    't=2018-06-01',
-    'imageDownload='
+    't=2018-06-01'
   ]
 
   const url = await joinUrl(highResParams, null)
@@ -316,8 +311,7 @@ test('download with Antarctic projection and GeoTIFF', async () => {
     'p=antarctic',
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
     'v=-1000000,-1000000,1000000,1000000',
-    't=2018-06-01',
-    'imageDownload='
+    't=2018-06-01'
   ]
 
   const url = await joinUrl(antarcticParams, null)

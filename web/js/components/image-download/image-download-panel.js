@@ -115,7 +115,7 @@ function ImageDownloadPanel(props) {
       filename: `snapshot-${date.toISOString()}`,
     };
 
-    const timeout = setTimeout(onCancelSnapshot, 300_000);
+    const timeout = setTimeout(onCancelSnapshot, 180_000);
     try {
       setSnapshotStatus('Creating snapshot...');
       await snapshot(snapshotOptions);

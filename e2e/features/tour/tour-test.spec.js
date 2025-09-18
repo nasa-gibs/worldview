@@ -1,4 +1,4 @@
-// @ts-check
+
 const { test } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
