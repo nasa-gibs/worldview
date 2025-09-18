@@ -711,7 +711,7 @@ async function initiateDownload(blob, filename, abortSignal, parentReject) {
 
   // Wait for download to initiate with cancellation support
   return new Promise((resolve, reject) => {
-    const timeoutId = setTimeout(resolve, 1000);
+    const timeoutId = setTimeout(resolve, 0);
 
     if (abortSignal) {
       const abortHandler = () => {
@@ -737,7 +737,7 @@ async function initiateDownload(blob, filename, abortSignal, parentReject) {
       // Clean up the event listener when the timeout completes
       setTimeout(() => {
         abortSignal.removeEventListener('abort', abortHandler);
-      }, 1000);
+      }, 0);
     }
   });
 }
