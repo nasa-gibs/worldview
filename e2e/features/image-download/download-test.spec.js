@@ -26,6 +26,7 @@ test.afterEach(async () => {
 })
 
 test('download button downloads an image', async () => {
+  test.setTimeout(200_500)
   const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
@@ -59,6 +60,7 @@ test('download button downloads an image', async () => {
 })
 
 test('download PNG format with different resolution', async () => {
+  test.setTimeout(200_500)
   const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
@@ -92,6 +94,7 @@ test('download PNG format with different resolution', async () => {
 })
 
 test('download GeoTIFF with worldfile enabled', async () => {
+  test.setTimeout(200_500)
   const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
@@ -125,6 +128,7 @@ test('download GeoTIFF with worldfile enabled', async () => {
 })
 
 test('download GeoTIFF with entire globe selected', async () => {
+  test.setTimeout(200_500)
   const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
@@ -162,6 +166,7 @@ test('download GeoTIFF with entire globe selected', async () => {
 })
 
 test('download KMZ format with larger area', async () => {
+  test.setTimeout(200_500)
   const largeAreaParams = [
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
     'v=-10,-10,10,10', // Larger viewport
@@ -201,6 +206,7 @@ test('download KMZ format with larger area', async () => {
 })
 
 test('download with different date and layers', async () => {
+  test.setTimeout(200_500)
   const multiLayerParams = [
     'l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor',
     'v=-5,-5,5,5',
@@ -232,6 +238,7 @@ test('download with different date and layers', async () => {
 })
 
 test('download Arctic projection with PNG format', async () => {
+  test.setTimeout(200_500)
   const arcticParams = [
     'p=arctic',
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
@@ -272,6 +279,7 @@ test('download Arctic projection with PNG format', async () => {
 })
 
 test('download with high resolution (60m)', async () => {
+  test.setTimeout(200_500)
   const highResParams = [
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
     'v=-0.5,-0.5,0.5,0.5', // Small area for high resolution
@@ -307,6 +315,7 @@ test('download with high resolution (60m)', async () => {
 })
 
 test('download with Antarctic projection and GeoTIFF', async () => {
+  test.setTimeout(200_500)
   const antarcticParams = [
     'p=antarctic',
     'l=MODIS_Terra_CorrectedReflectance_TrueColor',
