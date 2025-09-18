@@ -1061,8 +1061,6 @@ export async function snapshot(options) {
 
   const enableHighResTileGrids = useHighResTileGrids && metersPerPixel < 1000;
 
-  console.log({ enableHighResTileGrids }); // eslint-disable-line no-console
-
   // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
   const restoreMap = createMapRestore(map, extent, enableHighResTileGrids);
   const view = map.getView();
