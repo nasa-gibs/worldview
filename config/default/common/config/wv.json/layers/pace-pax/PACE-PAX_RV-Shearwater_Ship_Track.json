@@ -13,7 +13,7 @@
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
-      "layergroup": "Suborbital Flight Tracks",
+      "layergroup": "Suborbital Ship Tracks",
       "vectorStyle": {
         "id": "PACE-PAX_RV-Shearwater_Ship_Track",
         "geographic": {

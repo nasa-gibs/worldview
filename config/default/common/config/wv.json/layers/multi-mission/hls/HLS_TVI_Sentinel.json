@@ -16,8 +16,8 @@
      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending", "OrbitTracks_Sentinel-2C_Descending"],
       "orbitDirection": ["descending", "descending", "descending"],
       "bandCombo": {
-        "assets": ["B03", "B04", "B05"],
-        "expression": "(120*(B05-B03)-200*(B04-B03))/2",
+        "assets": ["B03", "B04", "B8A"],
+        "expression": "(120*(B8A-B03)-200*(B04-B03))/2",
         "rescale": "-1,1",
         "colormap_name": "brbg",
         "bands_regex": "B[0-9][0-9A-Za-z]"

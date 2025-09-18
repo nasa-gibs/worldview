@@ -6,7 +6,7 @@ It is calculated using:
 
 `EVI = G * ((NIR - R) / (NIR + C1 * R – C2 * B + L))`
 
-Specifically for Sentinel-2A and -2B:
+Specifically for Sentinel-2:
 
 `EVI = 2.5 * ((B8A – B4) / (B8A + 6 * B4 – 7.5 * B2 + 1))`
 
