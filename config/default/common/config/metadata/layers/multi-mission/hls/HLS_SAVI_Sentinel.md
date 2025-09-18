@@ -6,7 +6,7 @@ It is calculated using:
 
 `SAVI = ((NIR - R) / (NIR + R + L)) * (1 + L)`
 
-Specifically for Sentinel-2A and -2B:
+Specifically for Sentinel-2:
 
 `SAVI = ((Band 8A – Band 4) / (Band 8A + Band 4 + 0.428)) * (1.428)`
 
