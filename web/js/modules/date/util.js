@@ -537,3 +537,54 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
   newDate = new Date(util.clamp(newDate, newMinDate, newMaxDate));
   return newDate;
 };
+
+/**
+ * Gets the next imagery delta for smart increments
+ *
+ * @method getNextImageryDelta
+ * @param  {Array} layers
+ * @param  {object} date Selected date
+ * @param  {Number} signConstant Direction of increment
+ * @returns {array} Array of visible layers within the date.
+ */
+export function getNextImageryDelta(layers, dateA, signConstant) {
+  let delta;
+  const dateAObj = new Date(dateA);
+  let hasDeltaChanged = false;
+  for (let i = 0; i < layers.length; i += 1) {
+    if (signConstant > 0) {
+      for (let j = 0; j < layers[i]?.dateRanges.length; j += 1) {
+        const obj = layers[i]?.dateRanges[j];
+        const startDateObj = new Date(obj.startDate);
+        if (dateAObj < startDateObj) {
+          const possibleDelta = Math.floor(((startDateObj - dateAObj) / 1000) / 60);
+          if (possibleDelta > 0) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+      }
+      if (hasDeltaChanged) {
+        return;
+      }
+    } else {
+      for (let j = 0; j < layers[i]?.dateRanges.length; j += 1) {
+        const obj = layers[i]?.dateRanges.reverse()[j];
+        const endDateObj = new Date(obj.endDate);
+        if (dateAObj > endDateObj) {
+          const possibleDelta = Math.floor(((dateAObj - endDateObj) / 1000) / 60);
+          if (possibleDelta > 0) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+      }
+      if (hasDeltaChanged) {
+        break;
+      }
+    }
+  }
+  return delta;
+}

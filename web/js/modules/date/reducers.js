@@ -23,6 +23,7 @@ export const dateReducerState = {
   interval: 3,
   delta: 1,
   customSelected: false,
+  smartSelected: false,
   customDelta: undefined,
   customInterval: undefined,
   timelineCustomModalOpen: false,
@@ -66,6 +67,7 @@ export function dateReducer(state = dateReducerState, action) {
         interval: action.interval,
         delta: action.delta,
         customSelected: action.customSelected,
+        smartSelected: action.smartSelected,
       };
     case SELECT_DATE:
       return {

@@ -89,6 +89,7 @@ class TimeScaleIntervalChange extends PureComponent {
       customInterval, customDelta, selectInterval, toggleCustomModal, modalType,
     } = this.props;
     const customSelected = timeScale === 'custom';
+    const smartSelected = timeScale === 'smart';
     let delta;
     let newTimeScale = timeScale;
 
@@ -100,11 +101,14 @@ class TimeScaleIntervalChange extends PureComponent {
     if (customSelected && customInterval && customDelta) {
       newTimeScale = customInterval;
       delta = customDelta;
+    } else if (smartSelected) {
+      newTimeScale = 5;
+      delta = 1;
     } else {
       newTimeScale = Number(TIME_SCALE_TO_NUMBER[newTimeScale]);
       delta = 1;
     }
-    selectInterval(delta, newTimeScale, customSelected);
+    selectInterval(delta, newTimeScale, customSelected, smartSelected);
   };
 
   // set custom text for custom interval
@@ -168,6 +172,13 @@ class TimeScaleIntervalChange extends PureComponent {
               >
                 Minute
               </span>
+              <span
+                id="interval-smart"
+                className="interval-btn interval-smart"
+                onClick={() => this.handleClickInterval('smart')}
+              >
+                Smart
+              </span>
             </>
           ) : null}
           <span
@@ -196,6 +207,7 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.state;
     const {
       customSelected,
+      smartSelected,
       interval,
       isDisabled,
     } = this.props;
@@ -214,7 +226,7 @@ class TimeScaleIntervalChange extends PureComponent {
           id="current-interval"
           className={className}
         >
-          {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
+          {customSelected ? customIntervalText : smartSelected ? 'SMART' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
         </span>
 
         {!isDisabled ? this.renderTooltip() : null}
@@ -228,21 +240,22 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCustomModal: (isOpen, modalType) => {
     dispatch(toggleCustomModalAction(isOpen, modalType));
   },
-  selectInterval: (delta, timeScale, customSelected) => {
-    dispatch(selectIntervalAction(delta, timeScale, customSelected));
+  selectInterval: (delta, timeScale, customSelected, smartSelected) => {
+    dispatch(selectIntervalAction(delta, timeScale, customSelected, smartSelected));
   },
 });
 
 const mapStateToProps = (state) => {
   const { date } = state;
   const {
-    interval, customInterval, customDelta, customSelected,
+    interval, customInterval, customDelta, customSelected, smartSelected,
   } = date;
   return {
     interval,
     customInterval,
     customDelta,
     customSelected,
+    smartSelected,
   };
 };
 
@@ -250,6 +263,7 @@ TimeScaleIntervalChange.propTypes = {
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  smartSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.number,
   isDisabled: PropTypes.bool,

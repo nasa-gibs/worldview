@@ -67,12 +67,14 @@ describe('dateReducer', () => {
           interval: 2,
           delta: 1,
           customSelected: false,
+          smartSelected: false,
         }),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
         delta: 1,
         customSelected: false,
+        smartSelected: false,
       });
     },
   );

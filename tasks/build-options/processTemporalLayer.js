@@ -16,7 +16,7 @@ async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic')
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
   try {
     let ranges = toList(value)
-    const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[source]}/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
+    const describeDomainsUrl = `https://uat.gibs.earthdata.nasa.gov/wmts/${projDict[source]}/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
     try {
       const describeDomainsResponse = await fetch(describeDomainsUrl)
       if (describeDomainsResponse?.ok) {

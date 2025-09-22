@@ -98,7 +98,7 @@ export function changeCustomInterval(delta, customInterval) {
     });
   };
 }
-export function selectInterval(delta, interval, customSelected) {
+export function selectInterval(delta, interval, customSelected, smartSelected) {
   return (dispatch, getState) => {
     dispatch(clearPreload());
     dispatch({
@@ -106,6 +106,7 @@ export function selectInterval(delta, interval, customSelected) {
       interval,
       delta,
       customSelected,
+      smartSelected,
     });
   };
 }
