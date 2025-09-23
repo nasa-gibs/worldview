@@ -9,6 +9,7 @@ const fs = require('fs')
 const path = require('path')
 
 let page
+let downloadPromise
 
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
@@ -17,12 +18,25 @@ const startParams = [
 ]
 const downloadDir = 'test-downloads'
 
+test.beforeAll(() => {
+  if (!fs.existsSync(downloadDir)) {
+    fs.mkdirSync(downloadDir)
+  }
+})
+
 test.beforeEach(async ({ browser }) => {
   page = await browser.newPage()
+  downloadPromise = page.waitForEvent('download')
 })
 
 test.afterEach(async () => {
   await page.close()
+})
+
+test.afterAll(() => {
+  if (fs.existsSync(downloadDir)) {
+    fs.rmdirSync(downloadDir, { recursive: true })
+  }
 })
 
 test('download button downloads an image', async () => {
@@ -32,17 +46,14 @@ test('download button downloads an image', async () => {
   await closeModal(page)
   await openImageDownloadPanel(page)
 
-  const downloadPromise = page.waitForEvent('download')
-
   // Start download and verify progress indicator appears
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.jpeg')
 
-  fs.mkdirSync(downloadDir, { recursive: true }) // Create the directory if it doesn't exist
   const filePath = path.join(downloadDir, suggestedFilename)
 
   // Save the downloaded file
@@ -74,15 +85,13 @@ test('download PNG format with different resolution', async () => {
   const resolutionSelect = page.locator('#wv-image-resolution')
   await resolutionSelect.selectOption('250')
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.png')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -108,15 +117,13 @@ test('download GeoTIFF with worldfile enabled', async () => {
   const worldfileCheckbox = page.locator('#wv-image-worldfile')
   await worldfileCheckbox.selectOption('1')
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -145,15 +152,13 @@ test('download GeoTIFF with entire globe selected', async () => {
   const globeCheckbox = page.locator('#image-global-cb')
   await globeCheckbox.click()
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -186,15 +191,13 @@ test('download KMZ format with larger area', async () => {
   const resolutionSelect = page.locator('#wv-image-resolution')
   await resolutionSelect.selectOption('1000')
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.kmz')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -218,15 +221,13 @@ test('download with different date and layers', async () => {
   await closeModal(page)
   await openImageDownloadPanel(page)
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2020-01-15T00_00_00.000Z.jpeg')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -259,15 +260,13 @@ test('download Arctic projection with PNG format', async () => {
   const resolutionSelect = page.locator('#wv-image-resolution')
   await resolutionSelect.selectOption('1000')
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.png')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -295,15 +294,13 @@ test('download with high resolution (60m)', async () => {
   const resolutionSelect = page.locator('#wv-image-resolution')
   await resolutionSelect.selectOption('60')
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.jpeg')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
@@ -336,15 +333,13 @@ test('download with Antarctic projection and GeoTIFF', async () => {
   const resolutionSelect = page.locator('#wv-image-resolution')
   await resolutionSelect.selectOption('500')
 
-  const downloadPromise = page.waitForEvent('download')
   await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
   await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
 
-  fs.mkdirSync(downloadDir, { recursive: true })
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
 
