@@ -197,7 +197,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (def.period === 'subdaily') {
-      closestDate = def.id.includes('TEMPO_L2') ? closestDate : nearestInterval(def, closestDate);
+      closestDate = def.id.includes('TEMPO') ? closestDate : nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
       closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
