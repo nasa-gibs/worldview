@@ -555,7 +555,7 @@ export async function georeference (inputBlob, options) {
   // For JPEG output, ensure RGB color space by selecting only RGB bands and setting color interpretation
   if (driver === 'JPEG') {
     const jpegOpts = [
-      '-co', 'QUALITY=100', // Maximum quality
+      '-co', 'QUALITY=75', // Maximum quality
       '-b', '1', '-b', '2', '-b', '3', // Select only RGB bands, drop alpha
       '-colorinterp', 'red,green,blue', // RGB color interpretation
     ];
