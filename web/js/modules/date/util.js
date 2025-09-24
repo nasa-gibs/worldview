@@ -553,8 +553,8 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
   let hasDeltaChanged = false;
   for (let i = 0; i < layers.length; i += 1) {
     if (signConstant > 0) {
-      for (let j = 0; j < layers[i]?.dateRanges.length; j += 1) {
-        const obj = layers[i]?.dateRanges[j];
+      for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
+        const obj = layers[i].dateRanges[j];
         const startDateObj = new Date(obj.startDate);
         if (dateAObj < startDateObj) {
           const possibleDelta = Math.floor(((startDateObj - dateAObj) / 1000) / 60);
@@ -566,11 +566,11 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
         }
       }
       if (hasDeltaChanged) {
-        return;
+        break;
       }
     } else {
-      for (let j = 0; j < layers[i]?.dateRanges.length; j += 1) {
-        const obj = layers[i]?.dateRanges.reverse()[j];
+      for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
+        const obj = [...layers[i].dateRanges].reverse()[j];
         const endDateObj = new Date(obj.endDate);
         if (dateAObj > endDateObj) {
           const possibleDelta = Math.floor(((dateAObj - endDateObj) / 1000) / 60);
