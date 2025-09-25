@@ -59,7 +59,6 @@ function ImageDownloadPanel(props) {
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
   const [maxWidth, setMaxWidth] = useState(0);
   const [maxHeight, setMaxHeight] = useState(0);
-  const [globalSelected, setGlobalSelected] = useState(false);
   const [isSnapshotInProgress, setIsSnapshotInProgress] = useState(false);
   const [snapshotStatus, setSnapshotStatus] = useState('');
   const abortControllerRef = useRef(null);

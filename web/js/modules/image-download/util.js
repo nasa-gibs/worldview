@@ -1049,7 +1049,7 @@ export async function snapshot(options) {
     worldfile,
     abortSignal,
     filename = 'Worldview Snapshot',
-    projection
+    projection,
   } = options;
 
   // Check if operation was cancelled before starting
