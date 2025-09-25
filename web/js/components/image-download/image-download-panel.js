@@ -259,7 +259,6 @@ function ImageDownloadPanel(props) {
           onLatLongChange={onLatLongChange}
           proj={projection.id}
           map={map}
-          handleChange={(event) => setGlobalSelected(event.target.checked)}
         />
         {showGranuleWarning && (
           <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line
