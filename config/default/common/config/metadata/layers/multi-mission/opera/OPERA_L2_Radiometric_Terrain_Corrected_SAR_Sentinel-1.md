@@ -6,7 +6,5 @@ The OPERA RTC-S1 product contains modified Copernicus Sentinel data correspondin
 
  The OPERA RTC-S1 product is produced by the Observational Products for End-Users from Remote Sensing Analysis (OPERA) project. The OPERA project, managed by the Jet Propulsion Laboratory and funded by the Satellite Needs Working Group (SNWG), creates remote sensing products to address Earth observation needs across U.S. civilian federal agencies.
 
-The imagery is available in Worldview/GIBS approximately XX - XX days after satellite overpass.
-
 References: [doi:10.5067/SNWG/OPERA_L2_RTC-S1_V1](https://doi.org/10.5067/SNWG/OPERA_L2_RTC-S1_V1)
 
