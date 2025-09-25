@@ -1,0 +1,12 @@
+The OPERA Radiometric Terrain Corrected SAR Backscatter from Sentinel-1 (RTC-S1) is a Level-2 (L2) product. It provides terrain-corrected radar images with a 30-meter pixel spacing and a temporal resolution of a few days to weeks on average, depending on the location. Each RTC-S1 product is derived from a Sentinel-1 Interferometric Wide (IW) Single-Look Complex (SLC) burst, provided by the European Space Agency (ESA). Synthetic aperture radar (SAR) images deliver all-weather, day-and-night, imaging of the Earth’s surface.
+
+RTC-S1 images are displayed in false-color for better visual interpretation of the SAR backscatter data. The false-color RGB visualization combines both co-polarized VV (vertical transmit vertical receive) or HH (horizontal transmit horizontal receive) backscatter values (red and blue) with cross-polarized VH or HV values (green) to generate a color image from SAR data. In this false-color scale, vegetated areas appear green; urban and/or sparsely vegetated areas appear white/pink; calm water, dry sand, and frozen ground appears black; and rough water appears purple or magenta. Note there are other land covers not listed that may have similar appearance and it is recommended that users consult auxiliary datasets to help determine the land cover of interest.
+
+The OPERA RTC-S1 product contains modified Copernicus Sentinel data corresponding to the same time period of the OPERA RTC-S1 product. The organizations in charge of the OPERA project and the Copernicus programme by law or by delegation do not assume any legal responsibility or liability, whether express or implied, arising from the use of this product. Users, including those who redistribute, adapt, modify, or combine RTC-S1 data, must comply with the terms of the [Copernicus Sentinel Data License Agreement](https://www.earthdata.nasa.gov/engage/open-data-services-software/end-user-license-agreements#toc-sentinel-1-end-user-license-agreement).
+
+ The OPERA RTC-S1 product is produced by the Observational Products for End-Users from Remote Sensing Analysis (OPERA) project. The OPERA project, managed by the Jet Propulsion Laboratory and funded by the Satellite Needs Working Group (SNWG), creates remote sensing products to address Earth observation needs across U.S. civilian federal agencies.
+
+The imagery is available in Worldview/GIBS approximately XX - XX days after satellite overpass.
+
+References: [doi:10.5067/SNWG/OPERA_L2_RTC-S1_V1](https://doi.org/10.5067/SNWG/OPERA_L2_RTC-S1_V1)
+
