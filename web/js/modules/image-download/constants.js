@@ -7,23 +7,23 @@ export const RESOLUTIONS_GEO = {
   values: [
     { value: 0.075, text: '0.075m' },
     { value: 0.3, text: '0.3m' },
-    { value: 30, text: '30m' },
-    { value: 60, text: '60m' },
-    { value: 125, text: '125m' },
-    { value: 250, text: '250m' },
-    { value: 500, text: '500m' },
-    { value: 1000, text: '1km' },
-    { value: 5000, text: '5km' },
-    { value: 10000, text: '10km' },
+    { value: 30, text: '30m', tileMatrixID: 11 },
+    { value: 60, text: '60m', tileMatrixID: 10 },
+    { value: 125, text: '125m', tileMatrixID: 9 },
+    { value: 250, text: '250m', tileMatrixID: 8 },
+    { value: 500, text: '500m', tileMatrixID: 7 },
+    { value: 1000, text: '1km', tileMatrixID: 6 },
+    { value: 5000, text: '5km', tileMatrixID: 5 },
+    { value: 10000, text: '10km', tileMatrixID: 4 },
   ],
 };
 export const RESOLUTIONS_POLAR = {
   values: [
-    { value: 250, text: '250m' },
-    { value: 500, text: '500m' },
-    { value: 1000, text: '1km' },
-    { value: 5000, text: '5km' },
-    { value: 10000, text: '10km' },
+    { value: 250, text: '250m', tileMatrixID: 5 },
+    { value: 500, text: '500m', tileMatrixID: 4 },
+    { value: 1000, text: '1km', tileMatrixID: 3 },
+    { value: 5000, text: '5km', tileMatrixID: 2 },
+    { value: 10000, text: '10km', tileMatrixID: 1 },
   ],
 };
 export const fileTypesGeo = {

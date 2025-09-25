@@ -71,7 +71,7 @@ function ImageDownloadPanel(props) {
   };
 
   useEffect(() => {
-    const divElem = document.querySelector('body > div');
+    const divElem = document.querySelector('body');
     const resizeHandler = async () => {
       const { height, width } = await estimateMaxImageSize(map, Number(currResolution));
       setMaxHeight(height);
@@ -110,15 +110,17 @@ function ImageDownloadPanel(props) {
       pixelBbox: boundaries,
       map,
       worldfile: currIsWorldfile,
-      useHighResTileGrids: !globalSelected,
       abortSignal: abortController.signal,
       filename: `snapshot-${date.toISOString()}`,
+      projection,
     };
 
     const timeout = setTimeout(onCancelSnapshot, 180_000);
     try {
       setSnapshotStatus('Creating snapshot...');
+      const startTime = Date.now();
       await snapshot(snapshotOptions);
+      const endTime = Date.now();
       setSnapshotStatus('Download complete!');
 
       googleTagManager.pushEvent({
@@ -126,6 +128,7 @@ function ImageDownloadPanel(props) {
         layers: {
           activeCount: layerList.length,
         },
+        duration: endTime - startTime,
         image: {
           resolution: RESOLUTION_KEY[currResolution],
           format: currFileType,
