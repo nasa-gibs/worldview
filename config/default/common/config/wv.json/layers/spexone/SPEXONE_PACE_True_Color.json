@@ -6,7 +6,7 @@
       "tags": "natural color spexone pace plankton ocean",
       "group": "overlays",
       "layergroup": "Corrected Reflectance",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": false
     }
   }
 }

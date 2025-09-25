@@ -6,7 +6,7 @@
       "tags": "natural color harp2 pace plankton ocean",
       "group": "baselayers",
       "layergroup": "Corrected Reflectance",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": false
     }
   }
 }
