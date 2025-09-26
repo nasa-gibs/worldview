@@ -90,6 +90,8 @@
 		"VIIRS_NOAA20_CorrectedReflectance_BandsM11-I2-I1_Granule",
 		"VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11_Granule",
 		"OCI_PACE_True_Color",
+		"HARP2_PACE_True_Color",
+		"SPEXONE_PACE_True_Color",
 		"MODIS_Combined_L3_Nadir-BRDF_Daily",
 		"BlueMarble_NextGeneration",
 		"BlueMarble_ShadedRelief",
