@@ -433,10 +433,10 @@ export function convertPngToKml(pngBlob, options) {
   return new Promise((resolve, reject) => {
     try {
       // Validate input
-      if (!(pngBlob instanceof Blob)) reject(new Error('Input must be a Blob'));
+      if (!(pngBlob instanceof Blob)) return reject(new Error('Input must be a Blob'));
 
       // KML requires coordinates in EPSG:4326 (WGS84)
-      if (options.crs !== 'EPSG:4326') reject(new Error('KML requires WGS84 coordinates'));
+      if (options.crs !== 'EPSG:4326') return reject(new Error('KML requires WGS84 coordinates'));
 
       const reader = new FileReader();
 
