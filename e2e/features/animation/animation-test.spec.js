@@ -1,4 +1,3 @@
-// @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour, activeAnimationWidget, animationGeostationary } = require('../../test-utils/global-variables/querystrings')

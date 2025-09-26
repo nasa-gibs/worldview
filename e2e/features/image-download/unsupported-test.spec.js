@@ -1,4 +1,3 @@
-// @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { closeImageDownloadPanel, closeModal } = require('../../test-utils/hooks/wvHooks')
@@ -11,7 +10,7 @@ let cancelNotify
 let acceptNotify
 let toolbarSnapshot
 
-const startParams = ['v=-180,-90,180,90', 't=2018-06-01', 'imageDownload=']
+const startParams = ['v=-180,-90,180,90', 't=2018-06-01']
 
 test.describe.configure({ mode: 'serial' })
 

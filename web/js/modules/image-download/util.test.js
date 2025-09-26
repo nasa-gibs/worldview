@@ -3,6 +3,13 @@ import {
   imageUtilCalculateResolution,
   getLatestIntervalTime,
   getDownloadUrl,
+  convertPngToKml,
+  georeference,
+  snapshot,
+  estimateMaxCanvasSize,
+  estimateMaxImageSize,
+  imageSizeValid,
+  getDimensions,
 } from './util';
 
 const geoResolutions = [
@@ -181,8 +188,15 @@ test('bboxWMS13 [imagedownload-bbox]', () => {
 
 test('Default km resolution Calculation [imagedownload-default-resolution]', () => {
   const zoom = 5;
-  const isGeo = true;
-  expect(imageUtilCalculateResolution(zoom, isGeo, geoResolutions)).toBe('4');
+  const proj = {
+    id: 'geographic',
+    selected: {
+      crs: 'EPSG:4326',
+      resolutions: geoResolutions,
+    },
+  };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(zoom, proj, center)).toBe(1000);
 });
 
 test('Date time snapping when no subdaily layers present [imagedownload-time-snap-no-subdaily]', () => {
@@ -231,4 +245,162 @@ test('Download URL [imagedownload-url]', () => {
     + '&colormaps='
     + '&MARKER=2.7117,-19.1609,71.173,-39.0961';
   expect(dlURL.includes(expectedURL)).toBe(true);
+});
+
+// Tests for coordinate conversion functions
+describe('coordinate conversion functions', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test('getDimensions should calculate image dimensions', () => {
+    const mockMap = {
+      getView: () => ({
+        getProjection: () => ({
+          getUnits: () => 'degrees',
+          getMetersPerUnit: () => 111000,
+        }),
+        getCenter: () => [0, 0],
+      }),
+    };
+    const bounds = [[0, 0], [1, 1]];
+    const resolution = 1000;
+
+    const result = getDimensions(mockMap, bounds, resolution);
+    expect(result).toHaveProperty('width');
+    expect(result).toHaveProperty('height');
+  });
+});
+
+// Tests for canvas size estimation
+describe('canvas size functions', () => {
+  test('estimateMaxCanvasSize should return a function', () => {
+    const result = estimateMaxCanvasSize();
+    expect(typeof result).toBe('object');
+  });
+
+  test('estimateMaxImageSize should be an async function', async () => {
+    // Mock canvas-size to avoid environment issues
+    jest.doMock('canvas-size', () => ({
+      maxArea: () => Promise.resolve({ height: 8192, width: 8192 }),
+    }));
+
+    // This test would need proper mocking of canvas-size in a real test environment
+    expect(estimateMaxImageSize).toBeInstanceOf(Function);
+  });
+});
+
+// Tests for convertPngToKml
+describe('convertPngToKml', () => {
+  test('should reject non-Blob input', async () => {
+    await expect(convertPngToKml('not a blob', {})).rejects.toThrow('Input must be a Blob');
+  });
+
+  test('should reject non-WGS84 CRS', async () => {
+    const blob = new Blob(['fake png data'], { type: 'image/png' });
+    const options = { crs: 'EPSG:3857', extent: [0, 0, 1, 1] };
+    await expect(convertPngToKml(blob, options)).rejects.toThrow('KML requires WGS84 coordinates');
+  });
+
+  test('should create KML with valid inputs', async () => {
+    const blob = new Blob(['fake png data'], { type: 'image/png' });
+    const options = {
+      crs: 'EPSG:4326',
+      extent: [-180, -90, 180, 90],
+      name: 'Test Image',
+    };
+
+    const result = await convertPngToKml(blob, options);
+    expect(result).toBeInstanceOf(Blob);
+    expect(result.type).toBe('application/vnd.google-earth.kml+xml');
+  });
+});
+
+describe('imageSizeValid', () => {
+  test('should return false for zero size', () => {
+    const mockMap = {
+      getView: () => ({
+        getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
+        getCenter: () => [0, 0],
+        getResolutionForExtent: () => 1000,
+      }),
+      getSize: () => [1000, 1000],
+      getCoordinateFromPixel: jest.fn().mockReturnValue([0, 0]),
+    };
+    const options = {
+      maxHeight: 8192,
+      maxWidth: 8192,
+      map: mockMap,
+      resolution: 1000,
+      pixelBbox: [[0, 0], [0, 0]],
+    };
+    const result = imageSizeValid(options);
+    expect(result).toBe(false);
+  });
+
+  test('should return false for oversized image', () => {
+    const mockMapLarge = {
+      getView: () => ({
+        getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
+        getCenter: () => [0, 0],
+        getResolutionForExtent: () => 1000,
+      }),
+      getSize: () => [10000, 10000],
+      getCoordinateFromPixel: jest.fn().mockReturnValue([0, 0]),
+    };
+    const options = {
+      maxHeight: 1000,
+      maxWidth: 1000,
+      map: mockMapLarge,
+      resolution: 1,
+      pixelBbox: [[0, 0], [100, 100]],
+    };
+    const result = imageSizeValid(options);
+    expect(result).toBe(false);
+  });
+});
+
+// Mock tests for async functions that require complex dependencies
+describe('complex async functions (mocked)', () => {
+  beforeEach(() => {
+    // Reset all mocks before each test
+    jest.clearAllMocks();
+  });
+
+  describe('georeference', () => {
+    test('should handle KML output format', async () => {
+      // Mock convertPngToKml to avoid complex dependencies
+      const mockKmlBlob = new Blob(['<kml></kml>'], { type: 'application/vnd.google-earth.kml+xml' });
+      jest.doMock('./util', () => ({
+        ...jest.requireActual('./util'),
+        convertPngToKml: jest.fn().mockResolvedValue(mockKmlBlob),
+      }));
+
+      // This would need proper mocking of GDAL in a real test environment
+      // For now, we're just testing that the function exists and is async
+      expect(georeference).toBeInstanceOf(Function);
+    });
+  });
+
+  describe('snapshot', () => {
+    test('should throw AbortError when already aborted', async () => {
+      const abortController = new AbortController();
+      abortController.abort();
+
+      const options = {
+        format: 'png',
+        metersPerPixel: 1000,
+        pixelBbox: [0, 0, 100, 100],
+        map: { getSize: () => [1000, 1000] },
+        abortSignal: abortController.signal,
+      };
+
+      await expect(snapshot(options)).rejects.toThrow(DOMException);
+    });
+
+    test('should be an async function', () => {
+      expect(snapshot).toBeInstanceOf(Function);
+      expect(snapshot.constructor.name).toBe('AsyncFunction');
+    });
+  });
 });

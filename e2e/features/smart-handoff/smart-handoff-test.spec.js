@@ -1,7 +1,6 @@
 // AS OF 11/29/23 THE EARTH DATA SEARCH IS TAKING LONGER THAN CAN BE CONSIDERED REASAONABLE TO LOAD FOR A TEST
 // THIS SHOULD BE REVISTIED
 
-// // @ts-check
 // const { test, expect } = require('@playwright/test')
 // const createSelectors = require('../../test-utils/global-variables/selectors')
 

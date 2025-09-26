@@ -1,4 +1,3 @@
-// @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive, spyAndBIsActive } = require('../../test-utils/global-variables/querystrings')
