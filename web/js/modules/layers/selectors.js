@@ -627,6 +627,7 @@ export function getSmallestIntervalValue(state) {
   let smallestDelta = timeUnitLookup.D; // 1 day in minutes
   if (layers && layers.length) {
     for (let i = 0; i < layers.length; i += 1) {
+      let interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
       const variablePeriod = layers[i]?.hasVariablePeriod;
       if (variablePeriod) {
         const numberMatch = variablePeriod.match(/[0-9]+/g);
@@ -641,9 +642,8 @@ export function getSmallestIntervalValue(state) {
           return acc + valueToAdd;
         }, 0);
 
-        return time;
+        interval = time;
       }
-      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
       if (layers[i].period === 'subdaily' && interval < smallestDelta) {
         smallestDelta = Number(interval);
       }
