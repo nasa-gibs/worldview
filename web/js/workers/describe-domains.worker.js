@@ -69,8 +69,9 @@ function periodToTime(period) {
     H: oneHour,
     D: oneDay,
   };
-  const numberMatch = period.match(/[0-9]+/g);
-  const unitMatch = period.match(/[a-zA-Z]+/g);
+  const processedPeriod = period.replace('PT', '')
+  const numberMatch = processedPeriod.match(/[0-9]+/g);
+  const unitMatch = processedPeriod.match(/[a-zA-Z]+/g);
   const time = numberMatch.reduce((acc, val, idx) => {
     const number = Number(val);
     const unit = unitMatch[idx];
