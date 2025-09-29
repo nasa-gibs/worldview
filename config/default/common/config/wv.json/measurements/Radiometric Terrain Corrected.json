@@ -1,8 +1,8 @@
 {
     "measurements": {
-        "Radiometric Terrain Corrected SAR Backscatter": {
-            "id": "radiometric-terrain-corrected-sar-backscatter",
-            "title":    "Radiometric Terrain Corrected SAR Backscatter",
+        "RTC SAR Backscatter": {
+            "id": "rtc-sar-backscatter",
+            "title":    "RTC SAR Backscatter",
             "subtitle": "RTC-S1/Sentinel-1",
             "sources": {
                 "RTC-S1/Sentinel-1": {
