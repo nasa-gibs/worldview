@@ -5,13 +5,13 @@
           "description": "viirs/snpp/VIIRS_SNPP_CorrectedReflectance_TrueColor_Granule",
           "tags":     "subdaily",
           "group":    "overlays",
-          "layergroup": "Granules",
+          "layergroup": "Corrected Reflectance",
           "type": "granule",
           "dataAvailability": "dd",
           "period": "subdaily",
           "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_TrueColor"],
           "availability": {
-            "rollingWindow": 30
+            "rollingWindow": 90
           }
       }
   }

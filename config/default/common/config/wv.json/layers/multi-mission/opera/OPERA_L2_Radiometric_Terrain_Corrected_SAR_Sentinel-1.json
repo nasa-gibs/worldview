@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1": {
+      "id": "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1",
+      "enableCMRDataFinder": true,
+      "description": "multi-mission/opera/OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1",
+      "tags": "asf asfdaac rtc synthetic aperture radar backscatter opera",
+      "group": "overlays",
+      "layergroup": "RTC SAR Backscatter"
+    }
+  }
+}
