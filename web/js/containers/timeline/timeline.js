@@ -1183,6 +1183,7 @@ class Timeline extends React.Component {
       timeScaleChangeUnit,
       toggleActiveCompareState,
       proj,
+      describeDomainsUrl,
     } = this.props;
     const {
       animationEndLocation,
@@ -1344,6 +1345,7 @@ class Timeline extends React.Component {
                         isTimelineDragging={isTimelineDragging}
                         matchingTimelineCoverage={matchingTimelineCoverage}
                         proj={proj}
+                        describeDomainsUrl={describeDomainsUrl}
                       />
 
                       <AxisHoverLine
@@ -1604,6 +1606,8 @@ function mapStateToProps(state) {
     nowOverride,
     appNow,
   );
+  const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
+
   return {
     appNow,
     activeLayers: activeLayersFiltered,
@@ -1663,6 +1667,7 @@ function mapStateToProps(state) {
     displayStaticMap,
     newCustomDelta,
     proj: proj.selected,
+    describeDomainsUrl,
   };
 }
 
@@ -1795,4 +1800,5 @@ Timeline.propTypes = {
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
   proj: PropTypes.object,
+  describeDomainsUrl: PropTypes.string,
 };

@@ -47,7 +47,7 @@ class LayerMetadataDetail extends React.Component {
 
   render() {
     const {
-      layer, selectedProjection, isActive, showPreviewImage, measurementDescriptionPath,
+      layer, selectedProjection, isActive, showPreviewImage, measurementDescriptionPath, describeDomainsUrl,
     } = this.props;
     if (!layer) {
       return this.renderNoSelection();
@@ -79,6 +79,7 @@ class LayerMetadataDetail extends React.Component {
           <LayerInfo
             layer={layer}
             measurementDescriptionPath={measurementDescriptionPath}
+            describeDomainsUrl={describeDomainsUrl}
           />
         </div>
       </div>
@@ -95,6 +96,7 @@ LayerMetadataDetail.propTypes = {
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,
   showPreviewImage: PropTypes.bool,
+  describeDomainsUrl: PropTypes.string,
 };
 
 const makeMapStateToProps = () => {
@@ -109,6 +111,7 @@ const makeMapStateToProps = () => {
     const activeLayers = getActiveLayersMap(state);
     const isActive = selectedLayer && !!activeLayers[selectedLayer.id];
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
+    const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
 
     return {
       isActive,
@@ -116,6 +119,7 @@ const makeMapStateToProps = () => {
       measurementDescriptionPath,
       selectedProjection: proj.id,
       showPreviewImage: config.features.previewSnapshots,
+      describeDomainsUrl,
     };
   };
 };

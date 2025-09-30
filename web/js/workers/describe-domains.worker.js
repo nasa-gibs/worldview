@@ -17,12 +17,13 @@ async function requestDescribeDomains(params) {
     startDate,
     endDate,
     proj,
+    baseUrl,
   } = params;
 
   const start = `${new Date(startDate).toISOString().split('.')[0]}Z`;
   const end = `${new Date(endDate).toISOString().split('.')[0]}Z`;
 
-  const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${start}--${end}.xml`;
+  const describeDomainsUrl = `${baseUrl}/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${start}--${end}.xml`;
   const describeDomainsResponse = await fetch(describeDomainsUrl);
   const describeDomainsText = await describeDomainsResponse.text();
 
