@@ -3,7 +3,7 @@
         "Orbital Track": {
             "id": "orbital-track",
             "title":    "Orbital Track & Overpass Time",
-            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, EarthCARE, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Landsat 7, Landsat 8, Landsat 9, MetOp-A, MetOp-B, MetOp-C, NOAA-20, NOAA-21, OCO-2, PACE, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-2A, Sentinel-2B, Sentinel-2C, Sentinel-3A, Sentinel-3B, Sentinel-5P, SMAP, Suomi NPP, TRMM",
+            "subtitle": "Space-Track.org/Aqua, Terra, Aura, CALIPSO, CloudSat, CYGNSS, EarthCARE, GCOM-C, GCOM-W1, GOSAT, GOSAT-2, GPM, ICESat-2, ISS, Landsat 7, Landsat 8, Landsat 9, MetOp-A, MetOp-B, MetOp-C, NOAA-20, NOAA-21, OCO-2, PACE, SAOCOM1-A, Sentinel-1A, Sentinel-1B, Sentinel-1C, Sentinel-2A, Sentinel-2B, Sentinel-2C, Sentinel-3A, Sentinel-3B, Sentinel-5P, SMAP, Suomi NPP, TRMM",
             "sources": {
               "Aqua/Space-Track.org": {
                   "id": "space-track-org-aqua",
@@ -274,7 +274,17 @@
                         "OrbitTracks_Sentinel-1B_Ascending",
                         "OrbitTracks_Sentinel-1B_Descending"
                     ]
-                },
+                ,
+                "Sentinel-1C/Space-Track.org": {
+                    "id": "space-track-org-sentinel-1b",
+                    "title": "Sentinel-1C/Space-Track.org",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OrbitTracks_Sentinel-1C_Ascending",
+                        "OrbitTracks_Sentinel-1C_Descending"
+                    ]
+                }},
                 "Sentinel-2A/Space-Track.org": {
                     "id": "space-track-org-sentinel-2a",
                     "title": "Sentinel-2A/Space-Track.org",
