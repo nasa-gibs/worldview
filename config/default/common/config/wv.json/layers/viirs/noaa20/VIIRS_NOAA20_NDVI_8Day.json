@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_NDVI_8Day": {
+      "id": "VIIRS_NOAA20_NDVI_8Day",
+      "description": "viirs/noaa20/VIIRS_NOAA20_NDVI_8Day",
+      "group": "overlays",
+      "tags": "ndvi normalized difference vegetation index",
+      "disableCharting": true,
+      "layergroup": "Vegetation Indices"
+    }
+  }
+}

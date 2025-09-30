@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "HARP2_PACE_True_Color": {
+      "id": "HARP2_PACE_True_Color",
+      "description": "harp2/HARP2_PACE_True_Color",
+      "tags": "natural color harp2 pace plankton ocean",
+      "group": "baselayers",
+      "layergroup": "Corrected Reflectance",
+      "wrapadjacentdays": false
+    }
+  }
+}
