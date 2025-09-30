@@ -1,0 +1,5 @@
+The World Imagery layer is a reference layer that provides one meter or better satellite and aerial imagery in many parts of the world and lower resolution satellite imagery worldwide. The map includes 15m TerraColor imagery at small and mid-scales (~1:591M down to ~1:288k) for the world. The map features Maxar imagery at 0.3m resolution for select metropolitan areas around the world, 0.5m resolution across the United States and parts of Western Europe, and 1m resolution imagery across the rest of the world. In addition to commercial sources, the World Imagery map features high-resolution aerial photography contributed by the GIS User Community. This imagery ranges from 0.3m to 0.03m resolution (down to ~1:280 in select communities).
+
+For more information on this map, including the terms of use, visit Esri online at [https://goto.arcgisonline.com/maps/World_Imagery](https://goto.arcgisonline.com/maps/World_Imagery)
+
+Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community

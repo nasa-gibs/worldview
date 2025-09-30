@@ -20,7 +20,7 @@
       ],
       "projections": {
         "geographic": {
-          "source": "ESRI"
+          "source": "ESRI:basemaps"
         }
       },
       "vectorStyle": {
