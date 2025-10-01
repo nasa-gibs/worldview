@@ -29,6 +29,7 @@ function UpdateCollections () {
     if (def.layergroup === 'Reference') return; // Don't query static layers
     const { id, period } = def;
     const { matrixSet } = def.projections[proj.id];
+    selectedDate.setSeconds?.(59);
     const isoStringDate = util.toISOStringSeconds(util.roundTimeOneMinute(selectedDate));
 
     const sourceDomain = lookupLayerSource(id);
@@ -60,7 +61,8 @@ function UpdateCollections () {
 
   const findLayerCollections = (layers, dailyDate, subdailyDate, forceUpdate) => {
     const wmtsLayers = layers.filter((layer) => {
-      if (layer.type !== 'wmts' || !layer.visible) return false;
+      const layerTypeEnabled = layer.type !== 'wmts' && layer.type !== 'granule';
+      if (layerTypeEnabled || !layer.visible) return false;
 
       const date = layer.period === 'daily' ? dailyDate : subdailyDate;
 
