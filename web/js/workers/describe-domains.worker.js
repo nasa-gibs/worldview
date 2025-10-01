@@ -17,12 +17,13 @@ async function requestDescribeDomains(params) {
     startDate,
     endDate,
     proj,
+    baseUrl,
   } = params;
 
   const start = `${new Date(startDate).toISOString().split('.')[0]}Z`;
   const end = `${new Date(endDate).toISOString().split('.')[0]}Z`;
 
-  const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${start}--${end}.xml`;
+  const describeDomainsUrl = `${baseUrl}/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${start}--${end}.xml`;
   const describeDomainsResponse = await fetch(describeDomainsUrl);
   const describeDomainsText = await describeDomainsResponse.text();
 
@@ -59,22 +60,29 @@ function makeDateString(time) {
  * Convert period to time
 */
 function periodToTime(period) {
+  const oneSecond = 1_000;
   const oneMinute = 60_000;
   const oneHour = 3_600_000;
   const oneDay = 86_400_000;
   const lookup = {
+    S: oneSecond,
     M: oneMinute,
     H: oneHour,
     D: oneDay,
   };
-  const match = period.match(/[0-9]+/i);
-  const number = Number(match[0]);
-  const unit = period.at(-1);
-  const time = number * lookup[unit];
+  const processedPeriod = period.replace('PT', '');
+  const numberMatch = processedPeriod.match(/[0-9]+/g);
+  const unitMatch = processedPeriod.match(/[a-zA-Z]+/g);
+  const time = numberMatch.reduce((acc, val, idx) => {
+    const number = Number(val);
+    const unit = unitMatch[idx];
+    const milliseconds = number * lookup[unit?.toUpperCase?.()];
+    const invalid = Number.isNaN(milliseconds);
+    const valueToAdd = invalid ? (console.warn(`Invalid period: ${period}`), 0) : milliseconds;
+    return acc + valueToAdd;
+  }, 0);
 
-  if (Number.isNaN(time)) return 360_000;
-
-  return time;
+  return time || 360_000;
 }
 
 /**
