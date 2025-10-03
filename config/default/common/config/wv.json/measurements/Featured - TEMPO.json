@@ -26,7 +26,9 @@
                       "TEMPO_L3_Cloud_Cloud_Pressure_Total",
                       "TEMPO_L3_Ozone_Column_Amount",
                       "TEMPO_L3_Ozone_Cloud_Fraction",
-                      "TEMPO_L3_Ozone_UV_Aerosol_Index"
+                      "TEMPO_L3_Ozone_UV_Aerosol_Index",
+                      "TEMPO_L3_Ozone_Profile_Total_Column",
+                      "TEMPO_L3_Ozone_Profile_Troposphere_Column"
                   ]
               }
           }
