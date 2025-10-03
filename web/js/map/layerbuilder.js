@@ -395,7 +395,6 @@ export default function mapLayerBuilder(config, cache, store) {
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({
-      className: def.id,
       extent: polygon ? granuleExtent : extent,
       preload: 0,
       source: tileSource,
