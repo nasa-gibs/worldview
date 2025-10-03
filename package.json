@@ -122,7 +122,7 @@
     "patch-package": "^8.0.0",
     "postcss": "^8.5.6",
     "postcss-loader": "^8.2.0",
-    "react-refresh": "^0.17.0",
+    "react-refresh": "^0.18.0",
     "react-test-renderer": "^18.3.1",
     "redux-mock-store": "^1.5.5",
     "run-script-os": "^1.1.6",
