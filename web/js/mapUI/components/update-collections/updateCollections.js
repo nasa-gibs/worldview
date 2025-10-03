@@ -15,6 +15,8 @@ function UpdateCollections () {
   const sources = useSelector((state) => state.config.sources);
   const layerConfig = useSelector((state) => state.layers.layerConfig);
   const projId = useSelector((state) => state.proj.id);
+  const map = useSelector((state) => state.map?.ui?.selected);
+  const mapLayers = map?.getAllLayers() || [];
 
   // Finds the correct subdomain to query headers from based on the layer source and GIBS/GITC env
   const lookupLayerSource = (layerId) => {
@@ -25,7 +27,7 @@ function UpdateCollections () {
     return sourceDomain;
   };
 
-  const getHeaders = async (def, date) => {
+  const getHeaders = async (def, date, baseUrl) => {
     if (def.layergroup === 'Reference') return; // Don't query static layers
     const { id, period } = def;
     const { matrixSet } = def.projections[proj.id];
@@ -34,17 +36,19 @@ function UpdateCollections () {
 
     const sourceDomain = lookupLayerSource(id);
 
-    const sourceUrl = `${sourceDomain}?TIME=${isoStringDate}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=${encodeURIComponent(def.format)}&TileMatrix=0&TileCol=0&TileRow=0`;
+    const timeUrl = baseUrl || `${sourceDomain}?TIME=${isoStringDate}`;
+
+    const sourceUrl = `${timeUrl}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=${encodeURIComponent(def.format)}&TileMatrix=0&TileCol=0&TileRow=0`;
     try {
-      const response = await fetch(sourceUrl);
+      const response = await fetch(sourceUrl, { method: 'HEAD' });
 
       const { headers } = response;
       const actualId = headers.get('layer-identifier-actual');
       if (!actualId) return undefined;
 
       const parts = actualId.split('_');
-      const type = parts[parts.length - 1];
-      const version = parts[parts.length - 2];
+      const type = parts.at(-1);
+      const version = parts.at(-2);
       const formattedDate = period === 'daily' ? formatDailyDate(date) : formatSubdailyDate(date);
 
       if (type !== 'NRT' && type !== 'STD') return undefined;
@@ -55,11 +59,11 @@ function UpdateCollections () {
     } catch (error) {
       // errors will clutter console, turn this on for debugging
       // console.error(error);
-      throw new Error('Failed to query headers');
+      throw new Error(`Error fetching headers for ${id} on ${sourceUrl}: ${error.message}`);
     }
   };
 
-  const findLayerCollections = (layers, dailyDate, subdailyDate, forceUpdate) => {
+  const findLayerCollections = (dailyDate, subdailyDate, forceUpdate) => {
     const wmtsLayers = layers.filter((layer) => {
       const layerTypeEnabled = layer.type !== 'wmts' && layer.type !== 'granule';
       if (layerTypeEnabled || !layer.visible) return false;
@@ -76,11 +80,37 @@ function UpdateCollections () {
     return wmtsLayers;
   };
 
+  const getAllHeaders = (defs) => {
+    const headerRequests = defs.flatMap(async (def) => { // flatMap to handle layers which may constain multiple layers
+      const selectedDateRequest = await getHeaders(def, selectedDate);
+      if (def.type !== 'granule') return selectedDateRequest; // non-granule layers only need one header request
+      const layerGroup = map.getLayers()?.getArray()?.find((l) => l?.wv?.id === def.id);
+      if (!layerGroup) return selectedDateRequest; // if we can't find the layer in the map, just do a single request
+      const granuleLayerArray = layerGroup.getLayersArray() || [];
+      // granule layers don't necessarily use the selected date, rather they create one layer for each granule and each has their own date
+      const granuleHeaders = granuleLayerArray.map(async (layer) => {
+        const source = layer.getSource();
+        if (!source?.getUrls) return null;
+        const urls = source.getUrls();
+        if (!urls?.length) return null;
+        const urlRequests = urls.map(async (url) => getHeaders(def, selectedDate, url));
+        const firstResponse = await Promise.any(urlRequests); // we just want the first response that works and only fail if they all fail
+        return firstResponse;
+      });
+
+      const firstGranuleHeaderResponse = await Promise.any(granuleHeaders); // Right now we don't handle the possibility of multiple imagery versions in granule layers, so just return the first valid response
+
+      return firstGranuleHeaderResponse;
+    });
+
+    return headerRequests;
+  };
+
   const updateLayerCollections = async (forceUpdate = false) => {
     const formattedDailyDate = formatDailyDate(selectedDate);
     const formattedSubdailyDate = formatSubdailyDate(selectedDate);
-    const layersToUpdate = findLayerCollections(layers, formattedDailyDate, formattedSubdailyDate, forceUpdate);
-    const headerPromises = layersToUpdate.map((layer) => getHeaders(layer, selectedDate));
+    const layersToUpdate = findLayerCollections(formattedDailyDate, formattedSubdailyDate, forceUpdate);
+    const headerPromises = getAllHeaders(layersToUpdate);
 
     try {
       const results = await Promise.allSettled(headerPromises);
@@ -100,7 +130,7 @@ function UpdateCollections () {
   useEffect(() => {
     if (!layers.length) return;
     updateLayerCollections(true);
-  }, [projId]);
+  }, [projId, mapLayers.length]);
 
   return null;
 }

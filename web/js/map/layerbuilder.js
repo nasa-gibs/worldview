@@ -395,6 +395,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
 
     return new OlLayerTile({
+      className: def.id,
       extent: polygon ? granuleExtent : extent,
       preload: 0,
       source: tileSource,
@@ -1204,37 +1205,38 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
 
-      if (!isGranule) {
-        switch (def.type) {
-          case 'wmts':
-            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
-            break;
-          case 'vector':
-            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            break;
-          case 'wms':
-            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
-            break;
-          case 'titiler':
-            layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'xyz':
-            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'indexedVector':
-            layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'composite:wmts':
-            layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
-            break;
-          default:
-            throw new Error(`Unknown layer type: ${type}`);
-        }
+      switch (def.type) {
+        case 'wmts':
+          layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'vector':
+          layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
+          break;
+        case 'wms':
+          layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        case 'titiler':
+          layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'xyz':
+          layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'indexedVector':
+          layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'composite:wmts':
+          layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'granule':
+          layer = await getGranuleLayer(def, attributes, options);
+          break;
+        default:
+          throw new Error(`Unknown layer type: ${type}`);
+      }
+      if (def.type !== 'granule') {
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
         if (def.type !== 'titiler') layer.setVisible(false);
-      } else {
-        layer = await getGranuleLayer(def, attributes, options);
       }
     }
     layer.setOpacity(opacity || 1.0);
