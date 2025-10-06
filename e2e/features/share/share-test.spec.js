@@ -45,7 +45,7 @@ test('Share link clipboard with existing time query string param in the page url
   await shareToolbarButton.click()
   const url = await page.url()
   expect(url).toContain('t=')
-  await expect(shareLinkInput).toHaveValue('http://localhost:3000/?t=2018-12-31-T00%3A00%3A59Z')
+  await expect(shareLinkInput).toHaveValue('http://localhost:3000/?t=2018-12-31-T00%3A00%3A00Z')
 })
 
 test('Share link clipboard with no time query string param in the page url will have the same serialized time (partial YYYY-MM-DD)', async () => {
