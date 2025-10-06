@@ -16,7 +16,7 @@ function UpdateCollections () {
   const layerConfig = useSelector((state) => state.layers.layerConfig);
   const projId = useSelector((state) => state.proj.id);
   const map = useSelector((state) => state.map?.ui?.selected);
-  const mapLayers = map?.getAllLayers() || [];
+  const mapLayersLength = map?.getAllLayers()?.length || 0;
 
   // Finds the correct subdomain to query headers from based on the layer source and GIBS/GITC env
   const lookupLayerSource = (layerId) => {
@@ -40,18 +40,18 @@ function UpdateCollections () {
 
     const sourceUrl = `${timeUrl}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=${encodeURIComponent(def.format)}&TileMatrix=0&TileCol=0&TileRow=0`;
     try {
-      const response = await fetch(sourceUrl, { method: 'HEAD', signal }); // HEAD request to only fetch headers (faster than the previous GET request)
+      const response = await fetch(sourceUrl, { method: 'HEAD', signal }); // HEAD request to only fetch headers (faster than the previous GET request) and pass in abort signal
 
       const { headers } = response;
       const actualId = headers.get('layer-identifier-actual');
-      if (!actualId) throw new Error(`No layer-identifier-actual header found for ${id} on ${sourceUrl}`);
+      if (!actualId) throw new Error(`No layer-identifier-actual header found for ${id} on ${sourceUrl}`); // reject the promise if no actualId found
 
       const parts = actualId.split('_');
       const type = parts.at(-1);
       const version = parts.at(-2);
       const formattedDate = period === 'daily' ? formatDailyDate(date) : formatSubdailyDate(date);
 
-      if (type !== 'NRT' && type !== 'STD') throw new Error(`Invalid imagery type ${type} for ${id} on ${sourceUrl}`);
+      if (type !== 'NRT' && type !== 'STD') throw new Error(`Invalid imagery type ${type} for ${id} on ${sourceUrl}`); // reject the promise if not NRT or STD
 
       return {
         id, date: formattedDate, type, version, projection: proj.id,
@@ -64,7 +64,7 @@ function UpdateCollections () {
   const findLayerCollections = (dailyDate, subdailyDate, forceUpdate) => {
     const layersToUpdate = layers.filter((layer) => {
       const layerTypeEnabled = layer.type !== 'wmts' && layer.type !== 'granule';
-      if (layer.layergroup === 'Reference' || layerTypeEnabled || !layer.visible) return false;
+      if (layer.layergroup === 'Reference' || layerTypeEnabled || !layer.visible) return false; // Reference and non-wmts/granule layers don't need collections, skip invisible layers
 
       const date = layer.period === 'daily' ? dailyDate : subdailyDate;
 
@@ -90,7 +90,7 @@ function UpdateCollections () {
       // granule layers don't necessarily use the selected date, rather they create one layer for each granule and each has their own date
       const granuleHeaders = granuleLayerArray.map(async (layer) => {
         const urls = layer.getSource?.()?.getUrls?.() || [];
-        const urlRequests = urls.map(async (url) => getHeaders(def, selectedDate, signal, url));
+        const urlRequests = urls.map(async (url) => getHeaders(def, selectedDate, signal, url)); // each layer has multiple urls to try
         const firstResponse = await Promise.any(urlRequests); // we just want the first response that works and only fail if they all fail
         return firstResponse;
       });
@@ -111,7 +111,7 @@ function UpdateCollections () {
     const headerPromises = getAllHeaders(layersToUpdate);
 
     try {
-      const results = await Promise.allSettled(headerPromises);
+      const results = await Promise.allSettled(headerPromises); // perform all header requests and wait for them to settle
       const validCollections = results.filter(({ status, value }) => status === 'fulfilled' && value).map(({ value }) => value);
       updateCollection(validCollections);
     } catch (error) {
@@ -128,7 +128,7 @@ function UpdateCollections () {
   useEffect(() => {
     if (!layers.length) return;
     updateLayerCollections(true);
-  }, [projId, mapLayers.length]);
+  }, [projId, mapLayersLength]);
 
   return null;
 }
