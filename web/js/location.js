@@ -230,6 +230,9 @@ const getParameters = function(config, parameters) {
     iss: {
       stateKey: 'date.smartSelected',
       initialState: false,
+      options: {
+        parse: (val) => val === 'true',
+      },
     },
     ici: {
       stateKey: 'date.customInterval',

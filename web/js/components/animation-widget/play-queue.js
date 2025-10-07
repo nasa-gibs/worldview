@@ -6,6 +6,9 @@ import PQueue from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
+import {
+  getNextImageryDelta,
+} from '../../modules/date/util';
 
 // We assume anything this fast or faster is a frame that was pulled from the cache
 const MIN_REQUEST_TIME_MS = 200;
@@ -264,7 +267,15 @@ class PlayQueue extends React.Component {
   };
 
   nextDate(date) {
-    const { interval, delta } = this.props;
+    const {
+      interval,
+      delta,
+      smartSelected,
+      layers,
+    } = this.props;
+    if (smartSelected) {
+      return util.dateAdd(date, 'minute', getNextImageryDelta(layers, date, 1));
+    }
     return util.dateAdd(date, interval, delta);
   }
 
@@ -478,6 +489,8 @@ PlayQueue.propTypes = {
   snappedCurrentDate: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
   map: PropTypes.object,
+  smartSelected: PropTypes.bool,
+  layers: PropTypes.array,
 };
 
 export default PlayQueue;

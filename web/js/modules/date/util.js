@@ -548,10 +548,13 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
  * @returns {array} Array of visible layers within the date.
  */
 export function getNextImageryDelta(layers, dateA, signConstant) {
-  let delta;
+  let delta = 0;
   const dateAObj = new Date(dateA);
   let hasDeltaChanged = false;
   for (let i = 0; i < layers.length; i += 1) {
+    if (!Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges')) {
+      break;
+    }
     if (signConstant > 0) {
       // Forward in time
       for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
@@ -560,8 +563,8 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
         const endDateObj = new Date(obj.endDate);
         const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
         if (dateAObj < startDateObj) {
-          const possibleDelta = Math.floor(((startDateObj - dateAObj) / 1000) / 60);
-          if (possibleDelta >= minDelta) {
+          const possibleDelta = Math.ceil(((startDateObj - dateAObj) / 1000) / 60);
+          if (possibleDelta >= 1) {
             delta = possibleDelta;
             hasDeltaChanged = true;
             break;
