@@ -155,7 +155,7 @@ function getDAAC (metadata) {
   if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
     return metadata
   }
-  for (const collection of metadata.conceptIds) {
+  const promises = metadata.conceptIds.map(async (collection) => {
     const origDataCenter = collection.dataCenter
     const dataCenter = daacMap[origDataCenter]
     if (!dataCenter) {
@@ -167,7 +167,9 @@ function getDAAC (metadata) {
     } else if (!metadata.dataCenter.includes(dataCenter)) {
       metadata.dataCenter.push(dataCenter)
     }
-  }
+    return delete collection.dataCenter
+  })
+  await Promise.allSettled(promises)
   return metadata
 }
 
