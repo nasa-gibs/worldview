@@ -28,12 +28,10 @@
   "scripts": {
     "analyze": "cross-env ANALYZE_MODE=true NODE_ENV=production webpack",
     "build": "run-s clean getcapabilities build:config build:dev",
-    "build:verbose": "run-s clean getcapabilities:verbose build:config:verbose build:dev",
+    "build:verbose": "run-s clean getcapabilities:verbose build:config build:dev",
     "build:ci": "run-s getcapabilities build:config build:prod",
     "build:options": "bash tasks/buildOptions.sh",
-    "build:options:verbose": "bash tasks/buildOptions.sh -v",
     "build:config": "run-s build:options && node ./tasks/util/config.js",
-    "build:config:verbose": "run-s build:options:verbose && node ./tasks/util/config.js",
     "build:dev": "cross-env NODE_ENV=development webpack",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "clean": "node ./tasks/util/clean.js",
