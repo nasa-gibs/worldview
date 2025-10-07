@@ -122,11 +122,11 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  for (const layerId of layerOrder) {
-    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
-      await getMetadata(layerId, url)
-    }
-  }
+  const promises = layerOrder.map((layerId) => {
+    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
+    return Promise.resolve()
+  })
+  await Promise.allSettled(promises)
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
@@ -144,19 +144,18 @@ async function getDAAC (metadata) {
   if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
     return metadata
   }
-  for (const collection of metadata.conceptIds) {
+  const promises = metadata.conceptIds.map(async (collection) => {
     const origDataCenter = collection.dataCenter
     const dataCenter = daacMap[origDataCenter]
-    if (!dataCenter) {
-      continue
-    }
-    await delete collection.dataCenter
+    if (!dataCenter) return Promise.resolve()
     if (!metadata.dataCenter) {
       metadata.dataCenter = [dataCenter]
     } else if (!metadata.dataCenter.includes(dataCenter)) {
       metadata.dataCenter.push(dataCenter)
     }
-  }
+    return delete collection.dataCenter
+  })
+  await Promise.allSettled(promises)
   return metadata
 }
 
