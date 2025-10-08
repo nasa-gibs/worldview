@@ -97,7 +97,7 @@ async function main () {
     totalErrorCount += errorCount
     totalWarningCount += warningCount
     totalLayerCount += layerCount
-  })
+  }
 
   console.warn(`${prog}: ${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
 
@@ -160,7 +160,7 @@ async function processEntry (entry) {
       console.error(result.reason.stack)
       console.error(`${prog}: ERROR: ${result.reason}\n`)
     }
-  })
+  }
 
   const gcTileMatrixSet = gcContents.TileMatrixSet
 
