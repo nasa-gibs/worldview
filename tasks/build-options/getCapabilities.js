@@ -71,28 +71,24 @@ async function getCapabilities () {
   // Download each GC xml using the "from" attribute and put it in the "to" location
   if (Object.prototype.hasOwnProperty.call(config, 'wv-options-fetch')) {
     const fetchValues = config['wv-options-fetch']
-    for (const value of fetchValues) {
-      const inputFile = value.from
-      const outputFile = `${outputDir}/${value.to}`
 
-      if (argv.mode === 'verbose') console.warn(`Fetching config for ${inputFile} to ${outputFile}...`)
-      await fetchConfigs(inputFile, outputFile)
-      if (argv.mode === 'verbose') console.warn(`Processing capabilities for ${outputFile}...`)
-      await processGetCapabilities(outputFile)
-    }
+    const files = fetchValues.map(({ from, to }) => [from, `${outputDir}/${to}`])
+    await Promise.allSettled(files.map(([from, to]) => fetchConfigs(from, to)))
+    await Promise.allSettled(files.map(([, to]) => processGetCapabilities(to)))
   }
 }
 
 // convert to superagent and use promises
 async function fetchConfigs (inputFile, outputFile) {
   const writer = await fs.createWriteStream(outputFile)
+  if (argv.mode === 'verbose') console.warn(`${prog}: Fetching ${inputFile}...`)
   return axios({
     method: 'get',
     url: inputFile,
     responseType: 'stream',
     timeout: 100000
   }).then(async (response) => {
-    if (argv.mode === 'verbose') console.warn(`Writing ${outputFile}...`)
+    if (argv.mode === 'verbose') console.warn(`${prog}: Writing ${outputFile}...`)
     await response.data.pipe(writer)
     return finished(writer)
   })
@@ -129,7 +125,7 @@ async function processVectorData (layer) {
 
 async function processLayer (layer) {
   const ident = layer['ows:Identifier']._text
-  if (argv.mode === 'verbose') console.warn(`Processing layer ${ident}:`)
+  if (argv.mode === 'verbose') console.warn(`Processing layer ${ident}...`)
   if (layer['ows:Metadata']) {
     if (config.skipPalettes) {
       console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
@@ -190,9 +186,8 @@ async function gatherProcess (type, typeStr, dir, ext) {
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir)
   }
-  Object.values(type).forEach(async (link) => {
-    await processMetadata(link, dir, ext)
-  })
+  const promises = Object.values(type).map((link) => processMetadata(link, dir, ext))
+  await Promise.allSettled(promises)
 }
 
 main().catch((err) => {

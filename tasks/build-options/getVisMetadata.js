@@ -59,7 +59,6 @@ const outputFile = argv.layerMetadata
 const metadataConfig = features.features.vismetadata
 const url = metadataConfig.url
 const daacMap = metadataConfig.daacMap || {}
-const layerMetadata = {}
 
 // These are alias or otherwise layers that don't exist in GIBS
 const skipLayers = [
@@ -122,11 +121,18 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  for (const layerId of layerOrder) {
-    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) {
-      await getMetadata(layerId, url)
-    }
-  }
+  const promises = layerOrder.map((layerId) => {
+    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
+    return Promise.reject(new Error(`Skipped layer: ${layerId}`))
+  })
+  const results = await Promise.allSettled(promises)
+  const { fulfilled = [], rejected = [] } = Object.groupBy(results, (item) => item.status)
+
+  rejected.forEach(({ reason }) => {
+    console.error(`${prog}: ERROR: ${reason}\n`)
+  })
+  const metadataMap = new Map(fulfilled.map(({ value }) => value))
+  const layerMetadata = Object.fromEntries(metadataMap.entries())
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
@@ -136,11 +142,11 @@ async function main (url) {
     {}
   )
 
-  await fs.writeFileSync(outputFile, JSON.stringify({ layers }))
-  console.warn(`${prog}: Combined all layer-metadata files into ${path.parse(outputFile).base}`)
+  fs.writeFileSync(outputFile, JSON.stringify({ layers }))
+  console.warn(`${prog}: Combined all ${Object.keys(layerMetadata).length} layer-metadata files into ${path.parse(outputFile).base}`)
 }
 
-async function getDAAC (metadata) {
+function getDAAC (metadata) {
   if (!Array.isArray(metadata.conceptIds) || !metadata.conceptIds.length) {
     return metadata
   }
@@ -150,7 +156,7 @@ async function getDAAC (metadata) {
     if (!dataCenter) {
       continue
     }
-    await delete collection.dataCenter
+    delete collection.dataCenter
     if (!metadata.dataCenter) {
       metadata.dataCenter = [dataCenter]
     } else if (!metadata.dataCenter.includes(dataCenter)) {
@@ -162,31 +168,34 @@ async function getDAAC (metadata) {
 
 async function getMetadata (layerId, baseUrl, count) {
   if (count) console.warn(`retry #${count} for ${layerId}`)
-  return axios({
-    method: 'get',
-    url: `${baseUrl}${layerId}.json`,
-    responseType: 'json',
-    timeout: 10000
-  }).then(async (response) => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${baseUrl}${layerId}.json`,
+      responseType: 'json',
+      timeout: 10000
+    })
     const metadata = response.data
-    layerMetadata[layerId] = await getDAAC(metadata)
-    let metadataKeys = Object.keys(layerMetadata[layerId])
+    const daac = getDAAC(metadata)
+    let metadataKeys = Object.keys(daac)
     metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
     for (const key of metadataKeys) {
-      delete layerMetadata[layerId][key]
+      delete daac[key]
     }
-  }).catch((error) => {
-    handleException(error, layerId, url, count)
-  })
+    return [layerId, daac]
+  } catch (error) {
+    return await handleException(error, layerId, url, count)
+  }
 }
 
 async function handleException (error, layerId, url, count) {
   if (!count) count = 0
   count++
   if (count <= 5) {
-    await getMetadata(layerId, url, count)
+    return getMetadata(layerId, url, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
+    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${error}`))
   }
 }
 
