@@ -82,12 +82,13 @@ async function main () {
   const promises = entries.map((entry) => processEntry(entry))
   const results = await Promise.allSettled(promises)
 
-  results.forEach(({ value }) => {
+  for (const { status, value } of results) {
+    if (status === 'rejected' || !value) continue
     const { errorCount, warningCount, layerCount, wv, to, source } = value
     console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${source}`)
 
     const outputFile = path.join(outputDir, to)
-    fs.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8', err => {
+    await fs.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8', err => {
       if (err) {
         console.error(err)
       }
@@ -96,7 +97,7 @@ async function main () {
     totalErrorCount += errorCount
     totalWarningCount += warningCount
     totalLayerCount += layerCount
-  })
+  }
 
   console.warn(`${prog}: ${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
 
@@ -149,18 +150,17 @@ async function processEntry (entry) {
 
   layerCount += results.length
 
-  results.forEach((result) => {
-    if (result.status === 'rejected') {
-      if (result.reason instanceof SkipException) {
-        warningCount += 1
-        console.warn(`${prog}: WARNING: Skipping\n`)
-      } else {
-        errorCount += 1
-        console.error(result.reason.stack)
-        console.error(`${prog}: ERROR: ${result.reason}\n`)
-      }
+  for (const result of results) {
+    if (result.status === 'fulfilled') continue
+    if (result.reason instanceof SkipException) {
+      warningCount += 1
+      console.warn(`${prog}: WARNING: Skipping\n`)
+    } else {
+      errorCount += 1
+      console.error(result.reason.stack)
+      console.error(`${prog}: ERROR: ${result.reason}\n`)
     }
-  })
+  }
 
   const gcTileMatrixSet = gcContents.TileMatrixSet
 

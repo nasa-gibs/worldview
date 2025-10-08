@@ -132,7 +132,7 @@ async function main (url) {
     console.error(`${prog}: ERROR: ${reason}\n`)
   })
   const metadataMap = new Map(fulfilled.map(({ value }) => value))
-  const layerMetadata = Object.fromEntries(metadataMap.entries())
+  const layerMetadata = Object.fromEntries(metadataMap)
 
   const layers = Object.keys(layerMetadata).sort().reduce(
     (obj, key) => {
