@@ -21,8 +21,8 @@ while getopts ":vfd" option; do
         CACHE_MODE="no-store";;
       d)
         echo "Debug Mode Activated"
-        export NODE_DEBUG=http*
         export NODE_OPTIONS='--inspect'
+        export NODE_DEBUG=http*;;
    esac
 done
 
