@@ -417,11 +417,12 @@ function mapStateToProps(state) {
   const {
     customSelected, smartSelected, interval, customInterval, customDelta,
   } = date;
-  const increment = customSelected
+  const customIncrement = customSelected
     ? `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`
-    : smartSelected
-      ? 'Smart Interval'
-      : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
+    : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
+  const increment = smartSelected
+    ? 'Smart Interval'
+    : customIncrement;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
