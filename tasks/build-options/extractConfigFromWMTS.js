@@ -34,6 +34,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'mode'
   })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'cm',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Extracts configuration information from a WMTS GetCapabilities file, converts the XML to JSON')
 
 const { argv } = options
@@ -46,6 +52,7 @@ const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
 const inputDir = argv.inputDir
 const outputDir = argv.outputDir
 const mode = argv.mode
+const cacheMode = argv.cacheMode
 
 if (!Object.prototype.hasOwnProperty.call(config, 'wv-options-wmts')) {
   throw new Error(`${prog}: Error: "wv-options-wmts" not in config file`)
@@ -175,7 +182,7 @@ async function processEntry (entry) {
 
 async function processLayer (gcLayer, wvLayers, entry) {
   const ident = gcLayer['ows:Identifier']._text
-  if (mode === 'verbose') console.warn(`${prog}: Processing layer ${ident}...`)
+  if (mode === 'verbose') console.trace(`Processing layer ${ident}...`)
   if (skip.includes(ident)) {
     console.log(`${ident}: skipping`)
     throw new SkipException(ident)
@@ -194,7 +201,7 @@ async function processLayer (gcLayer, wvLayers, entry) {
     const dimension = gcLayer.Dimension
     if (dimension['ows:Identifier']._text === 'Time') {
       try {
-        wvLayer = await processTemporalLayer(wvLayer, dimension.Value, entry.source)
+        wvLayer = await processTemporalLayer(wvLayer, dimension.Value, entry.source, cacheMode)
       } catch (e) {
         console.error(e)
         console.error(`${prog}: ERROR: [${ident}] Error processing time values.`)

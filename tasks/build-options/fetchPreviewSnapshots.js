@@ -27,6 +27,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'features file'
   })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'c',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Fetch preview images from WV Snapshots for any layers which they are missing.')
 
 const { argv } = options
@@ -37,6 +43,7 @@ if (!argv.wvJsonFile && !argv.overridesFile && !argv.featuresFile) {
 const wvJsonFile = argv.wvJsonFile
 const overridesFile = argv.overridesFile
 const featuresFile = argv.featuresFile
+const cacheMode = argv.cacheMode
 
 let overrideDatesDict = {}
 const badSnapshots = []
@@ -250,12 +257,24 @@ async function getSnapshots (layer) {
       params.LAYERS = gibsLayerId
     }
 
+    let headers = {}
+
+    if (cacheMode === 'no-store') {
+      const noCacheHeaders = {
+        'Cache-Control': 'no-cache no-store',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+      headers = Object.assign(headers, noCacheHeaders)
+    }
+
     try {
       const imageReq = await axios({
         method: 'get',
         url: snapshotsUrl,
         params,
-        responseType: 'stream'
+        responseType: 'stream',
+        headers
       })
       let statusText
       if (imageReq.status === 200) {

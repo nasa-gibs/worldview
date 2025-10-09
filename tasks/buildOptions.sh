@@ -8,13 +8,21 @@ DEST_DIR="$BASE/build/options"
 SCRIPTS_DIR="$BASE/tasks/build-options"
 
 MODE="default"
+CACHE_MODE="default"
 
-while getopts ":v" option; do
+while getopts ":vfd" option; do
    echo "Option -$option set"
    case $option in
       v)
-       echo "Verbose Mode Activated"
-       MODE="verbose";;
+        echo "Verbose Mode Activated"
+        MODE="verbose";;
+      f)
+        echo "Force Mode Activated"
+        CACHE_MODE="no-store";;
+      d)
+        echo "Debug Mode Activated"
+        export NODE_DEBUG=http*
+        export NODE_OPTIONS='--inspect'
    esac
 done
 
@@ -66,7 +74,8 @@ if [ "$FETCH_GC" ] ; then
     `node $SCRIPTS_DIR/getCapabilities.js \
       --config "$OPT_DIR/$OPT_SUBDIR/config.json" \
       --getcapabilities "$OPT_DIR/$OPT_SUBDIR/gc" \
-      --mode "$MODE"`
+      --mode "$MODE" \
+      --cacheMode "$CACHE_MODE"`
 
     # Get metadata for files in layerOrder.json and combine this data into 1 file
     if [ "$MODE" == "verbose" ] ; then
@@ -78,7 +87,8 @@ if [ "$FETCH_GC" ] ; then
       --features "$BUILD_DIR/features.json" \
       --layerOrder "$BUILD_DIR/config/wv.json/layerOrder.json" \
       --layerMetadata "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" \
-      --mode "$MODE"`
+      --mode "$MODE" \
+      --cacheMode "$CACHE_MODE"`
 else
   # Validate layers in wv.json with a JSON schema
   if [ "$MODE" == "verbose" ] ; then
@@ -87,7 +97,8 @@ else
   `node $SCRIPTS_DIR/validateConfigs.js \
     --inputDirectory "$SRC_DIR/common/config/wv.json/layers" \
     --schemaFile "$BASE/schemas/layer-config.json" \
-    --mode "$MODE"`
+    --mode "$MODE" \
+    --cacheMode "$CACHE_MODE"`
 
   if [ -e "$BUILD_DIR/features.json" ] ; then
     if [ "$MODE" == "verbose" ] ; then
@@ -105,7 +116,8 @@ else
       --config "$BUILD_DIR/config.json" \
       --inputDir "$BUILD_DIR/gc" \
       --outputDir  "$BUILD_DIR/_wmts" \
-      --mode "$MODE"`
+      --mode "$MODE" \
+      --cacheMode "$CACHE_MODE"`
   fi
 
   # Run processVectorStyles.js and move vectorstyles where we want them
@@ -118,7 +130,8 @@ else
         --inputDir "$BUILD_DIR/gc/vectorstyles" \
         --wvStylesDir "$SRC_DIR/common/vectorstyles" \
         --outputDir "$BUILD_DIR/config/wv.json/vectorstyles" \
-        --mode "$MODE"`
+        --mode "$MODE" \
+        --cacheMode "$CACHE_MODE"`
   fi
 
   # Run processVectorData.js and move vectordata where we want them
@@ -130,7 +143,8 @@ else
       `node $SCRIPTS_DIR/processVectorData.js \
         --inputDir "$BUILD_DIR/gc/vectordata" \
         --outputDir "$BUILD_DIR/config/wv.json/vectordata" \
-        --mode "$MODE"`
+        --mode "$MODE" \
+        --cacheMode "$CACHE_MODE"`
   fi
 
   # Run processColormap.js and move colormaps where we want them
@@ -147,7 +161,8 @@ else
         --inputDir "$BUILD_DIR/colormaps" \
         --outputDir "$BUILD_DIR/config/palettes" \
         --layersDir "$BUILD_DIR/_wmts" \
-        --mode "$MODE"`
+        --mode "$MODE" \
+        --cacheMode "$CACHE_MODE"`
   fi
 
   # Throw error if no categoryGroupOrder.json file present
@@ -156,7 +171,8 @@ else
       `node $SCRIPTS_DIR/generateCategoryGroupOrder.js \
         --inputDir "$SRC_DIR/common/config/wv.json/categories/" \
         --outputDir "$SRC_DIR/common/config/wv.json/" \
-        --mode "$MODE"`
+        --mode "$MODE" \
+        --cacheMode "$CACHE_MODE"`
   fi
 
   if [ -e "$OPT_DIR/$OPT_SUBDIR/layer-metadata/all.json" ] ; then
@@ -186,7 +202,8 @@ else
   `node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
     --inputDir "$BUILD_DIR/_wmts" \
     --outputFile "$DEST_DIR/config/wv.json" \
-    --mode "$MODE"`
+    --mode "$MODE" \
+    --cacheMode "$CACHE_MODE"`
 
   # Copy brand files from build to dest
   if [ "$MODE" == "verbose" ] ; then
@@ -203,7 +220,8 @@ else
   `node $SCRIPTS_DIR/validateOptions.js \
     --optionsFile "$BUILD_DIR/config.json" \
     --configDir "$DEST_DIR/config" \
-    --mode "$MODE"`
+    --mode "$MODE" \
+    --cacheMode "$CACHE_MODE"`
 
   # Fetch preview images from WV Snapshots for any layers which they are missing
   if [ "$MODE" == "verbose" ] ; then
@@ -213,6 +231,7 @@ else
     --wvJsonFile "$DEST_DIR/config/wv.json" \
     --overridesFile "$OPT_DIR/common/previewLayerOverrides.json" \
     --featuresFile "$BUILD_DIR/features.json" \
-    --mode "$MODE"`
+    --mode "$MODE" \
+    --cacheMode "$CACHE_MODE"`
 fi
 exit 0
