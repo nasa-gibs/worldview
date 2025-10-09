@@ -2,6 +2,7 @@ import googleTagManager from 'googleTagManager';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_SMART_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -95,6 +96,15 @@ export function changeCustomInterval(delta, customInterval) {
       type: CHANGE_CUSTOM_INTERVAL,
       interval: customInterval,
       delta,
+    });
+  };
+}
+export function changeSmartInterval(smartInterval) {
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({
+      type: CHANGE_SMART_INTERVAL,
+      smartSelected: smartInterval,
     });
   };
 }

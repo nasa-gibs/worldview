@@ -6,6 +6,13 @@ import googleTagManager from 'googleTagManager';
 import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/icon-list';
+import {
+  selectInterval,
+  changeSmartInterval as changeSmartIntervalAction,
+} from '../modules/date/actions';
+import {
+  TIME_SCALE_TO_NUMBER,
+} from '../modules/date/constants';
 
 const DEFAULT_PROJ_ARRAY = [
   {
@@ -49,11 +56,15 @@ class ProjectionList extends Component {
 
   onClick(id) {
     const {
-      updateProjection, projection, onCloseModal,
+      updateProjection, projection, onCloseModal, changeSmartInterval, layers,
     } = this.props;
 
     if (id !== projection) {
       updateProjection(id);
+      const enableSmart = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.id.includes('TEMPO')).length > 0;
+      changeSmartInterval(enableSmart);
+      // Defaults to 1 minute if new projection has no TEMPO layers present
+      selectInterval(1, TIME_SCALE_TO_NUMBER.minute, false, enableSmart);
     }
 
     googleTagManager.pushEvent({
@@ -78,7 +89,7 @@ class ProjectionList extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    config, models, proj, screenSize,
+    config, models, proj, screenSize, layers,
   } = state;
   const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
@@ -90,6 +101,7 @@ const mapStateToProps = (state) => {
     isMobile,
     projection: proj.id,
     projectionArray,
+    layers: layers.active.layers,
   };
 };
 
@@ -99,6 +111,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onCloseModal: () => {
     dispatch(onToggle());
+  },
+  changeSmartInterval: (delta, timeScale) => {
+    dispatch(changeSmartIntervalAction(delta, timeScale));
   },
 });
 
@@ -113,4 +128,6 @@ ProjectionList.propTypes = {
   projection: PropTypes.string,
   projectionArray: PropTypes.array,
   updateProjection: PropTypes.func,
+  changeSmartInterval: PropTypes.func,
+  layers: PropTypes.array,
 };

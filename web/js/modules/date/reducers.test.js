@@ -5,6 +5,7 @@ import {
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_SMART_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -53,6 +54,22 @@ describe('dateReducer', () => {
         customInterval: 4,
         customDelta: 10,
         customSelected: true,
+      });
+    },
+  );
+  test(
+    `${CHANGE_SMART_INTERVAL
+    }action type and true as smartSelected `
+      + 'should return new state [date-reducer-smart-interval]',
+    () => {
+      expect(
+        dateReducer(dateReducerState, {
+          type: CHANGE_SMART_INTERVAL,
+          smartSelected: true,
+        }),
+      ).toEqual({
+        ...dateReducerState,
+        smartSelected: true,
       });
     },
   );

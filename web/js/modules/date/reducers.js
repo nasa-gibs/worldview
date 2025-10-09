@@ -1,6 +1,7 @@
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_SMART_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -59,6 +60,12 @@ export function dateReducer(state = dateReducerState, action) {
         customInterval: interval,
         customDelta: delta,
         customSelected: !(!interval && !delta),
+      };
+    }
+    case CHANGE_SMART_INTERVAL: {
+      return {
+        ...state,
+        smartSelected: action.smartSelected,
       };
     }
     case CHANGE_INTERVAL:
