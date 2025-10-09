@@ -63,10 +63,11 @@ class ProjectionList extends Component {
     if (id !== projection) {
       updateProjection(id);
       const enableSmart = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.id.includes('TEMPO')).length > 0;
-      changeSmartInterval(enableSmart);
       // Defaults to 1 day if new projection has no TEMPO layers present
-      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, enableSmart);
-      changeTimeScale(enableSmart ? TIME_SCALE_TO_NUMBER.hour : TIME_SCALE_TO_NUMBER.day);
+      const timescale = enableSmart ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
+      changeSmartInterval(1, timescale, enableSmart);
+      selectInterval(1, timescale, false, enableSmart);
+      changeTimeScale(enableSmart ? TIME_SCALE_TO_NUMBER.hour : timescale);
     }
 
     googleTagManager.pushEvent({
@@ -117,8 +118,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeTimeScale: (val) => {
     dispatch(changeTimeScale(val));
   },
-  changeSmartInterval: (delta, timeScale) => {
-    dispatch(changeSmartIntervalAction(delta, timeScale));
+  changeSmartInterval: (delta, timeScale, smartSelected) => {
+    dispatch(changeSmartIntervalAction(delta, timeScale, smartSelected));
   },
 });
 

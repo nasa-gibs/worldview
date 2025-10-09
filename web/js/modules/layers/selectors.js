@@ -618,21 +618,9 @@ export function getSmallestIntervalValue(state) {
   let smallestDelta = 1440; // 1 day in minutes
   if (layers && layers.length) {
     for (let i = 0; i < layers.length; i += 1) {
-      if (layers[i].period === 'subdaily') {
-        const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
-        for (let j = 0; j < layers[i]?.dateRanges.length; j += 1) {
-          const obj = layers[i].dateRanges[j];
-          if (state.date.selected < new Date(obj.endDate) && obj.dateInterval < smallestDelta) {
-            // smallestDelta = Number(obj.dateInterval);
-            break;
-          }
-        }
-        if (interval < smallestDelta) {
-          smallestDelta = Number(interval);
-        }
-        if (layers[i].id.includes('TEMPO_L3')) {
-          // smallestDelta = 6;
-        }
+      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
+      if (layers[i].period === 'subdaily' && interval < smallestDelta) {
+        smallestDelta = Number(interval);
       }
     }
   }

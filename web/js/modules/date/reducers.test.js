@@ -65,6 +65,8 @@ describe('dateReducer', () => {
       expect(
         dateReducer(dateReducerState, {
           type: CHANGE_SMART_INTERVAL,
+          interval: 3,
+          delta: 1,
           smartSelected: true,
         }),
       ).toEqual({

@@ -211,9 +211,11 @@ describe('Date timescale changes', () => {
       };
       const expectedSecond = {
         type: CHANGE_SMART_INTERVAL,
+        delta: 5,
+        interval: 3,
         smartSelected: true,
       };
-      store.dispatch(changeSmartInterval(true));
+      store.dispatch(changeSmartInterval(delta, customInterval, true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
     },

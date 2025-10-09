@@ -63,9 +63,12 @@ export function dateReducer(state = dateReducerState, action) {
       };
     }
     case CHANGE_SMART_INTERVAL: {
+      const { interval, delta, smartSelected } = action;
       return {
         ...state,
-        smartSelected: action.smartSelected,
+        interval,
+        delta,
+        smartSelected,
       };
     }
     case CHANGE_INTERVAL:
