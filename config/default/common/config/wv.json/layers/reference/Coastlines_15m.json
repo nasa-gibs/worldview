@@ -2,34 +2,32 @@
   "layers": {
     "Coastlines_15m": {
       "id": "Coastlines_15m",
+      "layerName": "World_Basemap_GCS_v2",
       "title": "Coastlines",
+      "subtitle": "Sources: Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community",
       "description": "reference/Coastlines_15m",
       "group": "overlays",
-      "format": "image/png",
+      "tags": "esri world basemap gcs v2, country, countries, state, province, cities, city, towns, town, lakes, lake, parks, park, airports, airport",
+      "format": "application/x-protobuf",
+      "type": "indexedVector",
+      "disableSnapshot": true,
       "layergroup": "Reference",
+      "wrapX": true,
+      "maxZoom": 19,
       "noTransition": true,
+      "serviceName": "VectorTileServer",
+      "tiles": [
+        "tile/{z}/{y}/{x}.pbf"
+      ],
       "projections": {
-        "antarctic": {
-          "id": "Coastlines",
-          "subtitle": "SCAR Antarctic Digital Database / Coastlines",
-          "tags": "borders reference",
-          "source": "GIBS:antarctic",
-          "matrixSet": "250m"
-        },
         "geographic": {
-          "subtitle": "&copy; OpenStreetMap contributors",
-          "tags": "borders reference osm",
-          "source": "GIBS:geographic"
-        },
-        "arctic": {
-          "id": "Coastlines",
-          "subtitle": "&copy; OpenStreetMap contributors",
-          "tags": "borders reference osm",
-          "source": "GIBS:arctic",
-          "matrixSet": "250m"
+          "source": "ESRI"
         }
       },
-      "wrapX": true
+      "vectorStyle": {
+        "id": "Coastlines_15m",
+        "url": "https://nasa.maps.arcgis.com/sharing/rest/content/items/175cfa9566024faab5595d696685cbd1/resources/styles/root.json?f=pjson"
+      }
     }
   }
 }

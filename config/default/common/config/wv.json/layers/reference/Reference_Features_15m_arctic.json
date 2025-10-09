@@ -1,0 +1,24 @@
+{
+  "layers": {
+    "Reference_Features_15m_arctic": {
+      "id": "Reference_Features_15m_arctic",
+      "title": "Coastlines / Borders / Roads",
+      "subtitle": "© OpenStreetMap contributors, Natural Earth",
+      "description": "reference/Reference_Features_15m_arctic",
+      "tags": "osm reference, country, countries, state, province",
+      "group": "overlays",
+      "layergroup": "Reference",
+      "wrapX": true,
+      "type": "wmts",
+      "format": "image/png",
+      "projections": {
+        "arctic": {
+          "id": "Reference_Features",
+          "tags": "osm reference, country, countries, state, province",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        }
+      }
+    }
+  }
+}
