@@ -63,8 +63,8 @@ class ProjectionList extends Component {
       updateProjection(id);
       const enableSmart = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.id.includes('TEMPO')).length > 0;
       changeSmartInterval(enableSmart);
-      // Defaults to 1 minute if new projection has no TEMPO layers present
-      selectInterval(1, TIME_SCALE_TO_NUMBER.minute, false, enableSmart);
+      // Defaults to 1 day if new projection has no TEMPO layers present
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, enableSmart);
     }
 
     googleTagManager.pushEvent({
