@@ -15,14 +15,18 @@ while getopts ":vfd" option; do
    case $option in
       v)
         echo "Verbose Mode Activated"
-        MODE="verbose";;
+        MODE="verbose"
+        ;;
       f)
         echo "Force Mode Activated"
-        CACHE_MODE="no-store";;
+        CACHE_MODE="no-store"
+        ;;
       d)
         echo "Debug Mode Activated"
         export NODE_OPTIONS='--inspect'
-        export NODE_DEBUG=http*;;
+        export NODE_DEBUG=http,http2
+        echo "Open debugger to view results (change '--inspect' to '--inspect-brk' to break on start)"
+        ;;
    esac
 done
 
