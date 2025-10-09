@@ -7,6 +7,7 @@ import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/icon-list';
 import {
+  changeTimeScale,
   selectInterval,
   changeSmartInterval as changeSmartIntervalAction,
 } from '../modules/date/actions';
@@ -56,7 +57,7 @@ class ProjectionList extends Component {
 
   onClick(id) {
     const {
-      updateProjection, projection, onCloseModal, changeSmartInterval, layers,
+      updateProjection, projection, onCloseModal, changeTimeScale, changeSmartInterval, layers,
     } = this.props;
 
     if (id !== projection) {
@@ -65,6 +66,7 @@ class ProjectionList extends Component {
       changeSmartInterval(enableSmart);
       // Defaults to 1 day if new projection has no TEMPO layers present
       selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, enableSmart);
+      changeTimeScale(enableSmart ? TIME_SCALE_TO_NUMBER.hour : TIME_SCALE_TO_NUMBER.day);
     }
 
     googleTagManager.pushEvent({
@@ -112,6 +114,9 @@ const mapDispatchToProps = (dispatch) => ({
   onCloseModal: () => {
     dispatch(onToggle());
   },
+  changeTimeScale: (val) => {
+    dispatch(changeTimeScale(val));
+  },
   changeSmartInterval: (delta, timeScale) => {
     dispatch(changeSmartIntervalAction(delta, timeScale));
   },
@@ -128,6 +133,7 @@ ProjectionList.propTypes = {
   projection: PropTypes.string,
   projectionArray: PropTypes.array,
   updateProjection: PropTypes.func,
+  changeTimeScale: PropTypes.func,
   changeSmartInterval: PropTypes.func,
   layers: PropTypes.array,
 };
