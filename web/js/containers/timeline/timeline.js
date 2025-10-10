@@ -44,6 +44,7 @@ import {
   changeTimeScale,
   selectInterval,
   changeCustomInterval as changeCustomIntervalAction,
+  changeSmartInterval as changeSmartIntervalAction,
   updateAppNow,
   toggleCustomModal,
   triggerTodayButton,
@@ -282,6 +283,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       changeCustomInterval,
+      changeSmartInterval,
       customInterval,
       dateA,
       dateB,
@@ -290,6 +292,7 @@ class Timeline extends React.Component {
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
+      hasTempoProduct,
       subDailyLayersList,
       newCustomDelta,
     } = this.props;
@@ -326,7 +329,9 @@ class Timeline extends React.Component {
 
     const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
-      if (isSubDaily) {
+      if (hasTempoProduct) {
+        changeSmartInterval(1, TIME_SCALE_TO_NUMBER.minute, true);
+      } else if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
       } else {
         changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
@@ -1560,6 +1565,7 @@ function mapStateToProps(state) {
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
     : subdailyLayers(state);
   const newCustomDelta = getSmallestIntervalValue(state);
+  const hasTempoProduct = layers.active.layers.filter((layer) => layer.visible && layer.id.includes('TEMPO'));
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1633,6 +1639,7 @@ function mapStateToProps(state) {
     isChartingActive,
     isAnimatingToEvent,
     hasFutureLayers,
+    hasTempoProduct,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     timelineStartDateLimit: config.startDate, // same as startDate
@@ -1691,6 +1698,10 @@ const mapDispatchToProps = (dispatch) => ({
   // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomIntervalAction(delta, timeScale));
+  },
+  // changes/sets smart delta and timescale interval
+  changeSmartInterval: (delta, timeScale, smartSelected) => {
+    dispatch(changeSmartIntervalAction(delta, timeScale, smartSelected));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
@@ -1751,6 +1762,7 @@ Timeline.propTypes = {
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.object,
   changeCustomInterval: PropTypes.func,
+  changeSmartInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customInterval: PropTypes.number,
@@ -1761,6 +1773,7 @@ Timeline.propTypes = {
   deltaChangeAmt: PropTypes.number,
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   subDailyLayersList: PropTypes.object,
   hideTimeline: PropTypes.bool,

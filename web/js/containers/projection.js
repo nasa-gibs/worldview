@@ -62,7 +62,7 @@ class ProjectionList extends Component {
 
     if (id !== projection) {
       updateProjection(id);
-      const enableSmart = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.id.includes('TEMPO')).length > 0;
+      const enableSmart = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
       // Defaults to 1 day if new projection has no TEMPO layers present
       const timescale = enableSmart ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
       changeSmartInterval(1, timescale, enableSmart);
