@@ -5,11 +5,13 @@ import {
   updateAppNow,
   selectDate,
   changeCustomInterval,
+  changeSmartInterval,
   selectInterval,
 } from './actions';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_SMART_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -186,6 +188,34 @@ describe('Date timescale changes', () => {
         delta,
       };
       store.dispatch(changeCustomInterval(delta, customInterval));
+      expect(store.getActions()[0]).toEqual(expectedFirst);
+      expect(store.getActions()[1]).toEqual(expectedSecond);
+    },
+  );
+
+  test(
+    `changeSmartInterval action returns ${CHANGE_SMART_INTERVAL} as type and true as smartSelected [date-action-smart-interval]`,
+    () => {
+      const store = mockStore({
+        date: {},
+        compare: {
+          isCompareA: false,
+          activeString: 'activeB',
+        },
+        proj: {
+          id: 'geographic',
+        },
+      });
+      const expectedFirst = {
+        type: CLEAR_PRELOAD,
+      };
+      const expectedSecond = {
+        type: CHANGE_SMART_INTERVAL,
+        delta: 5,
+        interval: 3,
+        smartSelected: true,
+      };
+      store.dispatch(changeSmartInterval(delta, customInterval, true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
     },

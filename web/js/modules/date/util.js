@@ -537,3 +537,81 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
   newDate = new Date(util.clamp(newDate, newMinDate, newMaxDate));
   return newDate;
 };
+
+/**
+ * Gets the next imagery delta for smart increments
+ *
+ * @method getNextImageryDelta
+ * @param  {Array} layers
+ * @param  {object} date Selected date
+ * @param  {Number} signConstant Direction of increment
+ * @returns {array} Array of visible layers within the date.
+ */
+export function getNextImageryDelta(layers, dateA, signConstant) {
+  let delta = 0;
+  const dateAObj = new Date(dateA);
+  let hasDeltaChanged = false;
+  for (let i = 0; i < layers.length; i += 1) {
+    if (!Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges')) {
+      break;
+    }
+    if (signConstant > 0) {
+      // Forward in time
+      for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
+        const obj = layers[i].dateRanges[j];
+        const startDateObj = new Date(obj.startDate);
+        const endDateObj = new Date(obj.endDate);
+        const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
+        if (dateAObj < startDateObj) {
+          const possibleDelta = Math.ceil(((startDateObj - dateAObj) / 1000) / 60);
+          if (possibleDelta >= 1) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+        if (dateAObj < endDateObj) {
+          const possibleDate = new Date(dateAObj.getTime() + (minDelta * 60000));
+          const possibleDelta = possibleDate > endDateObj ? Math.floor(((endDateObj - dateAObj) / 1000) / 60) : minDelta;
+          if (possibleDelta >= minDelta) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+      }
+      if (hasDeltaChanged) {
+        break;
+      }
+    } else {
+      // Backward in time
+      for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
+        const obj = [...layers[i].dateRanges].reverse()[j];
+        const endDateObj = new Date(obj.endDate);
+        const startDateObj = new Date(obj.startDate);
+        const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
+        if (dateAObj > endDateObj) {
+          const possibleDelta = Math.floor(((dateAObj - endDateObj) / 1000) / 60);
+          if (possibleDelta >= minDelta) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+        if (dateAObj > startDateObj) {
+          const possibleDate = new Date(dateAObj.getTime() - (minDelta * 60000));
+          const possibleDelta = possibleDate < startDateObj ? Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
+          if (possibleDelta >= minDelta) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+      }
+      if (hasDeltaChanged) {
+        break;
+      }
+    }
+  }
+  return delta;
+}

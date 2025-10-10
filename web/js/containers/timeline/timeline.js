@@ -52,6 +52,7 @@ import {
   checkHasFutureLayers,
   filterProjLayersWithStartDate,
   getNextTimeSelection,
+  getNextImageryDelta,
 } from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import { addGranuleDateRanges } from '../../modules/layers/actions';
@@ -581,6 +582,7 @@ class Timeline extends React.Component {
   handleArrowDateChange(signConstant) {
     const {
       customSelected,
+      smartSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
       selectedDate,
@@ -588,9 +590,14 @@ class Timeline extends React.Component {
       leftArrowDisabled,
       timelineEndDateLimit,
       timelineStartDateLimit,
+      subDailyLayersList,
+      dateA,
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
+    if (smartSelected && subDailyLayersList && subDailyLayersList.length) {
+      delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
+    }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
     }
@@ -1522,6 +1529,7 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
+    smartSelected,
     interval,
     selected,
     selectedB,
@@ -1624,6 +1632,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     subDailyLayersList,
     customSelected,
+    smartSelected,
     isCompareModeActive,
     isChartingActive,
     isAnimatingToEvent,
@@ -1751,6 +1760,7 @@ Timeline.propTypes = {
   closeAnimation: PropTypes.func,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  smartSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
