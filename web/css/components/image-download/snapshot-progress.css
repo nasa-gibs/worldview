@@ -25,8 +25,8 @@
   display: inline-block;
   width: 16px;
   height: 16px;
-  margin-right: 8px;
-  border: 2px solid #007bff;
+  margin-right: 10px;
+  border: 2px solid white;
   border-top: 2px solid transparent;
   border-radius: 50%;
   animation: wv-snapshot-spin 1s linear infinite;
