@@ -7,6 +7,8 @@ import '../../../css/components/image-download/snapshot-progress.css';
 const Wait = (props) => {
   const { complete = false, statusText, onCancel } = props;
 
+  const root = document.querySelector('.wv-content') || document.body;
+
   return createPortal(
     <div className="wv-snapshot-progress-overlay">
       <dialog className="wv-snapshot-progress-dialog" open>
@@ -20,14 +22,14 @@ const Wait = (props) => {
                 autoFocus
                 text="Cancel"
                 onClick={onCancel}
-                className="wv-button-red"
+                className="wv-button gray"
               />
             )}
           </div>
         </div>
       </dialog>
     </div>,
-    document.body,
+    root,
   );
 };
 
