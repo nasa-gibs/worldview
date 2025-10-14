@@ -549,13 +549,13 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
  */
 export function getNextImageryDelta(layers, dateA, signConstant) {
   let delta = 0;
+  let invalidLayerCount = 0;
   const dateAObj = new Date(dateA);
   let hasDeltaChanged = false;
   for (let i = 0; i < layers.length; i += 1) {
-    if (!Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges')) {
-      break;
-    }
-    if (signConstant > 0) {
+    if (!Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges') || !layers[i].visible) {
+      invalidLayerCount += 1;
+    } else if (signConstant > 0) {
       // Forward in time
       for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
         const obj = layers[i].dateRanges[j];
@@ -612,6 +612,10 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
         break;
       }
     }
+  }
+  // If all layers are hidden/invalid, make delta 1
+  if (invalidLayerCount === layers.length) {
+    delta = 1;
   }
   return delta;
 }
