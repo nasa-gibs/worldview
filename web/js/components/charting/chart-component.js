@@ -93,23 +93,92 @@ function ChartComponent (props) {
 
   function CustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
+      if (!Number.isNaN(payload[0].value)) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label" style={{ color: 'gray' }}>
+              {label}
+            </p>
+            <p className="label" style={{ color: '#000' }}>
+              <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
+              {`${payload[0].name}${formattedUnit}: `}
+              <b>
+                {formatToThreeDigits(payload[0].value)}
+              </b>
+            </p>
+          </div>
+        );
+      }
       return (
         <div className="custom-tooltip">
           <p className="label" style={{ color: 'gray' }}>
             {label}
           </p>
           <p className="label" style={{ color: '#000' }}>
-            <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
-            {`${payload[0].name}${formattedUnit}: `}
-            <b>
-              {formatToThreeDigits(payload[0].value)}
-            </b>
+            No data
           </p>
         </div>
       );
     }
 
     return null;
+  }
+
+  // Gets the indices of the tick positions so that they are evenly spaced
+  function getTickPositions(dataLength) {
+    // If dataLength is too small, just show first and last tick
+    if (dataLength < 8) return [0, dataLength - 1];
+
+    const numGaps = Math.floor((dataLength - 3) / 5);
+    const gapsArr = Array(numGaps).fill(5);
+
+    // Last gap must be 7 to give extra room for end-aligned label
+    gapsArr[gapsArr.length - 1] = 7;
+
+    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
+    let leftoverGap = (dataLength - 1) - gapsTotal;
+
+    let i = 0;
+    // Distribute extra gaps across existing gaps
+    while (leftoverGap > 0 && i < numGaps - 1) {
+      gapsArr[i] += 1;
+      leftoverGap -= 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    // Build final array of tick positions based on calculated gaps
+    const tickPosArr = [0];
+    for (let i = 0; i < gapsArr.length; i += 1) {
+      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[i]);
+    }
+    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
+
+    return tickPosArr;
+  }
+
+  const tickPositions = getTickPositions(data.length);
+
+  function CustomXAxisTick(obj) {
+    const {
+      x, y, fill, textAnchor, visibleTicksCount, index, payload,
+    } = obj;
+    const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
+    const isLabeled = tickPositions.includes(index);
+    if (isLabeled) {
+      return (
+        <g transform={`translate(${x}, ${y})`}>
+          <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
+          <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
+            {payload.value}
+          </text>
+        </g>
+      );
+    }
+    return (
+      <g transform={`translate(${x}, ${y})`}>
+        <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
+      </g>
+    );
   }
 
   const yAxisValuesArr = getYAxisValues(data);
@@ -147,7 +216,7 @@ function ChartComponent (props) {
    * @param {Object} chartData
    */
   function getQuickStatistics(chartData) {
-    const count = chartData.length;
+    let count = 0;
     let minTotal = 0;
     let maxTotal = 0;
     let meanTotal = 0;
@@ -155,11 +224,14 @@ function ChartComponent (props) {
     let stddevTotal = 0;
 
     for (let i = 0; i < chartData.length; i += 1) {
-      meanTotal += chartData[i].mean;
-      minTotal += chartData[i].min;
-      maxTotal += chartData[i].max;
-      medianTotal += chartData[i].median;
-      stddevTotal += chartData[i].stddev;
+      if (!Number.isNaN(chartData[i].mean)) {
+        meanTotal += chartData[i].mean;
+        minTotal += chartData[i].min;
+        maxTotal += chartData[i].max;
+        medianTotal += chartData[i].median;
+        stddevTotal += chartData[i].stddev;
+        count += 1;
+      }
     }
 
     return (
@@ -297,7 +369,7 @@ function ChartComponent (props) {
             <Tooltip content={CustomTooltip} />
             {' '}
             {getLineChart(data)}
-            <XAxis dataKey="name" stroke="#a6a5a6" />
+            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick />} tickLine={false} />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -392,7 +464,7 @@ function ChartComponent (props) {
               />
               <i className="charting-disclaimer-block">
                 {`${errors.error_count} `}
-                dates requested have no data, so are not shown in the chart.
+                dates requested have no data, so are shown as gaps in the chart.
               </i>
               {!errorCollapsed
               && (
