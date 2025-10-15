@@ -217,7 +217,6 @@ function ImageDownloadPanel(props) {
   );
 
   const { crs } = projection.selected;
-  // console.log({ currResolution }); // eslint-disable-line no-console
   const dimensions = getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
