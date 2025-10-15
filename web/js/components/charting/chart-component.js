@@ -464,7 +464,7 @@ function ChartComponent (props) {
               />
               <i className="charting-disclaimer-block">
                 {`${errors.error_count} `}
-                dates requested have no data, so are shown as gaps in the chart.
+                requested dates have no data and are represented as gaps in the chart.
               </i>
               {!errorCollapsed
               && (
