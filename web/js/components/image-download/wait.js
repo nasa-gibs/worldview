@@ -23,6 +23,7 @@ const Wait = (props) => {
                 text="Cancel"
                 onClick={onCancel}
                 className="wv-button gray"
+                id="wv-snapshot-cancel-button"
               />
             )}
           </div>

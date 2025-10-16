@@ -96,7 +96,7 @@ test('Confirm bounding box integrity by testing snapshot functionality', async (
   const progressDialog = page.locator('.wv-snapshot-progress-overlay')
   await expect(progressDialog).toBeVisible()
 
-  const cancelButton = page.locator('button.wv-button.wv-button-red')
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
   await expect(cancelButton).toBeVisible()
 
   // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)

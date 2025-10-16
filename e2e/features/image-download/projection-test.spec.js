@@ -40,7 +40,7 @@ test('Geographic is EPSG:4326', async () => {
   const progressDialog = page.locator('.wv-snapshot-progress-overlay')
   await expect(progressDialog).toBeVisible()
 
-  const cancelButton = page.locator('button.wv-button.wv-button-red')
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
   await expect(cancelButton).toBeVisible()
 
   // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
@@ -66,7 +66,7 @@ test('Arctic is EPSG:3413', async () => {
   const progressDialog = page.locator('.wv-snapshot-progress-overlay')
   await expect(progressDialog).toBeVisible()
 
-  const cancelButton = page.locator('button.wv-button.wv-button-red')
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
   await expect(cancelButton).toBeVisible()
 
   // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
@@ -93,7 +93,7 @@ test('Antarctic is EPSG:3031', async () => {
   const progressDialog = page.locator('.wv-snapshot-progress-overlay')
   await expect(progressDialog).toBeVisible()
 
-  const cancelButton = page.locator('button.wv-button.wv-button-red')
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
   await expect(cancelButton).toBeVisible()
 
   // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
