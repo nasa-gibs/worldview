@@ -632,7 +632,7 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
       console.warn(error);
       tile.setState(3); // ol.TileState.ERROR
     }
-};
+  };
   const sourceOptions = {
     ...originalSource,
     urls: originalSource.getUrls?.() || originalSource.urls_,
