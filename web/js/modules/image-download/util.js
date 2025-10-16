@@ -605,10 +605,8 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
   const resolutions = originalTileGrid.getResolutions();
   if (typeof originalTileGrid.getMatrixIds !== 'function') return () => null; // No matrix IDs to update
   const matrixIds = originalTileGrid.getMatrixIds?.();
-  const maxResolutions = new Array(resolutions.length)
-    .fill(resolutions.at(tileMatrixID) || resolutions.at(-1))
-    .map((res, i) => evaluate(`${res} - (${i} * (${res} * 0.000000000001))`)); // Ensure unique resolutions see: openlayers/src/ol/tilegrid/TileGrid.js line 90
-  const maxMatrixIds = matrixIds ? new Array(matrixIds.length).fill(matrixIds.at(tileMatrixID) || matrixIds.at(-1)) : undefined;
+  const maxResolutions = resolutions.slice(0, tileMatrixID + 1);
+  const maxMatrixIds = matrixIds ? matrixIds.slice(0, tileMatrixID + 1) : undefined;
 
   const tileGrid = new TileGridConstructor({
     ...originalTileGrid,
@@ -617,6 +615,8 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
     resolutions: maxResolutions,
     matrixIds: maxMatrixIds,
     tileSize: originalTileGrid.getTileSize?.() || originalTileGrid.tileSize_,
+    minZoom: tileMatrixID,
+    maxZoom: tileMatrixID,
   });
 
   const originalTileLoadFunction = originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_;
