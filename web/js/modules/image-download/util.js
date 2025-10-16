@@ -596,7 +596,7 @@ export async function georeference (inputBlob, options) {
  * @param {*} layer - The OpenLayers layer to update
  * @returns {Function} - A function to restore the original tile grids
  */
-function updateHighResTileGrids(layer, tileMatrixID = -1) {
+function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
   const originalSource = layer.getSource();
   if (typeof originalSource?.getTileGrid !== 'function') return () => null; // No tile grid to update
   const SourceConstructor = originalSource.constructor;
@@ -619,6 +619,20 @@ function updateHighResTileGrids(layer, tileMatrixID = -1) {
     tileSize: originalTileGrid.getTileSize?.() || originalTileGrid.tileSize_,
   });
 
+  const originalTileLoadFunction = originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_;
+
+  const cancellableTileLoadFunction = async (tile, src) => {
+    try {
+      const response = await fetch(src, { signal: abortSignal });
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      await originalTileLoadFunction(tile, imageUrl);
+      URL.revokeObjectURL(imageUrl);
+    } catch (error) {
+      console.warn(error);
+      tile.setState(3); // ol.TileState.ERROR
+    }
+};
   const sourceOptions = {
     ...originalSource,
     urls: originalSource.getUrls?.() || originalSource.urls_,
@@ -626,7 +640,7 @@ function updateHighResTileGrids(layer, tileMatrixID = -1) {
     projection: originalSource.getProjection?.() || originalSource.projection_,
     tileGrid,
     layer: originalSource.getLayer?.() || originalSource.layer_,
-    tileLoadFunction: originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_,
+    tileLoadFunction: cancellableTileLoadFunction,
     matrixSet: originalSource.getMatrixSet?.() || originalSource.matrixSet_,
     dimensions: originalSource.getDimensions?.() || originalSource.dimensions_,
     crossOrigin: 'anonymous',
@@ -643,11 +657,11 @@ function updateHighResTileGrids(layer, tileMatrixID = -1) {
  * @param {Object} map - The OpenLayers map instance
  * @returns {Function} - A function to restore the original tile grids
  */
-function toggleHighResTileGrids (map, tileMatrixID) {
+function toggleHighResTileGrids (map, abortSignal, tileMatrixID) {
   const layers = map.getAllLayers();
   const restoreSources = layers
     .filter((layer) => layer.isVisible())
-    .map((layer) => updateHighResTileGrids(layer, tileMatrixID));
+    .map((layer) => updateHighResTileGrids(layer, abortSignal, tileMatrixID));
 
   return () => restoreSources.forEach((restoreSource) => restoreSource());
 }
@@ -657,7 +671,7 @@ function toggleHighResTileGrids (map, tileMatrixID) {
  * @param {Object} map
  * @returns {Function} - A function to restore the original map state
  */
-function createMapRestore(map, extent, tileMatrixID) {
+function createMapRestore(map, extent, abortSignal, tileMatrixID) {
   const mapElement = map.getTargetElement();
   const originalView = map.getView();
   const ViewConstructor = originalView.constructor;
@@ -681,7 +695,7 @@ function createMapRestore(map, extent, tileMatrixID) {
   const originalStyleWidth = mapElement.style.width;
   const originalStyleHeight = mapElement.style.height;
 
-  const restoreLayers = toggleHighResTileGrids(map, tileMatrixID);
+  const restoreLayers = toggleHighResTileGrids(map, abortSignal, tileMatrixID);
 
   return () => {
     // Restore original map size
@@ -1067,7 +1081,7 @@ export async function snapshot(options) {
   const tileMatrixID = config.values.find((res) => res.value === metersPerPixel)?.tileMatrixID;
 
   // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
-  const restoreMap = createMapRestore(map, extent, tileMatrixID);
+  const restoreMap = createMapRestore(map, extent, abortSignal, tileMatrixID);
   const view = map.getView();
 
   // Add abort event listener to clean up if cancelled
