@@ -7,6 +7,7 @@ import canvasSize from 'canvas-size';
 import { evaluate } from 'mathjs';
 import { transform, get } from 'ol/proj';
 import * as olExtent from 'ol/extent';
+import olTileState from 'ol/TileState';
 import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
@@ -622,15 +623,16 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
   const originalTileLoadFunction = originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_;
 
   const cancellableTileLoadFunction = async (tile, src) => {
+    tile.setState(olTileState.LOADING);
     try {
       const response = await fetch(src, { signal: abortSignal });
       const blob = await response.blob();
       const imageUrl = URL.createObjectURL(blob);
       await originalTileLoadFunction(tile, imageUrl);
       URL.revokeObjectURL(imageUrl);
+      tile.setState(olTileState.LOADED);
     } catch (error) {
-      console.warn(error);
-      tile.setState(3); // ol.TileState.ERROR
+      tile.setState(olTileState.ERROR);
     }
   };
   const sourceOptions = {
