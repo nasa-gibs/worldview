@@ -725,7 +725,7 @@ function rejectIfAborted(abortSignal, reject, restoreMap) {
  */
 async function initiateDownload(blob, filename, abortSignal, parentReject) {
   // Check if cancelled before starting download
-  rejectIfAborted(abortSignal, parentReject);
+  // rejectIfAborted(abortSignal, parentReject);
 
   // Wait for download to initiate with cancellation support
   return new Promise((resolve, reject) => {
@@ -760,268 +760,6 @@ async function initiateDownload(blob, filename, abortSignal, parentReject) {
   });
 }
 
-function createRenderCompleteCallback (options) {
-  const {
-    map,
-    extent,
-    metersPerPixel,
-    format,
-    worldfile,
-    restoreMap,
-    abortSignal,
-    resolve,
-    reject,
-    filename,
-  } = options;
-
-  const handleRenderComplete = async () => {
-    try {
-      // Check if operation was cancelled at the start
-      rejectIfAborted(abortSignal, reject, restoreMap);
-
-      const topLeft = olExtent.getTopLeft(extent);
-      const bottomLeft = olExtent.getBottomLeft(extent);
-      const topRight = olExtent.getTopRight(extent);
-
-      const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
-      const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
-      const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
-
-      const aoiPixelXOffset = aoiPixelTopLeft[0];
-      const aoiPixelYOffset = aoiPixelTopLeft[1];
-      const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
-      const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
-
-      const mapElement = map.getTargetElement();
-      const [mapWidth, mapHeight] = map.getSize();
-
-      const dpr = window.devicePixelRatio || 1;
-
-      // Create our output canvas with exact dimensions we want
-      const outputWidth = evaluate(`${aoiPixelWidth} * ${dpr}`);
-      const outputHeight = evaluate(`${aoiPixelHeight} * ${dpr}`);
-      const outputCanvas = new OffscreenCanvas(outputWidth, outputHeight);
-
-      const ctx = outputCanvas.getContext('2d');
-      ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
-
-      // Scale the context to ensure correct drawing operations
-      ctx.scale(dpr, dpr);
-
-      const capturedCanvas = new OffscreenCanvas(mapWidth * dpr, mapHeight * dpr);
-
-      // Check if operation was cancelled before html2canvas
-      rejectIfAborted(abortSignal, reject, restoreMap);
-
-      // Capture the map at its new scaled size
-      await html2canvas(mapElement, {
-        canvas: capturedCanvas,
-        backgroundColor: null,
-        useCORS: true,
-        allowTaint: true,
-        scrollX: 0,
-        scrollY: 0,
-        scale: dpr,
-        logging: false,
-        imageTimeout: 0,
-        removeContainer: true,
-        ignoreElements: (element) => element.classList.contains('ol-overlaycontainer-stopevent'), // this is super finicky, maybe prep the mapElement by hiding elements using css,
-      });
-
-      const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
-      const sourceY = evaluate(`${aoiPixelYOffset} * ${dpr}`);
-      const sourceWidth = outputCanvas.width; // Use the actual width of the output canvas
-      const sourceHeight = outputCanvas.height; // Use the actual height of the output canvas
-
-      const capturedCtx = capturedCanvas.getContext('2d');
-      capturedCtx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
-      const capturedImageData = capturedCtx.getImageData(
-        Math.round(sourceX), // source x
-        sourceY, // source y
-        sourceWidth, // source width
-        sourceHeight, // source height
-        { colorSpace: 'srgb' },
-      );
-
-      ctx.colorSpace = 'srgb';
-
-      ctx.putImageData(
-        capturedImageData,
-        0, // dest x
-        0, // dest y
-        0, // source x
-        0, // source y
-        sourceWidth, // dest width
-        sourceHeight, // dest height
-      );
-
-      // Reset map to original size
-      restoreMap();
-
-      // Check if operation was cancelled before processing image
-      rejectIfAborted(abortSignal, reject);
-
-      const pngBlob = await outputCanvas.convertToBlob({
-        type: 'image/png',
-        quality: 1, // Maximum quality
-      });
-
-      const crs = map.getView().getProjection().getCode();
-
-      // Check if operation was cancelled before georeferencing
-      rejectIfAborted(abortSignal, reject);
-
-      const georeferencedOutput = await georeference(pngBlob, {
-        extent,
-        crs,
-        metersPerPixel,
-        captureWidth: outputWidth / dpr,
-        captureHeight: outputHeight / dpr,
-        inputFormat: 'png',
-        outputFormat: format === 'kmz' ? 'kml' : format,
-        worldfile,
-        name: 'Worldview Snapshot',
-        description: 'Snapshot created with NASA Worldview',
-      });
-
-      if (georeferencedOutput.length > 1 || format === 'kmz') {
-        // Check if operation was cancelled before creating zip
-        rejectIfAborted(abortSignal, reject);
-
-        const zip = new JSZip();
-        georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
-        const zipBlob = await zip.generateAsync({
-          type: 'blob',
-          compression: 'DEFLATE',
-          compressionOptions: { level: 9 },
-          mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
-        });
-
-        // Final check before download
-        rejectIfAborted(abortSignal, reject);
-
-        await initiateDownload(zipBlob, `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal, reject);
-      } else {
-        // Final check before download
-        rejectIfAborted(abortSignal, reject);
-
-        const { blob } = georeferencedOutput[0];
-        await initiateDownload(blob, `${filename}.${format}`, abortSignal, reject);
-      }
-      resolve('Successfully created screenshot');
-    } catch (error) {
-      // Reset map size in case of error
-      restoreMap();
-
-      console.error('Error creating screenshot:', error);
-      reject(error);
-    }
-  };
-
-  return handleRenderComplete;
-}
-
-function createViewFitCallback(options) {
-  const {
-    map,
-    extent,
-    metersPerPixel,
-    format,
-    worldfile,
-    restoreMap,
-    originalWidth,
-    originalHeight,
-    maxWidth,
-    maxHeight,
-    abortSignal,
-    resolve,
-    reject,
-    filename,
-  } = options;
-
-  const view = map.getView();
-  const mapElement = map.getTargetElement();
-
-  const viewFitRenderCallback = () => {
-    try {
-      // Check if operation was cancelled
-      rejectIfAborted(abortSignal, reject, restoreMap);
-
-      const viewResolution = view.getResolution();
-
-      // Calculate scale factor based on target spatial resolution
-      const projection = view.getProjection();
-      const center = view.getCenter();
-      const scaleFactor = calculateScaleFactor(
-        metersPerPixel,
-        projection,
-        viewResolution,
-        center,
-      );
-
-      // Scale the entire map up to the target resolution
-      const scaledMapWidth = evaluate(`${originalWidth} * ${scaleFactor}`);
-      const scaledMapHeight = evaluate(`${originalHeight} * ${scaleFactor}`);
-      const devicePixelRatio = window.devicePixelRatio || 1;
-      const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${devicePixelRatio}`);
-      const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${devicePixelRatio}`);
-
-      if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
-
-      const scaledResolution = evaluate(`${viewResolution} / ${scaleFactor}`);
-
-      const renderCompleteOptions = {
-        map,
-        extent,
-        metersPerPixel,
-        format,
-        worldfile,
-        restoreMap,
-        abortSignal,
-        resolve,
-        reject,
-        filename,
-      };
-
-      map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
-
-      // Resize the map container
-      map.setSize([scaledMapWidth, scaledMapHeight]);
-      mapElement.style.width = `${scaledMapWidth}px`;
-      mapElement.style.height = `${scaledMapHeight}px`;
-      map.updateSize();
-      view.setResolution(scaledResolution);
-      map.render();
-    } catch (error) {
-      restoreMap();
-
-      console.error('Error configuring map:', error);
-      reject(error);
-    }
-  };
-
-  // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
-  const viewFitCallback = (notCancelled) => {
-    if (!notCancelled) {
-      console.warn('Snapshot cancelled by user');
-      restoreMap();
-      return;
-    }
-
-    // Check if operation was cancelled before proceeding
-    if (abortSignal?.aborted) {
-      restoreMap();
-      reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
-      return;
-    }
-
-    map.once('rendercomplete', viewFitRenderCallback);
-    map.render();
-  };
-
-  return viewFitCallback;
-}
-
 function getExtentFromPixelBbox(pixelBbox, map) {
   const [minPixelX, minPixelY, maxPixelX, maxPixelY] = pixelBbox;
 
@@ -1039,6 +777,21 @@ function getExtentFromPixelBbox(pixelBbox, map) {
   const extent = [minX, minY, maxX, maxY];
 
   return extent;
+}
+
+async function fitViewToExtent(map, extent) {
+  return new Promise((resolve) => {
+    const view = map.getView();
+    map.once('rendercomplete', () => resolve());
+    view.fit(extent, { callback: () => map.render() });
+  });
+}
+
+async function waitForRenderComplete(map) {
+  return new Promise((resolve) => {
+    map.once('rendercomplete', () => resolve()); // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
+    map.render();
+  });
 }
 
 /**
@@ -1095,28 +848,169 @@ export async function snapshot(options) {
     abortSignal.addEventListener('abort', abortHandler);
   }
 
-  const viewFitPromise = new Promise((resolve, reject) => {
-    const viewFitOptions = {
-      map,
-      extent,
-      metersPerPixel,
-      format,
-      worldfile,
-      restoreMap,
-      originalWidth,
-      originalHeight,
-      maxWidth,
-      maxHeight,
-      abortSignal,
-      resolve,
-      reject,
-      filename,
-    };
-    // fit view to the bounding box to reduce number of tiles needed to render
-    view.fit(extent, { callback: createViewFitCallback(viewFitOptions) });
+  await fitViewToExtent(map, extent);
+
+  const viewResolution = view.getResolution();
+
+  // Calculate scale factor based on target spatial resolution
+  const center = view.getCenter();
+  const scaleFactor = calculateScaleFactor(
+    metersPerPixel,
+    view.getProjection(),
+    viewResolution,
+    center,
+  );
+
+  // Scale the entire map up to the target resolution
+  const scaledMapWidth = evaluate(`${originalWidth} * ${scaleFactor}`);
+  const scaledMapHeight = evaluate(`${originalHeight} * ${scaleFactor}`);
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${devicePixelRatio}`);
+  const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${devicePixelRatio}`);
+
+  if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
+
+  const scaledResolution = evaluate(`${viewResolution} / ${scaleFactor}`);
+  const mapElement = map.getTargetElement();
+
+  map.setSize([scaledMapWidth, scaledMapHeight]);
+  mapElement.style.width = `${scaledMapWidth}px`;
+  mapElement.style.height = `${scaledMapHeight}px`;
+  map.updateSize();
+  view.setResolution(scaledResolution);
+
+  await waitForRenderComplete(map);
+
+  // Check if operation was cancelled at the start
+  // rejectIfAborted(abortSignal, reject, restoreMap);
+
+  const topLeft = olExtent.getTopLeft(extent);
+  const bottomLeft = olExtent.getBottomLeft(extent);
+  const topRight = olExtent.getTopRight(extent);
+
+  const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
+  const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
+  const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
+
+  const aoiPixelXOffset = aoiPixelTopLeft[0];
+  const aoiPixelYOffset = aoiPixelTopLeft[1];
+  const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
+  const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
+
+  const [mapWidth, mapHeight] = map.getSize();
+
+  const dpr = window.devicePixelRatio || 1;
+
+  // Create our output canvas with exact dimensions we want
+  const outputWidth = evaluate(`${aoiPixelWidth} * ${dpr}`);
+  const outputHeight = evaluate(`${aoiPixelHeight} * ${dpr}`);
+  const outputCanvas = new OffscreenCanvas(outputWidth, outputHeight);
+
+  const ctx = outputCanvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
+
+  // Scale the context to ensure correct drawing operations
+  ctx.scale(dpr, dpr);
+
+  const capturedCanvas = new OffscreenCanvas(mapWidth * dpr, mapHeight * dpr);
+
+  // Check if operation was cancelled before html2canvas
+  // rejectIfAborted(abortSignal, reject, restoreMap);
+
+  // Capture the map at its new scaled size
+  await html2canvas(mapElement, {
+    canvas: capturedCanvas,
+    backgroundColor: null,
+    useCORS: true,
+    allowTaint: true,
+    scrollX: 0,
+    scrollY: 0,
+    scale: dpr,
+    logging: false,
+    imageTimeout: 0,
+    removeContainer: true,
+    ignoreElements: (element) => element.classList.contains('ol-overlaycontainer-stopevent'), // this is super finicky, maybe prep the mapElement by hiding elements using css,
   });
 
-  return viewFitPromise;
+  const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
+  const sourceY = evaluate(`${aoiPixelYOffset} * ${dpr}`);
+  const sourceWidth = outputCanvas.width; // Use the actual width of the output canvas
+  const sourceHeight = outputCanvas.height; // Use the actual height of the output canvas
+
+  const capturedCtx = capturedCanvas.getContext('2d');
+  capturedCtx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
+  const capturedImageData = capturedCtx.getImageData(
+    Math.round(sourceX), // source x
+    sourceY, // source y
+    sourceWidth, // source width
+    sourceHeight, // source height
+    { colorSpace: 'srgb' },
+  );
+
+  ctx.colorSpace = 'srgb';
+
+  ctx.putImageData(
+    capturedImageData,
+    0, // dest x
+    0, // dest y
+    0, // source x
+    0, // source y
+    sourceWidth, // dest width
+    sourceHeight, // dest height
+  );
+
+  // Reset map to original size
+  restoreMap();
+
+  // Check if operation was cancelled before processing image
+  // rejectIfAborted(abortSignal, reject);
+
+  const pngBlob = await outputCanvas.convertToBlob({
+    type: 'image/png',
+    quality: 1, // Maximum quality
+  });
+
+  const crs = map.getView().getProjection().getCode();
+
+  // Check if operation was cancelled before georeferencing
+  // rejectIfAborted(abortSignal, reject);
+
+  const georeferencedOutput = await georeference(pngBlob, {
+    extent,
+    crs,
+    metersPerPixel,
+    captureWidth: outputWidth / dpr,
+    captureHeight: outputHeight / dpr,
+    inputFormat: 'png',
+    outputFormat: format === 'kmz' ? 'kml' : format,
+    worldfile,
+    name: 'Worldview Snapshot',
+    description: 'Snapshot created with NASA Worldview',
+  });
+
+  if (georeferencedOutput.length > 1 || format === 'kmz') {
+    // Check if operation was cancelled before creating zip
+    // rejectIfAborted(abortSignal, reject);
+
+    const zip = new JSZip();
+    georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
+    const zipBlob = await zip.generateAsync({
+      type: 'blob',
+      compression: 'DEFLATE',
+      compressionOptions: { level: 9 },
+      mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
+    });
+
+    // Final check before download
+    // rejectIfAborted(abortSignal, reject);
+
+    return initiateDownload(zipBlob, `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal);
+  }
+  // Final check before download
+  // rejectIfAborted(abortSignal, reject);
+
+  const { blob } = georeferencedOutput[0];
+  return initiateDownload(blob, `${filename}.${format}`, abortSignal);
 }
 
 export function imageUtilGetConversionFactor(proj) {
