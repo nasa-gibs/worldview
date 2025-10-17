@@ -709,12 +709,12 @@ function createMapRestore(map, extent, abortSignal, tileMatrixID) {
   };
 }
 
-function rejectIfAborted(abortSignal, reject, restoreMap) {
-  if (abortSignal?.aborted) {
-    restoreMap?.();
-    reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
-  }
-}
+// function rejectIfAborted(abortSignal, reject, restoreMap) {
+//   if (abortSignal?.aborted) {
+//     restoreMap?.();
+//     reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+//   }
+// }
 
 /**
  * Initiates a download and waits for a reasonable delay to simulate download completion
