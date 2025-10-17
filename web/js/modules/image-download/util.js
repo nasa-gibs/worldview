@@ -782,6 +782,7 @@ function getExtentFromPixelBbox(pixelBbox, map) {
 async function fitViewToExtent(map, extent) {
   return new Promise((resolve) => {
     const view = map.getView();
+    // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
     map.once('rendercomplete', () => resolve());
     view.fit(extent, { callback: () => map.render() });
   });
@@ -789,7 +790,7 @@ async function fitViewToExtent(map, extent) {
 
 async function waitForRenderComplete(map) {
   return new Promise((resolve) => {
-    map.once('rendercomplete', () => resolve()); // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
+    map.once('rendercomplete', () => resolve());
     map.render();
   });
 }
