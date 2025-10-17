@@ -2,4 +2,4 @@ The VIIRS Chlorophyll *a* layer provides the near-surface concentration of chlor
 
 The VIIRS Chlorophyll *a* product is available from the joint NASA/NOAA NOAA-20 satellite. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: VIIRSJ1_L2_OC_NRT and VIIRSJ1_L2_OC [doi:10.5067/NOAA-20/VIIRS/L2/OC/2022](https://doi.org/10.5067/NOAA-20/VIIRS/L2/OC/2022)
+References: [VIIRSJ1_L2_OC_NRT](https://cmr.earthdata.nasa.gov/search/concepts/C3396928895-OB_CLOUD.html); VIIRSJ1_L2_OC [doi:10.5067/NOAA-20/VIIRS/L2/OC/2022.02](https://doi.org/10.5067/NOAA-20/VIIRS/L2/OC/2022.0)
