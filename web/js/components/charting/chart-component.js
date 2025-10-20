@@ -382,7 +382,12 @@ function ChartComponent (props) {
                 dx: -40,
               }}
             />
-            <Legend formatter={() => `${title}`} />
+            <Legend
+              formatter={() => `${title}`}
+              wrapperStyle={{
+                paddingTop: '7px',
+              }}
+            />
           </LineChart>
         </div>
         <div className="charting-stat-text">
