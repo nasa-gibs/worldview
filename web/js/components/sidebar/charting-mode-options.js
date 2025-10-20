@@ -40,6 +40,7 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const MAX_DAYS = 100;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
 const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
@@ -433,9 +434,8 @@ function ChartingModeOptions(props) {
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
       const numDaysRequested = Math.floor((initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)) + 1;
-      const requestsNeeded = Math.ceil(numDaysRequested / STEP_NUM);
+      const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
       const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
-      console.log(numDaysRequested, 'days,', requestsNeeded, 'requests');
       const promises = [];
       for (let i = 0; i < requestsNeeded; i += 1) {
         const requestStartDate = new Date(initialStartDate.getTime());
@@ -445,15 +445,12 @@ function ChartingModeOptions(props) {
         if (requestEndDate > initialEndDate) {
           requestEndDate = new Date(initialEndDate.getTime());
         }
-        console.log(requestStartDate, requestEndDate, Math.ceil((requestEndDate - requestStartDate) / (1000 * 60 * 60 * 24)) + 1, 'days');
         const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection, requestStartDate, requestEndDate);
         const requestURI = getImageStatStatsRequestURL(uriParameters);
         promises.push(getImageStatData(requestURI));
       }
       const dataArr = await Promise.all(promises);
-      console.log(dataArr);
       const data = combineData(dataArr);
-      console.log(data);
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
