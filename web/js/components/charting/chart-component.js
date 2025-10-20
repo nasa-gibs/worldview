@@ -215,7 +215,7 @@ function ChartComponent (props) {
         fill,
         stroke,
       } = props;
-      const radius = 1;
+      const radius = chartData.length > 50 ? 2 : 3;
 
       const transformFunc = `translate(${radius + 1} ${radius + 1})`;
 
