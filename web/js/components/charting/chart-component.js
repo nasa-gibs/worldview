@@ -46,11 +46,12 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysArr = errors?.error_days?.length > 0 ? errors.error_days.replaceAll(/('|\[|\])/gi, '').split(', ') : [];
+  const errorDaysArr = errors?.error_days || [];
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+  const pointSizes = [3, 2, 1.5, 1.25];
   const formattedUnit = unit ? ` (${unit})` : '';
 
   function formatToThreeDigits(str) {
@@ -215,7 +216,7 @@ function ChartComponent (props) {
         fill,
         stroke,
       } = props;
-      const radius = chartData.length > 50 ? 2 : 3;
+      const radius = pointSizes[Math.floor(chartData.length / 26) - 1];
 
       const transformFunc = `translate(${radius + 1} ${radius + 1})`;
 
