@@ -216,7 +216,7 @@ function ChartComponent (props) {
         fill,
         stroke,
       } = props;
-      const radius = pointSizes[Math.floor(chartData.length / 26) - 1];
+      const radius = pointSizes[Math.max(Math.floor(chartData.length / 26), 1) - 1];
 
       const transformFunc = `translate(${radius + 1} ${radius + 1})`;
 
