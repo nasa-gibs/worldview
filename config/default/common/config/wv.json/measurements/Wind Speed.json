@@ -3,7 +3,7 @@
         "Wind Speed": {
             "id": "wind-speed",
             "title":    "Wind Speed",
-            "subtitle": "GCOM-W1/AMSR2, Aqua/AMSR-E; GCOM-W1/AMSR2, CYGNSS/DDMI, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, Merged Microwave Radiometers, CCMP, MERRA-2",
+            "subtitle": "GCOM-W1/AMSR2, CYGNSS/DDMI, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS, Merged Microwave Radiometers, CCMP, MERRA-2",
             "sources": {
                 "GCOM-W1/AMSR2": {
                     "id": "gcom-w1-amsr2",
@@ -18,18 +18,6 @@
                         "AMSRU2_L3_Ocean_Wind_Speed_Monthly",
                         "OrbitTracks_GCOM-W1_Ascending",
                         "OrbitTracks_GCOM-W1_Descending"
-                    ]
-                },
-                "Aqua/AMSR-E; GCOM-W1/AMSR2": {
-                    "id": "aqua-amsre-gcomw1-amsr2",
-                    "title": "Aqua/AMSR-E; GCOM-W1/AMSR2",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "AMSRUE_Ocean_Wind_Speed_Day",
-                        "AMSRUE_Ocean_Wind_Speed_Night",
-                        "OrbitTracks_Aqua_Ascending",
-                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "CYGNSS/DDMI": {

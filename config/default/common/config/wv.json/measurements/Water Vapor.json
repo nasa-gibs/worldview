@@ -3,21 +3,21 @@
         "Water Vapor": {
             "id": "water-vapor",
             "title":    "Water Vapor",
-            "subtitle": "Aqua/AMSR-E; GCOM-W1/AMSR2, Aqua/AMSR-E, GCOM-W1/AMSR2, Aura/MLS, Aqua/MODIS, Terra/MODIS, OCO-2, OCO-3, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, Aura/MLS, Terra/MODIS, GCOM-W1/AMSR2, OCO-2, OCO-3, DMSP-F08/SSMI, DMSP-F10/SSMI, DMSP-F11/SSMI, DMSP-F13/SSMI, DMSP-F14/SSMI, DMSP-F15/SSMI, DMSP-F16/SSMIS, DMSP-F17/SSMIS",
             "sources": {
-                "Aqua/AMSR-E; GCOM-W1/AMSR2": {
-                    "id": "aqua-amsre-gcomw1-amsr2",
-                    "title": "Aqua/AMSR-E; GCOM-W1/AMSR2",
+                "Aqua/MODIS": {
+                    "id": "aqua-modis",
+                    "title": "Aqua/MODIS",
                     "description": "",
                     "image": "",
                     "settings": [
-                        "AMSRUE_Columnar_Water_Vapor_Day",
-                        "AMSRUE_Columnar_Water_Vapor_Night",
+                        "MODIS_Aqua_Water_Vapor_5km_Day",
+                        "MODIS_Aqua_Water_Vapor_5km_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
                     ]
-              },
-              "Aqua/AMSR-E": {
+                },
+                "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
                     "description": "",
@@ -29,18 +29,6 @@
                         "OrbitTracks_Aqua_Descending"
                     ]
               },
-                "GCOM-W1/AMSR2": {
-                    "id": "gcom-w1-amsr2",
-                    "title": "GCOM-W1/AMSR2",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "AMSRU2_Columnar_Water_Vapor_Day",
-                        "AMSRU2_Columnar_Water_Vapor_Night",
-                        "OrbitTracks_GCOM-W1_Ascending",
-                        "OrbitTracks_GCOM-W1_Descending"
-                    ]
-                },
                 "Aura/MLS": {
                     "id": "aura-mls",
                     "title": "Aura/MLS",
@@ -51,18 +39,6 @@
                         "MLS_H2O_46hPa_Night",
                         "OrbitTracks_Aura_Ascending",
                         "OrbitTracks_Aura_Descending"
-                    ]
-                },
-                "Aqua/MODIS": {
-                    "id": "aqua-modis",
-                    "title": "Aqua/MODIS",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "MODIS_Aqua_Water_Vapor_5km_Day",
-                        "MODIS_Aqua_Water_Vapor_5km_Night",
-                        "OrbitTracks_Aqua_Ascending",
-                        "OrbitTracks_Aqua_Descending"
                     ]
                 },
                 "Terra/MODIS": {
@@ -85,6 +61,18 @@
                       "settings": [
                           "MODIS_Combined_MAIAC_L2G_ColumnWaterVapor"
                       ]
+                },
+                "GCOM-W1/AMSR2": {
+                    "id": "gcom-w1-amsr2",
+                    "title": "GCOM-W1/AMSR2",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "AMSRU2_Columnar_Water_Vapor_Day",
+                        "AMSRU2_Columnar_Water_Vapor_Night",
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
+                    ]
                 },
                 "OCO-2": {
                     "id": "oco-2",

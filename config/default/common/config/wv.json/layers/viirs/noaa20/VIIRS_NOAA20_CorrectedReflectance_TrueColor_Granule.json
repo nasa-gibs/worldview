@@ -5,13 +5,13 @@
           "description": "viirs/noaa20/VIIRS_NOAA20_CorrectedReflectance_TrueColor_Granule",
           "tags":     "subdaily",
           "group":    "overlays",
-          "layergroup": "Corrected Reflectance",
+          "layergroup": "Granules",
           "type": "granule",
           "dataAvailability": "dd",
           "period": "subdaily",
           "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_TrueColor"],
           "availability": {
-            "rollingWindow": 90
+            "rollingWindow": 30
           }
       }
   }

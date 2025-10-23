@@ -1,13 +1,5 @@
 /* eslint-disable */
 
-window.dataLayer = window.dataLayer || [];
-window.dataLayer.push({
-  event: "virtualPageView",
-  page_location: location.href,
-  page_title: document.title,
-  page_referrer: document.referrer,
-});
-
 export default {
   /*
   * @func dataLayerPush object to GoogleTagManager

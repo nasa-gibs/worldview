@@ -89,7 +89,6 @@ function ChartingModeOptions(props) {
 
   const isMounted = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
-  const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
   const [isWithinWings, setIsWithinWings] = useState(false);
   const [boundaries, setBoundaries] = useState({
@@ -477,23 +476,17 @@ function ChartingModeOptions(props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
-        const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
-        const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
         const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
         displayChart({
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
           unit: dataToRender.unit,
-          errors: dataToRender.errors,
           data: rechartsData,
           startDate: primaryDate,
           endDate: secondaryDate,
-          startDateFormatted,
-          endDateFormatted,
           numRangeDays,
           isTruncated: false,
           numPoints,
-          coordinates: [...bottomLeftLatLong, ...topRightLatLong],
         });
         updateChartRequestStatus(false);
       } else {
@@ -507,18 +500,12 @@ function ChartingModeOptions(props) {
   }
 
   useEffect(() => {
-    if (doRenderChart && isPostRender) {
-      onRequestChartClick();
-    }
-  }, [doRenderChart, isPostRender]);
-
-  useEffect(() => {
     const isOpen = (modalId === 'CHARTING-CHART' || modalId === 'CHARTING-STATS-MODAL') && isModalOpen;
     if (isChartOpen && !isOpen && Object.keys(renderedPalettes).length > 0) {
       const layerInfo = getActiveChartingLayer();
       const paletteName = layerInfo.palette.id;
       if (renderedPalettes[paletteName]) {
-        setDoRenderChart(true);
+        onRequestChartClick();
       }
     }
   }, [isChartOpen, renderedPalettes]);
@@ -923,29 +910,16 @@ const mapDispatchToProps = (dispatch) => ({
   displayChart: (liveData) => {
     dispatch(
       openCustomContent('CHARTING-CHART', {
-        headerText: (
-          <>
-            BETA |
-            {` ${liveData.title} `}
-            -
-            {` ${liveData.subtitle}${liveData.unit ? ` (${liveData.unit})` : ''}`}
-            <span className="charting-chart-subheader">
-              from &nbsp;
-              {liveData.startDateFormatted}
-              &nbsp; to &nbsp;
-              {liveData.endDateFormatted}
-            </span>
-          </>
-        ),
+        headerText: `BETA | ${liveData.title} - ${liveData.subtitle}${liveData.unit ? ` (${liveData.unit})` : ''}`,
         backdrop: false,
         bodyComponent: ChartComponent,
         wrapClassName: 'unclickable-behind-modal',
         modalClassName: 'chart-dialog',
         isDraggable: true,
         dragHandle: '.modal-header',
-        offsetLeft: 'calc(50% - 575px)',
+        offsetLeft: 'calc(50% - 425px)',
         offsetTop: 50,
-        width: 1150,
+        width: 850,
         height: 420,
         stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal

@@ -9,7 +9,7 @@
       "description": "multi-mission/hls/HLS_MSAVI_Landsat",
       "tags": "surface landsat oli l30 msavi",
       "group": "overlays",
-      "layergroup": "Vegetation Indices",
+      "layergroup": "Land Surface Reflectance",
       "format": "image/png",
       "type": "titiler",
       "period": "daily",

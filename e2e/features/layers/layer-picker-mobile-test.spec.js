@@ -27,7 +27,7 @@ test('Initial state indicates layer count', async () => {
   await page.goto(url)
   await closeModal(page)
   await expect(layerCount).toBeVisible()
-  await expect(layerCount).toContainText('9')
+  await expect(layerCount).toContainText('8')
 })
 
 test('Expand layer list and show default layers', async () => {
@@ -189,5 +189,5 @@ test('Collapse sidebar and confirm layer count updated', async () => {
   const { layerCount } = selectors
   await page.locator('.layer-btn-close').click()
   await page.locator('#toggleIconHolder').click()
-  await expect(layerCount).toContainText('10')
+  await expect(layerCount).toContainText('9')
 })

@@ -25,7 +25,6 @@ export const layersToMeasure = [
   'VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate',
   'VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean',
   'VIIRS_NOAA21_CorrectedReflectance_TrueColor',
-  'VIIRS_SNPP_NDVI_8Day',
 ];
 
 // Object that contains the black pixel % threshold for each layer
@@ -56,7 +55,6 @@ export const layerPixelData = {
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { threshold: 0.90 },
   VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { threshold: 0.90 },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
-  VIIRS_SNPP_NDVI_8Day: { threshold: 0.90 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
@@ -86,7 +84,6 @@ export const bestDates = {
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { date: '2024-10-01' },
   VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { date: '2024-10-01' },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { date: '2024-10-01' },
-  VIIRS_SNPP_NDVI_8Day: { date: '2025-08-24' },
 };
 
 export const travelModeData = {
@@ -146,8 +143,5 @@ export const travelModeData = {
   },
   19: {
     title: 'Active Fires detected by NOAA-21 satellite',
-  },
-  20: {
-    title: 'Vegetation Index (NDVI) by Suomi NPP satellite',
   },
 };

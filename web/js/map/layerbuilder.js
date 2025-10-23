@@ -873,7 +873,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const { maxExtent, crs } = selected;
     const { r, g, b } = def.bandCombo;
     const conceptID = def?.conceptIds?.[0]?.value || def?.collectionConceptID;
-    const dateTime = options.group === 'active' ? date.selected?.toISOString().split('T') : date.selectedB?.toISOString().split('T');
+    const dateTime = state.date.selected?.toISOString().split('T');
     dateTime.pop();
     dateTime.push('00:00:00.000Z');
     const zeroedDate = dateTime.join('T');
@@ -956,7 +956,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const x = tileCoord[1];
       const y = tileCoord[2];
 
-      const dateTimeTile = options.group === 'active' ? date.selected?.toISOString().split('T') : date.selectedB?.toISOString().split('T');
+      const dateTimeTile = state.date.selected?.toISOString().split('T');
       dateTimeTile.pop();
       dateTimeTile.push('00:00:00Z');
       const zeroedDateTile = dateTimeTile.join('T');
@@ -987,7 +987,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
-    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(options.group === 'active' ? date.selected : date.selectedB)).slice(0, 10);
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
 
     const layer = new OlLayerTile({
@@ -1033,7 +1033,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
-    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(options.group === 'active' ? date.selected : date.selectedB)).slice(0, 10);
+    const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(date.selected)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
 
     const layer = new OlLayerTile({
@@ -1086,7 +1086,7 @@ export default function mapLayerBuilder(config, cache, store) {
       source,
       extent: shifted ? RIGHT_WING_EXTENT : extent,
       className: id,
-      declutter: options.group || true,
+      declutter: true,
       renderMode: 'hybrid',
     });
 

@@ -186,6 +186,37 @@ class PlayQueue extends React.Component {
 
   getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length;
 
+  calcBufferSize() {
+    const { numberOfFrames, speed } = this.props;
+    let bufferSize = 0;
+    const msPerSec = 1000;
+    const avgFetchTime = this.getAverageFetchTime();
+    const remainingFrames = numberOfFrames - this.initialBufferSize;
+    const remainingLoadTime = avgFetchTime * remainingFrames;
+    const remainingPlayTime = (remainingFrames / speed) * msPerSec;
+    const totalPlayTime = (numberOfFrames / speed) * msPerSec;
+    const timeToBufferEnd = totalPlayTime - remainingPlayTime;
+    const framesLoadedDuringInitialBufferPlayback = timeToBufferEnd / avgFetchTime;
+    const canKeepUp = framesLoadedDuringInitialBufferPlayback >= this.initialBufferSize;
+
+    if (!canKeepUp && remainingLoadTime >= remainingPlayTime) {
+      const preloadTime = remainingLoadTime - remainingPlayTime;
+      bufferSize = Math.ceil(preloadTime / msPerSec);
+    }
+
+    // const totalLoadTime = ((avgFetchTime * numberOfFrames) / msPerSec / CONCURRENT_REQUESTS).toFixed(2);
+    // console.debug('Total frames: ', numberOfFrames);
+    // console.debug('Avg fetch time: ', (avgFetchTime / msPerSec).toFixed(2));
+    // console.debug('Play time (t/r): ', (totalPlayTime / msPerSec).toFixed(2), (remainingPlayTime / msPerSec).toFixed(2));
+    // console.debug('Load time (t/r): ', totalLoadTime, (remainingLoadTime / msPerSec).toFixed(2));
+
+    const totalBuffer = bufferSize + this.initialBufferSize;
+    if (totalBuffer >= numberOfFrames) {
+      return numberOfFrames;
+    }
+    return totalBuffer;
+  }
+
   isPreloadSufficient() {
     const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
@@ -199,7 +230,11 @@ class PlayQueue extends React.Component {
       this.checkQueue();
       return false;
     }
-    return false;
+    if (!this.minBufferLength) {
+      this.minBufferLength = this.calcBufferSize();
+    }
+    // console.debug(`Buffer: ${currentBufferSize} / ${this.minBufferLength}`);
+    return currentBufferSize >= this.minBufferLength;
   }
 
   checkShouldPlay = function(loopStart) {
@@ -313,19 +348,18 @@ class PlayQueue extends React.Component {
       const fetchTime = elapsedTime >= MIN_REQUEST_TIME_MS ? elapsedTime : MIN_REQUEST_TIME_MS;
       this.fetchTimes.push(fetchTime);
       this.setState({ loadedItems: loadedItems += 1 });
-
-      if (!this.mounted) return;
-      this.bufferObject[strDate] = strDate;
-      delete this.inQueueObject[strDate];
-      const currentBufferSize = util.objectLength(this.bufferObject);
-
-      if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
-        this.checkQueue();
-        this.checkShouldPlay();
-      }
-
       return strDate;
     });
+
+    if (!this.mounted) return;
+    this.bufferObject[strDate] = strDate;
+    delete this.inQueueObject[strDate];
+    const currentBufferSize = util.objectLength(this.bufferObject);
+
+    if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
+      this.checkQueue();
+      this.checkShouldPlay();
+    }
   }
 
   play() {

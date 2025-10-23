@@ -4,7 +4,6 @@
       "id": "VIIRS_SNPP_EVI_8Day",
       "description": "viirs/snpp/VIIRS_SNPP_EVI_8Day",
       "group": "overlays",
-      "disableCharting": true,
       "layergroup": "Vegetation Indices"
     }
   }

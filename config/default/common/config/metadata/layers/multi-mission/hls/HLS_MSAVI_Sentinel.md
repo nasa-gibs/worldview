@@ -6,7 +6,7 @@ It is calculated using:
 
 `MSAVI = (2 * NIR + 1 – sqrt ((2 * NIR + 1)2 – 8 * (NIR - R))) / 2`
 
-Specifically for Sentinel-2:
+Specifically for Sentinel-2A and -2B:
 
 `MSAVI = (2 * Band 8A + 1 – sqrt ((2 * Band 8A + 1)2 – 8 * (Band 8A – Band 4))) / 2`
 

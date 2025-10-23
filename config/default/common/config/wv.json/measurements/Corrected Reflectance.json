@@ -3,7 +3,7 @@
         "Corrected Reflectance": {
             "id": "corrected-reflectance",
             "title":    "Corrected Reflectance",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, PACE/HARP2, PACE/OCI, PACE/SPEXone, Landsat/WELD, OrbView-2/SeaWiFS, ENVISAT/MERIS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, PACE/OCI, Landsat/WELD, OrbView-2/SeaWiFS, ENVISAT/MERIS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -70,16 +70,6 @@
                     "OrbitTracks_NOAA-21_Ascending"
                     ]
                 },
-                "PACE/HARP2": {
-                    "id": "pace-harp2",
-                    "title": "PACE/HARP2",
-                    "description": "harp2/harp2",
-                    "image": "",
-                    "settings": [
-                        "HARP2_PACE_True_Color",
-                        "OrbitTracks_PACE_Ascending"
-                    ]
-                },
                 "PACE/OCI": {
                     "id": "pace-oci",
                     "title": "PACE/OCI",
@@ -87,16 +77,6 @@
                     "image": "",
                     "settings": [
                         "OCI_PACE_True_Color",
-                        "OrbitTracks_PACE_Ascending"
-                    ]
-                },
-                "PACE/SPEXone": {
-                    "id": "pace-spexone",
-                    "title": "PACE/SPEXONE",
-                    "description": "spexone/spexone",
-                    "image": "",
-                    "settings": [
-                        "SPEXONE_PACE_True_Color",
                         "OrbitTracks_PACE_Ascending"
                     ]
                 },

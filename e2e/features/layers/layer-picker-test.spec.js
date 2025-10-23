@@ -155,8 +155,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(19)
-  await expect(layerResultsCountText).toContainText('Showing 19 out of')
+  await expect(layersSearchRow).toHaveCount(17)
+  await expect(layerResultsCountText).toContainText('Showing 17 out of')
 })
 
 test('Finding layer by ID with search', async () => {
@@ -256,7 +256,7 @@ test('Collapsed sidebar shows updated layer count', async () => {
   const { collapsedLayerButton } = selectors
   await page.locator('#toggleIconHolder').click()
   const layerCount = await page.locator('.layer-count')
-  await expect(layerCount).toContainText('11 Layers')
+  await expect(layerCount).toContainText('10 Layers')
   await collapsedLayerButton.click()
 })
 

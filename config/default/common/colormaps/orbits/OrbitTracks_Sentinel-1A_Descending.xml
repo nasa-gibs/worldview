@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
-  <ColorMap title="Sentinel-1A Orbital Track">
+  <ColorMap title="Sentinel-2A Orbital Track">
     <Entries>
       <ColorMapEntry rgb="237,209,130" sourceValue="200" transparent="false" ref="1" />
     </Entries>

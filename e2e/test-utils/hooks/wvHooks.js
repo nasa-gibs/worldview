@@ -69,7 +69,7 @@ const assertDefaultLayers = async (page) => {
   const trueColorAqua = page.locator('#active-MODIS_Aqua_CorrectedReflectance_TrueColor')
   const trueColorMODIS = page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor')
   const trueColorNOAA20 = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
-  await expect(layerItem).toHaveCount(9)
+  await expect(layerItem).toHaveCount(8)
   await expect(refLabels).toBeVisible()
   await expect(refFeatures).toBeVisible()
   await expect(coastlines).toBeVisible()

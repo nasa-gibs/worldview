@@ -1,16 +1,11 @@
 @use "variables";
 
-.wv-map, #wv-map-preload {
+.wv-map {
   position: absolute;
   margin: 0;
   padding: 0;
   inset: 0;
   z-index: 0;
-}
-
-#wv-map-preload {
-  display: block !important;
-  visibility: hidden;
 }
 
 .wv-map-zoom {

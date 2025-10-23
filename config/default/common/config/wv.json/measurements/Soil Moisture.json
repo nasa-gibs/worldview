@@ -3,22 +3,8 @@
         "Soil Moisture": {
             "id": "soil-moisture",
             "title":    "Soil Moisture",
-            "subtitle": "Aqua/AMSR-E; GCOM-W1/AMSR2, Aqua/AMSR-E, GCOM-W1/AMSR2, SMAP/Radar, SMAP/Radiometer, SMAP/Model Value-Added, SMAP/Radiometer and Sentinel-1/Radar, CYGNSS/DDMI, SAC-D/Aquarius, GLDAS, NLDAS, MERRA-2",
+            "subtitle": "Aqua/AMSR-E, CYGNSS/DDMI, GCOM-W1/AMSR2, SMAP/Radar, SMAP/Radiometer, SMAP/Model Value-Added, SMAP/Radiometer and Sentinel-1/Radar, SAC-D/Aquarius, GLDAS, NLDAS, MERRA-2",
             "sources": {
-                 "Aqua/AMSR-E; GCOM-W1/AMSR2": {
-                    "id": "aqua-amsre-gcomw1-amsr2",
-                    "title": "Aqua/AMSR-E; GCOM-W1/AMSR2",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "AMSRUE_Soil_Moisture_NPD_Day",
-                        "AMSRUE_Soil_Moisture_NPD_Night",
-                        "AMSRUE_Soil_Moisture_SCA_Day",
-                        "AMSRUE_Soil_Moisture_SCA_Night",
-                        "OrbitTracks_Aqua_Ascending",
-                        "OrbitTracks_Aqua_Descending"
-                    ]
-                },
                 "Aqua/AMSR-E": {
                     "id": "aqua-amsr-e",
                     "title": "Aqua/AMSR-E",
@@ -31,6 +17,15 @@
                         "AMSRE_Soil_Moisture_SCA_Night",
                         "OrbitTracks_Aqua_Ascending",
                         "OrbitTracks_Aqua_Descending"
+                    ]
+                },
+                "CYGNSS/DDMI": {
+                    "id": "cygnss-ddmi",
+                    "title": "CYGNSS/DDMI",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "CYGNSS_L3_Soil_Moisture_SDR_Daily"
                     ]
                 },
               "GCOM-W1/AMSR2": {
@@ -114,15 +109,6 @@
                         "SMAP_L4_Uncertainty_Analyzed_Root_Zone_Soil_Moisture",
                         "SMAP_L4_Analyzed_Surface_Soil_Moisture",
                         "SMAP_L4_Uncertainty_Analyzed_Surface_Soil_Moisture"
-                    ]
-                },
-                "CYGNSS/DDMI": {
-                    "id": "cygnss-ddmi",
-                    "title": "CYGNSS/DDMI",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "CYGNSS_L3_Soil_Moisture_SDR_Daily"
                     ]
                 },
                 "SAC-D/Aquarius": {
