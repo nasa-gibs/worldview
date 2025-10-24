@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   LineChart, Line, XAxis, YAxis, Legend, Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import OlMap from 'ol/Map';
+import OlView from 'ol/View';
+import OlLayerGroup from 'ol/layer/Group';
+import OlLayerTile from 'ol/layer/Tile';
+import OlFeature from 'ol/Feature';
+import { fromExtent } from 'ol/geom/Polygon';
+import { Vector as OlVectorLayer } from 'ol/layer';
+import { Vector as OlVectorSource } from 'ol/source';
+import { getCenter } from 'ol/extent';
+import { inAndOut } from 'ol/easing';
+import {
+  Fill as OlStyleFill,
+  Stroke as OlStyleStroke,
+  Style as OlStyle,
+} from 'ol/style';
+import util from '../../util/util';
 
 function ChartComponent (props) {
   const {
     liveData,
+    mapView,
+    createLayer,
+    overviewMapLayerDef,
   } = props;
+
+  const [errorCollapsed, setErrorCollapsed] = useState(true);
+  const mapInstanceRef = useRef(null);
 
   const {
     data,
@@ -19,7 +42,12 @@ function ChartComponent (props) {
     isTruncated,
     title,
     numPoints,
+    coordinates,
+    errors,
   } = liveData;
+
+  const errorDaysArr = errors?.error_days?.replaceAll(/('|\[|\])/gi, '').split(', ') || [];
+  const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -285,6 +313,75 @@ function ChartComponent (props) {
     );
   }
 
+  useEffect(() => {
+    const boxFeature = new OlFeature({
+      geometry: fromExtent(coordinates),
+    });
+    boxFeature.setStyle(new OlStyle({
+      stroke: new OlStyleStroke({
+        color: 'rgba(255, 255, 255, .6)',
+        width: 1,
+      }),
+      fill: new OlStyleFill({
+        color: 'rgba(255, 255, 255, .3)',
+      }),
+    }));
+    const boxLayer = new OlVectorLayer({
+      source: new OlVectorSource({
+        features: [boxFeature],
+      }),
+    });
+
+    const createLayerWrapper = async () => {
+      const backgroundLayerGroup = await createLayer(overviewMapLayerDef);
+      backgroundLayerGroup.setVisible(true);
+
+      const layersList = [];
+      backgroundLayerGroup.getLayers().getArray().forEach((layer) => {
+        layersList.push(new OlLayerTile({
+          source: layer.getSource(),
+        }));
+      });
+      const copiedLayerGroup = new OlLayerGroup({
+        layers: layersList,
+      });
+
+      mapInstanceRef.current = new OlMap({
+        view: new OlView({
+          center: mapView.getCenter(),
+          zoom: mapView.getZoom(),
+          projection: mapView.getProjection(),
+        }),
+        layers: [copiedLayerGroup, boxLayer],
+        target: 'charting-minimap-inner',
+        interactions: [],
+      });
+
+      const minimapView = mapInstanceRef.current.getView();
+      minimapView.fit(boxFeature.getGeometry().getExtent(), { padding: [50, 50, 50, 50] });
+
+      mapInstanceRef.current.on('moveend', () => {
+        const boxCenter = getCenter(boxFeature.getGeometry().getExtent());
+        const minimapCenter = minimapView.getCenter();
+        if (boxCenter[0] === minimapCenter[0] && boxCenter[1] === minimapCenter[1]) {
+          return;
+        }
+        minimapView.animate({
+          center: boxCenter,
+          duration: 350,
+          easing: inAndOut,
+        });
+      });
+    };
+
+    createLayerWrapper();
+
+    return () => {
+      mapInstanceRef.current.setTarget(null);
+      mapInstanceRef.current = null;
+    };
+  }, [overviewMapLayerDef]);
+
   return (
     <div className="charting-chart-container">
       <div className="charting-chart-inner">
@@ -325,47 +422,38 @@ function ChartComponent (props) {
           </LineChart>
         </div>
         <div className="charting-stat-text">
-          <h3>
-            <b>
-              Average Statistics
-              {formattedUnit}
-            </b>
-          </h3>
-          <br />
-          {getQuickStatistics(data)}
-        </div>
-      </div>
-      <div className="charting-disclaimer">
-        <strong className="charting-disclaimer-pre">Note: </strong>
-        <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
-        {isTruncated
-        && (
-          <div className="charting-disclaimer-lower">
-            <FontAwesomeIcon
-              icon="exclamation-triangle"
-              className="wv-alert-icon"
-              size="1x"
-              widthAuto
-            />
-            <i className="charting-disclaimer-block">
-              As part of this beta feature release, the number of data points plotted between
+          <div id="charting-stats-container">
+            <h3>
               <b>
-                {` ${startDate} `}
+                Average Statistics
+                {formattedUnit}
               </b>
-              and
+            </h3>
+            <br />
+            {getQuickStatistics(data)}
+          </div>
+          <div id="charting-minimap-container">
+            <div id="charting-minimap-inner" />
+          </div>
+          <div />
+          <div id="charting-coordinates-container">
+            <h3>
               <b>
-                {` ${endDate} `}
+                Coordinates
               </b>
-              have been reduced from
-              <b>
-                {` ${numRangeDays} `}
-              </b>
-              to
-              <b>
-                {` ${numPoints}`}
-              </b>
-              .
-            </i>
+            </h3>
+            <br />
+            <div className="charting-coordinates-inner">
+              <div />
+              <div className="coordinate-center coordinate-subheader">Latitude</div>
+              <div className="coordinate-center coordinate-subheader">Longitude</div>
+              <div>Top Right:</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[0]}</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[1]}</div>
+              <div>Bottom Left:</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[0]}</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[1]}</div>
+            </div>
           </div>
         </div>
         <div className="charting-disclaimer">
@@ -446,8 +534,29 @@ function ChartComponent (props) {
   );
 }
 
+const mapStateToProps = (state) => {
+  const {
+    map,
+    layers,
+  } = state;
+
+  const {
+    ui,
+  } = map;
+
+  const layerId = 'Coastlines_15m';
+
+  return {
+    mapView: ui.selected.getView(),
+    createLayer: ui.createLayer,
+    overviewMapLayerDef: layers.layerConfig[layerId],
+  };
+};
+
 ChartComponent.propTypes = {
   liveData: PropTypes.object,
 };
 
-export default ChartComponent;
+export default connect(
+  mapStateToProps,
+)(ChartComponent);

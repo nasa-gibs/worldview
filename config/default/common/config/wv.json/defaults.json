@@ -21,6 +21,10 @@
                 "id": "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                 "hidden": "true"
             },
+             {
+                "id": "OCI_PACE_True_Color",
+                "hidden": "true"
+            },
             {
                 "id": "Coastlines_15m"
             },

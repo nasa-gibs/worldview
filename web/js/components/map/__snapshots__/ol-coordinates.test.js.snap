@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`clears coordinates when mouse moves off the map 1`] = `"<div id="ol-coords-case" class="wv-coords-container" style="width: 230px;"></div>"`;
 

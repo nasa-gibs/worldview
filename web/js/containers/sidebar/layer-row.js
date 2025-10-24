@@ -685,7 +685,7 @@ const makeMapStateToProps = () => {
     );
     const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
     const dailyDate = formatDailyDate(activeDate);
-    const selectedDate = date.selected;
+    const selectedDate = compare.activeString === 'active' ? date.selected : date.selectedB;
     const subdailyDate = formatSubdailyDate(activeDate);
     const collections = getCollections(layers, dailyDate, subdailyDate, layer, proj.id);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
