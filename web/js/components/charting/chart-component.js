@@ -215,7 +215,11 @@ function ChartComponent (props) {
         cy,
         fill,
         stroke,
+        payload,
       } = props;
+
+      if (!payload.mean) return;
+
       const radius = pointSizes[Math.max(Math.floor(chartData.length / 26), 1) - 1];
 
       const transformFunc = `translate(${radius + 1} ${radius + 1})`;
