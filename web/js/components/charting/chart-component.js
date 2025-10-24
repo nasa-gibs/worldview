@@ -129,16 +129,24 @@ function ChartComponent (props) {
     // If dataLength is too small, just show first and last tick
     if (dataLength < 8) return [0, dataLength - 1];
 
-    const numGaps = Math.floor((dataLength - 3) / 5);
-    const gapsArr = Array(numGaps).fill(5);
+    const numGaps = dataLength < 15 ? 4 : 5;
+    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
 
-    // Last gap must be 7 to give extra room for end-aligned label
-    gapsArr[gapsArr.length - 1] = 7;
+    // Last gap must be at least 3 to give extra room for end-aligned label
+    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
 
     const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
     let leftoverGap = (dataLength - 1) - gapsTotal;
 
     let i = 0;
+    // Reduce gaps that are too large due to last gap size
+    while (leftoverGap < 0 && i < numGaps - 1) {
+      gapsArr[i] -= 1;
+      leftoverGap += 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    i = 0;
     // Distribute extra gaps across existing gaps
     while (leftoverGap > 0 && i < numGaps - 1) {
       gapsArr[i] += 1;
