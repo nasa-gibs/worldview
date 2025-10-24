@@ -46,7 +46,7 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysArr = errors?.error_days?.replaceAll(/('|\[|\])/gi, '').split(', ') || [];
+  const errorDaysArr = errors?.error_days || [];
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
