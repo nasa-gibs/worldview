@@ -131,7 +131,7 @@ function Markers(props) {
 
   useEffect(() => {
     handleActiveMapMarker();
-  }, [ui]);
+  }, [ui, ui.selected?.proj]);
 
   useEffect(() => {
     switch (action.type) {
