@@ -189,7 +189,12 @@
             "Water Bodies",
             "Water Indices",
             "Water Vapor",
-            "Wind Speed"
+            "Wind Speed",
+            "EUMETSAT_RING_Airmass_RGB",
+            "EUMETSAT_RING_Ash_RGB",
+            "EUMETSAT_RING_Dust_RGB",
+            "EUMETSAT_RING_Natural_Color_RGB",
+            "EUMETSAT_RING_IR108"
           ]
         },
         "clickDisabledFeatures": {

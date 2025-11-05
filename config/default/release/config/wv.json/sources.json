@@ -213,6 +213,10 @@
     },
     "ESRI": {
       "url": "https://basemaps.arcgis.com/arcgis/rest/services"
+    },
+    "EUMETSAT:wms": {
+      "url": "https://view.eumetsat.int/geoserver/wms",
+      "VERSION": "1.3.0"
     }
   }
 }

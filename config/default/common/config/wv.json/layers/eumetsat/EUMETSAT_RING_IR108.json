@@ -1,0 +1,30 @@
+{
+  "layers": {
+    "EUMETSAT_RING_IR108": {
+      "id": "EUMETSAT_RING_IR108",
+      "title": "Geostationary Ring IR10.8 μm",
+      "subtitle": "EUMETSAT",
+      "description": "eumetsat/EUMETSAT_RING_IR108",
+      "tags": "eumetsat ring",
+      "group": "overlays",
+      "type": "wms",
+      "format": "image/png",
+      "wrapadjacentdays": true,
+      "disableSnapshot": true,
+      "period": "subdaily",
+      "layergroup": "Corrected Reflectance",
+      "startDate": "2021-02-06T00:00:00Z",
+      "dateRanges": [
+        {
+          "dateInterval": "180"
+        }
+      ],
+      "projections": {
+        "geographic": {
+          "source": "EUMETSAT:wms",
+          "layer": "mumi:worldcloudmap_ir108"
+        }
+      }
+    }
+  }
+}

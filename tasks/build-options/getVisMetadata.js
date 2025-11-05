@@ -101,7 +101,12 @@ const skipLayers = [
   'DAILY_AERONET_AOD_500NM',
   'DAILY_AERONET_ANGSTROM_440-870NM',
   'NOAA_2025_ERI_WMTS',
-  'Reference_Labels_15m_arctic'
+  'Reference_Labels_15m_arctic',
+  'EUMETSAT_RING_Airmass_RGB',
+  'EUMETSAT_RING_Ash_RGB',
+  'EUMETSAT_RING_Dust_RGB',
+  'EUMETSAT_RING_Natural_Color_RGB',
+  'EUMETSAT_RING_IR108'
 ]
 
 // NOTE: Only using these properties at this time

@@ -1,0 +1,1 @@
+EUMETSAT_RING_Airmass_RGB

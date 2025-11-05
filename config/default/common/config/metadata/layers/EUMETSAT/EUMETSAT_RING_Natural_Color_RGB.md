@@ -1,0 +1,1 @@
+EUMETSAT_RING_Natural_Color_RGB
