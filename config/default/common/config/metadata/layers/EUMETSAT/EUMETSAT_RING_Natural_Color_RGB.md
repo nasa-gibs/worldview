@@ -1,1 +1,7 @@
-EUMETSAT_RING_Natural_Color_RGB
+The Natural Color RGB Geostationary Ring layer is composed of 3-hourly imagery from several different geostationary satellites. These include Meteosat 0 Degree and Meteosat IODC, GOES-East and GOES-West, and Himawari-9. The imagery is produced by assigning red, green and blue to imagery from solar and visible and near-IR channels from the following instruments: SEVIRI (Meteosat): NIR1.6, VIS0.8 and VIS0.6 channels; ABI (GOES-East and GOES-West): NIR1.6, VIS0.86 and VIS0.64 channels; AHI (Himawari-9): NIR1.6, VIS0.86 and VIS0.64 channels.
+
+Vegetation appears greenish because of its large reflectance in the VIS0.8 channel compared to the NIR1.6 and VIS0.6 channels. Water clouds with small droplets have large reflectance in all three channels and hence appear whitish, while snow and ice clouds appears cyan as ice strongly absorbs in NIR1.6. Bare ground appears brown because of the larger reflectance in the NIR1.6 than at VIS0.6, and the ocean appears black because of the low reflectance in all three channels.
+
+The imagery is updated every 3 hours.
+
+This imagery has been made available through an API service of [Geostationary Ring Natural Colour RGB - Multimission](https://data.eumetsat.int/product/EO:EUM:DAT:0336) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)).

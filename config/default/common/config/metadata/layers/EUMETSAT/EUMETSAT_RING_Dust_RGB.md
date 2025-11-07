@@ -1,1 +1,7 @@
-EUMETSAT_RING_Dust_RGB
+The Dust Geostationary Ring layer is composed of 3-hourly imagery of RGB Dust products from different geostationary satellite to provide near global coverage: Meteosat 0 Degree and Meteosat IODC, GOES-East and GOES-West, Himawari-9. The imagery is produced by assigning red, green and blue to imagery from infrared channel data from the following instruments: SEVIRI (Meteosat): IR12.0, IR10.8, IR8.7 channels; ABI (GOES-East and GOES-West): IR12.3, IR10.3, IR11.2, IR8.4 channels; AHI (Himawari-9): IR12.4, IR10.4, IR11.2, IR8.6 channels.
+
+The Dust product is an RGB (Red, Green, Blue) composite based upon infrared channel. It is designed to monitor the evolution of dust storms during both day and night. It is also useful for discrimination of cloud types (e.g. cloud phase or thin Cirrus detection) and detection of low level moisture. Being based solely on IR channels this product has the same utility both during day and night.
+
+The imagery is updated every 3 hours.
+
+This imagery has been made available through an API service of [Geostationary Ring Dust RGB - Multimission](https://data.eumetsat.int/product/EO:EUM:DAT:0334) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)).

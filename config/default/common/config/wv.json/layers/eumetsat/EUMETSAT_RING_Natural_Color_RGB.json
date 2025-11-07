@@ -2,17 +2,17 @@
   "layers": {
     "EUMETSAT_RING_Natural_Color_RGB": {
       "id": "EUMETSAT_RING_Natural_Color_RGB",
-      "title": "Geostationary Ring Natural Color",
-      "subtitle": "EUMETSAT",
+      "title": "Natural Color RGB (3 hour, Geostationary Ring)",
+      "subtitle": "MSG/SEVIRI, Himawari/AHI, GOES/ABI",
       "description": "eumetsat/EUMETSAT_RING_Natural_Color_RGB",
       "tags": "eumetsat ring",
       "group": "overlays",
       "type": "wms",
       "format": "image/png",
-      "wrapadjacentdays": true,
+      "wrapX": true,
       "disableSnapshot": true,
       "period": "subdaily",
-      "layergroup": "Corrected Reflectance",
+      "layergroup": "Geostationary",
       "startDate": "2021-02-06T00:00:00Z",
       "dateRanges": [
         {

@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "Volcanic Ash": {
+            "id": "volcanic-ash",
+            "title":    "Volcanic Ash",
+            "subtitle": "Geostationary Ring",
+            "sources": {
+              "Geostationary Ring": {
+                    "id": "geostationary-ring",
+                    "title": "Geostationary Ring (MSG/SEVIRI, Himawari/AHI, GOES/ABI)",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                      "EUMETSAT_RING_Ash_RGB"
+                    ]
+                  }
+              }
+         }
+     }
+}

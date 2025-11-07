@@ -171,6 +171,8 @@
             "Soil Moisture",
             "Soil Temperature",
             "Solar Induced Chlorophyll Fluorescence",
+            "Suborbital Flight Tracks",
+            "Suborbital Ship Tracks",
             "Sulfur Dioxide",
             "Surface Albedo",
             "Surface Flux",
@@ -189,12 +191,7 @@
             "Water Bodies",
             "Water Indices",
             "Water Vapor",
-            "Wind Speed",
-            "EUMETSAT_RING_Airmass_RGB",
-            "EUMETSAT_RING_Ash_RGB",
-            "EUMETSAT_RING_Dust_RGB",
-            "EUMETSAT_RING_Natural_Color_RGB",
-            "EUMETSAT_RING_IR108"
+            "Wind Speed"
           ]
         },
         "clickDisabledFeatures": {

@@ -1,1 +1,7 @@
-EUMETSAT_RING_Airmass_RGB
+The Air Mass Geostationary Ring layer is composed of 3-hourly imagery of RGB Airmass products from different geostationary satellites to provide near global coverage: Meteosat 0 Degree and Meteosat IODC, GOES-East and GOES-West, Himawari-9. The imagery is produced by assigning red, green and blue to imagery from infrared and water vapor channels from the following instruments: SEVIRI (Meteosat): WV6.2, WV7.3, IR9.7, IR10.8 channels; ABI (GOES-East and GOES-West): WV6.2, WV7.3, IR9.6, IR10.3 channels; AHI (Himawari-9): WV6.2, WV7.3, IR9.6, IR10.4 channels.
+
+The layer is designed and tuned to monitor the distribution of different air masses and evolution of cyclones, in particular rapid cyclogenesis, jet streaks and to validate the location of PV (potential vorticity) anomalies in model data. Due to the incorporation of the water vapour and ozone channels, its usage at highest satellite viewing angles is limited (limb cooling effect). As it is based solely on IR channels, this product has the same utility both during day and night.
+
+The imagery is updated every 3 hours.
+
+This imagery has been made available through an API service of [Geostationary Ring Airmass RGB - Multimission](https://data.eumetsat.int/product/EO:EUM:DAT:0331) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)).
