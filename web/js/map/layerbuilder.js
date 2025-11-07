@@ -448,7 +448,6 @@ export default function mapLayerBuilder(config, cache, store) {
       TRANSPARENT: transparent,
       VERSION: '1.1.1',
     };
-    console.log(def, options);
     if (def.source === 'EUMETSAT:wms') {
       parameters.VERSION = '1.3.0';
     }
