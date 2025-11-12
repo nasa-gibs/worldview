@@ -121,7 +121,7 @@ window.onload = () => {
 
       const pageLoadTime = new Date(config.pageLoadTime);
 
-      config.initialDate = config.pageLoadTime.getUTCHours() < 3
+      config.initialDate = config.pageLoadTime.getUTCHours() < 7
         ? new Date(pageLoadTime.setUTCDate(pageLoadTime.getUTCDate() - 1))
         : pageLoadTime;
 
