@@ -40,6 +40,7 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const MAX_DAYS = 100;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
 const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
@@ -253,9 +254,9 @@ function ChartingModeOptions(props) {
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(initialStartDate);
-    const endDateForImageStat = formatDateForImageStat(initialEndDate);
+  function getImageStatRequestParameters(layerInfo, timeSpan, startDate, endDate) {
+    const startDateForImageStat = formatDateForImageStat(startDate);
+    const endDateForImageStat = formatDateForImageStat(endDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
@@ -301,8 +302,7 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
-      // Mock data, to be removed before merging
-      // const data = JSON.stringify({"mean": {"2025-09-10T00:00:00Z": 0.32626962336612314, "2025-09-11T00:00:00Z": 0.5039413804624584, "2025-09-12T00:00:00Z": 0.6364696921707916, "2025-09-13T00:00:00Z": 0.6708885118357888, "2025-09-14T00:00:00Z": 0.8617797424304515, "2025-09-15T00:00:00Z": 0.8216062795654208, "2025-09-16T00:00:00Z": 0.636655055327338, "2025-09-17T00:00:00Z": 0.5692548394958568, "2025-09-18T00:00:00Z": 0.6042759015815452, "2025-09-19T00:00:00Z": 0.6671228369732474, "2025-09-20T00:00:00Z": 0.6438424278008147, "2025-09-21T00:00:00Z": 0.93460329417892, "2025-09-22T00:00:00Z": 0.8468979259479646, "2025-09-23T00:00:00Z": 0.5895524603400779, "2025-09-24T00:00:00Z": 0.4824067719484085, "2025-09-25T00:00:00Z": 0.5168849128927858, "2025-09-26T00:00:00Z": 0.6026034577982918, "2025-09-27T00:00:00Z": 0.5244425180168761, "2025-09-28T00:00:00Z": 0.5866451379247902, "2025-09-30T00:00:00Z": 0.4702760520116403, "2025-10-01T00:00:00Z": 0.48182150608662827, "2025-10-02T00:00:00Z": 0.3823509882219332, "2025-10-03T00:00:00Z": 0.7139505056593664, "2025-10-04T00:00:00Z": 0.9638534612792451, "2025-10-05T00:00:00Z": 0.6867387375222029, "2025-10-06T00:00:00Z": 0.6924459682425589, "2025-10-07T00:00:00Z": 0.7024427898956004, "2025-10-08T00:00:00Z": 0, "2025-10-09T00:00:00Z": 0}, "median": {"2025-09-10T00:00:00Z": "0.25", "2025-09-11T00:00:00Z": "0.4", "2025-09-12T00:00:00Z": "0.55", "2025-09-13T00:00:00Z": "0.55", "2025-09-14T00:00:00Z": "0.725", "2025-09-15T00:00:00Z": "0.775", "2025-09-16T00:00:00Z": "0.55", "2025-09-17T00:00:00Z": "0.425", "2025-09-18T00:00:00Z": "0.525", "2025-09-19T00:00:00Z": "0.525", "2025-09-20T00:00:00Z": "0.425", "2025-09-21T00:00:00Z": "0.825", "2025-09-22T00:00:00Z": "0.675", "2025-09-23T00:00:00Z": "0.525", "2025-09-24T00:00:00Z": "0.4", "2025-09-25T00:00:00Z": "0.45", "2025-09-26T00:00:00Z": "0.475", "2025-09-27T00:00:00Z": "0.425", "2025-09-28T00:00:00Z": "0.475", "2025-09-30T00:00:00Z": "0.375", "2025-10-01T00:00:00Z": "0.425", "2025-10-02T00:00:00Z": "0.3", "2025-10-03T00:00:00Z": "0.525", "2025-10-04T00:00:00Z": "0.725", "2025-10-05T00:00:00Z": "0.5", "2025-10-06T00:00:00Z": "0.625", "2025-10-07T00:00:00Z": "0.6", "2025-10-08T00:00:00Z": 0, "2025-10-09T00:00:00Z": 0}, "max": {"2025-09-10T00:00:00Z": 1.6, "2025-09-11T00:00:00Z": 2.075, "2025-09-12T00:00:00Z": 4.975, "2025-09-13T00:00:00Z": 2.775, "2025-09-14T00:00:00Z": 4.975, "2025-09-15T00:00:00Z": 3.9, "2025-09-16T00:00:00Z": 3.475, "2025-09-17T00:00:00Z": 3.45, "2025-09-18T00:00:00Z": 2.8, "2025-09-19T00:00:00Z": 2.6, "2025-09-20T00:00:00Z": 2.95, "2025-09-21T00:00:00Z": 3.025, "2025-09-22T00:00:00Z": 4.975, "2025-09-23T00:00:00Z": 2.175, "2025-09-24T00:00:00Z": 2.5, "2025-09-25T00:00:00Z": 1.975, "2025-09-26T00:00:00Z": 2.2, "2025-09-27T00:00:00Z": 2.85, "2025-09-28T00:00:00Z": 2.0, "2025-09-30T00:00:00Z": 2.4, "2025-10-01T00:00:00Z": 1.95, "2025-10-02T00:00:00Z": 2.45, "2025-10-03T00:00:00Z": 2.925, "2025-10-04T00:00:00Z": 4.4, "2025-10-05T00:00:00Z": 2.975, "2025-10-06T00:00:00Z": 2.475, "2025-10-07T00:00:00Z": 2.7, "2025-10-08T00:00:00Z": 0, "2025-10-09T00:00:00Z": 0}, "min": {"2025-09-10T00:00:00Z": 0.0, "2025-09-11T00:00:00Z": 0.0, "2025-09-12T00:00:00Z": 0.0, "2025-09-13T00:00:00Z": 0.0, "2025-09-14T00:00:00Z": 0.0, "2025-09-15T00:00:00Z": 0.0, "2025-09-16T00:00:00Z": 0.0, "2025-09-17T00:00:00Z": 0.0, "2025-09-18T00:00:00Z": 0.0, "2025-09-19T00:00:00Z": 0.0, "2025-09-20T00:00:00Z": 0.0, "2025-09-21T00:00:00Z": 0.0, "2025-09-22T00:00:00Z": 0.0, "2025-09-23T00:00:00Z": 0.0, "2025-09-24T00:00:00Z": 0.0, "2025-09-25T00:00:00Z": 0.0, "2025-09-26T00:00:00Z": 0.0, "2025-09-27T00:00:00Z": 0.0, "2025-09-28T00:00:00Z": 0.0, "2025-09-30T00:00:00Z": 0.0, "2025-10-01T00:00:00Z": 0.0, "2025-10-02T00:00:00Z": 0.0, "2025-10-03T00:00:00Z": 0.0, "2025-10-04T00:00:00Z": 0.0, "2025-10-05T00:00:00Z": 0.0, "2025-10-06T00:00:00Z": 0.0, "2025-10-07T00:00:00Z": 0.0, "2025-10-08T00:00:00Z": 0, "2025-10-09T00:00:00Z": 0}, "stdev": {"2025-09-10T00:00:00Z": 0.2996384743659499, "2025-09-11T00:00:00Z": 0.4217835608583786, "2025-09-12T00:00:00Z": 0.48480904392469776, "2025-09-13T00:00:00Z": 0.5519831699979253, "2025-09-14T00:00:00Z": 0.6836449366385909, "2025-09-15T00:00:00Z": 0.5772791344241578, "2025-09-16T00:00:00Z": 0.49879087509208164, "2025-09-17T00:00:00Z": 0.5710494882904773, "2025-09-18T00:00:00Z": 0.47281206713402174, "2025-09-19T00:00:00Z": 0.5397050772283568, "2025-09-20T00:00:00Z": 0.6245294514132563, "2025-09-21T00:00:00Z": 0.6804210128289083, "2025-09-22T00:00:00Z": 0.6944088906142988, "2025-09-23T00:00:00Z": 0.41970150563344993, "2025-09-24T00:00:00Z": 0.3834694302700857, "2025-09-25T00:00:00Z": 0.3789662830732043, "2025-09-26T00:00:00Z": 0.503109287861155, "2025-09-27T00:00:00Z": 0.4378406817031671, "2025-09-28T00:00:00Z": 0.459214688817658, "2025-09-30T00:00:00Z": 0.38934798554736716, "2025-10-01T00:00:00Z": 0.346205632386419, "2025-10-02T00:00:00Z": 0.34302545677825946, "2025-10-03T00:00:00Z": 0.6436004501055309, "2025-10-04T00:00:00Z": 0.8056352454342522, "2025-10-05T00:00:00Z": 0.6002012453021701, "2025-10-06T00:00:00Z": 0.47181570590882344, "2025-10-07T00:00:00Z": 0.5313159945604392, "2025-10-08T00:00:00Z": 0, "2025-10-09T00:00:00Z": 0}, "stderr": "0.00033191396261756203", "hist": [["0.0", "1379967"], ["0.49749999999999994", "821488"], ["0.9949999999999999", "404937"], ["1.4924999999999997", "168503"], ["1.9899999999999998", "54128"], ["2.4875", "18491"], ["2.9849999999999994", "5641"], ["3.4824999999999995", "1989"], ["3.9799999999999995", "17"], ["4.477499999999999", "500"]], "errors": {"error_count": 2, "error_days": "['2025-09-29T00:00:00Z', '2025-10-10T00:00:00Z']"}});
+
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -371,6 +371,49 @@ function ChartingModeOptions(props) {
     return rechartsData;
   }
 
+  function combineData(inputArr) {
+    if (!inputArr || inputArr.length === 0) return inputArr;
+    if (inputArr.length === 1) return inputArr[0];
+    const output = {
+      ok: true,
+      body: {
+        errors: {
+          error_count: 0,
+          error_days: [],
+        },
+        hist: [],
+        max: {},
+        mean: {},
+        median: {},
+        min: {},
+        stderr: 0,
+        stdev: {},
+      },
+    };
+    if (inputArr.every((dataset) => !dataset.ok)) {
+      output.ok = false;
+      output.error = inputArr[0].error;
+      return output;
+    }
+    inputArr?.forEach((dataset) => {
+      if (dataset.ok && !!dataset.body) {
+        Object.keys(dataset.body).forEach((key) => {
+          if (key === 'errors') {
+            output.body.errors.error_count += dataset.body.errors.error_count;
+            output.body.errors.error_days.push(...dataset.body.errors.error_days.replaceAll(/('|\[|\])/gi, '').split(', '));
+          } else if (key === 'hist') {
+            output.body.hist.push(...dataset.body.hist);
+          } else if (key === 'stderr') {
+            output.body.stderr += parseFloat(dataset.body.stderr);
+          } else {
+            output.body[key] = { ...output.body[key], ...dataset.body[key] };
+          }
+        });
+      }
+    });
+    return output;
+  }
+
   async function onRequestChartClick() {
     if (chartRequestInProgress) return;
     updateChartRequestStatus(true);
@@ -389,9 +432,24 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
-      const data = await getImageStatData(requestURI);
+      const numDaysRequested = Math.floor((initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)) + 1;
+      const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
+      const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
+      const promises = [];
+      for (let i = 0; i < requestsNeeded; i += 1) {
+        const requestStartDate = new Date(initialStartDate.getTime());
+        requestStartDate.setDate(requestStartDate.getDate() + (i * requestsSize));
+        let requestEndDate = new Date(requestStartDate.getTime());
+        requestEndDate.setDate(requestEndDate.getDate() + requestsSize - 1);
+        if (requestEndDate > initialEndDate) {
+          requestEndDate = new Date(initialEndDate.getTime());
+        }
+        const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection, requestStartDate, requestEndDate);
+        const requestURI = getImageStatStatsRequestURL(uriParameters);
+        promises.push(getImageStatData(requestURI));
+      }
+      const dataArr = await Promise.all(promises);
+      const data = combineData(dataArr);
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
@@ -413,7 +471,6 @@ function ChartingModeOptions(props) {
         subtitle: layerInfo.subtitle,
         unit: unitOfMeasure,
         ...data.body,
-        ...uriParameters,
       };
 
       if (timeSpanSelection === 'range') {
@@ -433,7 +490,7 @@ function ChartingModeOptions(props) {
           startDateFormatted,
           endDateFormatted,
           numRangeDays,
-          isTruncated: numRangeDays > STEP_NUM,
+          isTruncated: false,
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
         });

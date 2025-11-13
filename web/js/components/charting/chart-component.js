@@ -46,11 +46,12 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysArr = errors?.error_days?.replaceAll(/('|\[|\])/gi, '').split(', ') || [];
+  const errorDaysArr = errors?.error_days || [];
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+  const pointSizes = [3, 2, 1.5, 1.25];
   const formattedUnit = unit ? ` (${unit})` : '';
 
   function formatToThreeDigits(str) {
@@ -208,12 +209,38 @@ function ChartComponent (props) {
   function getLineChart(chartData) {
     const chartLineName = getLineNames(chartData);
 
+    function CustomizedDot(props) {
+      const {
+        cx,
+        cy,
+        fill,
+        stroke,
+        payload,
+      } = props;
+
+      if (!payload.mean) return;
+
+      const radius = pointSizes[Math.max(Math.floor(chartData.length / 26), 1) - 1];
+
+      const transformFunc = `translate(${radius + 1} ${radius + 1})`;
+
+      return (
+        <svg x={cx - radius - 1} y={cy - radius - 1}>
+          <g transform={transformFunc}>
+            <circle r={radius + 0.5} fill={stroke} />
+            <circle r={radius - 0.5} fill={fill} />
+          </g>
+        </svg>
+      );
+    }
+
     const chartLinesArr = chartLineName.map((id, index) => (
       <Line
         type="linear"
         key={id}
         dataKey={chartLineName[index]}
         stroke={lineColors[index]}
+        dot={<CustomizedDot />}
       />
     ));
     return chartLinesArr;
