@@ -1,8 +1,7 @@
 const fetch = require('node-fetch')
+const path = require('path')
+const prog = path.basename(__filename)
 // URL status check function makes GET requests to provided list of URLs to get status codes / errors
-
-// Delay helper to prevent too many requests at once
-const sleeper = (ms) => (x) => new Promise((resolve) => setTimeout(() => resolve(x), ms))
 
 // Checks status code of provided links and return object organized by errors / statuscodes
 const requestCheck = async (urls) => {
@@ -10,27 +9,25 @@ const requestCheck = async (urls) => {
     ERROR: [],
     STATUSCODE: {}
   }
-  for (let i = 0; i < urls.length; i += 1) {
-    const linkName = Object.keys(urls[i])[0]
-    const url = Object.values(urls[i])[0]
 
-    // Skip for mailto email links
-    if (url[0] === 'h') {
-      // eslint-disable-next-line no-await-in-loop
-      await fetch(url, { timeout: 10000 })
-        .then(async (res) => {
-          const statusCode = await res.status
-          if (!parsedUrls.STATUSCODE[statusCode]) {
-            parsedUrls.STATUSCODE[statusCode] = []
-          }
-          parsedUrls.STATUSCODE[statusCode].push({ [linkName]: url })
-        })
-        .then(sleeper(500))
-        .catch((err) => { // eslint-disable-line n/handle-callback-err
-          parsedUrls.ERROR.push({ [linkName]: url })
-        })
-    }
-  }
+  console.warn(`${prog}: Checking ${urls.length} URLs for errors/status codes...`)
+  const promises = urls.map((link) => {
+    const linkName = Object.keys(link)[0]
+    const url = Object.values(link)[0]
+    if (url[0] !== 'h') return Promise.resolve() // Skip for mailto email links
+    return fetch(url, { timeout: 10000 })
+      .then(async (res) => {
+        const statusCode = await res.status
+        if (!parsedUrls.STATUSCODE[statusCode]) {
+          parsedUrls.STATUSCODE[statusCode] = []
+        }
+        parsedUrls.STATUSCODE[statusCode].push({ [linkName]: url })
+      })
+      .catch((err) => { // eslint-disable-line n/handle-callback-err
+        parsedUrls.ERROR.push({ [linkName]: url })
+      })
+  })
+  await Promise.allSettled(promises)
   return parsedUrls
 }
 

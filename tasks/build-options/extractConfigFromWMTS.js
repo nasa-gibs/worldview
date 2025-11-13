@@ -28,6 +28,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'wmts output directory'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
   .epilog('Extracts configuration information from a WMTS GetCapabilities file, converts the XML to JSON')
 
 const { argv } = options
@@ -39,6 +45,7 @@ const configFile = argv.config
 const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
 const inputDir = argv.inputDir
 const outputDir = argv.outputDir
+const mode = argv.mode
 
 if (!Object.prototype.hasOwnProperty.call(config, 'wv-options-wmts')) {
   throw new Error(`${prog}: Error: "wv-options-wmts" not in config file`)
@@ -56,12 +63,6 @@ let totalLayerCount = 0
 let totalWarningCount = 0
 let totalErrorCount = 0
 
-const wv = {
-  layers: {},
-  sources: {}
-}
-let wvMatrixSets = {}
-
 class SkipException extends Error {
   constructor (message) {
     super(message)
@@ -76,15 +77,18 @@ class SkipException extends Error {
  * @throws {SkipException}
  */
 async function main () {
-  for (const entry of entries) {
-    wv.layers = {}
-    wv.sources = {}
-    wvMatrixSets = {}
-    const { errorCount, warningCount, layerCount } = await processEntry(entry)
-    console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
+  console.warn(`${prog}: Processing ${entries.length} entries...`)
 
-    const outputFile = path.join(outputDir, entry.to)
-    fs.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8', err => {
+  const promises = entries.map((entry) => processEntry(entry))
+  const results = await Promise.allSettled(promises)
+
+  for (const { status, value } of results) {
+    if (status === 'rejected' || !value) continue
+    const { errorCount, warningCount, layerCount, wv, to, source } = value
+    console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${source}`)
+
+    const outputFile = path.join(outputDir, to)
+    await fs.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8', err => {
       if (err) {
         console.error(err)
       }
@@ -95,7 +99,7 @@ async function main () {
     totalLayerCount += layerCount
   }
 
-  console.warn(`${prog}:${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
+  console.warn(`${prog}: ${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
 
   if (totalErrorCount > 0) {
     throw new Error(`${prog}: Error: ${totalErrorCount} errors occured`)
@@ -103,13 +107,15 @@ async function main () {
 }
 
 async function processEntry (entry) {
+  console.warn(`${prog}: Processing ${entry.source} from ${entry.from} --> ${entry.to}...`)
+  const wv = {}
+  wv.layers = {}
+  wv.sources = {}
+  let wvMatrixSets = {}
+
   let layerCount = 0
   let warningCount = 0
   let errorCount = 0
-
-  wv.sources[entry.source] = {
-    matrixSets: wvMatrixSets
-  }
 
   const inputFile = path.join(inputDir, entry.from)
   const gcId = path.basename(inputFile)
@@ -137,36 +143,39 @@ async function processEntry (entry) {
     return { errorCount, warningCount, layerCount }
   }
 
-  for (const gcLayer of gcContents.Layer) {
-    try {
-      layerCount += 1
-      await processLayer(gcLayer, wvLayers, entry)
-    } catch (error) {
-      if (error instanceof SkipException) {
-        warningCount += 1
-        console.warn(`${prog}: WARNING: [${gcId}] Skipping\n`)
-      } else {
-        errorCount += 1
-        console.error(error.stack)
-        const ident = gcLayer['ows:Identifier']._text
-        console.error(`${prog}: ERROR: [${gcId}:${ident}] ${error}\n`)
-      }
+  console.warn(`${prog}: Processing ${gcContents.Layer.length} layers for ${entry.source}...`)
+  const promises = gcContents.Layer.map((gcLayer) => processLayer(gcLayer, wvLayers, entry))
+  const results = await Promise.allSettled(promises)
+  console.warn(`${prog}: Processed ${results.length} layers for ${entry.source}...`)
+
+  layerCount += results.length
+
+  for (const result of results) {
+    if (result.status === 'fulfilled') continue
+    if (result.reason instanceof SkipException) {
+      warningCount += 1
+      console.warn(`${prog}: WARNING: Skipping\n`)
+    } else {
+      errorCount += 1
+      console.error(result.reason.stack)
+      console.error(`${prog}: ERROR: ${result.reason}\n`)
     }
   }
 
-  if (gcContents.TileMatrixSet === 'Object') {
-    processMatrixSet(gcContents.TileMatrixSet, entry)
-  } else {
-    gcContents.TileMatrixSet.forEach(gcMatrixSet => {
-      processMatrixSet(gcMatrixSet, entry)
-    })
+  const gcTileMatrixSet = gcContents.TileMatrixSet
+
+  wvMatrixSets = Array.isArray(gcTileMatrixSet) ? gcTileMatrixSet.map(gcMatrixSet => processMatrixSet(gcMatrixSet, entry)) : [processMatrixSet(gcTileMatrixSet, entry)]
+
+  wv.sources[entry.source] = {
+    matrixSets: Object.fromEntries(new Map(wvMatrixSets))
   }
 
-  return { errorCount, warningCount, layerCount }
+  return { errorCount, warningCount, layerCount, wv, to: entry.to, source: entry.source }
 }
 
 async function processLayer (gcLayer, wvLayers, entry) {
   const ident = gcLayer['ows:Identifier']._text
+  if (mode === 'verbose') console.warn(`${prog}: Processing layer ${ident}...`)
   if (skip.includes(ident)) {
     console.log(`${ident}: skipping`)
     throw new SkipException(ident)
@@ -298,7 +307,7 @@ function processMatrixSet (gcMatrixSet, entry) {
     })
   }
 
-  wvMatrixSets[ident] = {
+  const value = {
     id: ident,
     maxResolution,
     resolutions,
@@ -308,6 +317,8 @@ function processMatrixSet (gcMatrixSet, entry) {
     ],
     tileMatrices: formattedTileMatrixArr
   }
+
+  return [ident, value]
 }
 
 main().catch((err) => {
