@@ -31,6 +31,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'mode'
   })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'f',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Pulls GetCapabilities XML and linked metadata from configured locations')
 
 const { argv } = options
@@ -39,6 +45,7 @@ if (!argv.config && !argv.getcapabilities) {
 }
 const configFile = argv.config
 const outputDir = argv.getcapabilities
+const cacheMode = argv.cacheMode
 const colormaps = {}
 const vectorstyles = {}
 const vectordata = {}
@@ -48,6 +55,17 @@ const vectordataDir = path.join(outputDir, 'vectordata')
 
 const configData = fs.readFileSync(configFile)
 const config = JSON.parse(configData)
+
+let headers = {}
+
+if (cacheMode === 'no-store') {
+  const noCacheHeaders = {
+    'Cache-Control': 'no-cache no-store',
+    Pragma: 'no-cache',
+    Expires: '0'
+  }
+  headers = Object.assign(headers, noCacheHeaders)
+}
 
 async function main () {
   if (!fs.existsSync(outputDir)) {
@@ -81,17 +99,17 @@ async function getCapabilities () {
 // convert to superagent and use promises
 async function fetchConfigs (inputFile, outputFile) {
   const writer = await fs.createWriteStream(outputFile)
-  if (argv.mode === 'verbose') console.warn(`${prog}: Fetching ${inputFile}...`)
-  return axios({
+  if (argv.mode === 'verbose') console.trace(`Fetching ${inputFile}...`)
+  const response = await axios({
     method: 'get',
     url: inputFile,
     responseType: 'stream',
-    timeout: 100000
-  }).then(async (response) => {
-    if (argv.mode === 'verbose') console.warn(`${prog}: Writing ${outputFile}...`)
-    await response.data.pipe(writer)
-    return finished(writer)
+    timeout: 100000,
+    headers
   })
+  if (argv.mode === 'verbose') console.trace(`Writing ${outputFile}...`)
+  await response.data.pipe(writer)
+  return finished(writer)
 }
 
 async function handleException (error, link, dir, ext, count) {
@@ -113,7 +131,7 @@ async function processVectorData (layer) {
     Object.values(layer['ows:Metadata']).forEach((item) => {
       const schemaVersion = item._attributes['xlink:role']
       if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
-        if (argv.mode === 'verbose') console.warn(`  Processing Metadata: ${item._attributes['xlink:href']}`)
+        if (argv.mode === 'verbose') console.trace(`  Processing Metadata: ${item._attributes['xlink:href']}`)
         const vectorDataLink = item._attributes['xlink:href']
         const vectorDataFile = path.basename(vectorDataLink)
         const vectorDataId = path.parse(vectorDataFile).name
@@ -125,13 +143,13 @@ async function processVectorData (layer) {
 
 async function processLayer (layer) {
   const ident = layer['ows:Identifier']._text
-  if (argv.mode === 'verbose') console.warn(`Processing layer ${ident}...`)
+  if (argv.mode === 'verbose') console.trace(`Processing layer ${ident}...`)
   if (layer['ows:Metadata']) {
     if (config.skipPalettes) {
       console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
     } else {
       Object.values(layer['ows:Metadata']).forEach((item) => {
-        if (argv.mode === 'verbose') console.warn(`  Processing pallette: ${item._attributes['xlink:href']}`)
+        if (argv.mode === 'verbose') console.trace(`  Processing pallette: ${item._attributes['xlink:href']}`)
         const schemaVersion = item._attributes['xlink:role']
         if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
           const colormapLink = item._attributes['xlink:href']

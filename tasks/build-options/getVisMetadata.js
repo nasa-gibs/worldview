@@ -27,12 +27,20 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'layer-metadata/all.json file'
   })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'c',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Creates a layer-metadata file containing all layers')
 
 const { argv } = options
 if (!argv.features && !argv.layerOrder && !argv.layerMetadata) {
   throw new Error('Invalid number of arguments')
 }
+
+const cacheMode = argv.cacheMode
 
 const featuresFile = argv.features
 let featuresData = fs.readFileSync(featuresFile)
@@ -171,6 +179,17 @@ function getDAAC (metadata) {
   return metadata
 }
 
+let headers = {}
+
+if (cacheMode === 'no-store') {
+  const noCacheHeaders = {
+    'Cache-Control': 'no-cache no-store',
+    Pragma: 'no-cache',
+    Expires: '0'
+  }
+  headers = Object.assign(headers, noCacheHeaders)
+}
+
 async function getMetadata (layerId, baseUrl, count) {
   if (count) console.warn(`retry #${count} for ${layerId}`)
   try {
@@ -178,7 +197,8 @@ async function getMetadata (layerId, baseUrl, count) {
       method: 'get',
       url: `${baseUrl}${layerId}.json`,
       responseType: 'json',
-      timeout: 10000
+      timeout: 10000,
+      headers
     })
     const metadata = response.data
     const daac = getDAAC(metadata)

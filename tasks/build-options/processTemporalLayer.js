@@ -11,14 +11,15 @@ function toList (val) {
   return val instanceof Array ? val : [val]
 }
 
-async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic') {
+async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic', cacheMode) {
   const dateFormat = 'YYYY-MM-DD'
   const dateTimeFormat = 'YYYY-MM-DD HH:mm:ss'
+  const fetchOpts = cacheMode === 'no-store' ? { cache: cacheMode } : undefined
   try {
     let ranges = toList(value)
     const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[source]}/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
     try {
-      const describeDomainsResponse = await fetch(describeDomainsUrl)
+      const describeDomainsResponse = await fetch(describeDomainsUrl, fetchOpts)
       if (describeDomainsResponse?.ok) {
         const describeDomainsText = await describeDomainsResponse?.text?.() || ''
         const parser = new xml2js.Parser()
