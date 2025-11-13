@@ -2,4 +2,4 @@ The MODIS Chlorophyll *a* layer provides the near-surface concentration of chlor
 
 The MODIS Level 2 Chlorophyll *a* product is available from both the Terra and Aqua satellites. The sensor and imagery resolution is 1 km, and the temporal resolution is daily.
 
-References: [MODIST_L2_OC_NRT](https://oceancolor.gsfc.nasa.gov/data/10.5067/TERRA/MODIS/L2/OC/2022); MODIST_L2_OC [doi:10.5067/TERRA/MODIS/L2/OC/2022](https://dx.doi.org/10.5067/TERRA/MODIS/L2/OC/2022)
+References: [MODIST_L2_OC_NRT](https://cmr.earthdata.nasa.gov/search/concepts/C3384236977-OB_CLOUD.html); MODIST_L2_OC [doi:10.5067/TERRA/MODIS/L2/OC/2022.0](https://doi.org/10.5067/TERRA/MODIS/L2/OC/2022.0)
