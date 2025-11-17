@@ -1,11 +1,24 @@
+import html2canvas from 'html2canvas';
 import {
   get as lodashGet,
 } from 'lodash';
-import { transform } from 'ol/proj';
+import JSZip from 'jszip';
+import canvasSize from 'canvas-size';
+import { evaluate } from 'mathjs';
+import { transform, get } from 'ol/proj';
+import * as olExtent from 'ol/extent';
+import olTileState from 'ol/TileState';
+import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
 import { nearestInterval } from '../layers/util';
 import { CRS } from '../map/constants';
+import {
+  GDAL_WASM_PATH,
+  DRIVER_DICT,
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
+} from './constants';
 
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
@@ -39,7 +52,7 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opacities) {
+const imageUtilProcessKMZOrbitTracks = (layersArray, layerWraps, opacities) => {
   const processedLayersArray = [...layersArray];
   const processedLayerWraps = [...layerWraps];
   const processedOpacities = [...opacities];
@@ -82,7 +95,7 @@ const imageUtilProcessKMZOrbitTracks = function(layersArray, layerWraps, opaciti
  * @param {Array} opacities
  * @returns {Object} layersArray, layerWraps, opacities
  */
-const imageUtilProcessWrap = function(fileType, layersArray, layerWraps, opacities) {
+const imageUtilProcessWrap = (fileType, layersArray, layerWraps, opacities) => {
   if (fileType === 'application/vnd.google-earth.kmz') {
     return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities);
   }
@@ -99,6 +112,21 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
     : resolution / GEO_ESTIMATION_CONSTANT;
 }
 
+function getMetersPerUnit(projection, center = [0, 0]) {
+  const units = projection.getUnits();
+  let metersPerUnit = projection.getMetersPerUnit();
+
+  if (units === 'degrees') metersPerUnit *= evaluate(`cos((${center[1]} * pi) / ${180})`);
+
+  return metersPerUnit;
+}
+
+function convertResolutionToMetersPerPixel(resolution, projection, center = [0, 0]) {
+  const metersPerUnit = getMetersPerUnit(projection, center);
+
+  return evaluate(`${resolution} * ${metersPerUnit}`);
+}
+
 /*
  * Estimate appropriate Resolution based on zoom
  * This is only run if user has not already selected
@@ -106,31 +134,32 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
  */
 export function imageUtilCalculateResolution(
   zoom,
-  isGeoProjection,
-  resolutions,
+  proj,
+  center,
 ) {
   let resolution;
+  const isGeoProjection = proj.id === 'geographic';
+  const { crs, resolutions } = proj.selected || proj;
+  const projection = get(crs);
   const nZoomLevels = resolutions.length;
   const currentZoom = zoom < 0 ? 0 : zoom;
   const curResolution = currentZoom >= nZoomLevels
     ? resolutions[nZoomLevels - 1]
     : resolutions[currentZoom];
 
-  // Estimate the option value used by "wv-image-resolution"
-  const resolutionEstimate = imageUtilEstimateResolution(
-    curResolution,
-    isGeoProjection,
-  );
+  const currResolutionInMeters = convertResolutionToMetersPerPixel(curResolution, projection, center);
+
+  const getResolutions = (config) => config.values.map((res) => res.value);
 
   // Find the closest match of resolution within the available values
   const possibleResolutions = isGeoProjection
-    ? [0.125, 0.25, 0.5, 1, 2, 4, 20, 40]
-    : [1, 2, 4, 20, 40];
+    ? getResolutions(RESOLUTIONS_GEO)
+    : getResolutions(RESOLUTIONS_POLAR);
   let bestDiff = Infinity;
   let bestIdx = -1;
   let currDiff = 0;
   for (let i = 0; i < possibleResolutions.length; i += 1) {
-    currDiff = Math.abs(possibleResolutions[i] - resolutionEstimate);
+    currDiff = Math.abs(possibleResolutions[i] - currResolutionInMeters);
     if (currDiff < bestDiff) {
       resolution = possibleResolutions[i];
       bestDiff = currDiff;
@@ -164,7 +193,7 @@ export function imageUtilCalculateResolution(
       }
     }
   }
-  return resolution.toString();
+  return resolution;
 }
 
 /*
@@ -297,6 +326,36 @@ export function getTruncatedGranuleDates(layerDefs) {
 }
 
 /**
+ * Calculate ground resolution from map state and target spatial resolution
+ * @param {Number} targetMetersPerPixel - Target spatial resolution in meters per pixel
+ * @param {Object} projection - Map projection
+ * @param {Number} mapResolution - Current map resolution
+ * @param {Array} center - Map center coordinates
+ * @returns {Number} - Scale factor to apply to map
+ */
+function calculateScaleFactor(targetMetersPerPixel, projection, mapResolution, center) {
+  const currentResolutionInMeters = convertResolutionToMetersPerPixel(mapResolution, projection, center);
+
+  // Calculate scale factor needed to achieve target resolution
+  return evaluate(`${currentResolutionInMeters} / ${targetMetersPerPixel}`);
+}
+
+export const estimateMaxCanvasSize = () => canvasSize.maxArea();
+
+export async function estimateMaxImageSize() {
+  const { height: maxHeight, width: maxWidth } = await estimateMaxCanvasSize();
+
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const aoiMaxHeight = maxHeight / devicePixelRatio;
+  const aoiMaxWidth = maxWidth / devicePixelRatio;
+
+  return {
+    height: Math.floor(aoiMaxHeight),
+    width: Math.floor(aoiMaxWidth),
+  };
+}
+
+/**
  * Get the snapshots URL to download an image
  * @param {String} url
  * @param {Object} proj
@@ -354,12 +413,710 @@ export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime,
   if (markerCoordinates.length > 0) {
     const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
       const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
-      // const inExtent = containsCoordinate(boundingExtent(bbox), mCoord);
       return validCoords.concat([mCoord[0], mCoord[1]]);
     }, []);
     params.push(`MARKER=${coords.join(',')}`);
   }
   return `${url}?${params.join('&')}&ts=${Date.now()}`;
+}
+
+/**
+ * Convert a PNG image to a georeferenced KML file
+ * @param {Blob} pngBlob - The input PNG Blob
+ * @param {Object} options - Additional options for georeferencing
+ * @param {Array} options.extent - Bounding box [minX, minY, maxX, maxY] in map units
+ * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
+ * @param {String} options.name - Optional name for the KML overlay (default: 'Image Overlay')
+ * @param {String} options.description - Optional description for the KML overlay
+ * @returns {Promise<Blob>} - A promise that resolves to the KML Blob
+ */
+export function convertPngToKml(pngBlob, options) {
+  return new Promise((resolve, reject) => {
+    try {
+      // Validate input
+      if (!(pngBlob instanceof Blob)) return reject(new Error('Input must be a Blob'));
+
+      // KML requires coordinates in EPSG:4326 (WGS84)
+      if (options.crs !== 'EPSG:4326') return reject(new Error('KML requires WGS84 coordinates'));
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        try {
+          // Extract the base64 part of the data URL
+          const dataUrl = reader.result;
+          const base64Data = dataUrl.split(',')[1];
+
+          const [minX, minY, maxX, maxY] = options.extent;
+
+          // Create the KML document
+          const kmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+            <kml xmlns="http://www.opengis.net/kml/2.2">
+              <Document>
+                <name>${options.name || 'Image Overlay'}</name>
+                <GroundOverlay>
+                  <name>${options.name || 'Image Overlay'}</name>
+                  ${options.description ? `<description>${options.description}</description>` : ''}
+                  <Icon>
+                    <href>data:image/png;base64,${base64Data}</href>
+                  </Icon>
+                  <LatLonBox>
+                    <north>${maxY}</north>
+                    <south>${minY}</south>
+                    <east>${maxX}</east>
+                    <west>${minX}</west>
+                    <rotation>0</rotation>
+                  </LatLonBox>
+                </GroundOverlay>
+              </Document>
+            </kml>`;
+          // Create the KML Blob
+          const kmlBlob = new Blob([kmlContent], { type: 'application/vnd.google-earth.kml+xml' });
+          resolve(kmlBlob);
+        } catch (error) {
+          console.error('Error creating KML content:', error);
+          reject(error);
+        }
+      };
+
+      reader.onerror = () => reject(new Error('Failed to read image data'));
+
+      reader.readAsDataURL(pngBlob);
+    } catch (error) {
+      console.error('Error creating KML:', error);
+      reject(error);
+    }
+  });
+}
+
+/**
+ * Convert a input Blob to a properly georeferenced GeoTIFF Blob
+ * @param {Blob} pngBlob - The input TIFF Blob
+ * @param {Object} options - Additional options for georeferencing
+ * @param {Array} options.extent - Bounding box [minX, minY, maxX, maxY] in map units
+ * @param {String} options.crs - The Coordinate Reference System identifier (e.g., 'EPSG:4326')
+ * @param {Number} options.metersPerPixel - Ground resolution in meters per pixel
+ * @param {Number} options.captureWidth - Width of the output image in pixels
+ * @param {Number} options.captureHeight - Height of the output image in pixels
+ * @param {String} options.inputFormat - Input image format (default: 'png')
+ * @param {String} options.outputFormat - Output image format (default: 'tif')
+ * @param {Boolean} options.worldfile - Whether to create a worldfile
+ * @param {String} options.name - Optional name for the output file
+ * @param {String} options.description - Optional description for the output file
+ * @returns {Promise<Blob>} - A promise that resolves to the GeoTIFF Blob
+ */
+export async function georeference (inputBlob, options) {
+  let {
+    outputFormat = 'tif',
+  } = options;
+  const {
+    inputFormat = 'png',
+    crs = 'EPSG:4326',
+    captureHeight,
+    captureWidth,
+  } = options;
+  if (outputFormat === 'tiff' || outputFormat === 'geotiff') outputFormat = 'tif'; // Normalize tiff to tif for consistency
+  if (outputFormat === 'jpeg') outputFormat = 'jpg'; // Normalize jpg to jpeg for consistency
+  if (outputFormat === 'kml') {
+    const blob = await convertPngToKml(inputBlob, options);
+
+    return [
+      {
+        name: 'image.kml',
+        blob,
+      },
+    ];
+  }
+  const worldfile = options.worldfile ? 'YES' : 'NO';
+
+  const file = new File([inputBlob], `image.${inputFormat}`, { type: `image/${inputFormat}` });
+  const gdal = await initGdalJs({ path: GDAL_WASM_PATH, useWorker: true });
+  const openResult = await gdal.open(file);
+  const dataset = openResult.datasets[0];
+
+  const width = captureWidth || dataset.info.size[0];
+  const height = captureHeight || dataset.info.size[1];
+  const extent = options.extent.map((coord) => `${coord}`);
+  const driver = DRIVER_DICT[outputFormat];
+
+  const translateOpts = [
+    '-strict',
+    '-of', driver, // Output format
+    '-a_srs', crs, // Set the spatial reference system
+    '-outsize', `${width}`, `${height}`, // Set the output size
+    '-r', 'average', // Resampling method
+    '-a_ullr', extent[0], extent[3], extent[2], extent[1], // Set the bounding box
+  ];
+  if (driver !== 'GTiff') {
+    translateOpts.push('-co', `WORLDFILE=${worldfile}`); // Create a world file if requested
+  } else {
+    translateOpts.push('-co', `TFW=${worldfile}`); // Create ESRI tfw file
+  }
+
+  // For JPEG output, ensure RGB color space by selecting only RGB bands and setting color interpretation
+  if (driver === 'JPEG') {
+    const jpegOpts = [
+      '-co', 'QUALITY=75', // Maximum quality
+      '-b', '1', '-b', '2', '-b', '3', // Select only RGB bands, drop alpha
+      '-colorinterp', 'red,green,blue', // RGB color interpretation
+    ];
+    translateOpts.push(...jpegOpts);
+  }
+
+  const translate = await gdal.gdal_translate(dataset, translateOpts);
+
+  gdal.close(dataset);
+
+  const files = translate.all.map((p) => ({ path: p.local }));
+  const imageFilePath = files.find((f) => f.path.endsWith(`.${outputFormat}`))?.path;
+  const worldFilePath = files.find((f) => f.path.endsWith('.wld') || f.path.endsWith('.tfw'))?.path;
+  const imageFileBytes = await gdal.getFileBytes(imageFilePath);
+  const imageFileName = imageFilePath.split('/').pop();
+  const imageFileBlob = new Blob([imageFileBytes]);
+  const output = [
+    {
+      name: imageFileName,
+      blob: imageFileBlob,
+    },
+  ];
+  if (worldFilePath) {
+    const worldfileBytes = await gdal.getFileBytes(worldFilePath);
+    const worldFileName = worldFilePath.split('/').pop();
+    const worldFileBlob = new Blob([worldfileBytes], { type: 'text/plain' });
+    output.push({
+      name: worldFileName,
+      blob: worldFileBlob,
+    });
+  }
+
+  return output;
+}
+
+/**
+ * Update high-resolution tile grids for a specific layer
+ * @param {*} layer - The OpenLayers layer to update
+ * @returns {Function} - A function to restore the original tile grids
+ */
+function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
+  const originalSource = layer.getSource();
+  if (typeof originalSource?.getTileGrid !== 'function') return () => null; // No tile grid to update
+  const SourceConstructor = originalSource.constructor;
+  const originalTileGrid = originalSource.getTileGrid();
+  const TileGridConstructor = originalTileGrid.constructor;
+  const resolutions = originalTileGrid.getResolutions();
+  if (typeof originalTileGrid.getMatrixIds !== 'function') return () => null; // No matrix IDs to update
+  const matrixIds = originalTileGrid.getMatrixIds?.();
+  const maxResolutions = resolutions.slice(0, tileMatrixID + 1);
+  const maxMatrixIds = matrixIds ? matrixIds.slice(0, tileMatrixID + 1) : undefined;
+
+  const tileGrid = new TileGridConstructor({
+    ...originalTileGrid,
+    origin: originalTileGrid.getOrigin?.() || originalTileGrid.origin_,
+    extent: originalTileGrid.getExtent?.() || originalTileGrid.extent_,
+    resolutions: maxResolutions,
+    matrixIds: maxMatrixIds,
+    tileSize: originalTileGrid.getTileSize?.() || originalTileGrid.tileSize_,
+    minZoom: tileMatrixID,
+    maxZoom: tileMatrixID,
+  });
+
+  const originalTileLoadFunction = originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_;
+
+  const cancellableTileLoadFunction = async (tile, src) => {
+    tile.setState(olTileState.LOADING);
+    try {
+      const response = await fetch(src, { signal: abortSignal });
+      const blob = await response.blob();
+      const imageUrl = URL.createObjectURL(blob);
+      await originalTileLoadFunction(tile, imageUrl);
+      URL.revokeObjectURL(imageUrl);
+      tile.setState(olTileState.LOADED);
+    } catch (error) {
+      tile.setState(olTileState.ERROR);
+    }
+  };
+  const sourceOptions = {
+    ...originalSource,
+    urls: originalSource.getUrls?.() || originalSource.urls_,
+    format: originalSource.getFormat?.() || originalSource.format_,
+    projection: originalSource.getProjection?.() || originalSource.projection_,
+    tileGrid,
+    layer: originalSource.getLayer?.() || originalSource.layer_,
+    tileLoadFunction: cancellableTileLoadFunction,
+    matrixSet: originalSource.getMatrixSet?.() || originalSource.matrixSet_,
+    dimensions: originalSource.getDimensions?.() || originalSource.dimensions_,
+    crossOrigin: 'anonymous',
+  };
+
+  const hrSource = new SourceConstructor(sourceOptions);
+  layer.setSource(hrSource);
+
+  return () => layer.setSource(originalSource);
+}
+
+/**
+ * Toggle high-resolution tile grids for all layers in the map
+ * @param {Object} map - The OpenLayers map instance
+ * @returns {Function} - A function to restore the original tile grids
+ */
+function toggleHighResTileGrids (map, abortSignal, tileMatrixID) {
+  const layers = map.getAllLayers();
+  const restoreSources = layers
+    .filter((layer) => layer.isVisible())
+    .map((layer) => updateHighResTileGrids(layer, abortSignal, tileMatrixID));
+
+  return () => restoreSources.forEach((restoreSource) => restoreSource());
+}
+
+/**
+ * Create a restore function for the map and (optionally) configure high-resolution tile grids
+ * @param {Object} map
+ * @returns {Function} - A function to restore the original map state
+ */
+function createMapRestore(map, extent, abortSignal, tileMatrixID) {
+  const mapElement = map.getTargetElement();
+  const originalView = map.getView();
+  const ViewConstructor = originalView.constructor;
+  const newView = new ViewConstructor({
+    center: originalView.getCenter(),
+    resolution: originalView.getResolution(),
+    projection: originalView.getProjection(),
+    zoom: originalView.getZoom(),
+    rotation: originalView.getRotation(),
+    maxZoom: originalView.getMaxZoom(),
+    minZoom: originalView.getMinZoom(),
+    extent: extent || originalView.getExtent(),
+    maxResolution: originalView.getMaxResolution(),
+    minResolution: originalView.getMinResolution(),
+    resolutions: originalView.getResolutions(),
+    multiWorld: false,
+    showFullExtent: true,
+    smoothResolutionConstraint: false,
+  });
+  map.setView(newView);
+  const originalStyleWidth = mapElement.style.width;
+  const originalStyleHeight = mapElement.style.height;
+
+  const restoreLayers = toggleHighResTileGrids(map, abortSignal, tileMatrixID);
+
+  return () => {
+    // Restore original map size
+    restoreLayers();
+    map.setView(originalView);
+    mapElement.style.width = originalStyleWidth;
+    mapElement.style.height = originalStyleHeight;
+    map.updateSize();
+  };
+}
+
+function rejectIfAborted(abortSignal, reject, restoreMap) {
+  if (abortSignal?.aborted) {
+    restoreMap?.();
+    reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+  }
+}
+
+/**
+ * Initiates a download and waits for a reasonable delay to simulate download completion
+ * @param {Blob} blob - The blob to download
+ * @param {String} filename - The filename for the download
+ * @param {AbortSignal} abortSignal - Optional abort signal
+ * @returns {Promise} - Resolves when download is initiated and delay is complete
+ */
+async function initiateDownload(blob, filename, abortSignal, parentReject) {
+  // Check if cancelled before starting download
+  rejectIfAborted(abortSignal, parentReject);
+
+  // Wait for download to initiate with cancellation support
+  return new Promise((resolve, reject) => {
+    const timeoutId = setTimeout(resolve, 0);
+
+    if (abortSignal) {
+      const abortHandler = () => {
+        clearTimeout(timeoutId);
+        reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+      };
+
+      if (abortSignal.aborted) {
+        clearTimeout(timeoutId);
+        reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+        return;
+      }
+
+      abortSignal.addEventListener('abort', abortHandler, { once: true });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(url);
+
+      // Clean up the event listener when the timeout completes
+      setTimeout(() => {
+        abortSignal.removeEventListener('abort', abortHandler);
+      }, 0);
+    }
+  });
+}
+
+function createRenderCompleteCallback (options) {
+  const {
+    map,
+    extent,
+    metersPerPixel,
+    format,
+    worldfile,
+    restoreMap,
+    abortSignal,
+    resolve,
+    reject,
+    filename,
+  } = options;
+
+  const handleRenderComplete = async () => {
+    try {
+      // Check if operation was cancelled at the start
+      rejectIfAborted(abortSignal, reject, restoreMap);
+
+      const topLeft = olExtent.getTopLeft(extent);
+      const bottomLeft = olExtent.getBottomLeft(extent);
+      const topRight = olExtent.getTopRight(extent);
+
+      const aoiPixelTopLeft = map.getPixelFromCoordinate(topLeft);
+      const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
+      const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
+
+      const aoiPixelXOffset = aoiPixelTopLeft[0];
+      const aoiPixelYOffset = aoiPixelTopLeft[1];
+      const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
+      const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
+
+      const mapElement = map.getTargetElement();
+      const [mapWidth, mapHeight] = map.getSize();
+
+      const dpr = window.devicePixelRatio || 1;
+
+      // Create our output canvas with exact dimensions we want
+      const outputWidth = evaluate(`${aoiPixelWidth} * ${dpr}`);
+      const outputHeight = evaluate(`${aoiPixelHeight} * ${dpr}`);
+      const outputCanvas = new OffscreenCanvas(outputWidth, outputHeight);
+
+      const ctx = outputCanvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
+
+      // Scale the context to ensure correct drawing operations
+      ctx.scale(dpr, dpr);
+
+      const capturedCanvas = new OffscreenCanvas(mapWidth * dpr, mapHeight * dpr);
+
+      // Check if operation was cancelled before html2canvas
+      rejectIfAborted(abortSignal, reject, restoreMap);
+
+      // Capture the map at its new scaled size
+      await html2canvas(mapElement, {
+        canvas: capturedCanvas,
+        backgroundColor: null,
+        useCORS: true,
+        allowTaint: true,
+        scrollX: 0,
+        scrollY: 0,
+        scale: dpr,
+        logging: false,
+        imageTimeout: 0,
+        removeContainer: true,
+        ignoreElements: (element) => element.classList.contains('ol-overlaycontainer-stopevent'), // this is super finicky, maybe prep the mapElement by hiding elements using css,
+      });
+
+      const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
+      const sourceY = evaluate(`${aoiPixelYOffset} * ${dpr}`);
+      const sourceWidth = outputCanvas.width; // Use the actual width of the output canvas
+      const sourceHeight = outputCanvas.height; // Use the actual height of the output canvas
+
+      const capturedCtx = capturedCanvas.getContext('2d');
+      capturedCtx.imageSmoothingEnabled = false; // Disable smoothing for pixel-perfect rendering
+      const capturedImageData = capturedCtx.getImageData(
+        Math.round(sourceX), // source x
+        sourceY, // source y
+        sourceWidth, // source width
+        sourceHeight, // source height
+        { colorSpace: 'srgb' },
+      );
+
+      ctx.colorSpace = 'srgb';
+
+      ctx.putImageData(
+        capturedImageData,
+        0, // dest x
+        0, // dest y
+        0, // source x
+        0, // source y
+        sourceWidth, // dest width
+        sourceHeight, // dest height
+      );
+
+      // Reset map to original size
+      restoreMap();
+
+      // Check if operation was cancelled before processing image
+      rejectIfAborted(abortSignal, reject);
+
+      const pngBlob = await outputCanvas.convertToBlob({
+        type: 'image/png',
+        quality: 1, // Maximum quality
+      });
+
+      const crs = map.getView().getProjection().getCode();
+
+      // Check if operation was cancelled before georeferencing
+      rejectIfAborted(abortSignal, reject);
+
+      const georeferencedOutput = await georeference(pngBlob, {
+        extent,
+        crs,
+        metersPerPixel,
+        captureWidth: outputWidth / dpr,
+        captureHeight: outputHeight / dpr,
+        inputFormat: 'png',
+        outputFormat: format === 'kmz' ? 'kml' : format,
+        worldfile,
+        name: 'Worldview Snapshot',
+        description: 'Snapshot created with NASA Worldview',
+      });
+
+      if (georeferencedOutput.length > 1 || format === 'kmz') {
+        // Check if operation was cancelled before creating zip
+        rejectIfAborted(abortSignal, reject);
+
+        const zip = new JSZip();
+        georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
+        const zipBlob = await zip.generateAsync({
+          type: 'blob',
+          compression: 'DEFLATE',
+          compressionOptions: { level: 9 },
+          mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
+        });
+
+        // Final check before download
+        rejectIfAborted(abortSignal, reject);
+
+        await initiateDownload(zipBlob, `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal, reject);
+      } else {
+        // Final check before download
+        rejectIfAborted(abortSignal, reject);
+
+        const { blob } = georeferencedOutput[0];
+        await initiateDownload(blob, `${filename}.${format}`, abortSignal, reject);
+      }
+      resolve('Successfully created screenshot');
+    } catch (error) {
+      // Reset map size in case of error
+      restoreMap();
+
+      console.error('Error creating screenshot:', error);
+      reject(error);
+    }
+  };
+
+  return handleRenderComplete;
+}
+
+function createViewFitCallback(options) {
+  const {
+    map,
+    extent,
+    metersPerPixel,
+    format,
+    worldfile,
+    restoreMap,
+    originalWidth,
+    originalHeight,
+    maxWidth,
+    maxHeight,
+    abortSignal,
+    resolve,
+    reject,
+    filename,
+  } = options;
+
+  const view = map.getView();
+  const mapElement = map.getTargetElement();
+
+  const viewFitRenderCallback = () => {
+    try {
+      // Check if operation was cancelled
+      rejectIfAborted(abortSignal, reject, restoreMap);
+
+      const viewResolution = view.getResolution();
+
+      // Calculate scale factor based on target spatial resolution
+      const projection = view.getProjection();
+      const center = view.getCenter();
+      const scaleFactor = calculateScaleFactor(
+        metersPerPixel,
+        projection,
+        viewResolution,
+        center,
+      );
+
+      // Scale the entire map up to the target resolution
+      const scaledMapWidth = evaluate(`${originalWidth} * ${scaleFactor}`);
+      const scaledMapHeight = evaluate(`${originalHeight} * ${scaleFactor}`);
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${devicePixelRatio}`);
+      const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${devicePixelRatio}`);
+
+      if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
+
+      const scaledResolution = evaluate(`${viewResolution} / ${scaleFactor}`);
+
+      const renderCompleteOptions = {
+        map,
+        extent,
+        metersPerPixel,
+        format,
+        worldfile,
+        restoreMap,
+        abortSignal,
+        resolve,
+        reject,
+        filename,
+      };
+
+      map.once('rendercomplete', createRenderCompleteCallback(renderCompleteOptions));
+
+      // Resize the map container
+      map.setSize([scaledMapWidth, scaledMapHeight]);
+      mapElement.style.width = `${scaledMapWidth}px`;
+      mapElement.style.height = `${scaledMapHeight}px`;
+      map.updateSize();
+      view.setResolution(scaledResolution);
+      map.render();
+    } catch (error) {
+      restoreMap();
+
+      console.error('Error configuring map:', error);
+      reject(error);
+    }
+  };
+
+  // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
+  const viewFitCallback = (notCancelled) => {
+    if (!notCancelled) {
+      console.warn('Snapshot cancelled by user');
+      restoreMap();
+      return;
+    }
+
+    // Check if operation was cancelled before proceeding
+    if (abortSignal?.aborted) {
+      restoreMap();
+      reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
+      return;
+    }
+
+    map.once('rendercomplete', viewFitRenderCallback);
+    map.render();
+  };
+
+  return viewFitCallback;
+}
+
+function getExtentFromPixelBbox(pixelBbox, map) {
+  const [minPixelX, minPixelY, maxPixelX, maxPixelY] = pixelBbox;
+
+  // Calculate geographic extent
+  const topLeft = map.getCoordinateFromPixel([minPixelX, minPixelY]);
+  const topRight = map.getCoordinateFromPixel([maxPixelX, minPixelY]);
+  const bottomLeft = map.getCoordinateFromPixel([minPixelX, maxPixelY]);
+  const bottomRight = map.getCoordinateFromPixel([maxPixelX, maxPixelY]);
+
+  // Put everything in the correct order
+  const minX = Math.min(topLeft[0], bottomLeft[0]);
+  const maxX = Math.max(topRight[0], bottomRight[0]);
+  const minY = Math.min(bottomLeft[1], bottomRight[1]);
+  const maxY = Math.max(topLeft[1], topRight[1]);
+  const extent = [minX, minY, maxX, maxY];
+
+  return extent;
+}
+
+/**
+ * Create a snapshot of the map with the given options
+ * @param {Object} options - Snapshot configuration options
+ * @param {String} options.format - Output format (e.g., 'tif', 'png', 'kmz')
+ * @param {Number} options.metersPerPixel - Target spatial resolution in meters per pixel
+ * @param {Array} options.pixelBbox - Pixel bounding box [minX, minY, maxX, maxY]
+ * @param {Object} options.map - OpenLayers map instance
+ * @param {Boolean} options.worldfile - Whether to include a worldfile
+ * @param {Boolean} options.useHighResTileGrids - Whether to use high resolution tile grids
+ * @param {AbortSignal} options.abortSignal - Optional AbortController signal to cancel the operation
+ * @returns {Promise<void>} - Promise that resolves when snapshot is complete
+ * @throws {DOMException} - Throws AbortError if the operation is cancelled
+ */
+export async function snapshot(options) {
+  const { height: maxHeight = 0, width: maxWidth = 0 } = await estimateMaxCanvasSize();
+
+  const {
+    format,
+    metersPerPixel,
+    pixelBbox,
+    map,
+    worldfile,
+    abortSignal,
+    filename = 'Worldview Snapshot',
+    projection,
+  } = options;
+
+  // Check if operation was cancelled before starting
+  if (abortSignal?.aborted) {
+    throw new DOMException('Snapshot operation was cancelled before starting', 'AbortError');
+  }
+
+  // Save original viewport size
+  const [originalWidth, originalHeight] = map.getSize();
+  const extent = getExtentFromPixelBbox(pixelBbox, map);
+
+  const isGeoProjection = projection.id === 'geographic';
+
+  const config = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
+  const tileMatrixID = config.values.find((res) => res.value === metersPerPixel)?.tileMatrixID;
+
+  // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
+  const restoreMap = createMapRestore(map, extent, abortSignal, tileMatrixID);
+  const view = map.getView();
+
+  // Add abort event listener to clean up if cancelled
+  const abortHandler = () => {
+    restoreMap();
+  };
+
+  if (abortSignal) {
+    abortSignal.addEventListener('abort', abortHandler);
+  }
+
+  const viewFitPromise = new Promise((resolve, reject) => {
+    const viewFitOptions = {
+      map,
+      extent,
+      metersPerPixel,
+      format,
+      worldfile,
+      restoreMap,
+      originalWidth,
+      originalHeight,
+      maxWidth,
+      maxHeight,
+      abortSignal,
+      resolve,
+      reject,
+      filename,
+    };
+    // fit view to the bounding box to reduce number of tiles needed to render
+    view.fit(extent, { callback: createViewFitCallback(viewFitOptions) });
+  });
+
+  return viewFitPromise;
 }
 
 export function imageUtilGetConversionFactor(proj) {
@@ -392,28 +1149,52 @@ export function imageUtilGetPixelValuesFromCoords(bottomLeft, topRight, map) {
   };
 }
 
-export function imageSizeValid(imgHeight, imgWidth, maxSize) {
-  if (imgHeight === 0 && imgWidth === 0) {
-    return false;
-  }
-  if (imgHeight > maxSize || imgWidth > maxSize) {
-    return false;
-  }
+export function imageSizeValid(options) {
+  const {
+    maxHeight,
+    maxWidth,
+    map,
+    resolution,
+    pixelBbox,
+  } = options;
+
+  const imgWidth = Math.abs(pixelBbox[1][0] - pixelBbox[0][0]);
+  const imgHeight = Math.abs(pixelBbox[1][1] - pixelBbox[0][1]);
+  const view = map.getView();
+  const projection = view.getProjection();
+  const center = view.getCenter();
+  const extent = getExtentFromPixelBbox(pixelBbox, map);
+  const viewResolution = view.getResolutionForExtent(extent);
+
+  const scaleFactor = calculateScaleFactor(
+    resolution,
+    projection,
+    viewResolution,
+    center,
+  );
+
+  const mapSize = map.getSize();
+  const [scaledWidth, scaledHeight] = mapSize.map((size) => size * scaleFactor);
+
+  const isZero = imgHeight === 0 && imgWidth === 0;
+  const isTooBig = scaledWidth > maxHeight || scaledHeight > maxWidth;
+
+  if (isZero || isTooBig) return false;
+
   return true;
 }
 
-export function getDimensions(projection, bounds, resolution) {
-  const conversionFactor = imageUtilGetConversionFactor(projection);
-  const imgWidth = Math.round(
-    Math.abs(bounds[1][0] - bounds[0][0])
-    / conversionFactor
-    / Number(resolution),
-  );
-  const imgHeight = Math.round(
-    Math.abs(bounds[1][1] - bounds[0][1])
-    / conversionFactor
-    / Number(resolution),
-  );
+export function getDimensions(map, bounds, resolution) {
+  const projection = map.getView().getProjection();
+  const center = map.getView().getCenter();
+  const metersPerUnit = getMetersPerUnit(projection, center);
+
+  const mapWidth = Math.abs(bounds[1][0] - bounds[0][0]) * metersPerUnit;
+  const mapHeight = Math.abs(bounds[1][1] - bounds[0][1]) * metersPerUnit;
+
+  const imgWidth = Math.round(mapWidth / resolution);
+  const imgHeight = Math.round(mapHeight / resolution);
+
   return { width: imgWidth, height: imgHeight };
 }
 export function getPercentageFromPixel(maxDimension, dimension) {

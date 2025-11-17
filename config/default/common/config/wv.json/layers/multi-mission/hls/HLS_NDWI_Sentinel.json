@@ -22,7 +22,7 @@
             "colormap_name": "gnbu",
             "bands_regex": "B[0-9][0-9A-Za-z]"
         },
-        "disableSnapshot": true,
+        "disableSnapshot": false,
         "minZoom": 7,
         "wrapX": false,
         "projections": {

@@ -1,31 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
   imageSizeValid,
+  estimateMaxImageSize,
   getDimensions,
-  getDownloadUrl,
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
+  snapshot,
 } from '../../modules/image-download/util';
 import SelectionList from '../util/selector';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
 import LatLongSelect from './lat-long-inputs';
 import GlobalSelectCheckbox from './global-select';
+import WaitOverlay from './wait';
 
-const MAX_DIMENSION_SIZE = 8200;
 const RESOLUTION_KEY = {
-  0.125: '30m',
-  0.25: '60m',
-  0.5: '125m',
-  1: '250m',
-  2: '500m',
-  4: '1km',
-  20: '5km',
-  40: '10km',
+  0.075: '7.5cm',
+  0.3: '30cm',
+  30: '30m',
+  60: '60m',
+  125: '125m',
+  250: '250m',
+  500: '500m',
+  1_000: '1km',
+  5_000: '5km',
+  10_000: '10km',
 };
 
 function ImageDownloadPanel(props) {
@@ -34,11 +35,9 @@ function ImageDownloadPanel(props) {
     isWorldfile,
     resolution,
     getLayers,
-    url,
     lonlats,
     projection,
     date,
-    markerCoordinates,
     onPanelChange,
     fileTypeOptions,
     fileTypes,
@@ -48,60 +47,109 @@ function ImageDownloadPanel(props) {
     map,
     viewExtent,
     resolutions,
-    maxImageSize,
     firstLabel,
     geoLatLong,
     onLatLongChange,
+    boundaries,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
   const [currIsWorldfile, setIsWorldfile] = useState(isWorldfile);
   const [currResolution, setResolution] = useState(resolution);
-  const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
+  const [maxWidth, setMaxWidth] = useState(0);
+  const [maxHeight, setMaxHeight] = useState(0);
+  const [isSnapshotInProgress, setIsSnapshotInProgress] = useState(false);
+  const [snapshotStatus, setSnapshotStatus] = useState('');
+  const abortControllerRef = useRef(null);
+
+  const onCancelSnapshot = () => {
+    abortControllerRef.current?.abort();
+    setIsSnapshotInProgress(false);
+    setSnapshotStatus('');
+  };
 
   useEffect(() => {
+    const divElem = document.querySelector('body');
+    const resizeHandler = async () => {
+      const { height, width } = await estimateMaxImageSize(map, Number(currResolution));
+      setMaxHeight(height);
+      setMaxWidth(width);
+    };
     const layerList = getLayers();
     const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
     const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
     const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
+    const resizeObserver = new ResizeObserver(resizeHandler);
+    resizeObserver.observe(divElem);
+    resizeHandler();
 
     setShowGranuleWarning(isTruncated);
+
+    return () => {
+      resizeObserver.unobserve(divElem);
+      // Clean up any ongoing snapshot operation when component unmounts
+      onCancelSnapshot();
+    };
   }, []);
 
-  const onDownload = (width, height) => {
-    const time = new Date(date.getTime());
-
+  const onDownload = async () => {
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
-    const dlURL = getDownloadUrl(
-      url,
-      projection,
-      layerDefs,
-      lonlats,
-      { width, height },
-      time,
-      currFileType,
-      currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
-      markerCoordinates,
-      activePalettes,
-    );
+    const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
 
-    window.open(dlURL, '_blank');
-    googleTagManager.pushEvent({
-      event: 'image_download',
-      layers: {
-        activeCount: layerList.length,
-      },
-      image: {
-        resolution: RESOLUTION_KEY[currResolution],
-        format: currFileType,
-        worldfile: currIsWorldfile,
-      },
-    });
-    setDebugUrl(dlURL);
+    // Create abort controller for this snapshot operation
+    const abortController = new AbortController();
+    abortControllerRef.current = abortController;
+    setIsSnapshotInProgress(true);
+    setSnapshotStatus('Preparing snapshot...');
+
+    const snapshotOptions = {
+      format: snapshotFormat,
+      metersPerPixel: Number(currResolution),
+      pixelBbox: boundaries,
+      map,
+      worldfile: currIsWorldfile,
+      abortSignal: abortController.signal,
+      filename: `snapshot-${date.toISOString()}`,
+      projection,
+    };
+
+    const timeout = setTimeout(onCancelSnapshot, 180_000);
+    try {
+      setSnapshotStatus('Creating snapshot...');
+      const startTime = Date.now();
+      await snapshot(snapshotOptions);
+      const endTime = Date.now();
+      setSnapshotStatus('Download complete!');
+
+      googleTagManager.pushEvent({
+        event: 'image_download',
+        layers: {
+          activeCount: layerList.length,
+        },
+        duration: endTime - startTime,
+        image: {
+          resolution: RESOLUTION_KEY[currResolution],
+          format: currFileType,
+          worldfile: currIsWorldfile,
+        },
+      });
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        console.warn('Snapshot operation was cancelled by user');
+      } else {
+        throw new Error('Snapshot operation failed', { cause: error });
+      }
+    } finally {
+      // Add a delay to show the 'Download complete!' message before clearing UI
+      if (snapshotStatus === 'Download complete!') {
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      }
+      clearTimeout(timeout);
+      setIsSnapshotInProgress(false);
+      setSnapshotStatus('');
+      abortControllerRef.current = null;
+    }
   };
 
   const handleChange = (type, value) => {
@@ -169,7 +217,7 @@ function ImageDownloadPanel(props) {
   );
 
   const { crs } = projection.selected;
-  const dimensions = getDimensions(projection.id, lonlats, currResolution);
+  const dimensions = getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
   const filetypeSelect = _renderFileTypeSelect();
@@ -179,13 +227,13 @@ function ImageDownloadPanel(props) {
   return (
     <>
       {crossesDatelineAlert()}
-      <div className="wv-re-pick-wrapper wv-image">
-        <div
-          id="wv-image-download-url"
-          style={{ display: 'none' }}
-          // eslint-disable-next-line react/no-unknown-property
-          url={debugUrl}
+      {isSnapshotInProgress && (
+        <WaitOverlay
+          statusText={snapshotStatus || 'Creating snapshot...'}
+          onCancel={onCancelSnapshot}
         />
+      )}
+      <div className="wv-re-pick-wrapper wv-image">
         <div className="wv-image-header">
           <SelectionList
             id="wv-image-resolution"
@@ -218,10 +266,17 @@ function ImageDownloadPanel(props) {
           width={width}
           height={height}
           fileSize={((width * height * 24) / 8388608).toFixed(2)}
-          maxImageSize={maxImageSize}
-          validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
+          maxImageSize={`${maxWidth}px x ${maxHeight}px`}
+          validSize={imageSizeValid({
+            maxHeight,
+            maxWidth,
+            map,
+            resolution: Number(currResolution),
+            pixelBbox: boundaries,
+          })}
           validLayers={layerList.length > 0}
           onClick={onDownload}
+          isSnapshotInProgress={isSnapshotInProgress}
         />
       </div>
     </>
@@ -233,8 +288,7 @@ ImageDownloadPanel.defaultProps = {
   fileTypeOptions: true,
   firstLabel: 'Resolution (per pixel)',
   isWorldfile: false,
-  maxImageSize: '8200px x 8200px',
-  resolution: '1',
+  resolution: 250,
   secondLabel: 'Format',
   worldFileOptions: true,
 };
@@ -249,12 +303,11 @@ ImageDownloadPanel.propTypes = {
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.array,
   map: PropTypes.object,
-  maxImageSize: PropTypes.string,
   markerCoordinates: PropTypes.array,
   onPanelChange: PropTypes.func,
   projection: PropTypes.object,
   date: PropTypes.object,
-  resolution: PropTypes.string,
+  resolution: PropTypes.number,
   resolutions: PropTypes.object,
   secondLabel: PropTypes.string,
   url: PropTypes.string,
@@ -262,6 +315,7 @@ ImageDownloadPanel.propTypes = {
   worldFileOptions: PropTypes.bool,
   geoLatLong: PropTypes.array,
   onLatLongChange: PropTypes.func,
+  boundaries: PropTypes.array,
 };
 
 export default ImageDownloadPanel;

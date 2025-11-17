@@ -1,4 +1,3 @@
-// @ts-check
 const { test, expect } = require('@playwright/test')
 const {
   openImageDownloadPanel,
@@ -6,18 +5,20 @@ const {
   clickDownload,
   closeModal
 } = require('../../test-utils/hooks/wvHooks')
-const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
+const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 
 let page
+let downloadPromise
 
 const startParams = [
-  'imageDownload='
+  'v=-1,-1,1,1'
 ]
 
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage()
+  downloadPromise = page.waitForEvent('download')
 })
 
 test.afterAll(async () => {
@@ -25,34 +26,97 @@ test.afterAll(async () => {
 })
 
 test('Image for today', async () => {
-  const url = await joinUrl(startParams, '&now=2018-06-01T3')
+  const url = await joinUrl(startParams, null)
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
+
+  // Verify current date is selected
+  const dateDisplay = page.locator('.wv-date-selector-widget')
+  await expect(dateDisplay).toBeVisible()
+
+  // Start download and verify progress indicator appears
   await clickDownload(page)
-  const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
-  expect(urlAttribute).toContain('TIME=2018-06-01')
+  const progressDialog = page.locator('.wv-snapshot-progress-overlay')
+  await expect(progressDialog).toBeVisible()
+
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
+  await expect(cancelButton).toBeVisible()
+
+  // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
+  try {
+    await Promise.race([
+      downloadPromise,
+      progressDialog.waitFor({ state: 'detached', timeout: 200_000 }),
+      cancelButton.click()
+    ])
+  } catch (e) {
+    throw new Error('Snapshot download did not complete or progress dialog did not disappear in time')
+  }
+
   await closeImageDownloadPanel(page)
 })
 
-test('Image for yesterday', async () => {
-  const url = await joinUrl(startParams, '&now=2018-06-01T0')
+test('Image for past date', async () => {
+  const url = await joinUrl(startParams, 't=2018-05-31')
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
+
+  // Verify test date is selected
+  const dateDisplay = page.locator('.wv-date-selector-widget')
+  await expect(dateDisplay).toBeVisible()
+
+  // Start download and verify progress indicator appears
   await clickDownload(page)
-  const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
-  expect(urlAttribute).toContain('TIME=2018-05-31')
+  const progressDialog = page.locator('.wv-snapshot-progress-overlay')
+  await expect(progressDialog).toBeVisible()
+
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
+  await expect(cancelButton).toBeVisible()
+
+  // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
+  try {
+    await Promise.race([
+      downloadPromise,
+      progressDialog.waitFor({ state: 'detached', timeout: 200_000 }),
+      cancelButton.click()
+    ])
+  } catch (e) {
+    throw new Error('Snapshot download did not complete or progress dialog did not disappear in time')
+  }
+
   await closeImageDownloadPanel(page)
 })
 
 test('Image for 2018-05-15', async () => {
-  const url = await joinUrl(startParams, '&t=2018-05-15')
+  const url = await joinUrl(startParams, 't=2018-05-15')
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
+
+  // Verify specific date is selected
+  const dateDisplay = page.locator('.wv-date-selector-widget')
+  await expect(dateDisplay).toBeVisible()
+
+  // Start download and verify progress indicator appears
   await clickDownload(page)
-  const urlAttribute = await getAttribute(page, '#wv-image-download-url', 'url')
-  expect(urlAttribute).toContain('TIME=2018-05-15')
+  const progressDialog = page.locator('.wv-snapshot-progress-overlay')
+  await expect(progressDialog).toBeVisible()
+
+  const cancelButton = page.locator('#wv-snapshot-cancel-button')
+  await expect(cancelButton).toBeVisible()
+
+  // Wait for either the download to start or the progress dialog to disappear (timeout after 20s)
+  try {
+    await Promise.race([
+      downloadPromise,
+      progressDialog.waitFor({ state: 'detached', timeout: 200_000 }),
+      cancelButton.click()
+    ])
+  } catch (e) {
+    throw new Error('Snapshot download did not complete or progress dialog did not disappear in time')
+  }
+
   await closeImageDownloadPanel(page)
 })

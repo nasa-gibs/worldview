@@ -1,4 +1,3 @@
-// @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { openImageDownloadPanel, closeModal } = require('../../test-utils/hooks/wvHooks')
@@ -11,8 +10,7 @@ const startParams = [
   'p=geographic',
   'v=-180,-90,180,90',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
-  't=2018-06-01',
-  'imageDownload='
+  't=2018-06-01'
 ]
 
 const defaultCoords = '180.0000'

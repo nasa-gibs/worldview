@@ -1,4 +1,4 @@
-// // @ts-check
+//
 // const { test, expect } = require('@playwright/test')
 
 // let page

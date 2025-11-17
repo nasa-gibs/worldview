@@ -1,4 +1,3 @@
-// @ts-check
 const { test, expect } = require('@playwright/test')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
 const createSelectors = require('../../test-utils/global-variables/selectors')
@@ -15,7 +14,6 @@ let selectors
 const expectedResolutions = '30m60m125m250m500m1km5km10km'
 const expectedFormats = 'JPEGPNGGeoTIFFKMZ'
 const expectedWorldFile = 'NoYes'
-const expectedSize = '8200px x 8200px'
 const expectedPolarFormats = 'JPEGPNGGeoTIFF'
 
 test.describe.configure({ mode: 'serial' })
@@ -45,11 +43,6 @@ test('Check formats', async () => {
 test('Check worldfile option', async () => {
   const { imageWorldFile } = selectors
   await expect(imageWorldFile).toHaveText(expectedWorldFile)
-})
-
-test('Check max size', async () => {
-  const { imageMaxSize } = selectors
-  await expect(imageMaxSize).toHaveText(expectedSize)
 })
 
 test('Check arctic formats', async () => {
