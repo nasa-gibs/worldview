@@ -113,8 +113,6 @@
 		"TEMPO_L3_Ozone_Column_Amount",
 		"TEMPO_L3_Ozone_Cloud_Fraction",
 		"TEMPO_L3_Ozone_UV_Aerosol_Index",
-		"TEMPO_L3_Ozone_Profile_Total_Column",
-		"TEMPO_L3_Ozone_Profile_Troposphere_Column",
 		"VIIRS_NOAA21_DayNightBand",
 		"VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
 		"VIIRS_NOAA20_DayNightBand_AtSensor_M15",
