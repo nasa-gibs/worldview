@@ -67,7 +67,7 @@ async function main () {
 }
 
 async function validateFile (filePath) {
-  if (argv.mode === 'verbose') console.warn(`${prog}: Validating ${filePath}`)
+  if (argv.mode === 'verbose') console.trace(`Validating ${filePath}`)
   const layerFile = fs.readFileSync(filePath)
   const layer = JSON.parse(layerFile)
   const valid = validate(layer)

@@ -40,6 +40,7 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const MAX_DAYS = 100;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
 const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
@@ -253,9 +254,9 @@ function ChartingModeOptions(props) {
    * @param {Object} layerInfo
    * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(initialStartDate);
-    const endDateForImageStat = formatDateForImageStat(initialEndDate);
+  function getImageStatRequestParameters(layerInfo, timeSpan, startDate, endDate) {
+    const startDateForImageStat = formatDateForImageStat(startDate);
+    const endDateForImageStat = formatDateForImageStat(endDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
@@ -301,6 +302,7 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
+
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -348,6 +350,11 @@ function ChartingModeOptions(props) {
    */
   function formatGIBSDataForRecharts(data) {
     const xAxisNames = getKeysFromObj(data.min);
+    // Add error days to data
+    if (data.errors?.error_count > 0) {
+      xAxisNames.push(...data.errors.error_days.replace(/[[\]']/g, '').split(', '));
+      xAxisNames.sort();
+    }
     const rechartsData = [];
     for (let i = 0; i < xAxisNames.length; i += 1) {
       const name = xAxisNames[i];
@@ -362,6 +369,49 @@ function ChartingModeOptions(props) {
       rechartsData.push(entry);
     }
     return rechartsData;
+  }
+
+  function combineData(inputArr) {
+    if (!inputArr || inputArr.length === 0) return inputArr;
+    if (inputArr.length === 1) return inputArr[0];
+    const output = {
+      ok: true,
+      body: {
+        errors: {
+          error_count: 0,
+          error_days: [],
+        },
+        hist: [],
+        max: {},
+        mean: {},
+        median: {},
+        min: {},
+        stderr: 0,
+        stdev: {},
+      },
+    };
+    if (inputArr.every((dataset) => !dataset.ok)) {
+      output.ok = false;
+      output.error = inputArr[0].error;
+      return output;
+    }
+    inputArr?.forEach((dataset) => {
+      if (dataset.ok && !!dataset.body) {
+        Object.keys(dataset.body).forEach((key) => {
+          if (key === 'errors') {
+            output.body.errors.error_count += dataset.body.errors.error_count;
+            output.body.errors.error_days.push(...dataset.body.errors.error_days.replaceAll(/('|\[|\])/gi, '').split(', '));
+          } else if (key === 'hist') {
+            output.body.hist.push(...dataset.body.hist);
+          } else if (key === 'stderr') {
+            output.body.stderr += parseFloat(dataset.body.stderr);
+          } else {
+            output.body[key] = { ...output.body[key], ...dataset.body[key] };
+          }
+        });
+      }
+    });
+    return output;
   }
 
   async function onRequestChartClick() {
@@ -382,9 +432,24 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
-      const data = await getImageStatData(requestURI);
+      const numDaysRequested = Math.floor((initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)) + 1;
+      const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
+      const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
+      const promises = [];
+      for (let i = 0; i < requestsNeeded; i += 1) {
+        const requestStartDate = new Date(initialStartDate.getTime());
+        requestStartDate.setDate(requestStartDate.getDate() + (i * requestsSize));
+        let requestEndDate = new Date(requestStartDate.getTime());
+        requestEndDate.setDate(requestEndDate.getDate() + requestsSize - 1);
+        if (requestEndDate > initialEndDate) {
+          requestEndDate = new Date(initialEndDate.getTime());
+        }
+        const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection, requestStartDate, requestEndDate);
+        const requestURI = getImageStatStatsRequestURL(uriParameters);
+        promises.push(getImageStatData(requestURI));
+      }
+      const dataArr = await Promise.all(promises);
+      const data = combineData(dataArr);
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
@@ -406,7 +471,6 @@ function ChartingModeOptions(props) {
         subtitle: layerInfo.subtitle,
         unit: unitOfMeasure,
         ...data.body,
-        ...uriParameters,
       };
 
       if (timeSpanSelection === 'range') {
@@ -426,7 +490,7 @@ function ChartingModeOptions(props) {
           startDateFormatted,
           endDateFormatted,
           numRangeDays,
-          isTruncated: numRangeDays > STEP_NUM,
+          isTruncated: false,
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
         });

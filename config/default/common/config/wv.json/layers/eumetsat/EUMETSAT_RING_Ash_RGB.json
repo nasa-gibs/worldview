@@ -1,0 +1,30 @@
+{
+  "layers": {
+    "EUMETSAT_RING_Ash_RGB": {
+      "id": "EUMETSAT_RING_Ash_RGB",
+      "title": "Volcanic Ash (3 hour, Geostationary Ring)",
+      "subtitle": "MSG/SEVIRI, Himawari/AHI, GOES/ABI",
+      "description": "eumetsat/EUMETSAT_RING_Ash_RGB",
+      "tags": "eumetsat ring",
+      "group": "overlays",
+      "type": "wms",
+      "format": "image/png",
+      "wrapX": true,
+      "disableSnapshot": true,
+      "period": "subdaily",
+      "layergroup": "Geostationary",
+      "startDate": "2021-02-06T00:00:00Z",
+      "dateRanges": [
+        {
+          "dateInterval": "180"
+        }
+      ],
+      "projections": {
+        "geographic": {
+          "source": "EUMETSAT:wms",
+          "layer": "mumi:wideareacoverage_rgb_ash"
+        }
+      }
+    }
+  }
+}

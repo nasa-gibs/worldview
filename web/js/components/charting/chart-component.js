@@ -46,11 +46,12 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysArr = errors?.error_days?.replaceAll(/('|\[|\])/gi, '').split(', ') || [];
+  const errorDaysArr = errors?.error_days || [];
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
+  const pointSizes = [3, 2, 1.5, 1.25];
   const formattedUnit = unit ? ` (${unit})` : '';
 
   function formatToThreeDigits(str) {
@@ -93,23 +94,100 @@ function ChartComponent (props) {
 
   function CustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
+      if (!Number.isNaN(payload[0].value)) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label" style={{ color: 'gray' }}>
+              {label}
+            </p>
+            <p className="label" style={{ color: '#000' }}>
+              <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
+              {`${payload[0].name}${formattedUnit}: `}
+              <b>
+                {formatToThreeDigits(payload[0].value)}
+              </b>
+            </p>
+          </div>
+        );
+      }
       return (
         <div className="custom-tooltip">
           <p className="label" style={{ color: 'gray' }}>
             {label}
           </p>
           <p className="label" style={{ color: '#000' }}>
-            <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
-            {`${payload[0].name}${formattedUnit}: `}
-            <b>
-              {formatToThreeDigits(payload[0].value)}
-            </b>
+            No data
           </p>
         </div>
       );
     }
 
     return null;
+  }
+
+  // Gets the indices of the tick positions so that they are evenly spaced
+  function getTickPositions(dataLength) {
+    // If dataLength is too small, just show first and last tick
+    if (dataLength < 8) return [0, dataLength - 1];
+
+    const numGaps = dataLength < 15 ? 4 : 5;
+    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
+
+    // Last gap must be at least 3 to give extra room for end-aligned label
+    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
+
+    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
+    let leftoverGap = (dataLength - 1) - gapsTotal;
+
+    let i = 0;
+    // Reduce gaps that are too large due to last gap size
+    while (leftoverGap < 0 && i < numGaps - 1) {
+      gapsArr[i] -= 1;
+      leftoverGap += 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    i = 0;
+    // Distribute extra gaps across existing gaps
+    while (leftoverGap > 0 && i < numGaps - 1) {
+      gapsArr[i] += 1;
+      leftoverGap -= 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    // Build final array of tick positions based on calculated gaps
+    const tickPosArr = [0];
+    for (let i = 0; i < gapsArr.length; i += 1) {
+      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[i]);
+    }
+    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
+
+    return tickPosArr;
+  }
+
+  const tickPositions = getTickPositions(data.length);
+
+  function CustomXAxisTick(obj) {
+    const {
+      x, y, fill, textAnchor, visibleTicksCount, index, payload,
+    } = obj;
+    const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
+    const isLabeled = tickPositions.includes(index);
+    if (isLabeled) {
+      return (
+        <g transform={`translate(${x}, ${y})`}>
+          <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
+          <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
+            {payload.value}
+          </text>
+        </g>
+      );
+    }
+    return (
+      <g transform={`translate(${x}, ${y})`}>
+        <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
+      </g>
+    );
   }
 
   const yAxisValuesArr = getYAxisValues(data);
@@ -131,12 +209,38 @@ function ChartComponent (props) {
   function getLineChart(chartData) {
     const chartLineName = getLineNames(chartData);
 
+    function CustomizedDot(props) {
+      const {
+        cx,
+        cy,
+        fill,
+        stroke,
+        payload,
+      } = props;
+
+      if (!payload.mean) return;
+
+      const radius = pointSizes[Math.max(Math.floor(chartData.length / 26), 1) - 1];
+
+      const transformFunc = `translate(${radius + 1} ${radius + 1})`;
+
+      return (
+        <svg x={cx - radius - 1} y={cy - radius - 1}>
+          <g transform={transformFunc}>
+            <circle r={radius + 0.5} fill={stroke} />
+            <circle r={radius - 0.5} fill={fill} />
+          </g>
+        </svg>
+      );
+    }
+
     const chartLinesArr = chartLineName.map((id, index) => (
       <Line
         type="linear"
         key={id}
         dataKey={chartLineName[index]}
         stroke={lineColors[index]}
+        dot={<CustomizedDot />}
       />
     ));
     return chartLinesArr;
@@ -147,7 +251,7 @@ function ChartComponent (props) {
    * @param {Object} chartData
    */
   function getQuickStatistics(chartData) {
-    const count = chartData.length;
+    let count = 0;
     let minTotal = 0;
     let maxTotal = 0;
     let meanTotal = 0;
@@ -155,11 +259,14 @@ function ChartComponent (props) {
     let stddevTotal = 0;
 
     for (let i = 0; i < chartData.length; i += 1) {
-      meanTotal += chartData[i].mean;
-      minTotal += chartData[i].min;
-      maxTotal += chartData[i].max;
-      medianTotal += chartData[i].median;
-      stddevTotal += chartData[i].stddev;
+      if (!Number.isNaN(chartData[i].mean)) {
+        meanTotal += chartData[i].mean;
+        minTotal += chartData[i].min;
+        maxTotal += chartData[i].max;
+        medianTotal += chartData[i].median;
+        stddevTotal += chartData[i].stddev;
+        count += 1;
+      }
     }
 
     return (
@@ -297,7 +404,7 @@ function ChartComponent (props) {
             <Tooltip content={CustomTooltip} />
             {' '}
             {getLineChart(data)}
-            <XAxis dataKey="name" stroke="#a6a5a6" />
+            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick />} tickLine={false} />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -310,7 +417,12 @@ function ChartComponent (props) {
                 dx: -40,
               }}
             />
-            <Legend formatter={() => `${title}`} />
+            <Legend
+              formatter={() => `${title}`}
+              wrapperStyle={{
+                paddingTop: '7px',
+              }}
+            />
           </LineChart>
         </div>
         <div className="charting-stat-text">
@@ -392,7 +504,7 @@ function ChartComponent (props) {
               />
               <i className="charting-disclaimer-block">
                 {`${errors.error_count} `}
-                dates requested have no data, so are not shown in the chart.
+                {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
               </i>
               {!errorCollapsed
               && (
