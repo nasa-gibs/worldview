@@ -143,7 +143,7 @@
     "tar": "^7.5.2",
     "terser-webpack-plugin": "^5.3.14",
     "uuid": "^13.0.0",
-    "webpack": "^5.101.3",
+    "webpack": "^5.102.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-cli": "^6.0.1",
     "webpack-dev-middleware": "^7.4.5",
