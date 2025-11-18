@@ -225,9 +225,15 @@ function ChartComponent (props) {
         payload,
       } = props;
 
-      if (!payload.mean) return;
+      // Guard: skip if coordinates or value are not finite numbers
+      if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
+      if (!Number.isFinite(payload?.mean)) return null;
 
-      const radius = pointSizes[Math.max(Math.floor(chartData.length / 26), 1) - 1];
+      // Determine a safe radius based on dataset length with clamping + fallback
+      const len = Number.isFinite(chartData?.length) && chartData.length > 0 ? chartData.length : 1;
+      const idxBase = Math.max(Math.floor(len / 26), 1) - 1; // 0 for <26, 1 for 26–51, etc.
+      const idx = Math.min(pointSizes.length - 1, Math.max(0, idxBase));
+      const radius = pointSizes[idx] ?? 2; // fallback radius
 
       const transformFunc = `translate(${radius + 1} ${radius + 1})`;
 
