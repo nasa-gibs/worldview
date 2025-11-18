@@ -46,7 +46,14 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysArr = errors?.error_days || [];
+  const errorDaysRaw = errors?.error_days;
+  const errorDaysArr = Array.isArray(errorDaysRaw)
+    ? errorDaysRaw
+    : typeof errorDaysRaw === 'string'
+      ? errorDaysRaw.split(',').map((s) => s.trim()).filter(Boolean)
+      : errorDaysRaw == null
+        ? []
+        : [errorDaysRaw];
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
@@ -270,50 +277,48 @@ function ChartComponent (props) {
     }
 
     return (
-      <>
-        <div className="charting-statistics-container">
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Median:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(medianTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Mean:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(meanTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Min:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(minTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Max:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(maxTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Stdev:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(stddevTotal / count)}
-            </span>
-          </div>
+      <div className="charting-statistics-container">
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Median:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(medianTotal / count)}
+          </span>
         </div>
-      </>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Mean:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(meanTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Min:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(minTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Max:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(maxTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Stdev:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(stddevTotal / count)}
+          </span>
+        </div>
+      </div>
     );
   }
 
@@ -506,17 +511,22 @@ function ChartComponent (props) {
                 {`${errors.error_count} `}
                 {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
               </i>
-              {!errorCollapsed
-              && (
+              {!errorCollapsed && (
                 <div className="charting-disclaimer-dates">
                   <i className="charting-disclaimer-block">
-                    {errorDaysArr.map((date, index) => (
-                      <>
-                        {date.split('T')[0]}
-                        {index < errorDaysArr.length - 1 && ', '}
-                        &nbsp;&nbsp;
-                      </>
-                    ))}
+                    {errorDaysArr.map((item, index) => {
+                      const dateStr = typeof item === 'string'
+                        ? item
+                        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+                      const short = (dateStr || '').split('T')[0];
+                      return (
+                        <React.Fragment key={dateStr}>
+                          {short}
+                          {index < errorDaysArr.length - 1 && ', '}
+                          &nbsp;&nbsp;
+                        </React.Fragment>
+                      );
+                    })}
                   </i>
                 </div>
               )}
