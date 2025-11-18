@@ -282,7 +282,7 @@ function ChartingModeOptions(props) {
       areaOfInterestCoords,
       bins,
     } = uriParameters;
-    let requestURL = `https://worldview.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
+    let requestURL = `https://worldview.uat.earthdata.nasa.gov/service/imagestat/get_stats?_type=${type}&timestamp=${timestamp}&steps=${steps}&layer=${layer}&colormap=${colormap}&bbox=${areaOfInterestCoords}&bins=${bins}`;
     if (type !== 'date') {
       requestURL += `&end_timestamp=${endTimestamp}`;
     }
@@ -302,7 +302,6 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
-
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -352,7 +351,7 @@ function ChartingModeOptions(props) {
     const xAxisNames = getKeysFromObj(data.min);
     // Add error days to data
     if (data.errors?.error_count > 0) {
-      xAxisNames.push(...data.errors.error_days.replace(/[[\]']/g, '').split(', '));
+      xAxisNames.push(...data.errors.error_days);
       xAxisNames.sort();
     }
     const rechartsData = [];
