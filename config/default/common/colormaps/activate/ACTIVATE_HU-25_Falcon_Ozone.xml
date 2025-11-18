@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ColorMaps xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="http://gibs.earthdata.nasa.gov/schemas/ColorMap_v1.3.xsd">
-  <ColorMap title="Ozone and Flight Track (Ozone and Flight Track (Applanix, 2B Technologies Ozone Monitor, ACTIVATE, NASA HU-25)">
+  <ColorMap title="Ozone and Flight Track (Applanix, 2B Technologies Ozone Monitor, ACTIVATE, NASA HU-25)">
     <Entries>
       <ColorMapEntry rgb="0,0,0" transparent="true" nodata="true" ref="0" />
     </Entries>
