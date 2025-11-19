@@ -67,7 +67,7 @@ function ChartComponent (props) {
         const arr = JSON.parse(jsonish);
         if (Array.isArray(arr)) return arr.map((s) => String(s));
       } catch {
-        // fall through to manual split
+        // fall through
       }
     }
 
@@ -92,7 +92,7 @@ function ChartComponent (props) {
 
   const format = util.getCoordinateFormat();
 
-  // Arbitrary array of colors to use
+  // Colors / sizes
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
   const pointSizes = [3, 2, 1.5, 1.25];
   const formattedUnit = unit ? ` (${unit})` : '';
@@ -113,16 +113,73 @@ function ChartComponent (props) {
     return s.includes('T') ? s.split('T')[0] : s;
   }
 
-  // Build a data copy with stable category labels for the X axis
+  // Build data with stable date labels
   const dataWithLabels = useMemo(
-    () => (Array.isArray(data) ? data.map((d) => ({ ...d, dateLabel: normalizeDateLabel(d) })) : []),
+    () => (Array.isArray(data) ? data.map((d, idx) => ({
+      ...d,
+      dateLabel: normalizeDateLabel(d),
+      _idx: idx,
+    })) : []),
     [data],
   );
 
+  // Compute evenly spaced tick indices (reuse prior logic)
+  function getTickPositions(dataLength) {
+    if (dataLength < 8) return [0, Math.max(dataLength - 1, 0)];
+    const numGaps = dataLength < 15 ? 4 : 5;
+    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
+    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
+    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
+    let leftoverGap = (dataLength - 1) - gapsTotal;
+    let i = 0;
+    while (leftoverGap < 0 && i < numGaps - 1) {
+      gapsArr[i] -= 1;
+      leftoverGap += 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+    i = 0;
+    while (leftoverGap > 0 && i < numGaps - 1) {
+      gapsArr[i] += 1;
+      leftoverGap -= 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+    const tickPosArr = [0];
+    for (let j = 0; j < gapsArr.length; j += 1) {
+      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[j]);
+    }
+    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
+    return tickPosArr;
+  }
+
+  const tickPositions = useMemo(() => getTickPositions(dataWithLabels.length), [dataWithLabels.length]);
+
+  // Custom tick: show label only at selected positions, minor ticks elsewhere
+  function CustomXAxisTick(props) {
+    const {
+      x, y, index,
+    } = props;
+    const isMajor = tickPositions.includes(index);
+    const label = dataWithLabels[index]?.dateLabel || '';
+    if (isMajor && label) {
+      return (
+        <g transform={`translate(${x}, ${y})`}>
+          <line x1="0" y1="0" x2="0" y2="-8" stroke="#a6a5a6" />
+          <text x={0} y={0} dy={16} textAnchor="middle" fill="#a6a5a6">
+            {label}
+          </text>
+        </g>
+      );
+    }
+    // Minor tick mark
+    return (
+      <g transform={`translate(${x}, ${y})`}>
+        <line x1="0" y1="-4" x2="0" y2="-8" stroke="#a6a5a6" />
+      </g>
+    );
+  }
+
   /**
-   * Return an array of provided min & max values buffered by 10%
-   * @param {number} min | the lowest mean value of the collected data
-   * @param {number} max | the highest mean value of the collected data
+   * Return buffered min/max for Y axis
    */
   function bufferYAxisMinAndMax(min, max) {
     const yAxisMin = Math.floor(min * 4) / 4;
@@ -155,27 +212,19 @@ function ChartComponent (props) {
       if (!Number.isNaN(payload[0].value)) {
         return (
           <div className="custom-tooltip">
-            <p className="label" style={{ color: 'gray' }}>
-              {label}
-            </p>
+            <p className="label" style={{ color: 'gray' }}>{label}</p>
             <p className="label" style={{ color: '#000' }}>
               <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
               {`${payload[0].name}${formattedUnit}: `}
-              <b>
-                {formatToThreeDigits(payload[0].value)}
-              </b>
+              <b>{formatToThreeDigits(payload[0].value)}</b>
             </p>
           </div>
         );
       }
       return (
         <div className="custom-tooltip">
-          <p className="label" style={{ color: 'gray' }}>
-            {label}
-          </p>
-          <p className="label" style={{ color: '#000' }}>
-            No data
-          </p>
+          <p className="label" style={{ color: 'gray' }}>{label}</p>
+          <p className="label" style={{ color: '#000' }}>No data</p>
         </div>
       );
     }
@@ -204,11 +253,7 @@ function ChartComponent (props) {
 
     function CustomizedDot(props) {
       const {
-        cx,
-        cy,
-        fill,
-        stroke,
-        payload,
+        cx, cy, fill, stroke, payload,
       } = props;
 
       // Guard: skip if coordinates or value are not finite numbers
@@ -217,10 +262,9 @@ function ChartComponent (props) {
 
       // Determine a safe radius based on dataset length with clamping + fallback
       const len = Number.isFinite(chartData?.length) && chartData.length > 0 ? chartData.length : 1;
-      const idxBase = Math.max(Math.floor(len / 26), 1) - 1; // 0 for <26, 1 for 26–51, etc.
+      const idxBase = Math.max(Math.floor(len / 26), 1) - 1;
       const idx = Math.min(pointSizes.length - 1, Math.max(0, idxBase));
-      const radius = pointSizes[idx] ?? 2; // fallback radius
-
+      const radius = pointSizes[idx] ?? 2;
       const transformFunc = `translate(${radius + 1} ${radius + 1})`;
 
       return (
@@ -232,8 +276,7 @@ function ChartComponent (props) {
         </svg>
       );
     }
-
-    const chartLinesArr = chartLineName.map((id, index) => (
+    return chartLineName.map((id, index) => (
       <Line
         type="linear"
         key={id}
@@ -242,7 +285,6 @@ function ChartComponent (props) {
         dot={<CustomizedDot />}
       />
     ));
-    return chartLinesArr;
   }
 
   /**
@@ -315,22 +357,13 @@ function ChartComponent (props) {
   }
 
   useEffect(() => {
-    const boxFeature = new OlFeature({
-      geometry: fromExtent(coordinates),
-    });
+    const boxFeature = new OlFeature({ geometry: fromExtent(coordinates) });
     boxFeature.setStyle(new OlStyle({
-      stroke: new OlStyleStroke({
-        color: 'rgba(255, 255, 255, .6)',
-        width: 1,
-      }),
-      fill: new OlStyleFill({
-        color: 'rgba(255, 255, 255, .3)',
-      }),
+      stroke: new OlStyleStroke({ color: 'rgba(255, 255, 255, .6)', width: 1 }),
+      fill: new OlStyleFill({ color: 'rgba(255, 255, 255, .3)' }),
     }));
     const boxLayer = new OlVectorLayer({
-      source: new OlVectorSource({
-        features: [boxFeature],
-      }),
+      source: new OlVectorSource({ features: [boxFeature] }),
     });
 
     const createLayerWrapper = async () => {
@@ -339,14 +372,9 @@ function ChartComponent (props) {
 
       const layersList = [];
       backgroundLayerGroup.getLayers().getArray().forEach((layer) => {
-        layersList.push(new OlLayerTile({
-          source: layer.getSource(),
-        }));
+        layersList.push(new OlLayerTile({ source: layer.getSource() }));
       });
-      const copiedLayerGroup = new OlLayerGroup({
-        layers: layersList,
-      });
-
+      const copiedLayerGroup = new OlLayerGroup({ layers: layersList });
       mapInstanceRef.current = new OlMap({
         view: new OlView({
           center: mapView.getCenter(),
@@ -364,21 +392,15 @@ function ChartComponent (props) {
       mapInstanceRef.current.on('moveend', () => {
         const boxCenter = getCenter(boxFeature.getGeometry().getExtent());
         const minimapCenter = minimapView.getCenter();
-        if (boxCenter[0] === minimapCenter[0] && boxCenter[1] === minimapCenter[1]) {
-          return;
-        }
-        minimapView.animate({
-          center: boxCenter,
-          duration: 350,
-          easing: inAndOut,
-        });
+        if (boxCenter[0] === minimapCenter[0] && boxCenter[1] === minimapCenter[1]) return;
+        minimapView.animate({ center: boxCenter, duration: 350, easing: inAndOut });
       });
     };
 
     createLayerWrapper();
 
     return () => {
-      mapInstanceRef.current.setTarget(null);
+      mapInstanceRef.current?.setTarget(null);
       mapInstanceRef.current = null;
     };
   }, [overviewMapLayerDef]);
@@ -399,15 +421,14 @@ function ChartComponent (props) {
             }}
           >
             <Tooltip content={CustomTooltip} />
-            {' '}
             {getLineChart(dataWithLabels)}
             <XAxis
               dataKey="dateLabel"
-              type="category"
+              tick={<CustomXAxisTick />}
+              interval={0} /* ensure every position gets a tick (label filtered by CustomXAxisTick) */
               allowDuplicatedCategory={false}
-              interval={0}
               tickLine={false}
-              tickMargin={6}
+              height={50}
             />
             <YAxis
               type="number"
@@ -423,9 +444,7 @@ function ChartComponent (props) {
             />
             <Legend
               formatter={() => `${title}`}
-              wrapperStyle={{
-                paddingTop: '7px',
-              }}
+              wrapperStyle={{ paddingTop: '7px' }}
             />
           </LineChart>
         </div>
@@ -445,11 +464,7 @@ function ChartComponent (props) {
           </div>
           <div />
           <div id="charting-coordinates-container">
-            <h3>
-              <b>
-                Coordinates
-              </b>
-            </h3>
+            <h3><b>Coordinates</b></h3>
             <br />
             <div className="charting-coordinates-inner">
               <div />
@@ -467,58 +482,41 @@ function ChartComponent (props) {
         <div className="charting-disclaimer">
           <strong className="charting-disclaimer-pre">Note: </strong>
           <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
-          {isTruncated
-          && (
+          {isTruncated && (
             <div className="charting-disclaimer-upper">
-              <FontAwesomeIcon
-                icon="exclamation-triangle"
-                className="wv-alert-icon"
-                size="1x"
-                widthAuto
-              />
+              <FontAwesomeIcon icon="exclamation-triangle" className="wv-alert-icon" size="1x" widthAuto />
               <i className="charting-disclaimer-block">
                 As part of this beta feature release, the number of data points plotted between
-                <b>
-                  {` ${startDate} `}
-                </b>
+                <b>{` ${startDate} `}</b>
                 and
-                <b>
-                  {` ${endDate} `}
-                </b>
+                <b>{` ${endDate} `}</b>
                 have been reduced from
-                <b>
-                  {` ${numRangeDays} `}
-                </b>
+                <b>{` ${numRangeDays} `}</b>
                 to
-                <b>
-                  {` ${numPoints}`}
-                </b>
+                <b>{` ${numPoints}`}</b>
                 .
               </i>
             </div>
           )}
-          {errors && errors.error_count > 0
-          && (
+          {errors && errors.error_count > 0 && (
             <div className="charting-disclaimer-lower">
-              <FontAwesomeIcon
-                icon="exclamation-triangle"
-                className="wv-alert-icon"
-                size="1x"
-                widthAuto
-              />
+              <FontAwesomeIcon icon="exclamation-triangle" className="wv-alert-icon" size="1x" widthAuto />
               <i className="charting-disclaimer-block">
                 {`${errors.error_count} `}
-                {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
+                {errors.error_count === 1
+                  ? 'requested date has no data and is represented as a gap in the chart.'
+                  : 'requested dates have no data and are represented as gaps in the chart.'}
               </i>
               {!errorCollapsed && (
                 <div className="charting-disclaimer-dates">
-                  <i className="charting-disclaimer-block">
-                    {errorDatesDisplay}
-                  </i>
+                  <i className="charting-disclaimer-block">{errorDatesDisplay}</i>
                 </div>
               )}
               <div className="error-expand-button">
-                <span className="error-expand-button-inner" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+                <span
+                  className="error-expand-button-inner"
+                  onClick={() => setErrorCollapsed(!errorCollapsed)}
+                >
                   {errorCollapsed ? 'more' : 'less'}
                   <FontAwesomeIcon
                     className="layer-group-collapse"
@@ -536,15 +534,8 @@ function ChartComponent (props) {
 }
 
 const mapStateToProps = (state) => {
-  const {
-    map,
-    layers,
-  } = state;
-
-  const {
-    ui,
-  } = map;
-
+  const { map, layers } = state;
+  const { ui } = map;
   const layerId = 'Coastlines_15m';
 
   return {
@@ -556,6 +547,9 @@ const mapStateToProps = (state) => {
 
 ChartComponent.propTypes = {
   liveData: PropTypes.object,
+  mapView: PropTypes.object,
+  createLayer: PropTypes.func,
+  overviewMapLayerDef: PropTypes.object,
 };
 
 export default connect(
