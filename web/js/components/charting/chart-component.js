@@ -1,4 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useMemo,
+} from 'react';
 import { connect } from 'react-redux';
 import {
   LineChart, Line, XAxis, YAxis, Legend, Tooltip,
@@ -46,14 +51,45 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysRaw = errors?.error_days;
-  const errorDaysArr = Array.isArray(errorDaysRaw)
-    ? errorDaysRaw
-    : typeof errorDaysRaw === 'string'
-      ? errorDaysRaw.split(',').map((s) => s.trim()).filter(Boolean)
-      : errorDaysRaw == null
-        ? []
-        : [errorDaysRaw];
+  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  const errorDaysArr = useMemo(() => {
+    const raw = errors?.error_days;
+    if (Array.isArray(raw)) return raw.map((s) => String(s));
+    if (raw == null) return [];
+    if (typeof raw !== 'string') return [String(raw)];
+
+    const trimmed = raw.trim();
+
+    // Try JSON parse if looks like an array; tolerate single quotes
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const jsonish = trimmed.replace(/'/g, '"');
+        const arr = JSON.parse(jsonish);
+        if (Array.isArray(arr)) return arr.map((s) => String(s));
+      } catch {
+        // fall through to manual split
+      }
+    }
+
+    // Fallback: strip brackets, split on comma, strip surrounding quotes
+    return trimmed
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+  }, [errors]);
+
+  // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
+  const errorDatesDisplay = useMemo(() => errorDaysArr
+    .map((item) => {
+      const dateStr = typeof item === 'string'
+        ? item
+        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+      return (dateStr || '').split('T')[0];
+    })
+    .filter(Boolean)
+    .join(', \u00A0\u00A0'), [errorDaysArr]);
+
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
@@ -67,6 +103,21 @@ function ChartComponent (props) {
     }
     return parseFloat(str).toFixed(3);
   }
+
+  // Normalize X-axis label to a date string (YYYY-MM-DD)
+  function normalizeDateLabel(datum) {
+    const raw = datum?.name ?? datum?.date ?? datum?.time ?? '';
+    const s = String(raw || '');
+    if (!s) return '';
+    // If ISO-like, take date portion; otherwise return as-is
+    return s.includes('T') ? s.split('T')[0] : s;
+  }
+
+  // Build a data copy with stable category labels for the X axis
+  const dataWithLabels = useMemo(
+    () => (Array.isArray(data) ? data.map((d) => ({ ...d, dateLabel: normalizeDateLabel(d) })) : []),
+    [data],
+  );
 
   /**
    * Return an array of provided min & max values buffered by 10%
@@ -132,76 +183,11 @@ function ChartComponent (props) {
     return null;
   }
 
-  // Gets the indices of the tick positions so that they are evenly spaced
-  function getTickPositions(dataLength) {
-    // If dataLength is too small, just show first and last tick
-    if (dataLength < 8) return [0, dataLength - 1];
-
-    const numGaps = dataLength < 15 ? 4 : 5;
-    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
-
-    // Last gap must be at least 3 to give extra room for end-aligned label
-    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
-
-    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
-    let leftoverGap = (dataLength - 1) - gapsTotal;
-
-    let i = 0;
-    // Reduce gaps that are too large due to last gap size
-    while (leftoverGap < 0 && i < numGaps - 1) {
-      gapsArr[i] -= 1;
-      leftoverGap += 1;
-      i = (i + 1) % (numGaps - 1);
-    }
-
-    i = 0;
-    // Distribute extra gaps across existing gaps
-    while (leftoverGap > 0 && i < numGaps - 1) {
-      gapsArr[i] += 1;
-      leftoverGap -= 1;
-      i = (i + 1) % (numGaps - 1);
-    }
-
-    // Build final array of tick positions based on calculated gaps
-    const tickPosArr = [0];
-    for (let i = 0; i < gapsArr.length; i += 1) {
-      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[i]);
-    }
-    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
-
-    return tickPosArr;
-  }
-
-  const tickPositions = getTickPositions(data.length);
-
-  function CustomXAxisTick(obj) {
-    const {
-      x, y, fill, textAnchor, visibleTicksCount, index, payload,
-    } = obj;
-    const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
-    const isLabeled = tickPositions.includes(index);
-    if (isLabeled) {
-      return (
-        <g transform={`translate(${x}, ${y})`}>
-          <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
-          <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
-            {payload.value}
-          </text>
-        </g>
-      );
-    }
-    return (
-      <g transform={`translate(${x}, ${y})`}>
-        <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
-      </g>
-    );
-  }
-
-  const yAxisValuesArr = getYAxisValues(data);
+  const yAxisValuesArr = getYAxisValues(dataWithLabels);
 
   /**
    * Extracts each key from the provided object & returns the list, removing 'name' from the collection
-   * @param {Object} chartData
+   * @param {Object} obj
    */
   function getLineNames(obj) {
     // Add additional fields to the chart here!!
@@ -404,7 +390,7 @@ function ChartComponent (props) {
           <LineChart
             width={600}
             height={300}
-            data={data}
+            data={dataWithLabels}
             margin={{
               top: 20,
               right: 10,
@@ -414,8 +400,15 @@ function ChartComponent (props) {
           >
             <Tooltip content={CustomTooltip} />
             {' '}
-            {getLineChart(data)}
-            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick />} tickLine={false} />
+            {getLineChart(dataWithLabels)}
+            <XAxis
+              dataKey="dateLabel"
+              type="category"
+              allowDuplicatedCategory={false}
+              interval={0}
+              tickLine={false}
+              tickMargin={6}
+            />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -445,7 +438,7 @@ function ChartComponent (props) {
               </b>
             </h3>
             <br />
-            {getQuickStatistics(data)}
+            {getQuickStatistics(dataWithLabels)}
           </div>
           <div id="charting-minimap-container">
             <div id="charting-minimap-inner" />
@@ -520,19 +513,7 @@ function ChartComponent (props) {
               {!errorCollapsed && (
                 <div className="charting-disclaimer-dates">
                   <i className="charting-disclaimer-block">
-                    {errorDaysArr.map((item, index) => {
-                      const dateStr = typeof item === 'string'
-                        ? item
-                        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
-                      const short = (dateStr || '').split('T')[0];
-                      return (
-                        <React.Fragment key={dateStr}>
-                          {short}
-                          {index < errorDaysArr.length - 1 && ', '}
-                          &nbsp;&nbsp;
-                        </React.Fragment>
-                      );
-                    })}
+                    {errorDatesDisplay}
                   </i>
                 </div>
               )}
