@@ -51,7 +51,7 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  // Normalize error days input robustly
   const errorDaysArr = useMemo(() => {
     const raw = errors?.error_days;
     if (Array.isArray(raw)) return raw.map((s) => String(s));
@@ -66,9 +66,7 @@ function ChartComponent (props) {
         const jsonish = trimmed.replace(/'/g, '"');
         const arr = JSON.parse(jsonish);
         if (Array.isArray(arr)) return arr.map((s) => String(s));
-      } catch {
-        // fall through
-      }
+      } catch { /* ignore */ }
     }
 
     // Fallback: strip brackets, split on comma, strip surrounding quotes
@@ -79,16 +77,18 @@ function ChartComponent (props) {
       .filter(Boolean);
   }, [errors]);
 
-  // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
-  const errorDatesDisplay = useMemo(() => errorDaysArr
-    .map((item) => {
-      const dateStr = typeof item === 'string'
-        ? item
-        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
-      return (dateStr || '').split('T')[0];
-    })
-    .filter(Boolean)
-    .join(', \u00A0\u00A0'), [errorDaysArr]);
+  const errorDatesDisplay = useMemo(
+    () => errorDaysArr
+      .map((item) => {
+        const dateStr = typeof item === 'string'
+          ? item
+          : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+        return (dateStr || '').split('T')[0];
+      })
+      .filter(Boolean)
+      .join(', \u00A0\u00A0'),
+    [errorDaysArr],
+  );
 
   const format = util.getCoordinateFormat();
 
@@ -98,6 +98,7 @@ function ChartComponent (props) {
   const formattedUnit = unit ? ` (${unit})` : '';
 
   function formatToThreeDigits(str) {
+    if (!Number.isFinite(Number(str))) return '';
     if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
       return Number(parseFloat(str).toFixed(3)).toPrecision(3);
     }
@@ -113,58 +114,72 @@ function ChartComponent (props) {
     return s.includes('T') ? s.split('T')[0] : s;
   }
 
-  // Build data with stable date labels
-  const dataWithLabels = useMemo(
-    () => (Array.isArray(data) ? data.map((d, idx) => ({
-      ...d,
-      dateLabel: normalizeDateLabel(d),
-      _idx: idx,
-    })) : []),
-    [data],
-  );
+  // Prepare data; convert non-finite mean to null to create gaps
+  const dataWithLabels = useMemo(() => {
+    if (!Array.isArray(data)) return [];
+    return data.map((d, idx) => {
+      const meanVal = Number.isFinite(d?.mean) ? d.mean : null;
+      return {
+        ...d,
+        mean: meanVal,
+        dateLabel: normalizeDateLabel(d),
+        _idx: idx,
+        isGap: meanVal === null,
+      };
+    });
+  }, [data]);
 
-  // Compute evenly spaced tick indices (reuse prior logic)
-  function getTickPositions(dataLength) {
-    if (dataLength < 8) return [0, Math.max(dataLength - 1, 0)];
-    const numGaps = dataLength < 15 ? 4 : 5;
-    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
-    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
-    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
-    let leftoverGap = (dataLength - 1) - gapsTotal;
-    let i = 0;
-    while (leftoverGap < 0 && i < numGaps - 1) {
-      gapsArr[i] -= 1;
-      leftoverGap += 1;
-      i = (i + 1) % (numGaps - 1);
+  // Uniform major tick selection
+  function computeMajorTickIndices(length) {
+    if (length === 0) return [];
+    const SMALL_THRESHOLD = 10;
+    if (length <= SMALL_THRESHOLD) {
+      return Array.from({ length }, (_, i) => i); // show all labels
     }
-    i = 0;
-    while (leftoverGap > 0 && i < numGaps - 1) {
-      gapsArr[i] += 1;
-      leftoverGap -= 1;
-      i = (i + 1) % (numGaps - 1);
+    // Desired number of major ticks scales mildly with size
+    const desired = length < 30 ? 6 : length < 60 ? 8 : 10;
+    const step = (length - 1) / (desired - 1);
+    const indices = [];
+    for (let i = 0; i < desired; i += 1) {
+      const raw = i * step;
+      const idx = Math.round(raw);
+      if (!indices.includes(idx)) indices.push(idx);
     }
-    const tickPosArr = [0];
-    for (let j = 0; j < gapsArr.length; j += 1) {
-      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[j]);
-    }
-    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
-    return tickPosArr;
+    // Ensure first & last
+    if (indices[0] !== 0) indices.unshift(0);
+    if (indices[indices.length - 1] !== length - 1) indices.push(length - 1);
+    // Sort & unique
+    return Array.from(new Set(indices)).sort((a, b) => a - b);
   }
 
-  const tickPositions = useMemo(() => getTickPositions(dataWithLabels.length), [dataWithLabels.length]);
+  const majorTickIndices = useMemo(
+    () => computeMajorTickIndices(dataWithLabels.length),
+    [dataWithLabels.length],
+  );
 
-  // Custom tick: show label only at selected positions, minor ticks elsewhere
   function CustomXAxisTick(props) {
-    const {
-      x, y, index,
-    } = props;
-    const isMajor = tickPositions.includes(index);
+    const { x, y, index } = props;
     const label = dataWithLabels[index]?.dateLabel || '';
-    if (isMajor && label) {
+    const showLabel = majorTickIndices.includes(index);
+    if (showLabel && label) {
       return (
         <g transform={`translate(${x}, ${y})`}>
           <line x1="0" y1="0" x2="0" y2="-8" stroke="#a6a5a6" />
-          <text x={0} y={0} dy={16} textAnchor="middle" fill="#a6a5a6">
+          {/* Prevent cutoff: nudge last & first inward slightly */}
+          <text
+            x={0}
+            y={0}
+            dy={16}
+            textAnchor="middle"
+            fill="#a6a5a6"
+            style={{
+              transform: index === dataWithLabels.length - 1
+                ? 'translateX(-8px)'
+                : index === 0
+                  ? 'translateX(8px)'
+                  : 'none',
+            }}
+          >
             {label}
           </text>
         </g>
@@ -182,6 +197,7 @@ function ChartComponent (props) {
    * Return buffered min/max for Y axis
    */
   function bufferYAxisMinAndMax(min, max) {
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return [0, 1];
     const yAxisMin = Math.floor(min * 4) / 4;
     const yAxisMax = Math.ceil(max * 4) / 4;
     return [yAxisMin - yAxisMin * 0.1, yAxisMax + yAxisMax * 0.1];
@@ -195,41 +211,39 @@ function ChartComponent (props) {
     let lowestMin;
     let highestMax;
     for (let i = 0; i < axisData.length; i += 1) {
-      // Establish mean min & max values for chart rendering
-      if (axisData[i].mean < lowestMin || lowestMin === undefined) {
-        lowestMin = axisData[i].mean;
-      }
-      if (axisData[i].mean > highestMax || highestMax === undefined) {
-        highestMax = axisData[i].mean;
+      const m = axisData[i].mean;
+      if (m != null && Number.isFinite(m)) {
+        if (lowestMin === undefined || m < lowestMin) lowestMin = m;
+        if (highestMax === undefined || m > highestMax) highestMax = m;
       }
     }
-
+    if (lowestMin === undefined || highestMax === undefined) {
+      return [0, 1];
+    }
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
 
-  function CustomTooltip({ active, payload, label }) {
-    if (active && payload && payload.length) {
-      if (!Number.isNaN(payload[0].value)) {
-        return (
-          <div className="custom-tooltip">
-            <p className="label" style={{ color: 'gray' }}>{label}</p>
-            <p className="label" style={{ color: '#000' }}>
-              <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
-              {`${payload[0].name}${formattedUnit}: `}
-              <b>{formatToThreeDigits(payload[0].value)}</b>
-            </p>
-          </div>
-        );
-      }
-      return (
-        <div className="custom-tooltip">
-          <p className="label" style={{ color: 'gray' }}>{label}</p>
-          <p className="label" style={{ color: '#000' }}>No data</p>
-        </div>
-      );
-    }
+  function CustomTooltip({ active, payload }) {
+    if (!active || !payload || !payload.length) return null;
+    const p = payload[0];
+    const dateLabel = p?.payload?.dateLabel || '';
+    const value = p?.value;
+    const isGap = p?.payload?.isGap || value == null || !Number.isFinite(value);
 
-    return null;
+    return (
+      <div className="custom-tooltip">
+        <p className="label" style={{ color: 'gray' }}>{dateLabel}</p>
+        {isGap ? (
+          <p className="label" style={{ color: '#000' }}>No data</p>
+        ) : (
+          <p className="label" style={{ color: '#000' }}>
+            <span className="custom-data-rect" style={{ backgroundColor: p.color }} />
+            {`${p.name}${formattedUnit}: `}
+            <b>{formatToThreeDigits(value)}</b>
+          </p>
+        )}
+      </div>
+    );
   }
 
   const yAxisValuesArr = getYAxisValues(dataWithLabels);
@@ -249,14 +263,14 @@ function ChartComponent (props) {
    * @param {Object} chartData
    */
   function getLineChart(chartData) {
+    if (!chartData.length) return null;
     const chartLineName = getLineNames(chartData);
 
     function CustomizedDot(props) {
       const {
         cx, cy, fill, stroke, payload,
       } = props;
-
-      // Guard: skip if coordinates or value are not finite numbers
+      if (payload?.isGap) return null;
       if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
       if (!Number.isFinite(payload?.mean)) return null;
 
@@ -276,6 +290,7 @@ function ChartComponent (props) {
         </svg>
       );
     }
+
     return chartLineName.map((id, index) => (
       <Line
         type="linear"
@@ -283,6 +298,9 @@ function ChartComponent (props) {
         dataKey={chartLineName[index]}
         stroke={lineColors[index]}
         dot={<CustomizedDot />}
+        // Break lines at gaps (mean null)
+        connectNulls={false}
+        isAnimationActive={false}
       />
     ));
   }
@@ -300,57 +318,53 @@ function ChartComponent (props) {
     let stddevTotal = 0;
 
     for (let i = 0; i < chartData.length; i += 1) {
-      if (!Number.isNaN(chartData[i].mean)) {
-        meanTotal += chartData[i].mean;
-        minTotal += chartData[i].min;
-        maxTotal += chartData[i].max;
-        medianTotal += chartData[i].median;
-        stddevTotal += chartData[i].stddev;
+      const row = chartData[i];
+      const valid = Number.isFinite(row.mean)
+        && Number.isFinite(row.min)
+        && Number.isFinite(row.max)
+        && Number.isFinite(row.median)
+        && Number.isFinite(row.stddev);
+      if (valid) {
+        meanTotal += row.mean;
+        minTotal += row.min;
+        maxTotal += row.max;
+        medianTotal += row.median;
+        stddevTotal += row.stddev;
         count += 1;
       }
+    }
+
+    if (count === 0) {
+      return (
+        <div className="charting-statistics-container">
+          <div className="charting-statistics-row">
+            <span className="charting-statistics-label">No valid data</span>
+          </div>
+        </div>
+      );
     }
 
     return (
       <div className="charting-statistics-container">
         <div className="charting-statistics-row">
-          <span className="charting-statistics-label">
-            Median:
-          </span>
-          <span className="charting-statistics-value">
-            {formatToThreeDigits(medianTotal / count)}
-          </span>
+          <span className="charting-statistics-label">Median:</span>
+          <span className="charting-statistics-value">{formatToThreeDigits(medianTotal / count)}</span>
         </div>
         <div className="charting-statistics-row">
-          <span className="charting-statistics-label">
-            Mean:
-          </span>
-          <span className="charting-statistics-value">
-            {formatToThreeDigits(meanTotal / count)}
-          </span>
+          <span className="charting-statistics-label">Mean:</span>
+          <span className="charting-statistics-value">{formatToThreeDigits(meanTotal / count)}</span>
         </div>
         <div className="charting-statistics-row">
-          <span className="charting-statistics-label">
-            Min:
-          </span>
-          <span className="charting-statistics-value">
-            {formatToThreeDigits(minTotal / count)}
-          </span>
+          <span className="charting-statistics-label">Min:</span>
+          <span className="charting-statistics-value">{formatToThreeDigits(minTotal / count)}</span>
         </div>
         <div className="charting-statistics-row">
-          <span className="charting-statistics-label">
-            Max:
-          </span>
-          <span className="charting-statistics-value">
-            {formatToThreeDigits(maxTotal / count)}
-          </span>
+          <span className="charting-statistics-label">Max:</span>
+          <span className="charting-statistics-value">{formatToThreeDigits(maxTotal / count)}</span>
         </div>
         <div className="charting-statistics-row">
-          <span className="charting-statistics-label">
-            Stdev:
-          </span>
-          <span className="charting-statistics-value">
-            {formatToThreeDigits(stddevTotal / count)}
-          </span>
+          <span className="charting-statistics-label">Stdev:</span>
+          <span className="charting-statistics-value">{formatToThreeDigits(stddevTotal / count)}</span>
         </div>
       </div>
     );
@@ -415,8 +429,8 @@ function ChartComponent (props) {
             data={dataWithLabels}
             margin={{
               top: 20,
-              right: 10,
-              left: 30,
+              right: 30, // extra to prevent last label cutoff
+              left: 35,
               bottom: 10,
             }}
           >
@@ -425,10 +439,11 @@ function ChartComponent (props) {
             <XAxis
               dataKey="dateLabel"
               tick={<CustomXAxisTick />}
-              interval={0} /* ensure every position gets a tick (label filtered by CustomXAxisTick) */
+              interval={0}
               allowDuplicatedCategory={false}
               tickLine={false}
-              height={50}
+              height={55}
+              padding={{ left: 5, right: 15 }}
             />
             <YAxis
               type="number"
@@ -537,7 +552,6 @@ const mapStateToProps = (state) => {
   const { map, layers } = state;
   const { ui } = map;
   const layerId = 'Coastlines_15m';
-
   return {
     mapView: ui.selected.getView(),
     createLayer: ui.createLayer,
