@@ -110,7 +110,6 @@ function ChartComponent (props) {
     const raw = datum?.name ?? datum?.date ?? datum?.time ?? '';
     const s = String(raw || '');
     if (!s) return '';
-    // If ISO-like, take date portion; otherwise return as-is
     return s.includes('T') ? s.split('T')[0] : s;
   }
 
@@ -129,43 +128,71 @@ function ChartComponent (props) {
     });
   }, [data]);
 
-  // Uniform major tick selection
-  function computeMajorTickIndices(length) {
-    if (length === 0) return [];
-    const SMALL_THRESHOLD = 10;
-    if (length <= SMALL_THRESHOLD) {
-      return Array.from({ length }, (_, i) => i); // show all labels
+  // Build evenly spaced major/minor ticks on a numeric index axis
+  const axisTicksConfig = useMemo(() => {
+    const len = dataWithLabels.length;
+    if (len <= 1) {
+      return { ticks: [0], labelStep: 1, minorCount: 0 };
     }
-    // Desired number of major ticks scales mildly with size
-    const desired = length < 30 ? 6 : length < 60 ? 8 : 10;
-    const step = (length - 1) / (desired - 1);
-    const indices = [];
-    for (let i = 0; i < desired; i += 1) {
-      const raw = i * step;
-      const idx = Math.round(raw);
-      if (!indices.includes(idx)) indices.push(idx);
+    const n = len - 1;
+
+    // Desired major intervals by size
+    const desiredIntervals = len > 200 ? 10 : len > 120 ? 9 : len > 80 ? 8 : len > 40 ? 7 : 6;
+
+    // Pick a divisor of n closest to desiredIntervals for consistent spacing
+    const divisors = [];
+    for (let i = 1; i <= n; i += 1) {
+      if (n % i === 0) divisors.push(i);
     }
-    // Ensure first & last
-    if (indices[0] !== 0) indices.unshift(0);
-    if (indices[indices.length - 1] !== length - 1) indices.push(length - 1);
-    // Sort & unique
-    return Array.from(new Set(indices)).sort((a, b) => a - b);
-  }
+    let intervals = divisors[0];
+    for (let i = 1; i < divisors.length; i += 1) {
+      if (Math.abs(divisors[i] - desiredIntervals) < Math.abs(intervals - desiredIntervals)) {
+        intervals = divisors[i];
+      }
+    }
+    intervals = intervals || desiredIntervals; // fallback (should not happen for n>=1)
+    const labelStep = Math.max(1, Math.round(n / intervals)); // integer if intervals is divisor
 
-  const majorTickIndices = useMemo(
-    () => computeMajorTickIndices(dataWithLabels.length),
-    [dataWithLabels.length],
-  );
+    // Minor tick count by size (consistent between majors)
+    const minorCount = len > 200 ? 10 : len > 120 ? 8 : len > 60 ? 6 : len > 30 ? 4 : 2;
 
-  function CustomXAxisTick(props) {
-    const { x, y, index } = props;
-    const label = dataWithLabels[index]?.dateLabel || '';
-    const showLabel = majorTickIndices.includes(index);
-    if (showLabel && label) {
+    // For very small ranges, show every point as a major (no minors)
+    if (len <= 12) {
+      return {
+        ticks: Array.from({ length: len }, (_, i) => i),
+        labelStep: 1,
+        minorCount: 0,
+      };
+    }
+
+    // Build ticks: constant count of minors between majors across the axis
+    const minorStep = labelStep / (minorCount + 1); // can be fractional
+    const totalSteps = intervals * (minorCount + 1);
+    const ticks = Array.from({ length: totalSteps + 1 }, (_, k) => k * minorStep);
+
+    // Guarantee last tick is exactly n (avoid FP drift)
+    ticks[ticks.length - 1] = n;
+    // Ensure first tick is 0
+    ticks[0] = 0;
+
+    return { ticks, labelStep, minorCount };
+  }, [dataWithLabels.length]);
+
+  function CustomXAxisTick({ x, y, payload }) {
+    const v = Number(payload?.value ?? NaN);
+    if (!Number.isFinite(v)) return null;
+
+    const { labelStep } = axisTicksConfig;
+    const isMajor = Math.abs((v / labelStep) - Math.round(v / labelStep)) < 1e-6;
+    const idx = Math.max(0, Math.min(dataWithLabels.length - 1, Math.round(v)));
+    const label = dataWithLabels[idx]?.dateLabel || '';
+
+    if (isMajor && label) {
+      const isFirst = idx === 0;
+      const isLast = idx === dataWithLabels.length - 1;
       return (
         <g transform={`translate(${x}, ${y})`}>
           <line x1="0" y1="0" x2="0" y2="-8" stroke="#a6a5a6" />
-          {/* Prevent cutoff: nudge last & first inward slightly */}
           <text
             x={0}
             y={0}
@@ -173,11 +200,7 @@ function ChartComponent (props) {
             textAnchor="middle"
             fill="#a6a5a6"
             style={{
-              transform: index === dataWithLabels.length - 1
-                ? 'translateX(-8px)'
-                : index === 0
-                  ? 'translateX(8px)'
-                  : 'none',
+              transform: isLast ? 'translateX(-8px)' : isFirst ? 'translateX(8px)' : 'none',
             }}
           >
             {label}
@@ -437,10 +460,12 @@ function ChartComponent (props) {
             <Tooltip content={CustomTooltip} />
             {getLineChart(dataWithLabels)}
             <XAxis
-              dataKey="dateLabel"
+              type="number"
+              dataKey="_idx"
+              domain={[0, Math.max(dataWithLabels.length - 1, 0)]}
+              ticks={axisTicksConfig.ticks}
               tick={<CustomXAxisTick />}
               interval={0}
-              allowDuplicatedCategory={false}
               tickLine={false}
               height={55}
               padding={{ left: 5, right: 15 }}
