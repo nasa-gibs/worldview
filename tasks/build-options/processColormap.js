@@ -145,17 +145,20 @@ async function matchLegend (entry, legends) {
 async function processEntries (colormap) {
   const entries = toList(colormap.Entries.ColorMapEntry)
   let transparentMap = 'true'
+  let noDataValue
 
   // Check to see if there is at least one non-transparent entry.
   for (const entry of entries) {
     if (entry._attributes.transparent === 'false') {
       transparentMap = 'false'
       break
+    } else if (entry._attributes.nodata === 'true') {
+      noDataValue = entry._attributes.sourceValue
     }
   }
 
   if (transparentMap === 'true') {
-    return 'transparent'
+    return { transparent: noDataValue }
   }
 
   if (!colormap.Legend) {
@@ -347,6 +350,7 @@ async function readFileAsync (file) {
 async function processFile (id, xml) {
   let document
   let colormaps = []
+  let noDataValue
   try {
     document = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
     if (document && document.ColorMaps && document.ColorMaps.ColorMap) {
@@ -355,7 +359,9 @@ async function processFile (id, xml) {
     const maps = []
     for (const colormap of colormaps) {
       const result = await processEntries(colormap)
-      if (result === 'transparent') {
+      if (result && 'transparent' in result) {
+        // set the no data value (could be null)
+        noDataValue = result.transparent
         // There are no visible colors in the colormap so stop processing
         continue
       }
@@ -373,6 +379,13 @@ async function processFile (id, xml) {
         result.legend.units = colormap._attributes.units
       }
       maps.push(result)
+    }
+
+    // if there was a nodata value, assign to all maps
+    if (noDataValue) {
+      maps.forEach(map => {
+        map.noDataValue = noDataValue
+      })
     }
 
     const data = {
