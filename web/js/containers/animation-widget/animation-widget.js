@@ -90,6 +90,8 @@ function AnimationWidget (props) {
     startDate,
     subDailyMode,
     map,
+    smartSelected,
+    layers,
   } = props;
 
   const widgetWidth = 334;
@@ -193,10 +195,14 @@ function AnimationWidget (props) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
       const startMinutes = startDateZeroed.getMinutes();
       const endMinutes = endDateZeroed.getMinutes();
-      startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      if (!smartSelected) {
+        startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      }
       startDateZeroed.setUTCSeconds(0);
       startDateZeroed.setUTCMilliseconds(0);
-      endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      if (!smartSelected) {
+        endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      }
       endDateZeroed.setUTCSeconds(0);
       endDateZeroed.setUTCMilliseconds(0);
     } else {
@@ -249,6 +255,8 @@ function AnimationWidget (props) {
             promiseImageryForTime={promiseImageryForTime}
             onClose={onPushPause}
             map={map}
+            smartSelected={smartSelected}
+            layers={layers}
           />
         ) : null
       }
@@ -356,12 +364,14 @@ const mapStateToProps = (state) => {
     screenSize,
     ui,
     proj,
+    layers,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed, autoplay,
   } = animation;
   const {
     customSelected,
+    smartSelected,
     delta,
     customDelta,
     appNow,
@@ -413,6 +423,8 @@ const mapStateToProps = (state) => {
     TIME_SCALE_FROM_NUMBER[useInterval],
     useDelta,
     frameLimit,
+    smartSelected,
+    layers.active.layers,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
@@ -473,6 +485,8 @@ const mapStateToProps = (state) => {
     promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    smartSelected,
+    layers: layers.active.layers,
   };
 };
 
@@ -561,6 +575,8 @@ AnimationWidget.propTypes = {
   speedRedux: PropTypes.number,
   startDate: PropTypes.object,
   subDailyMode: PropTypes.bool,
+  smartSelected: PropTypes.bool,
+  layers: PropTypes.array,
 };
 
 export default connect(

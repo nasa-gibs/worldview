@@ -44,6 +44,7 @@ import {
   changeTimeScale,
   selectInterval,
   changeCustomInterval as changeCustomIntervalAction,
+  changeSmartInterval as changeSmartIntervalAction,
   updateAppNow,
   toggleCustomModal,
   triggerTodayButton,
@@ -52,6 +53,7 @@ import {
   checkHasFutureLayers,
   filterProjLayersWithStartDate,
   getNextTimeSelection,
+  getNextImageryDelta,
 } from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import { addGranuleDateRanges } from '../../modules/layers/actions';
@@ -281,6 +283,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       changeCustomInterval,
+      changeSmartInterval,
       customInterval,
       dateA,
       dateB,
@@ -289,6 +292,7 @@ class Timeline extends React.Component {
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
+      hasTempoProduct,
       subDailyLayersList,
       newCustomDelta,
     } = this.props;
@@ -325,7 +329,9 @@ class Timeline extends React.Component {
 
     const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
-      if (isSubDaily) {
+      if (hasTempoProduct) {
+        changeSmartInterval(1, TIME_SCALE_TO_NUMBER.minute, true);
+      } else if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
       } else {
         changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
@@ -581,6 +587,7 @@ class Timeline extends React.Component {
   handleArrowDateChange(signConstant) {
     const {
       customSelected,
+      smartSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
       selectedDate,
@@ -588,9 +595,14 @@ class Timeline extends React.Component {
       leftArrowDisabled,
       timelineEndDateLimit,
       timelineStartDateLimit,
+      subDailyLayersList,
+      dateA,
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
+    if (smartSelected && subDailyLayersList && subDailyLayersList.length) {
+      delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
+    }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
     }
@@ -1520,6 +1532,7 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
+    smartSelected,
     interval,
     selected,
     selectedB,
@@ -1552,6 +1565,7 @@ function mapStateToProps(state) {
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
     : subdailyLayers(state);
   const newCustomDelta = getSmallestIntervalValue(state);
+  const hasTempoProduct = layers.active.layers.filter((layer) => layer.visible && layer.id.includes('TEMPO'));
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1620,10 +1634,12 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     subDailyLayersList,
     customSelected,
+    smartSelected,
     isCompareModeActive,
     isChartingActive,
     isAnimatingToEvent,
     hasFutureLayers,
+    hasTempoProduct,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     timelineStartDateLimit: config.startDate, // same as startDate
@@ -1682,6 +1698,10 @@ const mapDispatchToProps = (dispatch) => ({
   // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomIntervalAction(delta, timeScale));
+  },
+  // changes/sets smart delta and timescale interval
+  changeSmartInterval: (delta, timeScale, smartSelected) => {
+    dispatch(changeSmartIntervalAction(delta, timeScale, smartSelected));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
@@ -1742,15 +1762,18 @@ Timeline.propTypes = {
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.object,
   changeCustomInterval: PropTypes.func,
+  changeSmartInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  smartSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   subDailyLayersList: PropTypes.object,
   hideTimeline: PropTypes.bool,

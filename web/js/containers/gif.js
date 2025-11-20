@@ -408,18 +408,21 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    screenSize, proj, animation, map, date, config,
+    screenSize, proj, animation, map, date, config, layers,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
   } = animation;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    customSelected, interval, customInterval, customDelta,
+    customSelected, smartSelected, interval, customInterval, customDelta,
   } = date;
-  const increment = customSelected
+  const customIncrement = customSelected
     ? `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`
     : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
+  const increment = smartSelected
+    ? 'Smart Interval'
+    : customIncrement;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -450,6 +453,9 @@ function mapStateToProps(state) {
         ? TIME_SCALE_FROM_NUMBER[customInterval]
         : TIME_SCALE_FROM_NUMBER[interval],
       customSelected ? customDelta : 1,
+      null,
+      smartSelected,
+      layers.active.layers,
     ),
     getImageArray: (options, dimensions) => getImageArray(
       options,

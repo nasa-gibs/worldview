@@ -164,6 +164,7 @@ function MapUI(props) {
       case vectorStyleConstants.SET_SELECTED_VECTORS:
         return setVectorActions(action);
       case dateConstants.CHANGE_CUSTOM_INTERVAL:
+      case dateConstants.CHANGE_SMART_INTERVAL:
       case dateConstants.CHANGE_INTERVAL:
         return setPreloadAction(action);
       case dateConstants.ARROW_DOWN:
