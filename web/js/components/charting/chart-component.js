@@ -1,4 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useMemo,
+  useState,
+} from 'react';
 import { connect } from 'react-redux';
 import {
   LineChart, Line, XAxis, YAxis, Legend, Tooltip,
@@ -46,7 +51,44 @@ function ChartComponent (props) {
     errors,
   } = liveData;
 
-  const errorDaysArr = errors?.error_days?.replaceAll(/('|\[|\])/gi, '').split(', ') || [];
+  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  const errorDaysArr = useMemo(() => {
+    const raw = errors?.error_days;
+    if (Array.isArray(raw)) return raw.map((s) => String(s));
+    if (raw == null) return [];
+    if (typeof raw !== 'string') return [String(raw)];
+
+    const trimmed = raw.trim();
+
+    // Try JSON parse if looks like an array; tolerate single quotes
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const jsonish = trimmed.replace(/'/g, '"');
+        const arr = JSON.parse(jsonish);
+        if (Array.isArray(arr)) return arr.map((s) => String(s));
+      } catch {
+        // fall through to manual split
+      }
+    }
+
+    // Fallback: strip brackets, split on comma, strip surrounding quotes
+    return trimmed
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+  }, [errors]);
+
+  // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
+  const errorDatesDisplay = useMemo(() => errorDaysArr
+    .map((item) => {
+      const dateStr = typeof item === 'string'
+        ? item
+        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+      return (dateStr || '').split('T')[0];
+    })
+    .filter(Boolean)
+    .join(', \u00A0\u00A0'), [errorDaysArr]);
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
@@ -93,23 +135,100 @@ function ChartComponent (props) {
 
   function CustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
+      if (!Number.isNaN(payload[0].value)) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label" style={{ color: 'gray' }}>
+              {label}
+            </p>
+            <p className="label" style={{ color: '#000' }}>
+              <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
+              {`${payload[0].name}${formattedUnit}: `}
+              <b>
+                {formatToThreeDigits(payload[0].value)}
+              </b>
+            </p>
+          </div>
+        );
+      }
       return (
         <div className="custom-tooltip">
           <p className="label" style={{ color: 'gray' }}>
             {label}
           </p>
           <p className="label" style={{ color: '#000' }}>
-            <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
-            {`${payload[0].name}${formattedUnit}: `}
-            <b>
-              {formatToThreeDigits(payload[0].value)}
-            </b>
+            No data
           </p>
         </div>
       );
     }
 
     return null;
+  }
+
+  // Gets the indices of the tick positions so that they are evenly spaced
+  function getTickPositions(dataLength) {
+    // If dataLength is too small, just show first and last tick
+    if (dataLength < 8) return [0, dataLength - 1];
+
+    const numGaps = dataLength < 15 ? 4 : 5;
+    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
+
+    // Last gap must be at least 3 to give extra room for end-aligned label
+    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
+
+    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
+    let leftoverGap = (dataLength - 1) - gapsTotal;
+
+    let i = 0;
+    // Reduce gaps that are too large due to last gap size
+    while (leftoverGap < 0 && i < numGaps - 1) {
+      gapsArr[i] -= 1;
+      leftoverGap += 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    i = 0;
+    // Distribute extra gaps across existing gaps
+    while (leftoverGap > 0 && i < numGaps - 1) {
+      gapsArr[i] += 1;
+      leftoverGap -= 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    // Build final array of tick positions based on calculated gaps
+    const tickPosArr = [0];
+    for (let i = 0; i < gapsArr.length; i += 1) {
+      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[i]);
+    }
+    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
+
+    return tickPosArr;
+  }
+
+  const tickPositions = getTickPositions(data.length);
+
+  function CustomXAxisTick(obj) {
+    const {
+      x, y, fill, textAnchor, visibleTicksCount, index, payload,
+    } = obj;
+    const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
+    const isLabeled = tickPositions.includes(index);
+    if (isLabeled) {
+      return (
+        <g transform={`translate(${x}, ${y})`}>
+          <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
+          <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
+            {payload.value}
+          </text>
+        </g>
+      );
+    }
+    return (
+      <g transform={`translate(${x}, ${y})`}>
+        <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
+      </g>
+    );
   }
 
   const yAxisValuesArr = getYAxisValues(data);
@@ -147,7 +266,7 @@ function ChartComponent (props) {
    * @param {Object} chartData
    */
   function getQuickStatistics(chartData) {
-    const count = chartData.length;
+    let count = 0;
     let minTotal = 0;
     let maxTotal = 0;
     let meanTotal = 0;
@@ -155,58 +274,59 @@ function ChartComponent (props) {
     let stddevTotal = 0;
 
     for (let i = 0; i < chartData.length; i += 1) {
-      meanTotal += chartData[i].mean;
-      minTotal += chartData[i].min;
-      maxTotal += chartData[i].max;
-      medianTotal += chartData[i].median;
-      stddevTotal += chartData[i].stddev;
+      if (!Number.isNaN(chartData[i].mean)) {
+        meanTotal += chartData[i].mean;
+        minTotal += chartData[i].min;
+        maxTotal += chartData[i].max;
+        medianTotal += chartData[i].median;
+        stddevTotal += chartData[i].stddev;
+        count += 1;
+      }
     }
 
     return (
-      <>
-        <div className="charting-statistics-container">
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Median:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(medianTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Mean:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(meanTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Min:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(minTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Max:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(maxTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Stdev:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(stddevTotal / count)}
-            </span>
-          </div>
+      <div className="charting-statistics-container">
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Median:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(medianTotal / count)}
+          </span>
         </div>
-      </>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Mean:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(meanTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Min:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(minTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Max:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(maxTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Stdev:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(stddevTotal / count)}
+          </span>
+        </div>
+      </div>
     );
   }
 
@@ -297,7 +417,7 @@ function ChartComponent (props) {
             <Tooltip content={CustomTooltip} />
             {' '}
             {getLineChart(data)}
-            <XAxis dataKey="name" stroke="#a6a5a6" />
+            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick />} tickLine={false} />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -310,7 +430,12 @@ function ChartComponent (props) {
                 dx: -40,
               }}
             />
-            <Legend formatter={() => `${title}`} />
+            <Legend
+              formatter={() => `${title}`}
+              wrapperStyle={{
+                paddingTop: '7px',
+              }}
+            />
           </LineChart>
         </div>
         <div className="charting-stat-text">
@@ -392,19 +517,12 @@ function ChartComponent (props) {
               />
               <i className="charting-disclaimer-block">
                 {`${errors.error_count} `}
-                dates requested have no data, so are not shown in the chart.
+                {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
               </i>
-              {!errorCollapsed
-              && (
+              {!errorCollapsed && (
                 <div className="charting-disclaimer-dates">
                   <i className="charting-disclaimer-block">
-                    {errorDaysArr.map((date, index) => (
-                      <>
-                        {date.split('T')[0]}
-                        {index < errorDaysArr.length - 1 && ', '}
-                        &nbsp;&nbsp;
-                      </>
-                    ))}
+                    {errorDatesDisplay}
                   </i>
                 </div>
               )}
@@ -447,6 +565,9 @@ const mapStateToProps = (state) => {
 
 ChartComponent.propTypes = {
   liveData: PropTypes.object,
+  mapView: PropTypes.object,
+  createLayer: PropTypes.func,
+  overviewMapLayerDef: PropTypes.object,
 };
 
 export default connect(

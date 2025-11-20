@@ -130,8 +130,9 @@ function Markers(props) {
   };
 
   useEffect(() => {
+    if (!ui.selected || !ui.selected.proj) return;
     handleActiveMapMarker();
-  }, [ui]);
+  }, [ui, ui.selected?.proj]);
 
   useEffect(() => {
     switch (action.type) {

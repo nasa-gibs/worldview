@@ -178,6 +178,8 @@ function promiseTileLayer(layer, map) {
       });
     }
 
+    preloadMap.setView(map.getView());
+
     const onLoad = function onLoad (e) {
       i -= 1;
       preloadMap.removeLayer(layer);
@@ -232,7 +234,7 @@ export async function promiseImageryForTime(state, date, activeString) {
   const { map } = state;
   if (!map.ui.proj) return;
   const {
-    cache, selected, createLayer, layerKey,
+    cache, selected, createLayer, layerKey, proj,
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
   await Promise.all(layers.map(async (layer) => {
@@ -243,8 +245,8 @@ export async function promiseImageryForTime(state, date, activeString) {
     const key = layerKey(layer, options, state);
     const cachedItem = cache.getItem(key);
     const layerGroup = cachedItem || await createLayer(layer, options);
-    if (!cachedItem) {
-      return promiseLayerGroup(layerGroup, selected);
+    if (!cachedItem && layerGroup.wv.proj && proj[layerGroup.wv.proj]) {
+      return promiseLayerGroup(layerGroup, proj[layerGroup.wv.proj]);
     }
   }));
   selected.getView().changed();
@@ -259,7 +261,7 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
   const { map } = state;
   if (!map.ui.proj) return;
   const {
-    cache, selected, createLayer, layerKey,
+    cache, selected, createLayer, layerKey, proj,
   } = map.ui;
   const appNow = lodashGet(state, 'date.appNow');
   const date = tryCatchDate(dateString, appNow);
@@ -286,7 +288,11 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     }
 
     const key = layerKey(layer, options, state);
-    const layerGroup = cache.getItem(key) || await createLayer(layer, options);
-    return promiseLayerGroup(layerGroup, selected);
+    const cachedItem = cache.getItem(key);
+    const layerGroup = cachedItem || await createLayer(layer, options);
+    if (!cachedItem && layerGroup.wv.proj && proj[layerGroup.wv.proj]) {
+      return promiseLayerGroup(layerGroup, proj[layerGroup.wv.proj]);
+    }
   }));
+  selected.getView().changed();
 }
