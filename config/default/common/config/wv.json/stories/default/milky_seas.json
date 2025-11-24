@@ -49,11 +49,12 @@
           "id": "004",
           "description": "step004.html",
           "transition": {
-            "element": "",
-            "action": ""
+            "element": "animation",
+            "action": "play"
           },
-          "stepLink": "v=100.67998184312945,-14.291923420341536,117.25352103649873,-5.466315280409101&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night,VIIRS_SNPP_DayNightBand(hidden)&lg1=true&ca=true&cm=opacity&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
+          "stepLink": "v=100.40490925777027,-13.649554035145663,117.52859362185791,-6.108684665604975&as=2019-08-04-T00%3A00%3A00Z&ae=2019-08-09-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand,VIIRS_NOAA20_DayNightBand(hidden)&lg=true&al=true&ab=on&t=2019-08-04-T18%3A00%3A00Z"
         },
+
         {
           "id": "005",
           "description": "step005.html",
@@ -61,7 +62,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=98.95722025671999,-14.291923420341536,118.97628262290819,-5.466315280409103&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Sea_Surface_Temp_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Sea_Surface_Temp_Night,VIIRS_SNPP_DayNightBand&lg1=true&ca=false&cm=opacity&cv=100&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
+          "stepLink": "v=100.67998184312945,-14.291923420341536,117.25352103649873,-5.466315280409101&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night,VIIRS_SNPP_DayNightBand(hidden)&lg1=true&ca=true&cm=opacity&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
         },
         {
           "id": "006",
@@ -70,7 +71,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=100.16937216323105,-13.757533870159241,117.76413071639713,-6.000704830591397&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A,VIIRS_SNPP_DayNightBand(hidden)&lg1=true&ca=false&cm=opacity&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
+          "stepLink": "v=98.95722025671999,-14.291923420341536,118.97628262290819,-5.466315280409103&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Sea_Surface_Temp_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Sea_Surface_Temp_Night,VIIRS_SNPP_DayNightBand&lg1=true&ca=false&cm=opacity&cv=100&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
         },
         {
           "id": "007",
@@ -79,7 +80,7 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=42.55005588597402,-0.8871732496289075,64.1817383317124,8.649374925374037&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand(max=152,squash=true)&lg=true&t=2018-01-20-T00%3A00%3A00Z"
+          "stepLink": "v=100.16937216323105,-13.757533870159241,117.76413071639713,-6.000704830591397&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A(hidden),VIIRS_SNPP_DayNightBand&lg=true&l1=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A,VIIRS_SNPP_DayNightBand(hidden)&lg1=true&ca=false&cm=opacity&t=2019-08-04-T00%3A00%3A00Z&t1=2019-08-04-T00%3A00%3A00Z"
         },
         {
           "id": "008",
@@ -88,11 +89,20 @@
             "element": "",
             "action": ""
           },
-          "stepLink": "v=51.661053118137694,8.779948128908448,62.00120964951609,13.48466259900323&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A(hidden,min=0.0278,squash=true),VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&t=2021-01-17-T00%3A00%3A00Z"
+          "stepLink": "v=42.53817732819853,-0.8871732496289066,64.19361688948788,8.649374925374039&l=Reference_Labels_15m,Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand(max=152,squash=true)&lg=true&s=54.4759,4.6286&t=2018-01-20-T00%3A00%3A00Z"
         },
         {
           "id": "009",
           "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=51.48943656980004,8.77994812890845,62.172826197853745,13.484662599003228&l=Reference_Labels_15m,Reference_Features_15m,Coastlines_15m,VIIRS_SNPP_L2_Chlorophyll_A(hidden,min=0.0278,squash=true),VIIRS_SNPP_Brightness_Temp_BandI5_Night(hidden),VIIRS_SNPP_DayNightBand&lg=true&s=56.6747,11.8252&t=2021-01-17-T00%3A00%3A00Z"
+        },
+        {
+          "id": "010",
+          "description": "step010.html",
           "transition": {
             "element": "",
             "action": ""

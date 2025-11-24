@@ -1,3 +1,1 @@
-The 2021 study, [Honing in on bioluminescent milky seas from space](https://www.nature.com/articles/s41598-021-94823-z) has shown that the nighttime imagery from the Day/Night Band is useful for pinpointing the location of milky seas. In the future, when more nighttime imagery is available it will be easier to spot these via satellite and research vessels can be tasked to sail out to study the bioluminescent phenomena!
-
-References: Miller, S.D., Haddock, S.H.D., Straka, W.C. et al. Honing in on bioluminescent milky seas from space. Sci Rep 11, 15443 (2021). [https://doi.org/10.1038/s41598-021-94823-z](https://doi.org/10.1038/s41598-021-94823-z)
+This is an example of milky seas southeast of the Yemeni island, Socotra, in the Indian Ocean on January 17, 2021. Turn on and off the Chlorophyll a layer to see how the milky sea coincides with warmer waters shown in cyan.
