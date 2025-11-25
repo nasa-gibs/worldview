@@ -134,7 +134,7 @@ const useLookup = function(layerId, palettesObj, state) {
         use = true;
         return false;
       }
-    } else if (palette.legend.colors.length > 1) {
+    } else if (palette.legend.colors.length > 1 || !lodashIsUndefined(palette.size)) {
       use = true;
     }
   });
@@ -364,6 +364,9 @@ export function getKey(layerId, groupStr, state) {
   if (def.squash) {
     keys.push('squash');
   }
+  if (def.size) {
+    keys.push(`size=${def.size}`);
+  }
   return keys.join(',');
 }
 
@@ -494,6 +497,39 @@ export function clearCustomSelector(layerId, index, palettes, state) {
   const newPalettes = update(palettes, {
     [layerId]: { maps: { [index]: { $set: palette } } },
   }); // remove custom key
+  return updateLookup(layerId, newPalettes, state);
+}
+
+export function setSize(layerId, size, index, palettes, state) {
+  let newPalettes = prepare(layerId, palettes, state);
+  newPalettes = update(newPalettes, {
+    [layerId]: {
+      maps: {
+        [index]: {
+          $merge: {
+            size,
+          },
+        },
+      },
+    },
+  });
+  return updateLookup(layerId, newPalettes, state);
+}
+
+export function clearSize(layerId, index, palettes, state) {
+  index = lodashIsUndefined(index) ? 0 : index;
+  const active = palettes[layerId];
+  if (!active) {
+    return palettes;
+  }
+  const palette = active.maps[index];
+  if (!palette.size) {
+    return palettes;
+  }
+  delete palette.size;
+  const newPalettes = update(palettes, {
+    [layerId]: { maps: { [index]: { $set: palette } } },
+  }); // remove size key
   return updateLookup(layerId, newPalettes, state);
 }
 

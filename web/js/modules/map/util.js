@@ -283,6 +283,9 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     if (layer.squash) {
       keys.push('squash');
     }
+    if (layer.size) {
+      keys.push(`size=${layer.size}`);
+    }
     if (keys.length > 0) {
       options.style = keys.join(',');
     }

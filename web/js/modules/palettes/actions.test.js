@@ -8,6 +8,7 @@ import {
   setThresholdRangeAndSquash,
   setCustomPalette,
   clearCustomPalette,
+  setSize,
 } from './actions';
 import { addLayer } from '../layers/selectors';
 import {
@@ -17,6 +18,7 @@ import {
   SET_THRESHOLD_RANGE_AND_SQUASH,
   SET_CUSTOM,
   CLEAR_CUSTOM,
+  SET_SIZE,
 } from './constants';
 import fixtures from '../../fixtures';
 
@@ -245,4 +247,15 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
       );
     },
   );
+  test(`test ${setSize} action [palettes-actions-set-size]`, () => {
+    const store = mockStore(stateWithLayers);
+    store.dispatch(setSize('terra-aod', 15, 0, 'active'));
+    const response = store.getActions()[0];
+
+    expect(response.type).toEqual(SET_SIZE);
+    expect(response.size).toEqual(15);
+    expect(response.groupName).toEqual('active');
+    expect(response.layerId).toEqual('terra-aod');
+    expect(response.activeString).toEqual('active');
+  });
 });
