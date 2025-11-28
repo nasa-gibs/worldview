@@ -60,7 +60,7 @@
     "linkcheck": "node ./tasks/link-check",
     "lint": "run-s lint:js lint:scss",
     "lint:scss": "npx stylelint ./web/scss/**/*.scss",
-    "lint:js": "npx eslint . --quiet",
+    "lint:js": "npx eslint .",
     "preinstall": "node tasks/util/checkNodeVersion.js",
     "postinstall": "patch-package && husky",
     "start": "node ./tasks/util/start.js",
