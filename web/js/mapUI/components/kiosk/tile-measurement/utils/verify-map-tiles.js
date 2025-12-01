@@ -21,7 +21,8 @@ const checkTileImage = (image) => {
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] !== 0) { // If alpha is not 0
         isTransparent = false;
-        if (data[i] !== firstPixel[0] || data[i + 1] !== firstPixel[1] || data[i + 2] !== firstPixel[2] || data[i + 3] !== firstPixel[3]) {
+        if (data[i] !== firstPixel[0] || data[i + 1] !== firstPixel[1]
+          || data[i + 2] !== firstPixel[2] || data[i + 3] !== firstPixel[3]) {
           isSingleColor = false;
           break;
         }
@@ -99,7 +100,9 @@ export default function countTilesForSpecifiedLayers (ui, layersToCheck) {
   const map = ui.selected;
   const view = map.getView();
   // Match only the layers that are in the layersToMeasure array
-  const matchingLayers = map.getLayers().getArray().filter((layer) => layer.wv && layer.wv.id && layersToCheck.includes(layer.wv.id));
+  const matchingLayers = map.getLayers().getArray().filter(
+    (layer) => layer.wv && layer.wv.id && layersToCheck.includes(layer.wv.id),
+  );
 
   let totalExpectedTileCount = 0;
   let totalLoadedTileCount = 0;

@@ -7,8 +7,9 @@ function TourIntro(props) {
   return (
     <div className="tour-intro">
       <p className="intro">
-        Visually explore the past and the present of this dynamic planet from a satellite&apos;s perspective.
-        Select from an array of stories below to learn more about @NAME@ (a part of
+        Visually explore the past and the present of this dynamic planet from a
+        satellite&apos;s perspective. Select from an array of stories below to learn more about
+        @NAME@ (a part of
         {' '}
         <a href="https://earthdata.nasa.gov/" target="_blank" rel="noreferrer">NASA Earthdata</a>
         ), the satellite imagery we provide and events occurring around the world.

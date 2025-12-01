@@ -69,7 +69,16 @@ class CoverageLine extends PureComponent {
   * @param {Number/String} index
   * @returns {DOM Element} line
   */
-  createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
+  createMatchingCoverageLineDOMEl = (
+    id,
+    options,
+    lineType,
+    startDate,
+    endDate,
+    color,
+    layerPeriod,
+    index,
+  ) => {
     const {
       positionTransformX,
     } = this.props;

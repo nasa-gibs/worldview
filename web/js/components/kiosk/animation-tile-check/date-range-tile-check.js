@@ -10,7 +10,8 @@ import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN,
 } from '../../../modules/map/constants';
 
-// Layers to be checked for tile availability need to have manually determined content-length thresholds.
+// Layers to be checked for tile availability need
+// to have manually determined content-length thresholds.
 // Any active layers that are not listed in this object will NOT be checked for tile availability.
 // This represents a TOTAL content-length for all tiles for a single date for a single layer
 // To find a good value for the total content-length:
@@ -37,7 +38,11 @@ function DateRangeTileCheck(props) {
   } = props;
 
   const dispatch = useDispatch();
-  const toggleCheckedAnimationAvailability = (available) => { dispatch(toggleCheckedAnimationAvailabilityAction(available)); };
+  const toggleCheckedAnimationAvailability = (available) => {
+    dispatch(
+      toggleCheckedAnimationAvailabilityAction(available),
+    );
+  };
 
   const calcExtentsFromLimits = (matrixSet, matrixSetLimits, day) => {
     let extent;
@@ -103,7 +108,8 @@ function DateRangeTileCheck(props) {
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, null);
-    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [
+      matrixWidth, matrixHeight]);
 
     const tileGridOptions = {
       origin,
@@ -211,8 +217,10 @@ function DateRangeTileCheck(props) {
 
       layer.dates.forEach((date) => {
         if (date.contentLengthSum < threshold) {
-          const dateStr = date.date.toISOString(); // Convert date to string for use as an object key
-          uniqueDatesBelowThreshold.add(dateStr); // Add the date to the set. If it's already there, it won't be added again.
+          // Convert date to string for use as an object key
+          const dateStr = date.date.toISOString();
+          // Add the date to the set. If it's already there, it won't be added again.
+          uniqueDatesBelowThreshold.add(dateStr);
         }
       });
     });
@@ -222,9 +230,11 @@ function DateRangeTileCheck(props) {
     // Calculate how many frames are missing tiles as a percentage
     const percentMissing = (framesWithMissingTiles / frameDates.length) * 100;
 
-    // If there are less than 40% of frames with missing tiles we dispatch action to allow animation to play
+    // If there are less than 40% of frames with missing
+    // tiles we dispatch action to allow animation to play
     // Else we do not do anything which means we display static imagery of the first frame
-    // The imagery at this date should already be satisfactory because the errorTile process has already been completed
+    // The imagery at this date should already be
+    // satisfactory because the errorTile process has already been completed
     // The percentMissing conditional value is completely arbitrary and can be changed
     if (percentMissing < 40) {
       console.log('Good Check:', percentMissing, '% ', 'of dates with missing frames');

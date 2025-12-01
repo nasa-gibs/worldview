@@ -86,11 +86,13 @@ class PaletteLegend extends React.Component {
       width,
       paletteLegends,
     } = this.props;
-    // Updates when layer options/settings changed, if ZOT changes the width of the palette, or distraction free mode exit
+    // Updates when layer options/settings changed, if ZOT changes the width of the palette,
+    // or distraction free mode exit
     const layerChange = !lodashIsEqual(layer, prevProps.layer);
     const paletteLegendsChange = !lodashIsEqual(paletteLegends, prevProps.paletteLegends);
     const widthChange = prevProps.width !== width;
-    const distractionFreeChange = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    const distractionFreeChange = prevProps.isDistractionFreeModeActive
+    && !isDistractionFreeModeActive;
     if (layerChange || widthChange || distractionFreeChange || paletteLegendsChange) {
       this.updateCanvas();
     }
@@ -202,7 +204,10 @@ class PaletteLegend extends React.Component {
     const { globalTemperatureUnit } = this.props;
     const units = legend.units || '';
 
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(
+      units,
+      globalTemperatureUnit,
+    );
     for (let i = 0, len = legend.colors.length; i < len; i += 1) {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
         const tooltipRange = legend.tooltips[i];
@@ -258,11 +263,16 @@ class PaletteLegend extends React.Component {
     }
 
     const units = legend.units || '';
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const {
+      needsConversion,
+      legendTempUnit,
+    } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
     let min = legend.minLabel || legend.tooltips[0];
     let max = legend.maxLabel || legend.tooltips[toolTipLength];
-    min = palette.min ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
-    max = palette.max ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
+    min = palette.min
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
+    max = palette.max
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
 
     if (needsConversion) {
       min = `${convertPaletteValue(min, legendTempUnit, globalTemperatureUnit)}`;

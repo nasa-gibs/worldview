@@ -149,10 +149,11 @@ class SmartHandoff extends Component {
   }
 
   /**
-   * Fires when the image cropper is moved around on the map; updates the SW and NE lat/lon coordinates.
+   * Fires when the image cropper is moved around on the map;
+   * updates the SW and NE lat/lon coordinates.
    * @param {*} boundaries - the focal point to which layer data should be contained within
-   * @param {boolean} setExtent - should the subsequent setState call set the extent, which will trigger
-   *                              the granule count async requests
+   * @param {boolean} setExtent - should the subsequent setState call set the extent,
+   * which will trigger the granule count async requests
    */
   onBoundaryChange(boundaries, setExtent) {
     const { proj, map, selectedCollection } = this.props;
@@ -386,35 +387,36 @@ class SmartHandoff extends Component {
               <div className="layer-title">{layer.title}</div>
               <div className="layer-subtitle">{layer.subtitle}</div>
 
-              {layer.conceptIds.filter(({ value }) => validatedConceptIds[value]).map((collection) => {
-                const {
-                  type, value, version, quality,
-                } = collection;
-                const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
-                const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
-                const labelId = `${inputId}-label`;
-                const label = STD_NRT_MAP[type]
+              {layer.conceptIds.filter(({ value }) => validatedConceptIds[value])
+                .map((collection) => {
+                  const {
+                    type, value, version, quality,
+                  } = collection;
+                  const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
+                  const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
+                  const labelId = `${inputId}-label`;
+                  const label = STD_NRT_MAP[type]
                    + (version ? ` - v${version}` : '')
                    + (quality ? ' (Quality)' : '');
 
-                return (
-                  <div className="collection-choice" key={inputId}>
-                    <input
-                      id={inputId}
-                      type="radio"
-                      name="smart-handoff-layer-radio"
-                      checked={isSelected}
-                      onChange={() => selectCollection(collection.value, layer.id)}
-                    />
-                    <label id={labelId} htmlFor={inputId}>
-                      {label}
-                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" widthAuto />
-                    </label>
+                  return (
+                    <div className="collection-choice" key={inputId}>
+                      <input
+                        id={inputId}
+                        type="radio"
+                        name="smart-handoff-layer-radio"
+                        checked={isSelected}
+                        onChange={() => selectCollection(collection.value, layer.id)}
+                      />
+                      <label id={labelId} htmlFor={inputId}>
+                        {label}
+                        <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" widthAuto />
+                      </label>
 
-                    {this.renderCollectionTooltip(collection, labelId)}
-                  </div>
-                );
-              })}
+                      {this.renderCollectionTooltip(collection, labelId)}
+                    </div>
+                  );
+                })}
 
             </div>
           );
@@ -504,7 +506,10 @@ class SmartHandoff extends Component {
       <div className="smart-handoff-side-panel error">
         {requestFailed
           ? (
-            <h1>Data records from the Common Metadata Repository (CMR) could not be reached. Data downloads are not possible at this time.</h1>
+            <h1>
+              Data records from the Common Metadata Repository (CMR) could not be reached. Data
+              downloads are not possible at this time.
+            </h1>
           )
           : (
             <>
@@ -564,7 +569,8 @@ class SmartHandoff extends Component {
     } = this.state;
 
     // Determine if the download button is enabled
-    const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
+    const validSelection = showBoundingBox
+      ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (isLoading) {
@@ -623,7 +629,8 @@ const mapStateToProps = (state) => {
     screenSize, map, proj, smartHandoffs,
   } = state;
   const {
-    conceptId, layerId, availableTools, validatedConceptIds, validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
+    conceptId, layerId, availableTools, validatedConceptIds,
+    validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
   } = smartHandoffs;
   const { screenWidth, screenHeight } = screenSize;
 
@@ -632,7 +639,8 @@ const mapStateToProps = (state) => {
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const availableLayers = getValidLayersForHandoffs(state);
   const selectedLayer = availableLayers.find(({ id }) => id === layerId);
-  const selectedCollection = selectedLayer && (selectedLayer.conceptIds || []).find(({ value }) => value === conceptId);
+  const selectedCollection = selectedLayer && (selectedLayer.conceptIds || [])
+    .find(({ value }) => value === conceptId);
   const isLoading = isLoadingTools || isValidatingCollections;
   const isGranuleLayer = selectedLayer && selectedLayer.type === 'granule';
   const { startDate, endDate } = selectedLayer

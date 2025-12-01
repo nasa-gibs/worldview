@@ -72,7 +72,9 @@ class ImageDownloadContainer extends Component {
    */
   getLatLongFromPixelValue(pixelX, pixelY) {
     const { proj, map } = this.props;
-    const coordinate = map.ui.selected.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
+    const coordinate = map.ui.selected.getCoordinateFromPixel(
+      [Math.floor(pixelX), Math.floor(pixelY)],
+    );
     const { crs } = proj.selected;
     const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
@@ -188,7 +190,12 @@ class ImageDownloadContainer extends Component {
           hasSubdailyLayers={hasSubdailyLayers}
           markerCoordinates={markerCoordinates}
           date={date}
-          datelineMessage={getAlertMessageIfCrossesDateline(date, bottomLeftLatLong, topRightLatLong, proj)}
+          datelineMessage={getAlertMessageIfCrossesDateline(
+            date,
+            bottomLeftLatLong,
+            topRightLatLong,
+            proj,
+          )}
           url={url}
           viewExtent={viewExtent}
           getLayers={getLayers}

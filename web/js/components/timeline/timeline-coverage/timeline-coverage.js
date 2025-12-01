@@ -40,7 +40,8 @@ class TimelineLayerCoveragePanel extends Component {
 
     const layers = this.getActiveLayers(activeLayers);
     this.setActiveLayers(layers);
-    // prevent bubbling to parent which the wheel event is blocked for timeline zoom in/out wheel event
+    // prevent bubbling to parent which the wheel event
+    // is blocked for timeline zoom in/out wheel event
     document.querySelector('.timeline-layer-coverage-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
     // init populate of activeLayers
     this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
@@ -436,7 +437,10 @@ class TimelineLayerCoveragePanel extends Component {
                 id="toggle-layer-coverage-include-hidden"
                 containerClassAddition="toggle-layer-coverage-include-hidden"
                 label="Include Hidden Layers"
-                toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers, activeLayers)}
+                toggle={() => this.addMatchingCoverageToTimeline(
+                  !shouldIncludeHiddenLayers,
+                  activeLayers,
+                )}
               />
             </header>
             <Scrollbars style={scrollbarStyle}>

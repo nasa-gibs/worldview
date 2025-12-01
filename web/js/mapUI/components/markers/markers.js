@@ -79,7 +79,12 @@ function Markers(props) {
    * @param {Object} coordinatesObject - set of coordinates for marker
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
+  const addMarkerAndUpdateStore = (
+    showDialog,
+    geocodeResults,
+    shouldFlyToCoordinates,
+    coordinatesObject,
+  ) => {
     const results = geocodeResults;
     if (!results) return;
     const remove = () => removeMarker(coordinatesObject);
@@ -143,7 +148,12 @@ function Markers(props) {
         if (action.flyToExistingMarker) {
           return flyToMarker(action.coordinates);
         }
-        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
+        return addMarkerAndUpdateStore(
+          true,
+          action.reverseGeocodeResults,
+          action.isCoordinatesSearchActive,
+          action.coordinates,
+        );
       }
       case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
         return addMarkerAndUpdateStore(false);

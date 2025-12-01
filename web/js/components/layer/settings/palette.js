@@ -60,7 +60,7 @@ function PaletteSelect (props) {
           onClick={() => onChangePalette(id)}
         />
         {isSelected && (
-          <span class="dot" />
+          <span className="dot" />
         )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <span
@@ -103,7 +103,7 @@ function PaletteSelect (props) {
           onClick={() => onChangePalette(id)}
         />
         {isSelected && (
-          <span class="dot" />
+          <span className="dot" />
         )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <img src={dataURL} />

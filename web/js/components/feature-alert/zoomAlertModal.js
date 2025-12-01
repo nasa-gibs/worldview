@@ -15,7 +15,8 @@ function ZoomAlertModalBody() {
       <Row className="p-3">
         <Col>
           <p>
-            Imagery for certain layers is dynamically generated and only available when zoomed in. Please zoom in to view this product.
+            Imagery for certain layers is dynamically generated and only available when zoomed in.
+            Please zoom in to view this product.
           </p>
         </Col>
       </Row>

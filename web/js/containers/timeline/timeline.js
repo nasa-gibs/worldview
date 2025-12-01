@@ -94,7 +94,8 @@ const checkLeftArrowDisabled = (
 ) => {
   const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
   const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
-  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
+  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit)
+    .subtract(delta, timeScaleChangeUnit);
   const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
 
   const nextDecrementDateTime = nextDecrementDate.getTime();
@@ -222,8 +223,16 @@ class Timeline extends React.Component {
 
     // change timescale
     this.debounceWheelTime = 60;
-    this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, throttleSettings);
-    this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, throttleSettings);
+    this.debounceChangeTimeScaleWheel = lodashDebounce(
+      this.throttleChangeTimeScaleWheel,
+      this.debounceWheelTime,
+      throttleSettings,
+    );
+    this.throttleChangeTimeScaleWheelFire = lodashThrottle(
+      this.changeTimeScaleScroll,
+      200,
+      throttleSettings,
+    );
 
     // application relative now time
     this.appNowUpdateInterval = 0;
@@ -305,7 +314,8 @@ class Timeline extends React.Component {
     // handle location update triggered from animation start/end date change from animation widget
     if (isAnimationWidgetOpen) {
       if (prevStartLocationDate && prevEndLocationDate) {
-        const animStartDateChanged = prevStartLocationDate.getTime() !== animStartLocationDate.getTime();
+        const animStartDateChanged = prevStartLocationDate.getTime()
+        !== animStartLocationDate.getTime();
         const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();
         const frontDateChanged = prevState.frontDate !== frontDate;
         if (animStartDateChanged || animEndDateChanged || frontDateChanged) {
@@ -369,7 +379,8 @@ class Timeline extends React.Component {
     requestAnimationFrame(() => {
       this.setState({
         hoverTime: date,
-        leftOffset: leftOffset - parentOffset, // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
+        // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
+        leftOffset: leftOffset - parentOffset,
       });
     });
   };
@@ -451,12 +462,17 @@ class Timeline extends React.Component {
       const diffFactor = diff / gridWidth;
       const displayDateValue = currentDateValue + xHoverPositionInCurrentGrid * diffFactor;
 
-      const isBetweenValidTimeline = getIsBetween(displayDateValue, timelineStartDateLimit, timelineEndDateLimit);
+      const isBetweenValidTimeline = getIsBetween(
+        displayDateValue,
+        timelineStartDateLimit,
+        timelineEndDateLimit,
+      );
       if (isBetweenValidTimeline) {
         const displayDateFormat = getISODateFormatted(displayDateValue);
         this.displayDate(displayDateFormat, clientX);
         this.setState({
-          hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position,
+          hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid
+          + transformX + position,
         });
       }
     });
@@ -599,7 +615,13 @@ class Timeline extends React.Component {
     if (!disabled) {
       const minDate = new Date(timelineStartDateLimit);
       const maxDate = new Date(timelineEndDateLimit);
-      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate, minDate, maxDate));
+      this.onDateChange(getNextTimeSelection(
+        delta,
+        timeScaleChangeUnit,
+        selectedDate,
+        minDate,
+        maxDate,
+      ));
     }
   }
 
@@ -838,7 +860,13 @@ class Timeline extends React.Component {
   * @param {Boolean} otherDraggerVisibleArg
   * @returns {void}
   */
-  updateDraggerDatePosition = (newDate, draggerSelected, draggerPositionArg, draggerVisibleArg, otherDraggerVisibleArg) => {
+  updateDraggerDatePosition = (
+    newDate,
+    draggerSelected,
+    draggerPositionArg,
+    draggerVisibleArg,
+    otherDraggerVisibleArg,
+  ) => {
     const {
       draggerPosition,
       draggerPositionB,
@@ -947,7 +975,8 @@ class Timeline extends React.Component {
             isAnimationDraggerDragging,
           } = self.state;
           const { isAnimationPlaying, arrowDown } = self.props;
-          const userIsInteracting = arrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
+          const userIsInteracting = arrowDown || isTimelineDragging
+          || isDraggerDragging || isAnimationDraggerDragging;
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
@@ -1487,7 +1516,11 @@ class Timeline extends React.Component {
                   }
                 }
               >
-                <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} isKioskModeActive={isKioskModeActive} />
+                <KioskTimeStamp
+                  date={selectedDate}
+                  subdaily={hasSubdailyLayers}
+                  isKioskModeActive={isKioskModeActive}
+                />
               </div>
             </section>
           </ErrorBoundary>
