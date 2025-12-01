@@ -53,8 +53,10 @@ export const getValidLayersForHandoffs = (state) => {
       id, projections, disableSmartHandoff, conceptIds,
     } = layer;
     const isAvailable = memoizedAvailable(state)(id);
-    const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
-    return isAvailable && projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
+    const filteredConceptIds = (conceptIds || [])
+      .filter(({ type, value, version }) => type && value && version);
+    return isAvailable && projections[proj.id]
+    && !disableSmartHandoff && !!filteredConceptIds.length;
   };
   return getActiveLayers(state).filter(filterForSmartHandoff);
 };
