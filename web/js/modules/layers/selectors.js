@@ -614,11 +614,36 @@ export const subdailyLayers = createSelector(
  * @param {Object} state
  */
 export function getSmallestIntervalValue(state) {
+  const oneMinute = 1;
+  const oneHour = 60;
+  const oneDay = 1440;
+  const timeUnitLookup = {
+    S: oneMinute / 60,
+    M: oneMinute,
+    H: oneHour,
+    D: oneDay,
+  };
   const layers = getActiveLayers(state);
-  let smallestDelta = 1440; // 1 day in minutes
+  let smallestDelta = timeUnitLookup.D; // 1 day in minutes
   if (layers && layers.length) {
     for (let i = 0; i < layers.length; i += 1) {
-      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
+      let interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
+      const variablePeriod = layers[i]?.hasVariablePeriod;
+      if (variablePeriod) {
+        const numberMatch = variablePeriod.match(/[0-9]+/g);
+        const unitMatch = variablePeriod.match(/[a-zA-Z]+/g);
+        const time = numberMatch.reduce((acc, val, idx) => {
+          const number = Number(val);
+          const unit = unitMatch[idx];
+          const minutes = number * timeUnitLookup[unit?.toUpperCase?.()];
+          const invalid = Number.isNaN(minutes);
+          const valueToAdd = invalid ? (console.warn(`Invalid period: ${variablePeriod}`), 0) : minutes; // eslint-disable-line no-console
+
+          return acc + valueToAdd;
+        }, 0);
+
+        interval = time;
+      }
       if (layers[i].period === 'subdaily' && interval < smallestDelta) {
         smallestDelta = Number(interval);
       }

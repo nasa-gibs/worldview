@@ -197,7 +197,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (def.period === 'subdaily') {
-      closestDate = def.id.includes('TEMPO_L2') ? closestDate : nearestInterval(def, closestDate);
+      closestDate = def.id.includes('TEMPO') ? closestDate : nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
       closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
@@ -371,6 +371,7 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
+    layerDate.setSeconds(59); // force currently selected time to be 59 seconds. This is to compensate for the inability to select seconds in the timeline
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
@@ -1206,37 +1207,38 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
 
-      if (!isGranule) {
-        switch (def.type) {
-          case 'wmts':
-            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
-            break;
-          case 'vector':
-            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            break;
-          case 'wms':
-            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
-            break;
-          case 'titiler':
-            layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'xyz':
-            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'indexedVector':
-            layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'composite:wmts':
-            layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
-            break;
-          default:
-            throw new Error(`Unknown layer type: ${type}`);
-        }
+      switch (def.type) {
+        case 'wmts':
+          layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'vector':
+          layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
+          break;
+        case 'wms':
+          layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        case 'titiler':
+          layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'xyz':
+          layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'indexedVector':
+          layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'composite:wmts':
+          layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'granule':
+          layer = await getGranuleLayer(def, attributes, options);
+          break;
+        default:
+          throw new Error(`Unknown layer type: ${type}`);
+      }
+      if (def.type !== 'granule') {
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
         if (def.type !== 'titiler') layer.setVisible(false);
-      } else {
-        layer = await getGranuleLayer(def, attributes, options);
       }
     }
     layer.setOpacity(opacity || 1.0);
