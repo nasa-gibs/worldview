@@ -77,7 +77,8 @@ function SimpleStatistics(props) {
         <strong>Note:</strong>
         <br />
         {' '}
-        Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.
+        Numerical analyses performed on imagery should
+        only be used for initial basic exploratory purposes.
       </div>
     </>
   );

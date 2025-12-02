@@ -88,7 +88,8 @@ export class VectorInteractions extends React.Component {
     let toggledGranuleFootprint;
 
     // only allow hover footprints on selected side of A/B comparison
-    if (compareActive && !isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset)) {
+    if (compareActive
+      && !isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset)) {
       return;
     }
 
@@ -97,7 +98,11 @@ export class VectorInteractions extends React.Component {
       .keys(granuleFootprints)
       .forEach((date) => {
         const points = granuleFootprints[date];
-        const isValidPolygon = areCoordinatesAndPolygonExtentValid(points, mouseCoords, visibleExtent);
+        const isValidPolygon = areCoordinatesAndPolygonExtentValid(
+          points,
+          mouseCoords,
+          visibleExtent,
+        );
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
           events.trigger(GRANULE_HOVERED, granulePlatform, date);
@@ -125,11 +130,15 @@ export class VectorInteractions extends React.Component {
         if (def.layergroup === 'Reference') isReferenceLayer = true;
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
-        const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
-        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) || featureOutsideExtent) return;
+        const featureOutsideExtent = layerExtent
+        && !olExtent.containsCoordinate(layerExtent, pixelCoords);
+        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType())
+          || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
-        const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
+        const isRenderedFeature = isWrapped ? lon > -250
+        || lon < 250 || lat > -90 || lat < 90 : true;
+        if (isRenderedFeature
+          && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
@@ -186,7 +195,8 @@ export class VectorInteractions extends React.Component {
     let clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
-    clickObj = getDialogObject(pixels, map, isMobile ? screenSize.screenWidth : isAeronet ? 250 : 445);
+    clickObj = getDialogObject(pixels, map, isMobile
+      ? screenSize.screenWidth : isAeronet ? 250 : 445);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
@@ -197,7 +207,12 @@ export class VectorInteractions extends React.Component {
     if (isCoordinatesMarker) return;
 
     const mapRes = map.getView().getResolution();
-    const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id, isMobile);
+    const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(
+      activeLayers,
+      mapRes,
+      proj.id,
+      isMobile,
+    );
 
     if (isMobile) {
       const coord = map.getCoordinateFromPixel(pixels);
@@ -208,7 +223,15 @@ export class VectorInteractions extends React.Component {
       if (hasNonClickableVectorLayerType && !isAeronet) {
         activateVectorZoomAlert();
       } else {
-        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet);
+        openVectorDialog(
+          dialogId,
+          metaArray,
+          offsetLeft,
+          offsetTop,
+          screenSize,
+          isEmbedModeActive,
+          isAeronet,
+        );
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
         } else if (isVectorExceededAlertPresent) {
@@ -218,7 +241,8 @@ export class VectorInteractions extends React.Component {
     } else if (hasNonClickableVectorLayerType) {
       activateVectorZoomAlert();
     }
-    if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
+    if (Object.entries(selected).length
+    || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       if (isMobile && hasNonClickableVectorLayerType) return;
       selectVectorFeatures(selected);
     } else if (isVectorModalOpen && !Object.entries(selected).length) {
@@ -275,7 +299,13 @@ function mapStateToProps(state) {
     screenSize,
     isCoordinateSearchActive,
     compareState: compare,
-    getDialogObject: (pixels, olMap, modalWidth) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset, modalWidth),
+    getDialogObject: (pixels, olMap, modalWidth) => onMapClickGetVectorFeatures(
+      pixels,
+      olMap,
+      state,
+      swipeOffset,
+      modalWidth,
+    ),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
     isVectorExceededAlertPresent,
@@ -311,7 +341,15 @@ const mapDispatchToProps = (dispatch) => ({
   activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet) => {
+  openVectorDialog: (
+    dialogId,
+    metaArray,
+    offsetLeft,
+    offsetTop,
+    screenSize,
+    isEmbedModeActive,
+    isAeronet,
+  ) => {
     const { screenHeight, screenWidth } = screenSize;
     const isMobile = screenSize.isMobileDevice;
     const dialogKey = new Date().getUTCMilliseconds();

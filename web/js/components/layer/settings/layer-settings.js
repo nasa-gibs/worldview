@@ -125,7 +125,9 @@ class LayerSettings extends React.Component {
               palette={palette}
               toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)}
               legend={legend}
-              toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, i, groupName); }}
+              toggleAll={(disabledArray) => {
+                toggleAllClassifications(layer.id, disabledArray, i, groupName);
+              }}
             />
           </TabPane>
         );
@@ -227,7 +229,9 @@ class LayerSettings extends React.Component {
           palette={palette}
           toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)}
           legend={legend}
-          toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, 0, groupName); }}
+          toggleAll={(disabledArray) => {
+            toggleAllClassifications(layer.id, disabledArray, 0, groupName);
+          }}
         />
       );
     }

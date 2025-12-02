@@ -104,7 +104,12 @@ export function drawSidebarPaletteOnCanvas(
       ctx.fillStyle = util.hexToRGBA(color);
       ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, barHeight);
     });
-    ctx.rect(2 - thickness, colorbarStartY - thickness, width - 3 + (thickness * 2), barHeight + (thickness * 2));
+    ctx.rect(
+      2 - thickness,
+      colorbarStartY - thickness,
+      width - 3 + (thickness * 2),
+      barHeight + (thickness * 2),
+    );
     ctx.stroke();
   }
 }
@@ -137,7 +142,12 @@ export function drawTravelModePaletteOnCanvas(
       ctx.fillStyle = util.hexToRGBA(color);
       ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, height);
     });
-    ctx.rect(2 - thickness, colorbarStartY - thickness, width - 3 + (thickness * 2), height + (thickness * 2));
+    ctx.rect(
+      2 - thickness,
+      colorbarStartY - thickness,
+      width - 3 + (thickness * 2),
+      height + (thickness * 2),
+    );
     ctx.stroke();
   }
 }

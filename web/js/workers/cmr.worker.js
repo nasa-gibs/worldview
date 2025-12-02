@@ -24,13 +24,17 @@ function mergeSortedGranuleDateRanges(granules) {
     const endTime = makeTime(end) + 60000;
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
-    if ((startTime >= lastRangeStartTime && startTime <= lastRangeEndTime) && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) { // within current range, ignore
+    // within current range, ignore
+    if ((startTime >= lastRangeStartTime
+      && startTime <= lastRangeEndTime)
+      && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) {
       return acc;
     }
     if (startTime > lastRangeEndTime) { // discontinuous, add new range
       return [...acc, [start, end]];
     }
-    if (startTime <= lastRangeEndTime && endTime > lastRangeEndTime) { // intersects current range, merge
+    if (startTime <= lastRangeEndTime
+      && endTime > lastRangeEndTime) { // intersects current range, merge
       return acc.with(-1, [acc.at(-1)[0], end]);
     }
     return acc;
@@ -100,8 +104,12 @@ async function getLayerGranuleRanges(layer) {
     nonNRTGranules = await requestGranules(nonNRTParams);
   }
   const granules = [...nonNRTGranules, ...nrtGranules];
-  const granuleDateRanges = granules.map(({ time_start: timeStart, time_end: timeEnd }) => [timeStart, timeEnd]);
-  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges); // merge overlapping granule ranges to simplify rendering
+  const granuleDateRanges = granules.map(({
+    time_start: timeStart,
+    time_end: timeEnd,
+  }) => [timeStart, timeEnd]);
+  // merge overlapping granule ranges to simplify rendering
+  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges);
 
   return mergedGranuleDateRanges;
 }

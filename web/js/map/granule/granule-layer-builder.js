@@ -62,7 +62,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   /**
    * Query CMR to get dates
    * @param {object} def - Layer specs
-   * @param {object} selectedDate - current selected date (Note: may not return this date, but this date will be the max returned)
+   * @param {object} selectedDate - current selected date (Note: may not return this date,
+   * but this date will be the max returned)
    * @returns {array} granule dates
   */
   const getQueriedGranuleDates = async (def, selectedDate) => {
@@ -185,30 +186,46 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {Date} leadingEdgeDate - timeline date
    * @returns {array}
   */
-  const getVisibleGranules = (availableGranules, granuleCount, leadingEdgeDate, granuleDateRanges) => {
+  const getVisibleGranules = (
+    availableGranules,
+    granuleCount,
+    leadingEdgeDate,
+    granuleDateRanges,
+  ) => {
     const { proj: { selected: { crs } } } = store.getState();
     const visibleGranules = [];
     const invisibleGranules = [];
     const availableCount = availableGranules?.length;
     if (!availableCount) return { visibleGranules, invisibleGranules };
     const count = granuleCount > availableCount ? availableCount : granuleCount;
-    const sortedAvailableGranules = availableGranules.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sortedAvailableGranules = availableGranules
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
     let totalLength = visibleGranules.length + invisibleGranules.length;
     for (let i = 0; totalLength < count; i += 1) {
       const item = sortedAvailableGranules[i];
       if (!item) break;
       const { date } = item;
       const dateDate = new Date(date);
-      leadingEdgeDate.setSeconds(59); // force currently selected time to be 59 seconds. This is to compensate for the inability to select seconds in the timeline
-      const isWithinRange = isWithinRanges(leadingEdgeDate, granuleDateRanges); // check if currently selected time is within a date range
-      const granuleIsWithinRange = isWithinRanges(dateDate, granuleDateRanges) ?? true; // check if the current granule is within a date range, defaults to true
+      // force currently selected time to be 59 seconds.
+      // This is to compensate for the inability to select seconds in the timeline
+      leadingEdgeDate.setSeconds(59);
+      // check if currently selected time is within a date range
+      const isWithinRange = isWithinRanges(leadingEdgeDate, granuleDateRanges);
+      // check if the current granule is within a date range, defaults to true
+      const granuleIsWithinRange = isWithinRanges(dateDate, granuleDateRanges) ?? true;
       const gaps = identifyGaps(granuleDateRanges); // identify gaps between date ranges
-      const currentlySelectedGap = !isWithinRange ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end) : null; // get the gap that the currently selected time is within
-      const granuleIsWithinSelectedGap = currentlySelectedGap ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : true; // check if the current granule is within the currently selected gap
+      // get the gap that the currently selected time is within
+      const currentlySelectedGap = !isWithinRange
+        ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end) : null;
+      // check if the current granule is within the currently selected gap
+      const granuleIsWithinSelectedGap = currentlySelectedGap
+        ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : true;
 
-      if (dateDate <= leadingEdgeDate && isWithinRange && granuleIsWithinRange && isWithinBounds(crs, item)) {
+      if (dateDate <= leadingEdgeDate && isWithinRange
+        && granuleIsWithinRange && isWithinBounds(crs, item)) {
         visibleGranules.unshift(item);
-      } else if (dateDate <= leadingEdgeDate && !granuleIsWithinRange && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
+      } else if (dateDate <= leadingEdgeDate && !granuleIsWithinRange
+        && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
         invisibleGranules.unshift(item);
       }
 
@@ -237,13 +254,18 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
     // get granule dates waiting for CMR query and filtering (if necessary)
     const availableGranules = await getQueriedGranuleDates(def, date, group);
-    const { visibleGranules, invisibleGranules } = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
+    const {
+      visibleGranules,
+      invisibleGranules,
+    } = getVisibleGranules(availableGranules, count, date, granuleDateRanges);
     const transformedVisibleGranules = transformGranulesForProj(visibleGranules, crs);
     const transformedInvisibleGranules = transformGranulesForProj(invisibleGranules, crs);
 
     return {
       count,
-      granuleDates: [...transformedVisibleGranules.map((g) => g.date), ...transformedInvisibleGranules.map((g) => g.date)],
+      granuleDates: [
+        ...transformedVisibleGranules.map((g) => g.date),
+        ...transformedInvisibleGranules.map((g) => g.date)],
       visibleGranules: transformedVisibleGranules,
       invisibleGranules: transformedInvisibleGranules,
       granuleDateRanges,
@@ -275,9 +297,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const granuleAttributes = await getGranuleAttributes(def, options);
     const { visibleGranules, invisibleGranules } = granuleAttributes;
     const shouldShift = def.shiftadjacentdays ?? true; // defaults to true
-    const shiftedVisibleGranules = shouldShift ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
-    const shiftedInvisibleGranules = shouldShift ? datelineShiftGranules(invisibleGranules, date, crs) : invisibleGranules;
-    const tileLayers = new OlCollection(createGranuleTileLayers(shiftedVisibleGranules, def, attributes));
+    const shiftedVisibleGranules = shouldShift
+      ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
+    const shiftedInvisibleGranules = shouldShift
+      ? datelineShiftGranules(invisibleGranules, date, crs) : invisibleGranules;
+    const tileLayers = new OlCollection(createGranuleTileLayers(
+      shiftedVisibleGranules,
+      def,
+      attributes,
+    ));
     granuleLayer.setLayers(tileLayers);
     granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);
     granuleLayer.set('granuleGroup', true);

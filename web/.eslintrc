@@ -87,7 +87,7 @@
         // Base rule overrides
         "no-nested-ternary": "off",    // 164 errors across 40 files
         "no-shadow": "warn",           // 110 errors across 40 files
-        "max-len": "off",              // 315 errors across 109 files
+        "max-len": "error",              // 315 errors across 109 files
         "consistent-return": "off",    // 95 errors across 58 files
         "no-underscore-dangle": "off", // 40 errors across 7 files
         "no-param-reassign": [         // 198 errors across 46 files

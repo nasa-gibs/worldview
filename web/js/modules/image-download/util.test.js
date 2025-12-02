@@ -218,7 +218,18 @@ test('Download URL [imagedownload-url]', () => {
     { id: 1, longitude: 2.7117, latitude: -19.1609 },
     { id: 2, longitude: 71.173, latitude: -39.0961 },
   ];
-  const dlURL = getDownloadUrl(url, proj, mockLayerDefs, lonlats, dimensions, dateTime, false, false, locationMarkers, undefined);
+  const dlURL = getDownloadUrl(
+    url,
+    proj,
+    mockLayerDefs,
+    lonlats,
+    dimensions,
+    dateTime,
+    false,
+    false,
+    locationMarkers,
+    undefined,
+  );
   const expectedURL = 'http://localhost:3002/api/v1/snapshot'
     + '?REQUEST=GetSnapshot'
     + '&TIME=2019-06-24T00:00:00Z'

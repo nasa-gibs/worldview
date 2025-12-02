@@ -238,7 +238,8 @@ function ChartingModeOptions(props) {
   }, [isModalOpen, modalId]);
 
   /**
-   * Provides a default AOI of the entire map if unspecified, and modifies the Openlayers coordinates for use with imageStat API
+   * Provides a default AOI of the entire map if unspecified,
+   * and modifies the Openlayers coordinates for use with imageStat API
    * @param {Object} aoi (Area Of Interest)
    */
   function convertOLcoordsForImageStat(aoi) {
@@ -252,7 +253,8 @@ function ChartingModeOptions(props) {
   /**
    * Returns the ImageStat request parameters based on the provided layer
    * @param {Object} layerInfo
-   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series'
+   * for time series charting
    */
   function getImageStatRequestParameters(layerInfo, timeSpan, startDate, endDate) {
     const startDateForImageStat = formatDateForImageStat(startDate);
@@ -262,9 +264,12 @@ function ChartingModeOptions(props) {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
       type: timeSpan === 'range' ? 'series' : 'date',
-      steps: STEP_NUM, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
-      layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
-      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
+      steps: STEP_NUM, // the number of days selected within a given range/series. Use '1' for just
+      // the start and end date, '2' for start date, end date and middle date, etc.
+      layer: layerInfo.id, // Layer to be pulled from gibs api.
+      // e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
+      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer.
+      // e.g. 'GHRSST_Sea_Surface_Temperature.xml'
       areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
       bins: 10, // Number of bins to used in returned histogram. e.g. 10
       scale: 1, // unused
@@ -345,7 +350,8 @@ function ChartingModeOptions(props) {
 
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
-   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   * @param {Object} data | This contains the name (dates)
+   * & min, max, stddev, etc. for each step requested
    */
   function formatGIBSDataForRecharts(data) {
     const xAxisNames = getKeysFromObj(data.min);
@@ -431,7 +437,9 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const numDaysRequested = Math.floor((initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)) + 1;
+      const numDaysRequested = Math.floor(
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
+      ) + 1;
       const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
       const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
       const promises = [];
@@ -443,7 +451,12 @@ function ChartingModeOptions(props) {
         if (requestEndDate > initialEndDate) {
           requestEndDate = new Date(initialEndDate.getTime());
         }
-        const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection, requestStartDate, requestEndDate);
+        const uriParameters = getImageStatRequestParameters(
+          layerInfo,
+          timeSpanSelection,
+          requestStartDate,
+          requestEndDate,
+        );
         const requestURI = getImageStatStatsRequestURL(uriParameters);
         promises.push(getImageStatData(requestURI));
       }
@@ -474,10 +487,14 @@ function ChartingModeOptions(props) {
 
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
-        const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
+        const numRangeDays = Math.floor(
+          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000,
+        );
         const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
         const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
-        const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
+        const numPoints = STEP_NUM - (
+          data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0
+        );
         displayChart({
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
@@ -810,7 +827,12 @@ const mapStateToProps = (state) => {
   const { crs, maxExtent } = proj.selected;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
+    activeLayer,
+    aoiActive,
+    aoiCoordinates,
+    aoiSelected,
+    chartRequestInProgress,
+    timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
   } = charting;
   const {
     isOpen, id,

@@ -48,7 +48,8 @@ function getSubdailyDates (selectedDate) {
   let currentDate = new Date(utcDateString);
 
   // Subtract 30 minutes to start half an hour before the selectedDate
-  // This is a performance improvement for EIC mode since most of the time, no full imagery is found in the first 30 minutes
+  // This is a performance improvement for EIC mode since most of the time,
+  // no full imagery is found in the first 30 minutes
   currentDate = new Date(currentDate.getTime() - 30 * 60 * 1000);
 
   // Round minutes down to nearest ten and seconds and milliseconds to zero
@@ -57,7 +58,8 @@ function getSubdailyDates (selectedDate) {
 
   // Add 12 more dates in ten-minute intervals (for the past two hours)
   for (let i = 1; i <= 12; i += 1) {
-    const previousDate = new Date(currentDate.getTime() - i * 10 * 60 * 1000); // subtracts i*10 minutes
+    // subtracts i*10 minutes
+    const previousDate = new Date(currentDate.getTime() - i * 10 * 60 * 1000);
     prevDates.push(formatSubdailyDate(previousDate));
   }
   return prevDates;

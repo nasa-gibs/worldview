@@ -32,13 +32,13 @@ const getInitialBufferSize = (numberOfFrames, speed) => {
  *
  * The buffering logic is as follows:
  * - n = 10 + speed (frames per sec)
- * - Make at least n requests (assuming there are >= n frames) to determine the avg fetch time for a frame
+ * - Make at least n requests (assuming there are >= n frames) to determine
+ * the avg fetch time for a frame
  * - While making initial requests, if any return too quickly (e.g. they were cached), keep making
- *   requests until at least n "real" requests can be made to determine average fetch time
+ * requests until at least n "real" requests can be made to determine average fetch time
  * - Based on how long it took to load the first n, calculate how many additional frames
- *   need to be pre-loaded, based on avg fetch time and playback speed, in order for playback to begin
- *   without having to stop to buffer.
- *
+ * need to be pre-loaded, based on avg fetch time and playback speed,
+ * in order for playback to begin without having to stop to buffer.
  */
 class PlayQueue extends React.Component {
   constructor(props) {

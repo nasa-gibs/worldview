@@ -167,7 +167,8 @@ class CategoryLayerRow extends React.Component {
                 if (minValidIndex < 0) {
                   minValidIndex = index;
                 }
-                // if activeSourceIndex is less than first valid index, make minValidIndex active tab
+                // if activeSourceIndex is less than first valid index,
+                // make minValidIndex active tab
                 validActiveIndex = minValidIndex > selectedMeasurementSourceIndex
                   ? minValidIndex
                   : selectedMeasurementSourceIndex;
@@ -265,7 +266,12 @@ const mapStateToProps = (state) => {
     sources: getSourcesForProjection(state),
     selectedMeasurement,
     selectedMeasurementSourceIndex,
-    hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
+    hasMeasurementSetting: (current, source) => hasSettingSelector(
+      current,
+      source,
+      config,
+      proj.id,
+    ),
   };
 };
 
