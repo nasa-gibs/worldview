@@ -44,7 +44,7 @@ import {
   changeTimeScale,
   selectInterval,
   changeCustomInterval as changeCustomIntervalAction,
-  changeSmartInterval as changeSmartIntervalAction,
+  changeAutoInterval as changeAutoIntervalAction,
   updateAppNow,
   toggleCustomModal,
   triggerTodayButton,
@@ -283,7 +283,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       changeCustomInterval,
-      changeSmartInterval,
+      changeAutoInterval,
       customInterval,
       dateA,
       dateB,
@@ -330,7 +330,7 @@ class Timeline extends React.Component {
     const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
       if (hasTempoProduct) {
-        changeSmartInterval(1, TIME_SCALE_TO_NUMBER.minute, true);
+        changeAutoInterval(1, TIME_SCALE_TO_NUMBER.minute, true);
       } else if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
       } else {
@@ -587,7 +587,7 @@ class Timeline extends React.Component {
   handleArrowDateChange(signConstant) {
     const {
       customSelected,
-      smartSelected,
+      autoSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
       selectedDate,
@@ -600,7 +600,7 @@ class Timeline extends React.Component {
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
-    if (smartSelected && subDailyLayersList && subDailyLayersList.length) {
+    if (autoSelected && subDailyLayersList && subDailyLayersList.length) {
       delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
     }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
@@ -1532,7 +1532,7 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
-    smartSelected,
+    autoSelected,
     interval,
     selected,
     selectedB,
@@ -1634,7 +1634,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     subDailyLayersList,
     customSelected,
-    smartSelected,
+    autoSelected,
     isCompareModeActive,
     isChartingActive,
     isAnimatingToEvent,
@@ -1699,9 +1699,9 @@ const mapDispatchToProps = (dispatch) => ({
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomIntervalAction(delta, timeScale));
   },
-  // changes/sets smart delta and timescale interval
-  changeSmartInterval: (delta, timeScale, smartSelected) => {
-    dispatch(changeSmartIntervalAction(delta, timeScale, smartSelected));
+  // changes/sets auto delta and timescale interval
+  changeAutoInterval: (delta, timeScale, autoSelected) => {
+    dispatch(changeAutoIntervalAction(delta, timeScale, autoSelected));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
@@ -1762,12 +1762,12 @@ Timeline.propTypes = {
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.object,
   changeCustomInterval: PropTypes.func,
-  changeSmartInterval: PropTypes.func,
+  changeAutoInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
-  smartSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,

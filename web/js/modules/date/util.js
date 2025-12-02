@@ -539,7 +539,7 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
 };
 
 /**
- * Gets the next imagery delta for smart increments
+ * Gets the next imagery delta for auto increments
  *
  * @method getNextImageryDelta
  * @param  {Array} layers

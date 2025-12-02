@@ -415,13 +415,13 @@ function mapStateToProps(state) {
   } = animation;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    customSelected, smartSelected, interval, customInterval, customDelta,
+    customSelected, autoSelected, interval, customInterval, customDelta,
   } = date;
   const customIncrement = customSelected
     ? `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`
     : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
-  const increment = smartSelected
-    ? 'Smart Interval'
+  const increment = autoSelected
+    ? 'Auto Interval'
     : customIncrement;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
@@ -454,7 +454,7 @@ function mapStateToProps(state) {
         : TIME_SCALE_FROM_NUMBER[interval],
       customSelected ? customDelta : 1,
       null,
-      smartSelected,
+      autoSelected,
       layers.active.layers,
     ),
     getImageArray: (options, dimensions) => getImageArray(

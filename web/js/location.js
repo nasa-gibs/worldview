@@ -227,8 +227,8 @@ const getParameters = function(config, parameters) {
         parse: (val) => val === 'true',
       },
     },
-    iss: {
-      stateKey: 'date.smartSelected',
+    ias: {
+      stateKey: 'date.autoSelected',
       initialState: false,
       options: {
         parse: (val) => val === 'true',

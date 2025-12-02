@@ -270,10 +270,10 @@ class PlayQueue extends React.Component {
     const {
       interval,
       delta,
-      smartSelected,
+      autoSelected,
       layers,
     } = this.props;
-    if (smartSelected) {
+    if (autoSelected) {
       return util.dateAdd(date, 'minute', getNextImageryDelta(layers, date, 1));
     }
     return util.dateAdd(date, interval, delta);
@@ -489,7 +489,7 @@ PlayQueue.propTypes = {
   snappedCurrentDate: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
   map: PropTypes.object,
-  smartSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   layers: PropTypes.array,
 };
 

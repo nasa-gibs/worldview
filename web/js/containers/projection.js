@@ -9,7 +9,7 @@ import IconList from '../components/util/icon-list';
 import {
   changeTimeScale,
   selectInterval,
-  changeSmartInterval as changeSmartIntervalAction,
+  changeAutoInterval as changeAutoIntervalAction,
 } from '../modules/date/actions';
 import {
   TIME_SCALE_TO_NUMBER,
@@ -57,17 +57,17 @@ class ProjectionList extends Component {
 
   onClick(id) {
     const {
-      updateProjection, projection, onCloseModal, changeTimeScale, changeSmartInterval, layers,
+      updateProjection, projection, onCloseModal, changeTimeScale, changeAutoInterval, layers,
     } = this.props;
 
     if (id !== projection) {
       updateProjection(id);
-      const enableSmart = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
+      const enableAuto = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
       // Defaults to 1 day if new projection has no TEMPO layers present
-      const timescale = enableSmart ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
-      changeSmartInterval(1, timescale, enableSmart);
-      selectInterval(1, timescale, false, enableSmart);
-      changeTimeScale(enableSmart ? TIME_SCALE_TO_NUMBER.hour : timescale);
+      const timescale = enableAuto ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
+      changeAutoInterval(1, timescale, enableAuto);
+      selectInterval(1, timescale, false, enableAuto);
+      changeTimeScale(enableAuto ? TIME_SCALE_TO_NUMBER.hour : timescale);
     }
 
     googleTagManager.pushEvent({
@@ -118,8 +118,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeTimeScale: (val) => {
     dispatch(changeTimeScale(val));
   },
-  changeSmartInterval: (delta, timeScale, smartSelected) => {
-    dispatch(changeSmartIntervalAction(delta, timeScale, smartSelected));
+  changeAutoInterval: (delta, timeScale, autoSelected) => {
+    dispatch(changeAutoIntervalAction(delta, timeScale, autoSelected));
   },
 });
 
@@ -135,6 +135,6 @@ ProjectionList.propTypes = {
   projectionArray: PropTypes.array,
   updateProjection: PropTypes.func,
   changeTimeScale: PropTypes.func,
-  changeSmartInterval: PropTypes.func,
+  changeAutoInterval: PropTypes.func,
   layers: PropTypes.array,
 };
