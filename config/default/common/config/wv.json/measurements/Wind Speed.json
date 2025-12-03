@@ -28,8 +28,13 @@
                     "settings": [
                         "AMSRUE_Ocean_Wind_Speed_Day",
                         "AMSRUE_Ocean_Wind_Speed_Night",
+                        "AMSRU_L3_Ocean_Wind_Speed_Daily",
+                        "AMSRU_L3_Ocean_Wind_Speed_Weekly",
+                        "AMSRU_L3_Ocean_Wind_Speed_Monthly",
                         "OrbitTracks_Aqua_Ascending",
-                        "OrbitTracks_Aqua_Descending"
+                        "OrbitTracks_Aqua_Descending",
+                        "OrbitTracks_GCOM-W1_Ascending",
+                        "OrbitTracks_GCOM-W1_Descending"
                     ]
                 },
                 "CYGNSS/DDMI": {

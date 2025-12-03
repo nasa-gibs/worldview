@@ -1,8 +1,8 @@
 {
   "layers": {
-    "AMSRU2_L3_Ocean_Wind_Speed_Monthly": {
-      "id": "AMSRU2_L3_Ocean_Wind_Speed_Monthly",
-      "description": "amsr2/AMSRU2_L3_Ocean_Wind_Speed_Monthly",
+    "AMSRU_L3_Ocean_Wind_Speed_Monthly": {
+      "id": "AMSRU_L3_Ocean_Wind_Speed_Monthly",
+      "description": "amsru/AMSRU_L3_Ocean_Wind_Speed_Monthly",
       "tags": "amsru2 amsr-u2 amsr2 amsr-ue amsr-e unified",
       "group": "overlays",
       "layergroup": "Wind Speed",
