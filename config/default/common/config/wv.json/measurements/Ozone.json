@@ -56,7 +56,9 @@
                         "TEMPO_L2_Ozone_Column_Amount_Granule",
                         "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
                         "TEMPO_L3_Ozone_Column_Amount",
-                        "TEMPO_L3_Ozone_Cloud_Fraction"
+                        "TEMPO_L3_Ozone_Cloud_Fraction",
+                        "TEMPO_L3_Ozone_Profile_Total_Column",
+                        "TEMPO_L3_Ozone_Profile_Troposphere_Column"
                     ]
                 },
                 "MERRA-2": {
