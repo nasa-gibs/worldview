@@ -197,7 +197,10 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (def.period === 'subdaily') {
-      closestDate = def.id.includes('TEMPO') ? closestDate : nearestInterval(def, closestDate);
+      // Skip interval snapping for non-variable subdaily products
+      const directIntervalProducts = ['TEMPO', 'PREFIRE'];
+      const useDirectInterval = directIntervalProducts.some((key) => def.id.includes(key));
+      closestDate = useDirectInterval ? closestDate : nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
       closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
