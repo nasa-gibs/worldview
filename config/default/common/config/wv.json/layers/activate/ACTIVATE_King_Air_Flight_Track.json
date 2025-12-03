@@ -1,13 +1,13 @@
 {
   "layers": {
-    "ARCSIX_P-3B_Flight_Track": {
-      "id": "ARCSIX_P-3B_Flight_Track",
-      "title": "NASA P-3B Flight Track (Per Flight)",
-      "subtitle": "ARCSIX/NASA P-3B",
-      "description": "arcsix/ARCSIX_P-3B_Flight_Track",
+    "ACTIVATE_King_Air_Flight_Track": {
+      "id": "ACTIVATE_King_Air_Flight_Track",
+      "title": "NASA King Air Flight Track (Per Flight)",
+      "subtitle": "ACTIVATE/NASA King Air",
+      "description": "activate/ACTIVATE_King_Air_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector Arctic Greenland Thule Pituffik THAAO",
+      "tags": "vector activate",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
@@ -15,19 +15,19 @@
       "disableCustomPalettes": true,
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
-        "id": "ARCSIX_P-3B_Flight_Track",
+        "id": "ACTIVATE_King_Air_Flight_Track",
         "geographic": {
-          "id": "ARCSIX_P-3B_Flight_Track"
+          "id": "ACTIVATE_King_Air_Flight_Track"
         }
       },
       "palette": {
-        "id": "ARCSIX_P-3B_Flight_Track",
+        "id": "ACTIVATE_King_Air_Flight_Track",
         "immutable": true
       },
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "alt",
+        "property": "GPS_Alt_m_",
         "order": "descending"
       }
     }
