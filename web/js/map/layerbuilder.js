@@ -4,6 +4,7 @@ import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
+import OlImageTile from 'ol/source/ImageTile';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
@@ -1057,6 +1058,20 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createLayerEsri = (def, options, day, state) => {
+    const source = config.sources[def.source];
+    const urlParams = `${def.id}/MapServer/tile/{z}/{y}/{x}`;
+
+    const url = `${source.url}/${urlParams}`;
+
+    return new OlLayerTile({
+      extent: [-180, -90, 180, 90],
+      source: new OlImageTile({
+        url,
+      }),
+    });
+  };
+
   const createIndexedVectorLayer = async (def, options, day, state) => {
     const { proj: { selected } } = state;
     const { crs } = selected;
@@ -1245,6 +1260,9 @@ export default function mapLayerBuilder(config, cache, store) {
             break;
           case 'composite:wmts':
             layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
+            break;
+          case 'esriMapServer':
+            layer = await getLayer(createLayerEsri, def, options, attributes, wrapLayer);
             break;
           default:
             throw new Error(`Unknown layer type: ${type}`);
