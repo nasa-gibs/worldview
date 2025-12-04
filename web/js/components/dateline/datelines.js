@@ -9,7 +9,8 @@ import { CRS } from '../../modules/map/constants';
 
 function DateLines(props) {
   const {
-    map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText, isMobilePhone, isMobileTablet,
+    map, proj, date, isCompareActive, mapIsRendered,
+    alwaysShow, hideText, isMobilePhone, isMobileTablet,
   } = props;
 
   const [height, setHeight] = useState(0);

@@ -45,7 +45,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(13)
+  await expect(layersSearchRow).toHaveCount(14)
 })
 
 test('Updating input changes results', async () => {
@@ -155,8 +155,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(17)
-  await expect(layerResultsCountText).toContainText('Showing 17 out of')
+  await expect(layersSearchRow).toHaveCount(19)
+  await expect(layerResultsCountText).toContainText('Showing 19 out of')
 })
 
 test('Finding layer by ID with search', async () => {

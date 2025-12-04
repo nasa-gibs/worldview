@@ -285,7 +285,8 @@ export default class GifStream {
       },
     });
     return new GifWriter(rs, width, height, {
-      loop: options.loop || 0, // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
+      // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
+      loop: options.loop || 0,
     });
   }
 }

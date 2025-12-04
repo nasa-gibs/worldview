@@ -75,7 +75,9 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
       }
     }
 
-    const markerAlreadyExists = coordinates.find(({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude);
+    const markerAlreadyExists = coordinates.find(
+      ({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude,
+    );
 
     if (markerAlreadyExists) {
       return dispatch({

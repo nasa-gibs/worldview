@@ -142,7 +142,8 @@ const FooterContent = React.forwardRef((props, ref) => {
               <div>
                 More than
                 {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-                events match the current filter criteria. Narrow your search by date, event type and/or map view.
+                events match the current filter criteria. Narrow your search by date, event type
+                and/or map view.
               </div>
             </UncontrolledTooltip>
           </>

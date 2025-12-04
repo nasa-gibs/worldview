@@ -308,7 +308,18 @@ export function getTruncatedGranuleDates(layerDefs) {
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates, activePalettes) {
+export function getDownloadUrl(
+  url,
+  proj,
+  layerDefs,
+  bbox,
+  dimensions,
+  dateTime,
+  fileType,
+  isWorldfile,
+  markerCoordinates,
+  activePalettes,
+) {
   const { crs } = proj.selected;
   const {
     layersArray,

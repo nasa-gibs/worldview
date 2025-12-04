@@ -44,9 +44,15 @@ export default function MapRunningData(compareUi, store) {
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
       const coords = map.getCoordinateFromPixel(pixel);
       const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), coords);
-      const inCompareRegion = isFromActiveCompareRegion(pixel, layer.wv.group, compare, swipeOffset);
+      const inCompareRegion = isFromActiveCompareRegion(
+        pixel,
+        layer.wv.group,
+        compare,
+        swipeOffset,
+      );
       const hasPalette = !lodashIsEmpty(def.palette);
-      return !isRenderedFeature || !inCompareRegion || featureOutsideExtent || !hasPalette || isCollapsed;
+      return !isRenderedFeature || !inCompareRegion
+      || featureOutsideExtent || !hasPalette || isCollapsed;
     };
 
     // Running data for vector layers
@@ -66,13 +72,16 @@ export default function MapRunningData(compareUi, store) {
         if (!value) return;
         const tooltips = legend.tooltips.map((c) => c.toLowerCase().replace(/\s/g, ''));
         if (id.includes('AERONET')) {
-          const colorIndex = tooltips.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]));
+          const colorIndex = tooltips.findIndex((range) => value >= range[0]
+            && (range.length < 2 || value < range[1]));
           color = legend.colors[colorIndex];
           if (!color) {
             const paletteLegendsAeronet = getPalette(id, 1, undefined, state);
             const { legend: legendAeronet } = paletteLegendsAeronet;
             const tooltipsAeronet = legendAeronet.tooltips;
-            const colorIndexAeronet = tooltipsAeronet.findIndex((range) => parseFloat(value) >= parseFloat(range.split(' – ')[0]) && (range.split(' – ').length < 2 || parseFloat(value) < parseFloat(range.split(' – ')[1])));
+            const colorIndexAeronet = tooltipsAeronet.findIndex((range) => parseFloat(value)
+            >= parseFloat(range.split(' – ')[0]) && (range.split(' – ').length < 2
+            || parseFloat(value) < parseFloat(range.split(' – ')[1])));
             color = legendAeronet.colors[colorIndexAeronet];
           }
         } else {

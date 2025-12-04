@@ -67,9 +67,11 @@ function UpdateCollections () {
       const layerInCollections = collections[layer.id];
       if (!layerInCollections) return true; // Layer not in collections, needs to be updated
 
-      const collectionDate = layerInCollections.dates.some((d) => d.date === date && d.projection === proj.id);
+      const collectionDate = layerInCollections.dates
+        .some((d) => d.date === date && d.projection === proj.id);
 
-      return !collectionDate || forceUpdate; // If date exists in layer collection, don't query layer
+      // If date exists in layer collection, don't query layer
+      return !collectionDate || forceUpdate;
     });
     return wmtsLayers;
   };
@@ -77,7 +79,12 @@ function UpdateCollections () {
   const updateLayerCollections = async (forceUpdate = false) => {
     const formattedDailyDate = formatDailyDate(selectedDate);
     const formattedSubdailyDate = formatSubdailyDate(selectedDate);
-    const layersToUpdate = findLayerCollections(layers, formattedDailyDate, formattedSubdailyDate, forceUpdate);
+    const layersToUpdate = findLayerCollections(
+      layers,
+      formattedDailyDate,
+      formattedSubdailyDate,
+      forceUpdate,
+    );
     const headerPromises = layersToUpdate.map((layer) => getHeaders(layer, selectedDate));
 
     try {

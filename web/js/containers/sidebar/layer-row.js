@@ -199,11 +199,14 @@ function LayerRow (props) {
   // hook that checks if the ddv layer location alert should be enabled or disabled
   useEffect(() => {
     const { title } = layer;
-    // if layer is ddv && layer IS NOT already in location alert list && location is at alertable coordinates
+    // if layer is ddv && layer IS NOT already in location alert list
+    // && location is at alertable coordinates
     if (isLayerNotificationDismissable && !ddvLayerLocationNoticeActive && showGranuleAlert) {
       enableDDVLocationAlert(title);
-      // if layer is ddv && layer IS NOT already in location alert list && location is at alertable coordinates
-    } else if (isLayerNotificationDismissable && ddvLayerLocationNoticeActive && !showGranuleAlert) {
+      // if layer is ddv && layer IS NOT already in location alert list
+      // && location is at alertable coordinates
+    } else if (isLayerNotificationDismissable
+      && ddvLayerLocationNoticeActive && !showGranuleAlert) {
       disableDDVLocationAlert(title);
     }
   }, [showGranuleAlert]);
@@ -596,7 +599,8 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && !hideZoomAlert && !isLayerNotificationDismissable && !layer.shouldHide && (
+        {showZoomAlert && !hideZoomAlert
+        && !isLayerNotificationDismissable && !layer.shouldHide && (
           <AlertUtil
             id="zoom-alert"
             isOpen
@@ -607,7 +611,8 @@ function LayerRow (props) {
             onClick={openZoomAlertModal}
           />
         )}
-        {showGranuleAlert && !hideGranuleAlert && !isLayerNotificationDismissable && !layer.shouldHide && (
+        {showGranuleAlert && !hideGranuleAlert
+        && !isLayerNotificationDismissable && !layer.shouldHide && (
           <AlertUtil
             id="granule-alert"
             isOpen
@@ -663,7 +668,8 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation, layers, date,
+      screenSize, palettes, config, embed, map,
+      compare, proj, ui, settings, animation, layers, date,
     } = state;
     const isMobile = screenSize.isMobileDevice;
     const { isDistractionFreeModeActive } = ui;
@@ -708,7 +714,8 @@ const makeMapStateToProps = () => {
       isVectorLayer: isVector,
       isChartableLayer: isChartable,
       isAnimating: animation.isPlaying,
-      hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
+      hasClickableFeature: isVector && isVisible
+      && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
       paletteLegends,

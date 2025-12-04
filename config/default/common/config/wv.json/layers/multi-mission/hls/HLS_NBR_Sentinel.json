@@ -9,15 +9,15 @@
       "description": "multi-mission/hls/HLS_NBR_Sentinel",
       "tags": "surface Sentinel msi s30 nbr 2A 2B 2C",
       "group": "overlays",
-      "layergroup": "Land Surface Reflectance",
+      "layergroup": "Vegetation Indices",
       "format": "image/png",
       "type": "titiler",
       "period": "daily",
      "orbitTracks": ["OrbitTracks_Sentinel-2A_Descending", "OrbitTracks_Sentinel-2B_Descending", "OrbitTracks_Sentinel-2C_Descending"],
       "orbitDirection": ["descending", "descending", "descending"],
       "bandCombo": {
-        "assets": ["B05", "B07"],
-        "expression": "(B05-B07)/(B05+B07)",
+        "assets": ["B8A", "012"],
+        "expression": "(B8A-B12)/(B8A+B12)",
         "rescale": "-1,1",
         "colormap_name": "puor",
         "bands_regex": "B[0-9][0-9A-Za-z]"
@@ -31,7 +31,7 @@
           "matrixSet": "31.25m"
         }
       },
-      "startDate": "2022-01-01T00:00:00Z"
+      "startDate": "2015-11-28T00:00:00Z"
     }
   }
 }

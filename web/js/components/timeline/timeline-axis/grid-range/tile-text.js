@@ -59,5 +59,9 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   );
 };
 
-const TileText = ({ item, index, gridWidth }) => axisScaleTextElementWrapper(item, index, gridWidth);
+const TileText = ({
+  item,
+  index,
+  gridWidth,
+}) => axisScaleTextElementWrapper(item, index, gridWidth);
 export default TileText;

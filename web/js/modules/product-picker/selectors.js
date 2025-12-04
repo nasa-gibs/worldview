@@ -30,7 +30,10 @@ export const getLayersForProjection = createSelector(
         }
         return layer;
       });
-    return lodashSortBy(layersWithFacetProps, (layer) => lodashIndexOf(config.layerOrder, layer.id));
+    return lodashSortBy(
+      layersWithFacetProps,
+      (layer) => lodashIndexOf(config.layerOrder, layer.id),
+    );
   },
 );
 

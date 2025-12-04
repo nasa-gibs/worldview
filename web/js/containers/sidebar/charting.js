@@ -41,7 +41,8 @@ function ChartingLayerMenu (props) {
 
   useEffect(() => {
     if (!activeChartingLayer && Object.keys(renderedPalettes).length > 0) {
-      updateActiveChartingLayer(activeLayersWithPalettes.filter((layer) => !layer.shouldHide)[0].id);
+      updateActiveChartingLayer(activeLayersWithPalettes
+        .filter((layer) => !layer.shouldHide)[0].id);
     }
   }, [renderedPalettes]);
 

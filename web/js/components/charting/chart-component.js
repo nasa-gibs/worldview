@@ -1,14 +1,42 @@
-import React from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useMemo,
+  useState,
+} from 'react';
+import { connect } from 'react-redux';
 import {
   LineChart, Line, XAxis, YAxis, Legend, Tooltip,
 } from 'recharts';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import OlMap from 'ol/Map';
+import OlView from 'ol/View';
+import OlLayerGroup from 'ol/layer/Group';
+import OlLayerTile from 'ol/layer/Tile';
+import OlFeature from 'ol/Feature';
+import { fromExtent } from 'ol/geom/Polygon';
+import { Vector as OlVectorLayer } from 'ol/layer';
+import { Vector as OlVectorSource } from 'ol/source';
+import { getCenter } from 'ol/extent';
+import { inAndOut } from 'ol/easing';
+import {
+  Fill as OlStyleFill,
+  Stroke as OlStyleStroke,
+  Style as OlStyle,
+} from 'ol/style';
+import util from '../../util/util';
 
 function ChartComponent (props) {
   const {
     liveData,
+    mapView,
+    createLayer,
+    overviewMapLayerDef,
   } = props;
+
+  const [errorCollapsed, setErrorCollapsed] = useState(true);
+  const mapInstanceRef = useRef(null);
 
   const {
     data,
@@ -19,7 +47,49 @@ function ChartComponent (props) {
     isTruncated,
     title,
     numPoints,
+    coordinates,
+    errors,
   } = liveData;
+
+  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  const errorDaysArr = useMemo(() => {
+    const raw = errors?.error_days;
+    if (Array.isArray(raw)) return raw.map((s) => String(s));
+    if (raw == null) return [];
+    if (typeof raw !== 'string') return [String(raw)];
+
+    const trimmed = raw.trim();
+
+    // Try JSON parse if looks like an array; tolerate single quotes
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const jsonish = trimmed.replace(/'/g, '"');
+        const arr = JSON.parse(jsonish);
+        if (Array.isArray(arr)) return arr.map((s) => String(s));
+      } catch {
+        // fall through to manual split
+      }
+    }
+
+    // Fallback: strip brackets, split on comma, strip surrounding quotes
+    return trimmed
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+  }, [errors]);
+
+  // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
+  const errorDatesDisplay = useMemo(() => errorDaysArr
+    .map((item) => {
+      const dateStr = typeof item === 'string'
+        ? item
+        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+      return (dateStr || '').split('T')[0];
+    })
+    .filter(Boolean)
+    .join(', \u00A0\u00A0'), [errorDaysArr]);
+  const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
@@ -65,17 +135,29 @@ function ChartComponent (props) {
 
   function CustomTooltip({ active, payload, label }) {
     if (active && payload && payload.length) {
+      if (!Number.isNaN(payload[0].value)) {
+        return (
+          <div className="custom-tooltip">
+            <p className="label" style={{ color: 'gray' }}>
+              {label}
+            </p>
+            <p className="label" style={{ color: '#000' }}>
+              <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
+              {`${payload[0].name}${formattedUnit}: `}
+              <b>
+                {formatToThreeDigits(payload[0].value)}
+              </b>
+            </p>
+          </div>
+        );
+      }
       return (
         <div className="custom-tooltip">
           <p className="label" style={{ color: 'gray' }}>
             {label}
           </p>
           <p className="label" style={{ color: '#000' }}>
-            <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
-            {`${payload[0].name}${formattedUnit}: `}
-            <b>
-              {formatToThreeDigits(payload[0].value)}
-            </b>
+            No data
           </p>
         </div>
       );
@@ -84,10 +166,76 @@ function ChartComponent (props) {
     return null;
   }
 
+  // Gets the indices of the tick positions so that they are evenly spaced
+  function getTickPositions(dataLength) {
+    // If dataLength is too small, just show first and last tick
+    if (dataLength < 8) return [0, dataLength - 1];
+
+    const numGaps = dataLength < 15 ? 4 : 5;
+    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
+
+    // Last gap must be at least 3 to give extra room for end-aligned label
+    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
+
+    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
+    let leftoverGap = (dataLength - 1) - gapsTotal;
+
+    let i = 0;
+    // Reduce gaps that are too large due to last gap size
+    while (leftoverGap < 0 && i < numGaps - 1) {
+      gapsArr[i] -= 1;
+      leftoverGap += 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    i = 0;
+    // Distribute extra gaps across existing gaps
+    while (leftoverGap > 0 && i < numGaps - 1) {
+      gapsArr[i] += 1;
+      leftoverGap -= 1;
+      i = (i + 1) % (numGaps - 1);
+    }
+
+    // Build final array of tick positions based on calculated gaps
+    const tickPosArr = [0];
+    for (let i = 0; i < gapsArr.length; i += 1) {
+      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[i]);
+    }
+    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
+
+    return tickPosArr;
+  }
+
+  const tickPositions = getTickPositions(data.length);
+
+  function CustomXAxisTick(obj) {
+    const {
+      x, y, fill, textAnchor, visibleTicksCount, index, payload,
+    } = obj;
+    const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
+    const isLabeled = tickPositions.includes(index);
+    if (isLabeled) {
+      return (
+        <g transform={`translate(${x}, ${y})`}>
+          <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
+          <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
+            {payload.value}
+          </text>
+        </g>
+      );
+    }
+    return (
+      <g transform={`translate(${x}, ${y})`}>
+        <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
+      </g>
+    );
+  }
+
   const yAxisValuesArr = getYAxisValues(data);
 
   /**
-   * Extracts each key from the provided object & returns the list, removing 'name' from the collection
+   * Extracts each key from the provided object &
+   * returns the list,removing 'name' from the collection
    * @param {Object} chartData
    */
   function getLineNames(obj) {
@@ -119,7 +267,7 @@ function ChartComponent (props) {
    * @param {Object} chartData
    */
   function getQuickStatistics(chartData) {
-    const count = chartData.length;
+    let count = 0;
     let minTotal = 0;
     let maxTotal = 0;
     let meanTotal = 0;
@@ -127,60 +275,130 @@ function ChartComponent (props) {
     let stddevTotal = 0;
 
     for (let i = 0; i < chartData.length; i += 1) {
-      meanTotal += chartData[i].mean;
-      minTotal += chartData[i].min;
-      maxTotal += chartData[i].max;
-      medianTotal += chartData[i].median;
-      stddevTotal += chartData[i].stddev;
+      if (!Number.isNaN(chartData[i].mean)) {
+        meanTotal += chartData[i].mean;
+        minTotal += chartData[i].min;
+        maxTotal += chartData[i].max;
+        medianTotal += chartData[i].median;
+        stddevTotal += chartData[i].stddev;
+        count += 1;
+      }
     }
 
     return (
-      <>
-        <div className="charting-statistics-container">
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Median:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(medianTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Mean:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(meanTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Min:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(minTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Max:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(maxTotal / count)}
-            </span>
-          </div>
-          <div className="charting-statistics-row">
-            <span className="charting-statistics-label">
-              Stdev:
-            </span>
-            <span className="charting-statistics-value">
-              {formatToThreeDigits(stddevTotal / count)}
-            </span>
-          </div>
+      <div className="charting-statistics-container">
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Median:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(medianTotal / count)}
+          </span>
         </div>
-      </>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Mean:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(meanTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Min:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(minTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Max:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(maxTotal / count)}
+          </span>
+        </div>
+        <div className="charting-statistics-row">
+          <span className="charting-statistics-label">
+            Stdev:
+          </span>
+          <span className="charting-statistics-value">
+            {formatToThreeDigits(stddevTotal / count)}
+          </span>
+        </div>
+      </div>
     );
   }
+
+  useEffect(() => {
+    const boxFeature = new OlFeature({
+      geometry: fromExtent(coordinates),
+    });
+    boxFeature.setStyle(new OlStyle({
+      stroke: new OlStyleStroke({
+        color: 'rgba(255, 255, 255, .6)',
+        width: 1,
+      }),
+      fill: new OlStyleFill({
+        color: 'rgba(255, 255, 255, .3)',
+      }),
+    }));
+    const boxLayer = new OlVectorLayer({
+      source: new OlVectorSource({
+        features: [boxFeature],
+      }),
+    });
+
+    const createLayerWrapper = async () => {
+      const backgroundLayerGroup = await createLayer(overviewMapLayerDef);
+      backgroundLayerGroup.setVisible(true);
+
+      const layersList = [];
+      backgroundLayerGroup.getLayers().getArray().forEach((layer) => {
+        layersList.push(new OlLayerTile({
+          source: layer.getSource(),
+        }));
+      });
+      const copiedLayerGroup = new OlLayerGroup({
+        layers: layersList,
+      });
+
+      mapInstanceRef.current = new OlMap({
+        view: new OlView({
+          center: mapView.getCenter(),
+          zoom: mapView.getZoom(),
+          projection: mapView.getProjection(),
+        }),
+        layers: [copiedLayerGroup, boxLayer],
+        target: 'charting-minimap-inner',
+        interactions: [],
+      });
+
+      const minimapView = mapInstanceRef.current.getView();
+      minimapView.fit(boxFeature.getGeometry().getExtent(), { padding: [50, 50, 50, 50] });
+
+      mapInstanceRef.current.on('moveend', () => {
+        const boxCenter = getCenter(boxFeature.getGeometry().getExtent());
+        const minimapCenter = minimapView.getCenter();
+        if (boxCenter[0] === minimapCenter[0] && boxCenter[1] === minimapCenter[1]) {
+          return;
+        }
+        minimapView.animate({
+          center: boxCenter,
+          duration: 350,
+          easing: inAndOut,
+        });
+      });
+    };
+
+    createLayerWrapper();
+
+    return () => {
+      mapInstanceRef.current.setTarget(null);
+      mapInstanceRef.current = null;
+    };
+  }, [overviewMapLayerDef]);
 
   return (
     <div className="charting-chart-container">
@@ -200,7 +418,7 @@ function ChartComponent (props) {
             <Tooltip content={CustomTooltip} />
             {' '}
             {getLineChart(data)}
-            <XAxis dataKey="name" stroke="#a6a5a6" />
+            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick />} tickLine={false} />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -213,60 +431,149 @@ function ChartComponent (props) {
                 dx: -40,
               }}
             />
-            <Legend formatter={() => `${title}`} />
+            <Legend
+              formatter={() => `${title}`}
+              wrapperStyle={{
+                paddingTop: '7px',
+              }}
+            />
           </LineChart>
         </div>
         <div className="charting-stat-text">
-          <h3>
-            <b>
-              Average Statistics
-              {formattedUnit}
-            </b>
-          </h3>
-          <br />
-          {getQuickStatistics(data)}
-        </div>
-      </div>
-      <div className="charting-disclaimer">
-        <strong className="charting-disclaimer-pre">Note: </strong>
-        <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
-        {isTruncated
-        && (
-          <div className="charting-disclaimer-lower">
-            <FontAwesomeIcon
-              icon="exclamation-triangle"
-              className="wv-alert-icon"
-              size="1x"
-              widthAuto
-            />
-            <i className="charting-disclaimer-block">
-              As part of this beta feature release, the number of data points plotted between
+          <div id="charting-stats-container">
+            <h3>
               <b>
-                {` ${startDate} `}
+                Average Statistics
+                {formattedUnit}
               </b>
-              and
-              <b>
-                {` ${endDate} `}
-              </b>
-              have been reduced from
-              <b>
-                {` ${numRangeDays} `}
-              </b>
-              to
-              <b>
-                {` ${numPoints}`}
-              </b>
-              .
-            </i>
+            </h3>
+            <br />
+            {getQuickStatistics(data)}
           </div>
-        )}
+          <div id="charting-minimap-container">
+            <div id="charting-minimap-inner" />
+          </div>
+          <div />
+          <div id="charting-coordinates-container">
+            <h3>
+              <b>
+                Coordinates
+              </b>
+            </h3>
+            <br />
+            <div className="charting-coordinates-inner">
+              <div />
+              <div className="coordinate-center coordinate-subheader">Latitude</div>
+              <div className="coordinate-center coordinate-subheader">Longitude</div>
+              <div>Top Right:</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[0]}</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[1]}</div>
+              <div>Bottom Left:</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[0]}</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[1]}</div>
+            </div>
+          </div>
+        </div>
+        <div className="charting-disclaimer">
+          <strong className="charting-disclaimer-pre">Note: </strong>
+          <span>
+            Numerical analyses performed on imagery should only
+            be used for initial basic exploratory purposes.
+          </span>
+          {isTruncated
+          && (
+            <div className="charting-disclaimer-upper">
+              <FontAwesomeIcon
+                icon="exclamation-triangle"
+                className="wv-alert-icon"
+                size="1x"
+                widthAuto
+              />
+              <i className="charting-disclaimer-block">
+                As part of this beta feature release, the number of data points plotted between
+                <b>
+                  {` ${startDate} `}
+                </b>
+                and
+                <b>
+                  {` ${endDate} `}
+                </b>
+                have been reduced from
+                <b>
+                  {` ${numRangeDays} `}
+                </b>
+                to
+                <b>
+                  {` ${numPoints}`}
+                </b>
+                .
+              </i>
+            </div>
+          )}
+          {errors && errors.error_count > 0
+          && (
+            <div className="charting-disclaimer-lower">
+              <FontAwesomeIcon
+                icon="exclamation-triangle"
+                className="wv-alert-icon"
+                size="1x"
+                widthAuto
+              />
+              <i className="charting-disclaimer-block">
+                {`${errors.error_count} `}
+                {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
+              </i>
+              {!errorCollapsed && (
+                <div className="charting-disclaimer-dates">
+                  <i className="charting-disclaimer-block">
+                    {errorDatesDisplay}
+                  </i>
+                </div>
+              )}
+              <div className="error-expand-button">
+                <span className="error-expand-button-inner" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+                  {errorCollapsed ? 'more' : 'less'}
+                  <FontAwesomeIcon
+                    className="layer-group-collapse"
+                    icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
+                    widthAuto
+                  />
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-ChartComponent.propTypes = {
-  liveData: PropTypes.object,
+const mapStateToProps = (state) => {
+  const {
+    map,
+    layers,
+  } = state;
+
+  const {
+    ui,
+  } = map;
+
+  const layerId = 'Coastlines_15m';
+
+  return {
+    mapView: ui.selected.getView(),
+    createLayer: ui.createLayer,
+    overviewMapLayerDef: layers.layerConfig[layerId],
+  };
 };
 
-export default ChartComponent;
+ChartComponent.propTypes = {
+  liveData: PropTypes.object,
+  mapView: PropTypes.object,
+  createLayer: PropTypes.func,
+  overviewMapLayerDef: PropTypes.object,
+};
+
+export default connect(
+  mapStateToProps,
+)(ChartComponent);

@@ -3,7 +3,7 @@
     "AMSRU2_L3_Cloud_Liquid_Water_Daily": {
       "id": "AMSRU2_L3_Cloud_Liquid_Water_Daily",
       "description": "amsr2/AMSRU2_L3_Cloud_Liquid_Water_Daily",
-      "tags": "amsru2 amsr-u2",
+      "tags": "amsru2 amsr-u2 amsr2 amsr-ue amsr-e unified",
       "group": "overlays",
       "layergroup": "Cloud Liquid Water"
     }

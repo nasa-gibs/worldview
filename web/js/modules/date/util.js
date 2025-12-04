@@ -10,7 +10,8 @@ import {
 import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
 import MonospaceDate from '../../components/util/monospace-date';
 
-export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
+export const filterProjLayersWithStartDate = (layers, projId) => layers
+  .filter((layer) => layer.startDate && layer.projections[projId]);
 
 /**
    * Parses a UTC ISO 8601 date to a non UTC date
@@ -219,7 +220,8 @@ export function checkHasFutureLayers(state) {
   if (compare.active) {
     const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
     const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
-    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
+    hasFutureLayers = [...compareALayersFiltered,
+      ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
   } else {
     const activeLayers = getActiveLayers(state);
     const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);

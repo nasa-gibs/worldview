@@ -59,7 +59,8 @@ function FindOrbitTracksMode () {
 
   const verifyExtent = () => {
     // This is a very loose measurement.. Should find a better way to find values...
-    const unitedStatesExtent = [-125.0799167388867, 22.176358212699427, -62.489596269417106, 57.01542814447728];
+    const unitedStatesExtent = [-125.0799167388867,
+      22.176358212699427, -62.489596269417106, 57.01542814447728];
     const intersection = getIntersection(unitedStatesExtent, currentExtent);
     const intersectionArea = getArea(intersection);
     if (isEmpty(intersection)) {

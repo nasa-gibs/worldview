@@ -23,7 +23,8 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive, isMobile,
+    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive,
+    allMeasurements, measurementIsActive, isMobile,
   } = props;
   const { crs } = proj.selected;
   const measurementsInProj = !!(Object.keys(allMeasurements[crs]) || []).length;

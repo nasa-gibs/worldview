@@ -196,10 +196,12 @@ export default (function(self) {
   };
 
   /**
-   * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
+   * Uses canvas.measureText to compute and return the width of the given text of given font in
+   * pixels.
    *
    * @param {String} text The text to be rendered.
-   * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+   * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px
+   * verdana").
    *
    * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
    */
@@ -651,7 +653,8 @@ export default (function(self) {
     if (Math.abs(longitude) < 180) return longitude;
     const isNegative = longitude < 0;
     const remainder = longitude % 360;
-    return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+    return isNegative && remainder < -180
+      ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
   };
 
   // Allows simple printf functionality with strings

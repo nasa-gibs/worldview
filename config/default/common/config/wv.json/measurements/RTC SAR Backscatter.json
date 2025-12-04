@@ -1,0 +1,20 @@
+{
+    "measurements": {
+        "RTC SAR Backscatter": {
+            "id": "rtc-sar-backscatter",
+            "title":    "RTC SAR Backscatter",
+            "subtitle": "RTC-S1/Sentinel-1",
+            "sources": {
+                "RTC-S1/Sentinel-1": {
+                    "id": "rtc-s1-sentinel-1",
+                    "title": "RTC-S1/Sentinel-1",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1"
+                    ]
+                }
+            }
+        }
+    }
+}

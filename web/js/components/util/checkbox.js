@@ -9,14 +9,17 @@ import HoverTooltip from './hover-tooltip';
  */
 export default function Checkbox (props) {
   const {
-    onCheck, checked, isRound, color, tooltipPlacement, classNames, id, name, title, label, children, disabled,
+    onCheck,
+    checked,
+    isRound, color, tooltipPlacement, classNames, id, name, title, label, children, disabled,
   } = props;
 
   const roundClassName = isRound ? 'wv-checkbox-round ' : '';
   const defaultClassName = 'wv-checkbox ';
   const checkedClassName = checked ? 'checked ' : '';
   const disabledClassName = disabled ? ' disabled' : '';
-  const caseClassName = defaultClassName + roundClassName + checkedClassName + color + disabledClassName;
+  const caseClassName = defaultClassName
+  + roundClassName + checkedClassName + color + disabledClassName;
   const showDisabledToolTip = disabled && id && title;
   return (
     <>

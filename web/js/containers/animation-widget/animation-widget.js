@@ -96,7 +96,9 @@ function AnimationWidget (props) {
   const subdailyWidgetWidth = 460;
   const halfWidgetWidth = (subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
 
-  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth / 2 - halfWidgetWidth, y: -25 });
+  const [widgetPosition, setWidgetPosition] = useState(
+    { x: screenWidth / 2 - halfWidgetWidth, y: -25 },
+  );
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
@@ -138,7 +140,8 @@ function AnimationWidget (props) {
     }
   });
 
-  // Prevent drag when interacting with child elements (e.g. buttons) Only allow drag when targeting "background" elements
+  // Prevent drag when interacting with child elements (e.g. buttons)
+  // Only allow drag when targeting "background" elements
   const handleDragStart = (e, data) => {
     const draggableTargets = [
       'wv-animation-widget',
@@ -472,7 +475,8 @@ const mapStateToProps = (state) => {
     proj,
     promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isEmbedModeActive,
-    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1
+      : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
   };
 };
 

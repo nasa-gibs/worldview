@@ -41,7 +41,11 @@ function PixelTestMode () {
     let mercatorExtent;
     if (visualMapExtentSetting) mercatorExtent = transformExtent(currentExtent, 'EPSG:4326', 'EPSG:3857');
     try {
-      const wmsImage = await fetchWMSImageExperimental(layerSelection.id, formattedDate, mercatorExtent);
+      const wmsImage = await fetchWMSImageExperimental(
+        layerSelection.id,
+        formattedDate,
+        mercatorExtent,
+      );
 
       // Create an image and handle its loading and error events
       const img = new Image();

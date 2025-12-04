@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "AMSRUE_Columnar_Water_Vapor_Day": {
+      "id": "AMSRUE_Columnar_Water_Vapor_Day",
+      "description": "amsre/AMSRUE_Columnar_Water_Vapor_Day",
+      "group": "overlays",
+      "layergroup": "Water Vapor"
+    }
+  }
+}
