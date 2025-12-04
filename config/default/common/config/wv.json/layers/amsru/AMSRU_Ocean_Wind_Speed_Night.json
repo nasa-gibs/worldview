@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRU_Ocean_Wind_Speed_Night": {
+      "id": "AMSRU_Ocean_Wind_Speed_Night",
+      "description": "amsru/AMSRU_Ocean_Wind_Speed_Night",
+      "tags": "amsru2 amsr-u2 amsr2 amsr-ue amsr-e unified",
+      "group": "overlays",
+      "layergroup": "Wind Speed"
+    }
+  }
+}

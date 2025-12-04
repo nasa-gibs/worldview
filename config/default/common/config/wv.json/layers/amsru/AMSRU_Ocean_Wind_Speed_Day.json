@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "AMSRU_Ocean_Wind_Speed_Day": {
+      "id": "AMSRU_Ocean_Wind_Speed_Day",
+      "description": "amsru/AMSRU_Ocean_Wind_Speed_Day",
+      "tags": "amsru2 amsr-u2 amsr2 amsr-ue amsr-e unified",
+      "group": "overlays",
+      "layergroup": "Wind Speed"
+    }
+  }
+}
