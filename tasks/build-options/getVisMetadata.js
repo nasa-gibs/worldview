@@ -199,7 +199,8 @@ async function getMetadata (layerId, baseUrl, count) {
       url: `${baseUrl}${layerId}.json`,
       responseType: 'json',
       timeout: 10000,
-      headers
+      headers,
+      httsAgent: new (require('https').Agent)({ rejectUnauthorized: false })
     })
     const metadata = response.data
     const daac = getDAAC(metadata)
