@@ -7,7 +7,7 @@
         "description": "reference/esri/World_Imagery",
         "tags": "",
         "group": "baselayers",
-        "layergroup": "Base Layers",
+        "layergroup": "Reference",
         "format": "image/png",
         "type": "esriMapServer",
         "disableSnapshot": true,
