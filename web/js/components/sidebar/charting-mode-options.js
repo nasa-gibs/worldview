@@ -538,7 +538,7 @@ function ChartingModeOptions(props) {
     }
   }, [isChartOpen, renderedPalettes]);
 
-  function onDateIconClick() {
+  const onDateIconClick = () => {
     const layerInfo = getActiveChartingLayer();
     const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
     const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
@@ -548,7 +548,7 @@ function ChartingModeOptions(props) {
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
-  }
+  };
 
   useEffect(() => {
     const isOpen = modalId === 'CHARTING-DATE-MODAL' && isModalOpen;
@@ -609,7 +609,7 @@ function ChartingModeOptions(props) {
   *
   * @returns {null}
   */
-  function onBoundaryUpdate(boundaries) {
+  const onBoundaryUpdate = (boundaries) => {
     const {
       x, y, width, height,
     } = boundaries;
@@ -631,9 +631,9 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  }
+  };
 
-  function onLatLongChange(coordsArray) {
+  const onLatLongChange = (coordsArray) => {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
     const topRight = [coordsArray[2], coordsArray[3]];
     const bottomLeftPixel = olMap.getPixelFromCoordinate(bottomLeft);
@@ -654,9 +654,9 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  }
+  };
 
-  function toggleMapView() {
+  const toggleMapView = () => {
     if (!mapViewChecked) {
       onLatLongChange(viewExtent);
     } else {
@@ -669,7 +669,7 @@ function ChartingModeOptions(props) {
       onBoundaryUpdate(boundaries);
     }
     setMapViewChecked(!mapViewChecked);
-  }
+  };
 
 
   const spinnerStyle = {
