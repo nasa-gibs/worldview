@@ -203,7 +203,7 @@ class EventMarkers extends React.Component {
     const category = event.categories[0];
     let willSelect = true;
     let moveCount = 0;
-    const pinEl = marker.pin.element_ || marker.pin.element;
+    const pinEl = marker.pin.element;
     // Use passiveSupport detect in ui.
     // Passive applied if supported, capture will be false either way.
     const options = mapUi.supportsPassive ? { passive: true } : false;

@@ -25,6 +25,7 @@ function UpdateOpacity(props) {
     const layers = ui.selected.getLayers().getArray();
     lodashEach(Object.keys(layers), (index) => {
       const layer = layers[index];
+      // eslint-disable-next-line no-underscore-dangle
       if (layer.className_ === 'ol-layer') {
         if (compare && isCompareActive) {
           const layerGroup = layer.getLayers().getArray();

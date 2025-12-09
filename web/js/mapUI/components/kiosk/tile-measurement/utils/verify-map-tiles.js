@@ -68,6 +68,7 @@ const processTileLayer = (layer, map, view) => {
     const tileState = tile.getState();
     expectedTileCount += 1;
     if (tileState === 2) {
+      // eslint-disable-next-line no-underscore-dangle
       const image = tile.image_;
       const isTileImageValid = checkTileImage(image);
       if (!isTileImageValid) {
