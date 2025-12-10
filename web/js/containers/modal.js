@@ -120,6 +120,133 @@ class ModalContainer extends Component {
     );
   }
 
+  handleCreateChildren = (children) => {
+    const {
+      customProps,
+      id,
+      isCustom,
+      screenHeight,
+      screenWidth,
+    } = this.props;
+    const { width, height } = this.state;
+    const style = this.getStyle();
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const {
+      dragHandle,
+      isDraggable,
+      isResizable,
+      stayOnscreen,
+    } = newProps;
+    const bounds = stayOnscreen ? {
+      left: -(screenWidth / 2 - width / 2),
+      right: screenWidth / 2 - width / 2,
+      top: -style.top,
+      bottom: screenHeight - height - style.top - 5,
+    } : '';
+      <Draggable
+        handle={dragHandle}
+        disabled={!isDraggable}
+        bounds={bounds}
+      >
+        {isResizable
+          ? (
+            <Resizable
+              className="resize-box"
+              resizeHandles={['se']}
+              width={width || newProps.width}
+              height={height || newProps.height}
+              minConstraints={[250, 250]}
+              maxConstraints={[495, screenHeight]}
+              handleSize={[8, 8]}
+              onResize={this.onResize}
+              draggableOpts={{ disabled: !isResizable }}
+            >
+              {children}
+            </Resizable>
+          )
+          : children}
+      </Draggable>;
+  };
+
+  getCustomModal() {
+    const {
+      customProps,
+      id,
+      isCustom,
+      isEmbedModeActive,
+      isMobile,
+      isOpen,
+    } = this.props;
+    const { width, height } = this.state;
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const {
+      CompletelyCustomModal,
+      desktopOnly,
+      mobileOnly,
+      onClose,
+      size,
+    } = newProps;
+
+    const isRestrictedDisplay = (isMobile && desktopOnly)
+      || (!isMobile && mobileOnly)
+      || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
+    if (isRestrictedDisplay) {
+      return null;
+    }
+    const lowerCaseId = lodashToLower(id);
+    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+
+    const finalProps = {
+      key: `custom_${lowerCaseId}`,
+      modalHeight: height || newProps.height,
+      modalWidth: width || newProps.width,
+      toggleWithClose: toggleFunction,
+      ...customProps,
+    };
+
+    return React.createElement(CompletelyCustomModal, finalProps);
+  }
+
+  getBodyComponent() {
+    const {
+      customProps,
+      id,
+      isCustom,
+      isEmbedModeActive,
+      isMobile,
+      isOpen,
+      screenHeight,
+    } = this.props;
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const {
+      bodyComponent,
+      bodyComponentProps,
+      desktopOnly,
+      mobileOnly,
+      onClose,
+      size,
+    } = newProps;
+
+    const isRestrictedDisplay = (isMobile && desktopOnly)
+      || (!isMobile && mobileOnly)
+      || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
+    if (isRestrictedDisplay) {
+      return null;
+    }
+    const BodyComponent = bodyComponent || '';
+    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+
+    const finalProps = {
+      ...bodyComponentProps,
+      parentId: { id },
+      screenHeight: { screenHeight },
+      closeModal: { toggleFunction },
+    };
+    return React.createElement(BodyComponent, finalProps);
+  }
+
+
+
   render() {
     const {
       customProps,
@@ -129,23 +256,18 @@ class ModalContainer extends Component {
       isMobile,
       isOpen,
       isTemplateModal,
-      screenHeight,
-      screenWidth,
     } = this.props;
-    const { width, height } = this.state;
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       autoFocus,
       backdrop,
       bodyComponent,
-      bodyComponentProps,
       bodyHeader,
       bodyText,
       footer,
       clickableBehindModal,
       CompletelyCustomModal,
       desktopOnly,
-      dragHandle,
       headerComponent,
       headerText,
       isDraggable,
@@ -158,7 +280,6 @@ class ModalContainer extends Component {
       timeout,
       type,
       wrapClassName,
-      stayOnscreen,
     } = newProps;
 
     const isRestrictedDisplay = (isMobile && desktopOnly)
@@ -178,41 +299,12 @@ class ModalContainer extends Component {
         &times;
       </button>
     );
-    const bounds = stayOnscreen ? {
-      left: -(screenWidth / 2 - width / 2),
-      right: screenWidth / 2 - width / 2,
-      top: -style.top,
-      bottom: screenHeight - height - style.top - 5,
-    } : '';
+
     return (
       <ErrorBoundary>
         <InteractionWrap
           condition={isDraggable || isResizable}
-          wrapper={(children) => (
-            <Draggable
-              handle={dragHandle}
-              disabled={!isDraggable}
-              bounds={bounds}
-            >
-              {isResizable
-                ? (
-                  <Resizable
-                    className="resize-box"
-                    resizeHandles={['se']}
-                    width={width || newProps.width}
-                    height={height || newProps.height}
-                    minConstraints={[250, 250]}
-                    maxConstraints={[495, screenHeight]}
-                    handleSize={[8, 8]}
-                    onResize={this.onResize}
-                    draggableOpts={{ disabled: !isResizable }}
-                  >
-                    {children}
-                  </Resizable>
-                )
-                : children}
-            </Draggable>
-          )}
+          wrapper={this.handleCreateChildren}
         >
           <Modal
             isOpen={isOpen}
@@ -228,35 +320,20 @@ class ModalContainer extends Component {
             fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? (
-                <CompletelyCustomModal
-                  key={`custom_${lowerCaseId}`}
-                  modalHeight={height || newProps.height}
-                  modalWidth={width || newProps.width}
-                  {...customProps}
-                  toggleWithClose={toggleFunction}
-                />
-              )
+              ? this.getCustomModal()
               : (
                 <DetectOuterClick
                   onClick={toggleFunction}
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                    <ModalHeader toggle={toggleFunction} close={closeBtn}>
-                      {headerComponent ? <headerComponent /> : headerText || ''}
-                    </ModalHeader>
+                  <ModalHeader toggle={toggleFunction} close={closeBtn}>
+                    {headerComponent ? <headerComponent /> : headerText || ''}
+                  </ModalHeader>
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? (
-                      <BodyComponent
-                        {...bodyComponentProps}
-                        parentId={id}
-                        screenHeight={screenHeight}
-                        closeModal={toggleFunction}
-                      />
-                    )
+                    {BodyComponent ? this.getBodyComponent()
                       : isTemplateModal ? this.getTemplateBody() : (<p>{bodyText}</p>) || ''}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
@@ -327,13 +404,10 @@ ModalContainer.propTypes = {
   customProps: PropTypes.object,
   id: PropTypes.string,
   isCustom: PropTypes.bool,
-  isDraggable: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
-  orientation: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  stayOnscreen: PropTypes.bool,
 };
