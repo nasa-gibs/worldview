@@ -133,7 +133,8 @@ class toolbarContainer extends Component {
       hasNonDownloadableLayer,
       visibleLayersForProj,
     } = this.props;
-    const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
+    const nonDownloadableLayers = hasNonDownloadableLayer
+      ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustomsSnapshot, 'Notice');
@@ -144,7 +145,8 @@ class toolbarContainer extends Component {
       {
         ...CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
         onClose: () => {
-          refreshStateAfterImageDownload(hasCustomPalette ? paletteStore : undefined, rotation, nonDownloadableLayers);
+          refreshStateAfterImageDownload(hasCustomPalette
+            ? paletteStore : undefined, rotation, nonDownloadableLayers);
         },
       },
     );
@@ -259,7 +261,9 @@ class toolbarContainer extends Component {
     );
   }
 
-  // handle rendering of Location Search button 1) visibility and 2) control of click (mobile vs desktop)
+  // handle rendering of Location Search button
+  // 1) visibility and
+  // 2) control of click (mobile vs desktop)
   renderLocationSearchButtonComponent = () => {
     const {
       config,
@@ -285,7 +289,8 @@ class toolbarContainer extends Component {
       )
       : () => toggleShowLocationSearch();
 
-    const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded) || shouldBeCollapsed) && !isDistractionFreeModeActive;
+    const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded)
+    || shouldBeCollapsed) && !isDistractionFreeModeActive;
     const mobileWvToolbarButtonStyle = isMobile ? {
       fontSize: '14.3px',
       height: '44px',

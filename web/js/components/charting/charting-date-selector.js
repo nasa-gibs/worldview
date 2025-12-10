@@ -10,7 +10,10 @@ import {
 
 function ChartingDateSelector (props) {
   const {
-    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, timeSpanSelection, date, layerStartDate, layerEndDate,
+    onUpdateStartDate, onUpdateEndDate,
+    timeSpanStartDate, timeSpanEndDate,
+    timeSpanSelection, date,
+    layerStartDate, layerEndDate,
   } = props;
   const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;

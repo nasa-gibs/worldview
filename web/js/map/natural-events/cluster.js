@@ -42,7 +42,12 @@ export const naturalEventsClusterCreateObject = (proj) => new Supercluster({
  * @param  {String} date
  * @return {Object} geoJSON point
  */
-export const clusterPointToGeoJSON = (id, coordinates, date, { magnitudeUnit, magnitudeValue }) => ({
+export const clusterPointToGeoJSON = (
+  id,
+  coordinates,
+  date,
+  { magnitudeUnit, magnitudeValue },
+) => ({
   type: 'Feature',
   properties: {
     id: `${id}-${date}`,

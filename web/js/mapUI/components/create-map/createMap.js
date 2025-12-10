@@ -207,7 +207,10 @@ function CreateMap(props) {
     });
     map.on('rendercomplete', onRenderComplete);
 
-    granuleFootprintsObj = { ...granuleFootprintsObj, [proj.crs]: granuleFootprint(map, initialIsMobile) };
+    granuleFootprintsObj = {
+      ...granuleFootprintsObj,
+      [proj.crs]: granuleFootprint(map, initialIsMobile),
+    };
 
     window.addEventListener('resize', () => {
       map.getView().changed();

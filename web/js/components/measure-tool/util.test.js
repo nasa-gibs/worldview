@@ -26,7 +26,8 @@ test('two different triangles of the same size return the same measurement', () 
 });
 
 /**
- * Should be able to handle area calculation made crossing the anti-meridian in geographic projection
+ * Should be able to handle area calculation made
+ * crossing the anti-meridian in geographic projection
  * where coordinates DO extend beyond +/- 180, +/- 90 due to map repeating
  */
 test('area measurement that includes coordinates outisde of "normal" extents return correct result', () => {

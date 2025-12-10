@@ -108,8 +108,10 @@ class EventMarkers extends React.Component {
       proj, eventsDataIsLoading, isAnimatingToEvent, selectedEvent,
     } = this.props;
     const projChange = proj !== prevProps.proj;
-    const finishedLoading = !eventsDataIsLoading && eventsDataIsLoading !== prevProps.eventsDataIsLoading;
-    const animationFinished = !isAnimatingToEvent && isAnimatingToEvent !== prevProps.isAnimatingToEvent;
+    const finishedLoading = !eventsDataIsLoading
+      && eventsDataIsLoading !== prevProps.eventsDataIsLoading;
+    const animationFinished = !isAnimatingToEvent
+      && isAnimatingToEvent !== prevProps.isAnimatingToEvent;
     const selectedEventChanged = selectedEvent && selectedEvent !== prevProps.selectedEvent;
 
     if (finishedLoading || projChange || animationFinished || selectedEventChanged) {
@@ -202,7 +204,8 @@ class EventMarkers extends React.Component {
     let willSelect = true;
     let moveCount = 0;
     const pinEl = marker.pin.element_ || marker.pin.element;
-    // Use passiveSupport detect in ui. passive applied if supported, capture will be false either way.
+    // Use passiveSupport detect in ui.
+    // Passive applied if supported, capture will be false either way.
     const options = mapUi.supportsPassive ? { passive: true } : false;
     const onMouseDownTouchStart = (e) => {
       willSelect = true;

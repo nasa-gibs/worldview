@@ -170,7 +170,8 @@ function EventFilterModalBody (props) {
         placement="right"
         target="bbox-show-all-tracks"
       >
-        If checked, shows tracks for all of the events listed in the sidebar. If unchecked, tracks will only
+        If checked, shows tracks for all of the events listed in the sidebar.
+        If unchecked, tracks will only
         show for a selected event.
       </UncontrolledTooltip>
 

@@ -156,7 +156,8 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
  * @param {Object} layer | OL layer object
  * @param {Object} options | Layer options object
  * @param {Object} state | The entire state of the application
- * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
+ * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with
+ * vector feature
  */
 export function setStyleFunction(opts) {
   let { layer } = opts;

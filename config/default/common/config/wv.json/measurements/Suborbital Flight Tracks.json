@@ -3,8 +3,18 @@
       "Suborbital Flight Tracks": {
           "id": "Suborbital Flight Tracks",
           "title":    "Suborbital Flight Tracks",
-          "subtitle": "AJAX, ARCSIX, ASIA-AQ, STAQS, PACE-PAX",
+          "subtitle": "ACTIVATE, AJAX, ARCSIX, ASIA-AQ, STAQS, PACE-PAX",
           "sources": {
+            "ACTIVATE": {
+                  "id": "activate",
+                  "title": "ACTIVATE",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "ACTIVATE_HU-25_Falcon_Ozone",
+                  "ACTIVATE_King_Air_Flight_Track"
+                  ]
+              },
               "AJAX": {
                   "id": "ajax",
                   "title": "AJAX",

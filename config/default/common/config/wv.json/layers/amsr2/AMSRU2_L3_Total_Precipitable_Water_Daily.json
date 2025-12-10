@@ -3,9 +3,10 @@
     "AMSRU2_L3_Total_Precipitable_Water_Daily": {
       "id": "AMSRU2_L3_Total_Precipitable_Water_Daily",
       "description": "amsr2/AMSRU2_L3_Total_Precipitable_Water_Daily",
-      "tags": "amsru2 amsr-u2",
+      "tags": "amsru2 amsr-u2 amsr2 amsr-ue amsr-e unified",
       "group": "overlays",
-      "layergroup": "Precipitation Rate"
+      "layergroup": "Precipitation Rate",
+      "dataAvailability": "dd"
     }
   }
 }

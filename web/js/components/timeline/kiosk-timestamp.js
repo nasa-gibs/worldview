@@ -11,7 +11,8 @@ import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 function getIsDaylightSavingsTime() {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
   const dateObj = new Date(date);
-  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1).getTimezoneOffset();
+  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1)
+    .getTimezoneOffset();
   return isDaylightSavingTime;
 }
 

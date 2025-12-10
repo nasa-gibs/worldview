@@ -277,7 +277,8 @@ function OlMeasureTool (props) {
     }
   }
 
-  // Monitor for projection change & terminate any incomplete measurement from the previous projection
+  // Monitor for projection change &
+  // terminate any incomplete measurement from the previous projection
   useEffect(() => {
     if (olMap != null) {
       const regionFromCrs = {

@@ -126,7 +126,8 @@ class CoverageItemContainer extends Component {
     } = getLayerItemStyles(visible, id);
 
     // get line container dimensions
-    const containerLineDimensions = getMatchingCoverageLineDimensions(layer).filter(({ visible }) => visible);
+    const containerLineDimensions = getMatchingCoverageLineDimensions(layer)
+      .filter(({ visible }) => visible);
     return (
       <div
         className="layer-coverage-line"
@@ -143,9 +144,19 @@ class CoverageItemContainer extends Component {
               const { date, interval } = itemRange;
               const dateObj = new Date(date);
               const nextDate = array[multiIndex + 1];
-              const rangeDateEnd = getRangeDateEndWithAddedInterval(layer, dateObj, layerPeriod, interval, nextDate);
+              const rangeDateEnd = getRangeDateEndWithAddedInterval(
+                layer,
+                dateObj,
+                layerPeriod,
+                interval,
+                nextDate,
+              );
               // get range line dimensions
-              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd).filter(({ visible }) => visible);
+              const multiLineRangeOptions = getMatchingCoverageLineDimensions(
+                layer,
+                dateObj,
+                rangeDateEnd,
+              ).filter(({ visible }) => visible);
               // create DOM line element
               const key = `${id}-${multiIndex}`;
               return (

@@ -129,7 +129,13 @@ class CoverageItemList extends Component {
   * @param {Object} nextDate range object with date
   * @returns {String} rangeDateEnd date ISO string
   */
-  getRangeDateEndWithAddedInterval = (layer, rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
+  getRangeDateEndWithAddedInterval = (
+    layer,
+    rangeDate,
+    layerPeriod,
+    itemRangeInterval,
+    nextDate,
+  ) => {
     const { appNow } = this.props;
     const { endDate, futureTime } = layer;
     const {
@@ -259,14 +265,21 @@ class CoverageItemList extends Component {
     // get dates within given date range
     let dateIntervalStartDates = [];
     const startLessThanOrEqualToEndDateLimit = startDateObj.getTime() <= endDateLimit.getTime();
-    const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
+    const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd)
+      .getTime() >= startDateLimit.getTime();
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
       // check layer date array cache and use caches date array if available, if not add date array
       this.layerDateArrayCache[id] ??= {};
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
       if (this.layerDateArrayCache[id][layerIdDates] === undefined) {
-        dateIntervalStartDates = datesInDateRanges(def, startDateLimit, startDateLimit, endDateLimit, appNow);
+        dateIntervalStartDates = datesInDateRanges(
+          def,
+          startDateLimit,
+          startDateLimit,
+          endDateLimit,
+          appNow,
+        );
         this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
       } else {
         dateIntervalStartDates = this.layerDateArrayCache[id][layerIdDates];
@@ -322,7 +335,10 @@ class CoverageItemList extends Component {
     <div className="layer-coverage-list-empty">
       <div className="layer-coverage-item-empty">
         <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" widthAuto />
-        <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
+        <p>
+          No visible layers with defined coverage. Add layers or toggle
+          &quot;Include Hidden Layers&quot; if current layers are hidden.
+        </p>
       </div>
     </div>
   );
@@ -386,10 +402,13 @@ class CoverageItemList extends Component {
             : 1;
 
           // conditional check to determine how layer coverage line will be built in child component
-          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
-          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1;
+          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom
+          && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
+          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom
+          && dateRangeIntervalZeroIndex > 1;
           // determine date range building vs using startDate to endDate single coverage
-          const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage));
+          const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage
+            || isLayerEqualZoomWithMultipleCoverage));
           const encodedId = util.encodeId(id);
           const key = `layer-coverage-item-${encodedId}-${index}`;
 

@@ -188,7 +188,9 @@ function LayerList(props) {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {layers.sort((layerA, layerB) => (isChartingActive ? layerB.shouldHide === layerA.shouldHide ? 0 : layerB.shouldHide ? -1 : 1 : 0)).map(renderLayer)}
+              {layers.sort((layerA, layerB) => (isChartingActive
+                ? layerB.shouldHide === layerA.shouldHide
+                  ? 0 : layerB.shouldHide ? -1 : 1 : 0)).map(renderLayer)}
               {provided.placeholder}
             </ul>
           )}

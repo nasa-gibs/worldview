@@ -26,7 +26,10 @@ export function getNormalizedCoordinate([lon, lat]) {
   }
   const isNegative = lon < 0;
   const remainder = lon % 360;
-  const longitude = isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+  const longitude = isNegative
+  && remainder < -180
+    ? remainder + 360
+    : !isNegative && remainder > 180 ? remainder - 360 : remainder;
   return [longitude, lat];
 }
 

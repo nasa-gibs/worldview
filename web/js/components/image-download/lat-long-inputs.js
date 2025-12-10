@@ -94,7 +94,9 @@ function LatLongSelect(props) {
   const boundingBoxArray = [geoLatLong[0][0], geoLatLong[0][1], geoLatLong[1][0], geoLatLong[1][1]];
   const [showCoordinates, setShowCoordinates] = useState(false);
   const coordText = showCoordinates ? 'Hide Coordinates' : 'Edit Coordinates';
-  const [minLon, minLat, maxLon, maxLat] = boundingBoxArray.map((coord) => coord.toFixed(4).toString());
+  const [minLon, minLat, maxLon, maxLat] = boundingBoxArray.map(
+    (coord) => coord.toFixed(4).toString(),
+  );
 
   return (
     <div className="wv-image-input-case">

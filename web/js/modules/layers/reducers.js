@@ -127,7 +127,9 @@ export function layerReducer(state = initialState, action) {
           overlayGroups: { $set: action.overlayGroups },
           prevLayers: { $set: [] },
         },
-        eventLayers: action.eventLayers === undefined ? { $push: [] } : action.eventLayers.length ? { $set: action.eventLayers } : { $push: [] },
+        eventLayers: action.eventLayers === undefined
+          ? { $push: [] } : action.eventLayers.length
+            ? { $set: action.eventLayers } : { $push: [] },
       });
 
     case TOGGLE_OVERLAY_GROUPS:
@@ -403,8 +405,9 @@ export function layerReducer(state = initialState, action) {
       });
     }
 
-    // This is required because to update band combinations we need to actually remove and re-add these layers
-    // This case sets the ddv layer back to its original index before being removed and added again
+    // This is required because to update band combinations we need to actually remove
+    // and re-add these layers. This case sets the ddv layer back to its original index before being
+    // removed and added again
     case UPDATE_DDV_LAYER: {
       const { layerIndex, id, layers } = action;
       const indexToMove = layers.findIndex((activeLayer) => activeLayer.id === id);

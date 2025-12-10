@@ -105,6 +105,7 @@
             "Fires and Thermal Anomalies",
             "Flood Hazard",
             "Forests, Mangrove",
+            "Formaldehyde",
             "Freeze/Thaw",
             "Frozen Area",
             "Geostationary",
@@ -152,6 +153,7 @@
             "Reflectance",
             "Relative Humidity",
             "Reservoirs",
+            "RTC SAR Backscatter",
             "Sea Ice Brightness Temperature",
             "Sea Ice",
             "Sea Surface Currents",
@@ -185,6 +187,7 @@
             "Urban Expansion",
             "Urban Extents",
             "Vectors",
+            "Vegetation Disturbance Status",
             "Vegetation Indices",
             "Vegetation Light Use Efficiency",
             "Volcano Hazard",
@@ -193,6 +196,12 @@
             "Water Vapor",
             "Wind Speed"
           ]
+        },
+        "enableCMRDataFinder": {
+          "type": "boolean"
+        },
+        "collectionConceptID": {
+          "type": "string"
         },
         "clickDisabledFeatures": {
           "type": "array"
@@ -221,11 +230,69 @@
             "yearly"
           ]
         },
+        "orbitTracks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "orbitDirection": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "$ref": "#/definitions/orbitDirection"
+          }
+        },
+        "bandCombo": {
+          "type": "object",
+          "properties": {
+            "assets": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "expression": {
+              "type": "string"
+            },
+            "rescale": {
+              "type": "string"
+            },
+            "colormap_name": {
+              "type": "string"
+            },
+            "bands_regex": {
+              "type": "string"
+            }
+          }
+        },
+        "count": {
+          "type": "number"
+        },
+        "ongoing": {
+          "type": "boolean"
+        },
+        "dataAvailability": {
+          "$ref": "#/definitions/dataAvailability"
+        },
         "startDate": {
           "$ref": "#/definitions/date"
         },
         "endDate": {
           "$ref": "#/definitions/date"
+        },
+        "granuleDateRanges": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "$ref": "#/definitions/date"
+            }
+          }
+        },
+        "shiftadjacentdays": {
+          "type": "boolean"
         },
         "futureTime": {
           "type": "string",
@@ -236,6 +303,12 @@
         },
         "noTransition": {
           "type": "boolean"
+        },
+        "serviceName": {
+          "type": "string"
+        },
+        "tiles": {
+          "type": "array"
         },
         "vectorStyle": {
           "type": "object",
@@ -256,6 +329,9 @@
               "$ref": "#/definitions/vectorStyle"
             }
           }
+        },
+        "disableCustomPalettes": {
+          "type": "boolean"
         },
         "breakPointLayer": {
           "type": "object",
@@ -280,8 +356,25 @@
         "wrapX": {
           "type": "boolean"
         },
+        "minZoom": {
+          "type": "number"
+        },
+        "maxZoom": {
+          "type": "number"
+        },
         "wrapadjacentdays": {
           "type": "boolean"
+        },
+        "renderOrder": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "immutable": {
+              "type": "boolean"
+            }
+          }
         },
         "availability": {
           "type": "object",
@@ -306,6 +399,12 @@
         "layer": {
           "type": "string"
         },
+        "layers": {
+          "type": "array"
+        },
+        "layerName": {
+          "type": "string"
+        },
         "disableSmartHandoff": {
           "type": "boolean"
         },
@@ -314,6 +413,17 @@
         },
         "temporal": {
           "type": "string"
+        },
+        "dateRanges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "dateInterval": {
+                "type": "string"
+              }
+            }
+          }
         }
       },
       "allOf": [
@@ -361,18 +471,36 @@
     "type": {
       "type": "string",
       "enum": [
+        "composite:wmts",
+        "granule",
+        "indexedVector",
+        "titiler",
+        "vector",
         "wms",
         "wmts",
-        "vector",
-        "granule",
-        "titiler"
+        "xyz"
       ]
     },
     "format": {
       "type": "string",
       "enum": [
         "image/jpeg",
-        "image/png"
+        "image/jpgpng",
+        "image/png",
+        "application/x-protobuf"
+      ]
+    },
+    "dataAvailability": {
+      "type": "string",
+      "enum": [
+        "dd"
+      ]
+    },
+    "orbitDirection": {
+      "type": "string",
+      "enum": [
+        "ascending",
+        "descending"
       ]
     },
     "date": {

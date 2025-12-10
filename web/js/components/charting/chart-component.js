@@ -234,7 +234,8 @@ function ChartComponent (props) {
   const yAxisValuesArr = getYAxisValues(data);
 
   /**
-   * Extracts each key from the provided object & returns the list, removing 'name' from the collection
+   * Extracts each key from the provided object &
+   * returns the list,removing 'name' from the collection
    * @param {Object} chartData
    */
   function getLineNames(obj) {
@@ -475,7 +476,10 @@ function ChartComponent (props) {
         </div>
         <div className="charting-disclaimer">
           <strong className="charting-disclaimer-pre">Note: </strong>
-          <span>Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.</span>
+          <span>
+            Numerical analyses performed on imagery should only
+            be used for initial basic exploratory purposes.
+          </span>
           {isTruncated
           && (
             <div className="charting-disclaimer-upper">

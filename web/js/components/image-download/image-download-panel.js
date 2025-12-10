@@ -59,12 +59,20 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
+  const activePalettes = useSelector((state) => getActivePalettes(
+    state,
+    state.compare.activeString,
+  ));
 
   useEffect(() => {
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
+      layer.wv.id,
+      layer.wv.granuleDates,
+    ]));
+    const layerDefs = layerList.map((def) => ({
+      ...def, granuleDates: granuleDatesMap.get(def.id),
+    }));
     const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
 
     setShowGranuleWarning(isTruncated);
@@ -74,8 +82,12 @@ function ImageDownloadPanel(props) {
     const time = new Date(date.getTime());
 
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
+      layer.wv.id, layer.wv.granuleDates,
+    ]));
+    const layerDefs = layerList.map((def) => ({
+      ...def, granuleDates: granuleDatesMap.get(def.id),
+    }));
     const dlURL = getDownloadUrl(
       url,
       projection,
@@ -212,7 +224,13 @@ function ImageDownloadPanel(props) {
           map={map}
         />
         {showGranuleWarning && (
-          <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line
+          <p>
+            Warning: A snapshot will capture a max. of
+            {GRANULE_LIMIT}
+            {' '}
+            granules, additional
+            granules are omitted.
+          </p> // eslint-disable-line react/jsx-one-expression-per-line
         )}
         <ResTable
           width={width}

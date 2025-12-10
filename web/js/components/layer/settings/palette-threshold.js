@@ -123,7 +123,10 @@ class PaletteThreshold extends React.Component {
     } = this.props;
 
     const units = legend.units || '';
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const {
+      needsConversion,
+      legendTempUnit,
+    } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
     let startLabel = start === 0 && legend.minLabel
       ? legend.minLabel
       : legend.tooltips[start];

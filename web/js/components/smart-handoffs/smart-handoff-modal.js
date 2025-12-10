@@ -53,8 +53,8 @@ function SmartHandoffModal({
       </div>
 
       <div className="smart-handoff-message">
-        You are about to be transferred to the NASA Earthdata Search tool. This tool is used to download
-        data granules using the selected layer, area of interest, and current date.
+        You are about to be transferred to the NASA Earthdata Search tool. This tool is used to
+        download data granules using the selected layer, area of interest, and current date.
       </div>
 
       { showMoreInfo
@@ -64,32 +64,36 @@ function SmartHandoffModal({
         <h1 className="about-heading">About Earthdata Search</h1>
         <div className="about-section">
           <p>
-            Earthdata Search provides the only means for data discovery, filtering, visualization, and
-            access across all of NASA Earth science data holdings. The current selected layer and the designated
-            viewport region in @NAME@ will be used to derive data granules within Earthdata Search.
+            Earthdata Search provides the only means for data discovery, filtering, visualization,
+            and access across all of NASA Earth science data holdings. The current selected layer
+            and the designated viewport region in @NAME@ will be used to derive data granules
+            within Earthdata Search.
           </p>
 
           <img className="earth-data-gif" src="images/earth-data-search-preview.gif" />
           <p className="earth-data-caption">
-            Granules that are available to download will be listed in the white pull out menu. Each granule listed can be
-            downloaded individually or the entire set contained within the bounding box can be downloaded as a zip file.
+            Granules that are available to download will be listed in the white pull out menu. Each
+            granule listed can be downloaded individually or the entire set contained within the
+            bounding box can be downloaded as a zip file.
           </p>
 
           <p>
             To leverage the use of Earthdata Search, users must register at
             {' '}
             <a href="https://urs.earthdata.nasa.gov/home" target="_blank" rel="noopener noreferrer">urs.earthdata.nasa.gov</a>
-            . The registration is provided free of charge. The user needs to set up a user ID, password, and provide
-            additional information, such as, user name, affiliation, country and a valid e-mail address, in order to complete
-            the registration process.
+            . The registration is provided free of charge. The user needs to set up a user ID,
+            password, and provide additional information, such as, user name, affiliation, country
+            and a valid e-mail address, in order to complete the registration process.
           </p>
 
           <h1 className="about-heading">Why must I register?</h1>
           <p>
-            As noted on the Earthdata homepage, the Earthdata Login provides a single mechanism for user registration and profile
-            management for all ESDIS system components (DAACs, Tools, Services). Your Earthdata Login also helps the ESDIS program
-            better understand the usage of ESDIS services to improve user experience through customization of tools and improvement
-            of services. ESDIS data are openly available to all and free of charge except where governed by international agreements.
+            As noted on the Earthdata homepage, the Earthdata Login provides a single mechanism for
+            user registration and profile management for all ESDIS system components
+            (DAACs, Tools, Services). Your Earthdata Login also helps the ESDIS program better
+            understand the usage of ESDIS services to improve user experience through customization
+            of tools and improvement of services. ESDIS data are openly available to all and free
+            of charge except where governed by international agreements.
           </p>
         </div>
       </div>

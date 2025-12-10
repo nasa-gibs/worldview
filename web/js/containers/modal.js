@@ -12,7 +12,10 @@ import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
-const InteractionWrap = ({ condition, wrapper, children }) => (condition ? wrapper(children) : children);
+const InteractionWrap = ({
+  condition,
+  wrapper, children,
+}) => (condition ? wrapper(children) : children);
 const toggleWithClose = (onToggle, onClose, isOpen) => {
   if (onClose && isOpen) {
     return () => {
@@ -176,7 +179,10 @@ class ModalContainer extends Component {
       </button>
     );
     const bounds = stayOnscreen ? {
-      left: -(screenWidth / 2 - width / 2), right: screenWidth / 2 - width / 2, top: -style.top, bottom: screenHeight - height - style.top - 5,
+      left: -(screenWidth / 2 - width / 2),
+      right: screenWidth / 2 - width / 2,
+      top: -style.top,
+      bottom: screenHeight - height - style.top - 5,
     } : '';
     return (
       <ErrorBoundary>

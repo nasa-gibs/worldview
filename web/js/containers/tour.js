@@ -150,7 +150,8 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
+      isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     if (e) e.preventDefault();
     const kioskParam = this.getKioskParam(isKioskModeActive);
@@ -262,7 +263,8 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab,
+      changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     const kioskParam = this.getKioskParam(isKioskModeActive);
 
@@ -303,7 +305,8 @@ class Tour extends React.Component {
 
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
+      config, renderedPalettes, processStepLink,
+      isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
@@ -616,7 +619,11 @@ const mapStateToProps = (state) => {
     screenHeight,
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
-    promiseImageryForTour: (layers, dateString, activeString) => promiseImageryForTour(state, layers, dateString, activeString),
+    promiseImageryForTour: (
+      layers,
+      dateString,
+      activeString,
+    ) => promiseImageryForTour(state, layers, dateString, activeString),
   };
 };
 

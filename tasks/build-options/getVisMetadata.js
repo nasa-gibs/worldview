@@ -109,6 +109,7 @@ const skipLayers = [
   'DAILY_AERONET_ANGSTROM_440-870NM',
   'NOAA_2025_ERI_WMTS',
   'Reference_Labels_15m_arctic',
+  'World_Imagery',
   'EUMETSAT_RING_Airmass_RGB',
   'EUMETSAT_RING_Ash_RGB',
   'EUMETSAT_RING_Dust_RGB',
