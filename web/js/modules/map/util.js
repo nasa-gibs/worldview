@@ -152,8 +152,9 @@ let preloadMap;
  * Adds the passed layer to a preloadMap, which is an invisible copy of our main OlMap
  * The layer is then removed once it is fully loaded on the preloadMap
  * This is done so because new version of OpenLayers (>= v10.2.x) no longer work properly with
- * displaying layers instantly on-screen during an animation with just pre-loading the tiles, and now
- * the layers themselves must have been rendered on an OlMap before animation to achieve the same results.
+ * displaying layers instantly on-screen during an animation with just pre-loading the tiles, and
+ * now the layers themselves must have been rendered on an OlMap before animation to achieve the
+ * same results.
  *
  * @method promiseTileLayer
  * @param  {object} layer      _ol_layer_Tile_
@@ -203,7 +204,7 @@ function promiseTileLayer(layer, map) {
  * a promise with an array of their fulfilled values is returned.
  *
  * @method promiseLayerGroup
- * @param  {object} layer      ol_Layer_Group object, contains values.layers for prev, current, next days
+ * @param  {object} layer ol_Layer_Group object, contains values.layers for prev, current, next days
  * @param  {object} viewState  Contains center, projection, resolution, rotation and zoom parameters
  * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
  * @param  {object} map        _ol_Map_ object

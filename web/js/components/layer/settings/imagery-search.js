@@ -90,7 +90,10 @@ export default function ImagerySearch({ layer }) {
   const loadNewerDates = async (layer, pageNum = 1) => {
     setGranulesStartStatus('loading');
     const newerDates = await getNewerGranules(layer, newerGranuleDates[0], pageNum);
-    const dates = [...newerGranuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
+    const dates = [
+      ...newerGranuleDates,
+      ...newerDates,
+    ].sort((a, b) => Date.parse(b) - Date.parse(a));
     setNewerGranuleDates(dates);
     setGranulesStartStatus('loaded');
   };
@@ -98,7 +101,10 @@ export default function ImagerySearch({ layer }) {
   const loadOlderDates = async (layer, pageNum = 1) => {
     setGranulesEndStatus('loading');
     const olderDates = await getOlderGranules(layer, olderGranuleDates.at(-1), pageNum);
-    const dates = [...olderGranuleDates, ...olderDates].sort((a, b) => Date.parse(b) - Date.parse(a));
+    const dates = [
+      ...olderGranuleDates,
+      ...olderDates,
+    ].sort((a, b) => Date.parse(b) - Date.parse(a));
     setOlderGranuleDates(dates);
     setGranulesEndStatus('loaded');
   };
@@ -120,8 +126,13 @@ export default function ImagerySearch({ layer }) {
   }, [page]);
 
   const renderDates = () => {
-    const granuleDates = [...olderGranuleDates, ...newerGranuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
-    const renderedDates = [...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
+    const granuleDates = [
+      ...olderGranuleDates,
+      ...newerGranuleDates,
+    ].sort((a, b) => Date.parse(b) - Date.parse(a));
+    const renderedDates = [
+      ...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions))),
+    ].map((date, i) => (
       <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
         {date}
       </li>

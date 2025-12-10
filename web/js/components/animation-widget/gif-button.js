@@ -74,7 +74,8 @@ function GifButton(props) {
     if (gifDisabled) {
       return;
     }
-    const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
+    const nonDownloadableLayers = hasNonDownloadableLayer
+      ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     await getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
     await getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
@@ -85,7 +86,8 @@ function GifButton(props) {
     });
 
     onCloseGif = () => {
-      refreshStateAfterGif(hasCustomPalettes ? paletteStore : undefined, rotation, nonDownloadableLayers);
+      refreshStateAfterGif(hasCustomPalettes
+        ? paletteStore : undefined, rotation, nonDownloadableLayers);
       toggleGif();
     };
     toggleGif();

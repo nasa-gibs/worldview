@@ -3,9 +3,10 @@
     "AMSRU2_L3_Ocean_Wind_Speed_Weekly": {
       "id": "AMSRU2_L3_Ocean_Wind_Speed_Weekly",
       "description": "amsr2/AMSRU2_L3_Ocean_Wind_Speed_Weekly",
-      "tags": "amsru2 amsr-u2",
+      "tags": "amsru2 amsr-u2 amsr2 amsr-ue amsr-e unified",
       "group": "overlays",
-      "layergroup": "Wind Speed"
+      "layergroup": "Wind Speed",
+      "dataAvailability": "dd"
     }
   }
 }

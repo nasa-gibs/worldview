@@ -74,7 +74,8 @@ export function validateLayersConceptIds (layers) {
       ));
 
       validatedLayers = layers.reduce((prev, curr) => {
-        const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
+        const validIdsArray = (curr.conceptIds || [])
+          .filter(({ value }) => validatedConceptIds[value]);
         if (validIdsArray.length) prev.push(curr);
         return prev;
       }, []);

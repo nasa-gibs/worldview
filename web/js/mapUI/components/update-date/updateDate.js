@@ -79,7 +79,8 @@ function UpdateDate(props) {
     const layers = mapLayerCollection.getArray();
     const activeLayers = getAllActiveLayers(state);
 
-    const visibleLayers = activeLayers.filter(({ id, visible }) => layers.findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
+    const visibleLayers = activeLayers.filter(({ id, visible }) => layers
+      .findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
 
     const layerPromises = visibleLayers.map(async (def) => {
       const { id, type } = def;
@@ -122,7 +123,8 @@ function UpdateDate(props) {
       }
       return updateDate(action.outOfStep);
     }
-    if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
+    if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY
+      || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
       const outOfStep = false;
       // if date not changing we do not want to recreate titiler layer
       const skipTitiler = true;

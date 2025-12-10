@@ -17,7 +17,12 @@ function VectorAlertModalBody() {
         <Col>
 
           <p>
-            Vector layers identify locations on earth using points, line segments or polygons while raster layers represent locations on earth through a grid of cells or pixels that have associated color values. The vector layers have attribute information that can be examined when a vector feature is clicked. For example, when a point is clicked on in the Dams layer, a table of attributes will appear including the dam name, river, main use, representative capacity, etc.
+            Vector layers identify locations on earth using points, line segments or polygons while
+            raster layers represent locations on earth through a grid of cells or pixels that have
+            associated color values. The vector layers have attribute information that can be
+            examined when a vector feature is clicked. For example, when a point is clicked on in
+            the Dams layer, a table of attributes will appear including the dam name, river, main
+            use, representative capacity, etc.
           </p>
         </Col>
       </Row>
@@ -32,7 +37,9 @@ function VectorAlertModalBody() {
         <Col>
 
           <p>
-            To speed up map interactions, vector layers that have a vast number of features are rendered as raster images in outer zoom levels. Zoom in to be able to query the vector layer.
+            To speed up map interactions, vector layers that have a vast number of features are
+            rendered as raster images in outer zoom levels. Zoom in to be able to query the vector
+            layer.
           </p>
         </Col>
       </Row>
@@ -46,7 +53,11 @@ function VectorAlertModalBody() {
       <Row className="p-3">
         <Col>
           <p>
-            If you see the blue pointer icon next to the layer in the sidebar Layer List, you should be able to click on that layer’s features in order to access attribute information associated with that vector feature. If you see the blue pointer with a red X over it, you are zoomed out too far and the layer is being rendered as a raster, zoom in to be able to examine the attribute information of the vector layer.
+            If you see the blue pointer icon next to the layer in the sidebar Layer List, you
+            should be able to click on that layer’s features in order to access attribute
+            information associated with that vector feature. If you see the blue pointer with a
+            red X over it, you are zoomed out too far and the layer is being rendered as a raster,
+            zoom in to be able to examine the attribute information of the vector layer.
           </p>
         </Col>
         <Col>

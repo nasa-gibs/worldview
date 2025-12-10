@@ -44,7 +44,8 @@ class DismissableAlerts extends React.Component {
   componentDidUpdate(prevProps) {
     const { isDistractionFreeModeActive } = this.props;
     const { distractionFreeModeInitLoad } = this.state;
-    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive
+    && !isDistractionFreeModeActive;
     if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
       this.toggleDistractionFreeModeInitLoad(false);
     }

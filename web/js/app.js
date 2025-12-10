@@ -71,7 +71,8 @@ class App extends React.Component {
       kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled, hideNotificationsPopup,
     } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled && !hideNotificationsPopup) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled
+        && !e2eModeEnabled && !hideNotificationsPopup) {
         this.openNotification(notifications, numberOutagesUnseen);
       }
     }
@@ -165,7 +166,8 @@ class App extends React.Component {
         <MapInteractions />
         <AlertDropdown isTourActive={isTourActive} />
         <div>
-          {isTourActive && (numberOutagesUnseen === 0 || hideNotificationsPopup) && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
+          {isTourActive && (numberOutagesUnseen === 0
+            || hideNotificationsPopup) && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />

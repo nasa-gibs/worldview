@@ -211,7 +211,10 @@
     "AERONET": {
       "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3"
     },
-    "ESRI": {
+    "ESRI:services": {
+      "url": "https://services.arcgisonline.com/ArcGIS/rest/services"
+    },
+    "ESRI:basemaps": {
       "url": "https://basemaps.arcgis.com/arcgis/rest/services"
     },
     "EUMETSAT:wms": {

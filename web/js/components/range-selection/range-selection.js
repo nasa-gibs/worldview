@@ -126,7 +126,12 @@ class TimelineRangeSelector extends React.Component {
   };
 
   // update animation dragger helper function
-  getAnimationLocateDateUpdate = (animLocationDate, animDraggerLocation, deltaX, { diffZeroValues, diffFactor }) => {
+  getAnimationLocateDateUpdate = (
+    animLocationDate,
+    animDraggerLocation,
+    deltaX,
+    { diffZeroValues, diffFactor },
+  ) => {
     if (!diffZeroValues) { // month or year
       const {
         timeScale,
@@ -138,7 +143,8 @@ class TimelineRangeSelector extends React.Component {
       const options = timeScaleOptions[timeScale].timeAxis;
       const { gridWidth } = options;
 
-      const startDraggerPositionRelativeToFrontDate = animDraggerLocation - position - transformX + deltaX;
+      const startDraggerPositionRelativeToFrontDate = animDraggerLocation
+      - position - transformX + deltaX;
       const gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
       const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
       const draggerDateAddedValue = draggerDateAdded.valueOf();
@@ -187,7 +193,8 @@ class TimelineRangeSelector extends React.Component {
       const diffZeroValues = options.scaleMs;
       // get startDate for diff calculation
       let diffFactor;
-      if (diffZeroValues) { // month or year diffFactor is not static, so require calculation based on front date
+      if (diffZeroValues) {
+        // month or year diffFactor is not static, so require calculation based on front date
         diffFactor = diffZeroValues / options.gridWidth; // else known diffFactor used
       }
 

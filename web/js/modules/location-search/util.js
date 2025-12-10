@@ -76,7 +76,14 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
  */
-export function getCoordinatesMarker(proj, coordinatesObject, results, removeMarker, isMobile, dialogVisible) {
+export function getCoordinatesMarker(
+  proj,
+  coordinatesObject,
+  results,
+  removeMarker,
+  isMobile,
+  dialogVisible,
+) {
   const { crs } = proj.selected;
   const { id, longitude, latitude } = coordinatesObject;
   const coordinates = [longitude, latitude];
@@ -162,7 +169,8 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   const serializeCoordinatesArray = (coordinatesArray) => coordinatesArray
     .map((coordinate) => serializeCoordinates(coordinate))
     .filter((coordinate) => coordinate);
-  const coordinatesURL = Array.isArray(coordinates) ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
+  const coordinatesURL = Array.isArray(coordinates)
+    ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
@@ -180,4 +188,5 @@ export function setLocalStorageCollapseState(storageValue) {
  * @param {Object} config
  * @return {Boolean} is Location Search feature enabled
  */
-export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch && features.locationSearch.url);
+export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch
+  && features.locationSearch.url);

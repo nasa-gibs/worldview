@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean": {
+      "id": "VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean",
+      "description": "viirs/noaa21/VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "wrapadjacentdays": true
+    }
+  }
+}

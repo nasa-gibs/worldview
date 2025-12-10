@@ -13,7 +13,7 @@
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
-      "layergroup": "Ozone",
+      "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
         "id": "ARCSIX_P-3B_Flight_Track",
         "geographic": {

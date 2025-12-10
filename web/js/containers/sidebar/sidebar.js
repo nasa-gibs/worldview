@@ -123,7 +123,8 @@ class Sidebar extends React.Component {
       const topOffset = 10;
       const basePadding = 130;
       newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight + addLayersHeight)
+        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight
+          + basePadding + footerHeight + addLayersHeight)
         - 10;
     } else {
       newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
