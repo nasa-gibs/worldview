@@ -168,85 +168,6 @@ class ModalContainer extends Component {
       </Draggable>;
   };
 
-  getCustomModal() {
-    const {
-      customProps,
-      id,
-      isCustom,
-      isEmbedModeActive,
-      isMobile,
-      isOpen,
-    } = this.props;
-    const { width, height } = this.state;
-    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
-    const {
-      CompletelyCustomModal,
-      desktopOnly,
-      mobileOnly,
-      onClose,
-      size,
-    } = newProps;
-
-    const isRestrictedDisplay = (isMobile && desktopOnly)
-      || (!isMobile && mobileOnly)
-      || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
-    if (isRestrictedDisplay) {
-      return null;
-    }
-    const lowerCaseId = lodashToLower(id);
-    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-
-    const finalProps = {
-      key: `custom_${lowerCaseId}`,
-      modalHeight: height || newProps.height,
-      modalWidth: width || newProps.width,
-      toggleWithClose: toggleFunction,
-      ...customProps,
-    };
-
-    return React.createElement(CompletelyCustomModal, finalProps);
-  }
-
-  getBodyComponent() {
-    const {
-      customProps,
-      id,
-      isCustom,
-      isEmbedModeActive,
-      isMobile,
-      isOpen,
-      screenHeight,
-    } = this.props;
-    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
-    const {
-      bodyComponent,
-      bodyComponentProps,
-      desktopOnly,
-      mobileOnly,
-      onClose,
-      size,
-    } = newProps;
-
-    const isRestrictedDisplay = (isMobile && desktopOnly)
-      || (!isMobile && mobileOnly)
-      || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
-    if (isRestrictedDisplay) {
-      return null;
-    }
-    const BodyComponent = bodyComponent || '';
-    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-
-    const finalProps = {
-      ...bodyComponentProps,
-      parentId: id,
-      screenHeight,
-      closeModal: toggleFunction,
-    };
-    return React.createElement(BodyComponent, finalProps);
-  }
-
-
-
   render() {
     const {
       customProps,
@@ -256,12 +177,16 @@ class ModalContainer extends Component {
       isMobile,
       isOpen,
       isTemplateModal,
+      screenHeight,
     } = this.props;
+    const { width, height } = this.state;
+
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       autoFocus,
       backdrop,
       bodyComponent,
+      bodyComponentProps,
       bodyHeader,
       bodyText,
       footer,
@@ -320,7 +245,16 @@ class ModalContainer extends Component {
             fade={!isDraggable}
           >
             {CompletelyCustomModal
-              ? this.getCustomModal()
+              ? (
+                <CompletelyCustomModal
+                  key={`custom_${lowerCaseId}`}
+                  modalHeight={height || newProps.height}
+                  modalWidth={width || newProps.width}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...customProps}
+                  toggleWithClose={toggleFunction}
+                />
+              )
               : (
                 <DetectOuterClick
                   onClick={toggleFunction}
@@ -333,7 +267,15 @@ class ModalContainer extends Component {
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? this.getBodyComponent()
+                    {BodyComponent ? (
+                      <BodyComponent
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                        {...bodyComponentProps}
+                        parentId={id}
+                        screenHeight={screenHeight}
+                        closeModal={toggleFunction}
+                      />
+                    )
                       : isTemplateModal ? this.getTemplateBody() : (<p>{bodyText}</p>) || ''}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
