@@ -103,6 +103,7 @@ function LayerRow (props) {
     disableDDVZoomAlert,
     map,
     selectedDate,
+    describeDomainsUrl,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -331,7 +332,7 @@ function LayerRow (props) {
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
           className="button wv-layers-info layer-options-dropdown-item"
-          onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
+          onClick={() => onInfoClick(layer, title, measurementDescriptionPath, describeDomainsUrl)}
         >
           {layerInfoBtnTitle}
         </DropdownItem>
@@ -387,7 +388,7 @@ function LayerRow (props) {
         aria-label={layerInfoBtnTitle}
         className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
         onMouseDown={stopPropagation}
-        onClick={() => onInfoClick(layer, title, measurementDescriptionPath)}
+        onClick={() => onInfoClick(layer, title, measurementDescriptionPath, describeDomainsUrl)}
       >
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerInfoBtnId}>
           {layerInfoBtnTitle}
@@ -696,6 +697,7 @@ const makeMapStateToProps = () => {
     const collections = getCollections(layers, dailyDate, subdailyDate, layer, proj.id);
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
     const { ddvZoomAlerts, ddvLocationAlerts } = state.alerts;
+    const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
 
     return {
       compare,
@@ -723,6 +725,7 @@ const makeMapStateToProps = () => {
       map,
       selectedDate,
       renderedPalette: renderedPalettes[paletteName],
+      describeDomainsUrl,
     };
   };
 };
@@ -768,7 +771,7 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  onInfoClick: (layer, title, measurementDescriptionPath) => {
+  onInfoClick: (layer, title, measurementDescriptionPath, describeDomainsUrl) => {
     const key = `LAYER_INFO_MODAL-${layer.id}`;
     googleTagManager.pushEvent({
       event: 'sidebar_layer_info',
@@ -787,6 +790,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           layer,
           measurementDescriptionPath,
+          describeDomainsUrl,
         },
       }),
     );
@@ -865,4 +869,5 @@ LayerRow.propTypes = {
   isDDVLocationAlertPresent: PropTypes.bool,
   isDDVZoomAlertPresent: PropTypes.bool,
   openZoomAlertModal: PropTypes.func,
+  describeDomainsUrl: PropTypes.string,
 };

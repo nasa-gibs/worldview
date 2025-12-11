@@ -1390,6 +1390,7 @@ class TimelineAxis extends Component {
   addTimeRanges = (def, proj, dateRange) => {
     const {
       addGranuleDateRanges,
+      describeDomainsUrl,
     } = this.props;
     const {
       cmrAvailability,
@@ -1433,6 +1434,7 @@ class TimelineAxis extends Component {
         endDate,
         id,
         proj: proj.crs,
+        baseUrl: describeDomainsUrl,
       };
       worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
     }
@@ -1699,6 +1701,7 @@ TimelineAxis.propTypes = {
   updatePositioningOnAxisStopDrag: PropTypes.func,
   updatePositioningOnSimpleDrag: PropTypes.func,
   updateTimelineMoveAndDrag: PropTypes.func,
+  describeDomainsUrl: PropTypes.string,
 };
 
 export default TimelineAxis;

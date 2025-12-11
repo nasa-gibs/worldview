@@ -4,7 +4,7 @@ import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
 import { coverageDateFormatter } from '../../../modules/date/util';
 
-export default function LayerInfo ({ layer, measurementDescriptionPath }) {
+export default function LayerInfo ({ layer, measurementDescriptionPath, describeDomainsUrl }) {
   const {
     dateRanges,
     endDate,
@@ -76,7 +76,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
               </>
             ) : startDate && ' - Present'}
           </span>
-          {needDateRanges && <DateRanges layer={layer} />}
+          {needDateRanges && <DateRanges layer={layer} describeDomainsUrl={describeDomainsUrl} />}
         </div>
       )}
       {layerMetadata ? (
@@ -104,4 +104,5 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
 LayerInfo.propTypes = {
   layer: PropTypes.object,
   measurementDescriptionPath: PropTypes.string,
+  describeDomainsUrl: PropTypes.string,
 };
