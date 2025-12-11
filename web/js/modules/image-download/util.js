@@ -709,13 +709,6 @@ function createMapRestore(map, extent, abortSignal, tileMatrixID) {
   };
 }
 
-// function rejectIfAborted(abortSignal, reject, restoreMap) {
-//   if (abortSignal?.aborted) {
-//     restoreMap?.();
-//     reject(new DOMException('Snapshot operation was cancelled', 'AbortError'));
-//   }
-// }
-
 /**
  * Initiates a download and waits for a reasonable delay to simulate download completion
  * @param {Blob} blob - The blob to download
@@ -724,9 +717,6 @@ function createMapRestore(map, extent, abortSignal, tileMatrixID) {
  * @returns {Promise} - Resolves when download is initiated and delay is complete
  */
 async function initiateDownload(blob, filename, abortSignal, parentReject) {
-  // Check if cancelled before starting download
-  // rejectIfAborted(abortSignal, parentReject);
-
   // Wait for download to initiate with cancellation support
   return new Promise((resolve, reject) => {
     const timeoutId = setTimeout(resolve, 0);
@@ -882,9 +872,6 @@ export async function snapshot(options) {
 
   await waitForRenderComplete(map);
 
-  // Check if operation was cancelled at the start
-  // rejectIfAborted(abortSignal, reject, restoreMap);
-
   const topLeft = olExtent.getTopLeft(extent);
   const bottomLeft = olExtent.getBottomLeft(extent);
   const topRight = olExtent.getTopRight(extent);
@@ -914,9 +901,6 @@ export async function snapshot(options) {
   ctx.scale(dpr, dpr);
 
   const capturedCanvas = new OffscreenCanvas(mapWidth * dpr, mapHeight * dpr);
-
-  // Check if operation was cancelled before html2canvas
-  // rejectIfAborted(abortSignal, reject, restoreMap);
 
   // Capture the map at its new scaled size
   await html2canvas(mapElement, {
@@ -963,18 +947,12 @@ export async function snapshot(options) {
   // Reset map to original size
   restoreMap();
 
-  // Check if operation was cancelled before processing image
-  // rejectIfAborted(abortSignal, reject);
-
   const pngBlob = await outputCanvas.convertToBlob({
     type: 'image/png',
     quality: 1, // Maximum quality
   });
 
   const crs = map.getView().getProjection().getCode();
-
-  // Check if operation was cancelled before georeferencing
-  // rejectIfAborted(abortSignal, reject);
 
   const georeferencedOutput = await georeference(pngBlob, {
     extent,
@@ -990,9 +968,6 @@ export async function snapshot(options) {
   });
 
   if (georeferencedOutput.length > 1 || format === 'kmz') {
-    // Check if operation was cancelled before creating zip
-    // rejectIfAborted(abortSignal, reject);
-
     const zip = new JSZip();
     georeferencedOutput.forEach(({ name, blob }) => zip.file(name, blob));
     const zipBlob = await zip.generateAsync({
@@ -1002,13 +977,8 @@ export async function snapshot(options) {
       mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
     });
 
-    // Final check before download
-    // rejectIfAborted(abortSignal, reject);
-
     return initiateDownload(zipBlob, `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal);
   }
-  // Final check before download
-  // rejectIfAborted(abortSignal, reject);
 
   const { blob } = georeferencedOutput[0];
   return initiateDownload(blob, `${filename}.${format}`, abortSignal);
