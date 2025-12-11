@@ -238,9 +238,9 @@ class ModalContainer extends Component {
 
     const finalProps = {
       ...bodyComponentProps,
-      parentId: { id },
-      screenHeight: { screenHeight },
-      closeModal: { toggleFunction },
+      parentId: id,
+      screenHeight,
+      closeModal: toggleFunction,
     };
     return React.createElement(BodyComponent, finalProps);
   }
