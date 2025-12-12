@@ -1,6 +1,6 @@
 The Nitrogen Dioxide (L2, Tropospheric Column) layer displays the tropospheric vertical column of nitrogen dioxide in molecules/cm<sup>2</sup>.
 
-The TROPOMI retrieval of total and tropospheric NO2, is based on the DOMINO approach, a DOAS retrieval, a pre-calculated air-mass factor (AMF) look-up table, and a data assimilation/chemistry transport model for the separation of the stratospheric and tropospheric contributions to the NO2 column. It also include many retrieval developments of the European Quality Assurance for Essential Climate Variables (QA4ECV) project.
+The TROPOMI retrieval of total and tropospheric NO2, is based on the DOMINO approach, a DOAS retrieval, a pre-calculated air-mass factor (AMF) look-up table, and a data assimilation/chemistry transport model for the separation of the stratospheric and tropospheric contributions to the NO2 column. It also includes many retrieval developments of the European Quality Assurance for Essential Climate Variables (QA4ECV) project.
 
 The Nitrogen Dioxide (L2, Tropospheric Column) layer is a science parameter of the Sentinel-5P TROPOMI Tropospheric NO2 1-Orbit L2 5.5km x 3.5km (S5P_L2__NO2____HiR) product. It is available from the TROPOspheric Monitoring Instrument (TROPOMI) instrument aboard the European Space Agency's (ESA) Sentinel-5P satellite. The sensor resolution is ~5.5km at nadir (5.5 x 3.5 km<sup>2</sup>), the imagery resolution is 2 km, and the temporal resolution is daily.
 
