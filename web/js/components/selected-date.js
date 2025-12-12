@@ -6,7 +6,7 @@ import { formatDisplayDate } from '../modules/date/util';
 
 // A simple component to re-use anywhere we want to display the selected date
 function SelectedDate({ selectedDate }) {
-  return <>{selectedDate}</>;
+  return <div>{selectedDate}</div>;
 }
 
 SelectedDate.propTypes = {

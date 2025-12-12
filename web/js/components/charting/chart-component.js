@@ -27,6 +27,114 @@ import {
 } from 'ol/style';
 import util from '../../util/util';
 
+// Gets the indices of the tick positions so that they are evenly spaced
+function getTickPositions(dataLength) {
+  // If dataLength is too small, just show first and last tick
+  if (dataLength < 8) return [0, dataLength - 1];
+
+  const numGaps = dataLength < 15 ? 4 : 5;
+  const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
+
+  // Last gap must be at least 3 to give extra room for end-aligned label
+  gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
+
+  const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
+  let leftoverGap = (dataLength - 1) - gapsTotal;
+
+  let i = 0;
+  // Reduce gaps that are too large due to last gap size
+  while (leftoverGap < 0 && i < numGaps - 1) {
+    gapsArr[i] -= 1;
+    leftoverGap += 1;
+    i = (i + 1) % (numGaps - 1);
+  }
+
+  i = 0;
+  // Distribute extra gaps across existing gaps
+  while (leftoverGap > 0 && i < numGaps - 1) {
+    gapsArr[i] += 1;
+    leftoverGap -= 1;
+    i = (i + 1) % (numGaps - 1);
+  }
+
+  // Build final array of tick positions based on calculated gaps
+  const tickPosArr = [0];
+  for (let j = 0; j < gapsArr.length; j += 1) {
+    tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[j]);
+  }
+  tickPosArr[tickPosArr.length - 1] = dataLength - 1;
+
+  return tickPosArr;
+}
+
+
+function CustomXAxisTick(props) {
+  const {
+    x, y, fill, textAnchor, visibleTicksCount, index, payload, data,
+  } = props;
+  const tickPositions = getTickPositions(data.length);
+  const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
+  const isLabeled = tickPositions.includes(index);
+  if (isLabeled) {
+    return (
+      <g transform={`translate(${x}, ${y})`}>
+        <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
+        <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
+          {payload.value}
+        </text>
+      </g>
+    );
+  }
+  return (
+    <g transform={`translate(${x}, ${y})`}>
+      <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
+    </g>
+  );
+}
+
+function formatToThreeDigits(str) {
+  if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
+    return Number(parseFloat(str).toFixed(3)).toPrecision(3);
+  }
+  return parseFloat(str).toFixed(3);
+}
+
+function CustomTooltip({
+  active, payload, label, unit,
+}) {
+  const formattedUnit = unit ? ` (${unit})` : '';
+  if (active && payload && payload.length) {
+    if (!Number.isNaN(payload[0].value)) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label" style={{ color: 'gray' }}>
+            {label}
+          </p>
+          <p className="label" style={{ color: '#000' }}>
+            <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
+            {`${payload[0].name}${formattedUnit}: `}
+            <b>
+              {formatToThreeDigits(payload[0].value)}
+            </b>
+          </p>
+        </div>
+      );
+    }
+    return (
+      <div className="custom-tooltip">
+        <p className="label" style={{ color: 'gray' }}>
+          {label}
+        </p>
+        <p className="label" style={{ color: '#000' }}>
+          No data
+        </p>
+      </div>
+    );
+  }
+
+  return null;
+}
+
 function ChartComponent (props) {
   const {
     liveData,
@@ -95,12 +203,7 @@ function ChartComponent (props) {
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
   const formattedUnit = unit ? ` (${unit})` : '';
 
-  function formatToThreeDigits(str) {
-    if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
-      return Number(parseFloat(str).toFixed(3)).toPrecision(3);
-    }
-    return parseFloat(str).toFixed(3);
-  }
+
 
   /**
    * Return an array of provided min & max values buffered by 10%
@@ -133,103 +236,10 @@ function ChartComponent (props) {
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
 
-  function CustomTooltip({ active, payload, label }) {
-    if (active && payload && payload.length) {
-      if (!Number.isNaN(payload[0].value)) {
-        return (
-          <div className="custom-tooltip">
-            <p className="label" style={{ color: 'gray' }}>
-              {label}
-            </p>
-            <p className="label" style={{ color: '#000' }}>
-              <span className="custom-data-rect" style={{ backgroundColor: payload[0].color }} />
-              {`${payload[0].name}${formattedUnit}: `}
-              <b>
-                {formatToThreeDigits(payload[0].value)}
-              </b>
-            </p>
-          </div>
-        );
-      }
-      return (
-        <div className="custom-tooltip">
-          <p className="label" style={{ color: 'gray' }}>
-            {label}
-          </p>
-          <p className="label" style={{ color: '#000' }}>
-            No data
-          </p>
-        </div>
-      );
-    }
 
-    return null;
-  }
 
-  // Gets the indices of the tick positions so that they are evenly spaced
-  function getTickPositions(dataLength) {
-    // If dataLength is too small, just show first and last tick
-    if (dataLength < 8) return [0, dataLength - 1];
 
-    const numGaps = dataLength < 15 ? 4 : 5;
-    const gapsArr = Array(numGaps).fill(Math.floor(dataLength / numGaps));
 
-    // Last gap must be at least 3 to give extra room for end-aligned label
-    gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
-
-    const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
-    let leftoverGap = (dataLength - 1) - gapsTotal;
-
-    let i = 0;
-    // Reduce gaps that are too large due to last gap size
-    while (leftoverGap < 0 && i < numGaps - 1) {
-      gapsArr[i] -= 1;
-      leftoverGap += 1;
-      i = (i + 1) % (numGaps - 1);
-    }
-
-    i = 0;
-    // Distribute extra gaps across existing gaps
-    while (leftoverGap > 0 && i < numGaps - 1) {
-      gapsArr[i] += 1;
-      leftoverGap -= 1;
-      i = (i + 1) % (numGaps - 1);
-    }
-
-    // Build final array of tick positions based on calculated gaps
-    const tickPosArr = [0];
-    for (let i = 0; i < gapsArr.length; i += 1) {
-      tickPosArr.push(tickPosArr[tickPosArr.length - 1] + gapsArr[i]);
-    }
-    tickPosArr[tickPosArr.length - 1] = dataLength - 1;
-
-    return tickPosArr;
-  }
-
-  const tickPositions = getTickPositions(data.length);
-
-  function CustomXAxisTick(obj) {
-    const {
-      x, y, fill, textAnchor, visibleTicksCount, index, payload,
-    } = obj;
-    const anchorPos = index === visibleTicksCount - 1 ? 'end' : textAnchor;
-    const isLabeled = tickPositions.includes(index);
-    if (isLabeled) {
-      return (
-        <g transform={`translate(${x}, ${y})`}>
-          <line x1="0" y1="0" x2="0" y2="-8" stroke={fill} />
-          <text x={anchorPos === 'end' ? 10 : 0} y={0} dy={16} textAnchor={anchorPos} fill={fill}>
-            {payload.value}
-          </text>
-        </g>
-      );
-    }
-    return (
-      <g transform={`translate(${x}, ${y})`}>
-        <line x1="0" y1="-4" x2="0" y2="-8" stroke={fill} />
-      </g>
-    );
-  }
 
   const yAxisValuesArr = getYAxisValues(data);
 
@@ -415,10 +425,10 @@ function ChartComponent (props) {
               bottom: 10,
             }}
           >
-            <Tooltip content={CustomTooltip} />
+            <Tooltip content={<CustomTooltip unit={unit} />} />
             {' '}
             {getLineChart(data)}
-            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick />} tickLine={false} />
+            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick data={data} />} tickLine={false} />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -572,6 +582,24 @@ ChartComponent.propTypes = {
   mapView: PropTypes.object,
   createLayer: PropTypes.func,
   overviewMapLayerDef: PropTypes.object,
+};
+
+CustomXAxisTick.propTypes = {
+  x: PropTypes.number,
+  y: PropTypes.number,
+  fill: PropTypes.string,
+  textAnchor: PropTypes.string,
+  visibleTicksCount: PropTypes.number,
+  index: PropTypes.number,
+  payload: PropTypes.object,
+  data: PropTypes.array,
+};
+
+CustomTooltip.propTypes = {
+  active: PropTypes.bool,
+  payload: PropTypes.array,
+  label: PropTypes.string,
+  unit: PropTypes.string,
 };
 
 export default connect(

@@ -184,8 +184,6 @@ class PlayQueue extends React.Component {
     }
   }
 
-  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length;
-
   isPreloadSufficient() {
     const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
@@ -344,7 +342,6 @@ class PlayQueue extends React.Component {
     this.abortController.abort();
     this.setState({ isAnimating: false });
     this.hasPlayStarted = false;
-    // console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
   animationInterval(ms, callback) {

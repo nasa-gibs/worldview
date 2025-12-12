@@ -659,16 +659,6 @@ class Timeline extends React.Component {
   };
 
   /**
-  * @desc show/hide custom interval modal
-  * @param {Boolean} isOpen
-  * @returns {void}
-  */
-  toggleCustomIntervalModal = (isOpen) => {
-    const { toggleCustomModal } = this.props;
-    toggleCustomModal(isOpen, customModalType.TIMELINE);
-  };
-
-  /**
   * @desc Change the timescale parent state
   * @param {Number} timeScaleNumber
   * @returns {void}
@@ -1071,18 +1061,6 @@ class Timeline extends React.Component {
       left: `${mobileLeft}px`,
       bottom: `${mobileBottom}px`,
     };
-  };
-
-  getStringFromDate = (dateObj, hasSubdailyLayers) => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const day = dateObj.getDate().toString().padStart(2, '0');
-    const month = months[dateObj.getMonth()];
-    const year = dateObj.getFullYear().toString();
-    const hours = dateObj.getUTCHours();
-    const minutes = dateObj.getUTCMinutes();
-    const timeString = hasSubdailyLayers ? ` ${`0${hours}`.slice(-2)}:${`0${minutes}`.slice(-2)}` : '';
-
-    return `${year} ${month} ${day}${timeString}`;
   };
 
   renderDateChangeArrows = () => {
