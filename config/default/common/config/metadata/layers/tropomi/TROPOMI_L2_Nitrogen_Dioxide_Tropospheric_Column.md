@@ -1,4 +1,4 @@
-The Nitrogen Dioxide (L2, Tropospheric Column) layer displays the tropospheric vertical column of nitrogen dioxide in molecules/cm<sup>2</sup> (mol m-2).
+The Nitrogen Dioxide (L2, Tropospheric Column) layer displays the tropospheric vertical column of nitrogen dioxide in molecules/cm<sup>2</sup>.
 
 The TROPOMI retrieval of total and tropospheric NO2, is based on the DOMINO approach, a DOAS retrieval, a pre-calculated air-mass factor (AMF) look-up table, and a data assimilation/chemistry transport model for the separation of the stratospheric and tropospheric contributions to the NO2 column. It also include many retrieval developments of the European Quality Assurance for Essential Climate Variables (QA4ECV) project.
 
