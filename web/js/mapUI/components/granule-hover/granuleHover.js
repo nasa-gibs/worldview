@@ -50,7 +50,6 @@ export default connect(
 
 GranuleHover.propTypes = {
   granuleFootprints: PropTypes.object,
-  setGranuleFootprints: PropTypes.func,
   state: PropTypes.object,
   ui: PropTypes.object,
 };

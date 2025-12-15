@@ -201,6 +201,7 @@ function LayerList(props) {
 }
 
 LayerList.propTypes = {
+  activeChartingLayer: PropTypes.string,
   activeLayers: PropTypes.array,
   available: PropTypes.func,
   collapsed: PropTypes.bool,
@@ -209,12 +210,14 @@ LayerList.propTypes = {
   getNames: PropTypes.func,
   groupId: PropTypes.string,
   isAnimating: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   layers: PropTypes.array,
   layerSplit: PropTypes.number,
   numVisible: PropTypes.number,
   projId: PropTypes.string,
+  removeGroup: PropTypes.func,
   reorderLayers: PropTypes.func,
   toggleCollapse: PropTypes.func,
   toggleVisibility: PropTypes.func,

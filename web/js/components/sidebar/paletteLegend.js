@@ -499,6 +499,8 @@ PaletteLegend.propTypes = {
   paletteLegends: PropTypes.array,
   palettes: PropTypes.object,
   parentLayer: PropTypes.object,
+  showingVectorHand: PropTypes.bool,
+  showingChartingIcon: PropTypes.bool,
   width: PropTypes.number,
   toggleAllClassifications: PropTypes.func,
 };

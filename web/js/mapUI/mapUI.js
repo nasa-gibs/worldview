@@ -507,6 +507,8 @@ MapUI.propTypes = {
   dateCompareState: PropTypes.object,
   embed: PropTypes.object,
   isEICModeActive: PropTypes.bool,
+  isStaticMapActive: PropTypes.bool,
+  isTravelModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,

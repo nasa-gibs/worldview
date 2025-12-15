@@ -441,7 +441,6 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   clearCustomPalette: PropTypes.func,
-  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
@@ -452,7 +451,6 @@ LayerSettings.propTypes = {
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
-  onCustomizeBandClick: PropTypes.func,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
@@ -460,11 +458,9 @@ LayerSettings.propTypes = {
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
-  setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
-  vectorStyles: PropTypes.object,
   zot: PropTypes.object,
 };

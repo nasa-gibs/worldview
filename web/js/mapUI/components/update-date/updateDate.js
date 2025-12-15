@@ -176,7 +176,7 @@ UpdateDate.propTypes = {
   dateCompareState: PropTypes.object,
   getGranuleOptions: PropTypes.func,
   granuleState: PropTypes.object,
-  isComparActive: PropTypes.bool,
+  isCompareActive: PropTypes.bool,
   layerState: PropTypes.object,
   preloadNextTiles: PropTypes.func,
   state: PropTypes.object,
