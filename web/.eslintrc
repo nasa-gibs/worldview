@@ -160,8 +160,8 @@
         "react/no-unknown-property": "error",
         "react/jsx-no-useless-fragment": "error",
         "react/no-unstable-nested-components": "error",
-        "react/prop-types": "warn",                        // 58 errors across 22 files
-        "react/no-unused-prop-types": "warn",              // 9 errors across 9 files
+        "react/prop-types": "error",
+        "react/no-unused-prop-types": "error",
         "default-param-last": "warn",                      // 42 errors across 34 files
         "prefer-regex-literals": "error",
         "no-promise-executor-return": "error"

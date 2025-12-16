@@ -105,7 +105,7 @@ UpdateOpacity.propTypes = {
   activeLayers: PropTypes.array,
   activeString: PropTypes.string,
   compare: PropTypes.object,
-  findLayers: PropTypes.func,
+  findLayer: PropTypes.func,
   isCompareActive: PropTypes.bool,
   ui: PropTypes.object,
   updateLayerVisibilities: PropTypes.func,

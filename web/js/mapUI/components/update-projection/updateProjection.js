@@ -464,6 +464,7 @@ UpdateProjection.propTypes = {
   action: PropTypes.object,
   activeLayers: PropTypes.array,
   compare: PropTypes.object,
+  compareMode: PropTypes.string,
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
   dateCompareState: PropTypes.object,
@@ -480,7 +481,7 @@ UpdateProjection.propTypes = {
   ui: PropTypes.object,
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
-  updateMapUi: PropTypes.func,
+  updateMapUI: PropTypes.func,
   renderedPalettes: PropTypes.object,
   requestPalette: PropTypes.func,
 };

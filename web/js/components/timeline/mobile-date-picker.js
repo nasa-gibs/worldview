@@ -157,6 +157,7 @@ MobileDatePicker.propTypes = {
   date: PropTypes.object,
   endDateLimit: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   onDateChange: PropTypes.func,
   startDateLimit: PropTypes.string,
 };
