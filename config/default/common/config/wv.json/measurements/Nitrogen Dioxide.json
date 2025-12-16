@@ -3,7 +3,7 @@
         "Nitrogen Dioxide": {
             "id": "nitrogen-dioxide",
             "title":    "Nitrogen Dioxide",
-            "subtitle": "Aura/OMI, TEMPO, ASIA-AQ, SEDAC",
+            "subtitle": "Aura/OMI, TEMPO, TROPOMI, ASIA-AQ, SEDAC",
             "sources": {
                 "Aura/MLS": {
                     "id": "aura-omi",
@@ -25,6 +25,16 @@
                         "TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule",
                         "TEMPO_L3_NO2_Vertical_Column_Stratosphere",
                         "TEMPO_L3_NO2_Vertical_Column_Troposphere"
+                    ]
+                },
+               "Sentinel-5P/TROPOMI": {
+                    "id": "sentinel-5p-tropomi",
+                    "title": "Sentinel-5P/TROPOMI",
+                    "description": "tropomi/NitrogenDioxide",
+                    "image": "",
+                    "settings": [
+                        "TROPOMI_L2_Nitrogen_Dioxide_Tropospheric_Column",
+                        "OrbitTracks_Sentinel-5P_Ascending"
                     ]
                 },
               "ASIA-AQ": {
