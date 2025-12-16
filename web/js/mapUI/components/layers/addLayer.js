@@ -123,7 +123,7 @@ AddLayer.propTypes = {
   activeLayersState: PropTypes.array,
   activeString: PropTypes.string,
   action: PropTypes.object,
-  clearPreload: PropTypes.func,
+  compareDate: PropTypes.instanceOf(Date),
   compareMapUi: PropTypes.object,
   mode: PropTypes.string,
   preloadNextTiles: PropTypes.func,

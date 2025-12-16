@@ -264,9 +264,5 @@ FooterContent.propTypes = {
   openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
-  breakpoints: PropTypes.object,
-  isPlaying: PropTypes.bool,
-  screenWidth: PropTypes.number,
-  addLayers: PropTypes.func,
   sidebarHeight: PropTypes.number,
 };

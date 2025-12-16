@@ -10,7 +10,6 @@ import Opacity from './opacity';
 import Palette from './palette';
 import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
-import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
@@ -273,34 +272,6 @@ class LayerSettings extends React.Component {
   }
 
   /**
-   * Render Opacity, threshold, and custom palette options
-   */
-  renderVectorStyles() {
-    const {
-      setStyle,
-      clearStyle,
-      groupName,
-      layer,
-      vectorStyles,
-    } = this.props;
-    let customStyle;
-    if (layer.custom && layer.custom[0]) {
-      [customStyle] = layer.custom;
-    }
-    return (
-      <VectorStyle
-        setStyle={setStyle}
-        clearStyle={clearStyle}
-        activeVectorStyle={customStyle || layer.id}
-        layer={layer}
-        index={0}
-        groupName={groupName}
-        vectorStyles={vectorStyles}
-      />
-    );
-  }
-
-  /**
    * Render Granule count slider and granule date list settings (if granule layer)
    */
   renderGranuleSettings = () => {
@@ -470,7 +441,6 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   clearCustomPalette: PropTypes.func,
-  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
@@ -481,7 +451,6 @@ LayerSettings.propTypes = {
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.object,
-  onCustomizeBandClick: PropTypes.func,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.array,
   palettesTranslate: PropTypes.func,
@@ -489,11 +458,9 @@ LayerSettings.propTypes = {
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
-  setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
-  vectorStyles: PropTypes.object,
   zot: PropTypes.object,
 };

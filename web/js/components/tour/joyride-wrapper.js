@@ -151,7 +151,7 @@ export default function JoyrideWrapper ({
     incrementKey();
   }
 
-  function joyrideStateCallback(data) {
+  const joyrideStateCallback = (data) => {
     joyrideProps = data;
     const {
       action, index, type, status,
@@ -168,7 +168,7 @@ export default function JoyrideWrapper ({
       setStepIndex(0);
       setRun(false);
     }
-  }
+  };
 
   /**
    * Forcing a re-render on a target resize (by calling incrementKey())

@@ -141,6 +141,7 @@ export default class GifResults extends Component {
 
 GifResults.propTypes = {
   boundaries: PropTypes.object,
+  closeBtn: PropTypes.object,
   endDate: PropTypes.string,
   gifObject: PropTypes.object,
   increment: PropTypes.string,

@@ -87,9 +87,9 @@
         // Base rule overrides
         "no-nested-ternary": "off",    // 164 errors across 40 files
         "no-shadow": "warn",           // 110 errors across 40 files
-        "max-len": "error",              // 315 errors across 109 files
+        "max-len": "error",
         "consistent-return": "off",    // 95 errors across 58 files
-        "no-underscore-dangle": "off", // 40 errors across 7 files
+        "no-underscore-dangle": "error",
         "no-param-reassign": [         // 198 errors across 46 files
           "warn",
           {
@@ -110,9 +110,9 @@
         "jsx-a11y/no-static-element-interactions": "off",         // 71 errors across 39 files
         "jsx-a11y/click-events-have-key-events": "off",           // 70 errors across 39 files
         // React rules overrides
-        "react/jsx-props-no-spreading": "warn",                   // 6 errors across 2 files
+        "react/jsx-props-no-spreading": "error",
         "react/jsx-filename-extension": "off",                    // 206 errors across 206 files
-        "react/jsx-no-bind": "warn",                              // 9 errors across 5 files
+        "react/jsx-no-bind": "error",
         "react/sort-comp": [
           "error",
           {
@@ -156,15 +156,15 @@
         "react/forbid-prop-types": "off",                  // 411 errors across 139 files
         "react/require-default-props": "off",              // 1644 errors across > 80 files
         "class-methods-use-this": "warn",                  // 15 errors across 13 files
-        "react/no-unused-class-component-methods": "warn", // 8 errors across 7 files
-        "react/no-unknown-property": "warn",               // 2 errors across 2 files
-        "react/jsx-no-useless-fragment": "warn",           // 3 errors across 3 files
-        "react/no-unstable-nested-components": "warn",     // 1 error across 1 file
-        "react/prop-types": "warn",                        // 58 errors across 22 files
-        "react/no-unused-prop-types": "warn",              // 9 errors across 9 files
+        "react/no-unused-class-component-methods": "error",
+        "react/no-unknown-property": "error",
+        "react/jsx-no-useless-fragment": "error",
+        "react/no-unstable-nested-components": "error",
+        "react/prop-types": "error",
+        "react/no-unused-prop-types": "error",
         "default-param-last": "warn",                      // 42 errors across 34 files
-        "prefer-regex-literals": "warn",                   // 3 errors across 1 file
-        "no-promise-executor-return": "warn"               // 1 error across 1 file
+        "prefer-regex-literals": "error",
+        "no-promise-executor-return": "error"
       }
     }
   ]

@@ -23,7 +23,7 @@ function ChartingDateSelector (props) {
   const validStartDate = startdate < layerStartDate ? layerStartDate : startdate;
   const validEndDate = endDate > layerEndDate ? layerEndDate : endDate;
 
-  function onDateChange([newStartDate, newEndDate]) {
+  const onDateChange = ([newStartDate, newEndDate]) => {
     if (newStartDate !== timeSpanStartDate) {
       onUpdateStartDate(newStartDate);
     }
@@ -31,13 +31,13 @@ function ChartingDateSelector (props) {
     if (newEndDate !== timeSpanEndDate) {
       onUpdateEndDate(newEndDate);
     }
-  }
+  };
 
-  function onSingleDateChange(newStartDate) {
+  const onSingleDateChange = (newStartDate) => {
     if (newStartDate !== timeSpanStartDate) {
       onUpdateStartDate(newStartDate);
     }
-  }
+  };
 
   return (
     <div className="charting-date-container wv-date-range-selector">
