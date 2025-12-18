@@ -623,7 +623,9 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1) {
   const originalTileLoadFunction = originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_;
 
   const cancellableTileLoadFunction = async (tile, src) => {
-    tile.setState(olTileState.LOADING);
+    if (tile.getState() !== olTileState.LOADED) {
+      tile.setState(olTileState.LOADING);
+    }
     try {
       const response = await fetch(src, { signal: abortSignal });
       const blob = await response.blob();
