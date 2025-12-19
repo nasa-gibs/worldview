@@ -371,6 +371,7 @@ class Sidebar extends React.Component {
             id="products-holder"
             className="products-holder-case"
             style={productsHolderStyle}
+            // eslint-disable-next-line react/no-unused-class-component-methods
             ref={(el) => { this.sidebarElement = el; }}
           >
             <NavCase
@@ -388,6 +389,7 @@ class Sidebar extends React.Component {
               <TabPane tabId="layers">
                 {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
                 <AddLayersContent
+                  // eslint-disable-next-line react/no-unused-class-component-methods
                   ref={(el) => { this.addLayersElement = el; }}
                   isActive={activeTab === 'layers'}
                   compareState={activeString}
@@ -415,6 +417,7 @@ class Sidebar extends React.Component {
               {
                 !isKioskModeActive && (
                   <FooterContent
+                    // eslint-disable-next-line react/no-unused-class-component-methods
                     ref={(el) => { this.footerElement = el; }}
                     tabTypes={tabTypes}
                     activeTab={activeTab}
@@ -543,6 +546,7 @@ Sidebar.propTypes = {
   chartingModeAccessible: PropTypes.bool,
   collapseExpandToggle: PropTypes.func,
   config: PropTypes.object,
+  displayStaticMap: PropTypes.bool,
   eventsData: PropTypes.array,
   eventsSources: PropTypes.array,
   hasEventRequestError: PropTypes.bool,
@@ -552,6 +556,7 @@ Sidebar.propTypes = {
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isLoadingEvents: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,

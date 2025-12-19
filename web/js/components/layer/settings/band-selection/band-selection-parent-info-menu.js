@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 import BandSelectionMenu from './band-selection-menu';
 import { toggleCustomContent } from '../../../../modules/modal/actions';
 
@@ -96,3 +97,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
     </div>
   );
 }
+
+BandSelectionParentInfoMenu.propTypes = {
+  layer: PropTypes.object,
+};

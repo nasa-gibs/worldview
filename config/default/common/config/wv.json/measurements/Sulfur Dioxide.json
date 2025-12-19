@@ -76,7 +76,7 @@
                 "Sentinel-5P/TROPOMI": {
                     "id": "sentinel-5p-tropomi",
                     "title": "Sentinel-5P/TROPOMI",
-                    "description": "tropomi/SO2",
+                    "description": "tropomi/SulfurDioxide",
                     "image": "",
                     "settings": [
                        "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",

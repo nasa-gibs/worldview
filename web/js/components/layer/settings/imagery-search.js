@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   Spinner,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { selectDate as selectDateAction } from '../../../modules/date/actions';
 
 const dateOptions = {
@@ -170,3 +171,7 @@ export default function ImagerySearch({ layer }) {
     </div>
   );
 }
+
+ImagerySearch.propTypes = {
+  layer: PropTypes.object,
+};

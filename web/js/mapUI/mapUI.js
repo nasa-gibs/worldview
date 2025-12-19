@@ -299,7 +299,7 @@ function MapUI(props) {
     };
   };
 
-  async function preloadNextTiles(date, compareString) {
+  const preloadNextTiles = async (date, compareString) => {
     const map = { ui };
     const state = {
       proj, embed, layers, palettes, vectorStyles, compare, map, ui,
@@ -321,14 +321,14 @@ function MapUI(props) {
     if (!date && !arrowDown) {
       preloadNextTiles(subsequentDate, useActiveString);
     }
-  }
+  };
 
-  function preloadForCompareMode() {
+  const preloadForCompareMode = () => {
     preloadNextTiles(selectedDate, 'active');
     if (compare.active) {
       preloadNextTiles(selectedDateB, 'activeB');
     }
-  }
+  };
 
   // Initial hook that initiates the map after it has been created in CreateMap.js
   useEffect(() => {
@@ -507,6 +507,8 @@ MapUI.propTypes = {
   dateCompareState: PropTypes.object,
   embed: PropTypes.object,
   isEICModeActive: PropTypes.bool,
+  isStaticMapActive: PropTypes.bool,
+  isTravelModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
   layerQueue: PropTypes.object,
   layers: PropTypes.object,
