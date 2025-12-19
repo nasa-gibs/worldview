@@ -398,13 +398,17 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
 
-    const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
-
-    return new OlLayerTile({
-      extent: polygon ? granuleExtent : extent,
+    const layerTile = new OlLayerTile({
       preload: 0,
       source: tileSource,
     });
+
+    // Because granule footprints from CMR are imprecise, setting an extent on granule
+    // layers can crop valid imagery. So extents are only applied to non-granule layers.
+    if (!isGranule) {
+      layerTile.extent = extent;
+    }
+    return layerTile;
   };
 
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
