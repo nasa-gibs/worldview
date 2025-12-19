@@ -28,7 +28,6 @@ import { applyBackground, applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
-import { getGranuleTileLayerExtent } from './granule/util';
 import {
   createVectorUrl,
   getGeographicResolutionWMS,
@@ -338,7 +337,7 @@ export default function mapLayerBuilder(config, cache, store) {
       period, source, style, wrapadjacentdays, type,
     } = def;
     const configSource = config.sources[source];
-    const { date, polygon, shifted } = options;
+    const { date, shifted } = options;
     const isSubdaily = period === 'subdaily';
     const isGranule = type === 'granule';
 

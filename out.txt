@@ -1,0 +1,898 @@
+
+> worldview@4.81.0 lint
+> run-s lint:js lint:scss
+
+
+> worldview@4.81.0 lint:js
+> npx eslint .
+
+
+/Users/tcariell/worldview/web/js/app.js
+   13:1  warning  Dependency cycle via ./share:17=>../main:26                    import/no-cycle
+   89:3  warning  Expected 'this' to be used by class method 'setVhCSSProperty'  class-methods-use-this
+  125:9  warning  Unexpected console statement                                   no-console
+  133:9  warning  Unexpected console statement                                   no-console
+
+/Users/tcariell/worldview/web/js/brand.js
+   6:17  warning  Unexpected unnamed function  func-names
+  64:18  warning  Unexpected unnamed function  func-names
+  68:14  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/components/about/about-section.js
+  35:10  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/animation-widget/gif-panel.js
+  12:25  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/components/animation-widget/play-queue.js
+  140:3  warning  Unexpected unnamed method 'getLastInQueue'   func-names
+  203:3  warning  Unexpected unnamed method 'checkShouldPlay'  func-names
+
+/Users/tcariell/worldview/web/js/components/compare/opacity-slider.js
+  23:31  warning  'dateA' is already declared in the upper scope on line 8 column 3  no-shadow
+  23:38  warning  'dateB' is already declared in the upper scope on line 9 column 3  no-shadow
+
+/Users/tcariell/worldview/web/js/components/context-menu/context-menu.js
+  67:49  warning  'crs' is already declared in the upper scope on line 29 column 11  no-shadow
+
+/Users/tcariell/worldview/web/js/components/date-selector/date-input-column.js
+  131:3   warning  Expected 'this' to be used by class method 'onKeyPress'  class-methods-use-this
+  194:11  warning  Assignment to function parameter 'value'                 no-param-reassign
+  211:7   warning  Assignment to function parameter 'value'                 no-param-reassign
+
+/Users/tcariell/worldview/web/js/components/image-download/lat-long-inputs.js
+  50:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/components/kiosk/animation-tile-check/date-range-tile-check.js
+  123:30  warning  Unexpected unnamed function   func-names
+  135:13  warning  Unexpected console statement  no-console
+  240:7   warning  Unexpected console statement  no-console
+  244:7   warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/components/layer/info/info.js
+  86:11  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+  97:11  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/browse/category-cell.js
+  72:26  warning  Do not use Array index in keys  react/no-array-index-key
+  84:26  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/browse/measurement-metadata-detail.js
+   84:16  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+  109:16  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/product-picker.js
+  128:23  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/renderSplitTitle.js
+  24:5  warning  Unexpected console statement  no-console
+  25:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/search/filter-chips.js
+  31:17  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/search/product-facet.js
+  38:14  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/layer/product-picker/search/search-layer-row.js
+  163:24  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+  184:24  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/layer/settings/band-selection/band-selection-menu.js
+  18:75  warning  'layer' is already declared in the upper scope on line 15 column 41  no-shadow
+
+/Users/tcariell/worldview/web/js/components/layer/settings/band-selection/band-selection-parent-info-menu.js
+  10:33  warning  'layer' is already declared in the upper scope on line 8 column 55  no-shadow
+
+/Users/tcariell/worldview/web/js/components/layer/settings/imagery-search.js
+   63:35  warning  'layer' is already declared in the upper scope on line 19 column 41  no-shadow
+   77:35  warning  'layer' is already declared in the upper scope on line 19 column 41  no-shadow
+   91:33  warning  'layer' is already declared in the upper scope on line 19 column 41  no-shadow
+  102:33  warning  'layer' is already declared in the upper scope on line 19 column 41  no-shadow
+  113:28  warning  'date' is already declared in the upper scope on line 25 column 9    no-shadow
+  135:36  warning  'date' is already declared in the upper scope on line 25 column 9    no-shadow
+  136:12  warning  'date' is already declared in the upper scope on line 25 column 9    no-shadow
+
+/Users/tcariell/worldview/web/js/components/layer/settings/layer-settings.js
+   82:7  warning  'clearCustomPalette' is already declared in the upper scope on line 38 column 3         no-shadow
+   83:7  warning  'getPalette' is already declared in the upper scope on line 27 column 3                 no-shadow
+   85:7  warning  'getDefaultLegend' is already declared in the upper scope on line 24 column 3           no-shadow
+   86:7  warning  'getCustomPalette' is already declared in the upper scope on line 25 column 3           no-shadow
+   88:7  warning  'setCustomPalette' is already declared in the upper scope on line 37 column 3           no-shadow
+   89:7  warning  'palettesTranslate' is already declared in the upper scope on line 21 column 3          no-shadow
+  197:7  warning  'setCustomPalette' is already declared in the upper scope on line 37 column 3           no-shadow
+  198:7  warning  'clearCustomPalette' is already declared in the upper scope on line 38 column 3         no-shadow
+  199:7  warning  'getDefaultLegend' is already declared in the upper scope on line 24 column 3           no-shadow
+  200:7  warning  'getCustomPalette' is already declared in the upper scope on line 25 column 3           no-shadow
+  202:7  warning  'palettesTranslate' is already declared in the upper scope on line 21 column 3          no-shadow
+  203:7  warning  'getPaletteLegends' is already declared in the upper scope on line 26 column 3          no-shadow
+  204:7  warning  'getPalette' is already declared in the upper scope on line 27 column 3                 no-shadow
+  205:7  warning  'getPaletteLegend' is already declared in the upper scope on line 28 column 3           no-shadow
+  282:7  warning  'resetGranuleLayerDates' is already declared in the upper scope on line 53 column 3     no-shadow
+  283:7  warning  'updateGranuleLayerOptions' is already declared in the upper scope on line 52 column 3  no-shadow
+  314:7  warning  'setOpacity' is already declared in the upper scope on line 54 column 3                 no-shadow
+
+/Users/tcariell/worldview/web/js/components/layer/settings/vector-style.js
+  80:11  warning  Unexpected console statement    no-console
+  85:9   warning  Unexpected console statement    no-console
+  90:17  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Users/tcariell/worldview/web/js/components/location-search/location-search-input.js
+  74:3  warning  Expected 'this' to be used by class method 'renderMenu'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/components/location-search/location-search-modal.js
+   94:13  warning  'getSuggestions' is already declared in the upper scope on line 19 column 3              no-shadow
+  123:7   warning  'clearSuggestions' is already declared in the upper scope on line 18 column 3            no-shadow
+  126:7   warning  'reverseGeocode' is already declared in the upper scope on line 30 column 3              no-shadow
+  127:7   warning  'setPlaceMarker' is already declared in the upper scope on line 20 column 3              no-shadow
+  152:7   warning  'processMagicKey' is already declared in the upper scope on line 29 column 3             no-shadow
+  153:7   warning  'setPlaceMarker' is already declared in the upper scope on line 20 column 3              no-shadow
+  154:7   warning  'setSuggestion' is already declared in the upper scope on line 21 column 3               no-shadow
+  181:25  warning  Unexpected console statement                                                             no-console
+  188:7   warning  'clearSuggestions' is already declared in the upper scope on line 18 column 3            no-shadow
+  215:7   warning  'clearSuggestions' is already declared in the upper scope on line 18 column 3            no-shadow
+  227:13  warning  'toggleReverseGeocodeActive' is already declared in the upper scope on line 22 column 3  no-shadow
+  314:13  warning  'toggleShowLocationSearch' is already declared in the upper scope on line 23 column 3    no-shadow
+
+/Users/tcariell/worldview/web/js/components/location-search/ol-coordinates-marker.js
+  49:7  warning  'toggleReverseGeocodeActive' is already declared in the upper scope on line 7 column 19  no-shadow
+  60:7  warning  'setPlaceMarker' is already declared in the upper scope on line 7 column 3               no-shadow
+
+/Users/tcariell/worldview/web/js/components/map/ol-coordinates.js
+  118:13  warning  'changeCoordinateFormat' is already declared in the upper scope on line 12 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/components/map/ol-coordinates.test.js
+  9:51  warning  'OlCoordinates' is already declared in the upper scope on line 5 column 8  no-shadow
+
+/Users/tcariell/worldview/web/js/components/measure-tool/measure-button.js
+  23:23  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/components/measure-tool/measure-menu.js
+  47:21  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/components/notifications/notification-block.js
+  27:20  warning  Do not use Array index in keys                      react/no-array-index-key
+  32:16  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/range-selection/range-selection.js
+  231:7  warning  Assignment to function parameter 'draggerEndLocation'    no-param-reassign
+  235:7  warning  Assignment to function parameter 'draggerStartLocation'  no-param-reassign
+  240:7  warning  Assignment to function parameter 'draggerEndLocation'    no-param-reassign
+  244:7  warning  Assignment to function parameter 'draggerStartLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/components/sidebar/charting-mode-options.js
+  128:12  warning  'x' is already declared in the upper scope on line 102 column 5           no-shadow
+  128:15  warning  'y' is already declared in the upper scope on line 102 column 8           no-shadow
+  137:11  warning  'date' is already declared in the upper scope on line 85 column 5         no-shadow
+  220:11  warning  'date' is already declared in the upper scope on line 85 column 5         no-shadow
+  612:29  warning  'boundaries' is already declared in the upper scope on line 95 column 10  no-shadow
+  614:7   warning  'x' is already declared in the upper scope on line 102 column 5           no-shadow
+  614:10  warning  'y' is already declared in the upper scope on line 102 column 8           no-shadow
+  663:13  warning  'boundaries' is already declared in the upper scope on line 95 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/components/sidebar/paletteLegend.js
+  413:21  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/components/smart-handoffs/granule-count.js
+  80:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/components/timeline/custom-interval-selector/interval-select.js
+  30:11  warning  'zoomLevel' is already declared in the upper scope on line 18 column 5  no-shadow
+
+/Users/tcariell/worldview/web/js/components/timeline/mobile-date-picker.js
+  103:25  warning  'date' is already declared in the upper scope on line 70 column 5   no-shadow
+  107:25  warning  'time' is already declared in the upper scope on line 77 column 10  no-shadow
+  112:11  warning  'date' is already declared in the upper scope on line 70 column 5   no-shadow
+  116:26  warning  'time' is already declared in the upper scope on line 77 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-axis/date-calc.js
+  57:5  warning  Assignment to function parameter 'startDate'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-axis/grid-range/grid-range.js
+  59:36  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-axis/timeline-axis.js
+  1507:3  warning  Expected 'this' to be used by class method 'createMatchingCoverageLineDOMEl'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-controls/axis-timescale-change.js
+  45:3  warning  Expected 'this' to be used by class method 'disableMapScales'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-coverage/coverage-item-container.js
+  130:18  warning  'visible' is already declared in the upper scope on line 120 column 7  no-shadow
+  159:27  warning  'visible' is already declared in the upper scope on line 120 column 7  no-shadow
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-coverage/coverage-item-list.js
+   59:3  warning  Expected 'this' to be used by class method 'getHeaderDOMEl'          class-methods-use-this
+  115:3  warning  Expected 'this' to be used by class method 'getFormattedTimePeriod'  class-methods-use-this
+  334:3  warning  Expected 'this' to be used by class method 'createEmptyLayersDOMEl'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-coverage/coverage-line.js
+  23:3  warning  Expected 'this' to be used by class method 'getFormattedDisplayDates'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/components/timeline/timeline-coverage/timeline-coverage.js
+  299:3  warning  Expected 'this' to be used by class method 'stopPropagation'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/components/tooltip/tooltip.js
+  48:22  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Users/tcariell/worldview/web/js/components/tour/tour-boxes.js
+  16:20  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Users/tcariell/worldview/web/js/components/util/selector.js
+  26:22  warning  Do not use Array index in keys  react/no-array-index-key
+
+/Users/tcariell/worldview/web/js/containers/animation-widget/animation-widget.js
+   73:5   warning  'onClose' is already declared in the upper scope on line 30 column 3                no-shadow
+   83:5   warning  'promiseImageryForTime' is already declared in the upper scope on line 8 column 10  no-shadow
+   86:5   warning  'selectDate' is already declared in the upper scope on line 10 column 3             no-shadow
+  218:7   warning  'startDate' is already declared in the upper scope on line 90 column 5              no-shadow
+  219:7   warning  'endDate' is already declared in the upper scope on line 54 column 5                no-shadow
+  476:29  warning  'date' is already declared in the upper scope on line 353 column 5                  no-shadow
+
+/Users/tcariell/worldview/web/js/containers/embed.js
+  10:1   warning  Dependency cycle via ./app:20  import/no-cycle
+  21:22  warning  Unexpected unnamed function    func-names
+  30:30  warning  Unexpected unnamed function    func-names
+
+/Users/tcariell/worldview/web/js/containers/error-boundary.js
+  35:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/containers/gif.js
+  182:7  warning  'getImageArray' is already declared in the upper scope on line 24 column 8  no-shadow
+
+/Users/tcariell/worldview/web/js/containers/image-download.js
+  152:7  warning  'getLayers' is already declared in the upper scope on line 17 column 3      no-shadow
+  155:7  warning  'onPanelChange' is already declared in the upper scope on line 28 column 3  no-shadow
+
+/Users/tcariell/worldview/web/js/containers/info.js
+  16:1  warning  Dependency cycle via ./constants:1=>../../containers/tour:1=>../main:43=>./app:20=>./containers/toolbar:13  import/no-cycle
+
+/Users/tcariell/worldview/web/js/containers/modal.js
+   19:26  warning  'onToggle' is already declared in the upper scope on line 11 column 10  no-shadow
+   54:7   warning  'onToggle' is already declared in the upper scope on line 11 column 10  no-shadow
+  118:9   warning  Dangerous property 'dangerouslySetInnerHTML' found                      react/no-danger
+  203:7   warning  'onToggle' is already declared in the upper scope on line 11 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/containers/projection.js
+  34:22  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/containers/share.js
+  26:1  warning  Dependency cycle via ./app:20=>./containers/toolbar:13  import/no-cycle
+
+/Users/tcariell/worldview/web/js/containers/sidebar/layer-row.js
+   66:5   warning  'getPalette' is already declared in the upper scope on line 18 column 3                no-shadow
+   69:5   warning  'requestPalette' is already declared in the upper scope on line 24 column 10           no-shadow
+   85:5   warning  'toggleVisibility' is already declared in the upper scope on line 26 column 3          no-shadow
+  100:5   warning  'enableDDVZoomAlert' is already declared in the upper scope on line 44 column 3        no-shadow
+  101:5   warning  'enableDDVLocationAlert' is already declared in the upper scope on line 44 column 23   no-shadow
+  102:5   warning  'disableDDVLocationAlert' is already declared in the upper scope on line 44 column 47  no-shadow
+  103:5   warning  'disableDDVZoomAlert' is already declared in the upper scope on line 44 column 72      no-shadow
+  189:13  warning  'title' is already declared in the upper scope on line 109 column 11                   no-shadow
+  201:13  warning  'title' is already declared in the upper scope on line 109 column 11                   no-shadow
+  273:29  warning  'layer' is already declared in the upper scope on line 60 column 5                     no-shadow
+  306:9   warning  'removeLayer' is already declared in the upper scope on line 27 column 3               no-shadow
+  307:17  warning  'title' is already declared in the upper scope on line 109 column 11                   no-shadow
+  404:11  warning  'title' is already declared in the upper scope on line 109 column 11                   no-shadow
+  425:11  warning  'title' is already declared in the upper scope on line 109 column 11                   no-shadow
+  496:34  warning  'layer' is already declared in the upper scope on line 60 column 5                     no-shadow
+
+/Users/tcariell/worldview/web/js/containers/sidebar/sidebar.js
+  40:1   warning  Dependency cycle via ./app:20  import/no-cycle
+  45:23  warning  Unexpected unnamed function    func-names
+
+/Users/tcariell/worldview/web/js/containers/sidebar/smart-handoff.js
+  531:3  warning  Expected 'this' to be used by class method 'renderLoadingSpinner'  class-methods-use-this
+
+/Users/tcariell/worldview/web/js/containers/sidebar/zot.js
+  52:14  warning  Dangerous property 'dangerouslySetInnerHTML' found  react/no-danger
+
+/Users/tcariell/worldview/web/js/containers/timeline/timeline.js
+    82:38  warning  'hasSubDaily' is already declared in the upper scope on line 34 column 3                no-shadow
+   667:13  warning  'changeTimeScale' is already declared in the upper scope on line 44 column 3            no-shadow
+   707:7   warning  'closeAnimation' is already declared in the upper scope on line 60 column 14            no-shadow
+   709:7   warning  'openAnimation' is already declared in the upper scope on line 59 column 17             no-shadow
+   956:7   warning  'updateAppNow' is already declared in the upper scope on line 47 column 3               no-shadow
+   959:29  warning  Unexpected unnamed function                                                             func-names
+  1019:13  warning  'triggerTodayButton' is already declared in the upper scope on line 49 column 3         no-shadow
+  1158:7   warning  'addGranuleDateRanges' is already declared in the upper scope on line 57 column 10      no-shadow
+  1191:7   warning  'toggleActiveCompareState' is already declared in the upper scope on line 56 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/containers/toolbar.js
+   16:1   warning  Dependency cycle via ../modules/tour/actions:19=>./constants:1=>../../containers/tour:1=>../main:43=>./app:20  import/no-cycle
+  132:7   warning  'toggleDialogVisible' is already declared in the upper scope on line 33 column 36                              no-shadow
+  156:21  warning  'requestNotifications' is already declared in the upper scope on line 21 column 3                              no-shadow
+  275:7   warning  'toggleShowLocationSearch' is already declared in the upper scope on line 33 column 10                         no-shadow
+
+/Users/tcariell/worldview/web/js/containers/tour.js
+   35:1   warning  Dependency cycle via ./constants:1                                                   import/no-cycle
+   43:1   warning  Dependency cycle via ./app:20                                                        import/no-cycle
+   49:27  warning  Unexpected unnamed function                                                          func-names
+   58:27  warning  Unexpected unnamed function                                                          func-names
+  154:46  warning  'promiseImageryForTour' is already declared in the upper scope on line 45 column 10  no-shadow
+  267:57  warning  'promiseImageryForTour' is already declared in the upper scope on line 45 column 10  no-shadow
+  302:3   warning  Expected 'this' to be used by class method 'getKioskParam'                           class-methods-use-this
+  512:5   warning  Assignment to function parameter 'search'                                            no-param-reassign
+  556:46  warning  'promiseImageryForTour' is already declared in the upper scope on line 45 column 10  no-shadow
+  557:5   warning  Assignment to function parameter 'search'                                            no-param-reassign
+
+/Users/tcariell/worldview/web/js/debug.js
+  12:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/fixtures.js
+   29:21  warning  Unexpected unnamed function  func-names
+  224:19  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/location.js
+  151:23  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/main.js
+   19:1   warning  Dependency cycle via ./tour/reducers:15=>./constants:5=>../../containers/tour:1  import/no-cycle
+   20:1   warning  Dependency cycle via ./containers/sidebar/sidebar:14                             import/no-cycle
+  188:25  warning  Unexpected console statement                                                     no-console
+
+/Users/tcariell/worldview/web/js/map/compare/compare.js
+   39:16  warning  Unexpected unnamed function  func-names
+   50:17  warning  Unexpected unnamed function  func-names
+   61:17  warning  Unexpected unnamed function  func-names
+   95:20  warning  Unexpected unnamed function  func-names
+  105:18  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/map/compare/spy.js
+   17:21  warning  Unexpected unnamed function                                           func-names
+   38:14  warning  Unexpected unnamed function                                           func-names
+   55:17  warning  Unexpected unnamed function                                           func-names
+   65:36  warning  Unexpected unnamed function                                           func-names
+   75:29  warning  Unexpected unnamed function                                           func-names
+   85:35  warning  Unexpected unnamed function                                           func-names
+   96:42  warning  Unexpected unnamed function                                           func-names
+  109:33  warning  Unexpected unnamed function                                           func-names
+  112:36  warning  'layer' is already declared in the upper scope on line 109 column 42  no-shadow
+  122:21  warning  Unexpected unnamed function                                           func-names
+
+/Users/tcariell/worldview/web/js/map/compare/swipe.js
+   24:17  warning  Unexpected unnamed function                                               func-names
+   29:25  warning  Unexpected unnamed function                                               func-names
+   33:25  warning  Unexpected unnamed function                                               func-names
+   47:25  warning  Unexpected unnamed function                                               func-names
+   62:18  warning  Unexpected unnamed function                                               func-names
+   62:27  warning  'listenerObj' is already declared in the upper scope on line 19 column 5  no-shadow
+  108:24  warning  Unexpected unnamed function                                               func-names
+  231:3   warning  Expected 'this' to be used by class method 'getSwipeOffset'               class-methods-use-this
+
+/Users/tcariell/worldview/web/js/map/granule/granule-layer-builder.js
+   94:7  warning  Unexpected console statement  no-console
+  236:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/map/granule/util.js
+  187:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/map/layerbuilder.js
+    31:10  error    'getGranuleTileLayerExtent' is defined but never used             no-unused-vars
+   341:19  error    'polygon' is assigned a value but never used                      no-unused-vars
+   984:71  warning  'b' is already declared in the upper scope on line 891 column 19  no-shadow
+  1238:7   warning  Assignment to function parameter 'def'                            no-param-reassign
+  1240:28  warning  Assignment to function parameter 'def'                            no-param-reassign
+
+/Users/tcariell/worldview/web/js/map/map.js
+  28:5  warning  Assignment to function parameter 'extent'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/map/model.js
+   15:16  warning  Unexpected unnamed function  func-names
+   27:19  warning  Unexpected unnamed function  func-names
+   46:17  warning  Unexpected unnamed function  func-names
+   51:20  warning  Unexpected unnamed function  func-names
+   56:18  warning  Unexpected unnamed function  func-names
+   72:15  warning  Unexpected unnamed function  func-names
+  121:15  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/map/natural-events/event-markers.js
+  38:19  warning  Unexpected unnamed function  func-names
+  58:27  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/map/natural-events/event-track.js
+  60:25  warning  Unexpected unnamed function  func-names
+  83:28  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/map/natural-events/natural-events.js
+  123:3  warning  Unexpected unnamed method 'getZoomPromise'  func-names
+  172:3  warning  Unexpected unnamed method 'zoomToEvent'     func-names
+
+/Users/tcariell/worldview/web/js/map/natural-events/util.js
+   17:30  warning  Unexpected unnamed function  func-names
+   48:23  warning  Unexpected unnamed function  func-names
+   51:28  warning  Unexpected unnamed function  func-names
+   54:28  warning  Unexpected unnamed function  func-names
+   95:26  warning  Unexpected unnamed function  func-names
+  146:30  warning  Unexpected unnamed function  func-names
+  200:23  warning  Unexpected unnamed function  func-names
+  203:27  warning  Unexpected unnamed function  func-names
+  206:28  warning  Unexpected unnamed function  func-names
+  235:34  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/map/runningdata.js
+   38:13  warning  'state' is already declared in the upper scope on line 27 column 11  no-shadow
+  103:13  warning  'state' is already declared in the upper scope on line 27 column 11  no-shadow
+
+/Users/tcariell/worldview/web/js/map/util.js
+  130:21  warning  Unexpected unnamed function                  func-names
+  148:43  warning  Default parameters should be last            default-param-last
+  148:56  warning  Default parameters should be last            default-param-last
+  154:28  warning  Assignment to function parameter 'endPoint'  no-param-reassign
+  169:28  warning  Unexpected unnamed function                  func-names
+  280:3   warning  Unexpected console statement                 no-console
+
+/Users/tcariell/worldview/web/js/mapUI/combineUI.js
+  75:30  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/mapUI/components/buffer-quick-animate/bufferQuickAnimate.js
+  17:5  warning  'setPreload' is already declared in the upper scope on line 7 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/create-map/createMap.js
+  48:5  warning  'startLoading' is already declared in the upper scope on line 35 column 10        no-shadow
+  49:5  warning  'stopLoading' is already declared in the upper scope on line 35 column 24         no-shadow
+  52:5  warning  'updateMapUI' is already declared in the upper scope on line 25 column 3          no-shadow
+  53:5  warning  'updateRenderedState' is already declared in the upper scope on line 24 column 3  no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/dev-test-mode/dev-console-test.js
+  12:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/dev-test-mode/dev-preset-console-commands.js
+  21:5  warning  Unexpected console statement  no-console
+  26:5  warning  Unexpected console statement  no-console
+  27:5  warning  Unexpected console statement  no-console
+  29:5  warning  Unexpected console statement  no-console
+  30:5  warning  Unexpected console statement  no-console
+  34:5  warning  Unexpected console statement  no-console
+  38:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/dev-test-mode/find-orbit-tracks-mode/dev-find-orbit-tracks-mode.js
+   67:7   warning  Unexpected console statement  no-console
+   72:5   warning  Unexpected console statement  no-console
+   74:27  warning  Unexpected console statement  no-console
+   82:5   warning  Unexpected console statement  no-console
+  101:11  warning  Unexpected console statement  no-console
+  106:11  warning  Unexpected console statement  no-console
+  114:7   warning  Unexpected console statement  no-console
+  131:9   warning  Unexpected console statement  no-console
+  134:9   warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/dev-test-mode/pixel-test-mode/dev-pixel-test.js
+  62:9  warning  Unexpected console statement  no-console
+  66:9  warning  Unexpected console statement  no-console
+  72:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/dev-test-mode/utils/image-api-request-experimental.js
+  43:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/eic/eic.js
+  28:9  warning  Unexpected console statement  no-console
+  36:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/kiosk/tile-measurement/tile-measurement.js
+   48:35  warning  Unexpected console statement                                             no-console
+   59:33  warning  'bestDates' is already declared in the upper scope on line 17 column 43  no-shadow
+   70:5   warning  Unexpected console statement                                             no-console
+   73:7   warning  Unexpected console statement                                             no-console
+   83:13  warning  Unexpected console statement                                             no-console
+   85:13  warning  Unexpected console statement                                             no-console
+   89:11  warning  Unexpected console statement                                             no-console
+   94:9   warning  Unexpected console statement                                             no-console
+  103:7   warning  Unexpected console statement                                             no-console
+  106:5   warning  Unexpected console statement                                             no-console
+  113:5   warning  Unexpected console statement                                             no-console
+  144:5   warning  Unexpected console statement                                             no-console
+  160:7   warning  Unexpected console statement                                             no-console
+  187:5   warning  Unexpected console statement                                             no-console
+  188:5   warning  Unexpected console statement                                             no-console
+  195:7   warning  Unexpected console statement                                             no-console
+  197:7   warning  Unexpected console statement                                             no-console
+  200:7   warning  Unexpected console statement                                             no-console
+  210:5   warning  Unexpected console statement                                             no-console
+  214:9   warning  Unexpected console statement                                             no-console
+  223:9   warning  Unexpected console statement                                             no-console
+  244:7   warning  Unexpected console statement                                             no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/kiosk/tile-measurement/utils/calculate-pixels.js
+  27:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/kiosk/tile-measurement/utils/image-api-request.js
+  47:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/kiosk/tile-measurement/utils/verify-map-tiles.js
+   34:3  warning  Unexpected console statement  no-console
+  136:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/mapUI/components/layers/addLayer.js
+  32:20  warning  Unexpected unnamed async function  func-names
+
+/Users/tcariell/worldview/web/js/mapUI/components/markers/markers.js
+  21:5  warning  'removeMarker' is already declared in the upper scope on line 7 column 29       no-shadow
+  22:5  warning  'setGeocodeResults' is already declared in the upper scope on line 7 column 10  no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/mouse-move-events/mouseMoveEvents.js
+  62:5  warning  'events' is already declared in the upper scope on line 13 column 9  no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/update-collections/updateCollections.js
+  61:33  warning  'layers' is already declared in the upper scope on line 12 column 9  no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/update-date/updateDate.js
+  80:11  warning  'activeLayers' is already declared in the upper scope on line 22 column 5  no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/update-opacity/updateOpacity.js
+  23:43  warning  'activeString' is already declared in the upper scope on line 15 column 5  no-shadow
+  23:66  warning  'compare' is already declared in the upper scope on line 16 column 5       no-shadow
+  61:26  warning  'action' is already declared in the upper scope on line 13 column 5        no-shadow
+
+/Users/tcariell/worldview/web/js/mapUI/components/update-projection/updateProjection.js
+   39:5   warning  'fitToLeadingExtent' is already declared in the upper scope on line 9 column 3  no-shadow
+   51:5   warning  'updateMapUI' is already declared in the upper scope on line 10 column 3        no-shadow
+   54:5   warning  'requestPalette' is already declared in the upper scope on line 27 column 10    no-shadow
+   71:23  warning  Unexpected unnamed function                                                     func-names
+  166:27  warning  Unexpected unnamed function                                                     func-names
+  186:20  warning  'map' is already declared in the upper scope on line 44 column 5                no-shadow
+  201:20  warning  'map' is already declared in the upper scope on line 44 column 5                no-shadow
+  232:11  warning  'map' is already declared in the upper scope on line 44 column 5                no-shadow
+  264:17  warning  'extent' is already declared in the upper scope on line 256 column 11           no-shadow
+  296:26  warning  Unexpected unnamed function                                                     func-names
+
+/Users/tcariell/worldview/web/js/mapUI/mapUI.js
+  107:28  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/mapUI/util/util.js
+  6:28  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/modules/alerts/reducer.js
+  25:30  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/animation/gifstream.js
+  159:7   warning  Unexpected console statement                                           no-console
+  171:25  warning  'chunks' is already declared in the upper scope on line 169 column 13  no-shadow
+  260:9   warning  Assignment to function parameter 'ctx'                                 no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/animation/reducers.js
+  40:34  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/animation/util.js
+   49:56  warning  Default parameters should be last                     default-param-last
+   94:5   warning  Assignment to function parameter 'stampWidth'         no-param-reassign
+  134:5   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  143:5   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  147:5   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/charting/reducers.js
+  28:33  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/charting/util.js
+   7:5   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  13:7   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  21:7   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  28:5   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  35:45  warning  Unexpected unnamed function                           func-names
+
+/Users/tcariell/worldview/web/js/modules/combine-reducers.js
+   15:1   warning  Dependency cycle via ./constants:5=>../../containers/tour:1=>../main:43  import/no-cycle
+   55:21  warning  Default parameters should be last                                        default-param-last
+   87:26  warning  Default parameters should be last                                        default-param-last
+  139:5   warning  Assignment to function parameter 'state'                                 no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/compare/reducers.js
+  17:32  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/compare/util.js
+   3:1   warning  Dependency cycle via ../layers/util:6=>../vector-styles/util:23  import/no-cycle
+   7:5   warning  Assignment to function parameter 'stateFromLocation'             no-param-reassign
+  14:7   warning  Assignment to function parameter 'stateFromLocation'             no-param-reassign
+  19:5   warning  Assignment to function parameter 'stateFromLocation'             no-param-reassign
+  31:58  warning  Default parameters should be last                                default-param-last
+  48:45  warning  Unexpected unnamed function                                      func-names
+
+/Users/tcariell/worldview/web/js/modules/core/actions.js
+  42:5  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/date/reducers.js
+  42:29  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/date/util.js
+    6:1   warning  Dependency cycle detected                             import/no-cycle
+   73:5   warning  Unexpected console statement                          no-console
+  285:7   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  407:20  warning  Unexpected unnamed function                           func-names
+  411:20  warning  Unexpected unnamed function                           func-names
+  415:21  warning  Unexpected unnamed function                           func-names
+  425:31  warning  Unexpected unnamed function                           func-names
+  439:19  warning  Unexpected unnamed function                           func-names
+  499:25  warning  Unexpected unnamed function                           func-names
+
+/Users/tcariell/worldview/web/js/modules/embed/reducers.js
+  5:39  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/embed/util.js
+  40:5  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/feedback/reducers.js
+  8:41  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/image-download/reducers.js
+  18:38  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/image-download/util.js
+  42:40  warning  Unexpected unnamed function  func-names
+  85:30  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/modules/key-press/actions.js
+  2:1  warning  Dependency cycle via ../../containers/tour:1=>../main:43=>./app:20  import/no-cycle
+
+/Users/tcariell/worldview/web/js/modules/layers/actions.js
+  179:14  warning  Unexpected console statement  no-console
+  259:14  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/layers/reducers.js
+  83:30  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/layers/selectors.js
+   26:3   warning  Default parameters should be last                                    default-param-last
+   83:31  warning  'layers' is already declared in the upper scope on line 35 column 9  no-shadow
+  428:26  warning  Default parameters should be last                                    default-param-last
+  459:34  warning  Default parameters should be last                                    default-param-last
+  488:3   warning  Assignment to function parameter 'date'                              no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/layers/selectors.test.js
+  275:3  warning  Assignment to function parameter 'state'  no-param-reassign
+  278:3  warning  Assignment to function parameter 'state'  no-param-reassign
+  281:3  warning  Assignment to function parameter 'state'  no-param-reassign
+  284:3  warning  Assignment to function parameter 'state'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/layers/util.js
+    23:1   warning  Dependency cycle via ../compare/util:12=>../date/util:3                import/no-cycle
+  1059:35  warning  Unexpected unnamed function                                            func-names
+  1110:6   warning  'result' is already declared in the upper scope on line 1109 column 9  no-shadow
+  1180:7   warning  Assignment to function parameter 'id'                                  no-param-reassign
+  1183:7   warning  Assignment to function parameter 'id'                                  no-param-reassign
+  1474:7   warning  Unexpected console statement                                           no-console
+
+/Users/tcariell/worldview/web/js/modules/link/reducers.js
+   9:27  warning  Default parameters should be last  default-param-last
+  13:29  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/loading/reducers.js
+  9:33  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/location-search/actions.js
+  74:9  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/location-search/reducers.js
+  24:39  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/location-search/util-api.js
+  47:12  warning  Unexpected console statement  no-console
+  64:12  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/location-search/util.js
+   51:19  warning  Unexpected unnamed function                           func-names
+  150:3   warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/map/reducers.js
+  22:36  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/map/util.js
+   73:5   warning  Assignment to function parameter 'extent'            no-param-reassign
+  118:13  warning  Assignment to function parameter 'currentItemState'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/measure/reducers.js
+  20:40  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/modal/reducers.js
+  29:35  warning  Default parameters should be last  default-param-last
+  39:30  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/natural-events/actions.js
+  54:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/natural-events/reducers.js
+   26:20  warning  Unexpected unnamed function        func-names
+   78:31  warning  Default parameters should be last  default-param-last
+  192:33  warning  Default parameters should be last  default-param-last
+  196:39  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/notifications/reducers.js
+  22:38  warning  Default parameters should be last  default-param-last
+  26:38  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/palettes/reducers.js
+  38:32  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/palettes/selectors.js
+   10:1   warning  Dependency cycle detected                                             import/no-cycle
+   40:3   warning  Assignment to function parameter 'groupStr'                           no-param-reassign
+   41:3   warning  Assignment to function parameter 'index'                              no-param-reassign
+  117:19  warning  Unexpected unnamed function                                           func-names
+  146:3   warning  Assignment to function parameter 'groupstr'                           no-param-reassign
+  150:22  warning  Unexpected unnamed function                                           func-names
+  186:32  warning  'index' is already declared in the upper scope on line 159 column 32  no-shadow
+  240:22  warning  Unexpected unnamed function                                           func-names
+  260:32  warning  'index' is already declared in the upper scope on line 248 column 32  no-shadow
+  295:3   warning  Assignment to function parameter 'index'                              no-param-reassign
+  298:30  warning  'index' is already declared in the upper scope on line 294 column 43  no-shadow
+  332:3   warning  Assignment to function parameter 'index'                              no-param-reassign
+  343:3   warning  Assignment to function parameter 'group'                              no-param-reassign
+  348:3   warning  Assignment to function parameter 'groupStr'                           no-param-reassign
+  452:3   warning  Assignment to function parameter 'index'                              no-param-reassign
+  484:3   warning  Assignment to function parameter 'index'                              no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/palettes/util.js
+   13:1   warning  Dependency cycle detected                                              import/no-cycle
+  179:9   warning  'lookup' is already declared in the upper scope on line 178 column 17  no-shadow
+  253:7   warning  Assignment to function parameter 'stateFromLocation'                   no-param-reassign
+  267:38  warning  Unexpected unnamed function                                            func-names
+  271:3   warning  Assignment to function parameter 'value'                               no-param-reassign
+  306:9   warning  Unexpected console statement                                           no-console
+  366:5   warning  Unexpected console statement                                           no-console
+  404:15  warning  Assignment to function parameter 'state'                               no-param-reassign
+  408:15  warning  Unexpected console statement                                           no-console
+  425:15  warning  Unexpected console statement                                           no-console
+  442:15  warning  Unexpected console statement                                           no-console
+  459:15  warning  Assignment to function parameter 'state'                               no-param-reassign
+  463:15  warning  Unexpected console statement                                           no-console
+  481:13  warning  Assignment to function parameter 'state'                               no-param-reassign
+  499:5   warning  Assignment to function parameter 'stateFromLocation'                   no-param-reassign
+  509:5   warning  Assignment to function parameter 'stateFromLocation'                   no-param-reassign
+  528:3   warning  Assignment to function parameter 'customLoaded'                        no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/product-picker/reducers.js
+  59:38  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/projection/reducer.js
+  8:43  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/projection/util.js
+  31:7  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  41:7  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  47:5  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/projection/util.test.js
+  38:9  warning  'state' is already declared in the upper scope on line 5 column 7  no-shadow
+
+/Users/tcariell/worldview/web/js/modules/screen-size/reducer.js
+  22:35  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/settings/reducer.js
+  32:33  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/sidebar/reducers.js
+  22:40  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/sidebar/util.js
+  25:3  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/smart-handoff/actions.js
+  35:7  warning  Unexpected console statement  no-console
+  83:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/smart-handoff/reducer.js
+  25:37  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/smart-handoff/util.js
+  46:7  warning  Unexpected console statement  no-console
+  48:7  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/modules/tour/actions.js
+  1:1  warning  Dependency cycle via ../../containers/tour:1  import/no-cycle
+
+/Users/tcariell/worldview/web/js/modules/tour/constants.js
+  1:1  warning  Dependency cycle via ../modules/tour/actions:39  import/no-cycle
+
+/Users/tcariell/worldview/web/js/modules/tour/reducers.js
+   3:1   warning  Dependency cycle via ../../containers/tour:1=>../main:43=>./modules/combine-reducers:19  import/no-cycle
+  12:37  warning  Default parameters should be last                                                        default-param-last
+
+/Users/tcariell/worldview/web/js/modules/tour/util.js
+  23:5  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  28:5  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+  32:5  warning  Assignment to function parameter 'stateFromLocation'  no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/ui/reducers.js
+  29:36  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/vector-styles/reducers.js
+  22:36  warning  Default parameters should be last  default-param-last
+
+/Users/tcariell/worldview/web/js/modules/vector-styles/selectors.js
+   12:1   warning  Dependency cycle detected                                            import/no-cycle
+   65:3   warning  Assignment to function parameter 'groupStr'                          no-param-reassign
+   66:3   warning  Assignment to function parameter 'index'                             no-param-reassign
+   78:3   warning  Assignment to function parameter 'index'                             no-param-reassign
+   81:30  warning  'index' is already declared in the upper scope on line 77 column 49  no-shadow
+  251:3   warning  Assignment to function parameter 'group'                             no-param-reassign
+  258:3   warning  Assignment to function parameter 'groupStr'                          no-param-reassign
+  283:9   warning  Assignment to function parameter 'layer'                             no-param-reassign
+
+/Users/tcariell/worldview/web/js/modules/vector-styles/util.js
+   11:1  warning  Dependency cycle detected                              import/no-cycle
+   12:1  warning  Dependency cycle via ../date/util:3=>../layers/util:6  import/no-cycle
+  132:9  warning  Unexpected console statement                           no-console
+  138:7  warning  Unexpected console statement                           no-console
+
+/Users/tcariell/worldview/web/js/util/browser.js
+   1:17  warning  Unexpected unnamed function  func-names
+   5:16  warning  Unexpected unnamed function  func-names
+  11:38  warning  Unexpected unnamed function  func-names
+  13:6   warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/util/events.js
+   8:9   warning  'events' is already declared in the upper scope on line 4 column 26  no-shadow
+  11:13  warning  Unexpected unnamed function                                          func-names
+  24:14  warning  Unexpected unnamed function                                          func-names
+  32:14  warning  Unexpected unnamed function                                          func-names
+  39:18  warning  Unexpected unnamed function                                          func-names
+
+/Users/tcariell/worldview/web/js/util/load.js
+   4:17  warning  Unexpected unnamed function   func-names
+   8:17  warning  Unexpected unnamed function   func-names
+  28:23  warning  Unexpected console statement  no-console
+
+/Users/tcariell/worldview/web/js/util/local-storage.js
+  3:18  warning  Unexpected unnamed function  func-names
+
+/Users/tcariell/worldview/web/js/util/util.js
+   12:17  warning  Unexpected unnamed function                     func-names
+   20:17  warning  Unexpected unnamed function                     func-names
+   28:14  warning  Unexpected unnamed function                     func-names
+   29:5   warning  Assignment to function parameter 'value'        no-param-reassign
+   32:7   warning  Assignment to function parameter 'value'        no-param-reassign
+   57:26  warning  Unexpected unnamed function                     func-names
+   62:7   warning  Assignment to function parameter 'queryString'  no-param-reassign
+   96:24  warning  Unexpected unnamed function                     func-names
+  125:28  warning  Unexpected unnamed function                     func-names
+  139:23  warning  Unexpected unnamed function                     func-names
+  178:33  warning  Unexpected unnamed function                     func-names
+  208:23  warning  Unexpected unnamed function                     func-names
+  225:26  warning  Unexpected unnamed function                     func-names
+  240:29  warning  Unexpected unnamed function                     func-names
+  242:27  warning  Assignment to function parameter 'date'         no-param-reassign
+  255:29  warning  Unexpected unnamed function                     func-names
+  272:31  warning  Unexpected unnamed function                     func-names
+  289:18  warning  Unexpected unnamed function                     func-names
+  301:23  warning  Unexpected unnamed function                     func-names
+  307:18  warning  Unexpected unnamed function                     func-names
+  339:21  warning  Unexpected unnamed function                     func-names
+  345:23  warning  Unexpected unnamed function                     func-names
+  358:22  warning  Unexpected unnamed function                     func-names
+  380:20  warning  Unexpected unnamed function                     func-names
+  399:16  warning  Unexpected unnamed function                     func-names
+  419:14  warning  Unexpected unnamed function                     func-names
+  430:20  warning  Unexpected unnamed function                     func-names
+  444:26  warning  Unexpected console statement                    no-console
+  444:42  warning  Unexpected console statement                    no-console
+  445:7   warning  Unexpected console statement                    no-console
+  445:36  warning  Unexpected unnamed function                     func-names
+  447:19  warning  Unexpected unnamed function                     func-names
+  454:20  warning  Unexpected unnamed function                     func-names
+  462:20  warning  Unexpected unnamed function                     func-names
+  470:24  warning  Unexpected unnamed function                     func-names
+  482:16  warning  Unexpected unnamed function                     func-names
+  495:22  warning  Unexpected unnamed function                     func-names
+  509:15  warning  Unexpected unnamed function                     func-names
+  510:12  warning  Unexpected unnamed function                     func-names
+  514:9   warning  Unexpected console statement                    no-console
+  527:14  warning  Unexpected unnamed function                     func-names
+  534:20  warning  Unexpected unnamed function                     func-names
+  547:21  warning  Unexpected unnamed function                     func-names
+  570:19  warning  Unexpected unnamed function                     func-names
+  575:19  warning  Unexpected unnamed function                     func-names
+  600:5   warning  Assignment to function parameter 'value'        no-param-reassign
+  624:30  warning  Unexpected unnamed function                     func-names
+  631:30  warning  Unexpected unnamed function                     func-names
+  635:27  warning  Unexpected unnamed function                     func-names
+  654:36  warning  Unexpected unnamed function                     func-names
+  666:17  warning  Unexpected unnamed function                     func-names
+  675:18  warning  Unexpected unnamed function                     func-names
+  680:7   warning  Assignment to function parameter 'value'        no-param-reassign
+  714:19  warning  Unexpected unnamed function                     func-names
+  721:20  warning  Unexpected unnamed function                     func-names
+  734:18  warning  Unexpected unnamed function                     func-names
+  740:21  warning  Unexpected unnamed function                     func-names
+  773:24  warning  Unexpected unnamed function                     func-names
+  793:23  warning  Default parameters should be last               default-param-last
+
+✖ 553 problems (2 errors, 551 warnings)
+
