@@ -18,9 +18,6 @@
     "GIBS:wms:antarctic": {
       "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3031/best/wms.cgi"
     },
-    "WDPA:wms": {
-      "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
-    },
     "FIRMS:xyz": {
       "url": "https://firms.modaps.eosdis.nasa.gov/layers"
     },
