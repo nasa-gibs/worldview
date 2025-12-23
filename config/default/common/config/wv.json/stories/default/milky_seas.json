@@ -52,7 +52,7 @@
             "element": "animation",
             "action": "play"
           },
-          "stepLink": "v=100.40490925777027,-13.649554035145663,117.52859362185791,-6.108684665604975&as=2019-08-04-T00%3A00%3A00Z&ae=2019-08-09-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand,VIIRS_NOAA20_DayNightBand(hidden)&lg=true&al=true&ab=on&t=2019-08-04-T18%3A00%3A00Z"
+          "stepLink": "v=100.40490925777027,-13.649554035145663,117.52859362185791,-6.108684665604975&as=2019-07-28-T00%3A00%3A00Z&ae=2019-08-09-T00%3A00%3A00Z&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_SNPP_DayNightBand,VIIRS_NOAA20_DayNightBand(hidden)&lg=true&al=true&ab=on&t=2019-07-28-T18%3A00%3A00Z"
         },
 
         {
