@@ -2,19 +2,42 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 
+const eventMappings = {
+  dustHaze: 'dust-and-haze',
+  icebergs: 'icebergs',
+  floods: 'floods',
+  manmade: 'manmade',
+  seaLakeIce: 'icebergs',
+  severeStorms: 'severe-storms',
+  snow: 'snow',
+  volcanoes: 'volcanoes',
+  waterColor: 'water-color',
+  wildfires: 'wildfires',
+};
+
 export default function EventIcon (props) {
   const {
     id,
     category,
     title,
     hideTooltip,
+    withPin,
   } = props;
 
   return (
     <div>
-      <i
+      {withPin
+        && (
+          <img
+            id={`${id + category}-pin`}
+            className={`event-icon-pin event-icon-${category}-pin`}
+            src="../images/natural-events/pin.svg"
+          />
+        )}
+      <img
         id={id + category}
         className={`event-icon event-icon-${category}`}
+        src={`../images/natural-events/icon-${eventMappings[category] || 'critical'}.svg`}
       />
       {!hideTooltip && (
         <UncontrolledTooltip
@@ -37,4 +60,5 @@ EventIcon.propTypes = {
   category: PropTypes.string,
   hideTooltip: PropTypes.bool,
   title: PropTypes.string,
+  withPin: PropTypes.bool,
 };
