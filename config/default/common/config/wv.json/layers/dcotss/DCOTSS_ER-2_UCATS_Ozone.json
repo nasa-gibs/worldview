@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "DCOTSS_ER-2_UCATS_Ozone": {
+      "id": "DCOTSS_ER-2_UCATS_Ozone",
+      "title": "Ozone and Flight Track (Per Flight)",
+      "subtitle": "DCOTSS/NASA ER-2 UCATS",
+      "description": "dcotss/DCOTSS_ER-2_UCATS_Ozone",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector alpha jet ozone california nevada",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "DCOTSS_ER-2_UCATS_Ozone",
+        "geographic": {
+          "id": "DCOTSS_ER-2_UCATS_Ozone"
+        }
+      },
+      "palette": {
+        "id": "DCOTSS_ER-2_UCATS_Ozone",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "O3_UCATS",
+        "order": "descending"
+      }
+    }
+  }
+}
