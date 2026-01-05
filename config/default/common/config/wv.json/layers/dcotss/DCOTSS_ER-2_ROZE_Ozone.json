@@ -9,6 +9,7 @@
       "type": "vector",
       "tags": "vector nama Salinas Kansas suborbital o3",
       "ongoing": false,
+      "dataAvailability": "dd",
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
