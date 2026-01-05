@@ -7,7 +7,7 @@
       "description": "dcotss/DCOTSS_ER-2_UCATS_Ozone",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector alpha jet ozone california nevada",
+      "tags": "vector suborbital o3",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
