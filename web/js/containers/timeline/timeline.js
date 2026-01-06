@@ -659,6 +659,16 @@ class Timeline extends React.Component {
   };
 
   /**
+  * @desc show/hide custom interval modal
+  * @param {Boolean} isOpen
+  * @returns {void}
+  */
+  toggleCustomIntervalModal = (isOpen) => {
+    const { toggleCustomModal } = this.props;
+    toggleCustomModal(isOpen, customModalType.TIMELINE);
+  };
+
+  /**
   * @desc Change the timescale parent state
   * @param {Number} timeScaleNumber
   * @returns {void}
@@ -1061,6 +1071,18 @@ class Timeline extends React.Component {
       left: `${mobileLeft}px`,
       bottom: `${mobileBottom}px`,
     };
+  };
+
+  getStringFromDate = (dateObj, hasSubdailyLayers) => {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const day = dateObj.getDate().toString().padStart(2, '0');
+    const month = months[dateObj.getMonth()];
+    const year = dateObj.getFullYear().toString();
+    const hours = dateObj.getUTCHours();
+    const minutes = dateObj.getUTCMinutes();
+    const timeString = hasSubdailyLayers ? ` ${`0${hours}`.slice(-2)}:${`0${minutes}`.slice(-2)}` : '';
+
+    return `${year} ${month} ${day}${timeString}`;
   };
 
   renderDateChangeArrows = () => {
@@ -1760,7 +1782,6 @@ Timeline.propTypes = {
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
-  displayStaticMap: PropTypes.bool,
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
@@ -1784,7 +1805,6 @@ Timeline.propTypes = {
   isPortrait: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
-  newCustomDelta: PropTypes.number,
   nowButtonDisabled: PropTypes.bool,
   nowOverride: PropTypes.bool,
   onPauseAnimation: PropTypes.func,
@@ -1804,6 +1824,7 @@ Timeline.propTypes = {
   timeScale: PropTypes.string,
   timeScaleChangeUnit: PropTypes.string,
   toggleActiveCompareState: PropTypes.func,
+  toggleCustomModal: PropTypes.func,
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
   proj: PropTypes.object,

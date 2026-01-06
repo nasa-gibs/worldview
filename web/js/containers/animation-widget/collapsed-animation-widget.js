@@ -89,7 +89,6 @@ CollapsedAnimationWidget.propTypes = {
   collapsedWidgetPosition: PropTypes.object,
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
-  isDistractionFreeModeActive: PropTypes.bool,
   isLandscape: PropTypes.bool,
   isMobile: PropTypes.bool,
   isMobilePhone: PropTypes.bool,

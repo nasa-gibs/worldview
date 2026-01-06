@@ -129,7 +129,7 @@ function ImageDownloadPanel(props) {
     onPanelChange(type, valueIn);
   };
 
-  const renderFileTypeSelect = () => {
+  const _renderFileTypeSelect = () => {
     if (fileTypeOptions) {
       return (
         <div className="wv-image-header">
@@ -146,7 +146,7 @@ function ImageDownloadPanel(props) {
     }
   };
 
-  const renderWorldfileSelect = () => {
+  const _renderWorldfileSelect = () => {
     if (worldFileOptions) {
       const value = currIsWorldfile ? 1 : 0;
       return (
@@ -184,8 +184,8 @@ function ImageDownloadPanel(props) {
   const dimensions = getDimensions(projection.id, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
-  const filetypeSelect = renderFileTypeSelect();
-  const worldfileSelect = renderWorldfileSelect();
+  const filetypeSelect = _renderFileTypeSelect();
+  const worldfileSelect = _renderWorldfileSelect();
   const layerList = getLayers();
 
   return (

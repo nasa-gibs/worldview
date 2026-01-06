@@ -40,7 +40,7 @@ function IntervalSelect(props) {
   };
 
   return (
-    <div>
+    <>
       {isMobile ? (
         <div className="mobile-timescale-dropdown">
           <Dropdown isOpen={dropdownOpen} toggle={toggle}>
@@ -104,7 +104,7 @@ function IntervalSelect(props) {
           </select>
         </form>
       )}
-    </div>
+    </>
   );
 }
 

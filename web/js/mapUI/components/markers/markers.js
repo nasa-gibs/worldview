@@ -205,16 +205,14 @@ export default React.memo(
 
 Markers.propTypes = {
   action: PropTypes.object,
-  activeLayers: PropTypes.array,
   config: PropTypes.object,
   coordinates: PropTypes.array,
   isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
   proj: PropTypes.object,
   removeMarker: PropTypes.func,
-  selectedMap: PropTypes.object,
-  selectedMapMarkers: PropTypes.array,
   setGeocodeResults: PropTypes.func,
+  state: PropTypes.object,
   ui: PropTypes.object,
 };
 

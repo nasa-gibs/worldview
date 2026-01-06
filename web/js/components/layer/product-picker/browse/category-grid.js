@@ -89,6 +89,7 @@ CategoryGrid.propTypes = {
   showMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
   measurementConfig: PropTypes.object,
+  width: PropTypes.number,
 };
 
 export default connect(

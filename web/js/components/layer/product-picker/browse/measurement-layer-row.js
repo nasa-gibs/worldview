@@ -37,13 +37,13 @@ function MeasurementLayerRow (props) {
   const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
   const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
 
-  const onCheck = () => {
+  function onCheck() {
     if (isEnabled) {
       removeLayer(layer.id);
     } else {
       addLayer(layer.id);
     }
-  };
+  }
 
   return (
     <ListGroupItem
@@ -81,7 +81,7 @@ function MeasurementLayerRow (props) {
                 </MonospaceDate>
               </div>
             )}
-            {layerNotices && (<div>{{ __html: layerNotices }}</div>)}
+            {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
           </UncontrolledTooltip>
         )}
       </Checkbox>

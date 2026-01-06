@@ -538,7 +538,7 @@ function ChartingModeOptions(props) {
     }
   }, [isChartOpen, renderedPalettes]);
 
-  const onDateIconClick = () => {
+  function onDateIconClick() {
     const layerInfo = getActiveChartingLayer();
     const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
     const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
@@ -548,7 +548,7 @@ function ChartingModeOptions(props) {
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
-  };
+  }
 
   useEffect(() => {
     const isOpen = modalId === 'CHARTING-DATE-MODAL' && isModalOpen;
@@ -609,7 +609,7 @@ function ChartingModeOptions(props) {
   *
   * @returns {null}
   */
-  const onBoundaryUpdate = (boundaries) => {
+  function onBoundaryUpdate(boundaries) {
     const {
       x, y, width, height,
     } = boundaries;
@@ -631,9 +631,9 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  };
+  }
 
-  const onLatLongChange = (coordsArray) => {
+  function onLatLongChange(coordsArray) {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
     const topRight = [coordsArray[2], coordsArray[3]];
     const bottomLeftPixel = olMap.getPixelFromCoordinate(bottomLeft);
@@ -654,9 +654,9 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  };
+  }
 
-  const toggleMapView = () => {
+  function toggleMapView() {
     if (!mapViewChecked) {
       onLatLongChange(viewExtent);
     } else {
@@ -669,7 +669,7 @@ function ChartingModeOptions(props) {
       onBoundaryUpdate(boundaries);
     }
     setMapViewChecked(!mapViewChecked);
-  };
+  }
 
 
   const spinnerStyle = {
@@ -1007,6 +1007,7 @@ ChartingModeOptions.propTypes = {
   activeLayer: PropTypes.string,
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
+  aoiSelected: PropTypes.bool,
   chartRequestInProgress: PropTypes.bool,
   aoiCoordinates: PropTypes.array,
   timeSpanSelection: PropTypes.string,
@@ -1023,6 +1024,7 @@ ChartingModeOptions.propTypes = {
   openChartingErrorModal: PropTypes.func,
   olMap: PropTypes.object,
   crs: PropTypes.string,
+  proj: PropTypes.object,
   renderedPalettes: PropTypes.object,
   projections: PropTypes.array,
   aoiActive: PropTypes.bool,
@@ -1036,8 +1038,4 @@ ChartingModeOptions.propTypes = {
   viewExtent: PropTypes.array,
   maxExtent: PropTypes.array,
   date: PropTypes.object,
-  screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
-  onUpdateStartDate: PropTypes.func,
-  onUpdateEndDate: PropTypes.func,
 };

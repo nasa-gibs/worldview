@@ -1687,7 +1687,6 @@ TimelineAxis.propTypes = {
   onDateChange: PropTypes.func,
   parentOffset: PropTypes.number,
   position: PropTypes.number,
-  proj: PropTypes.object,
   showHover: PropTypes.func,
   showHoverOff: PropTypes.func,
   showHoverOn: PropTypes.func,

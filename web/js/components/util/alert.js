@@ -24,6 +24,10 @@ export default class AlertUtil extends React.Component {
     };
   }
 
+  componentDidMount() {
+    this.mounted = true;
+  }
+
   componentWillUnmount() {
     if (this.timeout) {
       clearTimeout(this.timeout);

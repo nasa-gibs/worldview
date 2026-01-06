@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable func-names */
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';

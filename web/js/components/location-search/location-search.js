@@ -17,7 +17,7 @@ class LocationSearch extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isExpanded, isMobile } = this.props;
+    const { isExpanded, isMobile, toggleShowLocationSearch } = this.props;
     if (isExpanded && prevProps.isMobile !== isMobile) {
       toggleShowLocationSearch();
     }
@@ -58,9 +58,9 @@ class LocationSearch extends Component {
 
     const shouldShowComponent = isMobile || (isExpanded && !shouldCollapseFromOtherUI);
     return (
-      <div>
+      <>
         {shouldShowComponent && this.renderSearchComponent()}
-      </div>
+      </>
     );
   }
 }
@@ -108,6 +108,7 @@ LocationSearch.propTypes = {
   isFeatureEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   shouldCollapseFromOtherUI: PropTypes.bool,
+  toggleShowLocationSearch: PropTypes.func,
 };
 
 export default connect(

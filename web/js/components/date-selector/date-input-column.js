@@ -345,7 +345,6 @@ DateInputColumn.propTypes = {
   date: PropTypes.object,
   fontSize: PropTypes.number,
   idSuffix: PropTypes.string,
-  isKioskModeActive: PropTypes.bool,
   isValid: PropTypes.bool,
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,

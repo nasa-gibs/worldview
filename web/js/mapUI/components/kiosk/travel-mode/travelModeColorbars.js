@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import PropTypes from 'prop-types';
 import { drawTravelModePaletteOnCanvas } from '../../../../modules/palettes/util';
 
 function ColorBarRow({ legend, index }) {
@@ -96,8 +95,3 @@ function TravelModeColorbars() {
 }
 
 export default TravelModeColorbars;
-
-ColorBarRow.propTypes = {
-  legend: PropTypes.object,
-  index: PropTypes.number,
-};

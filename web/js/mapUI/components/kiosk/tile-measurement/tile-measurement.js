@@ -2,7 +2,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { transformExtent } from 'ol/proj';
-import PropTypes from 'prop-types';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 import {
@@ -138,7 +137,7 @@ function TileMeasurement({ ui }) {
     }
   };
 
-  const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   const verifyTilesAndHandleErrors = async () => {
     console.log('Verifying tiles on map...');
@@ -256,7 +255,3 @@ function TileMeasurement({ ui }) {
 }
 
 export default TileMeasurement;
-
-TileMeasurement.propTypes = {
-  ui: PropTypes.object,
-};

@@ -74,7 +74,6 @@ function KioskAnimations({ ui }) {
   // if subdaily animation check that date moved back one day
   // otherwise check if animation should play
   const checkAnimationSettings = () => {
-    // eslint-disable-next-line no-underscore-dangle
     if (!ui.selected.frameState_) return;
     if (eic === 'sa' && !subdailyAnimationDateUpdated) {
       const prevDayDate = new Date(selectedDate);

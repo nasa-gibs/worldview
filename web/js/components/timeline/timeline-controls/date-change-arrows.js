@@ -178,7 +178,6 @@ DateChangeArrows.propTypes = {
   arrowDown: PropTypes.string,
   leftArrowDisabled: PropTypes.bool,
   leftArrowDown: PropTypes.func,
-  isEmbedModeActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   nowButtonDisabled: PropTypes.bool,

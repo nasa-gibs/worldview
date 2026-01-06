@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ListGroup, ListGroupItem, Spinner } from 'reactstrap';
-import PropTypes from 'prop-types';
 import Scrollbar from '../../util/scrollbar';
 import { coverageDateFormatter } from '../../../modules/date/util';
 
@@ -101,7 +100,3 @@ export default function DateRanges ({ layer }) {
     </>
   );
 }
-
-DateRanges.propTypes = {
-  layer: PropTypes.object,
-};

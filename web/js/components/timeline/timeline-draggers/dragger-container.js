@@ -279,6 +279,15 @@ class DraggerContainer extends PureComponent {
       draggerWidth,
     } = this.state;
 
+    const sharedProps = {
+      axisWidth,
+      toggleShowDraggerTime,
+      transformX,
+      isCompareModeActive,
+      handleDragDragger: this.handleDragDragger,
+      selectDragger: this.selectDragger,
+    };
+
     const selectedDraggerClipAClipWidth = Math.max(draggerWidth, draggerWidth + draggerPosition);
     const selectedDraggerClipBClipWidth = Math.max(draggerWidth, draggerWidth + draggerPositionB);
     return (
@@ -298,12 +307,7 @@ class DraggerContainer extends PureComponent {
             {isCompareModeActive
               ? (
                 <Dragger
-                  axisWidth={axisWidth}
-                  toggleShowDraggerTime={toggleShowDraggerTime}
-                  transformX={transformX}
-                  isCompareModeActive={isCompareModeActive}
-                  handleDragDragger={this.handleDragDragger}
-                  selectDragger={this.selectDragger}
+                  {...sharedProps}
                   disabled
                   draggerName="selected"
                   draggerPosition={draggerPosition}
@@ -312,12 +316,7 @@ class DraggerContainer extends PureComponent {
               )
               : null}
             <Dragger
-              axisWidth={axisWidth}
-              toggleShowDraggerTime={toggleShowDraggerTime}
-              transformX={transformX}
-              isCompareModeActive={isCompareModeActive}
-              handleDragDragger={this.handleDragDragger}
-              selectDragger={this.selectDragger}
+              {...sharedProps}
               disabled={false}
               draggerName="selectedB"
               draggerPosition={draggerPositionB}
@@ -340,12 +339,7 @@ class DraggerContainer extends PureComponent {
             {isCompareModeActive
               ? (
                 <Dragger
-                  axisWidth={axisWidth}
-                  toggleShowDraggerTime={toggleShowDraggerTime}
-                  transformX={transformX}
-                  isCompareModeActive={isCompareModeActive}
-                  handleDragDragger={this.handleDragDragger}
-                  selectDragger={this.selectDragger}
+                  {...sharedProps}
                   disabled
                   draggerName="selectedB"
                   draggerPosition={draggerPositionB}
@@ -354,12 +348,7 @@ class DraggerContainer extends PureComponent {
               )
               : null}
             <Dragger
-              axisWidth={axisWidth}
-              toggleShowDraggerTime={toggleShowDraggerTime}
-              transformX={transformX}
-              isCompareModeActive={isCompareModeActive}
-              handleDragDragger={this.handleDragDragger}
-              selectDragger={this.selectDragger}
+              {...sharedProps}
               disabled={false}
               draggerName="selected"
               draggerPosition={draggerPosition}
@@ -382,6 +371,7 @@ DraggerContainer.propTypes = {
   draggerVisible: PropTypes.bool,
   draggerVisibleB: PropTypes.bool,
   frontDate: PropTypes.string,
+  isAnimationPlaying: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   onChangeSelectedDragger: PropTypes.func,

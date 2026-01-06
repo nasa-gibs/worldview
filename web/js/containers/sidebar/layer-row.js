@@ -865,10 +865,4 @@ LayerRow.propTypes = {
   isDDVLocationAlertPresent: PropTypes.bool,
   isDDVZoomAlertPresent: PropTypes.bool,
   openZoomAlertModal: PropTypes.func,
-  ddvLocationAlerts: PropTypes.array,
-  ddvZoomAlerts: PropTypes.array,
-  disableDDVLocationAlert: PropTypes.func,
-  disableDDVZoomAlert: PropTypes.func,
-  map: PropTypes.object,
-  selectedDate: PropTypes.instanceOf(Date),
 };
