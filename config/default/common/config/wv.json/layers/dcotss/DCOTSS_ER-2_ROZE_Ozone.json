@@ -2,7 +2,7 @@
   "layers": {
     "DCOTSS_ER-2_ROZE_Ozone": {
       "id": "DCOTSS_ER-2_ROZE_Ozone",
-      "title": "Ozone and Flight Track (Per Flight)",
+      "title": "ROZE Ozone and Flight Track (Per Flight)",
       "subtitle": "DCOTSS/NASA ER-2 ROZE",
       "description": "dcotss/DCOTSS_ER-2_ROZE_Ozone",
       "group": "overlays",

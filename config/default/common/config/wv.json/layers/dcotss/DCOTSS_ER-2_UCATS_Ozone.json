@@ -2,7 +2,7 @@
   "layers": {
     "DCOTSS_ER-2_UCATS_Ozone": {
       "id": "DCOTSS_ER-2_UCATS_Ozone",
-      "title": "Ozone and Flight Track (Per Flight)",
+      "title": "UCATS Ozone and Flight Track (Per Flight)",
       "subtitle": "DCOTSS/NASA ER-2 UCATS",
       "description": "dcotss/DCOTSS_ER-2_UCATS_Ozone",
       "group": "overlays",
