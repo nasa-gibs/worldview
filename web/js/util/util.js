@@ -481,12 +481,14 @@ export default (function(self) {
 
   self.fetch = function(url, mimeType) {
     return new Promise(
-      (resolve, reject) => fetch(url)
-        .then((response) => (mimeType === 'application/json'
-          ? response.json()
-          : response.text()))
-        .then(resolve)
-        .catch(reject),
+      (resolve, reject) => {
+        fetch(url)
+          .then((response) => (mimeType === 'application/json'
+            ? response.json()
+            : response.text()))
+          .then(resolve)
+          .catch(reject);
+      },
     );
   };
 

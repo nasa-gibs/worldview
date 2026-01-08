@@ -544,6 +544,7 @@ AnimationWidget.propTypes = {
   isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
+  map: PropTypes.object,
   maxDate: PropTypes.object,
   minDate: PropTypes.object,
   numberOfFrames: PropTypes.number,

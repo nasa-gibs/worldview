@@ -13,11 +13,6 @@ class FeaturedAlert extends React.Component {
     };
   }
 
-  dismissAlert() {
-    // safeLocalStorage.setItem('<alert-name-goes-here>', true);
-    this.setState({ showAlert: false });
-  }
-
   render() {
     // const { showAlert } = this.state;
     return '';

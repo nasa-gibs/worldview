@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   Card, CardImg, CardBody, CardTitle, CardText,
 } from 'reactstrap';
@@ -345,3 +346,10 @@ export default function PresetOptions(props) {
     </div>
   );
 }
+
+PresetOptions.propTypes = {
+  setBandSelection: PropTypes.func,
+  selectedPreset: PropTypes.object,
+  setSelectedPreset: PropTypes.func,
+  presetOptions: PropTypes.string,
+};

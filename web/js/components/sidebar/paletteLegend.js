@@ -471,7 +471,6 @@ class PaletteLegend extends React.Component {
             ? `active-legend wv-palettes-panel${customClass}`
             : `wv-palettes-panel${customClass}`
         }
-        datalayer={layer.id}
         id={`${paletteId}_panel`}
       >
         {this.renderPaletteLegends()}
@@ -500,6 +499,8 @@ PaletteLegend.propTypes = {
   paletteLegends: PropTypes.array,
   palettes: PropTypes.object,
   parentLayer: PropTypes.object,
+  showingVectorHand: PropTypes.bool,
+  showingChartingIcon: PropTypes.bool,
   width: PropTypes.number,
   toggleAllClassifications: PropTypes.func,
 };

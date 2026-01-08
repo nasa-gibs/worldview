@@ -118,4 +118,6 @@ ChartingLayerMenu.propTypes = {
   isActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   updateActiveChartingLayer: PropTypes.func,
+  renderedPalettes: PropTypes.object,
+  activeChartingLayer: PropTypes.string,
 };

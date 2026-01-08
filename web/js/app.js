@@ -109,12 +109,12 @@ class App extends React.Component {
   };
 
   onload() {
-    const self = this;
-    const state = self.props.parameters;
-    const { config } = self.props;
+    const { props, getScreenInfo, setVhCSSProperty } = this;
+    const { config, parameters } = props;
+    const state = parameters;
     config.parameters = state;
 
-    const main = function() {
+    const main = () => {
       // Load any additional scripts as needed
       if (config.scripts) {
         util.loadScripts(config.scripts);
@@ -133,14 +133,14 @@ class App extends React.Component {
         console.warn('Development version');
       }
       window.addEventListener('resize', () => {
-        self.getScreenInfo();
+        getScreenInfo();
       });
       window.addEventListener('orientationchange', () => {
-        self.getScreenInfo();
+        getScreenInfo();
       });
-      self.getScreenInfo();
+      getScreenInfo();
       events.trigger(STARTUP);
-      self.setVhCSSProperty();
+      setVhCSSProperty();
     };
     util.wrap(main)();
   }
@@ -272,6 +272,7 @@ App.propTypes = {
   parameters: PropTypes.object,
   setScreenInfoAction: PropTypes.func,
   hideNotificationsPopup: PropTypes.bool,
+  config: PropTypes.object,
 };
 
 App.defaultProps = {

@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-unresolved
-import PQueue from 'p-queue';
+import PQueue, { TimeoutError } from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
@@ -184,8 +184,6 @@ class PlayQueue extends React.Component {
     }
   }
 
-  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length;
-
   isPreloadSufficient() {
     const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
@@ -306,26 +304,32 @@ class PlayQueue extends React.Component {
     this.inQueueObject[strDate] = date;
     this.bufferArray.push(strDate);
 
-    await this.queue.add(async () => {
-      const startTime = Date.now();
-      await promiseImageryForTime(date);
-      const elapsedTime = Date.now() - startTime;
-      const fetchTime = elapsedTime >= MIN_REQUEST_TIME_MS ? elapsedTime : MIN_REQUEST_TIME_MS;
-      this.fetchTimes.push(fetchTime);
-      this.setState({ loadedItems: loadedItems += 1 });
+    try {
+      await this.queue.add(async () => {
+        const startTime = Date.now();
+        await promiseImageryForTime(date);
+        const elapsedTime = Date.now() - startTime;
+        const fetchTime = elapsedTime >= MIN_REQUEST_TIME_MS ? elapsedTime : MIN_REQUEST_TIME_MS;
+        this.fetchTimes.push(fetchTime);
+        this.setState({ loadedItems: loadedItems += 1 });
 
-      if (!this.mounted) return;
-      this.bufferObject[strDate] = strDate;
-      delete this.inQueueObject[strDate];
-      const currentBufferSize = util.objectLength(this.bufferObject);
+        if (!this.mounted) return;
+        this.bufferObject[strDate] = strDate;
+        delete this.inQueueObject[strDate];
+        const currentBufferSize = util.objectLength(this.bufferObject);
 
-      if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
-        this.checkQueue();
-        this.checkShouldPlay();
+        if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
+          this.checkQueue();
+          this.checkShouldPlay();
+        }
+
+        return strDate;
+      });
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        console.error('Imagery loading timed out after 3 seconds');
       }
-
-      return strDate;
-    });
+    }
   }
 
   play() {
@@ -344,7 +348,6 @@ class PlayQueue extends React.Component {
     this.abortController.abort();
     this.setState({ isAnimating: false });
     this.hasPlayStarted = false;
-    // console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
   animationInterval(ms, callback) {
