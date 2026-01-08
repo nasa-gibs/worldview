@@ -7,7 +7,7 @@
       "description": "activate/ACTIVATE_King_Air_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector activate",
+      "tags": "vector activate suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,

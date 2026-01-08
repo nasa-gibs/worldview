@@ -7,7 +7,7 @@
       "description": "arcsix/ARCSIX_SPEC-Learjet_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector Arctic Greenland Thule Pituffik THAAO",
+      "tags": "vector Arctic Greenland Thule Pituffik THAAO suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,

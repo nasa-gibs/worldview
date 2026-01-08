@@ -7,7 +7,7 @@
       "description": "activate/ACTIVATE_HU-25_Falcon_Ozone",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector activate",
+      "tags": "vector activate suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,

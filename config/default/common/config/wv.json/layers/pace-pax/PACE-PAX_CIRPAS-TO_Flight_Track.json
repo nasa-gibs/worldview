@@ -7,7 +7,7 @@
       "description": "pace-pax/PACE-PAX_CIRPAS-TO_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector California",
+      "tags": "vector California suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
