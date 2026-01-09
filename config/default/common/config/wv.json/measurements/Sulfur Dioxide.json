@@ -79,7 +79,7 @@
                     "description": "tropomi/SulfurDioxide",
                     "image": "",
                     "settings": [
-                       "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column_Daily",
+                       "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column",
                        "OrbitTracks_Sentinel-5P_Ascending"
 
                     ]
