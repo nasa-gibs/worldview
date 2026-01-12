@@ -143,6 +143,7 @@ class ModalContainer extends Component {
       top: -style.top,
       bottom: screenHeight - height - style.top - 5,
     } : '';
+    return (
       <Draggable
         handle={dragHandle}
         disabled={!isDraggable}
@@ -165,7 +166,8 @@ class ModalContainer extends Component {
             </Resizable>
           )
           : children}
-      </Draggable>;
+      </Draggable>
+    );
   };
 
   render() {

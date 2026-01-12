@@ -7,7 +7,7 @@
       "description": "arcsix/ARCSIX_G-III_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector Arctic Greenland Thule Pituffik THAAO HALO AVAPS",
+      "tags": "vector Arctic Greenland Thule Pituffik THAAO HALO AVAPS suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,

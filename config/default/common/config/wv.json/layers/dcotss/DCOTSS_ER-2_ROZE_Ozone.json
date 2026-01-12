@@ -1,13 +1,13 @@
 {
   "layers": {
-    "AJAX_Alpha_Jet_Ozone": {
-      "id": "AJAX_Alpha_Jet_Ozone",
-      "title": "Ozone and Flight Track (Per AJAX Flight)",
-      "subtitle": "AJAX/Alpha Jet",
-      "description": "ajax/AJAX_Alpha_Jet_Ozone",
+    "DCOTSS_ER-2_ROZE_Ozone": {
+      "id": "DCOTSS_ER-2_ROZE_Ozone",
+      "title": "ROZE Ozone and Flight Track (Per Flight)",
+      "subtitle": "DCOTSS/NASA ER-2 ROZE",
+      "description": "dcotss/DCOTSS_ER-2_ROZE_Ozone",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector alpha jet ozone california nevada suborbital",
+      "tags": "vector nama Salinas Kansas suborbital o3",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
@@ -15,19 +15,19 @@
       "disableCustomPalettes": true,
       "layergroup": "Ozone",
       "vectorStyle": {
-        "id": "AJAX_Alpha_Jet_Ozone",
+        "id": "DCOTSS_ER-2_ROZE_Ozone",
         "geographic": {
-          "id": "AJAX_Alpha_Jet_Ozone"
+          "id": "DCOTSS_ER-2_ROZE_Ozone"
         }
       },
       "palette": {
-        "id": "AJAX_Alpha_Jet_Ozone",
+        "id": "DCOTSS_ER-2_ROZE_Ozone",
         "immutable": true
       },
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "G_Alt",
+        "property": "O3_ROZE",
         "order": "descending"
       }
     }
