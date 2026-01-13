@@ -88,7 +88,6 @@
         "no-nested-ternary": "off",    // 164 errors across 40 files
         "no-shadow": "warn",           // 110 errors across 40 files
         "max-len": "error",
-        "consistent-return": "off",    // 95 errors across 58 files
         "no-underscore-dangle": "error",
         "no-param-reassign": [         // 198 errors across 46 files
           "warn",
