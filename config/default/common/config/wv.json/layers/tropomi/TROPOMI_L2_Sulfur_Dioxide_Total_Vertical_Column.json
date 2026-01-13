@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column": {
+      "id": "TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column",
+      "description": "tropomi/TROPOMI_L2_Sulfur_Dioxide_Total_Vertical_Column",
+      "tags": "sulphur so2",
+      "group": "overlays",
+      "layergroup": "Sulfur Dioxide",
+      "wrapadjacentdays": true
+    }
+  }
+}
