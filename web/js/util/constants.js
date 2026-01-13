@@ -26,6 +26,6 @@ export const STARTUP = 'startup';
 
 // Define each flight track layer's feature measurement key
 export const FLIGHT_TRACK_KEYS = {
-  'AJAX_Alpha_Jet_Ozone': 'O3',
+  AJAX_Alpha_Jet_Ozone: 'O3',
   'ACTIVATE_HU-25_Falcon_Ozone': 'O3_ppbv_',
 };
