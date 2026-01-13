@@ -57,12 +57,13 @@ export default function MapRunningData(compareUi, store) {
 
     // Running data for vector layers
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
+      const featureProps = feature.getProperties();
       console.log('layer def', layer.wv.def);
       console.log('feature props', JSON.stringify(featureProps));
       if (shouldNotProcessVectorLayer(layer)) return;
 
       const { id, palette } = layer.wv.def;
-      const isContinuousVectorLayer = layer.wv.def.colormapType === "continuous" && layer.wv.def.type === "vector"
+      const isContinuousVectorLayer = layer.wv.def.colormapType === 'continuous' && layer.wv.def.type === 'vector';
       const identifier = palette.styleProperty;
       const paletteLegends = getPalette(id, undefined, undefined, state);
       const { legend } = paletteLegends;
@@ -70,7 +71,6 @@ export default function MapRunningData(compareUi, store) {
 
       if (!isContinuousVectorLayer && !identifier && legend.colors.length > 1) return;
       if (identifier) {
-        const featureProps = feature.getProperties();
         const value = featureProps[identifier] || palette.unclassified;
         if (!value) return;
         const tooltips = legend.tooltips.map((c) => c.toLowerCase().replace(/\s/g, ''));
@@ -88,15 +88,15 @@ export default function MapRunningData(compareUi, store) {
             color = legendAeronet.colors[colorIndexAeronet];
           }
         } else if (isContinuousVectorLayer) {
-          let flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id]
+          const flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id];
           console.log(`Processing ${id} with value: ${value}`);
-          const featureValue = featureProps[flightTrackDataKey]
+          const featureValue = featureProps[flightTrackDataKey];
           // Ensure we are working with a number for comparison
           const numericValue = parseFloat(featureValue);
 
-          if (isNaN(numericValue)) return;
+          if (Number.isNaN(numericValue)) return;
 
-          const colorIndex = legend.tooltips.findIndex(range => {
+          const colorIndex = legend.tooltips.findIndex((range) => {
             if (range.includes('≥')) {
               const min = parseFloat(range.replace('≥', '').trim());
               return numericValue >= min;
@@ -108,7 +108,7 @@ export default function MapRunningData(compareUi, store) {
             }
 
             if (range.includes('-')) {
-              const [min, max] = range.split('-').map(s => parseFloat(s.trim()));
+              const [min, max] = range.split('-').map((s) => parseFloat(s.trim()));
               return numericValue >= min && numericValue < max;
             }
 
