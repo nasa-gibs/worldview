@@ -9,7 +9,7 @@ import { getPalette } from '../modules/palettes/selectors';
 import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
-import { MAP_RUNNING_DATA } from '../util/constants';
+import { FLIGHT_TRACK_KEYS, MAP_RUNNING_DATA } from '../util/constants';
 
 const { events } = util;
 
@@ -57,18 +57,21 @@ export default function MapRunningData(compareUi, store) {
 
     // Running data for vector layers
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
+      console.log('layer def', layer.wv.def);
+      console.log('feature props', JSON.stringify(featureProps));
       if (shouldNotProcessVectorLayer(layer)) return;
 
       const { id, palette } = layer.wv.def;
+      const isContinuousVectorLayer = layer.wv.def.colormapType === "continuous" && layer.wv.def.type === "vector"
       const identifier = palette.styleProperty;
       const paletteLegends = getPalette(id, undefined, undefined, state);
       const { legend } = paletteLegends;
       let color;
 
-      if (!identifier && legend.colors.length > 1) return;
+      if (!isContinuousVectorLayer && !identifier && legend.colors.length > 1) return;
       if (identifier) {
-        const properties = feature.getProperties();
-        const value = properties[identifier] || palette.unclassified;
+        const featureProps = feature.getProperties();
+        const value = featureProps[identifier] || palette.unclassified;
         if (!value) return;
         const tooltips = legend.tooltips.map((c) => c.toLowerCase().replace(/\s/g, ''));
         if (id.includes('AERONET')) {
@@ -84,6 +87,36 @@ export default function MapRunningData(compareUi, store) {
             || parseFloat(value) < parseFloat(range.split(' – ')[1])));
             color = legendAeronet.colors[colorIndexAeronet];
           }
+        } else if (isContinuousVectorLayer) {
+          let flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id]
+          console.log(`Processing ${id} with value: ${value}`);
+          const featureValue = featureProps[flightTrackDataKey]
+          // Ensure we are working with a number for comparison
+          const numericValue = parseFloat(featureValue);
+
+          if (isNaN(numericValue)) return;
+
+          const colorIndex = legend.tooltips.findIndex(range => {
+            if (range.includes('≥')) {
+              const min = parseFloat(range.replace('≥', '').trim());
+              return numericValue >= min;
+            }
+
+            if (range.includes('≤')) {
+              const max = parseFloat(range.replace('≤', '').trim());
+              return numericValue <= max;
+            }
+
+            if (range.includes('-')) {
+              const [min, max] = range.split('-').map(s => parseFloat(s.trim()));
+              return numericValue >= min && numericValue < max;
+            }
+
+            return false;
+          });
+
+          // Sometimes off by 1 in the sidebar?
+          color = legend.colors[colorIndex];
         } else {
           const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
           color = legend.colors[colorIndex];
