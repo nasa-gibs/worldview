@@ -57,9 +57,7 @@ export default function MapRunningData(compareUi, store) {
 
     // Running data for vector layers
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
-      const featureProps = feature.getProperties();
       if (shouldNotProcessVectorLayer(layer)) return;
-
       const { id, palette } = layer.wv.def;
       const isContinuousVectorLayer = layer.wv.def.colormapType === 'continuous' && layer.wv.def.type === 'vector';
       const identifier = palette.styleProperty;
@@ -68,6 +66,7 @@ export default function MapRunningData(compareUi, store) {
       let color;
 
       if (!isContinuousVectorLayer && !identifier && legend.colors.length > 1) return;
+      const featureProps = feature.getProperties();
       if (identifier) {
         const value = featureProps[identifier] || palette.unclassified;
         if (!value) return;
