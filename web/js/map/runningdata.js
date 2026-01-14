@@ -58,8 +58,6 @@ export default function MapRunningData(compareUi, store) {
     // Running data for vector layers
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       const featureProps = feature.getProperties();
-      console.log('layer def', layer.wv.def);
-      console.log('feature props', JSON.stringify(featureProps));
       if (shouldNotProcessVectorLayer(layer)) return;
 
       const { id, palette } = layer.wv.def;
@@ -87,40 +85,36 @@ export default function MapRunningData(compareUi, store) {
             || parseFloat(value) < parseFloat(range.split(' – ')[1])));
             color = legendAeronet.colors[colorIndexAeronet];
           }
-        } else if (isContinuousVectorLayer) {
-          const flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id];
-          console.log(`Processing ${id} with value: ${value}`);
-          const featureValue = featureProps[flightTrackDataKey];
-          // Ensure we are working with a number for comparison
-          const numericValue = parseFloat(featureValue);
-
-          if (Number.isNaN(numericValue)) return;
-
-          const colorIndex = legend.tooltips.findIndex((range) => {
-            if (range.includes('≥')) {
-              const min = parseFloat(range.replace('≥', '').trim());
-              return numericValue >= min;
-            }
-
-            if (range.includes('≤')) {
-              const max = parseFloat(range.replace('≤', '').trim());
-              return numericValue <= max;
-            }
-
-            if (range.includes('-')) {
-              const [min, max] = range.split('-').map((s) => parseFloat(s.trim()));
-              return numericValue >= min && numericValue < max;
-            }
-
-            return false;
-          });
-
-          // Sometimes off by 1 in the sidebar?
-          color = legend.colors[colorIndex];
         } else {
           const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
           color = legend.colors[colorIndex];
         }
+      } else if (isContinuousVectorLayer) {
+        const flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id];
+        const featureValue = featureProps[flightTrackDataKey];
+        const numericValue = parseFloat(featureValue);
+        if (Number.isNaN(numericValue)) return;
+
+        const colorIndex = legend.tooltips.findIndex((tooltip) => {
+          if (tooltip.includes('≥') || tooltip.includes('>')) {
+            const min = parseFloat(tooltip.replace(/[≥>]/g, '').trim());
+            return numericValue >= min;
+          }
+
+          if (tooltip.includes('≤') || tooltip.includes('<')) {
+            const max = parseFloat(tooltip.replace(/[≤<]/g, '').trim());
+            return numericValue <= max;
+          }
+
+          if (tooltip.includes('-')) {
+            const [min, max] = tooltip.split('-').map((s) => parseFloat(s.trim()));
+            return numericValue >= min && numericValue < max;
+          }
+
+          return false;
+        });
+
+        color = legend.colors[colorIndex];
       } else if (legend.colors.length === 1) {
         [color] = legend.colors;
       }
