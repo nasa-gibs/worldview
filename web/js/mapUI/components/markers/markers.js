@@ -86,7 +86,7 @@ function Markers(props) {
     coordinatesObject,
   ) => {
     const results = geocodeResults;
-    if (!results) return;
+    if (!results) return undefined;
     const remove = () => removeMarker(coordinatesObject);
     const marker = getCoordinatesMarker(
       proj,
@@ -109,7 +109,7 @@ function Markers(props) {
       flyToMarker(coordinatesObject);
     }
 
-    setGeocodeResults(geocodeResults);
+    return setGeocodeResults(geocodeResults);
   };
 
   /**
@@ -161,6 +161,7 @@ function Markers(props) {
       default:
         break;
     }
+    return undefined;
   }, [action]);
 
   return null;

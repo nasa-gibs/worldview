@@ -88,7 +88,7 @@ function Event (props) {
    * @returns Magnitude data output
    */
   function magnitudeOutput({ magnitudeUnit, magnitudeValue }) {
-    if (!magnitudeUnit || !magnitudeValue) return;
+    if (!magnitudeUnit || !magnitudeValue) return undefined;
     const formattedunit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
     return (
       <p className="magnitude">
@@ -143,6 +143,7 @@ function Event (props) {
         </ul>
       );
     }
+    return undefined;
   }
 
   /**
@@ -177,6 +178,7 @@ function Event (props) {
         return `${source.title} `;
       });
     }
+    return undefined;
   }
 
   return (

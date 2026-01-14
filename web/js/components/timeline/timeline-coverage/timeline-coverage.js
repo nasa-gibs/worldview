@@ -294,6 +294,7 @@ class TimelineLayerCoveragePanel extends Component {
         return granuleDateRanges.map(([start, end]) => ({ startDate: start, endDate: end }));
       });
     }
+    return undefined;
   };
 
   stopPropagation = (e) => {

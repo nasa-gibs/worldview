@@ -43,6 +43,7 @@ function AnimationButton(props) {
     } if (isMobileTablet && isLandscape) {
       return `tablet-landscape${subdailyID}`;
     }
+    return undefined;
   };
 
   const buttonClass = getButtonClassName();

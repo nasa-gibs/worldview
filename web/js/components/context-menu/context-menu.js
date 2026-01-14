@@ -61,7 +61,7 @@ function RightClickMenu(props) {
       return onToggleUnits(oppositeUnit);
     }
     setShow(false);
-    events.trigger(`measure:${action}`);
+    return events.trigger(`measure:${action}`);
   }
 
   function addPlaceMarkerHandler(coords, olMap, crs) {
@@ -79,7 +79,7 @@ function RightClickMenu(props) {
   };
 
   useEffect(() => {
-    if (isCoordinateSearchActive) return;
+    if (isCoordinateSearchActive) return false;
     events.on(MAP_SINGLE_CLICK, handleClick);
     events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {

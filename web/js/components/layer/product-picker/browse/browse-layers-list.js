@@ -36,6 +36,7 @@ function BrowseLayerList (props) {
                 />
               );
             }
+            return undefined;
           })
         }
       </div>

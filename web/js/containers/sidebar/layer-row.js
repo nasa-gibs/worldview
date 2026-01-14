@@ -261,6 +261,7 @@ function LayerRow (props) {
         />
       );
     }
+    return undefined;
   };
 
   useEffect(() => {

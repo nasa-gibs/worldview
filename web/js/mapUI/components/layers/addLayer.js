@@ -87,6 +87,7 @@ function AddLayer(props) {
     } else if (action.type === DISPLAY_STATIC_MAP) {
       addStaticLayer();
     }
+    return undefined;
   }, [action]);
 
   return null;

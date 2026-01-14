@@ -157,7 +157,7 @@ class Sidebar extends React.Component {
     });
     const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
     safeLocalStorage.setItem(SIDEBAR_COLLAPSED, storageValue);
-    collapseExpandToggle();
+    return collapseExpandToggle();
   }
 
   getProductsToRender(activeTab, isCompareMode, isChartMode) {
@@ -189,6 +189,7 @@ class Sidebar extends React.Component {
         />
       );
     }
+    return undefined;
   }
 
   handleWorldviewLogoClick(e, permalink) {

@@ -454,6 +454,7 @@ class PaletteLegend extends React.Component {
       } if (colorMap.type === 'classification') {
         return this.renderClasses(colorMap, index);
       }
+      return undefined;
     });
   }
 
@@ -463,7 +464,7 @@ class PaletteLegend extends React.Component {
     } = this.props;
     const { isHoveringLegend } = this.state;
     const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : isCustomPalette ? ' is_custom' : '';
-    if (!layer.palette) return;
+    if (!layer.palette) return undefined;
     return (
       <div
         className={

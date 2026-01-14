@@ -48,6 +48,7 @@ function CollapsedAnimationWidget (props) {
     } if (isMobileTablet && isLandscape) {
       return `-tablet-landscape${subdailyID}`;
     }
+    return undefined;
   };
 
   const widgetIDs = getWidgetIDs();
