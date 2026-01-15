@@ -43,8 +43,8 @@ SearchLayers.propTypes = {
   width: PropTypes.number,
   isMobile: PropTypes.bool,
   mediumBreakpoint: PropTypes.number,
-  results: PropTypes.array,
-  selectedLayer: PropTypes.object,
+  results: PropTypes.arrayOf,
+  selectedLayer: PropTypes.shape,
   smallView: PropTypes.bool,
   showMobileFacets: PropTypes.bool,
 };

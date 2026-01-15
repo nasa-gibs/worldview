@@ -349,7 +349,7 @@ export default function PresetOptions(props) {
 
 PresetOptions.propTypes = {
   setBandSelection: PropTypes.func,
-  selectedPreset: PropTypes.object,
+  selectedPreset: PropTypes.shape,
   setSelectedPreset: PropTypes.func,
   presetOptions: PropTypes.string,
 };

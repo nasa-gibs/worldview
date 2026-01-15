@@ -202,10 +202,10 @@ function EventFilterModalBody (props) {
 
 EventFilterModalBody.propTypes = {
   closeModal: PropTypes.func,
-  eventCategories: PropTypes.array,
+  eventCategories: PropTypes.arrayOf,
   isPolarProj: PropTypes.bool,
   parentId: PropTypes.string,
-  selectedCategories: PropTypes.array,
+  selectedCategories: PropTypes.arrayOf,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,

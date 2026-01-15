@@ -132,7 +132,7 @@ NavCase.propTypes = {
   isDataDisabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   onTabClick: PropTypes.func,
-  tabTypes: PropTypes.object,
+  tabTypes: PropTypes.shape,
   toggleSidebar: PropTypes.func,
 };
 

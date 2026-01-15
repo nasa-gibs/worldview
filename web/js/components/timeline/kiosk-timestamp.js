@@ -91,7 +91,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
 }
 
 KioskTimeStamp.propTypes = {
-  date: PropTypes.object,
+  date: PropTypes.shape,
   isKioskModeActive: PropTypes.bool,
   subdaily: PropTypes.bool,
 };

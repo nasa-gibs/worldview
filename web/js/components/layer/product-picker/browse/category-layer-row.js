@@ -228,20 +228,20 @@ class CategoryLayerRow extends React.Component {
 }
 
 CategoryLayerRow.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.shape,
   categoryType: PropTypes.string,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
   isMobile: PropTypes.bool,
   isSelected: PropTypes.bool,
-  layerConfig: PropTypes.object,
-  measurement: PropTypes.object,
+  layerConfig: PropTypes.shape,
+  measurement: PropTypes.shape,
   projection: PropTypes.string,
   selectSource: PropTypes.func,
   selectMeasurement: PropTypes.func,
   selectedMeasurement: PropTypes.string,
   selectedMeasurementSourceIndex: PropTypes.number,
-  sources: PropTypes.array,
+  sources: PropTypes.arrayOf,
 };
 
 const mapStateToProps = (state) => {

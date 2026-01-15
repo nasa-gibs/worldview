@@ -181,7 +181,7 @@ CoverageLine.propTypes = {
   index: PropTypes.string,
   layerPeriod: PropTypes.string,
   lineType: PropTypes.string,
-  options: PropTypes.array,
+  options: PropTypes.arrayOf,
   positionTransformX: PropTypes.number,
   startDate: PropTypes.string,
 };

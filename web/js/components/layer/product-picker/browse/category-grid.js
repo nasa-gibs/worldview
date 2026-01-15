@@ -84,11 +84,11 @@ function mapStateToProps(state) {
 }
 
 CategoryGrid.propTypes = {
-  categories: PropTypes.array,
+  categories: PropTypes.arrayOf,
   categoryType: PropTypes.string,
   showMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
+  measurementConfig: PropTypes.shape,
 };
 
 export default connect(

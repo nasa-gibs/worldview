@@ -191,14 +191,14 @@ function PaletteSelect (props) {
 
 PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
-  canvas: PropTypes.object,
+  canvas: PropTypes.shape,
   clearCustomPalette: PropTypes.func,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
-  layer: PropTypes.object,
-  paletteOrder: PropTypes.array,
+  layer: PropTypes.shape,
+  paletteOrder: PropTypes.arrayOf,
   palettesTranslate: PropTypes.func,
   setCustomPalette: PropTypes.func,
 };

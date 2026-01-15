@@ -255,7 +255,7 @@ class SearchBox extends Component {
 SearchBox.propTypes = {
   activeAlert: PropTypes.bool,
   clearInput: PropTypes.func,
-  coordinatesPending: PropTypes.array,
+  coordinatesPending: PropTypes.arrayOf,
   locationSearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
@@ -263,7 +263,7 @@ SearchBox.propTypes = {
   onChange: PropTypes.func,
   onCoordinateInputSelect: PropTypes.func,
   onSelect: PropTypes.func,
-  suggestions: PropTypes.array,
+  suggestions: PropTypes.arrayOf,
 };
 
 export default SearchBox;

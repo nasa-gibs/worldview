@@ -42,5 +42,5 @@ export default function RenderSplitLayerTitle(props) {
 }
 
 RenderSplitLayerTitle.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.shape,
 };

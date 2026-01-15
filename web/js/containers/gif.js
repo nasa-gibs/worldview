@@ -470,18 +470,18 @@ export default connect(
 )(GIF);
 
 GIF.propTypes = {
-  boundaries: PropTypes.object,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
+  boundaries: PropTypes.shape,
+  startDate: PropTypes.shape,
+  endDate: PropTypes.shape,
   startDateStr: PropTypes.string,
   endDateStr: PropTypes.string,
   getImageArray: PropTypes.func,
   increment: PropTypes.string,
-  map: PropTypes.object,
+  map: PropTypes.shape,
   numberOfFrames: PropTypes.number,
   onBoundaryChange: PropTypes.func,
   onClose: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.shape,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   speed: PropTypes.number,

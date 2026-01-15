@@ -131,5 +131,5 @@ export default function BandSelection({ layer }) {
 }
 
 BandSelection.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.shape,
 };

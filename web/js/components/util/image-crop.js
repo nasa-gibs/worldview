@@ -135,23 +135,23 @@ Crop.defaultProps = {
 };
 
 RenderCoordinates.propTypes = {
-  coordinates: PropTypes.object,
-  topRightStyle: PropTypes.object,
-  bottomLeftStyle: PropTypes.object,
+  coordinates: PropTypes.shape,
+  topRightStyle: PropTypes.shape,
+  bottomLeftStyle: PropTypes.shape,
 };
 
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func,
   onDragStop: PropTypes.func,
-  bottomLeftStyle: PropTypes.object,
-  coordinates: PropTypes.object,
+  bottomLeftStyle: PropTypes.shape,
+  coordinates: PropTypes.shape,
   height: PropTypes.number,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
   keepSelection: PropTypes.bool,
   showCoordinates: PropTypes.bool,
-  topRightStyle: PropTypes.object,
+  topRightStyle: PropTypes.shape,
   width: PropTypes.number,
   x: PropTypes.number,
   y: PropTypes.number,

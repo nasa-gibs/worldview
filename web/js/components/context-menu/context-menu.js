@@ -178,12 +178,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 RightClickMenu.propTypes = {
-  map: PropTypes.object,
-  proj: PropTypes.object,
+  map: PropTypes.shape,
+  proj: PropTypes.shape,
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
-  allMeasurements: PropTypes.object,
+  allMeasurements: PropTypes.shape,
   measurementIsActive: PropTypes.bool,
   isMobile: PropTypes.bool,
 };

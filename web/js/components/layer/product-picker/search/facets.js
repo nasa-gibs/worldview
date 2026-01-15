@@ -70,14 +70,14 @@ function Facets(props) {
 }
 
 Facets.propTypes = {
-  collapsedFacets: PropTypes.object,
-  facets: PropTypes.object,
-  filters: PropTypes.array,
+  collapsedFacets: PropTypes.shape,
+  facets: PropTypes.shape,
+  filters: PropTypes.arrayOf,
   isMobile: PropTypes.bool,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.shape,
   screenWidth: PropTypes.number,
   removeFilter: PropTypes.func,
-  results: PropTypes.array,
+  results: PropTypes.arrayOf,
   showMobileFacets: PropTypes.bool,
   toggleCollapseFacet: PropTypes.func,
   toggleMobileFacets: PropTypes.func,

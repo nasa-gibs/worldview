@@ -31,7 +31,7 @@ class Autocomplete extends React.Component {
     /**
      * The items to display in the dropdown menu
      */
-    items: PropTypes.array.isRequired,
+    items: PropTypes.arrayOf.isRequired,
     /**
      * The value to display in the input field
      */
@@ -100,7 +100,7 @@ class Autocomplete extends React.Component {
      * implementation. If you override `renderMenu` and you want to use
      * `menuStyle` you must manually apply them (`this.props.menuStyle`).
      */
-    menuStyle: PropTypes.object,
+    menuStyle: PropTypes.shape,
     /**
      * Arguments: `props: Object`
      *
@@ -120,18 +120,18 @@ class Autocomplete extends React.Component {
      * aria-autocomplete. `inputProps` is commonly used for (but not limited to)
      * placeholder, event handlers (onFocus, onBlur, etc.), autoFocus, etc..
      */
-    inputProps: PropTypes.object,
+    inputProps: PropTypes.shape,
     /**
      * Props that are applied to the element which wraps the `<input />` and
      * dropdown menu elements rendered by `Autocomplete`.
      */
-    wrapperProps: PropTypes.object,
+    wrapperProps: PropTypes.shape,
     /**
      * This is a shorthand for `wrapperProps={{ style: <your styles> }}`.
      * Note that `wrapperStyle` is applied before `wrapperProps`, so the latter
      * will win if it contains a `style` entry.
      */
-    wrapperStyle: PropTypes.object,
+    wrapperStyle: PropTypes.shape,
     /**
      * Whether or not to automatically highlight the top match in the dropdown
      * menu.

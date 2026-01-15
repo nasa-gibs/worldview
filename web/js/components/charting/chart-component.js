@@ -578,10 +578,10 @@ const mapStateToProps = (state) => {
 };
 
 ChartComponent.propTypes = {
-  liveData: PropTypes.object,
-  mapView: PropTypes.object,
+  liveData: PropTypes.shape,
+  mapView: PropTypes.shape,
   createLayer: PropTypes.func,
-  overviewMapLayerDef: PropTypes.object,
+  overviewMapLayerDef: PropTypes.shape,
 };
 
 CustomXAxisTick.propTypes = {
@@ -591,13 +591,13 @@ CustomXAxisTick.propTypes = {
   textAnchor: PropTypes.string,
   visibleTicksCount: PropTypes.number,
   index: PropTypes.number,
-  payload: PropTypes.object,
-  data: PropTypes.array,
+  payload: PropTypes.shape,
+  data: PropTypes.arrayOf,
 };
 
 CustomTooltip.propTypes = {
   active: PropTypes.bool,
-  payload: PropTypes.array,
+  payload: PropTypes.arrayOf,
   label: PropTypes.string,
   unit: PropTypes.string,
 };

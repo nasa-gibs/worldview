@@ -40,7 +40,7 @@ function NotificationBlock(props) {
 export default NotificationBlock;
 
 NotificationBlock.propTypes = {
-  arr: PropTypes.array.isRequired,
+  arr: PropTypes.arrayOf.isRequired,
   numberNotSeen: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
 };

@@ -60,11 +60,11 @@ OrbitTrack.propTypes = {
   hasPalette: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  paletteLegends: PropTypes.array,
-  parentLayer: PropTypes.object,
-  renderedPalette: PropTypes.object,
+  paletteLegends: PropTypes.arrayOf,
+  parentLayer: PropTypes.shape,
+  renderedPalette: PropTypes.shape,
   requestPalette: PropTypes.func,
-  trackLayer: PropTypes.object,
+  trackLayer: PropTypes.shape,
 };
 
 function mapStateToProps(state, ownProps) {

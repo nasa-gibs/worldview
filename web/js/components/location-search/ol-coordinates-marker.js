@@ -131,11 +131,11 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 CoordinatesMarker.propTypes = {
-  config: PropTypes.object.isRequired,
+  config: PropTypes.shape.isRequired,
   isCoordinateSearchActive: PropTypes.bool.isRequired,
   setPlaceMarker: PropTypes.func.isRequired,
   toggleReverseGeocodeActive: PropTypes.func.isRequired,
-  proj: PropTypes.object,
+  proj: PropTypes.shape,
 };
 export default connect(
   mapStateToProps,

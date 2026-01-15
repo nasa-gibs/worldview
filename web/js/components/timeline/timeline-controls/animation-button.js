@@ -72,7 +72,7 @@ function AnimationButton(props) {
 }
 
 AnimationButton.propTypes = {
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.shape,
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
   label: PropTypes.string,

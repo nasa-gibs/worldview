@@ -55,5 +55,5 @@ export default function Scrollbars(props) {
 Scrollbars.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.shape,
 };

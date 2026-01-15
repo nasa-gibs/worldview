@@ -455,8 +455,8 @@ class CoverageItemList extends Component {
 }
 
 CoverageItemList.propTypes = {
-  activeLayers: PropTypes.array,
-  appNow: PropTypes.object,
+  activeLayers: PropTypes.arrayOf,
+  appNow: PropTypes.shape,
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

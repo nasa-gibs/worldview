@@ -129,12 +129,12 @@ class LineText extends React.Component {
 
 LineText.propTypes = {
   active: PropTypes.bool,
-  date: PropTypes.object,
+  date: PropTypes.shape,
   x: PropTypes.number,
   isCompareActive: PropTypes.bool,
   isLeft: PropTypes.bool,
-  map: PropTypes.object,
-  textCoords: PropTypes.array,
+  map: PropTypes.shape,
+  textCoords: PropTypes.arrayOf,
 };
 
 export default LineText;

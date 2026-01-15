@@ -520,15 +520,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 AnimationWidget.propTypes = {
-  appNow: PropTypes.object,
+  appNow: PropTypes.shape,
   animationCustomModalOpen: PropTypes.bool,
   autoplay: PropTypes.bool,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.shape,
   checkAnimationAvailability: PropTypes.bool,
-  snappedCurrentDate: PropTypes.object,
-  currentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.shape,
+  currentDate: PropTypes.shape,
   delta: PropTypes.number,
-  endDate: PropTypes.object,
+  endDate: PropTypes.shape,
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
@@ -544,9 +544,9 @@ AnimationWidget.propTypes = {
   isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
-  map: PropTypes.object,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  map: PropTypes.shape,
+  maxDate: PropTypes.shape,
+  minDate: PropTypes.shape,
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
@@ -564,7 +564,7 @@ AnimationWidget.propTypes = {
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speedRedux: PropTypes.number,
-  startDate: PropTypes.object,
+  startDate: PropTypes.shape,
   subDailyMode: PropTypes.bool,
 };
 

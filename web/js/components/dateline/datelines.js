@@ -133,9 +133,9 @@ const mapStateToProps = (state) => {
 };
 
 DateLines.propTypes = {
-  map: PropTypes.object,
-  proj: PropTypes.object,
-  date: PropTypes.object,
+  map: PropTypes.shape,
+  proj: PropTypes.shape,
+  date: PropTypes.shape,
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,

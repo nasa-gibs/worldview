@@ -376,14 +376,14 @@ DateSelector.defaultProps = {
   fontSize: 15,
 };
 DateSelector.propTypes = {
-  date: PropTypes.object,
+  date: PropTypes.shape,
   fontSize: PropTypes.number,
   idSuffix: PropTypes.string,
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  maxDate: PropTypes.shape,
+  minDate: PropTypes.shape,
   onDateChange: PropTypes.func,
   subDailyMode: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,

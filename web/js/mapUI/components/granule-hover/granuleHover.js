@@ -49,7 +49,7 @@ export default connect(
 )(GranuleHover);
 
 GranuleHover.propTypes = {
-  granuleFootprints: PropTypes.object,
-  state: PropTypes.object,
-  ui: PropTypes.object,
+  granuleFootprints: PropTypes.shape,
+  state: PropTypes.shape,
+  ui: PropTypes.shape,
 };

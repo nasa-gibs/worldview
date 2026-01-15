@@ -9,10 +9,10 @@ import { callIfExists, cssClasses, store } from './helpers';
 
 export default class MenuItem extends Component {
     static propTypes = {
-        attributes: PropTypes.object,
+        attributes: PropTypes.shape,
         children: PropTypes.node,
         className: PropTypes.string,
-        data: PropTypes.object,
+        data: PropTypes.shape,
         disabled: PropTypes.bool,
         divider: PropTypes.bool,
         onClick: PropTypes.func,

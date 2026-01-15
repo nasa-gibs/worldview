@@ -153,11 +153,11 @@ export default function GranuleCount (props) {
 
 GranuleCount.propTypes = {
   getGranulesUrl: PropTypes.func,
-  currentExtent: PropTypes.object,
+  currentExtent: PropTypes.shape,
   displayDate: PropTypes.string,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
   selectedDate: PropTypes.string,
-  selectedCollection: PropTypes.object,
+  selectedCollection: PropTypes.shape,
   showGranuleHelpModal: PropTypes.func,
 };

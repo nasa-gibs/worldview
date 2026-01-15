@@ -113,11 +113,11 @@ export default connect(
 )(ChartingLayerMenu);
 
 ChartingLayerMenu.propTypes = {
-  activeLayersWithPalettes: PropTypes.array,
+  activeLayersWithPalettes: PropTypes.arrayOf,
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   updateActiveChartingLayer: PropTypes.func,
-  renderedPalettes: PropTypes.object,
+  renderedPalettes: PropTypes.shape,
   activeChartingLayer: PropTypes.string,
 };

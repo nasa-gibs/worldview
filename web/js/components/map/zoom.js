@@ -71,7 +71,7 @@ const mapStateToProps = (state) => {
 };
 
 Zoom.propTypes = {
-  map: PropTypes.object,
+  map: PropTypes.shape,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isChartingActive: PropTypes.bool,

@@ -89,5 +89,5 @@ export default connect(
 Embed.propTypes = {
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.shape,
 };

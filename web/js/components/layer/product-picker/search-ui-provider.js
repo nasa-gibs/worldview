@@ -28,7 +28,7 @@ class SearchUiProvider extends React.Component {
 
 SearchUiProvider.propTypes = {
   initState: PropTypes.func,
-  searchConfig: PropTypes.object,
+  searchConfig: PropTypes.shape,
 };
 
 const mapDispatchToProps = (dispatch) => ({

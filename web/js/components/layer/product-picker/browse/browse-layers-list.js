@@ -45,9 +45,9 @@ function BrowseLayerList (props) {
 }
 
 BrowseLayerList.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.shape,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
+  measurementConfig: PropTypes.shape,
   selectedMeasurement: PropTypes.string,
 };
 

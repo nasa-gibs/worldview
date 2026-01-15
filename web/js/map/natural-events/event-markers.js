@@ -309,16 +309,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 EventMarkers.propTypes = {
-  eventsData: PropTypes.array,
+  eventsData: PropTypes.arrayOf,
   eventsDataIsLoading: PropTypes.bool,
   highlightEvent: PropTypes.func,
   isAnimatingToEvent: PropTypes.bool,
   isMobile: PropTypes.bool,
-  map: PropTypes.object,
-  mapUi: PropTypes.object,
-  proj: PropTypes.object,
+  map: PropTypes.shape,
+  mapUi: PropTypes.shape,
+  proj: PropTypes.shape,
   selectEvent: PropTypes.func,
-  selectedEvent: PropTypes.object,
+  selectedEvent: PropTypes.shape,
   unHighlightEvent: PropTypes.func,
 };
 

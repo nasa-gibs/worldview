@@ -34,8 +34,8 @@ function TourBoxes(props) {
 
 TourBoxes.propTypes = {
   selectTour: PropTypes.func.isRequired,
-  stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
+  stories: PropTypes.shape.isRequired,
+  storyOrder: PropTypes.arrayOf.isRequired,
 };
 
 export default TourBoxes;

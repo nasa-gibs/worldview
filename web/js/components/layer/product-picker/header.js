@@ -231,17 +231,17 @@ class ProductPickerHeader extends React.Component {
 }
 
 ProductPickerHeader.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.shape,
   categoryType: PropTypes.string,
-  filters: PropTypes.array,
+  filters: PropTypes.arrayOf,
   isMobile: PropTypes.bool,
   layerCount: PropTypes.number,
   mode: PropTypes.string,
-  results: PropTypes.array,
+  results: PropTypes.arrayOf,
   saveSearchState: PropTypes.func,
-  searchConfig: PropTypes.object,
+  searchConfig: PropTypes.shape,
   setSearchTerm: PropTypes.func,
-  selectedLayer: PropTypes.object,
+  selectedLayer: PropTypes.shape,
   selectedProjection: PropTypes.string,
   searchTerm: PropTypes.string,
   showMobileFacets: PropTypes.bool,
