@@ -56,6 +56,7 @@ function MobileAnimationWidget (props) {
     } if (isMobileTablet || screenWidth <= breakpoints.small) {
       return 'tablet';
     }
+    return undefined;
   };
 
   const mobileID = getMobileIDs();

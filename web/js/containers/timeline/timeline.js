@@ -970,7 +970,7 @@ class Timeline extends React.Component {
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
-          setTimeout(waitForSafeUpdate, 1000);
+          return setTimeout(waitForSafeUpdate, 1000);
         }());
       });
     };

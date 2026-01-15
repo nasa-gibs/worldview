@@ -152,14 +152,14 @@ function MapUI(props) {
           duration: 500,
           rotation: 0,
         });
-        return;
+        return undefined;
       }
       case REFRESH_ROTATE: {
         ui.selected.getView().animate({
           rotation: action.rotation,
           duration: 500,
         });
-        return;
+        return undefined;
       }
       case vectorStyleConstants.SET_SELECTED_VECTORS:
         return setVectorActions(action);
@@ -172,6 +172,7 @@ function MapUI(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   const updateVectorSelections = () => {

@@ -144,6 +144,7 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
   const renderWorldfileSelect = () => {
@@ -169,6 +170,7 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
   const crossesDatelineAlert = () => datelineMessage && (

@@ -159,6 +159,7 @@ function PaletteSelect (props) {
         activePalette === target.id,
       );
     }
+    return undefined;
   };
 
   const recommended = layer.palette.recommended || [];
@@ -180,6 +181,7 @@ function PaletteSelect (props) {
                 return item;
               }
             }
+            return undefined;
           })
         }
       </Scrollbar>

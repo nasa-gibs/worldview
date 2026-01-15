@@ -21,7 +21,7 @@ function Steps(props) {
   };
 
   useEffect(() => {
-    if (!isKioskModeActive) return;
+    if (!isKioskModeActive) return undefined;
 
     document.addEventListener('keydown', handleKeyDown);
 

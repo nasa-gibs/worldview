@@ -60,7 +60,7 @@ function DateLines(props) {
 
   useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
-      return;
+      return undefined;
     }
     map.on('movestart', () => {
       setHideLines(true);

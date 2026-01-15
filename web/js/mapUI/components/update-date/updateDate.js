@@ -130,6 +130,7 @@ function UpdateDate(props) {
       const skipTitiler = true;
       return updateDate(outOfStep, skipTitiler);
     }
+    return undefined;
   };
 
   useEffect(() => {

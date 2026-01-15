@@ -1420,7 +1420,7 @@ class TimelineAxis extends Component {
         const xmlDoc = parser.parseFromString(event.data, 'text/xml');
         const domains = xmlDoc.querySelector('Domain')?.textContent;
         if (!domains) worker.terminate();
-        worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
+        return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
       };
       worker.onerror = () => worker.terminate();
       let startDate = new Date(def.startDate);

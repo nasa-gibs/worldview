@@ -166,6 +166,7 @@ class VectorStyleSelect extends React.Component {
                 const item = this.customLegend(styleLayerObject);
                 return item;
               }
+              return false;
             })
           }
         </Scrollbar>

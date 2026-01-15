@@ -56,6 +56,7 @@ export default function Line (props) {
       toggleTextActive(false);
     }
     if (overlay !== '') return overlay.setPosition([lineX, lineY]);
+    return undefined;
   });
 
   const mouseOver = () => {

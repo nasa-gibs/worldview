@@ -63,6 +63,7 @@ function TileMeasurement({ ui }) {
         return bestDates[layer.id].date;
       }
     }
+    return undefined;
   }
 
   // #4 Loop through layers and dates to find the first date that satisfies full imagery thresholds
@@ -233,7 +234,7 @@ function TileMeasurement({ ui }) {
       if (!fullImageryDate || bestDate === fullImageryDate) {
         updateDate(bestDate, layerPeriod);
         verifyTilesAndHandleErrors();
-        return;
+        return undefined;
       }
 
       // Format date based on period and dispatch redux action
@@ -243,6 +244,7 @@ function TileMeasurement({ ui }) {
     } catch (error) {
       console.error('Error calculating measurements:', error);
     }
+    return undefined;
   };
 
   useEffect(() => {

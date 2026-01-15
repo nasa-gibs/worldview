@@ -137,6 +137,7 @@ const useLookup = function(layerId, palettesObj, state) {
     } else if (palette.legend.colors.length > 1) {
       use = true;
     }
+    return undefined;
   });
   return use;
 };
@@ -301,6 +302,7 @@ export function findIndex(layerId, value, index, groupStr, state) {
       result = index;
       return false;
     }
+    return true;
   });
   return result;
 }

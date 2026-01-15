@@ -1128,6 +1128,7 @@ export default function mapLayerBuilder(config, cache, store) {
               url.replace('/VectorTileServer', '/VectorTileServer/'),
             );
           }
+          return undefined;
         },
       });
       await applyBackground(layer, vectorStyle.url);

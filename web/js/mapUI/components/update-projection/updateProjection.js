@@ -318,7 +318,7 @@ function UpdateProjection(props) {
           if (newState.v && !newState.e && extent) {
             flyToNewExtent(extent, rotate);
           }
-        }, 200); return;
+        }, 200); return undefined;
       }
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -338,14 +338,14 @@ function UpdateProjection(props) {
         if (compareMode === 'spy') {
           return reloadLayers();
         }
-        return;
+        return undefined;
       case layerConstants.REORDER_LAYERS:
       case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         reloadLayers();
         preloadForCompareMode();
-        return;
+        return undefined;
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
         return reloadLayers();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -362,6 +362,7 @@ function UpdateProjection(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   useEffect(() => {

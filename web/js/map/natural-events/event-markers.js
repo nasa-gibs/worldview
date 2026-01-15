@@ -190,7 +190,7 @@ class EventMarkers extends React.Component {
       return collection;
     }, []);
 
-    this.setState({ markers }, () => {
+    return this.setState({ markers }, () => {
       map.getView().changed();
       map.renderSync(); // Marker position will be off until this is called
     });

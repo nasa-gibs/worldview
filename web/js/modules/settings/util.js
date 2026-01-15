@@ -34,6 +34,7 @@ export function unitConvert(value, initialUnit, targetUnit) {
     if (targetUnit === 'Celsius') return new Kelvin(value).toCelcius().value;
     if (targetUnit === 'Fahrenheit') return new Kelvin(value).toFahrenheit().value;
   }
+  return undefined;
 }
 
 export function checkTemperatureUnitConversion(units, globalTemperatureUnit) {
