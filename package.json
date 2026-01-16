@@ -138,7 +138,7 @@
     "shelljs": "^0.10.0",
     "showdown": "^2.1.0",
     "stylelint": "^16.26.0",
-    "stylelint-config-standard-scss": "^16.0.0",
+    "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-high-performance-animation": "^1.11.0",
     "tar": "^7.5.2",
     "terser-webpack-plugin": "^5.3.16",
