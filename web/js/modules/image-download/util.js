@@ -787,6 +787,17 @@ async function waitForRenderComplete(map) {
   });
 }
 
+// Classnames to ignore for rendering in snapshot
+const classesToIgnore = [
+  'wv-map-scale-imperial',
+  'wv-map-scale-metric',
+];
+
+// Helper function for which elements to ignore for snapshot rendering
+function ignoreElementsFunc(element) {
+  return classesToIgnore.some((className) => element.classList.contains(className));
+}
+
 /**
  * Create a snapshot of the map with the given options
  * @param {Object} options - Snapshot configuration options
@@ -873,6 +884,7 @@ export async function snapshot(options) {
   view.setResolution(scaledResolution);
 
   await waitForRenderComplete(map);
+  await new Promise((r) => setTimeout(r, 250)); // Allows time for tracks to re-adjust position/size
 
   const topLeft = olExtent.getTopLeft(extent);
   const bottomLeft = olExtent.getBottomLeft(extent);
@@ -916,7 +928,7 @@ export async function snapshot(options) {
     logging: false,
     imageTimeout: 0,
     removeContainer: true,
-    ignoreElements: (element) => element.classList.contains('ol-overlaycontainer-stopevent'), // this is super finicky, maybe prep the mapElement by hiding elements using css,
+    ignoreElements: ignoreElementsFunc, // this is super finicky, maybe prep the mapElement by hiding elements using css,
   });
 
   const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
