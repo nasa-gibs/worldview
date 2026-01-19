@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
 import {
@@ -10,11 +11,13 @@ import {
   snapshot,
 } from '../../modules/image-download/util';
 import SelectionList from '../util/selector';
+import { openCustomContent } from '../../modules/modal/actions';
 import ResTable from './grid';
 import AlertUtil from '../util/alert';
 import LatLongSelect from './lat-long-inputs';
 import GlobalSelectCheckbox from './global-select';
 import WaitOverlay from './wait';
+import SnapshotError from './snapshot-error';
 
 const RESOLUTION_KEY = {
   0.075: '7.5cm',
@@ -51,6 +54,7 @@ function ImageDownloadPanel(props) {
     geoLatLong,
     onLatLongChange,
     boundaries,
+    openSnapshotErrorModal,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -112,6 +116,7 @@ function ImageDownloadPanel(props) {
       abortSignal: abortController.signal,
       filename: `snapshot-${date.toISOString()}`,
       projection,
+      onerror: openSnapshotErrorModal,
     };
 
     const timeout = setTimeout(onCancelSnapshot, 180_000);
@@ -283,6 +288,20 @@ function ImageDownloadPanel(props) {
   );
 }
 
+const mapDispatchToProps = (dispatch) => ({
+  openSnapshotErrorModal: () => {
+    dispatch(
+      openCustomContent('SNAPSHOT_ERROR_MODAL', {
+        headerText: 'Snapshot Error',
+        backdrop: false,
+        bodyComponent: SnapshotError,
+        wrapClassName: 'unclickable-behind-modal',
+        modalClassName: 'snapshot-error',
+      }),
+    );
+  },
+});
+
 ImageDownloadPanel.defaultProps = {
   fileType: 'image/jpeg',
   fileTypeOptions: true,
@@ -292,6 +311,11 @@ ImageDownloadPanel.defaultProps = {
   secondLabel: 'Format',
   worldFileOptions: true,
 };
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(ImageDownloadPanel);
 
 ImageDownloadPanel.propTypes = {
   datelineMessage: PropTypes.string,
@@ -316,6 +340,5 @@ ImageDownloadPanel.propTypes = {
   geoLatLong: PropTypes.array,
   onLatLongChange: PropTypes.func,
   boundaries: PropTypes.array,
+  openSnapshotErrorModal: PropTypes.func,
 };
-
-export default ImageDownloadPanel;
