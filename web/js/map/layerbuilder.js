@@ -394,7 +394,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
 
-     const layerTile = new OlLayerTile({
+    const layerTile = new OlLayerTile({
       preload: 0,
       source: tileSource,
     });
