@@ -79,7 +79,7 @@ class AxisHoverLine extends PureComponent {
 }
 
 AxisHoverLine.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.arrayOf,
   axisWidth: PropTypes.number,
   hoverLinePosition: PropTypes.number,
   isAnimationDraggerDragging: PropTypes.bool,

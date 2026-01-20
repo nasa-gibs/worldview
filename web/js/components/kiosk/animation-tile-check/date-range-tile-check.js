@@ -255,10 +255,10 @@ function DateRangeTileCheck(props) {
 }
 
 DateRangeTileCheck.propTypes = {
-  proj: PropTypes.object,
-  config: PropTypes.object,
-  activeLayers: PropTypes.array,
-  frameDates: PropTypes.array,
+  proj: PropTypes.shape,
+  config: PropTypes.shape,
+  activeLayers: PropTypes.arrayOf,
+  frameDates: PropTypes.arrayOf,
   zoom: PropTypes.number,
 };
 

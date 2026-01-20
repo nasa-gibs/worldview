@@ -464,23 +464,23 @@ class PlayQueue extends React.Component {
 }
 
 PlayQueue.propTypes = {
-  endDate: PropTypes.object.isRequired,
+  endDate: PropTypes.shape.isRequired,
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   selectDate: PropTypes.func.isRequired,
   speed: PropTypes.number.isRequired,
-  startDate: PropTypes.object.isRequired,
+  startDate: PropTypes.shape.isRequired,
   togglePlaying: PropTypes.func.isRequired,
-  currentDate: PropTypes.object,
+  currentDate: PropTypes.shape,
   delta: PropTypes.number,
   interval: PropTypes.string,
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
-  snappedCurrentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.shape,
   isKioskModeActive: PropTypes.bool,
-  map: PropTypes.object,
+  map: PropTypes.shape,
 };
 
 export default PlayQueue;

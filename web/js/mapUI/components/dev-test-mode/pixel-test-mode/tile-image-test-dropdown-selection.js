@@ -35,7 +35,7 @@ function TileImageTestModeDropdown({ activeLayers, layerSelection, setLayerSelec
 export default TileImageTestModeDropdown;
 
 TileImageTestModeDropdown.propTypes = {
-  activeLayers: PropTypes.array,
-  layerSelection: PropTypes.object,
+  activeLayers: PropTypes.arrayOf,
+  layerSelection: PropTypes.shape,
   setLayerSelection: PropTypes.func,
 };

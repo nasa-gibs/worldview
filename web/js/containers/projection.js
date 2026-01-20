@@ -111,6 +111,6 @@ ProjectionList.propTypes = {
   onCloseModal: PropTypes.func,
   isMobile: PropTypes.bool,
   projection: PropTypes.string,
-  projectionArray: PropTypes.array,
+  projectionArray: PropTypes.arrayOf,
   updateProjection: PropTypes.func,
 };

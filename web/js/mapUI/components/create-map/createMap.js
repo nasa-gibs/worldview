@@ -266,7 +266,7 @@ export default connect(
 )(CreateMap);
 
 CreateMap.propTypes = {
-  config: PropTypes.object,
+  config: PropTypes.shape,
   isMapSet: PropTypes.bool,
   preloadForCompareMode: PropTypes.func,
   setGranuleFootprints: PropTypes.func,
@@ -274,7 +274,7 @@ CreateMap.propTypes = {
   setUI: PropTypes.func,
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
-  ui: PropTypes.object,
+  ui: PropTypes.shape,
   updateExtent: PropTypes.func,
   updateMapUI: PropTypes.func,
   updateRenderedState: PropTypes.func,

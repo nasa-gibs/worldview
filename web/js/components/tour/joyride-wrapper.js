@@ -237,9 +237,9 @@ export default function JoyrideWrapper ({
 
 JoyrideWrapper.propTypes = {
   currentTourStep: PropTypes.number,
-  map: PropTypes.object,
+  map: PropTypes.shape,
   proj: PropTypes.string,
   tourComplete: PropTypes.bool,
-  tourSteps: PropTypes.array,
+  tourSteps: PropTypes.arrayOf,
   resetProductPicker: PropTypes.func,
 };

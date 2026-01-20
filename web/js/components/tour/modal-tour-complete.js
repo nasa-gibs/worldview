@@ -79,7 +79,7 @@ function ModalComplete(props) {
 }
 
 ModalComplete.propTypes = {
-  currentStory: PropTypes.object.isRequired,
+  currentStory: PropTypes.shape.isRequired,
   endTour: PropTypes.func.isRequired,
   modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,

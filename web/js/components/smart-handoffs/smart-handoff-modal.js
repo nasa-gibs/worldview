@@ -171,8 +171,8 @@ SmartHandoffModal.propTypes = {
   continueToEDS: PropTypes.func,
   displayDate: PropTypes.string,
   cmrSearchDetailURL: PropTypes.string,
-  selectedCollection: PropTypes.object,
-  selectedLayer: PropTypes.object,
+  selectedCollection: PropTypes.shape,
+  selectedLayer: PropTypes.shape,
 };
 
 export default connect(mapStateToProps)(SmartHandoffModal);

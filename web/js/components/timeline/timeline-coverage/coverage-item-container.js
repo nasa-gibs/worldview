@@ -206,7 +206,7 @@ CoverageItemContainer.propTypes = {
   getMaxEndDate: PropTypes.func,
   getRangeDateEndWithAddedInterval: PropTypes.func,
   needDateRangeBuilt: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.shape,
   layerPeriod: PropTypes.string,
   positionTransformX: PropTypes.number,
 };

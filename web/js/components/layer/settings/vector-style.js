@@ -180,9 +180,9 @@ VectorStyleSelect.propTypes = {
   clearStyle: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
-  layer: PropTypes.object,
+  layer: PropTypes.shape,
   setStyle: PropTypes.func,
-  vectorStyles: PropTypes.object,
+  vectorStyles: PropTypes.shape,
 };
 
 export default VectorStyleSelect;

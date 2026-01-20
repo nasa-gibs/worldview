@@ -460,8 +460,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 LocationSearchModal.propTypes = {
   clearSuggestions: PropTypes.func,
-  coordinates: PropTypes.array,
-  coordinatesPending: PropTypes.array,
+  coordinates: PropTypes.arrayOf,
+  coordinatesPending: PropTypes.arrayOf,
   locationSearchMobileModalOpen: PropTypes.bool,
   getSuggestions: PropTypes.func,
   inputValue: PropTypes.string,
@@ -473,8 +473,8 @@ LocationSearchModal.propTypes = {
   reverseGeocode: PropTypes.func,
   setPlaceMarker: PropTypes.func,
   setSuggestion: PropTypes.func,
-  suggestions: PropTypes.array,
-  suggestedPlace: PropTypes.array,
+  suggestions: PropTypes.arrayOf,
+  suggestedPlace: PropTypes.arrayOf,
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,

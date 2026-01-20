@@ -96,7 +96,7 @@ function KioskAnimations({ ui }) {
 }
 
 KioskAnimations.propTypes = {
-  ui: PropTypes.object,
+  ui: PropTypes.shape,
 };
 
 export default KioskAnimations;

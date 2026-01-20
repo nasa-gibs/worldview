@@ -84,13 +84,13 @@ class TourBox extends React.Component {
 TourBox.propTypes = {
   index: PropTypes.number.isRequired,
   selectTour: PropTypes.func.isRequired,
-  story: PropTypes.object.isRequired,
+  story: PropTypes.shape.isRequired,
   storyId: PropTypes.string.isRequired,
   backgroundImage: PropTypes.string,
   backgroundImageHover: PropTypes.string,
   className: PropTypes.string,
   description: PropTypes.string,
-  storyOrder: PropTypes.array,
+  storyOrder: PropTypes.arrayOf,
   title: PropTypes.string,
 };
 

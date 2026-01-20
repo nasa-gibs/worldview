@@ -152,7 +152,6 @@
             }
           }
         ],
-        "react/forbid-prop-types": "off",                  // 411 errors across 139 files
         "react/require-default-props": "off",              // 1644 errors across > 80 files
         "class-methods-use-this": "warn",                  // 15 errors across 13 files
         "react/no-unused-class-component-methods": "error",

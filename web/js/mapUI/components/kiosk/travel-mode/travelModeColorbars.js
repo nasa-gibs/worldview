@@ -98,6 +98,6 @@ function TravelModeColorbars() {
 export default TravelModeColorbars;
 
 ColorBarRow.propTypes = {
-  legend: PropTypes.object,
+  legend: PropTypes.shape,
   index: PropTypes.number,
 };

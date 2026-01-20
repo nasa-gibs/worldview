@@ -134,7 +134,7 @@ class TileRect extends PureComponent {
 TileRect.propTypes = {
   gridWidth: PropTypes.number,
   index: PropTypes.number,
-  item: PropTypes.object,
+  item: PropTypes.shape,
   showHover: PropTypes.func,
   timeScale: PropTypes.string,
 };

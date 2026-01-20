@@ -140,10 +140,10 @@ export default class GifResults extends Component {
 }
 
 GifResults.propTypes = {
-  boundaries: PropTypes.object,
-  closeBtn: PropTypes.object,
+  boundaries: PropTypes.shape,
+  closeBtn: PropTypes.shape,
   endDate: PropTypes.string,
-  gifObject: PropTypes.object,
+  gifObject: PropTypes.shape,
   increment: PropTypes.string,
   onClose: PropTypes.func,
   screenHeight: PropTypes.number,

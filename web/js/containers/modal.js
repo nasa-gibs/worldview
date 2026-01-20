@@ -344,8 +344,8 @@ ModalContainer.defaultProps = {
 };
 
 ModalContainer.propTypes = {
-  bodyTemplate: PropTypes.object,
-  customProps: PropTypes.object,
+  bodyTemplate: PropTypes.shape,
+  customProps: PropTypes.shape,
   id: PropTypes.string,
   isCustom: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,

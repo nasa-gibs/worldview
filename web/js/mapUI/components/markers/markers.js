@@ -205,17 +205,17 @@ export default React.memo(
 );
 
 Markers.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
-  config: PropTypes.object,
-  coordinates: PropTypes.array,
+  action: PropTypes.shape,
+  activeLayers: PropTypes.arrayOf,
+  config: PropTypes.shape,
+  coordinates: PropTypes.arrayOf,
   isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
-  proj: PropTypes.object,
+  proj: PropTypes.shape,
   removeMarker: PropTypes.func,
-  selectedMap: PropTypes.object,
-  selectedMapMarkers: PropTypes.array,
+  selectedMap: PropTypes.shape,
+  selectedMapMarkers: PropTypes.arrayOf,
   setGeocodeResults: PropTypes.func,
-  ui: PropTypes.object,
+  ui: PropTypes.shape,
 };
 

@@ -358,14 +358,14 @@ function OlMeasureTool (props) {
 }
 
 OlMeasureTool.propTypes = {
-  map: PropTypes.object,
-  olMap: PropTypes.object,
+  map: PropTypes.shape,
+  olMap: PropTypes.shape,
   crs: PropTypes.string,
   toggleMeasureActive: PropTypes.func,
   unitOfMeasure: PropTypes.string,
   updateMeasurements: PropTypes.func,
-  projections: PropTypes.array,
-  proj: PropTypes.object,
+  projections: PropTypes.arrayOf,
+  proj: PropTypes.shape,
 };
 
 const mapDispatchToProps = (dispatch) => ({

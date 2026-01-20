@@ -129,7 +129,7 @@ function CombineUI(props) {
 export default CombineUI;
 
 CombineUI.propTypes = {
-  config: PropTypes.object,
-  models: PropTypes.object,
-  store: PropTypes.object,
+  config: PropTypes.shape,
+  models: PropTypes.shape,
+  store: PropTypes.shape,
 };

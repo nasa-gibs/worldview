@@ -27,8 +27,8 @@ function KioskAnimationWidget(props) {
 }
 
 KioskAnimationWidget.propTypes = {
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
+  startDate: PropTypes.shape,
+  endDate: PropTypes.shape,
   hasSubdailyLayers: PropTypes.bool,
 };
 

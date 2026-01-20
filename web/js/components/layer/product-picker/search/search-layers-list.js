@@ -183,9 +183,9 @@ class SearchLayerList extends React.Component {
 SearchLayerList.propTypes = {
   clearSingleRecentLayer: PropTypes.func,
   isMobile: PropTypes.bool,
-  results: PropTypes.array,
+  results: PropTypes.arrayOf,
   recentLayerMode: PropTypes.bool,
-  selectedLayer: PropTypes.object,
+  selectedLayer: PropTypes.shape,
   selectLayer: PropTypes.func,
 };
 

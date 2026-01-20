@@ -299,9 +299,9 @@ class GranuleDateList extends PureComponent {
 }
 
 GranuleDateList.propTypes = {
-  def: PropTypes.object,
+  def: PropTypes.shape,
   granuleCount: PropTypes.number,
-  granuleDates: PropTypes.array,
+  granuleDates: PropTypes.arrayOf,
   resetGranuleLayerDates: PropTypes.func,
   granulePlatform: PropTypes.string,
   screenHeight: PropTypes.number,

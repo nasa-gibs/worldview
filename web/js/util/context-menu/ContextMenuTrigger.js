@@ -11,7 +11,7 @@ export default class ContextMenuTrigger extends Component {
     static propTypes = {
         id: PropTypes.string.isRequired,
         children: PropTypes.node.isRequired,
-        attributes: PropTypes.object,
+        attributes: PropTypes.shape,
         collect: PropTypes.func,
         disable: PropTypes.bool,
         holdToDisplay: PropTypes.number,

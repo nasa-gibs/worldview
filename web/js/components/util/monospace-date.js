@@ -10,6 +10,6 @@ export default function MonospaceDate({ date, children }) {
   );
 }
 MonospaceDate.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.shape,
   date: PropTypes.string,
 };

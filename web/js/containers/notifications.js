@@ -57,7 +57,7 @@ export default connect(
 )(Notifications);
 
 Notifications.propTypes = {
-  object: PropTypes.object,
+  object: PropTypes.shape,
   numberOutagesUnseen: PropTypes.number,
   kioskModeEnabled: PropTypes.bool,
 };

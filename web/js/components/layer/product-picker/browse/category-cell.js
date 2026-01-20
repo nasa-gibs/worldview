@@ -104,10 +104,10 @@ function CategoryCell(props) {
 }
 
 CategoryCell.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.shape,
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
+  measurementConfig: PropTypes.shape,
 };
 
 export default CategoryCell;

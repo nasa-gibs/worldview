@@ -103,5 +103,5 @@ export default function DateRanges ({ layer }) {
 }
 
 DateRanges.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.shape,
 };

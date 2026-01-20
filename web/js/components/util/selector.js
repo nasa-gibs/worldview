@@ -34,7 +34,7 @@ export default function Selector (props) {
 Selector.propTypes = {
   id: PropTypes.string,
   onChange: PropTypes.func,
-  optionArray: PropTypes.object,
+  optionArray: PropTypes.shape,
   optionName: PropTypes.string,
   value: PropTypes.string,
 };

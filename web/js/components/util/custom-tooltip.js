@@ -96,7 +96,7 @@ function CustomTooltip (props) {
 }
 
 CustomTooltip.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.shape,
   id: PropTypes.string,
   text: PropTypes.string,
   hideTooltip: PropTypes.bool,

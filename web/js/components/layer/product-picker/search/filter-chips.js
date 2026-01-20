@@ -41,7 +41,7 @@ export default function FilterChips(props) {
 }
 
 FilterChips.propTypes = {
-  filters: PropTypes.array,
+  filters: PropTypes.arrayOf,
   removeFilter: PropTypes.func,
-  facetConfig: PropTypes.array,
+  facetConfig: PropTypes.arrayOf,
 };

@@ -260,5 +260,5 @@ function TileMeasurement({ ui }) {
 export default TileMeasurement;
 
 TileMeasurement.propTypes = {
-  ui: PropTypes.object,
+  ui: PropTypes.shape,
 };

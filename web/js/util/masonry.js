@@ -12,8 +12,8 @@ const propTypes = {
   disableImagesLoaded: PropTypes.bool,
   onImagesLoaded: PropTypes.func,
   updateOnEachImageLoad: PropTypes.bool,
-  options: PropTypes.object,
-  imagesLoadedOptions: PropTypes.object,
+  options: PropTypes.shape,
+  imagesLoadedOptions: PropTypes.shape,
   elementType: PropTypes.string,
   onLayoutComplete: PropTypes.func,
   onRemoveComplete: PropTypes.func

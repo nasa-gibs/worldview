@@ -217,13 +217,13 @@ function BrowseLayers (props) {
 }
 
 BrowseLayers.propTypes = {
-  categoryTabNames: PropTypes.array,
+  categoryTabNames: PropTypes.arrayOf,
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
   isMobile: PropTypes.bool,
   selectedCategoryName: PropTypes.string,
   mode: PropTypes.string,
-  recentLayers: PropTypes.array,
+  recentLayers: PropTypes.arrayOf,
   selectCategoryType: PropTypes.func,
   selectedProjection: PropTypes.string,
   toggleMeasurementsTab: PropTypes.func,

@@ -51,10 +51,10 @@ export default React.memo(
 );
 
 RemoveLayer.propTypes = {
-  action: PropTypes.any,
-  compare: PropTypes.object,
+  action: PropTypes.shape,
+  compare: PropTypes.shape,
   findLayer: PropTypes.func,
-  map: PropTypes.object,
-  ui: PropTypes.object,
+  map: PropTypes.shape,
+  ui: PropTypes.shape,
   updateLayerVisibilities: PropTypes.func,
 };

@@ -93,11 +93,11 @@ MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.shape,
   layerNotices: PropTypes.string,
   measurementId: PropTypes.string,
   removeLayer: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.shape,
   title: PropTypes.string,
 };
 

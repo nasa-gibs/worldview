@@ -590,9 +590,9 @@ export default connect(
 )(toolbarContainer);
 
 toolbarContainer.propTypes = {
-  activePalettes: PropTypes.object,
+  activePalettes: PropTypes.shape,
   hasNonDownloadableLayer: PropTypes.bool,
-  config: PropTypes.object,
+  config: PropTypes.shape,
   faSize: PropTypes.string,
   hasCustomPalette: PropTypes.bool,
   isAboutOpen: PropTypes.bool,
@@ -618,5 +618,5 @@ toolbarContainer.propTypes = {
   toggleDialogVisible: PropTypes.func,
   toggleDistractionFreeModeAction: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
-  visibleLayersForProj: PropTypes.array,
+  visibleLayersForProj: PropTypes.arrayOf,
 };

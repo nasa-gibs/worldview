@@ -84,13 +84,13 @@ export default connect(
 )(MouseMoveEvents);
 
 MouseMoveEvents.propTypes = {
-  compareMapUi: PropTypes.object,
+  compareMapUi: PropTypes.shape,
   isCoordinateSearchActive: PropTypes.bool,
   isEventsTabActive: PropTypes.bool,
   isMapAnimating: PropTypes.bool,
   isMeasureActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   sidebarActiveTab: PropTypes.string,
-  map: PropTypes.object,
-  ui: PropTypes.object,
+  map: PropTypes.shape,
+  ui: PropTypes.shape,
 };
