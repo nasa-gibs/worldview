@@ -27,7 +27,6 @@ import { applyBackground, applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
-import { getGranuleTileLayerExtent } from './granule/util';
 import {
   createVectorUrl,
   getGeographicResolutionWMS,
@@ -339,7 +338,7 @@ export default function mapLayerBuilder(config, cache, store) {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
     } = def;
     const configSource = config.sources[source];
-    const { date, polygon, shifted } = options;
+    const { date, shifted } = options;
     const isSubdaily = period === 'subdaily';
     const isGranule = type === 'granule';
 
@@ -395,13 +394,17 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
 
-    const granuleExtent = polygon && getGranuleTileLayerExtent(polygon, extent);
-
-    return new OlLayerTile({
-      extent: polygon ? granuleExtent : extent,
+     const layerTile = new OlLayerTile({
       preload: 0,
       source: tileSource,
     });
+
+    // Because granule footprints from CMR are imprecise, setting an extent on granule
+    // layers can crop valid imagery. So extents are only applied to non-granule layers.
+    if (!isGranule) {
+      layerTile.extent = extent;
+    }
+    return layerTile;
   };
 
   const { getGranuleLayer } = granuleLayerBuilder(cache, store, createLayerWMTS);
