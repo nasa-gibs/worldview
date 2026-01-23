@@ -26,6 +26,12 @@ import CoverageItemList from './coverage-item-list';
  */
 
 class TimelineLayerCoveragePanel extends Component {
+  static stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -295,12 +301,6 @@ class TimelineLayerCoveragePanel extends Component {
       });
     }
     return undefined;
-  };
-
-  stopPropagation = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
   };
 
   /**
