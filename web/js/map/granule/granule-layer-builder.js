@@ -119,7 +119,8 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
   */
-  const createGranuleTileLayers = (granules, def, attributes) => {
+  const createGranuleTileLayers = (granules, def, attr) => {
+    const attributes = attr;
     const { period, id } = def;
     const { group, proj } = attributes;
 

@@ -45,7 +45,8 @@ const errors = [];
  * @param {*} config
  * @param {*} legacyState
  */
-function render (config, legacyState) {
+function render (c, legacyState) {
+  const config = c;
   config.parameters = parameters;
   debugConfig(config);
 
@@ -102,7 +103,8 @@ window.onload = () => {
       }
       return response.json();
     })
-    .then((config) => {
+    .then((c) => {
+      const config = c;
       // Perform check to see if app was in the midst of a tour
       const hasTour = lodashGet(config, `stories[${parameters.tr}]`);
       if (hasTour) {
