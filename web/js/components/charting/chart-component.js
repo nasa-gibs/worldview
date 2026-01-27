@@ -271,17 +271,6 @@ function ChartComponent(props) {
     return chartLinesArr;
   }
 
-  function extentToRing(extent) {
-    const [minX, minY, maxX, maxY] = extent;
-    return [
-      [minX, minY],
-      [maxX, minY],
-      [maxX, maxY],
-      [minX, maxY],
-      [minX, minY],
-    ];
-  }
-
   /**
    * Processes each date in the chart data, computes & returns the averages as "quick statistics"
    * @param {Object} chartData
@@ -633,6 +622,7 @@ ChartComponent.propTypes = {
   mapView: PropTypes.shape,
   createLayer: PropTypes.func,
   overviewMapLayerDef: PropTypes.shape,
+  layers: PropTypes.shape,
 };
 
 CustomXAxisTick.propTypes = {
