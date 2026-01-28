@@ -509,8 +509,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 TimelineLayerCoveragePanel.propTypes = {
-  activeLayers: PropTypes.arrayOf,
-  appNow: PropTypes.shape,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

@@ -90,13 +90,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 ChartingDateSelector.propTypes = {
-  timeSpanStartDate: PropTypes.shape,
-  timeSpanEndDate: PropTypes.shape,
-  layerEndDate: PropTypes.shape,
-  layerStartDate: PropTypes.shape,
+  timeSpanStartDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  timeSpanEndDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layerEndDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layerStartDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
-  date: PropTypes.shape,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   timeSpanSelection: PropTypes.string,
 };
 

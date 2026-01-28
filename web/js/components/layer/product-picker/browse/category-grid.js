@@ -84,11 +84,11 @@ function mapStateToProps(state) {
 }
 
 CategoryGrid.propTypes = {
-  categories: PropTypes.arrayOf,
+  categories: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
   showMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.shape,
+  measurementConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default connect(
