@@ -181,7 +181,7 @@ CoverageLine.propTypes = {
   index: PropTypes.string,
   layerPeriod: PropTypes.string,
   lineType: PropTypes.string,
-  options: PropTypes.arrayOf,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   positionTransformX: PropTypes.number,
   startDate: PropTypes.string,
 };

@@ -180,8 +180,8 @@ function MobileAnimationWidget (props) {
 }
 
 MobileAnimationWidget.propTypes = {
-  breakpoints: PropTypes.shape,
-  endDate: PropTypes.shape,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasSubdailyLayers: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isLandscape: PropTypes.bool,
@@ -191,8 +191,8 @@ MobileAnimationWidget.propTypes = {
   isPlaying: PropTypes.bool,
   isPortrait: PropTypes.bool,
   looping: PropTypes.bool,
-  maxDate: PropTypes.shape,
-  minDate: PropTypes.shape,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onLoop: PropTypes.func,
   onSlide: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
@@ -204,7 +204,7 @@ MobileAnimationWidget.propTypes = {
   setSpeed: PropTypes.func,
   sliderLabel: PropTypes.string,
   speed: PropTypes.number,
-  startDate: PropTypes.shape,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
   toggleCollapse: PropTypes.func,
 };

@@ -178,12 +178,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 RightClickMenu.propTypes = {
-  map: PropTypes.shape,
-  proj: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
-  allMeasurements: PropTypes.shape,
+  allMeasurements: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   measurementIsActive: PropTypes.bool,
   isMobile: PropTypes.bool,
 };

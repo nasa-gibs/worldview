@@ -358,14 +358,14 @@ function OlMeasureTool (props) {
 }
 
 OlMeasureTool.propTypes = {
-  map: PropTypes.shape,
-  olMap: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
   toggleMeasureActive: PropTypes.func,
   unitOfMeasure: PropTypes.string,
   updateMeasurements: PropTypes.func,
-  projections: PropTypes.arrayOf,
-  proj: PropTypes.shape,
+  projections: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 const mapDispatchToProps = (dispatch) => ({

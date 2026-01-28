@@ -11,5 +11,5 @@ export default function Debug ({ parameters }) {
 }
 
 Debug.propTypes = {
-  parameters: PropTypes.shape,
+  parameters: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

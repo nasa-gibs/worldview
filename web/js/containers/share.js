@@ -402,8 +402,8 @@ ShareLinkContainer.propTypes = {
   isMobile: PropTypes.bool,
   mock: PropTypes.string,
   requestShortLinkAction: PropTypes.func,
-  selectedDate: PropTypes.shape,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   sendFeedback: PropTypes.func,
-  shortLink: PropTypes.shape,
+  shortLink: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   urlShortening: PropTypes.bool,
 };

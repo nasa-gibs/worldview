@@ -141,5 +141,5 @@ VectorDialog.propTypes = {
   dialogKey: PropTypes.number,
   modalHeight: PropTypes.number,
   toggleWithClose: PropTypes.func,
-  vectorMetaObject: PropTypes.shape,
+  vectorMetaObject: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

@@ -173,5 +173,5 @@ export default function ImagerySearch({ layer }) {
 }
 
 ImagerySearch.propTypes = {
-  layer: PropTypes.shape,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

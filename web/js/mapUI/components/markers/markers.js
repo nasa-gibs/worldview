@@ -205,17 +205,17 @@ export default React.memo(
 );
 
 Markers.propTypes = {
-  action: PropTypes.shape,
-  activeLayers: PropTypes.arrayOf,
-  config: PropTypes.shape,
-  coordinates: PropTypes.arrayOf,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
-  proj: PropTypes.shape,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
-  selectedMap: PropTypes.shape,
-  selectedMapMarkers: PropTypes.arrayOf,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedMapMarkers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   setGeocodeResults: PropTypes.func,
-  ui: PropTypes.shape,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 

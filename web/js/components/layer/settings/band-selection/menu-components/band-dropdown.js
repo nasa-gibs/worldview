@@ -46,8 +46,8 @@ export default function BandsDropdown(props) {
 
 BandsDropdown.propTypes = {
   channel: PropTypes.string,
-  bandSelection: PropTypes.shape,
+  bandSelection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setBandSelection: PropTypes.func,
-  layer: PropTypes.shape,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setSelectedPreset: PropTypes.func,
 };

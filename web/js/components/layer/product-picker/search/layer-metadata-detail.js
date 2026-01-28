@@ -90,7 +90,7 @@ LayerMetadataDetail.propTypes = {
   addLayer: PropTypes.func,
   categoryType: PropTypes.string,
   isActive: PropTypes.bool,
-  layer: PropTypes.shape,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   measurementDescriptionPath: PropTypes.string,
   removeLayer: PropTypes.func,
   selectedProjection: PropTypes.string,

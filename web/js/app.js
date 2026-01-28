@@ -267,12 +267,12 @@ App.propTypes = {
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   notificationClick: PropTypes.func,
-  notifications: PropTypes.shape,
+  notifications: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOutagesUnseen: PropTypes.number,
-  parameters: PropTypes.shape,
+  parameters: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setScreenInfoAction: PropTypes.func,
   hideNotificationsPopup: PropTypes.bool,
-  config: PropTypes.shape,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 App.defaultProps = {

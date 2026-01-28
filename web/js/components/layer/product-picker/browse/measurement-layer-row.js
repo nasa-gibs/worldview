@@ -93,11 +93,11 @@ MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layer: PropTypes.shape,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layerNotices: PropTypes.string,
   measurementId: PropTypes.string,
   removeLayer: PropTypes.func,
-  selectedDate: PropTypes.shape,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   title: PropTypes.string,
 };
 

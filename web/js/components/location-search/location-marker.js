@@ -58,9 +58,9 @@ export default function LocationMarker ({
 }
 
 LocationMarker.propTypes = {
-  reverseGeocodeResults: PropTypes.shape,
+  reverseGeocodeResults: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
-  coordinatesObject: PropTypes.shape,
+  coordinatesObject: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
   dialogVisible: PropTypes.bool,
 };

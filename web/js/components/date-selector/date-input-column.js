@@ -342,7 +342,7 @@ class DateInputColumn extends Component {
 }
 
 DateInputColumn.propTypes = {
-  date: PropTypes.shape,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fontSize: PropTypes.number,
   idSuffix: PropTypes.string,
   isKioskModeActive: PropTypes.bool,
@@ -350,8 +350,8 @@ DateInputColumn.propTypes = {
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  maxDate: PropTypes.shape,
-  minDate: PropTypes.shape,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onFocus: PropTypes.func,
   subDailyMode: PropTypes.bool,
   type: PropTypes.string,
