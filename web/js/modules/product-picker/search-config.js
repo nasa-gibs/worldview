@@ -138,7 +138,8 @@ function updateCoverageFilter (filters, selectedDate) {
   const formattedDate = formatDisplayDate(selectedDate);
   const oldValueMatch = (value) => !value.includes(formattedDate) && !value.includes('Always');
 
-  filters.forEach((f) => {
+  filters.forEach((filter) => {
+    const f = filter;
     if (f.field !== 'coverage') return;
     f.values = f.values.map(
       (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value),

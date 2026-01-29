@@ -232,7 +232,8 @@ test('move overlay before', () => {
 });
 
 // Date Ranges
-function getDateRangesTestState(state) {
+function getDateRangesTestState(stateObj) {
+  let state = stateObj;
   const today = new Date(Date.UTC(2010, 0, 1));
   util.now = () => today;
   const layers = {
