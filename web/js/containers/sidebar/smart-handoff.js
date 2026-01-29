@@ -48,6 +48,24 @@ const STD_NRT_MAP = {
  * layer data and granule files that are available for download.
  */
 class SmartHandoff extends Component {
+  static renderLoadingSpinner() {
+    const containerStyle = {
+      padding: '30px 107px',
+    };
+
+    const spinnerStyle = {
+      height: '5rem',
+      width: '5rem',
+      margin: '40px auto',
+    };
+
+    return (
+      <div style={containerStyle}>
+        <Spinner style={spinnerStyle} color="light" />
+      </div>
+    );
+  }
+
   constructor(props) {
     super(props);
 
@@ -528,24 +546,6 @@ class SmartHandoff extends Component {
     );
   };
 
-  renderLoadingSpinner = () => {
-    const containerStyle = {
-      padding: '30px 107px',
-    };
-
-    const spinnerStyle = {
-      height: '5rem',
-      width: '5rem',
-      margin: '40px auto',
-    };
-
-    return (
-      <div style={containerStyle}>
-        <Spinner style={spinnerStyle} color="light" />
-      </div>
-    );
-  };
-
   /**
    * Default render which displays the download panel
    */
@@ -574,7 +574,7 @@ class SmartHandoff extends Component {
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (isLoading) {
-      return this.renderLoadingSpinner();
+      return SmartHandoff.renderLoadingSpinner();
     }
 
     if (!validatedLayers.length) {

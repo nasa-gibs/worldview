@@ -21,6 +21,42 @@ import {
 } from '../date-util';
 
 class TimelineAxis extends Component {
+  /**
+  * @desc get DOM coverage line
+  * @param {Object} lineCoverageOptions
+  * @param {Number} transformX
+  * @returns {Object} DOM SVG object
+  */
+  static createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) {
+    return lineCoverageOptions.map(({
+      leftOffset,
+      visible, width,
+    }, i) => (
+      <g
+        key={`matchingCoverageLine-${crypto.randomUUID()}`}
+        className="axis-matching-layer-coverage-line"
+        transform={`translate(${-transformX})`}
+        clipPath="url(#matchingCoverage)"
+      >
+        <rect
+          style={{
+            left: leftOffset,
+            visibility: visible ? 'visible' : 'hidden',
+            margin: '0 0 6px 0',
+          }}
+          rx={0}
+          ry={0}
+          width={width}
+          height={10}
+          transform={`translate(${transformX + leftOffset})`}
+          fill="rgba(0, 119, 212, 0.5)"
+          stroke="rgba(0, 69, 123, 0.8)"
+          strokeWidth={3}
+        />
+      </g>
+    ));
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -1498,40 +1534,6 @@ class TimelineAxis extends Component {
     });
   };
 
-  /**
-  * @desc get DOM coverage line
-  * @param {Object} lineCoverageOptions
-  * @param {Number} transformX
-  * @returns {Object} DOM SVG object
-  */
-  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => lineCoverageOptions.map(({
-    leftOffset,
-    visible, width,
-  }, i) => (
-    <g
-      key={`matchingCoverageLine-${crypto.randomUUID()}`}
-      className="axis-matching-layer-coverage-line"
-      transform={`translate(${-transformX})`}
-      clipPath="url(#matchingCoverage)"
-    >
-      <rect
-        style={{
-          left: leftOffset,
-          visibility: visible ? 'visible' : 'hidden',
-          margin: '0 0 6px 0',
-        }}
-        rx={0}
-        ry={0}
-        width={width}
-        height={10}
-        transform={`translate(${transformX + leftOffset})`}
-        fill="rgba(0, 119, 212, 0.5)"
-        stroke="rgba(0, 69, 123, 0.8)"
-        strokeWidth={3}
-      />
-    </g>
-  ));
-
   render() {
     const {
       axisWidth,
@@ -1622,7 +1624,7 @@ class TimelineAxis extends Component {
                   </pattern>
                 </defs>
                 {shouldDisplayMatchingCoverageLine
-                  && this.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
+                  && TimelineAxis.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
                 <Draggable
                   axis="x"
                   handle=".axis-grid-container"
