@@ -78,6 +78,6 @@ export default class VectorMetaTable extends React.Component {
 }
 VectorMetaTable.propTypes = {
   id: PropTypes.number,
-  metaArray: PropTypes.arrayOf,
+  metaArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   title: PropTypes.string,
 };

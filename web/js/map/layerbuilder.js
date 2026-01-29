@@ -406,7 +406,7 @@ export default function mapLayerBuilder(config, cache, store) {
     // Because granule footprints from CMR are imprecise, setting an extent on granule
     // layers can crop valid imagery. So extents are only applied to non-granule layers.
     if (!isGranule) {
-      layerTile.extent = extent;
+      layerTile.setExtent(extent);
     }
     return layerTile;
   };

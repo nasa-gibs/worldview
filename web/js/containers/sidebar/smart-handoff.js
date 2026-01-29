@@ -48,6 +48,24 @@ const STD_NRT_MAP = {
  * layer data and granule files that are available for download.
  */
 class SmartHandoff extends Component {
+  static renderLoadingSpinner() {
+    const containerStyle = {
+      padding: '30px 107px',
+    };
+
+    const spinnerStyle = {
+      height: '5rem',
+      width: '5rem',
+      margin: '40px auto',
+    };
+
+    return (
+      <div style={containerStyle}>
+        <Spinner style={spinnerStyle} color="light" />
+      </div>
+    );
+  }
+
   constructor(props) {
     super(props);
 
@@ -528,24 +546,6 @@ class SmartHandoff extends Component {
     );
   };
 
-  renderLoadingSpinner = () => {
-    const containerStyle = {
-      padding: '30px 107px',
-    };
-
-    const spinnerStyle = {
-      height: '5rem',
-      width: '5rem',
-      margin: '40px auto',
-    };
-
-    return (
-      <div style={containerStyle}>
-        <Spinner style={spinnerStyle} color="light" />
-      </div>
-    );
-  };
-
   /**
    * Default render which displays the download panel
    */
@@ -574,7 +574,7 @@ class SmartHandoff extends Component {
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (isLoading) {
-      return this.renderLoadingSpinner();
+      return SmartHandoff.renderLoadingSpinner();
     }
 
     if (!validatedLayers.length) {
@@ -731,30 +731,30 @@ export default connect(
 )(SmartHandoff);
 
 SmartHandoff.propTypes = {
-  availableLayers: PropTypes.arrayOf,
-  availableTools: PropTypes.arrayOf,
+  availableLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  availableTools: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   displayDate: PropTypes.string,
   isLoading: PropTypes.bool,
   isGranuleLayer: PropTypes.bool,
   endDate: PropTypes.string,
   getConceptUrl: PropTypes.func,
   getGranulesUrl: PropTypes.func,
-  granuleLayers: PropTypes.shape,
-  map: PropTypes.shape.isRequired,
-  proj: PropTypes.shape,
+  granuleLayers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fetchAvailableTools: PropTypes.func,
   requestFailed: PropTypes.bool,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   selectCollection: PropTypes.func,
   selectedDate: PropTypes.string,
-  selectedLayer: PropTypes.shape,
-  selectedCollection: PropTypes.shape,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedCollection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
   showNotAvailableModal: PropTypes.func,
   startDate: PropTypes.string,
-  validatedLayers: PropTypes.arrayOf,
-  validatedConceptIds: PropTypes.shape,
+  validatedLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  validatedConceptIds: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   validateLayersConceptIds: PropTypes.func,
 };

@@ -153,7 +153,6 @@
           }
         ],
         "react/require-default-props": "off",              // 1644 errors across > 80 files
-        "class-methods-use-this": "warn",                  // 15 errors across 13 files
         "react/no-unused-class-component-methods": "error",
         "react/no-unknown-property": "error",
         "react/jsx-no-useless-fragment": "error",
