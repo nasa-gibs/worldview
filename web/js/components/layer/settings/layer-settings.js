@@ -382,7 +382,7 @@ function mapStateToProps(state, ownProps) {
     getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
     getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
     getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
-    getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
+    getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, state),
     vectorStyles: config.vectorStyles,
   };
 }
