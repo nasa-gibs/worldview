@@ -42,11 +42,11 @@ const errors = [];
 
 /**
  *
- * @param {*} config
+ * @param {*} configObj
  * @param {*} legacyState
  */
-function render (c, legacyState) {
-  const config = c;
+function render (configObj, legacyState) {
+  const config = configObj;
   config.parameters = parameters;
   debugConfig(config);
 

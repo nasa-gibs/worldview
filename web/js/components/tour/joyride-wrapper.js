@@ -86,7 +86,7 @@ export default function JoyrideWrapper ({
 
   /**
    * Set a placeholder DOM element's position based on map coords
-   * @param {*} element
+   * @param {*} el
    * @param {*} targetCoordinates
    */
   function setPlaceholderLocation (el, targetCoordinates) {

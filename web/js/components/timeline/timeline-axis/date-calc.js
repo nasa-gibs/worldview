@@ -9,7 +9,7 @@ const limitCache = {};
 /**
  * get range of consecutive time units based on start/end dates and timescale
  *
- * @param {Object} startDate - moment date object - start of requested time range
+ * @param {Object} beginDate - moment date object - start of requested time range
  * @param {Object} endDate - moment date object - end of requested time range
  * @param {String} timeScale - timescale of time units (ex: 'day', 'month', etc.)
  * @param {startDateLimit} startDateLimit - min date within timeline range
