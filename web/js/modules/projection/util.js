@@ -23,8 +23,7 @@ export function parseProjection(str, config) {
  * @param {Object} stateFromLocation | State derived from permalink parsers
  * @param {Object} state | initial state before location POP action
  */
-export function mapLocationToProjState(parameters, stateFromLocationObj, state) {
-  let stateFromLocation = stateFromLocationObj;
+export function mapLocationToProjState(parameters, stateFromLocation, state) {
   const projId = lodashGet(stateFromLocation, 'proj.id');
   if (parameters.p) {
     const selected = lodashGet(state, `config.projections.${projId}`);

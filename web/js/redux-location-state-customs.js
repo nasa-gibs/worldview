@@ -41,8 +41,7 @@ export function stateToParams(initialState, currentState, location) {
   }
   const shouldPush = false;
   // check the original config for values
-  const newQueryParams = Object.keys(pathConfig).reduce((previous, curr) => {
-    const prev = previous;
+  const newQueryParams = Object.keys(pathConfig).reduce((prev, curr) => {
     const {
       stateKey,
       options = {},

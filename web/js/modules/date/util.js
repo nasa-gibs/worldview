@@ -272,11 +272,10 @@ export function getLayersActiveAtDate(layers, date) {
  */
 export function mapLocationToDateState(
   parameters,
-  stateFromLocationObj,
+  stateFromLocation,
   state,
   config,
 ) {
-  let stateFromLocation = stateFromLocationObj;
   const appNow = get(state, 'date.appNow');
   // legacy time permalink
 

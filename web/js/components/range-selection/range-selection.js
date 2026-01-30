@@ -226,31 +226,29 @@ class TimelineRangeSelector extends React.Component {
     const startDate = new Date(animationStartLocationDate);
     const endDate = new Date(animationEndLocationDate);
 
-    let newDraggerEndLocation = draggerEndLocation;
-    let newDraggerStartLocation = draggerStartLocation;
     // prevent draggers to be dragger BEFORE start date limit
     if (endDate < startDateLimit) {
-      newDraggerEndLocation = endLocation;
+      draggerEndLocation = endLocation;
       animationEndLocationDate = startDateLimit;
     }
     if (startDate < startDateLimit) {
-      newDraggerStartLocation = startLocation;
+      draggerStartLocation = startLocation;
       animationStartLocationDate = startDateLimit;
     }
     // prevent draggers to be dragger AFTER end date limit
     if (endDate > endDateLimit) {
-      newDraggerEndLocation = endLocation;
+      draggerEndLocation = endLocation;
       animationEndLocationDate = endDateLimit;
     }
     if (startDate > endDateLimit) {
-      newDraggerStartLocation = startLocation;
+      draggerStartLocation = startLocation;
       animationStartLocationDate = endDateLimit;
     }
     updateAnimationDateAndLocation(
       animationStartLocationDate,
       animationEndLocationDate,
-      newDraggerStartLocation,
-      newDraggerEndLocation,
+      draggerStartLocation,
+      draggerEndLocation,
       isDragging,
     );
   };
@@ -375,5 +373,3 @@ TimelineRangeSelector.propTypes = {
 };
 
 export default TimelineRangeSelector;
-
-

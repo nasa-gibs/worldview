@@ -508,8 +508,8 @@ class Tour extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  processStepLink: (currentStoryId, currentStep, totalSteps, s, config, rendered) => {
-    const search = s.split('/?').pop();
+  processStepLink: (currentStoryId, currentStep, totalSteps, search, config, rendered) => {
+    search = search.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search },
     });
@@ -553,8 +553,8 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
-  preProcessStepLink: async (s, config, promiseImageryForTour) => {
-    const search = s.split('/?').pop();
+  preProcessStepLink: async (search, config, promiseImageryForTour) => {
+    search = search.split('/?').pop();
     const parameters = util.fromQueryString(search);
     let layersA = [];
     let layersB = [];

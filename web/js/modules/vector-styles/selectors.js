@@ -56,13 +56,14 @@ export function getAllVectorStyles(layerId, index, state) {
 /**
  * Gets a single colormap (entries / legend combo)
  *
- * @param layerId {string} The ID of the layer
- * @param index {Number} The index of the colormap for this layer, default 0
+ * @param str {string} The ID of the layer
+ * @param number {Number} The index of the colormap for this layer, default 0
  * object.
  * @return {object} object including the entries and legend
  */
-export function getVectorStyle(layerId, indexInt, state) {
-  const index = lodashIsUndefined(indexInt) ? 0 : indexInt;
+export function getVectorStyle(layerId, index, groupStr, state) {
+  groupStr = groupStr || state.compare.activeString;
+  index = lodashIsUndefined(index) ? 0 : index;
   const renderedVectorStyle = lodashGet(
     state,
     `vectorStyles.${layerId}.layers.${index}`,
@@ -73,10 +74,9 @@ export function getVectorStyle(layerId, indexInt, state) {
   return getAllVectorStyles(layerId, index, state);
 }
 
-export function findIndex(layerId, type, value, indexInt, state) {
-  let index = indexInt;
+export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
-  const { values } = getVectorStyle(layerId, index, state).entries;
+  const { values } = getVectorStyle(layerId, index, groupStr, state).entries;
   let result;
   lodashEach(values, (check, index) => {
     const min = getMinValue(check);
@@ -249,8 +249,7 @@ export function setStyleFunction(opts) {
   return vectorStyleId;
 }
 
-export function isActive(layerId, groupObj, state) {
-  let group = groupObj;
+export function isActive(layerId, group, state) {
   group = group || state.compare.activeString;
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
@@ -258,13 +257,12 @@ export function isActive(layerId, groupObj, state) {
   return undefined;
 }
 
-export function getKey(layerId, group, state) {
-  let groupStr = group;
+export function getKey(layerId, groupStr, state) {
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
     return '';
   }
-  const def = getVectorStyle(layerId, undefined, state);
+  const def = getVectorStyle(layerId, undefined, groupStr, state);
   const keys = [];
   if (def.custom) {
     keys.push(`style=${def.custom}`);
@@ -278,8 +276,7 @@ export function getKey(layerId, group, state) {
   return keys.join(',');
 }
 
-export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, state) {
-  let layer = layerObj;
+export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');

@@ -230,11 +230,10 @@ export default function mapLayerBuilder(config, cache, store) {
    * @method createLayer
    * @static
    * @param {object} def - Layer Specs
-   * @param {object} optionsObj - Layer options
+   * @param {object} options - Layer options
    * @returns {object} OpenLayers layer
    */
-  const createLayer = async (def, optionsObj = {}) => {
-    const options = optionsObj;
+  const createLayer = async (def, options = {}) => {
     const state = store.getState();
     const { compare: { activeString } } = state;
     const { ui: { isKioskModeActive, displayStaticMap } } = state;
@@ -1197,15 +1196,14 @@ export default function mapLayerBuilder(config, cache, store) {
 
   /**
    * Create a new OpenLayers Layer
-   * @param {object} definition
+   * @param {object} def
    * @param {object} key
    * @param {object} options
    * @param {object} dateOptions
    * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
-  const createLayerWrapper = async (definition, key, options, dateOptions) => {
-    let def = definition;
+  const createLayerWrapper = async (def, key, options, dateOptions) => {
     const state = store.getState();
     const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;

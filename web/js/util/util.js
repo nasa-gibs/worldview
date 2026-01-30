@@ -9,8 +9,7 @@ import safeLocalStorage from './local-storage';
 
 const { COORDINATE_FORMAT } = safeLocalStorage.keys;
 
-export default (function(selfObj) {
-  const self = selfObj;
+export default (function(self) {
   let canvas = null;
 
   // Export other util methods
@@ -26,8 +25,7 @@ export default (function(selfObj) {
     return result;
   };
 
-  self.pad = function(valueStr, width, padding) {
-    let value = valueStr;
+  self.pad = function(value, width, padding) {
     value = `${value}`;
     if (value.length < width) {
       const add = width - value.length;
@@ -56,8 +54,7 @@ export default (function(selfObj) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(queryStringValue) {
-    let queryString = queryStringValue;
+  self.fromQueryString = function(queryString) {
     if (!queryString) {
       return {};
     }
@@ -240,8 +237,7 @@ export default (function(selfObj) {
    * @param  {Boolean} shouldRemoveTime if the time should be removed from the date
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
-  self.toISOStringSeconds = function(dateToConvert, shouldRemoveTime = false) {
-    let date = dateToConvert;
+  self.toISOStringSeconds = function(date, shouldRemoveTime = false) {
     const isString = typeof date === 'string' || date instanceof String;
     if (shouldRemoveTime) date = self.clearTimeUTC(date);
     const dateString = isString ? date : date.toISOString();
@@ -590,8 +586,7 @@ export default (function(selfObj) {
     DOWN: 40,
   };
 
-  function formatDegrees(degreeValue, type, withSeconds) {
-    let value = degreeValue;
+  function formatDegrees(value, type, withSeconds) {
     let width; let
       signs;
     if (type === 'longitude') {
@@ -677,8 +672,7 @@ export default (function(selfObj) {
     return formatted;
   };
 
-  self.toArray = function(nonArrayValue) {
-    let value = nonArrayValue;
+  self.toArray = function(value) {
     if (!value) {
       return [];
     }

@@ -10,11 +10,10 @@ import update from 'immutability-helper';
  */
 export default function mapLocationToSidebarState(
   parameters,
-  stateFromLocationObj,
+  stateFromLocation,
   state,
   config,
 ) {
-  let stateFromLocation = stateFromLocationObj;
   let activeTab;
   if (parameters.e) {
     activeTab = 'events';

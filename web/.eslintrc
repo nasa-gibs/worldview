@@ -89,6 +89,12 @@
         "no-shadow": "warn",           // 110 errors across 40 files
         "max-len": "error",
         "no-underscore-dangle": "error",
+        "no-param-reassign": [         // 198 errors across 46 files
+          "warn",
+          {
+            "props": false
+          }
+        ],
         // Import rules overrides
         "import/no-cycle": "warn",
         // Accesibility rules overrides
