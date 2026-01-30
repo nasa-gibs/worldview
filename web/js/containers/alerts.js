@@ -248,8 +248,8 @@ export default connect(
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {
-  ddvZoomAlerts: PropTypes.array,
-  ddvLocationAlerts: PropTypes.array,
+  ddvZoomAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  ddvLocationAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   dismissVectorZoomAlert: PropTypes.func,
   dismissVectorExceededAlert: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,

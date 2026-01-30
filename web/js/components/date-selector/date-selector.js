@@ -376,14 +376,14 @@ DateSelector.defaultProps = {
   fontSize: 15,
 };
 DateSelector.propTypes = {
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fontSize: PropTypes.number,
   idSuffix: PropTypes.string,
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onDateChange: PropTypes.func,
   subDailyMode: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,

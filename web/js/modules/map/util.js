@@ -78,6 +78,7 @@ export function mapIsExtentValid(extent) {
       valid = false;
       return false;
     }
+    return true;
   });
   return valid;
 }
@@ -233,7 +234,7 @@ function promiseLayerGroup(layerGroup, map) {
  */
 export async function promiseImageryForTime(state, date, activeString) {
   const { map } = state;
-  if (!map.ui.proj) return;
+  if (!map.ui.proj) return undefined;
   const {
     cache, selected, createLayer, layerKey, proj,
   } = map.ui;
@@ -249,6 +250,7 @@ export async function promiseImageryForTime(state, date, activeString) {
     if (!cachedItem && layerGroup.wv.proj && proj[layerGroup.wv.proj]) {
       return promiseLayerGroup(layerGroup, proj[layerGroup.wv.proj]);
     }
+    return undefined;
   }));
   selected.getView().changed();
   return date;
@@ -294,6 +296,7 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     if (!cachedItem && layerGroup.wv.proj && proj[layerGroup.wv.proj]) {
       return promiseLayerGroup(layerGroup, proj[layerGroup.wv.proj]);
     }
+    return undefined;
   }));
   selected.getView().changed();
 }

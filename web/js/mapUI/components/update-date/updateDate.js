@@ -130,6 +130,7 @@ function UpdateDate(props) {
       const skipTitiler = true;
       return updateDate(outOfStep, skipTitiler);
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -168,19 +169,19 @@ export default connect(
 )(UpdateDate);
 
 UpdateDate.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getGranuleOptions: PropTypes.func,
-  granuleState: PropTypes.object,
+  granuleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCompareActive: PropTypes.bool,
-  layerState: PropTypes.object,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadNextTiles: PropTypes.func,
-  state: PropTypes.object,
-  ui: PropTypes.object,
+  state: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
-  vectorStyleState: PropTypes.object,
+  vectorStyleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

@@ -12,6 +12,7 @@ export const getGranulesUrl = (state) => {
       if (params.startDate && params.endDate) {
         return `${params.startDate},${params.endDate}`;
       }
+      return undefined;
     };
     const newParams = {
       bounding_box: params.bbox,

@@ -148,8 +148,8 @@ function MeasurementMetadataDetail (props) {
 MeasurementMetadataDetail.propTypes = {
   categoryTitle: PropTypes.string,
   isMobile: PropTypes.bool,
-  layers: PropTypes.array,
-  source: PropTypes.object,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  source: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showPreviewImage: PropTypes.bool,
   selectedProjection: PropTypes.string,
 };

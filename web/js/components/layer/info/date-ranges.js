@@ -15,7 +15,7 @@ export default function DateRanges ({ layer }) {
   const { ongoing } = layer;
 
   const getDateRanges = async () => {
-    if (dateRanges.length) return;
+    if (dateRanges.length) return undefined;
     if (!ongoing) return setDateRanges(formatDateRanges(layer.dateRanges));
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
@@ -31,7 +31,7 @@ export default function DateRanges ({ layer }) {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(event.data, 'text/xml');
       const domains = xmlDoc.querySelector('Domain')?.textContent || '';
-      worker.postMessage({ operation: 'mergeDomains', args: [domains, 0] });
+      return worker.postMessage({ operation: 'mergeDomains', args: [domains, 0] });
     };
     worker.onerror = () => {
       worker.terminate();
@@ -48,7 +48,7 @@ export default function DateRanges ({ layer }) {
       id: layer.id,
       proj: 'EPSG:4326',
     };
-    worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    return worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
   };
 
   const renderListItem = () => dateRanges
@@ -103,5 +103,5 @@ export default function DateRanges ({ layer }) {
 }
 
 DateRanges.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

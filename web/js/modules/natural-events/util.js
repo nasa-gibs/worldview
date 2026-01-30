@@ -194,4 +194,5 @@ export const validateGeometryCoords = (geometry, proj) => {
   } if (type === 'Polygon') {
     return coordinates[0].every(passesFilter);
   }
+  return undefined;
 };

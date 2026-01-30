@@ -152,14 +152,14 @@ function MapUI(props) {
           duration: 500,
           rotation: 0,
         });
-        return;
+        return undefined;
       }
       case REFRESH_ROTATE: {
         ui.selected.getView().animate({
           rotation: action.rotation,
           duration: 500,
         });
-        return;
+        return undefined;
       }
       case vectorStyleConstants.SET_SELECTED_VECTORS:
         return setVectorActions(action);
@@ -172,6 +172,7 @@ function MapUI(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   const updateVectorSelections = () => {
@@ -496,34 +497,34 @@ export default connect(
 )(MapUI);
 
 MapUI.propTypes = {
-  activeLayers: PropTypes.array,
-  activeLayersState: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  activeLayersState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
   arrowDown: PropTypes.string,
   clearPreload: PropTypes.func,
-  compare: PropTypes.object,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
-  embed: PropTypes.object,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  embed: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isEICModeActive: PropTypes.bool,
   isStaticMapActive: PropTypes.bool,
   isTravelModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
-  layerQueue: PropTypes.object,
-  layers: PropTypes.object,
-  lastPreloadDate: PropTypes.object,
-  models: PropTypes.object,
-  palettes: PropTypes.object,
+  layerQueue: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  lastPreloadDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  models: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  palettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloaded: PropTypes.bool,
-  proj: PropTypes.object,
-  renderableLayersState: PropTypes.object,
-  selectedDate: PropTypes.object,
-  selectedDateB: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  renderableLayersState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedDateB: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setPreload: PropTypes.func,
   setUI: PropTypes.func,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateMapExtent: PropTypes.func,
-  vectorStyles: PropTypes.object,
-  vectorStylesState: PropTypes.object,
+  vectorStyles: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  vectorStylesState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

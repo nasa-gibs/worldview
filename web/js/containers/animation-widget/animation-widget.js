@@ -520,15 +520,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 AnimationWidget.propTypes = {
-  appNow: PropTypes.object,
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   animationCustomModalOpen: PropTypes.bool,
   autoplay: PropTypes.bool,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   checkAnimationAvailability: PropTypes.bool,
-  snappedCurrentDate: PropTypes.object,
-  currentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
-  endDate: PropTypes.object,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
@@ -544,9 +544,9 @@ AnimationWidget.propTypes = {
   isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
-  map: PropTypes.object,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
@@ -564,7 +564,7 @@ AnimationWidget.propTypes = {
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speedRedux: PropTypes.number,
-  startDate: PropTypes.object,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
 };
 

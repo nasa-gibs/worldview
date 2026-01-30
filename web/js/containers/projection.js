@@ -111,6 +111,6 @@ ProjectionList.propTypes = {
   onCloseModal: PropTypes.func,
   isMobile: PropTypes.bool,
   projection: PropTypes.string,
-  projectionArray: PropTypes.array,
+  projectionArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   updateProjection: PropTypes.func,
 };

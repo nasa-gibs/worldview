@@ -52,17 +52,22 @@ require('@elastic/react-search-ui-views/lib/styles/styles.css');
 const { events } = util;
 
 class App extends React.Component {
+  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  static setVhCSSProperty() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
   constructor(props) {
     super(props);
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.setVhCSSProperty = this.setVhCSSProperty.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('resize', this.setVhCSSProperty);
-    window.addEventListener('orientationchange', this.setVhCSSProperty);
+    window.addEventListener('resize', App.setVhCSSProperty);
+    window.addEventListener('orientationchange', App.setVhCSSProperty);
   }
 
   componentDidUpdate(prevProps) {
@@ -80,16 +85,9 @@ class App extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('resize', this.setVhCSSProperty);
-    window.removeEventListener('orientationchange', this.setVhCSSProperty);
+    window.removeEventListener('resize', App.setVhCSSProperty);
+    window.removeEventListener('orientationchange', App.setVhCSSProperty);
   }
-
-
-  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-  setVhCSSProperty = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
 
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
@@ -267,12 +265,12 @@ App.propTypes = {
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   notificationClick: PropTypes.func,
-  notifications: PropTypes.object,
+  notifications: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOutagesUnseen: PropTypes.number,
-  parameters: PropTypes.object,
+  parameters: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setScreenInfoAction: PropTypes.func,
   hideNotificationsPopup: PropTypes.bool,
-  config: PropTypes.object,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 App.defaultProps = {

@@ -14,7 +14,7 @@ export default class ContextMenu extends AbstractMenu {
     static propTypes = {
         id: PropTypes.string.isRequired,
         children: PropTypes.node.isRequired,
-        data: PropTypes.object,
+        data: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
         className: PropTypes.string,
         hideOnLeave: PropTypes.bool,
         rtl: PropTypes.bool,
@@ -24,7 +24,7 @@ export default class ContextMenu extends AbstractMenu {
         preventHideOnContextMenu: PropTypes.bool,
         preventHideOnResize: PropTypes.bool,
         preventHideOnScroll: PropTypes.bool,
-        style: PropTypes.object
+        style: PropTypes.shape
     };
 
     static defaultProps = {

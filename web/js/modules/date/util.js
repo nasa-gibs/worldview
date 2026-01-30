@@ -85,7 +85,7 @@ export function tryCatchDate(str, initialState) {
  * @returns {String | undefined} serialized time string OR undefined
  */
 export function serializeDateWrapper(currentItemState, state, prev) {
-  if (state.animation.isPlaying) return;
+  if (state.animation.isPlaying) return undefined;
   const prevParams = Object.keys(prev).length > 0;
   const initialDate = get(state, 'config.initialDate');
   const initialDateString = util.toISOStringSeconds(initialDate);
@@ -142,7 +142,7 @@ export function serializeDateBWrapper(currentItemState, state, prev) {
  * @returns {String | undefined} serialized time string OR undefined
  */
 export function serializeDateChartingWrapper(currentItemState, state) {
-  if (!state.charting.active || !state.charting.timeSpanStartDate) return;
+  if (!state.charting.active || !state.charting.timeSpanStartDate) return undefined;
   return serializeDate(currentItemState);
 }
 
@@ -293,7 +293,7 @@ export function mapLocationToDateState(
 }
 
 export const formatDisplayDate = (date, subdaily) => {
-  if (!date) return;
+  if (!date) return undefined;
   const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
   const dateString = moment.utc(date).format(format);
   return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;
@@ -377,7 +377,7 @@ export const outOfStepChange = (state, newDate) => {
 };
 
 export const coverageDateFormatter = (dateType, date, period) => {
-  if (!date) return;
+  if (!date) return undefined;
   let dateString;
   const parsedDate = new Date(date);
   switch (period) {

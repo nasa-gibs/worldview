@@ -83,11 +83,11 @@ export default connect(
 )(BufferQuickAnimate);
 
 BufferQuickAnimate.propTypes = {
-  action: PropTypes.object,
-  date: PropTypes.object,
-  dateCompareState: PropTypes.object,
-  lastPreloadDate: PropTypes.object,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  lastPreloadDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloaded: PropTypes.bool,
-  promiseImageryState: PropTypes.object,
+  promiseImageryState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setPreload: PropTypes.func,
 };
