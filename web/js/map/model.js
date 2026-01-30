@@ -113,12 +113,13 @@ export default function mapModel(models, config) {
    * @method save
    * @static
    *
-   * @param state {object} map state object from permalink
+   * @param stateObj {object} map state object from permalink
    *
    *
    * @returns {void}
    */
-  self.save = function(state) {
+  self.save = function(stateObj) {
+    const state = stateObj;
     state.v = lodashClone(self.extent);
     if (
       self.rotation !== 0.0

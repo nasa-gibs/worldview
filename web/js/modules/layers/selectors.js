@@ -485,7 +485,8 @@ export function getLayers(state, spec = {}, layersParam) {
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, bLayers, state) {
+export function isRenderable(id, layers, dateString, bLayers, state) {
+  let date = dateString;
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });
