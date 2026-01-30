@@ -81,7 +81,7 @@ function MeasurementLayerRow (props) {
                 </MonospaceDate>
               </div>
             )}
-            {layerNotices && (<div>{{ __html: layerNotices }}</div>)}
+            {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
           </UncontrolledTooltip>
         )}
       </Checkbox>
