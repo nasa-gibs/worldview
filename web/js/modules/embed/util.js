@@ -13,9 +13,8 @@ import { getOverlayGroups } from '../layers/util';
 // eslint-disable-next-line import/prefer-default-export
 export function mapLocationToEmbedState(
   parameters,
-  stateFromLocationObj,
+  stateFromLocation,
 ) {
-  let stateFromLocation = stateFromLocationObj;
   if (parameters.em === 'true') {
     const { layers } = stateFromLocation;
     const layersClone = lodashCloneDeep(layers);

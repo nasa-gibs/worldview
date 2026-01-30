@@ -116,11 +116,10 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
    * Create collection of granule TileLayers from range of granule times
    * @param {array} granueDates - array of dates (already sorted)
    * @param {object} def - Layer specs
-   * @param {object} attributesObj - Layer specs
+   * @param {object} attributes - Layer specs
    * @returns {array} collection of OpenLayers TileLayers
   */
-  const createGranuleTileLayers = (granules, def, attributesObj) => {
-    const attributes = attributesObj;
+  const createGranuleTileLayers = (granules, def, attributes) => {
     const { period, id } = def;
     const { group, proj } = attributes;
 

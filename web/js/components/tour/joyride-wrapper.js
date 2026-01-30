@@ -86,11 +86,10 @@ export default function JoyrideWrapper ({
 
   /**
    * Set a placeholder DOM element's position based on map coords
-   * @param {*} el
+   * @param {*} element
    * @param {*} targetCoordinates
    */
-  function setPlaceholderLocation (el, targetCoordinates) {
-    const element = { ...el };
+  function setPlaceholderLocation (element, targetCoordinates) {
     const { topLeft, bottomRight } = targetCoordinates;
     let [x1, y1] = map.getPixelFromCoordinate(topLeft) || [0, 0];
     let [x2, y2] = map.getPixelFromCoordinate(bottomRight) || [0, 0];

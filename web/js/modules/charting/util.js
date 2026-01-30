@@ -2,8 +2,7 @@ import update from 'immutability-helper';
 import { initialChartingState } from './reducers';
 import { formatDisplayDate } from '../date/util';
 
-export function mapLocationToChartingState(parameters, stateFromLocationObj) {
-  let stateFromLocation = stateFromLocationObj;
+export function mapLocationToChartingState(parameters, stateFromLocation) {
   if (parameters.cha === 'true') {
     stateFromLocation = update(stateFromLocation, {
       charting: {

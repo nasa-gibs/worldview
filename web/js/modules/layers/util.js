@@ -1108,8 +1108,7 @@ export function dateOverlap(period, dateRanges) {
   });
 
   const result = sortedRanges.reduce(
-    (resultObj, current, idx, arr) => {
-      const result = resultObj;
+    (result, current, idx, arr) => {
       // get the previous range
       if (idx === 0) {
         return result;
@@ -1172,8 +1171,7 @@ export function dateOverlap(period, dateRanges) {
 export function layersParse11(str, config) {
   const layers = [];
   const ids = str.split(/[~,.]/);
-  lodashEach(ids, (idString) => {
-    let id = idString;
+  lodashEach(ids, (id) => {
     if (id === 'baselayers' || id === 'overlays') {
       return;
     }
@@ -1454,8 +1452,7 @@ export function adjustStartDates(layers) {
     .subtract(days * 24, 'hours')
     .format('YYYY-MM-DDThh:mm:ss')}Z`;
 
-  const applyDateAdjustment = (layerObj) => {
-    const layer = layerObj;
+  const applyDateAdjustment = (layer) => {
     const { availability, dateRanges, endDate } = layer;
     if (!availability) {
       return;
@@ -1519,8 +1516,7 @@ export const getCacheOptions = (period, date, state) => {
  */
 export function adjustActiveDateRanges(layers, appNow) {
   const appNowYear = appNow.getUTCFullYear();
-  const applyDateRangeAdjustment = (layerObj) => {
-    const layer = layerObj;
+  const applyDateRangeAdjustment = (layer) => {
     const { dateRanges } = layer;
     const { ongoing, period } = layer;
     const failConditions = !ongoing
@@ -1610,8 +1606,7 @@ export function adjustActiveDateRanges(layers, appNow) {
  * @returns {Array} array of layers
  */
 export function adjustEndDates(layers) {
-  const applyDateAdjustment = (layerObj) => {
-    const layer = layerObj;
+  const applyDateAdjustment = (layer) => {
     const { futureTime, dateRanges } = layer;
     if (!futureTime) {
       return;
@@ -1637,8 +1632,7 @@ export function adjustEndDates(layers) {
  * @param  {String} mockFutureLayerParameters 'targetLayerId, mockFutureTime'
  * @returns {Void}
  */
-export function mockFutureTimeLayerOptions(layersObj, mockFutureLayerParameters) {
-  const layers = layersObj;
+export function mockFutureTimeLayerOptions(layers, mockFutureLayerParameters) {
   const urlParameters = mockFutureLayerParameters.split(',');
   const [targetLayerId, mockFutureTime] = urlParameters;
 
@@ -1659,8 +1653,7 @@ export function getLayersFromGroups (state, groups) {
 
 export function adjustMeasurementsValidUnitConversion(config) {
   const { measurements, layers } = config;
-  const applyDisableUnitConversionCheck = (layerObj) => {
-    const layer = layerObj;
+  const applyDisableUnitConversionCheck = (layer) => {
     const { layergroup } = layer;
     if (!layergroup || !measurements[layergroup]) {
       return;

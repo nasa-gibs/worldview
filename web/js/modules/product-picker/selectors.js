@@ -19,8 +19,7 @@ export const getLayersForProjection = createSelector(
     const layersWithFacetProps = buildLayerFacetProps(config, selectedDate)
       // Only use the layers for the active projection
       .filter((layer) => layer.projections && layer.projections[projection])
-      .map((layerObj) => {
-        const layer = layerObj;
+      .map((layer) => {
         // If there is metadata for the current projection, use that
         const projectionMeta = layer.projections[projection];
         if (projectionMeta.title) layer.title = projectionMeta.title;

@@ -3,8 +3,7 @@ import lodashIsNaN from 'lodash/isNaN';
 import lodashParseInt from 'lodash/parseInt';
 
 // eslint-disable-next-line import/prefer-default-export
-export function debugConfig(c) {
-  const config = c;
+export function debugConfig(config) {
   if (config.parameters.debug === 'tiles') {
     const tileSize = lodashParseInt(config.parameters.tileSize);
     if (lodashIsNaN(tileSize)) {

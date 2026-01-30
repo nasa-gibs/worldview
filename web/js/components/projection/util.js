@@ -1,25 +1,16 @@
 export default function parse(state, errors, config) {
-  let newState = { ...state };
-
   // Permalink version 1.0 - 1.1
-  if (newState.switch) {
-    newState = {
-      ...newState,
-      p: newState.switch,
-    };
-    delete newState.switch;
+  if (state.switch) {
+    state.p = state.switch;
+    delete state.switch;
   }
-
-  const projId = newState.p;
+  const projId = state.p;
   if (projId) {
     if (!config.projections[projId]) {
-      newState = { ...newState };
-      delete newState.p;
+      delete state.p;
       errors.push({
         message: `Unsupported projection: ${projId}`,
       });
     }
   }
-
-  return newState;
 }

@@ -234,11 +234,10 @@ export default class GifStream {
   /**
    * Generate GIF-creating Stream
    * @param  {Array} frames Array of GIF image objects
-   * @param  {Object} context    2d Canvas Context
+   * @param  {Object} ctx    2d Canvas Cntext
    * @return {Object}        Returns GifWriter Stream
    */
-  getStream(frames, context) {
-    let ctx = context;
+  getStream(frames, ctx) {
     const { options } = this;
     const width = options.gifWidth;
     const height = options.gifHeight;

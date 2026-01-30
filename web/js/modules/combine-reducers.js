@@ -134,8 +134,7 @@ const appReducer = combineReducers(reducers);
 /**
  * Top level reducer function w/ option to reset state
  */
-export default (stateObj, action) => {
-  let state = stateObj;
+export default (state, action) => {
   if (action.type === 'APP_RESET') {
     state = undefined;
   }

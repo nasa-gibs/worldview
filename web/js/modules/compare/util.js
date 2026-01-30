@@ -2,8 +2,7 @@ import update from 'immutability-helper';
 import { initialCompareState } from './reducers';
 import { formatDisplayDate } from '../date/util';
 
-export function mapLocationToCompareState(parameters, stateFromLocationObj) {
-  let stateFromLocation = stateFromLocationObj;
+export function mapLocationToCompareState(parameters, stateFromLocation) {
   if (parameters.ca !== undefined) {
     stateFromLocation = update(stateFromLocation, {
       compare: {

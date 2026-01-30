@@ -73,12 +73,11 @@ export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
 export function getStampProps(
   stampWidthRatio,
   breakPoint,
-  stampWidthInt,
+  stampWidth,
   dimensions,
   width,
   height,
 ) {
-  let stampWidth = stampWidthInt;
   const dateStamp = {};
   let stampHeight;
   let stampHeightByImageWidth;
@@ -125,11 +124,10 @@ export function svgToPng(svgURL, stampHeight) {
 
 export function mapLocationToAnimationState(
   parameters,
-  stateFromLocationObj,
+  stateFromLocation,
   state,
   config,
 ) {
-  let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
   const endDate = lodashGet(stateFromLocation, 'animation.endDate');
   if (parameters.playanim && parameters.ab) {
