@@ -104,10 +104,10 @@ function CategoryCell(props) {
 }
 
 CategoryCell.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   drawMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
+  measurementConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default CategoryCell;

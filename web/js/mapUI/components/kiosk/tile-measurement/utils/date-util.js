@@ -172,4 +172,5 @@ export function getOrbitalDates (selectedDate, latestDate, searchMethod) {
   } if (searchMethod === 3) {
     return getOrbitalDatesForwardsAndBackwards(selectedDate, latestDate);
   }
+  return undefined;
 }

@@ -60,7 +60,7 @@ function DateLines(props) {
 
   useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
-      return;
+      return undefined;
     }
     map.on('movestart', () => {
       setHideLines(true);
@@ -133,9 +133,9 @@ const mapStateToProps = (state) => {
 };
 
 DateLines.propTypes = {
-  map: PropTypes.object,
-  proj: PropTypes.object,
-  date: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,

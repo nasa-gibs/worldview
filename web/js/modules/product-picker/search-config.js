@@ -88,6 +88,7 @@ function filterSearch (layer, val, terms) {
     isFilteredOut = matchItems.every((item) => !item.includes(term))
       && shortNames.every((name) => name.indexOf(term) < 0);
     if (isFilteredOut) return false;
+    return true;
   });
   return isFilteredOut;
 }

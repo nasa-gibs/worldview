@@ -157,7 +157,7 @@ class Sidebar extends React.Component {
     });
     const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
     safeLocalStorage.setItem(SIDEBAR_COLLAPSED, storageValue);
-    collapseExpandToggle();
+    return collapseExpandToggle();
   }
 
   getProductsToRender(activeTab, isCompareMode, isChartMode) {
@@ -189,6 +189,7 @@ class Sidebar extends React.Component {
         />
       );
     }
+    return undefined;
   }
 
   handleWorldviewLogoClick(e, permalink) {
@@ -545,10 +546,10 @@ Sidebar.propTypes = {
   changeTab: PropTypes.func,
   chartingModeAccessible: PropTypes.bool,
   collapseExpandToggle: PropTypes.func,
-  config: PropTypes.object,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   displayStaticMap: PropTypes.bool,
-  eventsData: PropTypes.array,
-  eventsSources: PropTypes.array,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  eventsSources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
@@ -564,9 +565,9 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
-  selectedMap: PropTypes.object,
-  tabTypes: PropTypes.object,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  tabTypes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

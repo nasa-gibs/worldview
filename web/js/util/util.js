@@ -511,7 +511,7 @@ export default (function(self) {
       try {
         return func.apply(func, args);
       } catch (error) {
-        console.error(error);
+        return console.error(error);
       }
     };
   };

@@ -59,8 +59,8 @@ export default function ClassificationToggle(props) {
 
 ClassificationToggle.propTypes = {
   height: PropTypes.number,
-  legend: PropTypes.object,
-  palette: PropTypes.object,
+  legend: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  palette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   toggle: PropTypes.func,
   toggleAll: PropTypes.func,
 };

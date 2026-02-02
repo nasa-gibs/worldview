@@ -207,15 +207,15 @@ class PlayQueue extends React.Component {
     const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
 
     if ((isAnimating || this.hasPlayStarted) && !loopStart) {
-      return;
+      return true;
     }
     if (this.isPreloadSufficient() || restartLoop) {
-      if (this.isBetweenSteps) return;
+      if (this.isBetweenSteps) return true;
       // console.debug('Started: ', Date.now());
       this.hasPlayStarted = true;
       return this.play();
     }
-    this.checkQueue();
+    return this.checkQueue();
   };
 
   checkShouldLoop() {
@@ -313,7 +313,7 @@ class PlayQueue extends React.Component {
         this.fetchTimes.push(fetchTime);
         this.setState({ loadedItems: loadedItems += 1 });
 
-        if (!this.mounted) return;
+        if (!this.mounted) return true;
         this.bufferObject[strDate] = strDate;
         delete this.inQueueObject[strDate];
         const currentBufferSize = util.objectLength(this.bufferObject);
@@ -401,19 +401,19 @@ class PlayQueue extends React.Component {
       if (nextDate > endDate) {
         this.abortController.abort();
         this.checkShouldLoop();
-        return;
+        return true;
       }
 
       // Playback caught up with buffer :(
       if (!this.bufferObject[nextDateStr]) {
         this.stopPlaying();
         this.checkQueue();
-        return;
+        return true;
       }
       if (!isPlaying || !this.mounted) {
         this.stopPlaying();
       }
-      this.checkQueue();
+      return this.checkQueue();
     };
     const animIntervalMS = speed === 0.5 ? 2000 : 1000 / speed;
     this.animationInterval(animIntervalMS, player);
@@ -464,23 +464,23 @@ class PlayQueue extends React.Component {
 }
 
 PlayQueue.propTypes = {
-  endDate: PropTypes.object.isRequired,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   selectDate: PropTypes.func.isRequired,
   speed: PropTypes.number.isRequired,
-  startDate: PropTypes.object.isRequired,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   togglePlaying: PropTypes.func.isRequired,
-  currentDate: PropTypes.object,
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
   interval: PropTypes.string,
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
-  snappedCurrentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default PlayQueue;

@@ -318,7 +318,7 @@ function UpdateProjection(props) {
           if (newState.v && !newState.e && extent) {
             flyToNewExtent(extent, rotate);
           }
-        }, 200); return;
+        }, 200); return undefined;
       }
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -338,14 +338,14 @@ function UpdateProjection(props) {
         if (compareMode === 'spy') {
           return reloadLayers();
         }
-        return;
+        return undefined;
       case layerConstants.REORDER_LAYERS:
       case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         reloadLayers();
         preloadForCompareMode();
-        return;
+        return undefined;
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
         return reloadLayers();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -362,6 +362,7 @@ function UpdateProjection(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -461,27 +462,27 @@ export default connect(
 )(UpdateProjection);
 
 UpdateProjection.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
-  compare: PropTypes.object,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareMode: PropTypes.string,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layerState: PropTypes.object,
-  map: PropTypes.object,
-  models: PropTypes.object,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  models: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadForCompareMode: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   projectionTrigger: PropTypes.number,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
   updateMapUI: PropTypes.func,
-  renderedPalettes: PropTypes.object,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
 };

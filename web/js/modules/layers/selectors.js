@@ -137,7 +137,7 @@ export const isGroupingEnabled = ({
 }) => layers[compare.activeString].groupOverlays;
 
 export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) => {
-  if (!layers.collections[layer.id]) return;
+  if (!layers.collections[layer.id]) return undefined;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
     if ((dateCollection[i].date === dailyDate
@@ -145,6 +145,7 @@ export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) =
       return dateCollection[i];
     }
   }
+  return undefined;
 };
 
 /**
@@ -408,6 +409,7 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
       end: new Date(maxDate),
     };
   }
+  return undefined;
 }
 
 /**
@@ -511,6 +513,7 @@ export function isRenderable(id, layers, date, bLayers, state) {
         obscured = true;
         return false;
       }
+      return undefined;
     },
   );
   return !obscured;
@@ -573,10 +576,10 @@ export function hasMeasurementSource(current, config, projId) {
 export const makeGetDescription = () => createSelector(
   [getConfig, getLayerId],
   ({ layers, measurements }, layerId) => {
-    if (!layerId) return;
+    if (!layerId) return undefined;
     const { layergroup } = layers[layerId];
     if (layergroup === 'Orbital Track') {
-      return;
+      return undefined;
     }
     const [setting] = Object.keys(measurements)
       .filter((key) => !key.includes('Featured'))

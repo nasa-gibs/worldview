@@ -26,6 +26,12 @@ import CoverageItemList from './coverage-item-list';
  */
 
 class TimelineLayerCoveragePanel extends Component {
+  static stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -294,12 +300,7 @@ class TimelineLayerCoveragePanel extends Component {
         return granuleDateRanges.map(([start, end]) => ({ startDate: start, endDate: end }));
       });
     }
-  };
-
-  stopPropagation = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
+    return undefined;
   };
 
   /**
@@ -508,8 +509,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 TimelineLayerCoveragePanel.propTypes = {
-  activeLayers: PropTypes.array,
-  appNow: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,
