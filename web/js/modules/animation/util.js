@@ -3,6 +3,9 @@ import update from 'immutability-helper';
 import moment from 'moment';
 import canvg from '../../util/canvg';
 import util from '../../util/util';
+import {
+  getNextImageryDelta,
+} from '../date/util';
 
 /**
  * Snap the value for the date/time to the closest previous playback step so that
@@ -38,15 +41,29 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
 
 /**
  * Calculate the required number of steps (frames) required for the animation
- * @param {Date} start        | The date of the first frame of animation
- * @param {Date} end          | The date of the last frame of animation
- * @param {String} interval   | The animation step value (Year/Month/Day/Custom) separating frames
- * @param {Number} delta      | Rate of change between states; defaults to 1 second
- * @param {Number} maxToCheck | The limit on the total number of frames to be used
+ * @param {Date} start            | The date of the first frame of animation
+ * @param {Date} end              | The date of the last frame of animation
+ * @param {String} interval       | The animation step value (Year/Month/Day/Custom)
+ *                                  separating frames
+ * @param {Number} delta          | Rate of change between states; defaults to 1 second
+ * @param {Number} maxToCheck     | The limit on the total number of frames to be used
+ * @param {Boolean} autoSelected  | Is auto interval selected
+ * @param {Array} layers          | List of layers
  *
  * @return {Number} | The total number of frames required
  */
-export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
+export function getNumberOfSteps(
+  start,
+  end,
+  interval,
+  delta = 1,
+  maxToCheck,
+  autoSelected,
+  layers,
+) {
+  if (autoSelected) {
+    delta = getNextImageryDelta(layers, start, 1);
+  }
   let i = 1;
   let currentDate = start;
   let nextDate = util.dateAdd(start, interval, delta);
@@ -56,7 +73,13 @@ export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
   }
   while (currentDate < end) {
     i += 1;
+    if (autoSelected) {
+      delta = getNextImageryDelta(layers, currentDate, 1);
+    }
     currentDate = util.dateAdd(currentDate, interval, delta);
+    if (autoSelected) {
+      delta = getNextImageryDelta(layers, currentDate, 1);
+    }
     nextDate = util.dateAdd(currentDate, interval, delta);
     // checking to see if next date is after end date to prevent creation of extra frame
     if (nextDate > end) {

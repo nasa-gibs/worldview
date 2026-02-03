@@ -5,11 +5,13 @@ import {
   updateAppNow,
   selectDate,
   changeCustomInterval,
+  changeAutoInterval,
   selectInterval,
 } from './actions';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -186,6 +188,34 @@ describe('Date timescale changes', () => {
         delta,
       };
       store.dispatch(changeCustomInterval(delta, customInterval));
+      expect(store.getActions()[0]).toEqual(expectedFirst);
+      expect(store.getActions()[1]).toEqual(expectedSecond);
+    },
+  );
+
+  test(
+    `changeAutoInterval action returns ${CHANGE_AUTO_INTERVAL} as type and true as autoSelected [date-action-auto-interval]`,
+    () => {
+      const store = mockStore({
+        date: {},
+        compare: {
+          isCompareA: false,
+          activeString: 'activeB',
+        },
+        proj: {
+          id: 'geographic',
+        },
+      });
+      const expectedFirst = {
+        type: CLEAR_PRELOAD,
+      };
+      const expectedSecond = {
+        type: CHANGE_AUTO_INTERVAL,
+        delta: 5,
+        interval: 3,
+        autoSelected: true,
+      };
+      store.dispatch(changeAutoInterval(delta, customInterval, true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
     },

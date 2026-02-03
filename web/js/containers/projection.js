@@ -6,6 +6,14 @@ import googleTagManager from 'googleTagManager';
 import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/icon-list';
+import {
+  changeTimeScale,
+  selectInterval,
+  changeAutoInterval as changeAutoIntervalAction,
+} from '../modules/date/actions';
+import {
+  TIME_SCALE_TO_NUMBER,
+} from '../modules/date/constants';
 
 const DEFAULT_PROJ_ARRAY = [
   {
@@ -49,11 +57,17 @@ class ProjectionList extends Component {
 
   onClick(id) {
     const {
-      updateProjection, projection, onCloseModal,
+      updateProjection, projection, onCloseModal, changeTimeScale, changeAutoInterval, layers,
     } = this.props;
 
     if (id !== projection) {
       updateProjection(id);
+      const enableAuto = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
+      // Defaults to 1 day if new projection has no TEMPO layers present
+      const timescale = enableAuto ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
+      changeAutoInterval(1, timescale, enableAuto);
+      selectInterval(1, timescale, false, enableAuto);
+      changeTimeScale(enableAuto ? TIME_SCALE_TO_NUMBER.hour : timescale);
     }
 
     googleTagManager.pushEvent({
@@ -78,7 +92,7 @@ class ProjectionList extends Component {
 
 const mapStateToProps = (state) => {
   const {
-    config, models, proj, screenSize,
+    config, models, proj, screenSize, layers,
   } = state;
   const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
@@ -90,6 +104,7 @@ const mapStateToProps = (state) => {
     isMobile,
     projection: proj.id,
     projectionArray,
+    layers: layers.active.layers,
   };
 };
 
@@ -99,6 +114,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onCloseModal: () => {
     dispatch(onToggle());
+  },
+  changeTimeScale: (val) => {
+    dispatch(changeTimeScale(val));
+  },
+  changeAutoInterval: (delta, timeScale, autoSelected) => {
+    dispatch(changeAutoIntervalAction(delta, timeScale, autoSelected));
   },
 });
 
@@ -113,4 +134,7 @@ ProjectionList.propTypes = {
   projection: PropTypes.string,
   projectionArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   updateProjection: PropTypes.func,
+  changeTimeScale: PropTypes.func,
+  changeAutoInterval: PropTypes.func,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };

@@ -9,7 +9,7 @@ const formatDateRanges = (dateRanges = []) => dateRanges.map(({
   endDate,
 }) => [startDate, endDate]);
 
-export default function DateRanges ({ layer }) {
+export default function DateRanges ({ layer, describeDomainsUrl }) {
   const [showRanges, setShowRanges] = useState(false);
   const [dateRanges, setDateRanges] = useState([]);
   const { ongoing } = layer;
@@ -47,6 +47,7 @@ export default function DateRanges ({ layer }) {
       endDate,
       id: layer.id,
       proj: 'EPSG:4326',
+      baseUrl: describeDomainsUrl,
     };
     return worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
   };
@@ -104,4 +105,5 @@ export default function DateRanges ({ layer }) {
 
 DateRanges.propTypes = {
   layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  describeDomainsUrl: PropTypes.string,
 };
