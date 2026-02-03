@@ -493,7 +493,7 @@ PlayQueue.propTypes = {
   isKioskModeActive: PropTypes.bool,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   smartSelected: PropTypes.bool,
-  layers: PropTypes.array,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default PlayQueue;
