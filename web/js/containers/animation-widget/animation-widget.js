@@ -90,7 +90,7 @@ function AnimationWidget (props) {
     startDate,
     subDailyMode,
     map,
-    smartSelected,
+    autoSelected,
     layers,
   } = props;
 
@@ -198,12 +198,12 @@ function AnimationWidget (props) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
       const startMinutes = startDateZeroed.getMinutes();
       const endMinutes = endDateZeroed.getMinutes();
-      if (!smartSelected) {
+      if (!autoSelected) {
         startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
       }
       startDateZeroed.setUTCSeconds(0);
       startDateZeroed.setUTCMilliseconds(0);
-      if (!smartSelected) {
+      if (!autoSelected) {
         endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
       }
       endDateZeroed.setUTCSeconds(0);
@@ -258,7 +258,7 @@ function AnimationWidget (props) {
             promiseImageryForTime={promiseImageryForTime}
             onClose={onPushPause}
             map={map}
-            smartSelected={smartSelected}
+            autoSelected={autoSelected}
             layers={layers}
           />
         ) : null
@@ -374,7 +374,7 @@ const mapStateToProps = (state) => {
   } = animation;
   const {
     customSelected,
-    smartSelected,
+    autoSelected,
     delta,
     customDelta,
     appNow,
@@ -426,7 +426,7 @@ const mapStateToProps = (state) => {
     TIME_SCALE_FROM_NUMBER[useInterval],
     useDelta,
     frameLimit,
-    smartSelected,
+    autoSelected,
     layers.active.layers,
   );
   const currentDate = getSelectedDate(state);
@@ -489,7 +489,7 @@ const mapStateToProps = (state) => {
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1
       : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
-    smartSelected,
+    autoSelected,
     layers: layers.active.layers,
   };
 };
@@ -580,7 +580,7 @@ AnimationWidget.propTypes = {
   speedRedux: PropTypes.number,
   startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
-  smartSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 

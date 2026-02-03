@@ -5,13 +5,13 @@ import {
   updateAppNow,
   selectDate,
   changeCustomInterval,
-  changeSmartInterval,
+  changeAutoInterval,
   selectInterval,
 } from './actions';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
-  CHANGE_SMART_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -194,7 +194,7 @@ describe('Date timescale changes', () => {
   );
 
   test(
-    `changeSmartInterval action returns ${CHANGE_SMART_INTERVAL} as type and true as smartSelected [date-action-smart-interval]`,
+    `changeAutoInterval action returns ${CHANGE_AUTO_INTERVAL} as type and true as autoSelected [date-action-auto-interval]`,
     () => {
       const store = mockStore({
         date: {},
@@ -210,12 +210,12 @@ describe('Date timescale changes', () => {
         type: CLEAR_PRELOAD,
       };
       const expectedSecond = {
-        type: CHANGE_SMART_INTERVAL,
+        type: CHANGE_AUTO_INTERVAL,
         delta: 5,
         interval: 3,
-        smartSelected: true,
+        autoSelected: true,
       };
-      store.dispatch(changeSmartInterval(delta, customInterval, true));
+      store.dispatch(changeAutoInterval(delta, customInterval, true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
     },

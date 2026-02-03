@@ -47,7 +47,7 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
  *                                  separating frames
  * @param {Number} delta          | Rate of change between states; defaults to 1 second
  * @param {Number} maxToCheck     | The limit on the total number of frames to be used
- * @param {Boolean} smartSelected | Is smart interval selected
+ * @param {Boolean} autoSelected  | Is auto interval selected
  * @param {Array} layers          | List of layers
  *
  * @return {Number} | The total number of frames required
@@ -58,10 +58,10 @@ export function getNumberOfSteps(
   interval,
   delta = 1,
   maxToCheck,
-  smartSelected,
+  autoSelected,
   layers,
 ) {
-  if (smartSelected) {
+  if (autoSelected) {
     delta = getNextImageryDelta(layers, start, 1);
   }
   let i = 1;
@@ -73,11 +73,11 @@ export function getNumberOfSteps(
   }
   while (currentDate < end) {
     i += 1;
-    if (smartSelected) {
+    if (autoSelected) {
       delta = getNextImageryDelta(layers, currentDate, 1);
     }
     currentDate = util.dateAdd(currentDate, interval, delta);
-    if (smartSelected) {
+    if (autoSelected) {
       delta = getNextImageryDelta(layers, currentDate, 1);
     }
     nextDate = util.dateAdd(currentDate, interval, delta);

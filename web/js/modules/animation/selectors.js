@@ -64,7 +64,7 @@ export default function getImageArray(
     boundaries, showDates, startDate, endDate, url,
   } = options;
   const {
-    customInterval, interval, customDelta, delta, customSelected, smartSelected,
+    customInterval, interval, customDelta, delta, customSelected, autoSelected,
   } = date;
   const a = [];
   const fromDate = new Date(startDate);
@@ -105,7 +105,7 @@ export default function getImageArray(
       text: showDates ? strDate : '',
       delay: 1000 / animation.speed,
     });
-    current = util.dateAdd(current, increment, smartSelected
+    current = util.dateAdd(current, increment, autoSelected
       ? getNextImageryDelta(layers.active.layers, current, 1) : useDelta);
     if (j > 40) {
       // too many frames

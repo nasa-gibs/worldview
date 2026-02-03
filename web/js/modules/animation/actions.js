@@ -25,13 +25,13 @@ export function onActivate() {
   return (dispatch, getState) => {
     const { date, animation, layers } = getState();
     const {
-      customSelected, customDelta, delta, customInterval, interval, selected, smartSelected,
+      customSelected, customDelta, delta, customInterval, interval, selected, autoSelected,
     } = date;
     const activeDate = getSelectedDate(getState());
     if (!animation.startDate || !animation.endDate) {
-      let smartTenFramesBefore;
-      let smartTenFramesAfter;
-      if (smartSelected) {
+      let autoTenFramesBefore;
+      let autoTenFramesAfter;
+      if (autoSelected) {
         let tempDeltaBefore = 0;
         let tempDateBefore = new Date(selected);
         let tempDeltaAfter = 0;
@@ -42,18 +42,18 @@ export function onActivate() {
           tempDateAfter = util.dateAdd(tempDateAfter, 'minute', tempDeltaAfter);
           tempDeltaAfter = getNextImageryDelta(layers.active.layers, tempDateAfter, 1);
         }
-        smartTenFramesBefore = tempDateBefore;
-        smartTenFramesAfter = tempDateAfter;
+        autoTenFramesBefore = tempDateBefore;
+        autoTenFramesAfter = tempDateAfter;
       }
       const timeScaleChangeUnit = customSelected
         ? TIME_SCALE_FROM_NUMBER[customInterval]
         : TIME_SCALE_FROM_NUMBER[interval];
       const deltaChangeAmt = customSelected ? customDelta : delta;
       const tenFrameDelta = 10 * deltaChangeAmt;
-      const tenFramesBefore = smartSelected
-        ? smartTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
-      const tenFramesAfter = smartSelected
-        ? smartTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
+      const tenFramesBefore = autoSelected
+        ? autoTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
+      const tenFramesAfter = autoSelected
+        ? autoTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
         : date.appNow < tenFramesAfter

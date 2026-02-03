@@ -5,7 +5,7 @@ import {
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
-  CHANGE_SMART_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -58,20 +58,20 @@ describe('dateReducer', () => {
     },
   );
   test(
-    `${CHANGE_SMART_INTERVAL
-    }action type and true as smartSelected `
-      + 'should return new state [date-reducer-smart-interval]',
+    `${CHANGE_AUTO_INTERVAL
+    }action type and true as autoSelected `
+      + 'should return new state [date-reducer-auto-interval]',
     () => {
       expect(
         dateReducer(dateReducerState, {
-          type: CHANGE_SMART_INTERVAL,
+          type: CHANGE_AUTO_INTERVAL,
           interval: 3,
           delta: 1,
-          smartSelected: true,
+          autoSelected: true,
         }),
       ).toEqual({
         ...dateReducerState,
-        smartSelected: true,
+        autoSelected: true,
       });
     },
   );
@@ -86,14 +86,14 @@ describe('dateReducer', () => {
           interval: 2,
           delta: 1,
           customSelected: false,
-          smartSelected: false,
+          autoSelected: false,
         }),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
         delta: 1,
         customSelected: false,
-        smartSelected: false,
+        autoSelected: false,
       });
     },
   );

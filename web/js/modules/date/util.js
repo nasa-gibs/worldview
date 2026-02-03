@@ -541,7 +541,7 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
 };
 
 /**
- * Gets the next imagery delta for smart increments
+ * Gets the next imagery delta for auto increments
  *
  * @method getNextImageryDelta
  * @param  {Array} layers
@@ -603,8 +603,8 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
         }
         if (dateAObj > startDateObj) {
           const possibleDate = new Date(dateAObj.getTime() - (minDelta * 60000));
-          const possibleDelta = possibleDate < startDateObj
-            ? Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
+          const possibleDelta = possibleDate < startDateObj ?
+            Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
           if (possibleDelta >= minDelta) {
             delta = possibleDelta;
             hasDeltaChanged = true;
