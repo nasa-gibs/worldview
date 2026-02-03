@@ -375,5 +375,3 @@ TimelineRangeSelector.propTypes = {
 };
 
 export default TimelineRangeSelector;
-
-
