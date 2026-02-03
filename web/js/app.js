@@ -107,7 +107,7 @@ class App extends React.Component {
   };
 
   onload() {
-    const { props, getScreenInfo, setVhCSSProperty } = this;
+    const { props, getScreenInfo } = this;
     const { config, parameters } = props;
     const state = parameters;
     config.parameters = state;
@@ -138,7 +138,7 @@ class App extends React.Component {
       });
       getScreenInfo();
       events.trigger(STARTUP);
-      setVhCSSProperty();
+      App.setVhCSSProperty();
     };
     util.wrap(main)();
   }
