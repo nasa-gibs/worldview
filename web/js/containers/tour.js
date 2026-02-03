@@ -64,6 +64,10 @@ const prepareLayersList = function(layersString, config) {
 };
 
 class Tour extends React.Component {
+  static getKioskParam(isKioskModeActive) {
+    return isKioskModeActive ? '&kiosk=true' : '';
+  }
+
   constructor(props) {
     super(props);
     const { storyOrder, stories, currentStoryId } = props;
@@ -150,10 +154,11 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
+      isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     if (e) e.preventDefault();
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -262,9 +267,10 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab,
+      changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
 
     if (activeTab === 'events') changeTab('layers');
 
@@ -297,18 +303,15 @@ class Tour extends React.Component {
     }
   }
 
-  getKioskParam(isKioskModeActive) {
-    return isKioskModeActive ? '&kiosk=true' : '';
-  }
-
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
+      config, renderedPalettes, processStepLink,
+      isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
 
     if (activeTab === 'events') changeTab('layers');
 
@@ -616,7 +619,11 @@ const mapStateToProps = (state) => {
     screenHeight,
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
-    promiseImageryForTour: (layers, dateString, activeString) => promiseImageryForTour(state, layers, dateString, activeString),
+    promiseImageryForTour: (
+      layers,
+      dateString,
+      activeString,
+    ) => promiseImageryForTour(state, layers, dateString, activeString),
   };
 };
 
@@ -628,20 +635,21 @@ export default connect(
 Tour.propTypes = {
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
-  config: PropTypes.object.isRequired,
-  map: PropTypes.object,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectTour: PropTypes.func.isRequired,
-  stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
+  stories: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  storyOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
+  promiseImageryForTour: PropTypes.func,
   preProcessStepLink: PropTypes.func,
-  renderedPalettes: PropTypes.object,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
   startTour: PropTypes.func,
 };

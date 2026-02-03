@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { transformExtent } from 'ol/proj';
+import PropTypes from 'prop-types';
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { selectDate as selectDateAction } from '../../../../modules/date/actions';
 import {
@@ -22,11 +23,17 @@ function TileMeasurement({ ui }) {
   const setEICMeasurementComplete = () => { dispatch(setEICMeasurementCompleteAction()); };
   const setEICMeasurementAborted = () => { dispatch(setEICMeasurementAbortedAction()); };
   const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
-  const toggleGroupVisibility = (ids, visible) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
+  const toggleGroupVisibility = (
+    ids,
+    visible,
+  ) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
 
   const eic = useSelector((state) => state.ui.eic);
   const realTime = useSelector((state) => state.date.appNow);
-  const activeLayers = useSelector((state) => getActiveLayers(state, state.compare.activeString), shallowEqual);
+  const activeLayers = useSelector((state) => getActiveLayers(
+    state,
+    state.compare.activeString,
+  ), shallowEqual);
   const eicLegacy = useSelector((state) => state.ui.eicLegacy);
   const scenario = useSelector((state) => state.ui.scenario);
 
@@ -34,9 +41,10 @@ function TileMeasurement({ ui }) {
 
   // #2 Filter all of the active layers that are also in the layersToMeasure array
   const findLayersToMeasure = () => {
-    const measurementLayersExtra = activeLayers.filter((layer) => layersToMeasure.includes(layer.id));
-
-    const measurementLayers = measurementLayersExtra.map((layer) => ({ id: layer.id, period: layer.period }));
+    const measurementLayersExtra = activeLayers
+      .filter((layer) => layersToMeasure.includes(layer.id));
+    const measurementLayers = measurementLayersExtra
+      .map((layer) => ({ id: layer.id, period: layer.period }));
     if (measurementLayers.length) console.log(`${measurementLayers.length} EIC layer(s) found to measure...`);
     return measurementLayers;
   };
@@ -55,6 +63,7 @@ function TileMeasurement({ ui }) {
         return bestDates[layer.id].date;
       }
     }
+    return undefined;
   }
 
   // #4 Loop through layers and dates to find the first date that satisfies full imagery thresholds
@@ -130,7 +139,7 @@ function TileMeasurement({ ui }) {
     }
   };
 
-  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  const delay = (ms) => new Promise((resolve) => { setTimeout(resolve, ms); });
 
   const verifyTilesAndHandleErrors = async () => {
     console.log('Verifying tiles on map...');
@@ -145,7 +154,8 @@ function TileMeasurement({ ui }) {
     let abort = false;
 
     // In rare cases the TileLayer may not have finished loading tiles at the time of measurement
-    // We can verify this by checking the otherTileStates array for values of 1 that indicate that tiles were still loading
+    // We can verify this by checking the otherTileStates array for values of 1 that indicate that
+    // tiles were still loading
     let retries = 0;
     while (retries < 10) {
       console.log('Attempt #', retries + 1, 'to verify tiles on map...');
@@ -217,13 +227,14 @@ function TileMeasurement({ ui }) {
 
       const fullImageryDate = await findFullImageryDate(measurementLayers, dateRange);
 
-      // If we are using the best date, we need to make sure there are tiles on the map so we include the abort prodcedure parameter
-      // This allows us to fall back to the static map if the best date fails as a last resort
+      // If we are using the best date, we need to make sure there are tiles on the map so we
+      // include the abort prodcedure parameter. This allows us to fall back to the static map if
+      // the best date fails as a last resort
       const bestDate = findBestDate(measurementLayers, bestDates);
       if (!fullImageryDate || bestDate === fullImageryDate) {
         updateDate(bestDate, layerPeriod);
         verifyTilesAndHandleErrors();
-        return;
+        return undefined;
       }
 
       // Format date based on period and dispatch redux action
@@ -233,6 +244,7 @@ function TileMeasurement({ ui }) {
     } catch (error) {
       console.error('Error calculating measurements:', error);
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -246,3 +258,7 @@ function TileMeasurement({ ui }) {
 }
 
 export default TileMeasurement;
+
+TileMeasurement.propTypes = {
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+};

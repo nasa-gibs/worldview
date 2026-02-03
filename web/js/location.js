@@ -532,7 +532,8 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           const isChartingRange = get(state, 'charting.timeSpanSelection') === 'range';
           const timeSpanEndDate = get(state, 'charting.timeSpanEndDate');
-          return isChartingRange && !!timeSpanEndDate ? serializeDateChartingWrapper(currentItemState, state) : undefined;
+          return isChartingRange && !!timeSpanEndDate
+            ? serializeDateChartingWrapper(currentItemState, state) : undefined;
         },
         parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
       },

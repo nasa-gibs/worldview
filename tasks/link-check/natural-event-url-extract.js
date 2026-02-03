@@ -1,8 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 const fetch = require('node-fetch')
-
-// delay helper to prevent too many requests at once
-const sleeper = (ms) => (x) => new Promise((resolve) => setTimeout(() => resolve(x), ms))
+const path = require('path')
+const prog = path.basename(__filename)
 
 // helper function to find target key in nested object
 const findProp = async (obj, keys, out) => {
@@ -35,27 +34,26 @@ const scrapeLinks = async (htmlLinks) => {
   const trackDoubles = {}
   const addedUrls = []
 
-  for (let i = 0; i < htmlLinks.length; i += 1) {
-    const htmlLink = htmlLinks[i]
-    // eslint-disable-next-line no-await-in-loop
-    await fetch(htmlLink)
-      .then(async (res) => {
-        const status = await res.json()
-        const urls = await findProp(status, ['url', 'link', 'source'])
-        for (let j = 0; j < urls.length; j += 1) {
-          const url = urls[j]
-          const linkRel = Object.keys(url)[0]
-          const linkHref = Object.values(url)[0]
+  try {
+    console.warn(`${prog}: Scraping ${htmlLinks.length} links from EONET...`)
+    const results = await Promise.allSettled(htmlLinks.map((htmlLink, i) => fetch(htmlLink)))
+    const statuses = await Promise.allSettled(results.map(({ status, value }) => status === 'fulfilled' && value.json()))
+    const urls = await Promise.allSettled(statuses.map(({ status, value }) => status === 'fulfilled' && findProp(value, ['url', 'link', 'source'])))
+    urls.forEach(({ status, value }) => {
+      if (status === 'fulfilled' && Array.isArray(value)) {
+        value.forEach(obj => {
+          const linkRel = Object.keys(obj)[0]
+          const linkHref = Object.values(obj)[0]
 
           if (trackDoubles[linkRel] !== linkHref) {
             addedUrls.push({ [linkRel]: linkHref })
             trackDoubles[linkRel] = linkHref
           }
-        }
-      }).then(sleeper(500))
-      .catch((err) => {
-        console.log(htmlLink, err)
-      })
+        })
+      }
+    })
+  } catch (err) {
+    console.log(`${prog}: ERROR: ${err}`)
   }
   return addedUrls
 }

@@ -123,7 +123,8 @@ class Sidebar extends React.Component {
       const topOffset = 10;
       const basePadding = 130;
       newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight + addLayersHeight)
+        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight
+          + basePadding + footerHeight + addLayersHeight)
         - 10;
     } else {
       newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
@@ -156,7 +157,7 @@ class Sidebar extends React.Component {
     });
     const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
     safeLocalStorage.setItem(SIDEBAR_COLLAPSED, storageValue);
-    collapseExpandToggle();
+    return collapseExpandToggle();
   }
 
   getProductsToRender(activeTab, isCompareMode, isChartMode) {
@@ -188,6 +189,7 @@ class Sidebar extends React.Component {
         />
       );
     }
+    return undefined;
   }
 
   handleWorldviewLogoClick(e, permalink) {
@@ -370,6 +372,7 @@ class Sidebar extends React.Component {
             id="products-holder"
             className="products-holder-case"
             style={productsHolderStyle}
+            // eslint-disable-next-line react/no-unused-class-component-methods
             ref={(el) => { this.sidebarElement = el; }}
           >
             <NavCase
@@ -387,6 +390,7 @@ class Sidebar extends React.Component {
               <TabPane tabId="layers">
                 {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
                 <AddLayersContent
+                  // eslint-disable-next-line react/no-unused-class-component-methods
                   ref={(el) => { this.addLayersElement = el; }}
                   isActive={activeTab === 'layers'}
                   compareState={activeString}
@@ -414,6 +418,7 @@ class Sidebar extends React.Component {
               {
                 !isKioskModeActive && (
                   <FooterContent
+                    // eslint-disable-next-line react/no-unused-class-component-methods
                     ref={(el) => { this.footerElement = el; }}
                     tabTypes={tabTypes}
                     activeTab={activeTab}
@@ -541,9 +546,10 @@ Sidebar.propTypes = {
   changeTab: PropTypes.func,
   chartingModeAccessible: PropTypes.bool,
   collapseExpandToggle: PropTypes.func,
-  config: PropTypes.object,
-  eventsData: PropTypes.array,
-  eventsSources: PropTypes.array,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  displayStaticMap: PropTypes.bool,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  eventsSources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
@@ -551,6 +557,7 @@ Sidebar.propTypes = {
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isLoadingEvents: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
@@ -558,9 +565,9 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
-  selectedMap: PropTypes.object,
-  tabTypes: PropTypes.object,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  tabTypes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

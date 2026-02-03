@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import { ListGroup, ListGroupItem, Spinner } from 'reactstrap';
+import PropTypes from 'prop-types';
 import Scrollbar from '../../util/scrollbar';
 import { coverageDateFormatter } from '../../../modules/date/util';
 
-const formatDateRanges = (dateRanges = []) => dateRanges.map(({ startDate, endDate }) => [startDate, endDate]);
+const formatDateRanges = (dateRanges = []) => dateRanges.map(({
+  startDate,
+  endDate,
+}) => [startDate, endDate]);
 
 export default function DateRanges ({ layer, describeDomainsUrl }) {
   const [showRanges, setShowRanges] = useState(false);
@@ -11,27 +15,33 @@ export default function DateRanges ({ layer, describeDomainsUrl }) {
   const { ongoing } = layer;
 
   const getDateRanges = async () => {
-    if (dateRanges.length) return;
+    if (dateRanges.length) return undefined;
     if (!ongoing) return setDateRanges(formatDateRanges(layer.dateRanges));
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
         worker.terminate(); // terminate the worker
-        const data = event.data.length ? event.data : formatDateRanges(layer.dateRanges); // fallback to layer.dateRanges if no DescribeDomains data
+        // fallback to layer.dateRanges if no DescribeDomains data
+        const data = event.data.length
+          ? event.data : formatDateRanges(layer.dateRanges);
         return setDateRanges(data);
       }
-      // DOMParser is not available in workers so we parse the xml on the main thread before sending it back to the worker
+      // DOMParser is not available in workers so we parse the xml on the main thread before sending
+      // it back to the worker
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(event.data, 'text/xml');
       const domains = xmlDoc.querySelector('Domain')?.textContent || '';
-      worker.postMessage({ operation: 'mergeDomains', args: [domains, 0] });
+      return worker.postMessage({ operation: 'mergeDomains', args: [domains, 0] });
     };
     worker.onerror = () => {
       worker.terminate();
-      setDateRanges(formatDateRanges(layer.dateRanges)); // fallback to layer.dateRanges if worker fails
+      // fallback to layer.dateRanges if worker fails
+      setDateRanges(formatDateRanges(layer.dateRanges));
     };
     const { startDate } = layer;
-    const endDate = layer.endDate ? new Date(layer.endDate).toISOString() : new Date().toISOString(); // default to today if no end date
+    const endDate = layer.endDate
+      ? new Date(layer.endDate).toISOString()
+      : new Date().toISOString(); // default to today if no end date
     const params = {
       startDate,
       endDate,
@@ -39,7 +49,7 @@ export default function DateRanges ({ layer, describeDomainsUrl }) {
       proj: 'EPSG:4326',
       baseUrl: describeDomainsUrl,
     };
-    worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    return worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
   };
 
   const renderListItem = () => dateRanges
@@ -92,3 +102,7 @@ export default function DateRanges ({ layer, describeDomainsUrl }) {
     </>
   );
 }
+
+DateRanges.propTypes = {
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+};

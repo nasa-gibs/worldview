@@ -25,6 +25,7 @@ function UpdateOpacity(props) {
     const layers = ui.selected.getLayers().getArray();
     lodashEach(Object.keys(layers), (index) => {
       const layer = layers[index];
+      // eslint-disable-next-line no-underscore-dangle
       if (layer.className_ === 'ol-layer') {
         if (compare && isCompareActive) {
           const layerGroup = layer.getLayers().getArray();
@@ -100,12 +101,12 @@ export default connect(
 )(UpdateOpacity);
 
 UpdateOpacity.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compare: PropTypes.object,
-  findLayers: PropTypes.func,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  findLayer: PropTypes.func,
   isCompareActive: PropTypes.bool,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
 };

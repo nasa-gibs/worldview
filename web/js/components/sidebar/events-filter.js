@@ -170,7 +170,8 @@ function EventFilterModalBody (props) {
         placement="right"
         target="bbox-show-all-tracks"
       >
-        If checked, shows tracks for all of the events listed in the sidebar. If unchecked, tracks will only
+        If checked, shows tracks for all of the events listed in the sidebar.
+        If unchecked, tracks will only
         show for a selected event.
       </UncontrolledTooltip>
 
@@ -201,10 +202,10 @@ function EventFilterModalBody (props) {
 
 EventFilterModalBody.propTypes = {
   closeModal: PropTypes.func,
-  eventCategories: PropTypes.array,
+  eventCategories: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isPolarProj: PropTypes.bool,
   parentId: PropTypes.string,
-  selectedCategories: PropTypes.array,
+  selectedCategories: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
   setFilter: PropTypes.func,

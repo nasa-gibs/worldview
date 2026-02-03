@@ -40,7 +40,14 @@ class LocationSearchModal extends Component {
       showReverseGeocodeAlert: false,
       showNoSuggestionsAlert: false,
     };
-    this.debounceGetSuggestions = lodashDebounce(this.getSuggestions, 400, { leading: true, trailing: true });
+    this.debounceGetSuggestions = lodashDebounce(
+      this.getSuggestions,
+      400,
+      {
+        leading: true,
+        trailing: true,
+      },
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -66,14 +73,17 @@ class LocationSearchModal extends Component {
     if (inputValue && suggestions.length === 0 && prevProps.suggestions.length > 0) {
       const prevInputValue = prevProps.inputValue;
       const prevSuggestedPlace = prevProps.suggestedPlace;
-      const newSuggestedPlaceSelected = prevInputValue && prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
+      const newSuggestedPlaceSelected = prevInputValue
+        && prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
       const isCoordinates = isValidCoordinates(inputValue);
       // prevent flag error on new place/coordinates being copy pasted
       if (!newSuggestedPlaceSelected && !isCoordinates) {
         this.setNoSuggestionsAlert(true);
         this.setInputAlertIcon(true);
       }
-    } else if ((showNoSuggestionsAlert || showInputAlert) && (!inputValue || suggestions.length > 0)) {
+    } else if (
+      (showNoSuggestionsAlert || showInputAlert)
+      && (!inputValue || suggestions.length > 0)) {
       this.setNoSuggestionsAlert(false);
       this.setInputAlertIcon(false);
     }
@@ -414,7 +424,10 @@ const mapStateToProps = (state) => {
     preventInputFocus,
     coordinates,
     locationSearchMobileModalOpen,
-    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(proj, targetCoordinates),
+    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(
+      proj,
+      targetCoordinates,
+    ),
     isCoordinateSearchActive,
     isMobile,
     processMagicKey: (magicKey) => processMagicKey(magicKey, config),
@@ -447,8 +460,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 LocationSearchModal.propTypes = {
   clearSuggestions: PropTypes.func,
-  coordinates: PropTypes.array,
-  coordinatesPending: PropTypes.array,
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  coordinatesPending: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   locationSearchMobileModalOpen: PropTypes.bool,
   getSuggestions: PropTypes.func,
   inputValue: PropTypes.string,
@@ -460,8 +473,8 @@ LocationSearchModal.propTypes = {
   reverseGeocode: PropTypes.func,
   setPlaceMarker: PropTypes.func,
   setSuggestion: PropTypes.func,
-  suggestions: PropTypes.array,
-  suggestedPlace: PropTypes.array,
+  suggestions: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  suggestedPlace: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,

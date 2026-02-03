@@ -25,19 +25,25 @@ function AnimationButton(props) {
   const labelText = label || 'Set up animation';
 
   const getButtonClassName = () => {
-    if (((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) && isEmbedModeActive) {
+    if (((isMobilePhone && isPortrait)
+    || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers)
+    || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) && isEmbedModeActive) {
       return 'phone-portrait-embed';
-    } if ((isMobilePhone && isPortrait) || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+    } if ((isMobilePhone && isPortrait) || (
+      !isMobileTablet && screenWidth < 670 && hasSubdailyLayers
+    ) || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
       return `phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `phone-landscape${subdailyID}`;
-    } if (((isMobileTablet && isPortrait) || !isMobile || (!isMobilePhone && screenWidth < breakpoints.small)) && isEmbedModeActive) {
+    } if (((isMobileTablet && isPortrait) || !isMobile || (!isMobilePhone
+      && screenWidth < breakpoints.small)) && isEmbedModeActive) {
       return `tablet-portrait${subdailyID}-embed`;
     } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
       return `tablet-portrait${subdailyID}`;
     } if (isMobileTablet && isLandscape) {
       return `tablet-landscape${subdailyID}`;
     }
+    return undefined;
   };
 
   const buttonClass = getButtonClassName();
@@ -66,7 +72,7 @@ function AnimationButton(props) {
 }
 
 AnimationButton.propTypes = {
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
   label: PropTypes.string,

@@ -96,7 +96,8 @@ const checkLeftArrowDisabled = (
 ) => {
   const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
   const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
-  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit).subtract(delta, timeScaleChangeUnit);
+  const minMinusDeltaMoment = moment.utc(timelineStartDateLimit)
+    .subtract(delta, timeScaleChangeUnit);
   const minMinusDeltaDate = new Date(minMinusDeltaMoment.seconds(0).format());
 
   const nextDecrementDateTime = nextDecrementDate.getTime();
@@ -224,8 +225,16 @@ class Timeline extends React.Component {
 
     // change timescale
     this.debounceWheelTime = 60;
-    this.debounceChangeTimeScaleWheel = lodashDebounce(this.throttleChangeTimeScaleWheel, this.debounceWheelTime, throttleSettings);
-    this.throttleChangeTimeScaleWheelFire = lodashThrottle(this.changeTimeScaleScroll, 200, throttleSettings);
+    this.debounceChangeTimeScaleWheel = lodashDebounce(
+      this.throttleChangeTimeScaleWheel,
+      this.debounceWheelTime,
+      throttleSettings,
+    );
+    this.throttleChangeTimeScaleWheelFire = lodashThrottle(
+      this.changeTimeScaleScroll,
+      200,
+      throttleSettings,
+    );
 
     // application relative now time
     this.appNowUpdateInterval = 0;
@@ -309,7 +318,8 @@ class Timeline extends React.Component {
     // handle location update triggered from animation start/end date change from animation widget
     if (isAnimationWidgetOpen) {
       if (prevStartLocationDate && prevEndLocationDate) {
-        const animStartDateChanged = prevStartLocationDate.getTime() !== animStartLocationDate.getTime();
+        const animStartDateChanged = prevStartLocationDate.getTime()
+        !== animStartLocationDate.getTime();
         const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();
         const frontDateChanged = prevState.frontDate !== frontDate;
         if (animStartDateChanged || animEndDateChanged || frontDateChanged) {
@@ -375,7 +385,8 @@ class Timeline extends React.Component {
     requestAnimationFrame(() => {
       this.setState({
         hoverTime: date,
-        leftOffset: leftOffset - parentOffset, // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
+        // relative location from parent bounding box of mouse hover position (i.e. BLUE LINE)
+        leftOffset: leftOffset - parentOffset,
       });
     });
   };
@@ -457,12 +468,17 @@ class Timeline extends React.Component {
       const diffFactor = diff / gridWidth;
       const displayDateValue = currentDateValue + xHoverPositionInCurrentGrid * diffFactor;
 
-      const isBetweenValidTimeline = getIsBetween(displayDateValue, timelineStartDateLimit, timelineEndDateLimit);
+      const isBetweenValidTimeline = getIsBetween(
+        displayDateValue,
+        timelineStartDateLimit,
+        timelineEndDateLimit,
+      );
       if (isBetweenValidTimeline) {
         const displayDateFormat = getISODateFormatted(displayDateValue);
         this.displayDate(displayDateFormat, clientX);
         this.setState({
-          hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid + transformX + position,
+          hoverLinePosition: index * gridWidth + xHoverPositionInCurrentGrid
+          + transformX + position,
         });
       }
     });
@@ -611,7 +627,13 @@ class Timeline extends React.Component {
     if (!disabled) {
       const minDate = new Date(timelineStartDateLimit);
       const maxDate = new Date(timelineEndDateLimit);
-      this.onDateChange(getNextTimeSelection(delta, timeScaleChangeUnit, selectedDate, minDate, maxDate));
+      this.onDateChange(getNextTimeSelection(
+        delta,
+        timeScaleChangeUnit,
+        selectedDate,
+        minDate,
+        maxDate,
+      ));
     }
   }
 
@@ -646,16 +668,6 @@ class Timeline extends React.Component {
         this.handleArrowDateChange(1);
       }
     }
-  };
-
-  /**
-  * @desc show/hide custom interval modal
-  * @param {Boolean} isOpen
-  * @returns {void}
-  */
-  toggleCustomIntervalModal = (isOpen) => {
-    const { toggleCustomModal } = this.props;
-    toggleCustomModal(isOpen, customModalType.TIMELINE);
   };
 
   /**
@@ -850,7 +862,13 @@ class Timeline extends React.Component {
   * @param {Boolean} otherDraggerVisibleArg
   * @returns {void}
   */
-  updateDraggerDatePosition = (newDate, draggerSelected, draggerPositionArg, draggerVisibleArg, otherDraggerVisibleArg) => {
+  updateDraggerDatePosition = (
+    newDate,
+    draggerSelected,
+    draggerPositionArg,
+    draggerVisibleArg,
+    otherDraggerVisibleArg,
+  ) => {
     const {
       draggerPosition,
       draggerPositionB,
@@ -959,11 +977,12 @@ class Timeline extends React.Component {
             isAnimationDraggerDragging,
           } = self.state;
           const { isAnimationPlaying, arrowDown } = self.props;
-          const userIsInteracting = arrowDown || isTimelineDragging || isDraggerDragging || isAnimationDraggerDragging;
+          const userIsInteracting = arrowDown || isTimelineDragging
+          || isDraggerDragging || isAnimationDraggerDragging;
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
-          setTimeout(waitForSafeUpdate, 1000);
+          return setTimeout(waitForSafeUpdate, 1000);
         }());
       });
     };
@@ -1054,18 +1073,6 @@ class Timeline extends React.Component {
       left: `${mobileLeft}px`,
       bottom: `${mobileBottom}px`,
     };
-  };
-
-  getStringFromDate = (dateObj, hasSubdailyLayers) => {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const day = dateObj.getDate().toString().padStart(2, '0');
-    const month = months[dateObj.getMonth()];
-    const year = dateObj.getFullYear().toString();
-    const hours = dateObj.getUTCHours();
-    const minutes = dateObj.getUTCMinutes();
-    const timeString = hasSubdailyLayers ? ` ${`0${hours}`.slice(-2)}:${`0${minutes}`.slice(-2)}` : '';
-
-    return `${year} ${month} ${day}${timeString}`;
   };
 
   renderDateChangeArrows = () => {
@@ -1501,7 +1508,11 @@ class Timeline extends React.Component {
                   }
                 }
               >
-                <KioskTimeStamp date={selectedDate} subdaily={hasSubdailyLayers} isKioskModeActive={isKioskModeActive} />
+                <KioskTimeStamp
+                  date={selectedDate}
+                  subdaily={hasSubdailyLayers}
+                  isKioskModeActive={isKioskModeActive}
+                />
               </div>
             </section>
           </ErrorBoundary>
@@ -1759,13 +1770,13 @@ export default connect(
 
 Timeline.propTypes = {
   addGranuleDateRanges: PropTypes.func,
-  appNow: PropTypes.object,
-  activeLayers: PropTypes.array,
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   animationDisabled: PropTypes.bool,
-  animEndLocationDate: PropTypes.object,
-  animStartLocationDate: PropTypes.object,
+  animEndLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  animStartLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   changeCustomInterval: PropTypes.func,
   changeSmartInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
@@ -1776,11 +1787,12 @@ Timeline.propTypes = {
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
+  displayStaticMap: PropTypes.bool,
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
   hasTempoProduct: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
-  subDailyLayersList: PropTypes.object,
+  subDailyLayersList: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hideTimeline: PropTypes.bool,
   interval: PropTypes.number,
   isAnimationPlaying: PropTypes.bool,
@@ -1800,6 +1812,7 @@ Timeline.propTypes = {
   isPortrait: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftArrowDisabled: PropTypes.bool,
+  newCustomDelta: PropTypes.number,
   nowButtonDisabled: PropTypes.bool,
   nowOverride: PropTypes.bool,
   onPauseAnimation: PropTypes.func,
@@ -1812,16 +1825,15 @@ Timeline.propTypes = {
   rightArrowDisabled: PropTypes.bool,
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   timelineCustomModalOpen: PropTypes.bool,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,
   timeScale: PropTypes.string,
   timeScaleChangeUnit: PropTypes.string,
   toggleActiveCompareState: PropTypes.func,
-  toggleCustomModal: PropTypes.func,
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   describeDomainsUrl: PropTypes.string,
 };

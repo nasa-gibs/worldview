@@ -47,13 +47,16 @@ function MobileAnimationWidget (props) {
   const startingDate = getISODateFormatted(startDate);
 
   const getMobileIDs = () => {
-    if ((isMobilePhone && isLandscape) || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
+    if ((isMobilePhone && isLandscape)
+      || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
       return 'mobile-phone-landscape';
-    } if ((isMobilePhone && isPortrait) || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
+    } if ((isMobilePhone && isPortrait)
+      || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
       return 'mobile-phone-portrait';
     } if (isMobileTablet || screenWidth <= breakpoints.small) {
       return 'tablet';
     }
+    return undefined;
   };
 
   const mobileID = getMobileIDs();
@@ -177,8 +180,8 @@ function MobileAnimationWidget (props) {
 }
 
 MobileAnimationWidget.propTypes = {
-  breakpoints: PropTypes.object,
-  endDate: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasSubdailyLayers: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isLandscape: PropTypes.bool,
@@ -188,8 +191,8 @@ MobileAnimationWidget.propTypes = {
   isPlaying: PropTypes.bool,
   isPortrait: PropTypes.bool,
   looping: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onLoop: PropTypes.func,
   onSlide: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
@@ -201,7 +204,7 @@ MobileAnimationWidget.propTypes = {
   setSpeed: PropTypes.func,
   sliderLabel: PropTypes.string,
   speed: PropTypes.number,
-  startDate: PropTypes.object,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
   toggleCollapse: PropTypes.func,
 };

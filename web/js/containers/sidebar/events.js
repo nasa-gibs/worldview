@@ -143,7 +143,8 @@ function Events(props) {
       >
         <div id="wv-events">
           {isLoading || hasRequestError ? (
-            // notranslate included below to prevent Google Translate extension from crashing the page
+            // notranslate included below to prevent
+            // Google Translate extension from crashing the page
             <div className="events-loading-text notranslate">
               {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
               {errorOrLoadingText}
@@ -236,27 +237,27 @@ export default connect(
 Events.propTypes = {
   defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
-  eventsData: PropTypes.array,
-  eventLayers: PropTypes.array,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  eventLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
-  highlighted: PropTypes.object,
+  highlighted: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   highlightEvent: PropTypes.func,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
-  layers: PropTypes.array,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   openFilterModal: PropTypes.func,
   removeGroup: PropTypes.func,
-  selected: PropTypes.object,
+  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDate: PropTypes.string,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
-  selectedCategories: PropTypes.array,
+  selectedCategories: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   showDates: PropTypes.bool,
-  sources: PropTypes.array,
+  sources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
   unHighlightEvent: PropTypes.func,

@@ -10,7 +10,9 @@ import { selectDate as selectDateAction } from '../../../../modules/date/actions
 function KioskAnimations({ ui }) {
   const dispatch = useDispatch();
   const initiateAnimation = () => { dispatch(initiateAnimationAction()); };
-  const playKioskAnimation = (startDate, endDate) => { dispatch(playKioskAnimationAction(startDate, endDate)); };
+  const playKioskAnimation = (startDate, endDate) => {
+    dispatch(playKioskAnimationAction(startDate, endDate));
+  };
   const selectDate = (date) => { dispatch(selectDateAction(date)); };
 
   const selectedDate = useSelector((state) => state.date.selected);
@@ -69,8 +71,10 @@ function KioskAnimations({ ui }) {
     playKioskAnimation(startDate, endDate);
   };
 
-  // if subdaily animation check that date moved back one day otherwise check if animation should play
+  // if subdaily animation check that date moved back one day
+  // otherwise check if animation should play
   const checkAnimationSettings = () => {
+    // eslint-disable-next-line no-underscore-dangle
     if (!ui.selected.frameState_) return;
     if (eic === 'sa' && !subdailyAnimationDateUpdated) {
       const prevDayDate = new Date(selectedDate);
@@ -83,7 +87,8 @@ function KioskAnimations({ ui }) {
   };
 
   useEffect(() => {
-    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
+    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete
+      || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
     checkAnimationSettings();
   }, [map, eicMeasurementComplete]);
 
@@ -91,7 +96,7 @@ function KioskAnimations({ ui }) {
 }
 
 KioskAnimations.propTypes = {
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default KioskAnimations;

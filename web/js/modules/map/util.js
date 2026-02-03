@@ -78,6 +78,7 @@ export function mapIsExtentValid(extent) {
       valid = false;
       return false;
     }
+    return true;
   });
   return valid;
 }
@@ -152,8 +153,9 @@ let preloadMap;
  * Adds the passed layer to a preloadMap, which is an invisible copy of our main OlMap
  * The layer is then removed once it is fully loaded on the preloadMap
  * This is done so because new version of OpenLayers (>= v10.2.x) no longer work properly with
- * displaying layers instantly on-screen during an animation with just pre-loading the tiles, and now
- * the layers themselves must have been rendered on an OlMap before animation to achieve the same results.
+ * displaying layers instantly on-screen during an animation with just pre-loading the tiles, and
+ * now the layers themselves must have been rendered on an OlMap before animation to achieve the
+ * same results.
  *
  * @method promiseTileLayer
  * @param  {object} layer      _ol_layer_Tile_
@@ -178,6 +180,8 @@ function promiseTileLayer(layer, map) {
       });
     }
 
+    preloadMap.setView(map.getView());
+
     const onLoad = function onLoad (e) {
       i -= 1;
       preloadMap.removeLayer(layer);
@@ -201,7 +205,7 @@ function promiseTileLayer(layer, map) {
  * a promise with an array of their fulfilled values is returned.
  *
  * @method promiseLayerGroup
- * @param  {object} layer      ol_Layer_Group object, contains values.layers for prev, current, next days
+ * @param  {object} layer ol_Layer_Group object, contains values.layers for prev, current, next days
  * @param  {object} viewState  Contains center, projection, resolution, rotation and zoom parameters
  * @param  {number} pixelRatio The window.devicePixelRatio, used to detect retina displays
  * @param  {object} map        _ol_Map_ object
@@ -230,9 +234,9 @@ function promiseLayerGroup(layerGroup, map) {
  */
 export async function promiseImageryForTime(state, date, activeString) {
   const { map } = state;
-  if (!map.ui.proj) return;
+  if (!map.ui.proj) return undefined;
   const {
-    cache, selected, createLayer, layerKey,
+    cache, selected, createLayer, layerKey, proj,
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
   await Promise.all(layers.map(async (layer) => {
@@ -243,9 +247,10 @@ export async function promiseImageryForTime(state, date, activeString) {
     const key = layerKey(layer, options, state);
     const cachedItem = cache.getItem(key);
     const layerGroup = cachedItem || await createLayer(layer, options);
-    if (!cachedItem) {
-      return promiseLayerGroup(layerGroup, selected);
+    if (!cachedItem && layerGroup.wv.proj && proj[layerGroup.wv.proj]) {
+      return promiseLayerGroup(layerGroup, proj[layerGroup.wv.proj]);
     }
+    return undefined;
   }));
   selected.getView().changed();
   return date;
@@ -259,7 +264,7 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
   const { map } = state;
   if (!map.ui.proj) return;
   const {
-    cache, selected, createLayer, layerKey,
+    cache, selected, createLayer, layerKey, proj,
   } = map.ui;
   const appNow = lodashGet(state, 'date.appNow');
   const date = tryCatchDate(dateString, appNow);
@@ -286,7 +291,12 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     }
 
     const key = layerKey(layer, options, state);
-    const layerGroup = cache.getItem(key) || await createLayer(layer, options);
-    return promiseLayerGroup(layerGroup, selected);
+    const cachedItem = cache.getItem(key);
+    const layerGroup = cachedItem || await createLayer(layer, options);
+    if (!cachedItem && layerGroup.wv.proj && proj[layerGroup.wv.proj]) {
+      return promiseLayerGroup(layerGroup, proj[layerGroup.wv.proj]);
+    }
+    return undefined;
   }));
+  selected.getView().changed();
 }

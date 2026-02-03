@@ -98,7 +98,9 @@ function AnimationWidget (props) {
   const subdailyWidgetWidth = 460;
   const halfWidgetWidth = (subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
 
-  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth / 2 - halfWidgetWidth, y: -25 });
+  const [widgetPosition, setWidgetPosition] = useState(
+    { x: screenWidth / 2 - halfWidgetWidth, y: -25 },
+  );
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
@@ -140,7 +142,8 @@ function AnimationWidget (props) {
     }
   });
 
-  // Prevent drag when interacting with child elements (e.g. buttons) Only allow drag when targeting "background" elements
+  // Prevent drag when interacting with child elements (e.g. buttons)
+  // Only allow drag when targeting "background" elements
   const handleDragStart = (e, data) => {
     const draggableTargets = [
       'wv-animation-widget',
@@ -484,7 +487,8 @@ const mapStateToProps = (state) => {
     proj,
     promiseImageryForTime: (date) => promiseImageryForTime(state, date),
     isEmbedModeActive,
-    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1
+      : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
     smartSelected,
     layers: layers.active.layers,
   };
@@ -530,15 +534,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 AnimationWidget.propTypes = {
-  appNow: PropTypes.object,
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   animationCustomModalOpen: PropTypes.bool,
   autoplay: PropTypes.bool,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   checkAnimationAvailability: PropTypes.bool,
-  snappedCurrentDate: PropTypes.object,
-  currentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
-  endDate: PropTypes.object,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
@@ -554,8 +558,9 @@ AnimationWidget.propTypes = {
   isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
@@ -573,7 +578,7 @@ AnimationWidget.propTypes = {
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speedRedux: PropTypes.number,
-  startDate: PropTypes.object,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
   smartSelected: PropTypes.bool,
   layers: PropTypes.array,

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable func-names */
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
@@ -122,7 +123,8 @@ LookupImageTile.prototype.load = async function () {
             const rgbaStr = `${r},${g},${b},${a}`;
             const drawThisColor = pixelsToDisplay[rgbaStr];
 
-            // If the intended color exists in pixelsToDisplay obj, draw that color, otherwise transparent
+            // If the intended color exists in pixelsToDisplay obj, draw that color,
+            // otherwise transparent
             if (drawThisColor !== undefined) {
               outputData[outputIndex] = r;
               outputData[outputIndex + 1] = g;
@@ -136,7 +138,8 @@ LookupImageTile.prototype.load = async function () {
             }
           }
         } else {
-          // For non-indexed PNG, copy pixel data to output, this will throw an error if the lengths differ
+          // For non-indexed PNG, copy pixel data to output, this will throw an error if the
+          // lengths differ
           outputData.set(pixelData);
 
           // Apply transparency based on color proximity

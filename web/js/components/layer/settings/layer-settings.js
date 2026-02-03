@@ -10,7 +10,6 @@ import Opacity from './opacity';
 import Palette from './palette';
 import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
-import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
@@ -125,7 +124,9 @@ class LayerSettings extends React.Component {
               palette={palette}
               toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)}
               legend={legend}
-              toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, i, groupName); }}
+              toggleAll={(disabledArray) => {
+                toggleAllClassifications(layer.id, disabledArray, i, groupName);
+              }}
             />
           </TabPane>
         );
@@ -227,7 +228,9 @@ class LayerSettings extends React.Component {
           palette={palette}
           toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)}
           legend={legend}
-          toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, 0, groupName); }}
+          toggleAll={(disabledArray) => {
+            toggleAllClassifications(layer.id, disabledArray, 0, groupName);
+          }}
         />
       );
     }
@@ -265,34 +268,6 @@ class LayerSettings extends React.Component {
           paletteOrder={paletteOrder}
         />
       </>
-    );
-  }
-
-  /**
-   * Render Opacity, threshold, and custom palette options
-   */
-  renderVectorStyles() {
-    const {
-      setStyle,
-      clearStyle,
-      groupName,
-      layer,
-      vectorStyles,
-    } = this.props;
-    let customStyle;
-    if (layer.custom && layer.custom[0]) {
-      [customStyle] = layer.custom;
-    }
-    return (
-      <VectorStyle
-        setStyle={setStyle}
-        clearStyle={clearStyle}
-        activeVectorStyle={customStyle || layer.id}
-        layer={layer}
-        index={0}
-        groupName={groupName}
-        vectorStyles={vectorStyles}
-      />
     );
   }
 
@@ -466,30 +441,26 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   clearCustomPalette: PropTypes.func,
-  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
-  granuleOptions: PropTypes.object,
+  granuleOptions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
-  layer: PropTypes.object,
-  onCustomizeBandClick: PropTypes.func,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   palettedAllowed: PropTypes.bool,
-  paletteOrder: PropTypes.array,
+  paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,
   resetGranuleLayerDates: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
-  setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
-  vectorStyles: PropTypes.object,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

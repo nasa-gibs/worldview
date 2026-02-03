@@ -7,7 +7,7 @@
       "description": "pace-pax/PACE-PAX_ER-2_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector AirHARP2 HSRL-2 RSP SPEX-Airborne PRISM PICARD California",
+      "tags": "vector AirHARP2 HSRL-2 RSP SPEX-Airborne PRISM PICARD California suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,

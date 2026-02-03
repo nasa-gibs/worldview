@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line import/no-unresolved
-import PQueue from 'p-queue';
+import PQueue, { TimeoutError } from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
@@ -35,13 +35,13 @@ const getInitialBufferSize = (numberOfFrames, speed) => {
  *
  * The buffering logic is as follows:
  * - n = 10 + speed (frames per sec)
- * - Make at least n requests (assuming there are >= n frames) to determine the avg fetch time for a frame
+ * - Make at least n requests (assuming there are >= n frames) to determine
+ * the avg fetch time for a frame
  * - While making initial requests, if any return too quickly (e.g. they were cached), keep making
- *   requests until at least n "real" requests can be made to determine average fetch time
+ * requests until at least n "real" requests can be made to determine average fetch time
  * - Based on how long it took to load the first n, calculate how many additional frames
- *   need to be pre-loaded, based on avg fetch time and playback speed, in order for playback to begin
- *   without having to stop to buffer.
- *
+ * need to be pre-loaded, based on avg fetch time and playback speed,
+ * in order for playback to begin without having to stop to buffer.
  */
 class PlayQueue extends React.Component {
   constructor(props) {
@@ -187,8 +187,6 @@ class PlayQueue extends React.Component {
     }
   }
 
-  getAverageFetchTime = () => this.fetchTimes.reduce((a, b) => a + b) / this.fetchTimes.length;
-
   isPreloadSufficient() {
     const { numberOfFrames } = this.props;
     const currentBufferSize = util.objectLength(this.bufferObject);
@@ -212,15 +210,15 @@ class PlayQueue extends React.Component {
     const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
 
     if ((isAnimating || this.hasPlayStarted) && !loopStart) {
-      return;
+      return true;
     }
     if (this.isPreloadSufficient() || restartLoop) {
-      if (this.isBetweenSteps) return;
+      if (this.isBetweenSteps) return true;
       // console.debug('Started: ', Date.now());
       this.hasPlayStarted = true;
       return this.play();
     }
-    this.checkQueue();
+    return this.checkQueue();
   };
 
   checkShouldLoop() {
@@ -317,26 +315,32 @@ class PlayQueue extends React.Component {
     this.inQueueObject[strDate] = date;
     this.bufferArray.push(strDate);
 
-    await this.queue.add(async () => {
-      const startTime = Date.now();
-      await promiseImageryForTime(date);
-      const elapsedTime = Date.now() - startTime;
-      const fetchTime = elapsedTime >= MIN_REQUEST_TIME_MS ? elapsedTime : MIN_REQUEST_TIME_MS;
-      this.fetchTimes.push(fetchTime);
-      this.setState({ loadedItems: loadedItems += 1 });
+    try {
+      await this.queue.add(async () => {
+        const startTime = Date.now();
+        await promiseImageryForTime(date);
+        const elapsedTime = Date.now() - startTime;
+        const fetchTime = elapsedTime >= MIN_REQUEST_TIME_MS ? elapsedTime : MIN_REQUEST_TIME_MS;
+        this.fetchTimes.push(fetchTime);
+        this.setState({ loadedItems: loadedItems += 1 });
 
-      if (!this.mounted) return;
-      this.bufferObject[strDate] = strDate;
-      delete this.inQueueObject[strDate];
-      const currentBufferSize = util.objectLength(this.bufferObject);
+        if (!this.mounted) return true;
+        this.bufferObject[strDate] = strDate;
+        delete this.inQueueObject[strDate];
+        const currentBufferSize = util.objectLength(this.bufferObject);
 
-      if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
-        this.checkQueue();
-        this.checkShouldPlay();
+        if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
+          this.checkQueue();
+          this.checkShouldPlay();
+        }
+
+        return strDate;
+      });
+    } catch (error) {
+      if (error instanceof TimeoutError) {
+        console.error('Imagery loading timed out after 3 seconds');
       }
-
-      return strDate;
-    });
+    }
   }
 
   play() {
@@ -355,7 +359,6 @@ class PlayQueue extends React.Component {
     this.abortController.abort();
     this.setState({ isAnimating: false });
     this.hasPlayStarted = false;
-    // console.debug('Stopped', this.getAverageFetchTime(), this.fetchTimes);
   }
 
   animationInterval(ms, callback) {
@@ -409,19 +412,19 @@ class PlayQueue extends React.Component {
       if (nextDate > endDate) {
         this.abortController.abort();
         this.checkShouldLoop();
-        return;
+        return true;
       }
 
       // Playback caught up with buffer :(
       if (!this.bufferObject[nextDateStr]) {
         this.stopPlaying();
         this.checkQueue();
-        return;
+        return true;
       }
       if (!isPlaying || !this.mounted) {
         this.stopPlaying();
       }
-      this.checkQueue();
+      return this.checkQueue();
     };
     const animIntervalMS = speed === 0.5 ? 2000 : 1000 / speed;
     this.animationInterval(animIntervalMS, player);
@@ -472,23 +475,23 @@ class PlayQueue extends React.Component {
 }
 
 PlayQueue.propTypes = {
-  endDate: PropTypes.object.isRequired,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   selectDate: PropTypes.func.isRequired,
   speed: PropTypes.number.isRequired,
-  startDate: PropTypes.object.isRequired,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   togglePlaying: PropTypes.func.isRequired,
-  currentDate: PropTypes.object,
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
   interval: PropTypes.string,
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
-  snappedCurrentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   smartSelected: PropTypes.bool,
   layers: PropTypes.array,
 };

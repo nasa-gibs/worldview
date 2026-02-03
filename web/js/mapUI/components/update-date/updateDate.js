@@ -79,7 +79,8 @@ function UpdateDate(props) {
     const layers = mapLayerCollection.getArray();
     const activeLayers = getAllActiveLayers(state);
 
-    const visibleLayers = activeLayers.filter(({ id, visible }) => layers.findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
+    const visibleLayers = activeLayers.filter(({ id, visible }) => layers
+      .findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
 
     const layerPromises = visibleLayers.map(async (def) => {
       const { id, type } = def;
@@ -122,12 +123,14 @@ function UpdateDate(props) {
       }
       return updateDate(action.outOfStep);
     }
-    if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
+    if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY
+      || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
       const outOfStep = false;
       // if date not changing we do not want to recreate titiler layer
       const skipTitiler = true;
       return updateDate(outOfStep, skipTitiler);
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -166,19 +169,19 @@ export default connect(
 )(UpdateDate);
 
 UpdateDate.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getGranuleOptions: PropTypes.func,
-  granuleState: PropTypes.object,
-  isComparActive: PropTypes.bool,
-  layerState: PropTypes.object,
+  granuleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  isCompareActive: PropTypes.bool,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadNextTiles: PropTypes.func,
-  state: PropTypes.object,
-  ui: PropTypes.object,
+  state: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
-  vectorStyleState: PropTypes.object,
+  vectorStyleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

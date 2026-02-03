@@ -37,13 +37,13 @@ function MeasurementLayerRow (props) {
   const itemElementId = `checkbox-case-${layer.id.split('.').join('-')}`;
   const checkboxId = `${layer.id.split('.').join('-')}-checkbox`;
 
-  function onCheck() {
+  const onCheck = () => {
     if (isEnabled) {
       removeLayer(layer.id);
     } else {
       addLayer(layer.id);
     }
-  }
+  };
 
   return (
     <ListGroupItem
@@ -93,11 +93,11 @@ MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layerNotices: PropTypes.string,
   measurementId: PropTypes.string,
   removeLayer: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   title: PropTypes.string,
 };
 

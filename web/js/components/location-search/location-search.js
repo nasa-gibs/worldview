@@ -17,7 +17,7 @@ class LocationSearch extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { isExpanded, isMobile, toggleShowLocationSearch } = this.props;
+    const { isExpanded, isMobile } = this.props;
     if (isExpanded && prevProps.isMobile !== isMobile) {
       toggleShowLocationSearch();
     }
@@ -58,9 +58,9 @@ class LocationSearch extends Component {
 
     const shouldShowComponent = isMobile || (isExpanded && !shouldCollapseFromOtherUI);
     return (
-      <>
+      <div>
         {shouldShowComponent && this.renderSearchComponent()}
-      </>
+      </div>
     );
   }
 }
@@ -84,7 +84,10 @@ const mapStateToProps = (state) => {
   const isMobile = screenSize.isMobileDevice;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
-  const shouldCollapseFromOtherUI = snapshotModalOpen || measure.isActive || gifActive || isDistractionFreeModeActive;
+  const shouldCollapseFromOtherUI = snapshotModalOpen
+  || measure.isActive
+  || gifActive
+  || isDistractionFreeModeActive;
 
   return {
     isExpanded,
@@ -105,7 +108,6 @@ LocationSearch.propTypes = {
   isFeatureEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   shouldCollapseFromOtherUI: PropTypes.bool,
-  toggleShowLocationSearch: PropTypes.func,
 };
 
 export default connect(

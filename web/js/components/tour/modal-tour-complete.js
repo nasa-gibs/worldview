@@ -24,9 +24,8 @@ function ModalComplete(props) {
       <>
         <p>Read more about this story at the links below:</p>
         <ul>
-          {readMoreLinks.map((linkId, i) => (
-            /* eslint react/no-array-index-key: 1 */
-            <li key={i} index={i}>
+          {readMoreLinks.map((linkId) => (
+            <li key={linkId}>
               <a href={linkId.link} target="_blank" rel="noopener noreferrer">
                 {linkId.title}
               </a>
@@ -80,7 +79,7 @@ function ModalComplete(props) {
 }
 
 ModalComplete.propTypes = {
-  currentStory: PropTypes.object.isRequired,
+  currentStory: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   endTour: PropTypes.func.isRequired,
   modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,

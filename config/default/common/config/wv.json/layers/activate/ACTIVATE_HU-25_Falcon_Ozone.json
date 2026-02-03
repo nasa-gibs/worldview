@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "ACTIVATE_HU-25_Falcon_Ozone": {
+      "id": "ACTIVATE_HU-25_Falcon_Ozone",
+      "title": "Ozone and Flight Track (Per Flight)",
+      "subtitle": "ACTIVATE/NASA HU-25 Falcon",
+      "description": "activate/ACTIVATE_HU-25_Falcon_Ozone",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector activate suborbital",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "ACTIVATE_HU-25_Falcon_Ozone",
+        "geographic": {
+          "id": "ACTIVATE_HU-25_Falcon_Ozone"
+        }
+      },
+      "palette": {
+        "id": "ACTIVATE_HU-25_Falcon_Ozone",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "GPS_Alt_m_",
+        "order": "descending"
+      }
+    }
+  }
+}

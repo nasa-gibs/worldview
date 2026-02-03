@@ -32,7 +32,10 @@ function CustomIntervalSelector(props) {
 
   const dispatch = useDispatch();
   const closeModal = () => dispatch(toggleCustomModal(false, undefined));
-  const changeCustomInterval = (delta, timeScale) => dispatch(changeCustomIntervalAction(delta, timeScale));
+  const changeCustomInterval = (delta, timeScale) => dispatch(changeCustomIntervalAction(
+    delta,
+    timeScale,
+  ));
 
   useEffect(() => {
     if (modalOpen) {

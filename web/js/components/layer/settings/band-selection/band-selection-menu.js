@@ -18,7 +18,9 @@ export default function BandSelection({ layer }) {
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
   }));
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
-  const currentSelectedPreset = useSelector((state) => state.layers.active.layers[layerIndex].selectedPreset);
+  const currentSelectedPreset = useSelector(
+    (state) => state.layers.active.layers[layerIndex].selectedPreset,
+  );
   const [selectedPreset, setSelectedPreset] = useState(currentSelectedPreset);
   const updateBandCombination = (id, bandCombo) => {
     dispatch(updateBandCombinationAction(id, bandCombo, layerIndex, selectedPreset));
@@ -129,5 +131,5 @@ export default function BandSelection({ layer }) {
 }
 
 BandSelection.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

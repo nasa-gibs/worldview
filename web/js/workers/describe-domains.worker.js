@@ -106,7 +106,10 @@ function mergeDomains(domains, timeBuffer) {
       endTime += periodToTime(period);
     }
 
-    if (!acc.length) return [[makeDateString(startTime), makeDateString(endTime)]]; // add the first range to the accumulator
+    if (!acc.length) {
+      return [[makeDateString(startTime),
+        makeDateString(endTime)]];
+    } // add the first range to the accumulator
 
     // round start time down and end time up by a set time to account for small range gaps
     const bufferedStartTime = startTime - timeBuffer;
@@ -115,7 +118,10 @@ function mergeDomains(domains, timeBuffer) {
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
 
-    if ((bufferedStartTime >= lastRangeStartTime && bufferedStartTime <= lastRangeEndTime) && (bufferedEndTime >= lastRangeStartTime && bufferedEndTime <= lastRangeEndTime)) { // within current range, ignore
+    if ((bufferedStartTime >= lastRangeStartTime
+      && bufferedStartTime <= lastRangeEndTime)
+      && (bufferedEndTime >= lastRangeStartTime
+        && bufferedEndTime <= lastRangeEndTime)) { // within current range, ignore
       return acc;
     }
 
@@ -123,7 +129,8 @@ function mergeDomains(domains, timeBuffer) {
       return [...acc, [makeDateString(startTime), makeDateString(endTime)]];
     }
 
-    if (bufferedStartTime <= lastRangeEndTime && bufferedEndTime > lastRangeEndTime) { // intersects current range, merge
+    if (bufferedStartTime <= lastRangeEndTime
+      && bufferedEndTime > lastRangeEndTime) { // intersects current range, merge
       return acc.with(-1, [acc.at(-1)[0], makeDateString(endTime)]);
     }
 

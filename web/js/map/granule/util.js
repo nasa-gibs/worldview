@@ -111,6 +111,7 @@ export const isWithinBounds = (crs, granule) => {
   if (crs === CRS.ARCTIC) {
     return granule.polygon.every(([lat, lon]) => lon > 40);
   }
+  return undefined;
 };
 
 export const getGranuleFootprints = (layer) => {
@@ -186,6 +187,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
     } catch (e) {
       console.error(`Could not get shortName for a collection associated with layer ${def.id}`);
     }
+    return undefined;
   };
 
   if (def.conceptIds[0].type === 'NRT') {
@@ -235,7 +237,12 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
     * @param {object} rangeStart - date object
     * @param {object} rangeEnd - date object
   */
-export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQueryDate, endQueryDate) => {
+export const getCMRQueryDateUpdateOptions = (
+  CMRDateStoreForLayer,
+  date,
+  startQueryDate,
+  endQueryDate,
+) => {
   let canExtendRange = false;
   let needRangeUpdate = true;
   let rangeStart;
@@ -269,8 +276,10 @@ export const getCMRQueryDateUpdateOptions = (CMRDateStoreForLayer, date, startQu
   const newStartEqualsCurrentCMREnd = newStartTime === currentEndTime;
   const newEndEqualsCurrentCMRStart = newEndTime === currentStartTime;
 
-  const newEndCanExtendCurrentCMREnd = newStartBeforeCurrentCMRStart && newEndSameOrAfterCurentCMRStart;
-  const newStartCanExtendCurrentCMRStart = newStartAfterCurrentCMRStart && newStartSameOrBeforeCurrentCMREnd;
+  const newEndCanExtendCurrentCMREnd = newStartBeforeCurrentCMRStart
+  && newEndSameOrAfterCurentCMRStart;
+  const newStartCanExtendCurrentCMRStart = newStartAfterCurrentCMRStart
+  && newStartSameOrBeforeCurrentCMREnd;
 
   if (newStartSameOrAfterCurrentStart && newEndSameOrBeforeCurrentEnd) {
     needRangeUpdate = false;
@@ -354,7 +363,11 @@ export const transformGranuleData = (entry, date, crs) => {
 };
 
 export const transformGranulesForProj = (granules, crs) => granules.map((granule) => {
-  const transformedPolygon = granule.polygon.map((coords) => transform(coords, CRS.GEOGRAPHIC, crs));
+  const transformedPolygon = granule.polygon.map((coords) => transform(
+    coords,
+    CRS.GEOGRAPHIC,
+    crs,
+  ));
   return {
     ...granule,
     polygon: transformedPolygon,

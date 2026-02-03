@@ -21,7 +21,17 @@ const getLayerState = ({ layers }) => layers;
 const getConfig = ({ config }) => config;
 const getLayerId = (state, { layer }) => layer && layer.id;
 
-export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandComboParam, selectedPresetParam) {
+export function addLayer(
+  id,
+  spec = {},
+  layersParam,
+  layerConfig,
+  overlayLength,
+  projection,
+  groupOverlays,
+  bandComboParam,
+  selectedPresetParam,
+) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
     return layers;
@@ -121,16 +131,21 @@ export function resetLayers(config) {
 
 export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
 
-export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
+export const isGroupingEnabled = ({
+  compare,
+  layers,
+}) => layers[compare.activeString].groupOverlays;
 
 export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) => {
-  if (!layers.collections[layer.id]) return;
+  if (!layers.collections[layer.id]) return undefined;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if ((dateCollection[i].date === dailyDate || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
+    if ((dateCollection[i].date === dailyDate
+      || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
       return dateCollection[i];
     }
   }
+  return undefined;
 };
 
 /**
@@ -394,6 +409,7 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
       end: new Date(maxDate),
     };
   }
+  return undefined;
 }
 
 /**
@@ -418,7 +434,13 @@ function forGroup(group, spec = {}, activeLayers, state) {
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
     // eslint-disable-next-line no-use-before-define
-    const notRenderable = spec.renderable && !isRenderable(def.id, activeLayers, spec.date, null, state);
+    const notRenderable = spec.renderable && !isRenderable(
+      def.id,
+      activeLayers,
+      spec.date,
+      null,
+      state,
+    );
     if (notInProj || notRenderable) {
       return;
     }
@@ -491,6 +513,7 @@ export function isRenderable(id, layers, date, bLayers, state) {
         obscured = true;
         return false;
       }
+      return undefined;
     },
   );
   return !obscured;
@@ -553,10 +576,10 @@ export function hasMeasurementSource(current, config, projId) {
 export const makeGetDescription = () => createSelector(
   [getConfig, getLayerId],
   ({ layers, measurements }, layerId) => {
-    if (!layerId) return;
+    if (!layerId) return undefined;
     const { layergroup } = layers[layerId];
     if (layergroup === 'Orbital Track') {
-      return;
+      return undefined;
     }
     const [setting] = Object.keys(measurements)
       .filter((key) => !key.includes('Featured'))
@@ -702,7 +725,11 @@ export const getAllActiveOverlaysBaselayers = createSelector(
  */
 export const memoizedAvailable = createSelector(
   [getSelectedDate, getActiveLayers, getConfigParameters],
-  (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
+  (
+    currentDate,
+    activeLayers,
+    parameters,
+  ) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
 );
 
 export const findEventLayers = (originalLayers, newLayers) => {

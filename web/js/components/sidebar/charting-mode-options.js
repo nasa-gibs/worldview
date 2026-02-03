@@ -40,6 +40,7 @@ const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const MAX_DAYS = 100;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
 const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
@@ -237,7 +238,8 @@ function ChartingModeOptions(props) {
   }, [isModalOpen, modalId]);
 
   /**
-   * Provides a default AOI of the entire map if unspecified, and modifies the Openlayers coordinates for use with imageStat API
+   * Provides a default AOI of the entire map if unspecified,
+   * and modifies the Openlayers coordinates for use with imageStat API
    * @param {Object} aoi (Area Of Interest)
    */
   function convertOLcoordsForImageStat(aoi) {
@@ -251,19 +253,23 @@ function ChartingModeOptions(props) {
   /**
    * Returns the ImageStat request parameters based on the provided layer
    * @param {Object} layerInfo
-   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series'
+   * for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(initialStartDate);
-    const endDateForImageStat = formatDateForImageStat(initialEndDate);
+  function getImageStatRequestParameters(layerInfo, timeSpan, startDate, endDate) {
+    const startDateForImageStat = formatDateForImageStat(startDate);
+    const endDateForImageStat = formatDateForImageStat(endDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
       type: timeSpan === 'range' ? 'series' : 'date',
-      steps: STEP_NUM, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
-      layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
-      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
+      steps: STEP_NUM, // the number of days selected within a given range/series. Use '1' for just
+      // the start and end date, '2' for start date, end date and middle date, etc.
+      layer: layerInfo.id, // Layer to be pulled from gibs api.
+      // e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
+      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer.
+      // e.g. 'GHRSST_Sea_Surface_Temperature.xml'
       areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
       bins: 10, // Number of bins to used in returned histogram. e.g. 10
       scale: 1, // unused
@@ -344,10 +350,16 @@ function ChartingModeOptions(props) {
 
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
-   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   * @param {Object} data | This contains the name (dates)
+   * & min, max, stddev, etc. for each step requested
    */
   function formatGIBSDataForRecharts(data) {
     const xAxisNames = getKeysFromObj(data.min);
+    // Add error days to data
+    if (data.errors?.error_count > 0) {
+      xAxisNames.push(...data.errors.error_days);
+      xAxisNames.sort();
+    }
     const rechartsData = [];
     for (let i = 0; i < xAxisNames.length; i += 1) {
       const name = xAxisNames[i];
@@ -362,6 +374,49 @@ function ChartingModeOptions(props) {
       rechartsData.push(entry);
     }
     return rechartsData;
+  }
+
+  function combineData(inputArr) {
+    if (!inputArr || inputArr.length === 0) return inputArr;
+    if (inputArr.length === 1) return inputArr[0];
+    const output = {
+      ok: true,
+      body: {
+        errors: {
+          error_count: 0,
+          error_days: [],
+        },
+        hist: [],
+        max: {},
+        mean: {},
+        median: {},
+        min: {},
+        stderr: 0,
+        stdev: {},
+      },
+    };
+    if (inputArr.every((dataset) => !dataset.ok)) {
+      output.ok = false;
+      output.error = inputArr[0].error;
+      return output;
+    }
+    inputArr?.forEach((dataset) => {
+      if (dataset.ok && !!dataset.body) {
+        Object.keys(dataset.body).forEach((key) => {
+          if (key === 'errors') {
+            output.body.errors.error_count += dataset.body.errors.error_count;
+            output.body.errors.error_days.push(...dataset.body.errors.error_days.replaceAll(/('|\[|\])/gi, '').split(', '));
+          } else if (key === 'hist') {
+            output.body.hist.push(...dataset.body.hist);
+          } else if (key === 'stderr') {
+            output.body.stderr += parseFloat(dataset.body.stderr);
+          } else {
+            output.body[key] = { ...output.body[key], ...dataset.body[key] };
+          }
+        });
+      }
+    });
+    return output;
   }
 
   async function onRequestChartClick() {
@@ -382,9 +437,31 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
-      const data = await getImageStatData(requestURI);
+      const numDaysRequested = Math.floor(
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
+      ) + 1;
+      const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
+      const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
+      const promises = [];
+      for (let i = 0; i < requestsNeeded; i += 1) {
+        const requestStartDate = new Date(initialStartDate.getTime());
+        requestStartDate.setDate(requestStartDate.getDate() + (i * requestsSize));
+        let requestEndDate = new Date(requestStartDate.getTime());
+        requestEndDate.setDate(requestEndDate.getDate() + requestsSize - 1);
+        if (requestEndDate > initialEndDate) {
+          requestEndDate = new Date(initialEndDate.getTime());
+        }
+        const uriParameters = getImageStatRequestParameters(
+          layerInfo,
+          timeSpanSelection,
+          requestStartDate,
+          requestEndDate,
+        );
+        const requestURI = getImageStatStatsRequestURL(uriParameters);
+        promises.push(getImageStatData(requestURI));
+      }
+      const dataArr = await Promise.all(promises);
+      const data = combineData(dataArr);
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
@@ -406,15 +483,18 @@ function ChartingModeOptions(props) {
         subtitle: layerInfo.subtitle,
         unit: unitOfMeasure,
         ...data.body,
-        ...uriParameters,
       };
 
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
-        const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
+        const numRangeDays = Math.floor(
+          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000,
+        );
         const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
         const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
-        const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
+        const numPoints = STEP_NUM - (
+          data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0
+        );
         displayChart({
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
@@ -426,9 +506,10 @@ function ChartingModeOptions(props) {
           startDateFormatted,
           endDateFormatted,
           numRangeDays,
-          isTruncated: numRangeDays > STEP_NUM,
+          isTruncated: false,
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
+          layerId: layerInfo.id,
         });
         updateChartRequestStatus(false);
       } else {
@@ -458,7 +539,7 @@ function ChartingModeOptions(props) {
     }
   }, [isChartOpen, renderedPalettes]);
 
-  function onDateIconClick() {
+  const onDateIconClick = () => {
     const layerInfo = getActiveChartingLayer();
     const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
     const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
@@ -468,7 +549,7 @@ function ChartingModeOptions(props) {
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
-  }
+  };
 
   useEffect(() => {
     const isOpen = modalId === 'CHARTING-DATE-MODAL' && isModalOpen;
@@ -529,7 +610,7 @@ function ChartingModeOptions(props) {
   *
   * @returns {null}
   */
-  function onBoundaryUpdate(boundaries) {
+  const onBoundaryUpdate = (boundaries) => {
     const {
       x, y, width, height,
     } = boundaries;
@@ -551,9 +632,9 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  }
+  };
 
-  function onLatLongChange(coordsArray) {
+  const onLatLongChange = (coordsArray) => {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
     const topRight = [coordsArray[2], coordsArray[3]];
     const bottomLeftPixel = olMap.getPixelFromCoordinate(bottomLeft);
@@ -574,9 +655,9 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  }
+  };
 
-  function toggleMapView() {
+  const toggleMapView = () => {
     if (!mapViewChecked) {
       onLatLongChange(viewExtent);
     } else {
@@ -589,7 +670,7 @@ function ChartingModeOptions(props) {
       onBoundaryUpdate(boundaries);
     }
     setMapViewChecked(!mapViewChecked);
-  }
+  };
 
 
   const spinnerStyle = {
@@ -747,7 +828,12 @@ const mapStateToProps = (state) => {
   const { crs, maxExtent } = proj.selected;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
+    activeLayer,
+    aoiActive,
+    aoiCoordinates,
+    aoiSelected,
+    chartRequestInProgress,
+    timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
   } = charting;
   const {
     isOpen, id,
@@ -918,13 +1004,12 @@ export default connect(
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeLayer: PropTypes.string,
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  aoiSelected: PropTypes.bool,
   chartRequestInProgress: PropTypes.bool,
-  aoiCoordinates: PropTypes.array,
+  aoiCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   timeSpanSelection: PropTypes.string,
   timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
@@ -937,11 +1022,10 @@ ChartingModeOptions.propTypes = {
   displaySimpleStats: PropTypes.func,
   displayChart: PropTypes.func,
   openChartingErrorModal: PropTypes.func,
-  olMap: PropTypes.object,
+  olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
-  proj: PropTypes.object,
-  renderedPalettes: PropTypes.object,
-  projections: PropTypes.array,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  projections: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   aoiActive: PropTypes.bool,
   timelineStartDate: PropTypes.instanceOf(Date),
   timelineEndDate: PropTypes.instanceOf(Date),
@@ -950,7 +1034,11 @@ ChartingModeOptions.propTypes = {
   isModalOpen: PropTypes.bool,
   modalId: PropTypes.string,
   sidebarHeight: PropTypes.number,
-  viewExtent: PropTypes.array,
-  maxExtent: PropTypes.array,
-  date: PropTypes.object,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  maxExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  onUpdateStartDate: PropTypes.func,
+  onUpdateEndDate: PropTypes.func,
 };

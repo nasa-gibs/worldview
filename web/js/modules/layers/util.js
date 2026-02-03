@@ -41,6 +41,7 @@ export function getOrbitTrackTitle(def, includeSatName = true) {
   } if (daynightValue) {
     return `${lodashStartCase(daynightValue)}${satelliteName}`;
   }
+  return undefined;
 }
 
 /**
@@ -139,8 +140,10 @@ export function getOverlayGroups(layers, prevGroups = []) {
  * @method getRevisedMaxEndDate
  * @param  {Object} minDate        A date object
  * @param  {Object} maxEndDate     A date object
- * @param  {Object} startDateLimit   A date object used as start date of timeline range for available data
- * @param  {Object} endDateLimit   A date object used as end date of timeline range for available data
+ * @param  {Object} startDateLimit
+ *  A date object used as start date of timeline range for available data
+ * @param  {Object} endDateLimit
+ *  A date object used as end date of timeline range for available data
  * @return {Object}                A date object
  */
 const getRevisedMaxEndDate = (minDate, maxEndDate, startDateLimit, endDateLimit) => {
@@ -148,7 +151,8 @@ const getRevisedMaxEndDate = (minDate, maxEndDate, startDateLimit, endDateLimit)
   const maxEndDateTime = maxEndDate.getTime();
   const startDateLimitTime = startDateLimit.getTime();
   const endDateLimitTime = endDateLimit.getTime();
-  const frontDateWithinRange = startDateLimitTime >= minDateTime && startDateLimitTime <= maxEndDateTime;
+  const frontDateWithinRange = startDateLimitTime >= minDateTime
+  && startDateLimitTime <= maxEndDateTime;
   const backDateWithinRange = endDateLimitTime <= maxEndDateTime && endDateLimitTime >= minDateTime;
   if (frontDateWithinRange || backDateWithinRange) {
     return endDateLimit;
@@ -329,7 +333,7 @@ const getBreakMaxDate = (period, rangeEndDate) => {
    * @method getLimitedDateRange
    * @param  {Object} def           A layer object
    * @param  {Object} currentDate   A date object
-   * @return {Array}                An array of dates - previous, current, and next dates (if available)
+   * @return {Array} An array of dates - previous, current, and next dates (if available)
    */
 const getLimitedDateRange = (def, currentDate) => {
   const { period, dateRanges } = def;
@@ -392,7 +396,8 @@ const getLimitedDateRange = (def, currentDate) => {
 };
 
 /**
-   * Return an array of dates from a yearly period layer based on the dateRange the current date falls in.
+   * Return an array of dates from a yearly period layer based on the dateRange the current date
+   * falls in.
    *
    * @method getYearDateRange
    * @param  {Number} currentDateTime  Current date milliseconds
@@ -427,14 +432,16 @@ const getYearDateRange = (currentDateTime, minDate, maxDate, interval, dateArray
 };
 
 /**
-   * Return an array of dates from a monthly period layer based on the dateRange the current date falls in.
+   * Return an array of dates from a monthly period layer based on the dateRange the current date
+   * falls in.
    *
    * @method getMonthDateRange
    * @param  {Object}  A calculated time object based on period, current date, and date range
    * @return {Array}   An array of dates with normalized timezones
    */
 const getMonthDateRange = ({
-  rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
+  rangeLimitsProvided, currentDateTime, startDateLimit,
+  endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
 }) => {
   let newDateArray = [...dateArray];
   const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(maxDate, 'max');
@@ -495,14 +502,16 @@ const getMonthDateRange = ({
 };
 
 /**
-   * Return an array of dates from a daily period layer based on the dateRange the current date falls in.
+   * Return an array of dates from a daily period layer based on the dateRange the current date
+   * falls in.
    *
    * @method getDayDateRange
    * @param  {Object}  A calculated time object based on period, current date, and date range
    * @return {Array}   An array of dates with normalized timezones
    */
 const getDayDateRange = ({
-  rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
+  rangeLimitsProvided, currentDateTime, startDateLimit,
+  endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
 }) => {
   let newDateArray = [...dateArray];
   const { maxYear, maxMonth, maxDay } = util.getUTCNumbers(maxDate, 'max');
@@ -562,14 +571,16 @@ const getDayDateRange = ({
 };
 
 /**
-   * Return an array of dates from a subdaily period layer based on the dateRange the current date falls in.
+   * Return an array of dates from a subdaily period layer based on the dateRange the current date
+   * falls in.
    *
    * @method getSubdailyDateRange
    * @param  {Object}  A calculated time object based on period, current date, and date range
    * @return {Array}   An array of dates with normalized timezones
    */
 const getSubdailyDateRange = ({
-  rangeLimitsProvided, currentDateTime, startDateLimit, endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
+  rangeLimitsProvided, currentDateTime, startDateLimit,
+  endDateLimit, minDate, maxDate, dateIntervalNum, dateArray,
 }) => {
   const newDateArray = [...dateArray];
   const {
@@ -593,7 +604,13 @@ const getSubdailyDateRange = ({
   let hourBeforeStartDateLimit;
   let hourAfterEndDateLimit;
   if (rangeLimitsProvided) {
-    minMinuteDateMinusInterval = new Date(minYear, minMonth, minDay, minHour, minMinute - dateIntervalNum);
+    minMinuteDateMinusInterval = new Date(
+      minYear,
+      minMonth,
+      minDay,
+      minHour,
+      minMinute - dateIntervalNum,
+    );
     minMinuteDateMinusIntervalOffset = util.getTimezoneOffsetDate(minMinuteDateMinusInterval);
 
     const startDateLimitOffset = startDateLimit.getTimezoneOffset() * 60000;
@@ -601,7 +618,9 @@ const getSubdailyDateRange = ({
     const startDateLimitSetMinutes = new Date(startDateLimit).setMinutes(minMinute);
     const endDateLimitSetMinutes = new Date(endDateLimit).setMinutes(minMinute);
 
-    hourBeforeStartDateLimit = new Date(startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000));
+    hourBeforeStartDateLimit = new Date(
+      startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000),
+    );
     hourAfterEndDateLimit = new Date(endDateLimitSetMinutes - endDateLimitOffset + (60 * 60000));
   } else {
     // limit date range request to +/- one hour from current date
@@ -669,8 +688,10 @@ const getSubdailyDateRange = ({
    * @method datesInDateRanges
    * @param  {Object} def            A layer object
    * @param  {Object} date           A date object for currently selected date
-   * @param  {Object} startDateLimit A date object used as start date of timeline range for available data
-   * @param  {Object} endDateLimit   A date object used as end date of timeline range for available data
+   * @param  {Object} startDateLimit
+   *  A date object used as start date of timeline range for available data
+   * @param  {Object} endDateLimit
+   *  A date object used as end date of timeline range for available data
    * @param  {Object} appNow         A date object of appNow (current date or set explicitly)
    * @return {Array}                 An array of dates with normalized timezones
    */
@@ -756,9 +777,11 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
 
       // revise currentDate to minDate to reduce earlier minDate than needed
-      const minDateWithinRangeLimits = minDateTime > inputStartDateTime && minDateTime < inputEndDateTime;
+      const minDateWithinRangeLimits = minDateTime > inputStartDateTime
+      && minDateTime < inputEndDateTime;
       const runningMinDateAndLastDateEarlier = runningMinDate && lastDateInDateArray > minDate;
-      if (currentDateLessThanMinDate && (minDateWithinRangeLimits || runningMinDateAndLastDateEarlier)) {
+      if (currentDateLessThanMinDate
+        && (minDateWithinRangeLimits || runningMinDateAndLastDateEarlier)) {
         currentDate = minDate;
         currentDateTime = currentDate.getTime();
       }
@@ -782,7 +805,13 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
 
     // Yearly layers
     if (period === 'yearly') {
-      const yearArray = getYearDateRange(currentDateTime, minDate, maxDate, dateIntervalNum, dateArray);
+      const yearArray = getYearDateRange(
+        currentDateTime,
+        minDate,
+        maxDate,
+        dateIntervalNum,
+        dateArray,
+      );
       dateArray = [...yearArray];
       // Monthly layers
     }
@@ -846,7 +875,9 @@ export function serializeLayers(layers, state, groupName) {
         value: bandComboString,
       });
     }
-    if (def.palette && (def.custom || def.min || def.max || def.squash || def.disabled || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
+    if (def.palette
+      && (def.custom || def.min || def.max || def.squash || def.disabled
+        || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
@@ -1051,7 +1082,8 @@ const createLayerArrayFromState = function(layers, config) {
 };
 
 // this function takes an array of date ranges in this format:
-// [{ layer.period, dateRanges.startDate: Date, dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
+// [{ layer.period, dateRanges.startDate: Date,
+// dateRanges.endDate: Date, dateRanges.dateInterval: Number}]
 // the array is first sorted, and then checked for any overlap
 export function dateOverlap(period, dateRanges) {
   const sortedRanges = dateRanges.sort((previous, current) => {
@@ -1431,7 +1463,8 @@ export function adjustStartDates(layers) {
       const [firstDateRange] = dateRanges;
       const adjustedDate = adjustDate(rollingWindow);
 
-      // To prevent a startDate greater than endDate for layers with a rollingWindow and specific start and end dates
+      // To prevent a startDate greater than endDate for layers with a rollingWindow and specific
+      // start and end dates
       if (endDate && new Date(adjustedDate) > new Date(endDate)) {
         return;
       }

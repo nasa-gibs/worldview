@@ -142,7 +142,8 @@ const FooterContent = React.forwardRef((props, ref) => {
               <div>
                 More than
                 {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-                events match the current filter criteria. Narrow your search by date, event type and/or map view.
+                events match the current filter criteria. Narrow your search by date, event type
+                and/or map view.
               </div>
             </UncontrolledTooltip>
           </>
@@ -255,7 +256,7 @@ FooterContent.propTypes = {
   chartingModeAccessible: PropTypes.bool,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
-  eventsData: PropTypes.array,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isChartingActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,
@@ -263,9 +264,5 @@ FooterContent.propTypes = {
   openChartingInfoModal: PropTypes.func,
   toggleCompare: PropTypes.func,
   toggleCharting: PropTypes.func,
-  breakpoints: PropTypes.object,
-  isPlaying: PropTypes.bool,
-  screenWidth: PropTypes.number,
-  addLayers: PropTypes.func,
   sidebarHeight: PropTypes.number,
 };

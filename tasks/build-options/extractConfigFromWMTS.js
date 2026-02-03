@@ -28,6 +28,18 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'wmts output directory'
   })
+  .option('mode', {
+    demandOption: true,
+    alias: 'm',
+    type: 'string',
+    description: 'mode'
+  })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'cm',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Extracts configuration information from a WMTS GetCapabilities file, converts the XML to JSON')
 
 const { argv } = options
@@ -39,6 +51,8 @@ const configFile = argv.config
 const config = JSON.parse(fs.readFileSync(configFile, 'utf-8'))
 const inputDir = argv.inputDir
 const outputDir = argv.outputDir
+const mode = argv.mode
+const cacheMode = argv.cacheMode
 
 if (!Object.prototype.hasOwnProperty.call(config, 'wv-options-wmts')) {
   throw new Error(`${prog}: Error: "wv-options-wmts" not in config file`)
@@ -50,52 +64,154 @@ if (!fs.existsSync(outputDir)) {
 
 const tolerant = config.tolerant
 const entries = config['wv-options-wmts']
-const skip = config.skip || []
+const skipSet = new Set(config.skip || [])
+const skipPalettesSet = new Set(Object.keys(config.skipPalettes || {}))
 
 let totalLayerCount = 0
 let totalWarningCount = 0
 let totalErrorCount = 0
 
-const wv = {
-  layers: {},
-  sources: {}
-}
-let wvMatrixSets = {}
+// Concurrency + caching utilities
+const layerConcurrency = parseInt(process.env.LAYER_CONCURRENCY || '8', 10)
+// Keep a stable reference to the real fetch to avoid recursion
+const nativeFetch = globalThis.fetch ? globalThis.fetch.bind(globalThis) : undefined
+// Cache fetched text, not Response, to avoid body reuse problems
+const describeDomainsTextCache = new Map()
 
-class SkipException extends Error {
-  constructor (message) {
-    super(message)
-    this.name = 'SkipException'
+// Progress tracking
+const isTTY = process.stderr.isTTY
+const progress = {
+  total: 0,
+  done: 0,
+  lastRender: 0
+}
+function renderProgress (force = false) {
+  if (!isTTY) return
+  const now = Date.now()
+  // Throttle to ~20fps or on force
+  if (!force && now - progress.lastRender < 50) return
+  progress.lastRender = now
+  const line = `${prog}: ${progress.done}/${progress.total} layers processed`
+  // Clear line and rewrite (works in most terminals)
+  process.stderr.write(`\r${line}`)
+}
+function finishProgressLine () {
+  if (!isTTY) return
+  process.stderr.write('\n')
+}
+
+async function cachedFetch (url, opts) {
+  const eligible = typeof url === 'string' && url.includes('/wmts/') && url.endsWith('.xml')
+  if (!eligible || !nativeFetch) {
+    return nativeFetch ? nativeFetch(url, opts) : Promise.reject(new Error('fetch not available'))
+  }
+
+  if (describeDomainsTextCache.has(url)) {
+    const textPromise = describeDomainsTextCache.get(url)
+    return {
+      ok: true,
+      text: () => textPromise
+    }
+  }
+
+  // Perform the real fetch once, cache the resulting text
+  const responseTextPromise = (async () => {
+    try {
+      const res = await nativeFetch(url, opts)
+      if (!res || !res.ok) return ''
+      return res.text()
+    } catch {
+      return ''
+    }
+  })()
+
+  describeDomainsTextCache.set(url, responseTextPromise)
+
+  const res = await nativeFetch(url, opts)
+  const ok = !!(res && res.ok)
+  if (ok) {
+    // Ensure any rejection on the cached promise is observed to avoid unhandled rejections
+    responseTextPromise.catch(() => {})
+  }
+  return {
+    ok,
+    text: () => responseTextPromise
   }
 }
 
-/**
- * Main function
- * @returns {Promise<void>}
- * @throws {Error}
- * @throws {SkipException}
- */
-async function main () {
-  for (const entry of entries) {
-    wv.layers = {}
-    wv.sources = {}
-    wvMatrixSets = {}
-    const { errorCount, warningCount, layerCount } = await processEntry(entry)
-    console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${entry.source}`)
-
-    const outputFile = path.join(outputDir, entry.to)
-    fs.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8', err => {
-      if (err) {
-        console.error(err)
+async function asyncPool (limit, array, iteratorFn) {
+  const ret = []
+  const executing = []
+  for (const item of array) {
+    const p = Promise.resolve().then(() => iteratorFn(item))
+    ret.push(p)
+    if (limit <= array.length) {
+      const e = p.then(() => {
+        executing.splice(executing.indexOf(e), 1)
+      }).catch(() => {
+        executing.splice(executing.indexOf(e), 1)
+      })
+      executing.push(e)
+      if (executing.length >= limit) {
+        await Promise.race(executing)
       }
-    })
+    }
+  }
+  return Promise.allSettled(ret)
+}
+
+// Pre-scan all entries to compute a stable total layer count for progress
+async function computeTotalLayers (entriesList) {
+  let total = 0
+  const tasks = entriesList.map(async (entry) => {
+    try {
+      const inputFile = path.join(inputDir, entry.from)
+      const xml = await fs.promises.readFile(inputFile, 'utf8')
+      const gc = JSON.parse(convert.xml2json(xml, { compact: true }))
+      const count = Array.isArray(gc?.Capabilities?.Contents?.Layer)
+        ? gc.Capabilities.Contents.Layer.length
+        : (gc?.Capabilities?.Contents?.Layer ? 1 : 0)
+      total += count
+    } catch {
+      // Ignore count for entries that fail to parse in prescan
+    }
+  })
+  await Promise.allSettled(tasks)
+  return total
+}
+
+async function main () {
+  console.warn(`${prog}: Processing ${entries.length} entries...`)
+
+  // Setup a stable total for progress display
+  progress.total = await computeTotalLayers(entries)
+  if (progress.total > 0) renderProgress(true)
+
+  const entryResults = await Promise.allSettled(entries.map(e => processEntry(e)))
+
+  finishProgressLine()
+
+  for (const { status, value } of entryResults) {
+    if (status !== 'fulfilled' || !value) continue
+    const { errorCount, warningCount, layerCount, wv, to, source } = value
+    if (mode === 'verbose') {
+      console.warn(`${prog}: ${errorCount} errors, ${warningCount} warnings, ${layerCount} layers for ${source}`)
+    }
+
+    const outputFile = path.join(outputDir, to)
+    try {
+      await fs.promises.writeFile(outputFile, JSON.stringify(wv, null, 2), 'utf-8')
+    } catch (err) {
+      console.error(`${prog}: ERROR writing ${outputFile}: ${err}`)
+      totalErrorCount += 1
+    }
 
     totalErrorCount += errorCount
     totalWarningCount += warningCount
     totalLayerCount += layerCount
   }
 
-  console.warn(`${prog}:${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
+  console.warn(`${prog}: ${totalErrorCount} errors, ${totalWarningCount} warnings, ${totalLayerCount} layers`)
 
   if (totalErrorCount > 0) {
     throw new Error(`${prog}: Error: ${totalErrorCount} errors occured`)
@@ -103,97 +219,124 @@ async function main () {
 }
 
 async function processEntry (entry) {
+  if (mode === 'verbose') {
+    console.warn(`${prog}: Processing ${entry.source} from ${entry.from} --> ${entry.to}...`)
+  }
+  const wv = { layers: {}, sources: {} }
+  let wvMatrixSets = {}
+
   let layerCount = 0
   let warningCount = 0
   let errorCount = 0
-
-  wv.sources[entry.source] = {
-    matrixSets: wvMatrixSets
-  }
 
   const inputFile = path.join(inputDir, entry.from)
   const gcId = path.basename(inputFile)
   let gc
   try {
     const xml = await fs.promises.readFile(inputFile, 'utf8')
-    gc = JSON.parse(convert.xml2json(xml, { compact: true, spaces: 2 }))
+    // Remove pretty spaces to reduce parse overhead
+    gc = JSON.parse(convert.xml2json(xml, { compact: true }))
   } catch (e) {
+    const msg = `${prog}: [${inputFile}] Unable to get GC: ${e}`
     if (tolerant) {
-      console.warn(`${prog}: WARN: [${inputFile}] Unable to get GC: ${e}\n`)
+      console.warn(`${prog}: WARN: ${msg}`)
       warningCount += 1
     } else {
-      console.error(`${prog}: ERROR: [${inputFile}] Unable to get GC: ${e}\n`)
+      console.error(`${prog}: ERROR: ${msg}`)
       errorCount += 1
     }
     return { errorCount, warningCount, layerCount }
   }
 
-  const gcContents = gc.Capabilities.Contents
+  const gcContents = gc?.Capabilities?.Contents
   const wvLayers = wv.layers
 
   if (!gcContents || !gcContents.Layer) {
     errorCount += 1
-    console.error(`${prog}: ERROR: [${gcId}] No layers\n`)
+    console.error(`${prog}: ERROR: [${gcId}] No layers`)
     return { errorCount, warningCount, layerCount }
   }
 
-  for (const gcLayer of gcContents.Layer) {
+  const layersArr = Array.isArray(gcContents.Layer) ? gcContents.Layer : [gcContents.Layer]
+  if (mode === 'verbose') {
+    console.warn(`${prog}: Layer count for ${entry.source}: ${layersArr.length}`)
+  }
+
+  // Temporarily override fetch with caching layer for temporal requests
+  const originalFetch = globalThis.fetch
+  globalThis.fetch = cachedFetch
+
+  const layerResults = await asyncPool(layerConcurrency, layersArr, async (gcLayer) => {
     try {
-      layerCount += 1
-      await processLayer(gcLayer, wvLayers, entry)
-    } catch (error) {
-      if (error instanceof SkipException) {
+      const res = await processLayer(gcLayer, wvLayers, entry)
+      return res
+    } finally {
+      // Increment and render progress for every finished layer
+      progress.done += 1
+      if (progress.done <= progress.total) renderProgress()
+    }
+  })
+
+  globalThis.fetch = originalFetch
+
+  layerCount += layerResults.length
+
+  for (const res of layerResults) {
+    if (res.status === 'fulfilled') {
+      const val = res.value
+      if (val && val.skipped) {
         warningCount += 1
-        console.warn(`${prog}: WARNING: [${gcId}] Skipping\n`)
-      } else {
-        errorCount += 1
-        console.error(error.stack)
-        const ident = gcLayer['ows:Identifier']._text
-        console.error(`${prog}: ERROR: [${gcId}:${ident}] ${error}\n`)
+        if (mode === 'verbose') {
+          console.warn(`${prog}: WARNING: Skipping layer`)
+        }
       }
+      continue
+    }
+    // Real error
+    errorCount += 1
+    if (mode === 'verbose') {
+      console.error(res.reason?.stack || res.reason)
+      console.error(`${prog}: ERROR: ${res.reason}`)
     }
   }
 
-  if (gcContents.TileMatrixSet === 'Object') {
-    processMatrixSet(gcContents.TileMatrixSet, entry)
-  } else {
-    gcContents.TileMatrixSet.forEach(gcMatrixSet => {
-      processMatrixSet(gcMatrixSet, entry)
-    })
+  const gcTileMatrixSet = gcContents.TileMatrixSet
+  wvMatrixSets = Array.isArray(gcTileMatrixSet)
+    ? gcTileMatrixSet.map(gcMatrixSet => processMatrixSet(gcMatrixSet, entry))
+    : [processMatrixSet(gcTileMatrixSet, entry)]
+
+  wv.sources[entry.source] = {
+    matrixSets: Object.fromEntries(new Map(wvMatrixSets))
   }
 
-  return { errorCount, warningCount, layerCount }
+  return { errorCount, warningCount, layerCount, wv, to: entry.to, source: entry.source }
 }
 
 async function processLayer (gcLayer, wvLayers, entry) {
   const ident = gcLayer['ows:Identifier']._text
-  if (skip.includes(ident)) {
-    console.log(`${ident}: skipping`)
-    throw new SkipException(ident)
+  if (skipSet.has(ident)) {
+    if (mode === 'verbose') {
+      console.log(`${ident}: skipping`)
+    }
+    return { skipped: true }
   }
 
-  wvLayers[ident] = {}
-  let wvLayer = wvLayers[ident]
+  const wvLayer = {}
   wvLayer.id = ident
   wvLayer.type = 'wmts'
   wvLayer.format = gcLayer.Format._text
 
-  const temporalForProjection = {}
-
-  // Extract start and end dates
-  if ('Dimension' in gcLayer) {
-    const dimension = gcLayer.Dimension
-    if (dimension['ows:Identifier']._text === 'Time') {
-      try {
-        wvLayer = await processTemporalLayer(wvLayer, dimension.Value, entry.source)
-      } catch (e) {
-        console.error(e)
-        console.error(`${prog}: ERROR: [${ident}] Error processing time values.`)
-      }
+  // Temporal dimension
+  const dimension = gcLayer.Dimension
+  if (dimension && dimension['ows:Identifier']?._text === 'Time') {
+    try {
+      await processTemporalLayer(wvLayer, dimension.Value, entry.source, cacheMode)
+    } catch (e) {
+      console.error(`${prog}: ERROR: [${ident}] Temporal processing failed: ${e}`)
     }
   }
 
-  // Extract matrix set
+  // Matrix set
   const matrixSetLink = gcLayer.TileMatrixSetLink
   const matrixSet = matrixSetLink.TileMatrixSet._text
 
@@ -203,81 +346,54 @@ async function processLayer (gcLayer, wvLayers, entry) {
   }
 
   wvLayer.projections = {}
-  if (temporalForProjection[entry.projection]) {
-    wvLayer.projections[entry.projection] = {
-      ...projectionInfo,
-      ...temporalForProjection[entry.projection]
-    }
-    delete wvLayer.dateRanges
-    delete wvLayer.startDate
-    delete wvLayer.endDate
-  } else {
-    wvLayer.projections[entry.projection] = { ...projectionInfo }
-  }
+  wvLayer.projections[entry.projection] = { ...projectionInfo }
 
-  if (Object.prototype.hasOwnProperty.call(matrixSetLink, 'TileMatrixSetLimits') && matrixSetLink.TileMatrixSetLimits !== null) {
+  if (matrixSetLink.TileMatrixSetLimits) {
     const matrixSetLimits = matrixSetLink.TileMatrixSetLimits.TileMatrixLimits
-    const mappedSetLimits = []
-    for (const setLimit of matrixSetLimits) {
-      mappedSetLimits.push({
-        tileMatrix: setLimit.TileMatrix._text,
-        minTileRow: parseInt(setLimit.MinTileRow._text, 10),
-        maxTileRow: parseInt(setLimit.MaxTileRow._text, 10),
-        minTileCol: parseInt(setLimit.MinTileCol._text, 10),
-        maxTileCol: parseInt(setLimit.MaxTileCol._text, 10)
-      })
-    }
-    wvLayer.projections[entry.projection].matrixSetLimits = mappedSetLimits
+    wvLayer.projections[entry.projection].matrixSetLimits = matrixSetLimits.map(setLimit => ({
+      tileMatrix: setLimit.TileMatrix._text,
+      minTileRow: parseInt(setLimit.MinTileRow._text, 10),
+      maxTileRow: parseInt(setLimit.MaxTileRow._text, 10),
+      minTileCol: parseInt(setLimit.MinTileCol._text, 10),
+      maxTileCol: parseInt(setLimit.MaxTileCol._text, 10)
+    }))
   }
 
-  // Vector data links
-  if ((Object.prototype.hasOwnProperty.call(gcLayer, 'ows:Metadata') && gcLayer['ows:Metadata'] !== null)) {
-    for (const item of gcLayer['ows:Metadata']) {
-      if (!(['xlink:role'] in item._attributes)) {
-        throw new Error('No xlink:role')
-      }
-      const schemaVersion = item._attributes['xlink:role']
-
-      if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
-        const vectorDataLink = item._attributes['xlink:href']
-        const vectorDataFile = path.basename(vectorDataLink)
-        const vectorDataId = path.parse(vectorDataFile).name
-        wvLayer.vectorData = {
-          id: vectorDataId
-        }
-      }
-    }
-  }
-
-  if (('ows:Metadata' in gcLayer) && (gcLayer['ows:Metadata'] !== null)) {
-    if (('skipPalettes' in config) && (ident in config.skipPalettes)) {
-      console.warn(`${prog}: WARNING: Skipping palette for ${ident}`)
+  // ows:Metadata (vector data, palettes, vector style)
+  const metadataArr = gcLayer['ows:Metadata']
+  if (metadataArr) {
+    if (skipPalettesSet.has(ident)) {
       totalWarningCount++
+      if (mode === 'verbose') {
+        console.warn(`${prog}: WARNING: Skipping palette for ${ident}`)
+      }
     } else {
-      for (const item of gcLayer['ows:Metadata']) {
-        if (!(['xlink:role'] in item._attributes)) {
+      for (const item of metadataArr) {
+        const role = item._attributes?.['xlink:role']
+        if (!role) {
           throw new Error('No xlink:role')
         }
-        const schemaVersion = item._attributes['xlink:role']
+        const href = item._attributes['xlink:href']
+        if (!href) continue
 
-        if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
-          const colormapLink = item._attributes['xlink:href']
-          const colormapFile = path.basename(colormapLink)
+        if (role === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
+          const vectorDataFile = path.basename(href)
+          const vectorDataId = path.parse(vectorDataFile).name
+          wvLayer.vectorData = { id: vectorDataId }
+        } else if (role === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
+          const colormapFile = path.basename(href)
           const colormapId = path.parse(colormapFile).name
-          wvLayer.palette = {
-            id: colormapId
-          }
-        } else if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
-          const vectorstyleLink = item._attributes['xlink:href']
-          const vectorstyleFile = path.basename(vectorstyleLink)
+          wvLayer.palette = { id: colormapId }
+        } else if (role === 'http://earthdata.nasa.gov/gibs/metadata-type/mapbox-gl-style/1.0') {
+          const vectorstyleFile = path.basename(href)
           const vectorstyleId = path.parse(vectorstyleFile).name
-          wvLayer.vectorStyle = {
-            id: vectorstyleId
-          }
+          wvLayer.vectorStyle = { id: vectorstyleId }
         }
       }
     }
   }
+
+  wvLayers[ident] = wvLayer
 }
 
 function processMatrixSet (gcMatrixSet, entry) {
@@ -286,9 +402,11 @@ function processMatrixSet (gcMatrixSet, entry) {
   const zoomLevels = tileMatrixArr.length
   const resolutions = []
   const formattedTileMatrixArr = []
-  const maxResolution = entry.maxResolution
+
+  let current = entry.maxResolution
   for (let zoom = 0; zoom < zoomLevels; zoom += 1) {
-    resolutions.push(maxResolution / (2 ** zoom))
+    resolutions.push(current)
+    current /= 2
   }
 
   for (const tileMatrix of tileMatrixArr) {
@@ -298,9 +416,9 @@ function processMatrixSet (gcMatrixSet, entry) {
     })
   }
 
-  wvMatrixSets[ident] = {
+  const value = {
     id: ident,
-    maxResolution,
+    maxResolution: entry.maxResolution,
     resolutions,
     tileSize: [
       parseInt(tileMatrixArr[0].TileWidth._text, 10),
@@ -308,8 +426,17 @@ function processMatrixSet (gcMatrixSet, entry) {
     ],
     tileMatrices: formattedTileMatrixArr
   }
+
+  return [ident, value]
 }
 
 main().catch((err) => {
   console.error(err.stack)
 })
+
+module.exports = {
+  processEntry,
+  processLayer,
+  processMatrixSet,
+  main
+}

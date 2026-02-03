@@ -86,11 +86,13 @@ class PaletteLegend extends React.Component {
       width,
       paletteLegends,
     } = this.props;
-    // Updates when layer options/settings changed, if ZOT changes the width of the palette, or distraction free mode exit
+    // Updates when layer options/settings changed, if ZOT changes the width of the palette,
+    // or distraction free mode exit
     const layerChange = !lodashIsEqual(layer, prevProps.layer);
     const paletteLegendsChange = !lodashIsEqual(paletteLegends, prevProps.paletteLegends);
     const widthChange = prevProps.width !== width;
-    const distractionFreeChange = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    const distractionFreeChange = prevProps.isDistractionFreeModeActive
+    && !isDistractionFreeModeActive;
     if (layerChange || widthChange || distractionFreeChange || paletteLegendsChange) {
       this.updateCanvas();
     }
@@ -202,7 +204,10 @@ class PaletteLegend extends React.Component {
     const { globalTemperatureUnit } = this.props;
     const units = legend.units || '';
 
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(
+      units,
+      globalTemperatureUnit,
+    );
     for (let i = 0, len = legend.colors.length; i < len; i += 1) {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
         const tooltipRange = legend.tooltips[i];
@@ -258,11 +263,16 @@ class PaletteLegend extends React.Component {
     }
 
     const units = legend.units || '';
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const {
+      needsConversion,
+      legendTempUnit,
+    } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
     let min = legend.minLabel || legend.tooltips[0];
     let max = legend.maxLabel || legend.tooltips[toolTipLength];
-    min = palette.min ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
-    max = palette.max ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
+    min = palette.min
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
+    max = palette.max
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
 
     if (needsConversion) {
       min = `${convertPaletteValue(min, legendTempUnit, globalTemperatureUnit)}`;
@@ -444,6 +454,7 @@ class PaletteLegend extends React.Component {
       } if (colorMap.type === 'classification') {
         return this.renderClasses(colorMap, index);
       }
+      return undefined;
     });
   }
 
@@ -453,7 +464,7 @@ class PaletteLegend extends React.Component {
     } = this.props;
     const { isHoveringLegend } = this.state;
     const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : isCustomPalette ? ' is_custom' : '';
-    if (!layer.palette) return;
+    if (!layer.palette) return undefined;
     return (
       <div
         className={
@@ -461,7 +472,6 @@ class PaletteLegend extends React.Component {
             ? `active-legend wv-palettes-panel${customClass}`
             : `wv-palettes-panel${customClass}`
         }
-        datalayer={layer.id}
         id={`${paletteId}_panel`}
       >
         {this.renderPaletteLegends()}
@@ -484,12 +494,14 @@ PaletteLegend.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareState: PropTypes.string,
   paletteId: PropTypes.string,
-  paletteLegends: PropTypes.array,
-  palettes: PropTypes.object,
-  parentLayer: PropTypes.object,
+  paletteLegends: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  palettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  parentLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  showingVectorHand: PropTypes.bool,
+  showingChartingIcon: PropTypes.bool,
   width: PropTypes.number,
   toggleAllClassifications: PropTypes.func,
 };

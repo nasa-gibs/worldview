@@ -12,7 +12,8 @@ function GlobalSelectCheckbox(props) {
 
   const boundingBoxArray = [...geoLatLong[0], ...geoLatLong[1]];
   const globalSelected = isEqual(boundingBoxArray, GLOBAL_LAT_LONG_EXTENT);
-  const [prevExtent, setPrevExtent] = useState(globalSelected ? [-40, -40, 40, 40] : boundingBoxArray);
+  const [prevExtent, setPrevExtent] = useState(globalSelected ? [-40, -40, 40, 40]
+    : boundingBoxArray);
   const onCheck = () => {
     const useExtent = globalSelected ? prevExtent : GLOBAL_LAT_LONG_EXTENT;
     setPrevExtent(boundingBoxArray);
@@ -23,7 +24,8 @@ function GlobalSelectCheckbox(props) {
     }, 50);
   };
 
-  const globalIsNotSelected = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => latLongValue !== boundingBoxArray[index]);
+  const globalIsNotSelected = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => latLongValue
+  !== boundingBoxArray[index]);
   if (proj !== 'geographic') return null;
 
   return (
@@ -41,9 +43,9 @@ function GlobalSelectCheckbox(props) {
 }
 GlobalSelectCheckbox.propTypes = {
   onLatLongChange: PropTypes.func,
-  geoLatLong: PropTypes.array,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   proj: PropTypes.string,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default GlobalSelectCheckbox;

@@ -12,7 +12,10 @@ import { onToggle } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
-const InteractionWrap = ({ condition, wrapper, children }) => (condition ? wrapper(children) : children);
+const InteractionWrap = ({
+  condition,
+  wrapper, children,
+}) => (condition ? wrapper(children) : children);
 const toggleWithClose = (onToggle, onClose, isOpen) => {
   if (onClose && isOpen) {
     return () => {
@@ -117,6 +120,56 @@ class ModalContainer extends Component {
     );
   }
 
+  handleCreateChildren = (children) => {
+    const {
+      customProps,
+      id,
+      isCustom,
+      screenHeight,
+      screenWidth,
+    } = this.props;
+    const { width, height } = this.state;
+    const style = this.getStyle();
+    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+    const {
+      dragHandle,
+      isDraggable,
+      isResizable,
+      stayOnscreen,
+    } = newProps;
+    const bounds = stayOnscreen ? {
+      left: -(screenWidth / 2 - width / 2),
+      right: screenWidth / 2 - width / 2,
+      top: -style.top,
+      bottom: screenHeight - height - style.top - 5,
+    } : '';
+    return (
+      <Draggable
+        handle={dragHandle}
+        disabled={!isDraggable}
+        bounds={bounds}
+      >
+        {isResizable
+          ? (
+            <Resizable
+              className="resize-box"
+              resizeHandles={['se']}
+              width={width || newProps.width}
+              height={height || newProps.height}
+              minConstraints={[250, 250]}
+              maxConstraints={[495, screenHeight]}
+              handleSize={[8, 8]}
+              onResize={this.onResize}
+              draggableOpts={{ disabled: !isResizable }}
+            >
+              {children}
+            </Resizable>
+          )
+          : children}
+      </Draggable>
+    );
+  };
+
   render() {
     const {
       customProps,
@@ -127,9 +180,9 @@ class ModalContainer extends Component {
       isOpen,
       isTemplateModal,
       screenHeight,
-      screenWidth,
     } = this.props;
     const { width, height } = this.state;
+
     const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
     const {
       autoFocus,
@@ -142,7 +195,6 @@ class ModalContainer extends Component {
       clickableBehindModal,
       CompletelyCustomModal,
       desktopOnly,
-      dragHandle,
       headerComponent,
       headerText,
       isDraggable,
@@ -155,7 +207,6 @@ class ModalContainer extends Component {
       timeout,
       type,
       wrapClassName,
-      stayOnscreen,
     } = newProps;
 
     const isRestrictedDisplay = (isMobile && desktopOnly)
@@ -175,38 +226,12 @@ class ModalContainer extends Component {
         &times;
       </button>
     );
-    const bounds = stayOnscreen ? {
-      left: -(screenWidth / 2 - width / 2), right: screenWidth / 2 - width / 2, top: -style.top, bottom: screenHeight - height - style.top - 5,
-    } : '';
+
     return (
       <ErrorBoundary>
         <InteractionWrap
           condition={isDraggable || isResizable}
-          wrapper={(children) => (
-            <Draggable
-              handle={dragHandle}
-              disabled={!isDraggable}
-              bounds={bounds}
-            >
-              {isResizable
-                ? (
-                  <Resizable
-                    className="resize-box"
-                    resizeHandles={['se']}
-                    width={width || newProps.width}
-                    height={height || newProps.height}
-                    minConstraints={[250, 250]}
-                    maxConstraints={[495, screenHeight]}
-                    handleSize={[8, 8]}
-                    onResize={this.onResize}
-                    draggableOpts={{ disabled: !isResizable }}
-                  >
-                    {children}
-                  </Resizable>
-                )
-                : children}
-            </Draggable>
-          )}
+          wrapper={this.handleCreateChildren}
         >
           <Modal
             isOpen={isOpen}
@@ -227,6 +252,7 @@ class ModalContainer extends Component {
                   key={`custom_${lowerCaseId}`}
                   modalHeight={height || newProps.height}
                   modalWidth={width || newProps.width}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
                   {...customProps}
                   toggleWithClose={toggleFunction}
                 />
@@ -237,14 +263,15 @@ class ModalContainer extends Component {
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                    <ModalHeader toggle={toggleFunction} close={closeBtn}>
-                      {headerComponent ? <headerComponent /> : headerText || ''}
-                    </ModalHeader>
+                  <ModalHeader toggle={toggleFunction} close={closeBtn}>
+                    {headerComponent ? <headerComponent /> : headerText || ''}
+                  </ModalHeader>
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
                     {BodyComponent ? (
                       <BodyComponent
+                        // eslint-disable-next-line react/jsx-props-no-spreading
                         {...bodyComponentProps}
                         parentId={id}
                         screenHeight={screenHeight}
@@ -317,17 +344,14 @@ ModalContainer.defaultProps = {
 };
 
 ModalContainer.propTypes = {
-  bodyTemplate: PropTypes.object,
-  customProps: PropTypes.object,
+  bodyTemplate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  customProps: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   id: PropTypes.string,
   isCustom: PropTypes.bool,
-  isDraggable: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
-  orientation: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  stayOnscreen: PropTypes.bool,
 };

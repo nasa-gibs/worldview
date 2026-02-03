@@ -167,7 +167,8 @@ class CategoryLayerRow extends React.Component {
                 if (minValidIndex < 0) {
                   minValidIndex = index;
                 }
-                // if activeSourceIndex is less than first valid index, make minValidIndex active tab
+                // if activeSourceIndex is less than first valid index,
+                // make minValidIndex active tab
                 validActiveIndex = minValidIndex > selectedMeasurementSourceIndex
                   ? minValidIndex
                   : selectedMeasurementSourceIndex;
@@ -227,20 +228,20 @@ class CategoryLayerRow extends React.Component {
 }
 
 CategoryLayerRow.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
   isMobile: PropTypes.bool,
   isSelected: PropTypes.bool,
-  layerConfig: PropTypes.object,
-  measurement: PropTypes.object,
+  layerConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  measurement: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   projection: PropTypes.string,
   selectSource: PropTypes.func,
   selectMeasurement: PropTypes.func,
   selectedMeasurement: PropTypes.string,
   selectedMeasurementSourceIndex: PropTypes.number,
-  sources: PropTypes.array,
+  sources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 const mapStateToProps = (state) => {
@@ -265,7 +266,12 @@ const mapStateToProps = (state) => {
     sources: getSourcesForProjection(state),
     selectedMeasurement,
     selectedMeasurementSourceIndex,
-    hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
+    hasMeasurementSetting: (current, source) => hasSettingSelector(
+      current,
+      source,
+      config,
+      proj.id,
+    ),
   };
 };
 

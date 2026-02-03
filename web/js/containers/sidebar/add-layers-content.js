@@ -110,15 +110,13 @@ export default connect(
 )(AddLayersContent);
 
 AddLayersContent.propTypes = {
-  compareState: PropTypes.string,
   groupOverlays: PropTypes.bool,
   isActive: PropTypes.bool,
   isAnimating: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   toggleOverlayGroups: PropTypes.func,
-  breakpoints: PropTypes.object,
-  isPlaying: PropTypes.bool,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   screenWidth: PropTypes.number,
   addLayers: PropTypes.func,
 };

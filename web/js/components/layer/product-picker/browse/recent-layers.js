@@ -71,9 +71,9 @@ function RecentLayersList(props) {
 RecentLayersList.propTypes = {
   clearRecentLayers: PropTypes.func,
   isMobile: PropTypes.bool,
-  selectedLayer: PropTypes.object,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   smallView: PropTypes.bool,
-  recentLayers: PropTypes.array,
+  recentLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 const mapStateToProps = (state) => {

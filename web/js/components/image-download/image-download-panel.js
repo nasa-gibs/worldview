@@ -59,12 +59,20 @@ function ImageDownloadPanel(props) {
   const [currResolution, setResolution] = useState(resolution);
   const [debugUrl, setDebugUrl] = useState('');
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
-  const activePalettes = useSelector((state) => getActivePalettes(state, state.compare.activeString));
+  const activePalettes = useSelector((state) => getActivePalettes(
+    state,
+    state.compare.activeString,
+  ));
 
   useEffect(() => {
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
+      layer.wv.id,
+      layer.wv.granuleDates,
+    ]));
+    const layerDefs = layerList.map((def) => ({
+      ...def, granuleDates: granuleDatesMap.get(def.id),
+    }));
     const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
 
     setShowGranuleWarning(isTruncated);
@@ -74,8 +82,12 @@ function ImageDownloadPanel(props) {
     const time = new Date(date.getTime());
 
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
+      layer.wv.id, layer.wv.granuleDates,
+    ]));
+    const layerDefs = layerList.map((def) => ({
+      ...def, granuleDates: granuleDatesMap.get(def.id),
+    }));
     const dlURL = getDownloadUrl(
       url,
       projection,
@@ -117,7 +129,7 @@ function ImageDownloadPanel(props) {
     onPanelChange(type, valueIn);
   };
 
-  const _renderFileTypeSelect = () => {
+  const renderFileTypeSelect = () => {
     if (fileTypeOptions) {
       return (
         <div className="wv-image-header">
@@ -132,9 +144,10 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
-  const _renderWorldfileSelect = () => {
+  const renderWorldfileSelect = () => {
     if (worldFileOptions) {
       const value = currIsWorldfile ? 1 : 0;
       return (
@@ -157,6 +170,7 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
   const crossesDatelineAlert = () => datelineMessage && (
@@ -172,8 +186,8 @@ function ImageDownloadPanel(props) {
   const dimensions = getDimensions(projection.id, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
-  const filetypeSelect = _renderFileTypeSelect();
-  const worldfileSelect = _renderWorldfileSelect();
+  const filetypeSelect = renderFileTypeSelect();
+  const worldfileSelect = renderWorldfileSelect();
   const layerList = getLayers();
 
   return (
@@ -212,7 +226,13 @@ function ImageDownloadPanel(props) {
           map={map}
         />
         {showGranuleWarning && (
-          <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line
+          <p>
+            Warning: A snapshot will capture a max. of
+            {GRANULE_LIMIT}
+            {' '}
+            granules, additional
+            granules are omitted.
+          </p> // eslint-disable-line react/jsx-one-expression-per-line
         )}
         <ResTable
           width={width}
@@ -243,24 +263,24 @@ ImageDownloadPanel.propTypes = {
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
-  fileTypes: PropTypes.object,
+  fileTypes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
   isWorldfile: PropTypes.bool,
-  lonlats: PropTypes.array,
-  map: PropTypes.object,
+  lonlats: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   maxImageSize: PropTypes.string,
-  markerCoordinates: PropTypes.array,
+  markerCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onPanelChange: PropTypes.func,
-  projection: PropTypes.object,
-  date: PropTypes.object,
+  projection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resolution: PropTypes.string,
-  resolutions: PropTypes.object,
+  resolutions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   secondLabel: PropTypes.string,
   url: PropTypes.string,
-  viewExtent: PropTypes.array,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   worldFileOptions: PropTypes.bool,
-  geoLatLong: PropTypes.array,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onLatLongChange: PropTypes.func,
 };
 

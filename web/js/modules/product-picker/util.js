@@ -27,12 +27,14 @@ export function getRecentLayers(layerConfig, proj) {
     if (a.count < b.count) return 1;
     if (a.dateAdded > b.dateAdded) return 1;
     if (a.dateAdded < b.dateAdded) return -1;
+    return undefined;
   };
 
   const toLayerObj = ({ id }) => layerConfig[id];
   const filterUnknownLayers = (layerDef) => layerDef !== undefined;
   const layers = JSON.parse(safeLocalStorage.getItem(RECENT_LAYERS));
-  return layers && layers[proj] ? layers[proj].sort(byUse).map(toLayerObj).filter(filterUnknownLayers) : [];
+  return layers && layers[proj]
+    ? layers[proj].sort(byUse).map(toLayerObj).filter(filterUnknownLayers) : [];
 }
 
 export function clearRecentLayers() {

@@ -3,8 +3,17 @@
         "Ozone": {
             "id": "ozone",
             "title":    "Ozone",
-            "subtitle": "AJAX/Alpha Jet, Aura/MLS, Aura/OMI, Suomi NPP/OMPS, TEMPO, MERRA-2",
+            "subtitle": "ACTIVATE/NASA HU-25 Falcon, AJAX/Alpha Jet, Aura/MLS, Aura/OMI, DCOTSS/NASA ER-2 UCATS and ROZE, Suomi NPP/OMPS, TEMPO, MERRA-2",
             "sources": {
+                "ACTIVATE/NASA HU-25 Falcon": {
+                  "id": "activate-nasa-hu25-falcon",
+                  "title": "ACTIVATE/NASA HU-25 Falcon",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "ACTIVATE_HU-25_Falcon_Ozone"
+                  ]
+              },
                 "AJAX/Alpha Jet": {
                     "id": "ajax-alpha-jet",
                     "title": "AJAX/Alpha Jet",
@@ -37,6 +46,24 @@
                         "OrbitTracks_Aura_Ascending"
                     ]
                 },
+                "DCOTSS/NASA ER-2 UCATS": {
+                  "id": "DCOTSS_ER-2_UCATS_Ozone",
+                  "title": "DCOTSS//NASA ER-2 UCATS",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "DCOTSS_ER-2_UCATS_Ozone"
+                  ]
+              },
+                "DCOTSS/NASA ER-2 ROZE": {
+                  "id": "DCOTSS_ER-2_ROZE_Ozone",
+                  "title": "DCOTSS//NASA ER-2 ROZE",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "DCOTSS_ER-2_ROZE_Ozone"
+                  ]
+              },
                 "Suomi NPP/OMPS": {
                     "id": "suomi-npp-omps",
                     "title": "Suomi NPP/OMPS",

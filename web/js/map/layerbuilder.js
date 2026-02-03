@@ -4,6 +4,7 @@ import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
 import OlSourceXYZ from 'ol/source/XYZ';
+import OlImageTile from 'ol/source/ImageTile';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
 import { get } from 'ol/proj';
@@ -335,7 +336,8 @@ export default function mapLayerBuilder(config, cache, store) {
   const createLayerWMTS = (def, options, day, state) => {
     const { proj } = state;
     const {
-      id, layer, format, matrixIds, matrixSet, matrixSetLimits, period, source, style, wrapadjacentdays, type,
+      id, layer, format, matrixIds, matrixSet, matrixSetLimits,
+      period, source, style, wrapadjacentdays, type,
     } = def;
     const configSource = config.sources[source];
     const { date, shifted } = options;
@@ -360,8 +362,14 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
-    const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
-    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+    const { origin, extent } = calcExtentsFromLimits(
+      configMatrixSet,
+      matrixSetLimits,
+      day,
+      proj.selected,
+    );
+    const sizes = !tileMatrices
+      ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -402,7 +410,7 @@ export default function mapLayerBuilder(config, cache, store) {
     // Because granule footprints from CMR are imprecise, setting an extent on granule
     // layers can crop valid imagery. So extents are only applied to non-granule layers.
     if (!isGranule) {
-      layerTile.extent = extent;
+      layerTile.setExtent(extent);
     }
     return layerTile;
   };
@@ -455,6 +463,9 @@ export default function mapLayerBuilder(config, cache, store) {
       TRANSPARENT: transparent,
       VERSION: '1.1.1',
     };
+    if (def.source === 'EUMETSAT:wms') {
+      parameters.VERSION = '1.3.0';
+    }
     if (def.styles) {
       parameters.STYLES = def.styles;
     }
@@ -576,7 +587,8 @@ export default function mapLayerBuilder(config, cache, store) {
           const key = splitActive[5].split(',');
           // Actual data starts at row index 6, loop through all data points
           for (let i = 6; i < splitActive.length; i += 1) {
-            // Split the current data point into each value, and assign them their respective key based on the key from row index 5
+            // Split the current data point into each value,
+            // and assign them their respective key based on the key from row index 5
             const split2 = splitActive[i].split(',');
             const rowObj = {};
             for (let j = 0; j < split2.length; j += 1) {
@@ -609,7 +621,8 @@ export default function mapLayerBuilder(config, cache, store) {
           const key = splitAll[1].split(',');
           // Actual data starts at row index 2, loop through all data points
           for (let i = 2; i < splitAll.length; i += 1) {
-            // Split the current data point into each value, and assign them their respective key based on the key from row index 1
+            // Split the current data point into each value,
+            // and assign them their respective key based on the key from row index 1
             const split2 = splitAll[i].split(',');
             const rowObj = {};
             for (let j = 0; j < split2.length; j += 1) {
@@ -628,7 +641,8 @@ export default function mapLayerBuilder(config, cache, store) {
                 active: !!takenNamesActive[rowObj.Site_Name],
                 coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
                 MAIN_USE: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.value : 'inactivesite',
-                date: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.date : new Date(date.toUTCString()),
+                date: featuresObj[rowObj.Site_Name].properties
+                  ? featuresObj[rowObj.Site_Name].properties.date : new Date(date.toUTCString()),
               };
               takenNamesAll[rowObj.Site_Name] = true;
             }
@@ -637,7 +651,8 @@ export default function mapLayerBuilder(config, cache, store) {
 
         const geoJson = {
           type: 'FeatureCollection',
-          features: Object.values(featuresObj).sort((a, b) => a.properties.active > b.properties.active),
+          features: Object.values(featuresObj)
+            .sort((a, b) => a.properties.active > b.properties.active),
         };
         const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
         vectorSource.addFeatures(formattedFeatures);
@@ -674,7 +689,8 @@ export default function mapLayerBuilder(config, cache, store) {
         let valueIndex;
         // For active data points, define a color based on their value via the color palette
         if (active) {
-          valueIndex = values.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]));
+          valueIndex = values.findIndex((range) => value >= range[0]
+            && (range.length < 2 || value < range[1]));
           fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
@@ -1049,6 +1065,20 @@ export default function mapLayerBuilder(config, cache, store) {
     return layer;
   };
 
+  const createLayerEsri = (def, options, day, state) => {
+    const source = config.sources[def.source];
+    const urlParams = `${def.id}/MapServer/tile/{z}/{y}/{x}`;
+
+    const url = `${source.url}/${urlParams}`;
+
+    return new OlLayerTile({
+      extent: [-180, -90, 180, 90],
+      source: new OlImageTile({
+        url,
+      }),
+    });
+  };
+
   const createIndexedVectorLayer = async (def, options, day, state) => {
     const { proj: { selected } } = state;
     const { crs } = selected;
@@ -1105,6 +1135,7 @@ export default function mapLayerBuilder(config, cache, store) {
               url.replace('/VectorTileServer', '/VectorTileServer/'),
             );
           }
+          return undefined;
         },
       });
       await applyBackground(layer, vectorStyle.url);
@@ -1139,7 +1170,12 @@ export default function mapLayerBuilder(config, cache, store) {
       } = wmtsDef;
       const configSource = config.sources[source];
       const configMatrixSet = configSource.matrixSets[matrixSet];
-      const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, proj.selected);
+      const { extent } = calcExtentsFromLimits(
+        configMatrixSet,
+        matrixSetLimits,
+        day,
+        proj.selected,
+      );
 
       const sourceOptions = {
         url: `${configSource.url}/${layerName}/{z}/{x}/{y}`,

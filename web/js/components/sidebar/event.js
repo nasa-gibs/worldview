@@ -88,7 +88,7 @@ function Event (props) {
    * @returns Magnitude data output
    */
   function magnitudeOutput({ magnitudeUnit, magnitudeValue }) {
-    if (!magnitudeUnit || !magnitudeValue) return;
+    if (!magnitudeUnit || !magnitudeValue) return undefined;
     const formattedunit = magnitudeUnit === 'kts' ? ' kts' : ' NM';
     return (
       <p className="magnitude">
@@ -143,6 +143,7 @@ function Event (props) {
         </ul>
       );
     }
+    return undefined;
   }
 
   /**
@@ -177,6 +178,7 @@ function Event (props) {
         return `${source.title} `;
       });
     }
+    return undefined;
   }
 
   return (
@@ -220,16 +222,16 @@ function Event (props) {
 Event.propTypes = {
   defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
-  event: PropTypes.object,
-  eventLayers: PropTypes.array,
+  event: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  eventLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   highlightEvent: PropTypes.func,
   isSelected: PropTypes.bool,
   isHighlighted: PropTypes.bool,
-  layers: PropTypes.array,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   removeGroup: PropTypes.func,
   selectedDate: PropTypes.string,
   selectEvent: PropTypes.func,
-  sources: PropTypes.array,
+  sources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
   unHighlightEvent: PropTypes.func,

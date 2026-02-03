@@ -72,7 +72,9 @@ class ImageDownloadContainer extends Component {
    */
   getLatLongFromPixelValue(pixelX, pixelY) {
     const { proj, map } = this.props;
-    const coordinate = map.ui.selected.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
+    const coordinate = map.ui.selected.getCoordinateFromPixel(
+      [Math.floor(pixelX), Math.floor(pixelY)],
+    );
     const { crs } = proj.selected;
     const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
@@ -188,7 +190,12 @@ class ImageDownloadContainer extends Component {
           hasSubdailyLayers={hasSubdailyLayers}
           markerCoordinates={markerCoordinates}
           date={date}
-          datelineMessage={getAlertMessageIfCrossesDateline(date, bottomLeftLatLong, topRightLatLong, proj)}
+          datelineMessage={getAlertMessageIfCrossesDateline(
+            date,
+            bottomLeftLatLong,
+            topRightLatLong,
+            proj,
+          )}
           url={url}
           viewExtent={viewExtent}
           getLayers={getLayers}
@@ -293,18 +300,18 @@ export default connect(
 ImageDownloadContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,
-  map: PropTypes.object.isRequired,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onBoundaryChange: PropTypes.func.isRequired,
   onPanelChange: PropTypes.func.isRequired,
-  proj: PropTypes.object.isRequired,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   url: PropTypes.string.isRequired,
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getLayers: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
-  markerCoordinates: PropTypes.array,
+  markerCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  boundaries: PropTypes.object,
+  boundaries: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

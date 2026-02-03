@@ -18,9 +18,6 @@
     "GIBS:wms:antarctic": {
       "url": "https://gibs-{a-c}.earthdata.nasa.gov/wms/epsg3031/best/wms.cgi"
     },
-    "WDPA:wms": {
-      "url": "https://gis.unep-wcmc.org/arcgis/services/wdpa/public/MapServer/WMSServer"
-    },
     "FIRMS:xyz": {
       "url": "https://firms.modaps.eosdis.nasa.gov/layers"
     },
@@ -211,8 +208,14 @@
     "AERONET": {
       "url": "https://aeronet.gsfc.nasa.gov/cgi-bin/print_web_data_v3"
     },
-    "ESRI": {
+    "ESRI:services": {
+      "url": "https://services.arcgisonline.com/ArcGIS/rest/services"
+    },
+    "ESRI:basemaps": {
       "url": "https://basemaps.arcgis.com/arcgis/rest/services"
+    },
+    "EUMETSAT:wms": {
+      "url": "https://view.eumetsat.int/geoserver/wms"
     }
   }
 }

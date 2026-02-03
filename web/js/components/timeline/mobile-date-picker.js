@@ -154,9 +154,10 @@ function MobileDatePicker(props) {
 }
 
 MobileDatePicker.propTypes = {
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   endDateLimit: PropTypes.string,
   hasSubdailyLayers: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   onDateChange: PropTypes.func,
   startDateLimit: PropTypes.string,
 };

@@ -87,7 +87,17 @@ export default function getImageArray(
     products = getProducts(current, state);
 
     const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
-    const dlURL = getDownloadUrl(url, proj, products, lonlats, dimensions, current, false, false, markerCoordinates);
+    const dlURL = getDownloadUrl(
+      url,
+      proj,
+      products,
+      lonlats,
+      dimensions,
+      current,
+      false,
+      false,
+      markerCoordinates,
+    );
 
     src = util.format(dlURL, strDate);
     a.push({

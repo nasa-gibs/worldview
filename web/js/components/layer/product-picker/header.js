@@ -36,7 +36,7 @@ class ProductPickerHeader extends React.Component {
   componentDidMount() {
     const { isMobile } = this.props;
     setTimeout(() => {
-      if (this._input && !isMobile) this._input.focus();
+      if (this.input && !isMobile) this.input.focus();
     }, 500);
   }
 
@@ -212,7 +212,7 @@ class ProductPickerHeader extends React.Component {
             placeholder="Search"
             type="search"
             // eslint-disable-next-line no-return-assign
-            innerRef={(c) => (this._input = c)}
+            innerRef={(c) => (this.input = c)}
           />
         </InputGroup>
 
@@ -231,17 +231,17 @@ class ProductPickerHeader extends React.Component {
 }
 
 ProductPickerHeader.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
-  filters: PropTypes.array,
+  filters: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   layerCount: PropTypes.number,
   mode: PropTypes.string,
-  results: PropTypes.array,
+  results: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   saveSearchState: PropTypes.func,
-  searchConfig: PropTypes.object,
+  searchConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setSearchTerm: PropTypes.func,
-  selectedLayer: PropTypes.object,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedProjection: PropTypes.string,
   searchTerm: PropTypes.string,
   showMobileFacets: PropTypes.bool,

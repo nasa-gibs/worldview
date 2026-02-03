@@ -128,23 +128,22 @@ function LayersContainer (props) {
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
   const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
   return isActive && (
-    <>
-      <div id="layers-scroll-container" style={scrollContainerStyles}>
-        <div className="layer-container sidebar-panel">
+    <div id="layers-scroll-container" style={scrollContainerStyles}>
+      <div className="layer-container sidebar-panel">
 
-          {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
-            <LayerList
-              title="Overlays"
-              groupId="overlays"
-              compareState={compareState}
-              collapsed={overlaysCollapsed}
-              toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
-              layers={overlays}
-              layerSplit={overlays.length}
-            />
-          )}
+        {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
+        <LayerList
+          title="Overlays"
+          groupId="overlays"
+          compareState={compareState}
+          collapsed={overlaysCollapsed}
+          toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
+          layers={overlays}
+          layerSplit={overlays.length}
+        />
+        )}
 
-          {!shouldHideForEmbedNoBaseLayers && (
+        {!shouldHideForEmbedNoBaseLayers && (
           <div className="layer-group-baselayers">
             <LayerList
               title="Base Layers"
@@ -156,10 +155,9 @@ function LayersContainer (props) {
               layerSplit={overlays.length}
             />
           </div>
-          )}
-        </div>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 
@@ -227,8 +225,8 @@ export default connect(
 )(LayersContainer);
 
 LayersContainer.propTypes = {
-  activeLayersMap: PropTypes.object,
-  baselayers: PropTypes.array,
+  activeLayersMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  baselayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   compareState: PropTypes.string,
   groupOverlays: PropTypes.bool,
   height: PropTypes.number,
@@ -237,11 +235,11 @@ LayersContainer.propTypes = {
   isCompareActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  overlayGroups: PropTypes.array,
-  overlays: PropTypes.array,
+  overlayGroups: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  overlays: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   reorderOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isPlaying: PropTypes.bool,
   screenWidth: PropTypes.number,
   addLayers: PropTypes.func,

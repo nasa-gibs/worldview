@@ -138,6 +138,7 @@ class TimelineDragger extends PureComponent {
         </text>
       );
     }
+    return undefined;
   }
 
   /*

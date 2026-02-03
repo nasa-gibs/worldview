@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import {
   Dropdown,
@@ -42,3 +43,11 @@ export default function BandsDropdown(props) {
     </Dropdown>
   );
 }
+
+BandsDropdown.propTypes = {
+  channel: PropTypes.string,
+  bandSelection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  setBandSelection: PropTypes.func,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  setSelectedPreset: PropTypes.func,
+};

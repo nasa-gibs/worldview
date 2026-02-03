@@ -26,6 +26,12 @@ import CoverageItemList from './coverage-item-list';
  */
 
 class TimelineLayerCoveragePanel extends Component {
+  static stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +46,8 @@ class TimelineLayerCoveragePanel extends Component {
 
     const layers = this.getActiveLayers(activeLayers);
     this.setActiveLayers(layers);
-    // prevent bubbling to parent which the wheel event is blocked for timeline zoom in/out wheel event
+    // prevent bubbling to parent which the wheel event
+    // is blocked for timeline zoom in/out wheel event
     document.querySelector('.timeline-layer-coverage-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
     // init populate of activeLayers
     this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
@@ -293,12 +300,7 @@ class TimelineLayerCoveragePanel extends Component {
         return granuleDateRanges.map(([start, end]) => ({ startDate: start, endDate: end }));
       });
     }
-  };
-
-  stopPropagation = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
+    return undefined;
   };
 
   /**
@@ -436,7 +438,10 @@ class TimelineLayerCoveragePanel extends Component {
                 id="toggle-layer-coverage-include-hidden"
                 containerClassAddition="toggle-layer-coverage-include-hidden"
                 label="Include Hidden Layers"
-                toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers, activeLayers)}
+                toggle={() => this.addMatchingCoverageToTimeline(
+                  !shouldIncludeHiddenLayers,
+                  activeLayers,
+                )}
               />
             </header>
             <Scrollbars style={scrollbarStyle}>
@@ -504,8 +509,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 TimelineLayerCoveragePanel.propTypes = {
-  activeLayers: PropTypes.array,
-  appNow: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

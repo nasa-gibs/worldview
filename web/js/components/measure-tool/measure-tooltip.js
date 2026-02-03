@@ -72,6 +72,7 @@ export default function MeasureTooltip(props) {
         ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
         : `${roundAndLocale(imperialLength)} ft`;
     }
+    return undefined;
   };
 
   /**
@@ -91,6 +92,7 @@ export default function MeasureTooltip(props) {
         ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
         : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
     }
+    return undefined;
   };
 
   const getMeasurementValue = () => {
@@ -103,6 +105,7 @@ export default function MeasureTooltip(props) {
     if (geometry instanceof OlLineString) {
       return getFormattedLength(geometry);
     }
+    return undefined;
   };
 
   const checkGeographicCoordValidity = (val) => val.indexOf('NaN') < 0;
@@ -110,15 +113,19 @@ export default function MeasureTooltip(props) {
   const checkPolarCoordValidity = () => {
     const coordinates = geometry.flatCoordinates;
 
-    // Distance & Area measurement coordinates are stored differently, so identify based on geometry type
-    const yCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
-    const xCoord = geometry instanceof OlGeomPolygon ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
+    // Distance & Area measurement coordinates are stored differently,
+    // so identify based on geometry type
+    const yCoord = geometry instanceof OlGeomPolygon
+      ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
+    const xCoord = geometry instanceof OlGeomPolygon
+      ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
     const tCoord = transform([xCoord, yCoord], crs, CRS.GEOGRAPHIC);
     return areCoordinatesWithinExtent(proj, tCoord);
   };
 
   const tooltipValue = getMeasurementValue();
-  const coordinatesAreValid = crs === CRS.GEOGRAPHIC ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
+  const coordinatesAreValid = crs === CRS.GEOGRAPHIC
+    ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
 
   if (coordinatesAreValid) {
     return (
@@ -141,8 +148,8 @@ MeasureTooltip.defaultProps = {
 MeasureTooltip.propTypes = {
   active: PropTypes.bool,
   crs: PropTypes.string,
-  geometry: PropTypes.object,
+  geometry: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onRemove: PropTypes.func,
   unitOfMeasure: PropTypes.string,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

@@ -29,7 +29,8 @@ export const layersToMeasure = [
 ];
 
 // Object that contains the black pixel % threshold for each layer
-// Threshold values represent the amount of black pixels as a percentage that CAN be present in an image
+// Threshold values represent the amount of black pixels
+// as a percentage that CAN be present in an image
 export const layerPixelData = {
   MODIS_Terra_CorrectedReflectance_TrueColor: { threshold: 0.70 },
   VIIRS_SNPP_DayNightBand_At_Sensor_Radiance: { threshold: 0.70 },
@@ -60,7 +61,8 @@ export const layerPixelData = {
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
-// TO DO: These layers will eventually need to be prioritized if a scenario has layers from multiple best dates
+// TO DO: These layers will eventually need to be prioritized if a scenario has layers from multiple
+// best dates
 export const bestDates = {
   'GOES-East_ABI_GeoColor': { date: '2023-10-30T23:50:00.000Z' },
   'GOES-West_ABI_GeoColor': { date: '2023-10-30T23:50:00.000Z' },

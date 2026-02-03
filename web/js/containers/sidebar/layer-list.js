@@ -188,7 +188,9 @@ function LayerList(props) {
               ref={provided.innerRef}
               {...provided.droppableProps}
             >
-              {layers.sort((layerA, layerB) => (isChartingActive ? layerB.shouldHide === layerA.shouldHide ? 0 : layerB.shouldHide ? -1 : 1 : 0)).map(renderLayer)}
+              {layers.sort((layerA, layerB) => (isChartingActive
+                ? layerB.shouldHide === layerA.shouldHide
+                  ? 0 : layerB.shouldHide ? -1 : 1 : 0)).map(renderLayer)}
               {provided.placeholder}
             </ul>
           )}
@@ -199,25 +201,28 @@ function LayerList(props) {
 }
 
 LayerList.propTypes = {
-  activeLayers: PropTypes.array,
+  activeChartingLayer: PropTypes.string,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   available: PropTypes.func,
   collapsed: PropTypes.bool,
   compareState: PropTypes.string,
-  dragHandleProps: PropTypes.object,
+  dragHandleProps: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getNames: PropTypes.func,
   groupId: PropTypes.string,
   isAnimating: PropTypes.bool,
+  isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
-  layers: PropTypes.array,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   layerSplit: PropTypes.number,
   numVisible: PropTypes.number,
   projId: PropTypes.string,
+  removeGroup: PropTypes.func,
   reorderLayers: PropTypes.func,
   toggleCollapse: PropTypes.func,
   toggleVisibility: PropTypes.func,
   title: PropTypes.string,
-  zots: PropTypes.object,
+  zots: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 const mapStateToProps = (state, ownProps) => {

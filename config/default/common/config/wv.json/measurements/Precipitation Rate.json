@@ -62,8 +62,13 @@
                       "settings": [
                           "AMSRUE_Surface_Precipitation_Day",
                           "AMSRUE_Surface_Precipitation_Night",
+                          "AMSRU_L3_Total_Precipitable_Water_Daily",
+                          "AMSRU_L3_Total_Precipitable_Water_Weekly",
+                          "AMSRU_L3_Total_Precipitable_Water_Monthly",
                           "OrbitTracks_Aqua_Ascending",
-                          "OrbitTracks_Aqua_Descending"
+                          "OrbitTracks_Aqua_Descending",
+                          "OrbitTracks_GCOM-W1_Ascending",
+                          "OrbitTracks_GCOM-W1_Descending"
                       ]
                 },
                   "Aqua/AMSR-E": {

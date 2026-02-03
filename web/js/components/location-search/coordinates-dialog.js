@@ -149,7 +149,9 @@ class CoordinatesDialog extends Component {
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
-    const tooltipVisibilityCondition = !isMobile && !isCopyToClipboardTooltipVisible && showTooltips;
+    const tooltipVisibilityCondition = !isMobile
+      && !isCopyToClipboardTooltipVisible
+      && showTooltips;
 
     return (
       <div
@@ -207,7 +209,7 @@ CoordinatesDialog.propTypes = {
   removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
   title: PropTypes.string,
-  coordinates: PropTypes.array,
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   tooltipId: PropTypes.string,
 };

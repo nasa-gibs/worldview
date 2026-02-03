@@ -7,7 +7,7 @@
       "description": "asia-aq/ASIA-AQ_DC-8_NO2",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector no2 CANOE Philippines Taiwan South Korea Thailand",
+      "tags": "vector no2 CANOE Philippines Taiwan South Korea Thailand suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,

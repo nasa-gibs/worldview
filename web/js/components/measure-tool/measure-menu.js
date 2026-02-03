@@ -52,7 +52,9 @@ const MeasureMenu = function () {
   const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
   const isTouchDevice = useSelector((state) => state.modal.customProps.touchDevice);
   const unitOfMeasure = useSelector((state) => state.measure.unitOfMeasure);
-  const measurementsInProj = useSelector((state) => !!Object.keys(state.measure.allMeasurements[state.proj.selected.crs]).length);
+  const measurementsInProj = useSelector((state) => !!Object.keys(
+    state.measure.allMeasurements[state.proj.selected.crs],
+  ).length);
 
   const listSize = isTouchDevice ? 'large' : 'small';
   DOWNLOAD_GEOJSON.hidden = !measurementsInProj || isMobile;

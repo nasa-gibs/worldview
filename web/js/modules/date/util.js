@@ -10,7 +10,8 @@ import {
 import { getSelectedDate, getDeltaIntervalUnit } from './selectors';
 import MonospaceDate from '../../components/util/monospace-date';
 
-export const filterProjLayersWithStartDate = (layers, projId) => layers.filter((layer) => layer.startDate && layer.projections[projId]);
+export const filterProjLayersWithStartDate = (layers, projId) => layers
+  .filter((layer) => layer.startDate && layer.projections[projId]);
 
 /**
    * Parses a UTC ISO 8601 date to a non UTC date
@@ -84,7 +85,7 @@ export function tryCatchDate(str, initialState) {
  * @returns {String | undefined} serialized time string OR undefined
  */
 export function serializeDateWrapper(currentItemState, state, prev) {
-  if (state.animation.isPlaying) return;
+  if (state.animation.isPlaying) return undefined;
   const prevParams = Object.keys(prev).length > 0;
   const initialDate = get(state, 'config.initialDate');
   const initialDateString = util.toISOStringSeconds(initialDate);
@@ -141,7 +142,7 @@ export function serializeDateBWrapper(currentItemState, state, prev) {
  * @returns {String | undefined} serialized time string OR undefined
  */
 export function serializeDateChartingWrapper(currentItemState, state) {
-  if (!state.charting.active || !state.charting.timeSpanStartDate) return;
+  if (!state.charting.active || !state.charting.timeSpanStartDate) return undefined;
   return serializeDate(currentItemState);
 }
 
@@ -219,7 +220,8 @@ export function checkHasFutureLayers(state) {
   if (compare.active) {
     const compareALayersFiltered = filterProjLayersWithStartDate(layers.active.layers, proj.id);
     const compareBLayersFiltered = filterProjLayersWithStartDate(layers.activeB.layers, proj.id);
-    hasFutureLayers = [...compareALayersFiltered, ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
+    hasFutureLayers = [...compareALayersFiltered,
+      ...compareBLayersFiltered].filter((layer) => layer.futureTime).length > 0;
   } else {
     const activeLayers = getActiveLayers(state);
     const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, proj.id);
@@ -291,7 +293,7 @@ export function mapLocationToDateState(
 }
 
 export const formatDisplayDate = (date, subdaily) => {
-  if (!date) return;
+  if (!date) return undefined;
   const format = subdaily ? 'YYYY MMM DD HH:mm' : 'YYYY MMM DD';
   const dateString = moment.utc(date).format(format);
   return `${dateString.toUpperCase()}${subdaily ? 'Z' : ''}`;
@@ -375,7 +377,7 @@ export const outOfStepChange = (state, newDate) => {
 };
 
 export const coverageDateFormatter = (dateType, date, period) => {
-  if (!date) return;
+  if (!date) return undefined;
   let dateString;
   const parsedDate = new Date(date);
   switch (period) {

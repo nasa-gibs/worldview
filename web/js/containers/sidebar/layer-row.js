@@ -200,11 +200,14 @@ function LayerRow (props) {
   // hook that checks if the ddv layer location alert should be enabled or disabled
   useEffect(() => {
     const { title } = layer;
-    // if layer is ddv && layer IS NOT already in location alert list && location is at alertable coordinates
+    // if layer is ddv && layer IS NOT already in location alert list
+    // && location is at alertable coordinates
     if (isLayerNotificationDismissable && !ddvLayerLocationNoticeActive && showGranuleAlert) {
       enableDDVLocationAlert(title);
-      // if layer is ddv && layer IS NOT already in location alert list && location is at alertable coordinates
-    } else if (isLayerNotificationDismissable && ddvLayerLocationNoticeActive && !showGranuleAlert) {
+      // if layer is ddv && layer IS NOT already in location alert list
+      // && location is at alertable coordinates
+    } else if (isLayerNotificationDismissable
+      && ddvLayerLocationNoticeActive && !showGranuleAlert) {
       disableDDVLocationAlert(title);
     }
   }, [showGranuleAlert]);
@@ -259,6 +262,7 @@ function LayerRow (props) {
         />
       );
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -597,7 +601,8 @@ function LayerRow (props) {
             ))}
           </div>
         )}
-        {showZoomAlert && !hideZoomAlert && !isLayerNotificationDismissable && !layer.shouldHide && (
+        {showZoomAlert && !hideZoomAlert
+        && !isLayerNotificationDismissable && !layer.shouldHide && (
           <AlertUtil
             id="zoom-alert"
             isOpen
@@ -608,7 +613,8 @@ function LayerRow (props) {
             onClick={openZoomAlertModal}
           />
         )}
-        {showGranuleAlert && !hideGranuleAlert && !isLayerNotificationDismissable && !layer.shouldHide && (
+        {showGranuleAlert && !hideGranuleAlert
+        && !isLayerNotificationDismissable && !layer.shouldHide && (
           <AlertUtil
             id="granule-alert"
             isOpen
@@ -664,7 +670,8 @@ const makeMapStateToProps = () => {
       compareState,
     } = ownProps;
     const {
-      screenSize, palettes, config, embed, map, compare, proj, ui, settings, animation, layers, date,
+      screenSize, palettes, config, embed, map,
+      compare, proj, ui, settings, animation, layers, date,
     } = state;
     const isMobile = screenSize.isMobileDevice;
     const { isDistractionFreeModeActive } = ui;
@@ -710,7 +717,8 @@ const makeMapStateToProps = () => {
       isVectorLayer: isVector,
       isChartableLayer: isChartable,
       isAnimating: animation.isPlaying,
-      hasClickableFeature: isVector && isVisible && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
+      hasClickableFeature: isVector && isVisible
+      && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
       getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
       paletteLegends,
@@ -818,7 +826,7 @@ LayerRow.defaultProps = {
 };
 
 LayerRow.propTypes = {
-  compare: PropTypes.object,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
   globalTemperatureUnit: PropTypes.string,
@@ -832,26 +840,26 @@ LayerRow.propTypes = {
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
-  layer: PropTypes.object,
-  collections: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  collections: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareState: PropTypes.string,
   measurementDescriptionPath: PropTypes.string,
-  names: PropTypes.object,
+  names: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   updateActiveChartingLayer: PropTypes.func,
-  palette: PropTypes.object,
-  palettes: PropTypes.object,
-  paletteLegends: PropTypes.array,
-  renderedPalette: PropTypes.object,
+  palette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  palettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  paletteLegends: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  renderedPalette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
   toggleVisibility: PropTypes.func,
   hasClickableFeature: PropTypes.bool,
-  tracksForLayer: PropTypes.array,
+  tracksForLayer: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   openVectorAlertModal: PropTypes.func,
   openGranuleAlertModal: PropTypes.func,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isVectorLayer: PropTypes.bool,
   isChartableLayer: PropTypes.bool,
   isAnimating: PropTypes.bool,
@@ -862,5 +870,10 @@ LayerRow.propTypes = {
   isDDVLocationAlertPresent: PropTypes.bool,
   isDDVZoomAlertPresent: PropTypes.bool,
   openZoomAlertModal: PropTypes.func,
-  describeDomainsUrl: PropTypes.string,
+  ddvLocationAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  ddvZoomAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  disableDDVLocationAlert: PropTypes.func,
+  disableDDVZoomAlert: PropTypes.func,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedDate: PropTypes.instanceOf(Date),
 };

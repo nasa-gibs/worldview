@@ -23,7 +23,8 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive, isMobile,
+    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive,
+    allMeasurements, measurementIsActive, isMobile,
   } = props;
   const { crs } = proj.selected;
   const measurementsInProj = !!(Object.keys(allMeasurements[crs]) || []).length;
@@ -60,7 +61,7 @@ function RightClickMenu(props) {
       return onToggleUnits(oppositeUnit);
     }
     setShow(false);
-    events.trigger(`measure:${action}`);
+    return events.trigger(`measure:${action}`);
   }
 
   function addPlaceMarkerHandler(coords, olMap, crs) {
@@ -78,7 +79,7 @@ function RightClickMenu(props) {
   };
 
   useEffect(() => {
-    if (isCoordinateSearchActive) return;
+    if (isCoordinateSearchActive) return false;
     events.on(MAP_SINGLE_CLICK, handleClick);
     events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {
@@ -177,12 +178,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 RightClickMenu.propTypes = {
-  map: PropTypes.object,
-  proj: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
-  allMeasurements: PropTypes.object,
+  allMeasurements: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   measurementIsActive: PropTypes.bool,
   isMobile: PropTypes.bool,
 };

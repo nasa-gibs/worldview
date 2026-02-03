@@ -44,7 +44,8 @@ class DismissableAlerts extends React.Component {
   componentDidUpdate(prevProps) {
     const { isDistractionFreeModeActive } = this.props;
     const { distractionFreeModeInitLoad } = this.state;
-    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive
+    && !isDistractionFreeModeActive;
     if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
       this.toggleDistractionFreeModeInitLoad(false);
     }
@@ -247,6 +248,8 @@ export default connect(
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {
+  ddvZoomAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  ddvLocationAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   dismissVectorZoomAlert: PropTypes.func,
   dismissVectorExceededAlert: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
@@ -264,5 +267,4 @@ DismissableAlerts.propTypes = {
   isDDVLocationAlertPresent: PropTypes.bool,
   openGranuleAlertModal: PropTypes.func,
   openZoomAlertModal: PropTypes.func,
-  activeDDVLayer: PropTypes.object,
 };

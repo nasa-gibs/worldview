@@ -114,7 +114,8 @@ class TimelineDraggerRange extends PureComponent {
       }
     }
 
-    // +/- {number} - change in x - set to 0 to 'stop' dragger movement - min/max of -55/55 to prevent overdrag
+    // +/- {number} - change in x - set to 0 to 'stop' dragger movement
+    // - min/max of -55/55 to prevent overdrag
     let deltaX = d.deltaX < -55 ? -55 : d.deltaX > 55 ? 55 : d.deltaX;
     // +/- {number} - start position
     const deltaStart = d.x;
@@ -242,9 +243,9 @@ TimelineDraggerRange.propTypes = {
   deltaStart: PropTypes.number,
   draggerID: PropTypes.string,
   endLocation: PropTypes.number,
-  endLocationDate: PropTypes.object,
+  endLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   height: PropTypes.number,
-  max: PropTypes.object,
+  max: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onDrag: PropTypes.func,
   onStop: PropTypes.func,
   opacity: PropTypes.number,

@@ -59,7 +59,8 @@ function FindOrbitTracksMode () {
 
   const verifyExtent = () => {
     // This is a very loose measurement.. Should find a better way to find values...
-    const unitedStatesExtent = [-125.0799167388867, 22.176358212699427, -62.489596269417106, 57.01542814447728];
+    const unitedStatesExtent = [-125.0799167388867,
+      22.176358212699427, -62.489596269417106, 57.01542814447728];
     const intersection = getIntersection(unitedStatesExtent, currentExtent);
     const intersectionArea = getArea(intersection);
     if (isEmpty(intersection)) {
@@ -112,6 +113,7 @@ function FindOrbitTracksMode () {
     } catch (error) {
       console.error(`No image available for ${layerSelection.id} on ${date}: `, error);
     }
+    return undefined;
   };
 
   const findOrbitalImagery = async () => {
@@ -119,7 +121,7 @@ function FindOrbitTracksMode () {
     const verifyQuery = verifyExtent();
     if (!verifyQuery) {
       setIsLoading(false);
-      return;
+      return undefined;
     }
     const dateRange = getOrbitalDateRange();
     for (let i = 0; i < dateRange.length; i += 1) {
@@ -134,7 +136,7 @@ function FindOrbitTracksMode () {
         return setDateFound(date);
       }
     }
-    setIsLoading(false);
+    return setIsLoading(false);
   };
 
   const orangeStyle = { backgroundColor: '#d54e21' };

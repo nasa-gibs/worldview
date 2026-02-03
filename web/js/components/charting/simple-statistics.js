@@ -77,14 +77,15 @@ function SimpleStatistics(props) {
         <strong>Note:</strong>
         <br />
         {' '}
-        Numerical analyses performed on imagery should only be used for initial basic exploratory purposes.
+        Numerical analyses performed on imagery should
+        only be used for initial basic exploratory purposes.
       </div>
     </>
   );
 }
 
 SimpleStatistics.propTypes = {
-  data: PropTypes.object,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default SimpleStatistics;

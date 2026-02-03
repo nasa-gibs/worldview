@@ -10,7 +10,10 @@ import {
 
 function ChartingDateSelector (props) {
   const {
-    onUpdateStartDate, onUpdateEndDate, timeSpanStartDate, timeSpanEndDate, timeSpanSelection, date, layerStartDate, layerEndDate,
+    onUpdateStartDate, onUpdateEndDate,
+    timeSpanStartDate, timeSpanEndDate,
+    timeSpanSelection, date,
+    layerStartDate, layerEndDate,
   } = props;
   const { selected, selectedB } = date;
   const startdate = timeSpanStartDate == null ? selected : timeSpanStartDate;
@@ -20,7 +23,7 @@ function ChartingDateSelector (props) {
   const validStartDate = startdate < layerStartDate ? layerStartDate : startdate;
   const validEndDate = endDate > layerEndDate ? layerEndDate : endDate;
 
-  function onDateChange([newStartDate, newEndDate]) {
+  const onDateChange = ([newStartDate, newEndDate]) => {
     if (newStartDate !== timeSpanStartDate) {
       onUpdateStartDate(newStartDate);
     }
@@ -28,13 +31,13 @@ function ChartingDateSelector (props) {
     if (newEndDate !== timeSpanEndDate) {
       onUpdateEndDate(newEndDate);
     }
-  }
+  };
 
-  function onSingleDateChange(newStartDate) {
+  const onSingleDateChange = (newStartDate) => {
     if (newStartDate !== timeSpanStartDate) {
       onUpdateStartDate(newStartDate);
     }
-  }
+  };
 
   return (
     <div className="charting-date-container wv-date-range-selector">
@@ -87,13 +90,13 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 ChartingDateSelector.propTypes = {
-  timeSpanStartDate: PropTypes.object,
-  timeSpanEndDate: PropTypes.object,
-  layerEndDate: PropTypes.object,
-  layerStartDate: PropTypes.object,
+  timeSpanStartDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  timeSpanEndDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layerEndDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layerStartDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onUpdateStartDate: PropTypes.func,
   onUpdateEndDate: PropTypes.func,
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   timeSpanSelection: PropTypes.string,
 };
 

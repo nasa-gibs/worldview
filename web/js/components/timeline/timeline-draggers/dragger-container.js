@@ -117,12 +117,17 @@ class DraggerContainer extends PureComponent {
     const options = timeScaleOptions[timeScale].timeAxis;
     const { gridWidth } = options;
     const frontDateObj = moment.utc(frontDate);
-    const pixelsToAddToDraggerNew = Math.abs(frontDateObj.diff(inputTime, timeScale, true) * gridWidth);
+    const pixelsToAddToDraggerNew = Math.abs(
+      frontDateObj.diff(inputTime, timeScale, true) * gridWidth,
+    );
     newDraggerPosition = pixelsToAddToDraggerNew + position - draggerWidth + transformX + 2;
 
     // determine max timelineEndDate position for dragger
-    const endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
-    const endDatePosition = endDateLimitPositionFromFront + position - draggerWidth + transformX + 2;
+    const endDateLimitPositionFromFront = Math.abs(
+      frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth,
+    );
+    const endDatePosition = endDateLimitPositionFromFront
+    + position - draggerWidth + transformX + 2;
 
     // checks to prevent positioning outside of valid timeline range
     const isBeforeFrontDate = new Date(inputTime) < new Date(frontDate);
@@ -190,10 +195,13 @@ class DraggerContainer extends PureComponent {
       // only need to calculate difference in time unit for varying timescales - month and year
       const diffZeroValues = options.scaleMs;
       if (!diffZeroValues) {
-        // calculate based on frontDate due to varying number of days per month and per year (leap years)
-        const draggerPositionRelativeToFrontDate = draggerWidth - 2 + newDraggerPosition - position - transformX;
+        // calculate based on frontDate due to varying
+        // number of days per month and per year (leap years)
+        const draggerPositionRelativeToFrontDate = draggerWidth - 2
+        + newDraggerPosition - position - transformX;
         const gridWidthCoefficient = draggerPositionRelativeToFrontDate / gridWidth;
-        const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoefficient), timeScale);
+        const draggerDateAdded = moment.utc(frontDate)
+          .add(Math.floor(gridWidthCoefficient), timeScale);
 
         let daysCount;
         if (timeScale === 'year') {
@@ -201,7 +209,8 @@ class DraggerContainer extends PureComponent {
         } else if (timeScale === 'month') {
           daysCount = draggerDateAdded.daysInMonth();
         }
-        const gridWidthCoefficientRemainder = gridWidthCoefficient - Math.floor(gridWidthCoefficient);
+        const gridWidthCoefficientRemainder = gridWidthCoefficient
+        - Math.floor(gridWidthCoefficient);
         const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         newDraggerTime = draggerDateAdded.add(remainderMilliseconds);
       } else {
@@ -210,7 +219,11 @@ class DraggerContainer extends PureComponent {
       }
 
       // check if new dragger date is within valid date range and format or RETURN out of function
-      const isBetweenValidTimeline = getIsBetween(newDraggerTime, timelineStartDateLimit, timelineEndDateLimit);
+      const isBetweenValidTimeline = getIsBetween(
+        newDraggerTime,
+        timelineStartDateLimit,
+        timelineEndDateLimit,
+      );
       if (isBetweenValidTimeline) {
         newDraggerTime = getISODateFormatted(newDraggerTime);
       } else {
@@ -218,17 +231,34 @@ class DraggerContainer extends PureComponent {
         // prevent over drag and set endDatePosition and time to timelineEndDateLimit
         if (newDraggerTime > timelineEndDateLimitTime) {
           const frontDateObj = moment.utc(frontDate);
-          const endDateLimitPositionFromFront = Math.abs(frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth);
-          const endDatePosition = endDateLimitPositionFromFront + position - draggerWidth + transformX + 2;
+          const endDateLimitPositionFromFront = Math.abs(
+            frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth,
+          );
+          const endDatePosition = endDateLimitPositionFromFront
+          + position - draggerWidth + transformX + 2;
 
-          updateDraggerDatePosition(timelineEndDateLimit, draggerSelected, endDatePosition, null, null, true);
-          return;
+          updateDraggerDatePosition(
+            timelineEndDateLimit,
+            draggerSelected,
+            endDatePosition,
+            null,
+            null,
+            true,
+          );
+          return true;
         }
         return false;
       }
 
       // update parent dragger positioning
-      updateDraggerDatePosition(newDraggerTime, draggerSelected, newDraggerPosition, null, null, true);
+      return updateDraggerDatePosition(
+        newDraggerTime,
+        draggerSelected,
+        newDraggerPosition,
+        null,
+        null,
+        true,
+      );
     });
   };
 
@@ -249,15 +279,6 @@ class DraggerContainer extends PureComponent {
       draggerWidth,
     } = this.state;
 
-    const sharedProps = {
-      axisWidth,
-      toggleShowDraggerTime,
-      transformX,
-      isCompareModeActive,
-      handleDragDragger: this.handleDragDragger,
-      selectDragger: this.selectDragger,
-    };
-
     const selectedDraggerClipAClipWidth = Math.max(draggerWidth, draggerWidth + draggerPosition);
     const selectedDraggerClipBClipWidth = Math.max(draggerWidth, draggerWidth + draggerPositionB);
     return (
@@ -277,7 +298,12 @@ class DraggerContainer extends PureComponent {
             {isCompareModeActive
               ? (
                 <Dragger
-                  {...sharedProps}
+                  axisWidth={axisWidth}
+                  toggleShowDraggerTime={toggleShowDraggerTime}
+                  transformX={transformX}
+                  isCompareModeActive={isCompareModeActive}
+                  handleDragDragger={this.handleDragDragger}
+                  selectDragger={this.selectDragger}
                   disabled
                   draggerName="selected"
                   draggerPosition={draggerPosition}
@@ -286,7 +312,12 @@ class DraggerContainer extends PureComponent {
               )
               : null}
             <Dragger
-              {...sharedProps}
+              axisWidth={axisWidth}
+              toggleShowDraggerTime={toggleShowDraggerTime}
+              transformX={transformX}
+              isCompareModeActive={isCompareModeActive}
+              handleDragDragger={this.handleDragDragger}
+              selectDragger={this.selectDragger}
               disabled={false}
               draggerName="selectedB"
               draggerPosition={draggerPositionB}
@@ -309,7 +340,12 @@ class DraggerContainer extends PureComponent {
             {isCompareModeActive
               ? (
                 <Dragger
-                  {...sharedProps}
+                  axisWidth={axisWidth}
+                  toggleShowDraggerTime={toggleShowDraggerTime}
+                  transformX={transformX}
+                  isCompareModeActive={isCompareModeActive}
+                  handleDragDragger={this.handleDragDragger}
+                  selectDragger={this.selectDragger}
                   disabled
                   draggerName="selectedB"
                   draggerPosition={draggerPositionB}
@@ -318,7 +354,12 @@ class DraggerContainer extends PureComponent {
               )
               : null}
             <Dragger
-              {...sharedProps}
+              axisWidth={axisWidth}
+              toggleShowDraggerTime={toggleShowDraggerTime}
+              transformX={transformX}
+              isCompareModeActive={isCompareModeActive}
+              handleDragDragger={this.handleDragDragger}
+              selectDragger={this.selectDragger}
               disabled={false}
               draggerName="selected"
               draggerPosition={draggerPosition}
@@ -341,7 +382,6 @@ DraggerContainer.propTypes = {
   draggerVisible: PropTypes.bool,
   draggerVisibleB: PropTypes.bool,
   frontDate: PropTypes.string,
-  isAnimationPlaying: PropTypes.bool,
   isCompareModeActive: PropTypes.bool,
   isDraggerDragging: PropTypes.bool,
   onChangeSelectedDragger: PropTypes.func,

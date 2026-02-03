@@ -27,9 +27,9 @@ function KioskAnimationWidget(props) {
 }
 
 KioskAnimationWidget.propTypes = {
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
-  subDailyMode: PropTypes.bool,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  hasSubdailyLayers: PropTypes.bool,
 };
 
 export default KioskAnimationWidget;

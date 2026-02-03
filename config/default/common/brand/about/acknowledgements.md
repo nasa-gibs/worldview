@@ -6,8 +6,7 @@
                 href="https://search.earthdata.nasa.gov/">Earthdata Search</a> for a full listing of available data
         products.</p>
 <p>Near real-time imagery is courtesy of the <a href="https://www.earthdata.nasa.gov/data/projects/lance"
-                target="_blank" rel="noopener noreferrer">Land, Atmosphere Near Real-Time Capability for Earth observation (LANCE)
-        </a>data providers:
+                target="_blank" rel="noopener noreferrer">Land, Atmosphere Near Real-Time Capability for Earth observation (LANCE)</a> data providers:
 </p>
 <ul>
         <li>AMSR2 and ISS LIS layers from <a

@@ -1,0 +1,35 @@
+{
+  "layers": {
+    "ACTIVATE_King_Air_Flight_Track": {
+      "id": "ACTIVATE_King_Air_Flight_Track",
+      "title": "NASA King Air Flight Track (Per Flight)",
+      "subtitle": "ACTIVATE/NASA King Air",
+      "description": "activate/ACTIVATE_King_Air_Flight_Track",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector activate suborbital",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Suborbital Flight Tracks",
+      "vectorStyle": {
+        "id": "ACTIVATE_King_Air_Flight_Track",
+        "geographic": {
+          "id": "ACTIVATE_King_Air_Flight_Track"
+        }
+      },
+      "palette": {
+        "id": "ACTIVATE_King_Air_Flight_Track",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "GPS_Alt_m_",
+        "order": "descending"
+      }
+    }
+  }
+}

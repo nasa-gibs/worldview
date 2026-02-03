@@ -24,7 +24,8 @@ class AxisHoverLine extends PureComponent {
     // check for timeline/animation dragging and showhover handled by parent
     const isNoBlockingDragging = !isTimelineDragging && !isAnimationDraggerDragging;
     const showHover = isNoBlockingDragging && showHoverLine;
-    const panelDraggerHoverLine = isTimelineLayerCoveragePanelOpen && isNoBlockingDragging && isDraggerDragging;
+    const panelDraggerHoverLine = isTimelineLayerCoveragePanelOpen
+    && isNoBlockingDragging && isDraggerDragging;
     const shouldDisplayHoverLine = showHover || panelDraggerHoverLine;
 
     // init normal (no data coverage panel) line heights (svg container, inner line)
@@ -78,7 +79,7 @@ class AxisHoverLine extends PureComponent {
 }
 
 AxisHoverLine.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   hoverLinePosition: PropTypes.number,
   isAnimationDraggerDragging: PropTypes.bool,

@@ -96,6 +96,7 @@
                       "description": "viirs/Aerosol",
                       "image": "",
                       "settings": [
+                        "VIIRS_SNPP_AOD_Dark_Target_Land_Ocean",
                         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
@@ -119,11 +120,22 @@
                       "description": "viirs/Aerosol",
                       "image": "",
                       "settings": [
+                        "VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean",
                         "VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate",
                         "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean",
                         "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
                         "OrbitTracks_NOAA-20_Ascending"
+                      ]
+                },
+                  "NOAA-21/VIIRS": {
+                      "id": "noaa-21-viirs",
+                      "title": "NOAA-21/VIIRS",
+                      "description": "viirs/Aerosol",
+                      "image": "",
+                      "settings": [
+                        "VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean",
+                        "OrbitTracks_NOAA-21_Ascending"
                       ]
                 },
                 "NOAA-21/OMPS LP": {

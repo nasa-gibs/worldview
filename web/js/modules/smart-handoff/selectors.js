@@ -12,6 +12,7 @@ export const getGranulesUrl = (state) => {
       if (params.startDate && params.endDate) {
         return `${params.startDate},${params.endDate}`;
       }
+      return undefined;
     };
     const newParams = {
       bounding_box: params.bbox,
@@ -53,8 +54,10 @@ export const getValidLayersForHandoffs = (state) => {
       id, projections, disableSmartHandoff, conceptIds,
     } = layer;
     const isAvailable = memoizedAvailable(state)(id);
-    const filteredConceptIds = (conceptIds || []).filter(({ type, value, version }) => type && value && version);
-    return isAvailable && projections[proj.id] && !disableSmartHandoff && !!filteredConceptIds.length;
+    const filteredConceptIds = (conceptIds || [])
+      .filter(({ type, value, version }) => type && value && version);
+    return isAvailable && projections[proj.id]
+    && !disableSmartHandoff && !!filteredConceptIds.length;
   };
   return getActiveLayers(state).filter(filterForSmartHandoff);
 };

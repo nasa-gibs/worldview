@@ -277,7 +277,8 @@ function OlMeasureTool (props) {
     }
   }
 
-  // Monitor for projection change & terminate any incomplete measurement from the previous projection
+  // Monitor for projection change &
+  // terminate any incomplete measurement from the previous projection
   useEffect(() => {
     if (olMap != null) {
       const regionFromCrs = {
@@ -357,14 +358,14 @@ function OlMeasureTool (props) {
 }
 
 OlMeasureTool.propTypes = {
-  map: PropTypes.object,
-  olMap: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
   toggleMeasureActive: PropTypes.func,
   unitOfMeasure: PropTypes.string,
   updateMeasurements: PropTypes.func,
-  projections: PropTypes.array,
-  proj: PropTypes.object,
+  projections: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -49,8 +49,7 @@ export default connect(
 )(GranuleHover);
 
 GranuleHover.propTypes = {
-  granuleFootprints: PropTypes.object,
-  setGranuleFootprints: PropTypes.func,
-  state: PropTypes.object,
-  ui: PropTypes.object,
+  granuleFootprints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  state: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
