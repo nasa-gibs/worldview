@@ -52,12 +52,6 @@ require('@elastic/react-search-ui-views/lib/styles/styles.css');
 const { events } = util;
 
 class App extends React.Component {
-  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-  static setVhCSSProperty() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
-
   constructor(props) {
     super(props);
     this.onload();
@@ -88,6 +82,13 @@ class App extends React.Component {
     window.removeEventListener('resize', App.setVhCSSProperty);
     window.removeEventListener('orientationchange', App.setVhCSSProperty);
   }
+
+  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  // eslint-disable-next-line class-methods-use-this
+  setVhCSSProperty = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  };
 
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
