@@ -58,7 +58,7 @@ mkdir -p "$BUILD_DIR/colormaps"
 # If $FETCH_GC is set, make various API requests
 if [ "$FETCH_GC" ] ; then
     # Fetch GC files and create colormaps, vectordata and vectorstyle files
-    if [ "$MODE" == "verbose" ] ; then
+    if (( $MODE = "verbose" )) ; then
       echo "Fetch GC files and create colormaps, vectordata and vectorstyle files"
     fi
     rm -rf "$OPT_DIR/$OPT_SUBDIR/gc/*"
@@ -69,7 +69,7 @@ if [ "$FETCH_GC" ] ; then
       --mode "$MODE"`
 
     # Get metadata for files in layerOrder.json and combine this data into 1 file
-    if [ "$MODE" == "verbose" ] ; then
+    if (( $MODE = "verbose" )) ; then
       echo "Get metadata for files in layerOrder.json and combine this data into 1 file"
     fi
     rm -rf "$OPT_DIR/$OPT_SUBDIR/layer-metadata"
@@ -81,7 +81,7 @@ if [ "$FETCH_GC" ] ; then
       --mode "$MODE"`
 else
   # Validate layers in wv.json with a JSON schema
-  if [ "$MODE" == "verbose" ] ; then
+  if (( $MODE = "verbose" )) ; then
     echo "Validate layers in wv.json with a JSON schema"
   fi
   `node $SCRIPTS_DIR/validateConfigs.js \
@@ -90,15 +90,12 @@ else
     --mode "$MODE"`
 
   if [ -e "$BUILD_DIR/features.json" ] ; then
-    if [ "$MODE" == "verbose" ] ; then
-      echo "Copying features.json from $BUILD_DIR/features.json --> $BUILD_DIR/config/wv.json/_features.json"
-    fi
-    cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
+      cp "$BUILD_DIR/features.json" "$BUILD_DIR/config/wv.json/_features.json"
   fi
 
   # Run extractConfigFromWMTS.js script with config.json
   if [ -e "$BUILD_DIR/config.json" ] ; then
-    if [ "$MODE" == "verbose" ] ; then
+    if (( $MODE = "verbose" )) ; then
       echo "Run extractConfigFromWMTS.js script with config.json"
     fi
     `node $SCRIPTS_DIR/extractConfigFromWMTS.js \
@@ -110,7 +107,7 @@ else
 
   # Run processVectorStyles.js and move vectorstyles where we want them
   if [ -e "$BUILD_DIR/gc/vectorstyles" ] ; then
-      if [ "$MODE" == "verbose" ] ; then
+      if (( $MODE = "verbose" )) ; then
         echo "Run processVectorStyles.js and move vectorstyles where we want them"
       fi
       mkdir -p "$BUILD_DIR/config/wv.json/vectorstyles"
@@ -123,7 +120,7 @@ else
 
   # Run processVectorData.js and move vectordata where we want them
   if [ -e "$BUILD_DIR/gc/vectordata" ] ; then
-      if [ "$MODE" == "verbose" ] ; then
+      if (( $MODE = "verbose" )) ; then
         echo "Run processVectorData.js and move vectordata where we want them"
       fi
       mkdir -p "$BUILD_DIR/config/wv.json/vectordata"
@@ -135,7 +132,7 @@ else
 
   # Run processColormap.js and move colormaps where we want them
   if [ -e "$BUILD_DIR/colormaps" ] ; then
-      if [ "$MODE" == "verbose" ] ; then
+      if (( $MODE = "verbose" )) ; then
         echo "Run processColormap.js and move colormaps where we want them"
       fi
       mkdir -p "$BUILD_DIR"/config/palettes
@@ -180,7 +177,7 @@ else
   done
 
   # Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json
-  if [ "$MODE" == "verbose" ] ; then
+  if (( $MODE = "verbose" )) ; then
     echo "Run mergeConfigWithWMTS.js to merge layer metadata from WMTS GC with worldview layer configs into wv.json"
   fi
   `node $SCRIPTS_DIR/mergeConfigWithWMTS.js \
@@ -189,7 +186,7 @@ else
     --mode "$MODE"`
 
   # Copy brand files from build to dest
-  if [ "$MODE" == "verbose" ] ; then
+  if (( $MODE = "verbose" )) ; then
     echo "Copy brand files from build to dest"
   fi
   cp -r "$BUILD_DIR/brand" "$DEST_DIR"
@@ -197,7 +194,7 @@ else
 
 
   # Validate the options build
-  if [ "$MODE" == "verbose" ] ; then
+  if (( $MODE = "verbose" )) ; then
     echo "Validate the options build"
   fi
   `node $SCRIPTS_DIR/validateOptions.js \
@@ -206,7 +203,7 @@ else
     --mode "$MODE"`
 
   # Fetch preview images from WV Snapshots for any layers which they are missing
-  if [ "$MODE" == "verbose" ] ; then
+  if (( $MODE = "verbose" )) ; then
     echo "Fetch preview images from WV Snapshots for any layers which they are missing"
   fi
   `node $SCRIPTS_DIR/fetchPreviewSnapshots.js \
