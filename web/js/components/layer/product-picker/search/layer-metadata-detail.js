@@ -47,7 +47,12 @@ class LayerMetadataDetail extends React.Component {
 
   render() {
     const {
-      layer, selectedProjection, isActive, showPreviewImage, measurementDescriptionPath, describeDomainsUrl,
+      layer,
+      selectedProjection,
+      isActive,
+      showPreviewImage,
+      measurementDescriptionPath,
+      describeDomainsUrl,
     } = this.props;
     if (!layer) {
       return this.renderNoSelection();

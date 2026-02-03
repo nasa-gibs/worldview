@@ -574,7 +574,8 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
         }
         if (dateAObj < endDateObj) {
           const possibleDate = new Date(dateAObj.getTime() + (minDelta * 60000));
-          const possibleDelta = possibleDate > endDateObj ? Math.floor(((endDateObj - dateAObj) / 1000) / 60) : minDelta;
+          const possibleDelta = possibleDate > endDateObj
+            ? Math.floor(((endDateObj - dateAObj) / 1000) / 60) : minDelta;
           if (possibleDelta >= minDelta) {
             delta = possibleDelta;
             hasDeltaChanged = true;
@@ -602,7 +603,8 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
         }
         if (dateAObj > startDateObj) {
           const possibleDate = new Date(dateAObj.getTime() - (minDelta * 60000));
-          const possibleDelta = possibleDate < startDateObj ? Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
+          const possibleDelta = possibleDate < startDateObj
+            ? Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
           if (possibleDelta >= minDelta) {
             delta = possibleDelta;
             hasDeltaChanged = true;

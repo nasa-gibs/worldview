@@ -43,7 +43,8 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
  * Calculate the required number of steps (frames) required for the animation
  * @param {Date} start            | The date of the first frame of animation
  * @param {Date} end              | The date of the last frame of animation
- * @param {String} interval       | The animation step value (Year/Month/Day/Custom) separating frames
+ * @param {String} interval       | The animation step value (Year/Month/Day/Custom)
+ *                                  separating frames
  * @param {Number} delta          | Rate of change between states; defaults to 1 second
  * @param {Number} maxToCheck     | The limit on the total number of frames to be used
  * @param {Boolean} smartSelected | Is smart interval selected
@@ -51,7 +52,15 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
  *
  * @return {Number} | The total number of frames required
  */
-export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck, smartSelected, layers) {
+export function getNumberOfSteps(
+  start,
+  end,
+  interval,
+  delta = 1,
+  maxToCheck,
+  smartSelected,
+  layers,
+) {
   if (smartSelected) {
     delta = getNextImageryDelta(layers, start, 1);
   }

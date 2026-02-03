@@ -7,7 +7,13 @@ import LayerInfo from '../../info/info';
 
 function MeasurementMetadataDetail (props) {
   const {
-    isMobile, source, layers, categoryTitle, showPreviewImage, selectedProjection, describeDomainsUrl,
+    isMobile,
+    source,
+    layers,
+    categoryTitle,
+    showPreviewImage,
+    selectedProjection,
+    describeDomainsUrl,
   } = props;
   const [isMetadataExpanded, setMetadataExpansion] = useState(false);
   const [metadata, setMetadata] = useState({});

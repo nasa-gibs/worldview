@@ -74,7 +74,7 @@ function UpdateCollections () {
       const collectionDate = layerInCollections.dates
         .some((d) => d.date === date && d.projection === proj.id);
 
-       // If date exists in layer collection, don't query layer
+      // If date exists in layer collection, don't query layer
       return !collectionDate || forceUpdate;
     });
     return layersToUpdate;
@@ -87,17 +87,23 @@ function UpdateCollections () {
       const requestSelectedDateHeaders = () => getHeaders(def, selectedDate, signal);
       if (def.type !== 'granule') return requestSelectedDateHeaders(); // non-granule layers only need one header request
       const layerGroup = map?.getLayers()?.getArray()?.find((l) => l?.wv?.id === def.id);
-      if (!layerGroup) return requestSelectedDateHeaders(); // if we can't find the layer in the map, just do a single request
+      // if we can't find the layer in the map, just do a single request
+      if (!layerGroup) return requestSelectedDateHeaders();
       const granuleLayerArray = layerGroup.getLayersArray() || [];
-      // granule layers don't necessarily use the selected date, rather they create one layer for each granule and each has their own date
+      // granule layers don't necessarily use the selected date,
+      // rather they create one layer for each granule and each has their own date
       const granuleHeaders = granuleLayerArray.map(async (layer) => {
         const urls = layer.getSource?.()?.getUrls?.() || [];
-        const urlRequests = urls.map(async (url) => getHeaders(def, selectedDate, signal, url)); // each layer has multiple urls to try
-        const firstResponse = await Promise.any(urlRequests); // we just want the first response that works and only fail if they all fail
+        // each layer has multiple urls to try
+        const urlRequests = urls.map(async (url) => getHeaders(def, selectedDate, signal, url));
+        // we just want the first response that works and only fail if they all fail
+        const firstResponse = await Promise.any(urlRequests);
         return firstResponse;
       });
 
-      const firstGranuleHeaderResponse = await Promise.any(granuleHeaders); // Right now we don't handle the possibility of multiple imagery versions in granule layers, so just return the first valid response
+      // Right now we don't handle the possibility of multiple imagery versions in granule layers,
+      // so just return the first valid response
+      const firstGranuleHeaderResponse = await Promise.any(granuleHeaders);
       abortController.abort(); // abort any other requests once promise.any settles
 
       return firstGranuleHeaderResponse;
@@ -117,7 +123,8 @@ function UpdateCollections () {
     const headerPromises = getAllHeaders(layersToUpdate);
 
     try {
-      const results = await Promise.allSettled(headerPromises); // perform all header requests and wait for them to settle
+      // perform all header requests and wait for them to settle
+      const results = await Promise.allSettled(headerPromises);
       const validCollections = results.filter(({ status, value }) => status === 'fulfilled' && value).map(({ value }) => value);
       updateCollection(validCollections);
     } catch (error) {

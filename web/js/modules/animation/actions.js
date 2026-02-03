@@ -50,8 +50,10 @@ export function onActivate() {
         : TIME_SCALE_FROM_NUMBER[interval];
       const deltaChangeAmt = customSelected ? customDelta : delta;
       const tenFrameDelta = 10 * deltaChangeAmt;
-      const tenFramesBefore = smartSelected ? smartTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
-      const tenFramesAfter = smartSelected ? smartTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
+      const tenFramesBefore = smartSelected
+        ? smartTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
+      const tenFramesAfter = smartSelected
+        ? smartTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
         : date.appNow < tenFramesAfter

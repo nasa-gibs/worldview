@@ -105,4 +105,5 @@ export default function DateRanges ({ layer, describeDomainsUrl }) {
 
 DateRanges.propTypes = {
   layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  describeDomainsUrl: PropTypes.string,
 };

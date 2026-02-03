@@ -136,5 +136,5 @@ ProjectionList.propTypes = {
   updateProjection: PropTypes.func,
   changeTimeScale: PropTypes.func,
   changeSmartInterval: PropTypes.func,
-  layers: PropTypes.array,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };

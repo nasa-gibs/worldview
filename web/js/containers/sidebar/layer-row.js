@@ -876,4 +876,5 @@ LayerRow.propTypes = {
   disableDDVZoomAlert: PropTypes.func,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDate: PropTypes.instanceOf(Date),
+  describeDomainsUrl: PropTypes.string,
 };

@@ -381,7 +381,9 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
-    layerDate.setSeconds(59); // force currently selected time to be 59 seconds. This is to compensate for the inability to select seconds in the timeline
+    // force currently selected time to be 59 seconds.
+    // This is to compensate for the inability to select seconds in the timeline
+    layerDate.setSeconds(59);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
@@ -1267,6 +1269,9 @@ export default function mapLayerBuilder(config, cache, store) {
           break;
         case 'composite:wmts':
           layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'esriMapServer':
+          layer = await getLayer(createLayerEsri, def, options, attributes, wrapLayer);
           break;
         case 'granule':
           layer = await getGranuleLayer(def, attributes, options);
