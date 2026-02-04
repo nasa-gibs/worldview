@@ -127,7 +127,7 @@ export class VectorInteractions extends React.Component {
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
         if (!layer) return;
         const def = lodashGet(layer, 'wv.def');
-        if (def.layergroup === 'Reference') isReferenceLayer = true;
+        if (def?.layergroup === 'Reference') isReferenceLayer = true;
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
         const featureOutsideExtent = layerExtent

@@ -17,22 +17,43 @@ import {
 import util from '../../util/util';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
 import { getSelectedDate } from '../date/selectors';
+import {
+  getNextImageryDelta,
+} from '../date/util';
 
 export function onActivate() {
   return (dispatch, getState) => {
-    const { date, animation } = getState();
+    const { date, animation, layers } = getState();
     const {
-      customSelected, customDelta, delta, customInterval, interval,
+      customSelected, customDelta, delta, customInterval, interval, selected, autoSelected,
     } = date;
     const activeDate = getSelectedDate(getState());
     if (!animation.startDate || !animation.endDate) {
+      let autoTenFramesBefore;
+      let autoTenFramesAfter;
+      if (autoSelected) {
+        let tempDeltaBefore = 0;
+        let tempDateBefore = new Date(selected);
+        let tempDeltaAfter = 0;
+        let tempDateAfter = new Date(selected);
+        for (let i = 0; i < 10; i += 1) {
+          tempDateBefore = util.dateAdd(tempDateAfter, 'minute', -tempDeltaBefore);
+          tempDeltaBefore = getNextImageryDelta(layers.active.layers, tempDateBefore, -1);
+          tempDateAfter = util.dateAdd(tempDateAfter, 'minute', tempDeltaAfter);
+          tempDeltaAfter = getNextImageryDelta(layers.active.layers, tempDateAfter, 1);
+        }
+        autoTenFramesBefore = tempDateBefore;
+        autoTenFramesAfter = tempDateAfter;
+      }
       const timeScaleChangeUnit = customSelected
         ? TIME_SCALE_FROM_NUMBER[customInterval]
         : TIME_SCALE_FROM_NUMBER[interval];
       const deltaChangeAmt = customSelected ? customDelta : delta;
       const tenFrameDelta = 10 * deltaChangeAmt;
-      const tenFramesBefore = util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
-      const tenFramesAfter = util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
+      const tenFramesBefore = autoSelected
+        ? autoTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
+      const tenFramesAfter = autoSelected
+        ? autoTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
         : date.appNow < tenFramesAfter

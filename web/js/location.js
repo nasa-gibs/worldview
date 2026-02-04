@@ -227,6 +227,13 @@ const getParameters = function(config, parameters) {
         parse: (val) => val === 'true',
       },
     },
+    ias: {
+      stateKey: 'date.autoSelected',
+      initialState: false,
+      options: {
+        parse: (val) => val === 'true',
+      },
+    },
     ici: {
       stateKey: 'date.customInterval',
       initialState: undefined,

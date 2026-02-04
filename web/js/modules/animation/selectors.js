@@ -6,7 +6,7 @@ import {
 } from '../image-download/util';
 import { subdailyLayersActive, getLayers } from '../layers/selectors';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
-import { formatDisplayDate } from '../date/util';
+import { formatDisplayDate, getNextImageryDelta } from '../date/util';
 
 /*
  * retrieves renderable layers
@@ -58,13 +58,13 @@ export default function getImageArray(
   state,
 ) {
   const {
-    animation, proj, map, date, locationSearch,
+    animation, proj, map, date, locationSearch, layers,
   } = state;
   const {
     boundaries, showDates, startDate, endDate, url,
   } = options;
   const {
-    customInterval, interval, customDelta, delta, customSelected,
+    customInterval, interval, customDelta, delta, customSelected, autoSelected,
   } = date;
   const a = [];
   const fromDate = new Date(startDate);
@@ -105,7 +105,8 @@ export default function getImageArray(
       text: showDates ? strDate : '',
       delay: 1000 / animation.speed,
     });
-    current = util.dateAdd(current, increment, useDelta);
+    current = util.dateAdd(current, increment, autoSelected
+      ? getNextImageryDelta(layers.active.layers, current, 1) : useDelta);
     if (j > 40) {
       // too many frames
       return false;

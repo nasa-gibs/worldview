@@ -40,6 +40,9 @@
         "cmr": {
             "url": "https://cmr.earthdata.nasa.gov/search/"
         },
+        "describeDomains": {
+            "url": "https://gibs.earthdata.nasa.gov"
+        },
         "smartHandoffs": [
             {
                 "toolName": "EARTHDATA_SEARCH",

@@ -44,6 +44,7 @@ import {
   changeTimeScale,
   selectInterval,
   changeCustomInterval as changeCustomIntervalAction,
+  changeAutoInterval as changeAutoIntervalAction,
   updateAppNow,
   toggleCustomModal,
   triggerTodayButton,
@@ -52,6 +53,7 @@ import {
   checkHasFutureLayers,
   filterProjLayersWithStartDate,
   getNextTimeSelection,
+  getNextImageryDelta,
 } from '../../modules/date/util';
 import { toggleActiveCompareState } from '../../modules/compare/actions';
 import { addGranuleDateRanges } from '../../modules/layers/actions';
@@ -290,6 +292,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       changeCustomInterval,
+      changeAutoInterval,
       customInterval,
       dateA,
       dateB,
@@ -298,6 +301,7 @@ class Timeline extends React.Component {
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
+      hasTempoProduct,
       subDailyLayersList,
       newCustomDelta,
     } = this.props;
@@ -325,20 +329,25 @@ class Timeline extends React.Component {
     }
 
     const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
+    const tempoRemoved = !hasTempoProduct && prevProps.hasTempoProduct;
     const subDailyCountChanged = subDailyLayersList.length !== prevProps.subDailyLayersList.length;
     const subdailyInterval = customInterval > 3 || interval > 3;
 
+    if (tempoRemoved) {
+      changeAutoInterval();
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, false);
+    }
     if (subdailyRemoved && subdailyInterval) {
       changeCustomInterval();
-      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, false);
     }
 
     const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
-      if (isSubDaily) {
+      if (hasTempoProduct) {
+        changeAutoInterval(true);
+      } else if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
-      } else {
-        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
       }
     }
 
@@ -597,6 +606,7 @@ class Timeline extends React.Component {
   handleArrowDateChange(signConstant) {
     const {
       customSelected,
+      autoSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
       selectedDate,
@@ -604,9 +614,16 @@ class Timeline extends React.Component {
       leftArrowDisabled,
       timelineEndDateLimit,
       timelineStartDateLimit,
+      subDailyLayersList,
+      dateA,
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
+    let timescale = timeScaleChangeUnit;
+    if (autoSelected && subDailyLayersList && subDailyLayersList.length) {
+      delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
+      timescale = 'minute';
+    }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
     }
@@ -617,7 +634,7 @@ class Timeline extends React.Component {
       const maxDate = new Date(timelineEndDateLimit);
       this.onDateChange(getNextTimeSelection(
         delta,
-        timeScaleChangeUnit,
+        timescale,
         selectedDate,
         minDate,
         maxDate,
@@ -1168,6 +1185,7 @@ class Timeline extends React.Component {
       draggerSelected,
       hasFutureLayers,
       hasSubdailyLayers,
+      hasTempoProduct,
       hideTimeline,
       isAnimationPlaying,
       isAnimatingToEvent,
@@ -1190,6 +1208,7 @@ class Timeline extends React.Component {
       timeScaleChangeUnit,
       toggleActiveCompareState,
       proj,
+      describeDomainsUrl,
     } = this.props;
     const {
       animationEndLocation,
@@ -1275,6 +1294,7 @@ class Timeline extends React.Component {
                       <TimeScaleIntervalChange
                         timeScaleChangeUnit={timeScaleChangeUnit}
                         hasSubdailyLayers={hasSubdailyLayers}
+                        hasTempoProduct={hasTempoProduct}
                         modalType={customModalType.TIMELINE}
                       />
 
@@ -1351,6 +1371,7 @@ class Timeline extends React.Component {
                         isTimelineDragging={isTimelineDragging}
                         matchingTimelineCoverage={matchingTimelineCoverage}
                         proj={proj}
+                        describeDomainsUrl={describeDomainsUrl}
                       />
 
                       <AxisHoverLine
@@ -1531,6 +1552,7 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
+    autoSelected,
     interval,
     selected,
     selectedB,
@@ -1563,6 +1585,7 @@ function mapStateToProps(state) {
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
     : subdailyLayers(state);
   const newCustomDelta = getSmallestIntervalValue(state);
+  const hasTempoProduct = layers.active.layers.filter((layer) => layer.visible && layer.id.includes('TEMPO')).length > 0;
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1615,6 +1638,8 @@ function mapStateToProps(state) {
     nowOverride,
     appNow,
   );
+  const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
+
   return {
     appNow,
     activeLayers: activeLayersFiltered,
@@ -1631,10 +1656,12 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     subDailyLayersList,
     customSelected,
+    autoSelected,
     isCompareModeActive,
     isChartingActive,
     isAnimatingToEvent,
     hasFutureLayers,
+    hasTempoProduct,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
     timelineStartDateLimit: config.startDate, // same as startDate
@@ -1674,6 +1701,7 @@ function mapStateToProps(state) {
     displayStaticMap,
     newCustomDelta,
     proj: proj.selected,
+    describeDomainsUrl,
   };
 }
 
@@ -1693,6 +1721,10 @@ const mapDispatchToProps = (dispatch) => ({
   // changes/sets custom delta and timescale interval
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomIntervalAction(delta, timeScale));
+  },
+  // changes/sets auto delta and timescale interval
+  changeAutoInterval: (autoSelected) => {
+    dispatch(changeAutoIntervalAction(autoSelected));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
@@ -1753,16 +1785,19 @@ Timeline.propTypes = {
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   changeCustomInterval: PropTypes.func,
+  changeAutoInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   displayStaticMap: PropTypes.bool,
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   subDailyLayersList: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hideTimeline: PropTypes.bool,
@@ -1807,4 +1842,5 @@ Timeline.propTypes = {
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  describeDomainsUrl: PropTypes.string,
 };

@@ -90,6 +90,8 @@ function AnimationWidget (props) {
     startDate,
     subDailyMode,
     map,
+    autoSelected,
+    layers,
   } = props;
 
   const widgetWidth = 334;
@@ -196,10 +198,14 @@ function AnimationWidget (props) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
       const startMinutes = startDateZeroed.getMinutes();
       const endMinutes = endDateZeroed.getMinutes();
-      startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      if (!autoSelected) {
+        startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      }
       startDateZeroed.setUTCSeconds(0);
       startDateZeroed.setUTCMilliseconds(0);
-      endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      if (!autoSelected) {
+        endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      }
       endDateZeroed.setUTCSeconds(0);
       endDateZeroed.setUTCMilliseconds(0);
     } else {
@@ -252,6 +258,8 @@ function AnimationWidget (props) {
             promiseImageryForTime={promiseImageryForTime}
             onClose={onPushPause}
             map={map}
+            autoSelected={autoSelected}
+            layers={layers}
           />
         ) : null
       }
@@ -359,12 +367,14 @@ const mapStateToProps = (state) => {
     screenSize,
     ui,
     proj,
+    layers,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed, autoplay,
   } = animation;
   const {
     customSelected,
+    autoSelected,
     delta,
     customDelta,
     appNow,
@@ -416,6 +426,8 @@ const mapStateToProps = (state) => {
     TIME_SCALE_FROM_NUMBER[useInterval],
     useDelta,
     frameLimit,
+    autoSelected,
+    layers.active.layers,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
@@ -477,6 +489,8 @@ const mapStateToProps = (state) => {
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1
       : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    autoSelected,
+    layers: layers.active.layers,
   };
 };
 
@@ -566,6 +580,8 @@ AnimationWidget.propTypes = {
   speedRedux: PropTypes.number,
   startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
+  autoSelected: PropTypes.bool,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default connect(
