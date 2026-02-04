@@ -619,8 +619,10 @@ class Timeline extends React.Component {
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
+    let timescale = timeScaleChangeUnit;
     if (autoSelected && subDailyLayersList && subDailyLayersList.length) {
       delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
+      timescale = 'minute';
     }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
@@ -632,7 +634,7 @@ class Timeline extends React.Component {
       const maxDate = new Date(timelineEndDateLimit);
       this.onDateChange(getNextTimeSelection(
         delta,
-        timeScaleChangeUnit,
+        timescale,
         selectedDate,
         minDate,
         maxDate,
