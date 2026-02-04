@@ -99,13 +99,11 @@ export function changeCustomInterval(delta, customInterval) {
     });
   };
 }
-export function changeAutoInterval(delta, interval, autoSelected) {
+export function changeAutoInterval(autoSelected) {
   return (dispatch, getState) => {
     dispatch(clearPreload());
     dispatch({
       type: CHANGE_AUTO_INTERVAL,
-      delta,
-      interval,
       autoSelected,
     });
   };

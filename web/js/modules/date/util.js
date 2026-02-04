@@ -559,7 +559,14 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
       invalidLayerCount += 1;
     } else if (signConstant > 0) {
       // Forward in time
-      for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
+      const foundIndex = layers[i].dateRanges.findIndex(
+        (element) => element.startDate > dateA,
+      );
+      const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
+      // endingIndex gives 10 tries to find a valid next interval
+      const endingIndex = foundIndex + 5 > layers[i].dateRanges.length
+        ? layers[i].dateRanges.length : foundIndex + 5;
+      for (let j = startingIndex; j < endingIndex; j += 1) {
         const obj = layers[i].dateRanges[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
@@ -588,7 +595,14 @@ export function getNextImageryDelta(layers, dateA, signConstant) {
       }
     } else {
       // Backward in time
-      for (let j = 0; j < layers[i].dateRanges.length; j += 1) {
+      const foundIndex = [...layers[i].dateRanges].reverse().findIndex(
+        (element) => element.startDate < dateA,
+      );
+      const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
+      // endingIndex gives 10 tries to find a valid next interval
+      const endingIndex = foundIndex + 5 > layers[i].dateRanges.length
+        ? layers[i].dateRanges.length : foundIndex + 5;
+      for (let j = startingIndex; j < endingIndex; j += 1) {
         const obj = [...layers[i].dateRanges].reverse()[j];
         const endDateObj = new Date(obj.endDate);
         const startDateObj = new Date(obj.startDate);

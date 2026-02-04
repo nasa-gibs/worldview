@@ -65,7 +65,7 @@ class ProjectionList extends Component {
       const enableAuto = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
       // Defaults to 1 day if new projection has no TEMPO layers present
       const timescale = enableAuto ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
-      changeAutoInterval(1, timescale, enableAuto);
+      changeAutoInterval(enableAuto);
       selectInterval(1, timescale, false, enableAuto);
       changeTimeScale(enableAuto ? TIME_SCALE_TO_NUMBER.hour : timescale);
     }
@@ -118,8 +118,8 @@ const mapDispatchToProps = (dispatch) => ({
   changeTimeScale: (val) => {
     dispatch(changeTimeScale(val));
   },
-  changeAutoInterval: (delta, timeScale, autoSelected) => {
-    dispatch(changeAutoIntervalAction(delta, timeScale, autoSelected));
+  changeAutoInterval: (autoSelected) => {
+    dispatch(changeAutoIntervalAction(autoSelected));
   },
 });
 

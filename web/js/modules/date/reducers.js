@@ -63,11 +63,9 @@ export function dateReducer(state = dateReducerState, action) {
       };
     }
     case CHANGE_AUTO_INTERVAL: {
-      const { interval, delta, autoSelected } = action;
+      const { autoSelected } = action;
       return {
         ...state,
-        interval,
-        delta,
         autoSelected,
       };
     }

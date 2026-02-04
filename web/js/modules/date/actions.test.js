@@ -211,11 +211,9 @@ describe('Date timescale changes', () => {
       };
       const expectedSecond = {
         type: CHANGE_AUTO_INTERVAL,
-        delta: 5,
-        interval: 3,
         autoSelected: true,
       };
-      store.dispatch(changeAutoInterval(delta, customInterval, true));
+      store.dispatch(changeAutoInterval(true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
     },

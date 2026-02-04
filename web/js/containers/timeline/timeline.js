@@ -329,22 +329,25 @@ class Timeline extends React.Component {
     }
 
     const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
+    const tempoRemoved = !hasTempoProduct && prevProps.hasTempoProduct;
     const subDailyCountChanged = subDailyLayersList.length !== prevProps.subDailyLayersList.length;
     const subdailyInterval = customInterval > 3 || interval > 3;
 
+    if (tempoRemoved) {
+      changeAutoInterval();
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, false);
+    }
     if (subdailyRemoved && subdailyInterval) {
       changeCustomInterval();
-      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, false);
     }
 
     const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
       if (hasTempoProduct) {
-        changeAutoInterval(1, TIME_SCALE_TO_NUMBER.minute, true);
+        changeAutoInterval(true);
       } else if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
-      } else {
-        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
       }
     }
 
@@ -616,8 +619,10 @@ class Timeline extends React.Component {
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
+    let timescale = timeScaleChangeUnit;
     if (autoSelected && subDailyLayersList && subDailyLayersList.length) {
       delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
+      timescale = 'minute';
     }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
@@ -629,7 +634,7 @@ class Timeline extends React.Component {
       const maxDate = new Date(timelineEndDateLimit);
       this.onDateChange(getNextTimeSelection(
         delta,
-        timeScaleChangeUnit,
+        timescale,
         selectedDate,
         minDate,
         maxDate,
@@ -1180,6 +1185,7 @@ class Timeline extends React.Component {
       draggerSelected,
       hasFutureLayers,
       hasSubdailyLayers,
+      hasTempoProduct,
       hideTimeline,
       isAnimationPlaying,
       isAnimatingToEvent,
@@ -1288,6 +1294,7 @@ class Timeline extends React.Component {
                       <TimeScaleIntervalChange
                         timeScaleChangeUnit={timeScaleChangeUnit}
                         hasSubdailyLayers={hasSubdailyLayers}
+                        hasTempoProduct={hasTempoProduct}
                         modalType={customModalType.TIMELINE}
                       />
 
@@ -1578,7 +1585,7 @@ function mapStateToProps(state) {
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
     : subdailyLayers(state);
   const newCustomDelta = getSmallestIntervalValue(state);
-  const hasTempoProduct = layers.active.layers.filter((layer) => layer.visible && layer.id.includes('TEMPO'));
+  const hasTempoProduct = layers.active.layers.filter((layer) => layer.visible && layer.id.includes('TEMPO')).length > 0;
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1716,8 +1723,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeCustomIntervalAction(delta, timeScale));
   },
   // changes/sets auto delta and timescale interval
-  changeAutoInterval: (delta, timeScale, autoSelected) => {
-    dispatch(changeAutoIntervalAction(delta, timeScale, autoSelected));
+  changeAutoInterval: (autoSelected) => {
+    dispatch(changeAutoIntervalAction(autoSelected));
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
