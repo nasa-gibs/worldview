@@ -128,7 +128,7 @@ class TimeScaleIntervalChange extends PureComponent {
 
   renderTooltip = () => {
     const { toolTipHovered, customIntervalText } = this.state;
-    const { hasSubdailyLayers } = this.props;
+    const { hasSubdailyLayers, hasTempoProduct } = this.props;
     return (
       <div
         className="wv-tooltip"
@@ -172,14 +172,16 @@ class TimeScaleIntervalChange extends PureComponent {
               >
                 Minute
               </span>
-              <span
-                id="interval-auto"
-                className="interval-btn interval-auto"
-                onClick={() => this.handleClickInterval('auto')}
-              >
-                Auto
-              </span>
             </>
+          ) : null}
+          {hasTempoProduct ? (
+            <span
+              id="interval-auto"
+              className="interval-btn interval-auto"
+              onClick={() => this.handleClickInterval('auto')}
+            >
+              Auto
+            </span>
           ) : null}
           <span
             id="interval-custom"
@@ -265,6 +267,7 @@ TimeScaleIntervalChange.propTypes = {
   customSelected: PropTypes.bool,
   autoSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   interval: PropTypes.number,
   isDisabled: PropTypes.bool,
   selectInterval: PropTypes.func,
