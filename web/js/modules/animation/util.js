@@ -45,7 +45,7 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
  * @param {Date} end              | The date of the last frame of animation
  * @param {String} interval       | The animation step value (Year/Month/Day/Custom)
  *                                  separating frames
- * @param {Number} delta          | Rate of change between states; defaults to 1 second
+ * @param {Number} stateDelta          | Rate of change between states; defaults to 1 second
  * @param {Number} maxToCheck     | The limit on the total number of frames to be used
  * @param {Boolean} autoSelected  | Is auto interval selected
  * @param {Array} layers          | List of layers
@@ -56,11 +56,12 @@ export function getNumberOfSteps(
   start,
   end,
   interval,
-  delta = 1,
+  stateDelta = 1,
   maxToCheck,
   autoSelected,
   layers,
 ) {
+  let delta = stateDelta;
   if (autoSelected) {
     delta = getNextImageryDelta(layers, start, 1);
   }
@@ -96,11 +97,12 @@ export function getNumberOfSteps(
 export function getStampProps(
   stampWidthRatio,
   breakPoint,
-  stampWidth,
+  stampWidthInt,
   dimensions,
   width,
   height,
 ) {
+  let stampWidth = stampWidthInt;
   const dateStamp = {};
   let stampHeight;
   let stampHeightByImageWidth;
@@ -147,10 +149,11 @@ export function svgToPng(svgURL, stampHeight) {
 
 export function mapLocationToAnimationState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
   const endDate = lodashGet(stateFromLocation, 'animation.endDate');
   if (parameters.playanim && parameters.ab) {

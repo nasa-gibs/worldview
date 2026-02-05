@@ -64,15 +64,16 @@ function CreateMap(props) {
   /**
    * Create map object
    *
-   * @method createMap
+   * @method mapCreation
    * @static
    *
    * @param {object} proj - Projection properties
-   * @param {object} dateSelected
+   * @param {object} uiCopyObj
    *
    * @returns {object} OpenLayers Map Object
    */
-  const mapCreation = (proj, uiCopy) => {
+  const mapCreation = (proj, uiCopyObj) => {
+    const uiCopy = uiCopyObj;
     const mapContainerEl = document.getElementById('wv-map');
     const mapEl = document.createElement('div');
     const id = `wv-map-${proj.id}`;

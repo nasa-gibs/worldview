@@ -14,7 +14,8 @@ function capitalizeFirstLetter(string) {
   return !string ? '' : string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function setLayerProp (layer, prop, value) {
+function setLayerProp (layerObj, prop, value) {
+  const layer = layerObj;
   const featuredMeasurement = prop === 'measurements' && (value && value.includes('Featured'));
   if (!layer || featuredMeasurement || !value) {
     return;
@@ -67,7 +68,8 @@ function setMeasurementCategoryProps(layers, { measurements, categories }) {
   return layers;
 }
 
-function setCoverageFacetProp(layer, selectedDate) {
+function setCoverageFacetProp(layerObj, selectedDate) {
+  const layer = layerObj;
   const {
     id, startDate, endDate, dateRanges,
   } = layer;
@@ -79,7 +81,8 @@ function setCoverageFacetProp(layer, selectedDate) {
   }
 }
 
-function setTypeProp(layer) {
+function setTypeProp(layerObj) {
+  const layer = layerObj;
   const { type } = layer;
   const rasterTypes = ['wms', 'wmts', 'xyz', 'composite:wmts'];
   const vectorTypes = ['vector', 'indexedVector'];
@@ -99,7 +102,8 @@ function setTypeProp(layer) {
   return layer;
 }
 
-function setChartableProp(layer) {
+function setChartableProp(layerObj) {
+  const layer = layerObj;
   if (!(Object.prototype.hasOwnProperty.call(layer, 'palette') && Object.prototype.hasOwnProperty.call(layer, 'colormapType') && layer.colormapType === 'continuous' && layer.layerPeriod === 'Daily') || layer.disableCharting) {
     return;
   }
@@ -114,7 +118,8 @@ export default function buildLayerFacetProps(config, selectedDate) {
   let layers = lodashCloneDeep(config.layers);
   layers = setMeasurementCategoryProps(layers, config);
 
-  return lodashMap(layers, (layer) => {
+  return lodashMap(layers, (layerObj) => {
+    const layer = layerObj;
     setCoverageFacetProp(layer, selectedDate);
     setLayerProp(layer, 'sources', layer.subtitle);
     setTypeProp(layer);

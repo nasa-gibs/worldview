@@ -233,10 +233,11 @@ export function getMaxValue(v) {
  */
 export function parseLegacyPalettes(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const parts = parameters.palettes.split('~');
   parts.forEach((part) => {
     const items = part.split(',');
@@ -264,7 +265,8 @@ export function parseLegacyPalettes(
   return stateFromLocation;
 }
 
-const createPaletteAttributeObject = function(def, value, attrObj, count) {
+const createPaletteAttributeObject = function(def, valueArray, attrObj, count) {
+  let value = valueArray;
   const { key } = attrObj;
   const attrArray = attrObj.array;
   let hasAtLeastOnePair = attrObj.isActive;
@@ -375,7 +377,8 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
  * @param {Object} permlinkState | parameters parsed from permalink
  * @param {Object} state
  */
-export function loadPalettes(permlinkState, state) {
+export function loadPalettes(permlinkState, stateObject) {
+  let state = stateObject;
   let stateArray = [{ stateStr: 'l', groupStr: 'active' }];
   if (permlinkState.l1) {
     stateArray = [
@@ -491,10 +494,11 @@ export function loadPalettes(permlinkState, state) {
 
 export function mapLocationToPaletteState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   if (parameters.l1 || parameters.l) {
     stateFromLocation = loadPalettes(
       parameters,
@@ -523,7 +527,8 @@ export function mapLocationToPaletteState(
  * @param {Boolean} customLoaded
  * @returns {Promise}
  */
-export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
+export function preloadPalettes(layersArray, renderedPalettes, customLoadedBool) {
+  let customLoaded = customLoadedBool;
   const rendered = renderedPalettes || {};
   customLoaded = customLoaded || false;
   let preloadedCustom = false;

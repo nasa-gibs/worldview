@@ -9,14 +9,15 @@ const limitCache = {};
 /**
  * get range of consecutive time units based on start/end dates and timescale
  *
- * @param {Object} startDate - moment date object - start of requested time range
+ * @param {Object} beginDate - moment date object - start of requested time range
  * @param {Object} endDate - moment date object - end of requested time range
  * @param {String} timeScale - timescale of time units (ex: 'day', 'month', etc.)
  * @param {startDateLimit} startDateLimit - min date within timeline range
  * @param {endDateLimit} endDateLimit - max date within timeline range
  * @returns {Array} timeRange - consecutive time units based on range
  */
-export default function getTimeRange(startDate, endDate, timeScale, startDateLimit, endDateLimit) {
+export default function getTimeRange(beginDate, endDate, timeScale, startDateLimit, endDateLimit) {
+  let startDate = beginDate;
   const timeRange = [];
   const { format } = timeScaleOptions[timeScale].timeAxis;
 

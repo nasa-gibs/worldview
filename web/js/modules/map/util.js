@@ -56,15 +56,16 @@ export function getRotatedExtent(map) {
 /**
  * Determines if an exent object contains valid values.
  *
- * @method isExtentValid
+ * @method mapIsExtentValid
  * @static
  *
- * @param extent {OpenLayers.Bound} The extent to check.
+ * @param extentBound {OpenLayers.Bound} The extent to check.
  *
  * @return {boolean} False if any of the values is NaN, otherwise returns
  * true.
  */
-export function mapIsExtentValid(extent) {
+export function mapIsExtentValid(extentBound) {
+  let extent = extentBound;
   if (lodashIsUndefined(extent)) {
     return false;
   }
@@ -111,7 +112,8 @@ export function getMapParameterSetup(
           }
           return extent;
         },
-        serialize: (currentItemState, currentState) => {
+        serialize: (currentItemStateObj, currentState) => {
+          let currentItemState = currentItemStateObj;
           const rotation = lodashGet(currentState, 'map.rotation');
 
           if (rotation) {

@@ -55,7 +55,10 @@ export function activateLayersForEventCategory(category) {
     const overlayGroups = getOverlayGroups(newLayers);
 
     const newEventLayers = findEventLayers(originalLayers, newLayers);
-    overlayGroups.forEach((group) => { group.collapsed = true; });
+    overlayGroups.forEach((groupObj) => {
+      const group = groupObj;
+      group.collapsed = true;
+    });
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
@@ -225,7 +228,8 @@ export function toggleGroupVisibility(ids, visible) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeLayers = getActiveLayersSelector(getState());
-    activeLayers.forEach((layer) => {
+    activeLayers.forEach((layerObj) => {
+      const layer = layerObj;
       if (ids.includes(layer.id)) {
         layer.visible = visible;
       }
