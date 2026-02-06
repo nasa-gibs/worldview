@@ -216,11 +216,11 @@ function ChartingModeOptions(props) {
     }
   }, [fromButton]);
 
-  function formatDateForImageStat(dateObjArg) {
-    const dateObj = new Date(dateObjArg);
-    const year = dateObj.getUTCFullYear();
-    const month = `0${dateObj.getUTCMonth() + 1}`.slice(-2);
-    const day = `0${dateObj.getUTCDate()}`.slice(-2);
+  function formatDateForImageStat(dateObj) {
+    const dateString = new Date(dateObj);
+    const year = dateString.getUTCFullYear();
+    const month = `0${dateString.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${dateString.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
