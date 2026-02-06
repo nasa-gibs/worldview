@@ -8,7 +8,7 @@ import {
 } from 'reactstrap';
 import Draggable from 'react-draggable';
 import { Resizable } from 'react-resizable';
-import { onToggle } from '../modules/modal/actions';
+import { onToggle as onToggleAction } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
 
@@ -330,7 +330,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => ({
   onToggle: () => {
-    dispatch(onToggle());
+    dispatch(onToggleAction());
   },
 });
 

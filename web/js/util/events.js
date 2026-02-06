@@ -5,24 +5,24 @@ export default (function events() {
   const self = {};
 
   // Object of event types. Each event type is an array of listeners.
-  const events = {};
+  const eventTypes = {};
   const allListeners = [];
 
   self.on = function(event, callback) {
     if (!callback) {
       throw new Error('No listener specified');
     }
-    let listeners = events[event];
+    let listeners = eventTypes[event];
     if (!listeners) {
       listeners = [];
-      events[event] = listeners;
+      eventTypes[event] = listeners;
     }
     listeners.push(callback);
     return self;
   };
 
   self.off = function(event, callback) {
-    const listeners = events[event];
+    const listeners = eventTypes[event];
     if (listeners) {
       lodashPull(listeners, callback);
     }
@@ -38,12 +38,12 @@ export default (function events() {
 
   self.trigger = function(...args) {
     const [event] = args;
-    const listeners = events[event];
+    const listeners = eventTypes[event];
     if (!listeners && !allListeners) {
       return undefined;
     }
     const eventArguments = args.slice(1);
-    lodashEach(events[event], (listener) => {
+    lodashEach(eventTypes[event], (listener) => {
       listener.apply(self, eventArguments);
     });
     lodashEach(allListeners, (listener) => {

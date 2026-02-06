@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getNumberStepsBetween, getNextDateTime } from '../../../modules/date/util';
 import { getSelectedDate } from '../../../modules/date/selectors';
 import { promiseImageryForTime } from '../../../modules/map/util';
-import { setPreload } from '../../../modules/date/actions';
+import { setPreload as setPreloadAction } from '../../../modules/date/actions';
 
 function BufferQuickAnimate(props) {
   const {
@@ -73,7 +73,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setPreload: (preloaded, lastPreloadDate) => {
-    dispatch(setPreload(preloaded, lastPreloadDate));
+    dispatch(setPreloadAction(preloaded, lastPreloadDate));
   },
 });
 

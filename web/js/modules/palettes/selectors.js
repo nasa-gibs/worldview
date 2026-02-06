@@ -184,16 +184,16 @@ const updateLookup = function(layerId, palettesObj, state) {
     const targetCount = target.length;
     const appliedLegends = [];
     const disabled = palette.disabled || [];
-    lodashEach(source, (color, index) => {
+    lodashEach(source, (color, indexArg) => {
       let targetColor;
-      if (index < min || index > max || disabled.includes(index)) {
+      if (indexArg < min || indexArg > max || disabled.includes(indexArg)) {
         targetColor = '00000000';
       } else {
         let sourcePercent; let
           targetIndex;
         if (palette.squash) {
-          sourcePercent = (index - min) / (max - min);
-          if (index === max) {
+          sourcePercent = (indexArg - min) / (max - min);
+          if (indexArg === max) {
             sourcePercent = 1.0;
           }
           targetIndex = Math.floor(sourcePercent * targetCount);
@@ -201,12 +201,12 @@ const updateLookup = function(layerId, palettesObj, state) {
             targetIndex = targetCount - 1;
           }
         } else {
-          sourcePercent = index / sourceCount;
+          sourcePercent = indexArg / sourceCount;
           targetIndex = Math.round(sourcePercent * targetCount);
         }
         targetColor = target[targetIndex];
       }
-      const colormapRef = entries.refs[index];
+      const colormapRef = entries.refs[indexArg];
       const refIndex = refs.indexOf(colormapRef);
 
       if (~refIndex && !appliedLegends.includes(colormapRef)) {
@@ -246,7 +246,7 @@ const toggleLookup = function(layerId, palettesObj, state) {
   }
   const lookup = {};
   const active = newPalettes[layerId].maps;
-  lodashEach(active, (palette, index) => {
+  lodashEach(active, (palette) => {
     const { entries } = palette;
     const { refs } = palette.legend;
     const source = entries.colors;
@@ -292,14 +292,15 @@ const toggleLookup = function(layerId, palettesObj, state) {
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
 
-export function findIndex(layerId, value, index, groupStr, state) {
+export function findIndex(layerId, value, indexArg, groupStr, state) {
+  let index = indexArg;
   index = index || 0;
   const { values } = getPalette(layerId, index, groupStr, state).entries;
   let result;
-  lodashEach(values, (check, index) => {
+  lodashEach(values, (check, indexLodash) => {
     const min = getMinValue(check);
     if (value === min) {
-      result = index;
+      result = indexLodash;
       return false;
     }
     return true;

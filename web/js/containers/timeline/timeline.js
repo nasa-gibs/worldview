@@ -31,7 +31,7 @@ import {
 } from '../../components/timeline/date-util';
 import {
   dateRange as getDateRange,
-  hasSubDaily,
+  hasSubDaily as hasSubDailySelector,
   subdailyLayersActive,
   subdailyLayers,
   getActiveLayers,
@@ -41,13 +41,13 @@ import {
 import { getSelectedDate, getDeltaIntervalUnit } from '../../modules/date/selectors';
 import {
   selectDate as selectDateAction,
-  changeTimeScale,
+  changeTimeScale as changeTimeScaleAction,
   selectInterval,
   changeCustomInterval as changeCustomIntervalAction,
   changeAutoInterval as changeAutoIntervalAction,
-  updateAppNow,
+  updateAppNow as updateAppNowAction,
   toggleCustomModal,
-  triggerTodayButton,
+  triggerTodayButton as triggerTodayButtonAction,
 } from '../../modules/date/actions';
 import {
   checkHasFutureLayers,
@@ -55,11 +55,11 @@ import {
   getNextTimeSelection,
   getNextImageryDelta,
 } from '../../modules/date/util';
-import { toggleActiveCompareState } from '../../modules/compare/actions';
-import { addGranuleDateRanges } from '../../modules/layers/actions';
+import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
+import { addGranuleDateRanges as addGranuleDateRangesAction } from '../../modules/layers/actions';
 import {
-  onActivate as openAnimation,
-  onClose as closeAnimation,
+  onActivate as openAnimationAction,
+  onClose as closeAnimationAction,
   changeStartAndEndDate,
   changeStartDate,
   changeEndDate,
@@ -1579,7 +1579,7 @@ function mapStateToProps(state) {
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const hasSubdailyLayers = isCompareModeActive
-    ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
+    ? hasSubDailySelector(layers.active.layers) || hasSubDailySelector(layers.activeB.layers)
     : subdailyLayersActive(state);
   const subDailyLayersList = isCompareModeActive
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
@@ -1708,11 +1708,11 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => ({
   // updates the relative application now to allow up to date coverage
   updateAppNow: (date) => {
-    dispatch(updateAppNow(date));
+    dispatch(updateAppNowAction(date));
   },
   // sets date to NOW based on state.date.appNow
   triggerTodayButton: () => {
-    dispatch(triggerTodayButton());
+    dispatch(triggerTodayButtonAction());
   },
   // changes date of active dragger 'selected' or 'selectedB'
   selectDate: (val) => {
@@ -1728,7 +1728,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
-    dispatch(changeTimeScale(val));
+    dispatch(changeTimeScaleAction(val));
   },
   // changes to non-custom timescale interval, sets customSelected to TRUE/FALSE
   selectInterval: (delta, timeScale, customSelected) => {
@@ -1738,13 +1738,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleCustomModal(open, toggleBy));
   },
   openAnimation: () => {
-    dispatch(openAnimation());
+    dispatch(openAnimationAction());
   },
   closeAnimation: () => {
-    dispatch(closeAnimation());
+    dispatch(closeAnimationAction());
   },
   toggleActiveCompareState: () => {
-    dispatch(toggleActiveCompareState());
+    dispatch(toggleActiveCompareStateAction());
   },
   // update animation startDate
   onUpdateStartDate: (date) => {
@@ -1766,7 +1766,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(pauseAnimation());
   },
   addGranuleDateRanges: (layer, dateRanges) => {
-    dispatch(addGranuleDateRanges(layer, dateRanges));
+    dispatch(addGranuleDateRangesAction(layer, dateRanges));
   },
 });
 
