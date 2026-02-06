@@ -5,9 +5,9 @@ import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '../error-boundary';
 import PlayQueue from '../../components/animation-widget/play-queue';
-import { promiseImageryForTime } from '../../modules/map/util';
+import { promiseImageryForTime as promiseImageryForTimeUtil } from '../../modules/map/util';
 import {
-  selectDate,
+  selectDate as selectDateAction,
   selectInterval,
   toggleCustomModal,
 } from '../../modules/date/actions';
@@ -27,7 +27,7 @@ import {
 import { getSelectedDate } from '../../modules/date/selectors';
 import {
   play,
-  onClose,
+  onClose as onCloseAction,
   stop,
   toggleLooping,
   changeFrameRate,
@@ -221,10 +221,10 @@ function AnimationWidget (props) {
 
   const onPushPlayFunc = () => {
     const {
-      startDate,
-      endDate,
+      startDateZeroed = startDate,
+      endDateZeroed = endDate,
     } = zeroDates();
-    onUpdateStartAndEndDate(startDate, endDate);
+    onUpdateStartAndEndDate(startDateZeroed, endDateZeroed);
     onPushPlay();
   };
 
@@ -485,7 +485,7 @@ const mapStateToProps = (state) => {
     looping: loop,
     map,
     proj,
-    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
+    promiseImageryForTime: (dateArg) => promiseImageryForTimeUtil(state, dateArg),
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1
       : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
@@ -496,10 +496,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
-    dispatch(selectDate(val));
+    dispatch(selectDateAction(val));
   },
   onClose: () => {
-    dispatch(onClose());
+    dispatch(onCloseAction());
   },
   onPushPlay: () => {
     dispatch(play());

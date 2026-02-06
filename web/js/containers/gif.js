@@ -179,7 +179,7 @@ class GIF extends Component {
 
   createGIF(width, height) {
     const {
-      getImageArray, startDate, endDate, url,
+      getImageArrayFunc = getImageArray, startDate, endDate, url,
     } = this.props;
     const { boundaries, showDates } = this.state;
     const dimensions = {
@@ -198,7 +198,7 @@ class GIF extends Component {
         boundaries,
         showDates,
       };
-      const imageArray = getImageArray(options, { width, height });
+      const imageArray = getImageArrayFunc(options, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
@@ -457,7 +457,7 @@ function mapStateToProps(state) {
       autoSelected,
       layers.active.layers,
     ),
-    getImageArray: (options, dimensions) => getImageArray(
+    getImageArrayFunc: (options, dimensions) => getImageArray(
       options,
       dimensions,
       state,
@@ -481,7 +481,7 @@ GIF.propTypes = {
   endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   startDateStr: PropTypes.string,
   endDateStr: PropTypes.string,
-  getImageArray: PropTypes.func,
+  getImageArrayFunc: PropTypes.func,
   increment: PropTypes.string,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,

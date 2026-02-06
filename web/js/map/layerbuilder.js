@@ -986,7 +986,7 @@ export default function mapLayerBuilder(config, cache, store) {
       dateTimeTile.push('23:59:59Z');
       const lastDateTile = dateTimeTile.join('T');
 
-      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
+      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
       const params = assets.map((asset) => `bands=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);

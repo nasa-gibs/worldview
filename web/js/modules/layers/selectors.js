@@ -80,11 +80,11 @@ export function addLayer(
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
 
-    const findLastRefLayer = (layers) => {
+    const findLastRefLayer = (layersArg) => {
       let lastRefIndex = 0;
       let index = 0;
 
-      layers.forEach((layer) => {
+      layersArg.forEach((layer) => {
         if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
           lastRefIndex = index;
           index += 1;

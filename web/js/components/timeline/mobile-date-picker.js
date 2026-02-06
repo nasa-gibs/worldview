@@ -100,22 +100,22 @@ function MobileDatePicker(props) {
     setIsOpen(false);
   };
 
-  const handleChange = (date) => {
-    setTime(date);
+  const handleChange = (newDate) => {
+    setTime(newDate);
   };
 
-  const handleSelect = (time) => {
+  const handleSelect = (newTime) => {
     setIsOpen(false);
-    setTime(time);
+    setTime(newTime);
 
     // convert date back to local time
-    const date = convertToLocalDateObject(time);
-    onDateChange(getISODateFormatted(date));
+    const newDate = convertToLocalDateObject(newTime);
+    onDateChange(getISODateFormatted(newDate));
   };
 
-  const getHeaderTime = (time, isSubdaily) => (
+  const getHeaderTime = (newTime, isSubdaily) => (
     <div className="datepicker-header">
-      {getDisplayDate(new Date(convertToLocalDateObject(time)), isSubdaily)}
+      {getDisplayDate(new Date(convertToLocalDateObject(newTime)), isSubdaily)}
     </div>
   );
 

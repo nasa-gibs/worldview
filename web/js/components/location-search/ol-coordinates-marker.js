@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { transform } from 'ol/proj';
 import Alert from '../util/alert';
 import {
-  setPlaceMarker, toggleReverseGeocodeActive,
+  setPlaceMarker as setPlaceMarkerAction,
+  toggleReverseGeocodeActive as toggleReverseGeocodeActiveAction,
 } from '../../modules/location-search/actions';
 import { getNormalizedCoordinate } from './util';
 import { areCoordinatesWithinExtent } from '../../modules/location-search/util';
@@ -124,10 +125,10 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => ({
   setPlaceMarker: (coordinates, reverseGeocodeResults) => {
-    dispatch(setPlaceMarker(coordinates, reverseGeocodeResults));
+    dispatch(setPlaceMarkerAction(coordinates, reverseGeocodeResults));
   },
   toggleReverseGeocodeActive: (isActive) => {
-    dispatch(toggleReverseGeocodeActive(isActive));
+    dispatch(toggleReverseGeocodeActiveAction(isActive));
   },
 });
 CoordinatesMarker.propTypes = {

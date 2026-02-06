@@ -21,8 +21,8 @@ import * as olProj from 'ol/proj';
 import util from '../../../util/util';
 import {
   refreshRotation,
-  updateRenderedState,
-  updateMapUI,
+  updateRenderedState as updateRenderedStateAction,
+  updateMapUI as updateMapUIAction,
 } from '../../../modules/map/actions';
 import { saveRotation } from '../../../map/util';
 import {
@@ -32,7 +32,11 @@ import {
   MAP_MOVE_START,
   MAP_ZOOMING,
 } from '../../../util/constants';
-import { startLoading, stopLoading, MAP_LOADING } from '../../../modules/loading/actions';
+import {
+  startLoading as startLoadingAction,
+  stopLoading as stopLoadingAction,
+  MAP_LOADING,
+} from '../../../modules/loading/actions';
 import { granuleFootprint } from '../../../map/granule/util';
 
 const { events } = util;
@@ -247,16 +251,16 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(refreshRotation(rotation));
   },
   updateRenderedState: () => {
-    dispatch(updateRenderedState());
+    dispatch(updateRenderedStateAction());
   },
   updateMapUI: (ui, rotation) => {
-    dispatch(updateMapUI(ui, rotation));
+    dispatch(updateMapUIAction(ui, rotation));
   },
   startLoading: (key) => {
-    dispatch(startLoading(key));
+    dispatch(startLoadingAction(key));
   },
   stopLoading: (key) => {
-    dispatch(stopLoading(key));
+    dispatch(stopLoadingAction(key));
   },
 });
 

@@ -7,7 +7,7 @@ import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/icon-list';
 import {
-  changeTimeScale,
+  changeTimeScale as changeTimeScaleAction,
   selectInterval,
   changeAutoInterval as changeAutoIntervalAction,
 } from '../modules/date/actions';
@@ -116,7 +116,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onToggle());
   },
   changeTimeScale: (val) => {
-    dispatch(changeTimeScale(val));
+    dispatch(changeTimeScaleAction(val));
   },
   changeAutoInterval: (autoSelected) => {
     dispatch(changeAutoIntervalAction(autoSelected));

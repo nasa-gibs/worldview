@@ -59,10 +59,10 @@ function MouseMoveEvents(props) {
 
 const mapStateToProps = (state) => {
   const {
-    events, locationSearch, sidebar, animation, measure, screenSize, map,
+    stateEvents = events, locationSearch, sidebar, animation, measure, screenSize, map,
   } = state;
   const { isCoordinateSearchActive } = locationSearch;
-  const isEventsTabActive = typeof events !== 'undefined' && events.active;
+  const isEventsTabActive = typeof stateEvents !== 'undefined' && stateEvents.active;
   const isMobile = screenSize.isMobileDevice;
   const isMeasureActive = measure.isActive;
   const isMapAnimating = animation.isPlaying;

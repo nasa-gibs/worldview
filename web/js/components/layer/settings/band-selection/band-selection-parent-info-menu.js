@@ -7,9 +7,9 @@ import { toggleCustomContent } from '../../../../modules/modal/actions';
 
 export default function BandSelectionParentInfoMenu({ layer }) {
   const dispatch = useDispatch();
-  const onCustomizeBandClick = (layer) => {
-    const key = `BAND_SELECTION_MODAL_${layer.id}`;
-    const title = `Customize Bands for the ${layer.title} layer`;
+  const onCustomizeBandClick = (layerObj) => {
+    const key = `BAND_SELECTION_MODAL_${layerObj.id}`;
+    const title = `Customize Bands for the ${layerObj.title} layer`;
     dispatch(
       toggleCustomContent(key, {
         headerText: title,
@@ -20,7 +20,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
         timeout: 150,
         size: 'lg',
         bodyComponentProps: {
-          layer,
+          layerObj,
         },
       }),
     );

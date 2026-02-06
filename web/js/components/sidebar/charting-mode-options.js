@@ -125,19 +125,19 @@ function ChartingModeOptions(props) {
   function getLatLongFromPixelValue(pixelX, pixelY) {
     const coordinate = olMap.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
     if (!coordinate) return [0, 0];
-    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
+    const [olProjX, olProjY] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
-    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
+    return [Number(olProjX.toFixed(4)), Number(olProjY.toFixed(4))];
   }
 
   const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
   const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
 
   function formatDateString(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getUTCFullYear();
-    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
-    const day = `0${date.getUTCDate()}`.slice(-2);
+    const dateString = new Date(dateObj);
+    const year = dateString.getUTCFullYear();
+    const month = dateString.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${dateString.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
@@ -216,11 +216,11 @@ function ChartingModeOptions(props) {
     }
   }, [fromButton]);
 
-  function formatDateForImageStat(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getUTCFullYear();
-    const month = `0${date.getUTCMonth() + 1}`.slice(-2);
-    const day = `0${date.getUTCDate()}`.slice(-2);
+  function formatDateForImageStat(dateObjArg) {
+    const dateObj = new Date(dateObjArg);
+    const year = dateObj.getUTCFullYear();
+    const month = `0${dateObj.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${dateObj.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
@@ -610,15 +610,15 @@ function ChartingModeOptions(props) {
   *
   * @returns {null}
   */
-  const onBoundaryUpdate = (boundaries) => {
+  const onBoundaryUpdate = (boundaryObj) => {
     const {
-      x, y, width, height,
-    } = boundaries;
+      xBoundary = x, yBoundary = y, width, height,
+    } = boundaryObj;
     const newBoundaries = {
-      x,
-      y,
-      x2: x + width,
-      y2: y + height,
+      x: xBoundary,
+      y: yBoundary,
+      x2: xBoundary + width,
+      y2: yBoundary + height,
     };
     setBoundaries(newBoundaries);
     const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
@@ -661,13 +661,13 @@ function ChartingModeOptions(props) {
     if (!mapViewChecked) {
       onLatLongChange(viewExtent);
     } else {
-      const boundaries = {
+      const boundariesObj = {
         x: screenWidth / 2 - 100,
         y: screenHeight / 2 - 100,
         width: 200,
         height: 200,
       };
-      onBoundaryUpdate(boundaries);
+      onBoundaryUpdate(boundariesObj);
     }
     setMapViewChecked(!mapViewChecked);
   };
