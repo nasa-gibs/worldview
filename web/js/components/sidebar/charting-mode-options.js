@@ -612,7 +612,10 @@ function ChartingModeOptions(props) {
   */
   const onBoundaryUpdate = (boundaryObj) => {
     const {
-      xBoundary = x, yBoundary = y, width, height,
+      xBoundary = boundaryObj.x,
+      yBoundary = boundaryObj.y,
+      width,
+      height,
     } = boundaryObj;
     const newBoundaries = {
       x: xBoundary,
