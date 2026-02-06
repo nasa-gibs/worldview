@@ -23,3 +23,12 @@ export const MEASURE_DOWNLOAD_GEOJSON = 'measure:download-geojson';
 export const REDUX_ACTION_DISPATCHED = 'redux:action-dispatched';
 export const SIDEBAR_LAYER_HOVER = 'sidebar:layer-hover';
 export const STARTUP = 'startup';
+
+// Define each flight track layer's feature measurement key
+export const FLIGHT_TRACK_KEYS = {
+  AJAX_Alpha_Jet_Ozone: 'O3',
+  'ACTIVATE_HU-25_Falcon_Ozone': 'O3_ppbv_',
+  'ASIA-AQ_DC-8_NO2': 'NO2_CANOE',
+  'DCOTSS_ER-2_UCATS_Ozone': 'O3_UCATS',
+  'DCOTSS_ER-2_ROZE_Ozone': 'O3_ROZE',
+};

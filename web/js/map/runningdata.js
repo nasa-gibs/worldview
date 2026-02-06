@@ -9,7 +9,7 @@ import { getPalette } from '../modules/palettes/selectors';
 import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
-import { MAP_RUNNING_DATA } from '../util/constants';
+import { FLIGHT_TRACK_KEYS, MAP_RUNNING_DATA } from '../util/constants';
 
 const { events } = util;
 
@@ -58,17 +58,17 @@ export default function MapRunningData(compareUi, store) {
     // Running data for vector layers
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       if (shouldNotProcessVectorLayer(layer)) return;
-
       const { id, palette } = layer.wv.def;
+      const isContinuousVectorLayer = layer.wv.def.colormapType === 'continuous' && layer.wv.def.type === 'vector';
       const identifier = palette.styleProperty;
       const paletteLegends = getPalette(id, undefined, undefined, state);
       const { legend } = paletteLegends;
       let color;
 
-      if (!identifier && legend.colors.length > 1) return;
+      if (!isContinuousVectorLayer && !identifier && legend.colors.length > 1) return;
+      const featureProps = feature.getProperties();
       if (identifier) {
-        const properties = feature.getProperties();
-        const value = properties[identifier] || palette.unclassified;
+        const value = featureProps[identifier] || palette.unclassified;
         if (!value) return;
         const tooltips = legend.tooltips.map((c) => c.toLowerCase().replace(/\s/g, ''));
         if (id.includes('AERONET')) {
@@ -88,6 +88,32 @@ export default function MapRunningData(compareUi, store) {
           const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
           color = legend.colors[colorIndex];
         }
+      } else if (isContinuousVectorLayer) {
+        const flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id];
+        const featureValue = featureProps[flightTrackDataKey];
+        const numericValue = parseFloat(featureValue);
+        if (Number.isNaN(numericValue)) return;
+
+        const colorIndex = legend.tooltips.findIndex((tooltip) => {
+          if (tooltip.includes('≥') || tooltip.includes('>')) {
+            const min = parseFloat(tooltip.replace(/[≥>]/g, '').trim());
+            return numericValue >= min;
+          }
+
+          if (tooltip.includes('≤') || tooltip.includes('<')) {
+            const max = parseFloat(tooltip.replace(/[≤<]/g, '').trim());
+            return numericValue <= max;
+          }
+
+          if (tooltip.includes('-')) {
+            const [min, max] = tooltip.split('-').map((s) => parseFloat(s.trim()));
+            return numericValue >= min && numericValue < max;
+          }
+
+          return false;
+        });
+
+        color = legend.colors[colorIndex];
       } else if (legend.colors.length === 1) {
         [color] = legend.colors;
       }
