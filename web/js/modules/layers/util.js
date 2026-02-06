@@ -1107,9 +1107,8 @@ export function dateOverlap(period, dateRanges) {
     return 1;
   });
 
-  const result = sortedRanges.reduce(
-    (resultObj, current, idx, arr) => {
-      const result = resultObj;
+  const reducedRanges = sortedRanges.reduce(
+    (result, current, idx, arr) => {
       // get the previous range
       if (idx === 0) {
         return result;
@@ -1166,7 +1165,7 @@ export function dateOverlap(period, dateRanges) {
   );
 
   // return the final results
-  return result;
+  return reducedRanges;
 }
 // Permalink versions 1.0 and 1.1
 export function layersParse11(str, config) {

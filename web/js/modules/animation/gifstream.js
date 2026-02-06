@@ -168,9 +168,9 @@ export default class GifStream {
       const reader = gifStream.getReader();
       const chunks = [];
       let processedImages = 1;
-      const finished = (chunks) => {
+      const finished = (chunksArg) => {
         const callbackObj = {
-          blob: new Blob(chunks, { type: 'image/gif' }),
+          blob: new Blob(chunksArg, { type: 'image/gif' }),
           error: '',
         };
         callback(callbackObj);
