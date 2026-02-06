@@ -78,15 +78,15 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
   index = index || 0;
   const { values } = getVectorStyle(layerId, index, groupStr, state).entries;
   let result;
-  lodashEach(values, (check, index) => {
+  lodashEach(values, (check, indexArg) => {
     const min = getMinValue(check);
     const max = getMaxValue(check);
     if (type === 'min' && value === min) {
-      result = index;
+      result = indexArg;
       return false;
     }
     if (type === 'max' && value === max) {
-      result = index;
+      result = indexArg;
       return false;
     }
     return true;

@@ -176,7 +176,7 @@ export function drawTicksOnCanvas(ctx, legend, width) {
 }
 
 export function lookup(sourcePalette, targetPalette) {
-  const lookup = {};
+  const lookupObj = {};
   lodashEach(sourcePalette.colors, (sourceColor, index) => {
     const source = `${parseInt(sourceColor.substring(0, 2), 16)
     },${
@@ -192,9 +192,9 @@ export function lookup(sourcePalette, targetPalette) {
       b: parseInt(targetColor.substring(4, 6), 16),
       a: 255,
     };
-    lookup[source] = target;
+    lookupObj[source] = target;
   });
-  return lookup;
+  return lookupObj;
 }
 
 export function loadRenderedPalette(config, layerId) {
