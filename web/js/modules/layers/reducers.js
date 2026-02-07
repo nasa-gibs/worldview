@@ -23,6 +23,7 @@ import {
   UPDATE_DDV_LAYER,
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -421,6 +422,23 @@ export function layerReducer(state = initialState, action) {
             overlayGroups: getOverlayGroups(layers, getPrevOverlayGroups()),
             prevLayers: [],
             layerIndex: action.layerIndex,
+          },
+        },
+      });
+    }
+
+    case ADD_TEMPO_DATE_RANGES: {
+      const {
+        tempoDateRanges,
+      } = action;
+      const layerIndex = getLayerIndex();
+
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [layerIndex]: {
+              tempoDateRanges: { $set: tempoDateRanges },
+            },
           },
         },
       });

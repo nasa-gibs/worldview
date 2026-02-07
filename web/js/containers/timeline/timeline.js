@@ -111,7 +111,10 @@ const checkRightArrowDisabled = (
   delta,
   timeScaleChangeUnit,
   timelineEndDateLimit,
+  autoSelected,
 ) => {
+  if (autoSelected) return false;
+
   const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
 
   const startOfDayNextIncrement = nextIncMoment.startOf('day').valueOf();
@@ -615,13 +618,19 @@ class Timeline extends React.Component {
       timelineEndDateLimit,
       timelineStartDateLimit,
       subDailyLayersList,
+      activeString,
       dateA,
+      dateB,
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
     let timescale = timeScaleChangeUnit;
     if (autoSelected && subDailyLayersList && subDailyLayersList.length) {
-      delta = getNextImageryDelta(subDailyLayersList, dateA, signConstant);
+      delta = getNextImageryDelta(
+        subDailyLayersList,
+        activeString === 'active' ? dateA : dateB,
+        signConstant,
+      );
       timescale = 'minute';
     }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
@@ -1559,7 +1568,7 @@ function mapStateToProps(state) {
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { isCompareA } = compare;
+  const { isCompareA, activeString } = compare;
   const isCompareModeActive = compare.active;
   const isChartingActive = charting.active;
   const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
@@ -1585,7 +1594,7 @@ function mapStateToProps(state) {
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
     : subdailyLayers(state);
   const newCustomDelta = getSmallestIntervalValue(state);
-  const hasTempoProduct = layers.active.layers.filter((layer) => layer.visible && layer.id.includes('TEMPO')).length > 0;
+  const hasTempoProduct = layers[activeString].layers.filter((layer) => layer.visible && layer.id.includes('TEMPO')).length > 0;
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1630,6 +1639,7 @@ function mapStateToProps(state) {
     delta,
     unit,
     timelineEndDateLimit,
+    autoSelected,
   );
   const nowButtonDisabled = checkNowButtonDisabled(
     selectedDate,
@@ -1664,6 +1674,7 @@ function mapStateToProps(state) {
     hasTempoProduct,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
+    activeString,
     timelineStartDateLimit: config.startDate, // same as startDate
     isAnimationWidgetOpen: animation.isActive,
     animStartLocationDate: animation.startDate,
@@ -1793,6 +1804,7 @@ Timeline.propTypes = {
   autoSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
+  activeString: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   displayStaticMap: PropTypes.bool,
   draggerSelected: PropTypes.string,

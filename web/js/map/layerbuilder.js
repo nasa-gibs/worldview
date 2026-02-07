@@ -99,6 +99,65 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
+   * For TEMPO layers, get and set the product's dateRanges
+   * so that they are up-to-date and not stale from build-time
+   */
+  const getUpdatedDateRanges = (def, callback, group) => {
+    const state = store.getState();
+    const { config, proj } = state;
+    const describeDomainsUrl = config?.features?.describeDomains?.url
+      || 'https://gibs.earthdata.nasa.gov';
+    const {
+      id,
+    } = def;
+    let oldRanges = [];
+    const worker = new Worker('js/workers/describe-domains.worker.js');
+    worker.onmessage = (event) => {
+      if (Array.isArray(event.data)) { // our final format is an array
+        worker.terminate(); // terminate the worker
+        const newRanges = event.data.map(([startDate, endDate, dateInterval]) => ({
+          startDate, endDate, dateInterval,
+        }));
+        return callback(def, [...oldRanges, ...newRanges], group);
+      }
+      // DOMParser is not available in workers so we parse the xml
+      // on the main thread before sending it back to the worker
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(event.data, 'text/xml');
+      const domains = xmlDoc.querySelector('Domain')?.textContent;
+      if (!domains) worker.terminate();
+      console.log('DONE');
+      return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000, true] });
+    };
+    worker.onerror = () => worker.terminate();
+    let startDate = new Date(def.startDate);
+    const endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString();
+    // If there are any existing dateRanges, find any after the latest one
+    if (def.dateRanges && def.dateRanges.length > 0) {
+      startDate = new Date(def.dateRanges[def.dateRanges.length - 1].endDate);
+      startDate.setSeconds(startDate.getSeconds() + 1);
+    }
+    const params = {
+      startDate,
+      endDate,
+      id,
+      proj: proj.selected.crs,
+      baseUrl: describeDomainsUrl,
+    };
+    worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    // While worker is running, format any problematic existing dateRanges
+    if (def.dateRanges && def.dateRanges.length > 0) {
+      oldRanges = def.dateRanges.map(({ startDate, endDate, dateInterval }) => ({
+        startDate,
+        endDate: startDate === endDate
+          ? new Date(new Date(endDate).getTime() + (Number(dateInterval) * 60000)).toISOString()
+          : endDate,
+        dateInterval,
+      }));
+    }
+  };
+
+  /**
    *
    * @function layerKey
    * @static
@@ -240,8 +299,15 @@ export default function mapLayerBuilder(config, cache, store) {
     const state = store.getState();
     const { compare: { activeString } } = state;
     const { ui: { isKioskModeActive, displayStaticMap } } = state;
+    const { tempoCallback, group } = options;
 
     options.group = options.group || activeString;
+
+    // If layer is a TEMPO layer, fetch updated date ranges
+    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+      tempoCallback(def, [], group);
+      getUpdatedDateRanges(def, tempoCallback, group);
+    }
 
     // if gibs/dns failure, display static image layer
     if (displayStaticMap && isKioskModeActive) {
