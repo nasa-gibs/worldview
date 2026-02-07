@@ -26,6 +26,7 @@ import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/const
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
+import { addTEMPODateRanges } from '../../../modules/layers/actions';
 
 function UpdateProjection(props) {
   const {
@@ -52,6 +53,7 @@ function UpdateProjection(props) {
     ui,
     renderedPalettes,
     requestPalette,
+    addTEMPODateRanges,
   } = props;
 
   const layerStateRef = useRef(layerState);
@@ -106,6 +108,9 @@ function UpdateProjection(props) {
         if (def.palette) {
           requestPalette(def.id);
         }
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
+        }
         return createLayer(def, options);
       });
     const compareLayerGroup = await Promise.all(layers);
@@ -143,6 +148,9 @@ function UpdateProjection(props) {
           compare.activeString,
           granuleOptions,
         );
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
+        }
         return createLayer(def, options);
       });
       const layerResults = await Promise.allSettled(layerPromises);
@@ -454,6 +462,9 @@ const mapDispatchToProps = (dispatch) => ({
   requestPalette: (id) => {
     dispatch(requestPalette(id));
   },
+  addTEMPODateRanges: (layer, dateRanges, activeString) => {
+    dispatch(addTEMPODateRanges(layer, dateRanges, activeString));
+  },
 });
 
 export default connect(
@@ -485,4 +496,5 @@ UpdateProjection.propTypes = {
   updateMapUI: PropTypes.func,
   renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
+  addTEMPODateRanges: PropTypes.func,
 };
