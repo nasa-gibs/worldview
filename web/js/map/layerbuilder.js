@@ -126,7 +126,6 @@ export default function mapLayerBuilder(config, cache, store) {
       const xmlDoc = parser.parseFromString(event.data, 'text/xml');
       const domains = xmlDoc.querySelector('Domain')?.textContent;
       if (!domains) worker.terminate();
-      console.log('DONE');
       return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000, true] });
     };
     worker.onerror = () => worker.terminate();
@@ -299,14 +298,14 @@ export default function mapLayerBuilder(config, cache, store) {
     const state = store.getState();
     const { compare: { activeString } } = state;
     const { ui: { isKioskModeActive, displayStaticMap } } = state;
-    const { tempoCallback, group } = options;
+    const { tempoCallback } = options;
 
     options.group = options.group || activeString;
 
     // If layer is a TEMPO layer, fetch updated date ranges
     if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
-      tempoCallback(def, [], group);
-      getUpdatedDateRanges(def, tempoCallback, group);
+      tempoCallback(def, [], options.group);
+      getUpdatedDateRanges(def, tempoCallback, options.group);
     }
 
     // if gibs/dns failure, display static image layer
