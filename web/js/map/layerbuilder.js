@@ -125,7 +125,10 @@ export default function mapLayerBuilder(config, cache, store) {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(event.data, 'text/xml');
       const domains = xmlDoc.querySelector('Domain')?.textContent;
-      if (!domains) worker.terminate();
+      if (!domains) {
+        worker.terminate();
+        return callback(def, oldRanges, group);
+      }
       return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000, true] });
     };
     worker.onerror = () => worker.terminate();
