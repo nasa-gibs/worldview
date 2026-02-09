@@ -89,17 +89,19 @@ function periodToTime(period) {
  * @method mergeDomains
  * @param {array} domains
  * @param {number} timeBuffer
+ * @param {boolean} keepDateIntervals
  * @returns {array} mergedDateRanges
  * @description
  * Merge overlapping date ranges
 */
-function mergeDomains(domains, timeBuffer) {
+function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
   const dateRanges = domains.split(',').map((range) => range.split('/'));
 
   const mergedDateRanges = dateRanges.reduce((acc, [start, end, period]) => {
     // convert start and end to time values
     const startTime = makeTime(start);
     let endTime = makeTime(end);
+    const formattedPeriod = keepDateIntervals ? [period.match(/\d+/)[0]] : [];
 
     // if start and end are the same, add period
     if (startTime === endTime) {
@@ -108,7 +110,8 @@ function mergeDomains(domains, timeBuffer) {
 
     if (!acc.length) {
       return [[makeDateString(startTime),
-        makeDateString(endTime)]];
+        makeDateString(endTime),
+        ...formattedPeriod]];
     } // add the first range to the accumulator
 
     // round start time down and end time up by a set time to account for small range gaps
@@ -125,12 +128,15 @@ function mergeDomains(domains, timeBuffer) {
       return acc;
     }
 
-    if (bufferedStartTime > lastRangeEndTime) { // discontinuous, add new range
-      return [...acc, [makeDateString(startTime), makeDateString(endTime)]];
+    // discontinuous, add new range
+    if (bufferedStartTime > lastRangeEndTime || keepDateIntervals) {
+      return [...acc, [makeDateString(startTime), makeDateString(endTime),
+        ...formattedPeriod]];
     }
 
+    // intersects current range, merge
     if (bufferedStartTime <= lastRangeEndTime
-      && bufferedEndTime > lastRangeEndTime) { // intersects current range, merge
+      && bufferedEndTime > lastRangeEndTime && !keepDateIntervals) {
       return acc.with(-1, [acc.at(-1)[0], makeDateString(endTime)]);
     }
 

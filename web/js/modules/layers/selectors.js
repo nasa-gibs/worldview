@@ -421,8 +421,14 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
  */
 export function available(id, date, layers, parameters) {
   const range = dateRange({ layer: id }, layers, parameters);
-  if (range && (date < range.start || date > range.end)) {
-    return false;
+  if (range) {
+    // Standardize time by removing milliseconds before comparison
+    range.start.setMilliseconds(0);
+    range.end.setMilliseconds(0);
+    date.setMilliseconds(0);
+    if (date < range.start || date > range.end) {
+      return false;
+    }
   }
   return true;
 }

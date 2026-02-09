@@ -291,6 +291,16 @@
             }
           }
         },
+        "tempoDateRanges": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "$ref": "#/definitions/date"
+            }
+          }
+        },
         "shiftadjacentdays": {
           "type": "boolean"
         },
