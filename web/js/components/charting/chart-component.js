@@ -163,36 +163,8 @@ function ChartComponent(props) {
     layerId,
   } = liveData;
 
-  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
-  const errorDaysArr = useMemo(() => {
-    const raw = errors?.error_days;
-    if (Array.isArray(raw)) return raw.map((s) => String(s));
-    if (raw == null) return [];
-    if (typeof raw !== 'string') return [String(raw)];
-
-    const trimmed = raw.trim();
-
-    // Try JSON parse if looks like an array; tolerate single quotes
-    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-      try {
-        const jsonish = trimmed.replace(/'/g, '"');
-        const arr = JSON.parse(jsonish);
-        if (Array.isArray(arr)) return arr.map((s) => String(s));
-      } catch {
-        // fall through to manual split
-      }
-    }
-
-    // Fallback: strip brackets, split on comma, strip surrounding quotes
-    return trimmed
-      .replace(/^\[|\]$/g, '')
-      .split(',')
-      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
-      .filter(Boolean);
-  }, [errors]);
-
   // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
-  const errorDatesDisplay = useMemo(() => errorDaysArr
+  const errorDatesDisplay = useMemo(() => errors?.error_days
     .map((item) => {
       const dateStr = typeof item === 'string'
         ? item
@@ -200,14 +172,12 @@ function ChartComponent(props) {
       return (dateStr || '').split('T')[0];
     })
     .filter(Boolean)
-    .join(', \u00A0\u00A0'), [errorDaysArr]);
+    .join(', \u00A0\u00A0'), [errors?.error_days]);
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
   const formattedUnit = unit ? ` (${unit})` : '';
-
-
 
   /**
    * Return an array of provided min & max values buffered by 10%
