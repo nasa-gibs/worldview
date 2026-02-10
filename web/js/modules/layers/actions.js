@@ -34,6 +34,7 @@ import {
   UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -447,6 +448,19 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
       activeString: compare.activeString,
       layers: newLayers,
       layerIndex,
+    });
+  };
+}
+
+export function addTEMPODateRanges(layer, tempoDateRanges, activeString) {
+  return (dispatch) => {
+    const { id } = layer;
+
+    dispatch({
+      type: ADD_TEMPO_DATE_RANGES,
+      activeString,
+      id,
+      tempoDateRanges,
     });
   };
 }
