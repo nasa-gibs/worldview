@@ -237,12 +237,13 @@ class TimelineAxis extends Component {
     const hasFutureLayersUpdated = prevProps.hasFutureLayers !== hasFutureLayers;
     const isTimelineInteracting = isDraggerDragging || isTimelineDragging;
     const didTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
+    const isDraggerGreaterTimeline = new Date(draggerDate) > new Date(timelineEndDateLimit)
+      ? timelineEndDateLimit
+      : draggerDate;
     if (didTimelineEndDateLimitUpdate
       && (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
       const updatedDraggerDate = hasFutureLayersUpdated
-        ? new Date(draggerDate) > new Date(timelineEndDateLimit)
-          ? timelineEndDateLimit
-          : draggerDate
+        ? isDraggerGreaterTimeline
         : draggerDate;
       onDateChange(new Date(updatedDraggerDate));
       this.updateScale(updatedDraggerDate, timeScale, 0.5);
@@ -322,11 +323,12 @@ class TimelineAxis extends Component {
     const options = timeScaleOptions[timeScale].timeAxis;
     const { gridWidth } = options;
     const timelineAxisWidth = axisWidth;
+    const isLeftOffsetZero = leftOffset === 0
+      ? timelineAxisWidth * 0.8
+      : leftOffset;
     const hoverLeftOffset = leftOffsetFixedCoefficient
       ? timelineAxisWidth * leftOffsetFixedCoefficient
-      : leftOffset === 0
-        ? timelineAxisWidth * 0.8
-        : leftOffset;
+      : isLeftOffsetZero;
 
     // visible tiles based on timeline axis width (screen/browser size dependent)
     const numberOfVisibleTiles = Number((timelineAxisWidth / gridWidth).toFixed(8));
@@ -378,20 +380,22 @@ class TimelineAxis extends Component {
     // conditionally determine dragger times
     let draggerTime;
     let draggerTimeB;
+    const setDraggerDateACompareMode = isCompareModeActive
+      ? dateA
+      : inputDate || draggerTimeState;
+    const setDraggerDateBCompareMode = isCompareModeActive
+      ? dateB
+      : inputDate || draggerTimeStateB;
     if (draggerSelected === 'selected') {
       draggerTime = hoverChange
         ? draggerTimeState
-        : isCompareModeActive
-          ? dateA
-          : inputDate || draggerTimeState;
+        : setDraggerDateACompareMode;
       draggerTimeB = isCompareModeActive ? dateB : draggerTimeStateB;
     } else {
       draggerTime = isCompareModeActive ? dateA : draggerTimeState;
       draggerTimeB = hoverChange
         ? draggerTimeStateB
-        : isCompareModeActive
-          ? dateB
-          : inputDate || draggerTimeStateB;
+        : setDraggerDateBCompareMode;
     }
 
     // value of hover time, hover time time unit zeroed, hover time next unit time unit zeroed

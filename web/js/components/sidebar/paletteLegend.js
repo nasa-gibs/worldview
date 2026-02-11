@@ -287,6 +287,8 @@ class PaletteLegend extends React.Component {
       marginRight: '0',
       marginLeft: '0',
     } : null;
+
+    const translateXOffset = xOffset > 0 ? xOffset + 0.5 : 0;
     return (
       <div
         className={
@@ -319,7 +321,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              transform: `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
+              transform: `translateX(${isHoveringLegend ? 0 : translateXOffset}px)`,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden',
             }}
           />
@@ -374,6 +376,7 @@ class PaletteLegend extends React.Component {
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
+    const trackLabelOrLegendTooltip = layer.track ? trackLabel : legendTooltip;
     return (
       <VisibilitySensor
         key={`${legend.id}-${legendIndex}vis-sensor`}
@@ -390,9 +393,7 @@ class PaletteLegend extends React.Component {
               const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${util.encodeId(layer.id)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
-              const tooltipText = singleKey
-                ? layer.track ? trackLabel : legendTooltip
-                : keyLabel;
+              const tooltipText = singleKey ? trackLabelOrLegendTooltip : keyLabel;
               const isInvisible = color === '00000000';
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
               let legendColor = color;
@@ -463,7 +464,8 @@ class PaletteLegend extends React.Component {
       paletteId, layer, isCustomPalette, showingVectorHand, showingChartingIcon,
     } = this.props;
     const { isHoveringLegend } = this.state;
-    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : isCustomPalette ? ' is_custom' : '';
+    const customPaletteClassName = isCustomPalette ? ' is_custom' : '';
+    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : customPaletteClassName;
     if (!layer.palette) return undefined;
     return (
       <div
