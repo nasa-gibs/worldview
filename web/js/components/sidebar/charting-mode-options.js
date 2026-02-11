@@ -299,15 +299,14 @@ function ChartingModeOptions(props) {
    * @param {String} simpleStatsURI
    */
   async function getImageStatData(simpleStatsURI) {
-    /* const requestOptions = {
+    const requestOptions = {
       method: 'GET',
       redirect: 'follow',
-    }; */
+    };
 
     try {
-      // const response = await fetch(simpleStatsURI, requestOptions);
-      // const data = await response.text();
-      const data = '{"mean": {"2025-01-25T00:00:00Z": 0.05764121312338625, "2025-01-27T00:00:00Z": 0.055062081772484235}, "median": {"2025-01-25T00:00:00Z": "0.0575", "2025-01-27T00:00:00Z": "0.055"}, "max": {"2025-01-25T00:00:00Z": 0.1325, "2025-01-27T00:00:00Z": 0.1275}, "min": {"2025-01-25T00:00:00Z": 0.0075, "2025-01-27T00:00:00Z": 0.0025}, "stdev": {"2025-01-25T00:00:00Z": 0.018391197719837507, "2025-01-27T00:00:00Z": 0.017188272324989}, "stderr": "2.9391079740906122e-05", "hist": [["0.0025", "2863"], ["0.015500000000000002", "22296"], ["0.0285", "43104"], ["0.04150000000000001", "89680"], ["0.05450000000000001", "121601"], ["0.0675", "61075"], ["0.08050000000000002", "19809"], ["0.09350000000000001", "9326"], ["0.10650000000000001", "2065"], ["0.11950000000000001", "845"]], "errors": {"error_count": 9, "error_days": "[\'2025-01-22T00:00:00Z\', \'2025-01-23T00:00:00Z\', \'2025-01-24T00:00:00Z\', \'2025-01-26T00:00:00Z\', \'2025-01-28T00:00:00Z\', \'2025-01-29T00:00:00Z\', \'2025-01-30T00:00:00Z\', \'2025-01-31T00:00:00Z\', \'2025-02-01T00:00:00Z\']"}}';
+      const response = await fetch(simpleStatsURI, requestOptions);
+      const data = await response.text();
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -408,7 +407,7 @@ function ChartingModeOptions(props) {
   function combineData(inputArr) {
     if (!inputArr || inputArr.length === 0) return inputArr;
     if (inputArr.length === 1) {
-      if (Object.prototype.hasOwnProperty.call(inputArr[0].body, 'errors')) {
+      if (inputArr[0].body && Object.prototype.hasOwnProperty.call(inputArr[0].body, 'errors')) {
         inputArr[0].body.errors.error_days = normalizeErrorDays(inputArr[0].body.errors);
       }
       return inputArr[0];
