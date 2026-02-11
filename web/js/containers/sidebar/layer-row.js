@@ -484,17 +484,11 @@ function LayerRow (props) {
     return baseClasses;
   };
 
-  const visibilityTitle = !isVisible && !disabled
-    ? 'Show layer'
-    : disabled
-      ? getDisabledTitle(layer)
-      : 'Hide layer';
+  const handleDisabledTitle = disabled ? getDisabledTitle(layer) : 'Hide layer';
+  const visibilityTitle = !isVisible && !disabled ? 'Show layer' : handleDisabledTitle;
 
-  const visibilityIconClass = disabled
-    ? 'ban'
-    : !isVisible
-      ? ['fas', 'eye-slash']
-      : ['fas', 'eye'];
+  const visibilityIcon = !isVisible ? ['fas', 'eye-slash'] : ['fas', 'eye'];
+  const visibilityIconClass = disabled ? 'ban' : visibilityIcon;
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
 
@@ -503,6 +497,8 @@ function LayerRow (props) {
       updateActiveChartingLayer(layerArg);
     }
   };
+
+  const vectorLayerMinHeight = isVectorLayer ? '60px' : '40px';
 
   const renderLayerRow = () => (
     <>
@@ -563,7 +559,7 @@ function LayerRow (props) {
       <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
-        <div className="layer-info" style={{ minHeight: layer.shouldHide ? '22px' : isVectorLayer ? '60px' : '40px' }}>
+        <div className="layer-info" style={{ minHeight: layer.shouldHide ? '22px' : vectorLayerMinHeight }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>

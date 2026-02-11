@@ -54,16 +54,18 @@ export function onActivate() {
         ? autoTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
       const tenFramesAfter = autoSelected
         ? autoTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
+      const calculateStartDate = date.appNow < tenFramesAfter
+        ? tenFramesBefore
+        : activeDate;
       const startDate = animation.startDate
         ? animation.startDate
-        : date.appNow < tenFramesAfter
-          ? tenFramesBefore
-          : activeDate;
+        : calculateStartDate;
+      const calculateEndDate = date.appNow < tenFramesAfter
+        ? activeDate
+        : tenFramesAfter;
       const endDate = animation.endDate
         ? animation.endDate
-        : date.appNow < tenFramesAfter
-          ? activeDate
-          : tenFramesAfter;
+        : calculateEndDate;
       dispatch({ type: UPDATE_START_AND_END_DATE, startDate, endDate });
     }
     dispatch({ type: OPEN_ANIMATION });

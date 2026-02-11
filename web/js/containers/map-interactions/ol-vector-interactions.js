@@ -196,14 +196,16 @@ export class VectorInteractions extends React.Component {
     let clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
+    const getAeronetMobileSize = isAeronet ? 250 : 445;
     clickObj = getDialogObject(pixels, map, isMobile
-      ? screenSize.screenWidth : isAeronet ? 250 : 445);
+      ? screenSize.screenWidth : getAeronetMobileSize);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
     const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const exceededLengthLimit = clickObj.exceededLengthLimit || false;
-    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
+    const handleVectorModalOpen = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
+    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : handleVectorModalOpen;
 
     if (isCoordinatesMarker) return;
 
@@ -356,7 +358,8 @@ const mapDispatchToProps = (dispatch) => ({
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
-    const modalWidth = isMobile ? screenWidth : isAeronet ? 250 : 445;
+    const aeroNetModalWidth = isAeronet ? 250 : 445;
+    const modalWidth = isMobile ? screenWidth : aeroNetModalWidth;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
 
     dispatch(openCustomContent(

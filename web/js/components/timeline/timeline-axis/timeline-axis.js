@@ -1416,12 +1416,12 @@ class TimelineAxis extends Component {
     const timelineStartDateLimitDateObj = new Date(timelineStartDateLimit);
     const timelineEndDateLimitDateObj = new Date(timelineEndDateLimit);
     const hoverTimeDateObj = new Date(hoverTimeDate);
-
+    const constrainHoverTimeDateObj = hoverTimeDateObj < timelineStartDateLimitDateObj
+      ? timelineStartDateLimit
+      : hoverTimeDate;
     hoverTimeDate = hoverTimeDateObj > timelineEndDateLimitDateObj
       ? timelineEndDateLimit
-      : hoverTimeDateObj < timelineStartDateLimitDateObj
-        ? timelineStartDateLimit
-        : hoverTimeDate;
+      : constrainHoverTimeDateObj;
 
     // parent update positioning and hover time
     updatePositioningOnAxisStopDrag(updatePositioningArguments, hoverTimeDate);

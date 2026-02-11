@@ -228,130 +228,136 @@ function AnimationWidget (props) {
     onPushPlay();
   };
 
-  return isActive ? (
-    <ErrorBoundary>
-      {
-        checkAnimationAvailability ? (
-          <AnimationTileCheck
-            startDate={startDate}
-            endDate={endDate}
-            interval={interval}
-            delta={delta}
-            isPlaying={isPlaying}
-          />
-        ) : isPlaying ? (
-          <PlayQueue
-            isMobile={isMobile}
-            isLoopActive={looping}
-            isPlaying={isPlaying}
-            numberOfFrames={numberOfFrames}
-            snappedCurrentDate={snappedCurrentDate}
-            currentDate={currentDate}
-            startDate={startDate}
-            endDate={endDate}
-            interval={interval}
-            isKioskModeActive={isKioskModeActive}
-            delta={delta}
-            speed={speed}
-            selectDate={selectDate}
-            togglePlaying={onPushPause}
-            promiseImageryForTime={promiseImageryForTime}
-            onClose={onPushPause}
-            map={map}
-            autoSelected={autoSelected}
-            layers={layers}
-          />
-        ) : null
-      }
-      {isCollapsed ? (
-        <CollapsedAnimationWidget
-          isDistractionFreeModeActive={isDistractionFreeModeActive}
-          hasSubdailyLayers={hasSubdailyLayers}
-          isMobile={isMobile}
-          isPlaying={isPlaying}
-          onClose={onClose}
-          onPushPause={onPushPause}
-          playDisabled={playDisabled}
-          isPortrait={isPortrait}
-          isLandscape={isLandscape}
-          isMobilePhone={isMobilePhone}
-          isMobileTablet={isMobileTablet}
-          screenWidth={screenWidth}
-          breakpoints={breakpoints}
-          collapsedWidgetPosition={collapsedWidgetPosition}
-          handleDragStart={handleDragStart}
-          onCollapsedDrag={onCollapsedDrag}
-          onPushPlay={onPushPlayFunc}
-          toggleCollapse={toggleCollapse}
-        />
-      ) : isMobile ? (
-        <MobileAnimationWidget
-          breakpoints={breakpoints}
-          endDate={endDate}
-          hasSubdailyLayers={hasSubdailyLayers}
-          isEmbedModeActive={isEmbedModeActive}
-          isLandscape={isLandscape}
-          isMobile={isMobile}
-          isMobilePhone={isMobilePhone}
-          isMobileTablet={isMobileTablet}
-          isPlaying={isPlaying}
-          isPortrait={isPortrait}
-          looping={looping}
-          maxDate={maxDate}
-          minDate={minDate}
-          onLoop={onLoop}
-          onSlide={onSlide}
-          onUpdateEndDate={onUpdateEndDate}
-          onUpdateStartDate={onUpdateStartDate}
-          playDisabled={playDisabled}
-          selectDate={selectDate}
-          screenHeight={screenHeight}
-          screenWidth={screenWidth}
-          setSpeed={setSpeed}
-          sliderLabel={sliderLabel}
-          speed={speed}
-          startDate={startDate}
-          subDailyMode={subDailyMode}
-          toggleCollapse={toggleCollapse}
-        />
-      ) : isKioskModeActive
-        ? null
-        : (
-          <DesktopAnimationWidget
-            animationCustomModalOpen={animationCustomModalOpen}
-            autoplay={autoplay}
-            customModalType={customModalType}
-            isDistractionFreeModeActive={isDistractionFreeModeActive}
-            endDate={endDate}
-            handleDragStart={handleDragStart}
-            hasSubdailyLayers={hasSubdailyLayers}
-            interval={interval}
-            isKioskModeActive={isKioskModeActive}
-            isPlaying={isPlaying}
-            looping={looping}
-            maxDate={maxDate}
-            minDate={minDate}
-            numberOfFrames={numberOfFrames}
-            onClose={onClose}
-            onDateChange={onDateChange}
-            onExpandedDrag={onExpandedDrag}
-            onLoop={onLoop}
-            onPushPause={onPushPause}
-            onPushPlay={onPushPlayFunc}
-            onSlide={onSlide}
-            playDisabled={playDisabled}
-            toggleCollapse={toggleCollapse}
-            setSpeed={setSpeed}
-            sliderLabel={sliderLabel}
-            speed={speed}
-            startDate={startDate}
-            subDailyMode={subDailyMode}
-            widgetPosition={widgetPosition}
-            zeroDates={zeroDates}
-          />
-        )}
-    </ErrorBoundary>
+  const renderPlayQueue = isPlaying ? (
+    <PlayQueue
+      isMobile={isMobile}
+      isLoopActive={looping}
+      isPlaying={isPlaying}
+      numberOfFrames={numberOfFrames}
+      snappedCurrentDate={snappedCurrentDate}
+      currentDate={currentDate}
+      startDate={startDate}
+      endDate={endDate}
+      interval={interval}
+      isKioskModeActive={isKioskModeActive}
+      delta={delta}
+      speed={speed}
+      selectDate={selectDate}
+      togglePlaying={onPushPause}
+      promiseImageryForTime={promiseImageryForTime}
+      onClose={onPushPause}
+      map={map}
+      autoSelected={autoSelected}
+      layers={layers}
+    />
   ) : null;
+
+  const renderAnimationTileCheck = checkAnimationAvailability ? (
+    <AnimationTileCheck
+      startDate={startDate}
+      endDate={endDate}
+      interval={interval}
+      delta={delta}
+      isPlaying={isPlaying}
+    />
+  ) : renderPlayQueue;
+
+  const renderDesktopAnimationWidget = (
+    <DesktopAnimationWidget
+      animationCustomModalOpen={animationCustomModalOpen}
+      autoplay={autoplay}
+      customModalType={customModalType}
+      isDistractionFreeModeActive={isDistractionFreeModeActive}
+      endDate={endDate}
+      handleDragStart={handleDragStart}
+      hasSubdailyLayers={hasSubdailyLayers}
+      interval={interval}
+      isKioskModeActive={isKioskModeActive}
+      isPlaying={isPlaying}
+      looping={looping}
+      maxDate={maxDate}
+      minDate={minDate}
+      numberOfFrames={numberOfFrames}
+      onClose={onClose}
+      onDateChange={onDateChange}
+      onExpandedDrag={onExpandedDrag}
+      onLoop={onLoop}
+      onPushPause={onPushPause}
+      onPushPlay={onPushPlayFunc}
+      onSlide={onSlide}
+      playDisabled={playDisabled}
+      toggleCollapse={toggleCollapse}
+      setSpeed={setSpeed}
+      sliderLabel={sliderLabel}
+      speed={speed}
+      startDate={startDate}
+      subDailyMode={subDailyMode}
+      widgetPosition={widgetPosition}
+      zeroDates={zeroDates}
+    />
+  );
+  const renderMobileOrDesktopWidget = isMobile ? (
+    <MobileAnimationWidget
+      breakpoints={breakpoints}
+      endDate={endDate}
+      hasSubdailyLayers={hasSubdailyLayers}
+      isEmbedModeActive={isEmbedModeActive}
+      isLandscape={isLandscape}
+      isMobile={isMobile}
+      isMobilePhone={isMobilePhone}
+      isMobileTablet={isMobileTablet}
+      isPlaying={isPlaying}
+      isPortrait={isPortrait}
+      looping={looping}
+      maxDate={maxDate}
+      minDate={minDate}
+      onLoop={onLoop}
+      onSlide={onSlide}
+      onUpdateEndDate={onUpdateEndDate}
+      onUpdateStartDate={onUpdateStartDate}
+      playDisabled={playDisabled}
+      selectDate={selectDate}
+      screenHeight={screenHeight}
+      screenWidth={screenWidth}
+      setSpeed={setSpeed}
+      sliderLabel={sliderLabel}
+      speed={speed}
+      startDate={startDate}
+      subDailyMode={subDailyMode}
+      toggleCollapse={toggleCollapse}
+    />
+  ) : renderDesktopAnimationWidget;
+  const renderCollapsedAnimationWidget = isCollapsed ? (
+    <CollapsedAnimationWidget
+      isDistractionFreeModeActive={isDistractionFreeModeActive}
+      hasSubdailyLayers={hasSubdailyLayers}
+      isMobile={isMobile}
+      isPlaying={isPlaying}
+      onClose={onClose}
+      onPushPause={onPushPause}
+      playDisabled={playDisabled}
+      isPortrait={isPortrait}
+      isLandscape={isLandscape}
+      isMobilePhone={isMobilePhone}
+      isMobileTablet={isMobileTablet}
+      screenWidth={screenWidth}
+      breakpoints={breakpoints}
+      collapsedWidgetPosition={collapsedWidgetPosition}
+      handleDragStart={handleDragStart}
+      onCollapsedDrag={onCollapsedDrag}
+      onPushPlay={onPushPlayFunc}
+      toggleCollapse={toggleCollapse}
+    />
+  ) : renderMobileOrDesktopWidget;
+
+
+  const renderWidget = () => (
+    <ErrorBoundary>
+      {renderAnimationTileCheck}
+      {renderCollapsedAnimationWidget}
+    </ErrorBoundary>
+  );
+  return isActive ? renderWidget() : null;
 }
 
 const mapStateToProps = (state) => {

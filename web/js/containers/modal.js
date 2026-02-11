@@ -247,7 +247,7 @@ function ModalContainer(props) {
       &times;
     </button>
   );
-
+  const renderModalBodyText = isTemplateModal ? getTemplateBody() : (<p>{bodyText}</p>) || '';
   return (
     <ErrorBoundary>
       <InteractionWrap
@@ -300,7 +300,7 @@ function ModalContainer(props) {
                         closeModal={toggleFunction}
                       />
                     )
-                      : isTemplateModal ? getTemplateBody() : (<p>{bodyText}</p>) || ''}
+                      : renderModalBodyText}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
                 </DetectOuterClick>
