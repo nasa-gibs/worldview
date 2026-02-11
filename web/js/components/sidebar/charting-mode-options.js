@@ -348,6 +348,34 @@ function ChartingModeOptions(props) {
     return parseFloat(parseFloat(str).toFixed(3));
   }
 
+  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  function normalizeErrorDays(errors) {
+    const raw = errors?.error_days;
+    if (Array.isArray(raw)) return raw.map((s) => String(s));
+    if (raw == null) return [];
+    if (typeof raw !== 'string') return [String(raw)];
+
+    const trimmed = raw.trim();
+
+    // Try JSON parse if looks like an array; tolerate single quotes
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const jsonish = trimmed.replace(/'/g, '"');
+        const arr = JSON.parse(jsonish);
+        if (Array.isArray(arr)) return arr.map((s) => String(s));
+      } catch {
+        // fall through to manual split
+      }
+    }
+
+    // Fallback: strip brackets, split on comma, strip surrounding quotes
+    return trimmed
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+  }
+
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
    * @param {Object} data | This contains the name (dates)
@@ -378,7 +406,12 @@ function ChartingModeOptions(props) {
 
   function combineData(inputArr) {
     if (!inputArr || inputArr.length === 0) return inputArr;
-    if (inputArr.length === 1) return inputArr[0];
+    if (inputArr.length === 1) {
+      if (inputArr[0].body && Object.prototype.hasOwnProperty.call(inputArr[0].body, 'errors')) {
+        inputArr[0].body.errors.error_days = normalizeErrorDays(inputArr[0].body.errors);
+      }
+      return inputArr[0];
+    }
     const output = {
       ok: true,
       body: {
@@ -404,8 +437,9 @@ function ChartingModeOptions(props) {
       if (dataset.ok && !!dataset.body) {
         Object.keys(dataset.body).forEach((key) => {
           if (key === 'errors') {
+            const errorDays = normalizeErrorDays(dataset.body.errors.error_days);
             output.body.errors.error_count += dataset.body.errors.error_count;
-            output.body.errors.error_days.push(...dataset.body.errors.error_days.replaceAll(/('|\[|\])/gi, '').split(', '));
+            output.body.errors.error_days.push(...errorDays);
           } else if (key === 'hist') {
             output.body.hist.push(...dataset.body.hist);
           } else if (key === 'stderr') {
