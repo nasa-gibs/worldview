@@ -25,7 +25,7 @@ import {
   changeChartingStartDate,
   changeChartingEndDate,
 } from '../../modules/charting/actions';
-import { openCustomContent } from '../../modules/modal/actions';
+import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import ChartingInfo from '../charting/charting-info';
 import ChartingError from '../charting/charting-error';
@@ -54,6 +54,7 @@ function ChartingModeOptions(props) {
     crs,
     displayChart,
     displaySimpleStats,
+    closeModal,
     isChartingActive,
     isMobile,
     onChartDateButtonClick,
@@ -105,6 +106,7 @@ function ChartingModeOptions(props) {
   } = boundaries;
 
   const debouncedUpdateAOICoordinates = lodashDebounce(updateAOICoordinates, 50);
+  const debouncedModalClose = lodashDebounce(closeModal, 0);
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
@@ -156,6 +158,40 @@ function ChartingModeOptions(props) {
     displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
   }
 
+  /**
+  * Update latitude longitude values on
+  * crop change
+  * @param {Object} boundaries
+  *
+  * @returns {null}
+  */
+  const onBoundaryUpdate = (boundaryObj) => {
+    const {
+      xBoundary = boundaryObj.x,
+      yBoundary = boundaryObj.y,
+      width,
+      height,
+    } = boundaryObj;
+    const newBoundaries = {
+      x: xBoundary,
+      y: yBoundary,
+      x2: xBoundary + width,
+      y2: yBoundary + height,
+    };
+    setBoundaries(newBoundaries);
+    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
+    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
+    setBottomLeftLatLong(bottomLeft);
+    setTopRightLatLong(topRight);
+    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
+    setMapViewChecked(false);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
+  };
+
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
@@ -192,6 +228,17 @@ function ChartingModeOptions(props) {
       init = true;
     }
   }, [projections]);
+
+  useEffect(() => {
+    if (!isMounted.current) return;
+    const boundariesObj = {
+      x,
+      y,
+      width: x2 - x,
+      height: y2 - y,
+    };
+    onBoundaryUpdate(boundariesObj);
+  }, [screenWidth, screenHeight]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -245,7 +292,11 @@ function ChartingModeOptions(props) {
   }, [isModalOpen, modalId]);
 
   useEffect(() => {
-    if (!chartData.current || Object.keys(chartData.current).length === 0) return;
+    if (!chartData.current || Object.keys(chartData.current).length === 0 || !isModalOpen || timeSpanSelection !== 'range') return;
+    if (screenWidth < 768) {
+      debouncedModalClose();
+      updateModalOpen(false);
+    }
     displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
   }, [screenWidth]);
 
@@ -652,40 +703,6 @@ function ChartingModeOptions(props) {
     }
   });
 
-  /**
-  * Update latitude longitude values on
-  * crop change
-  * @param {Object} boundaries
-  *
-  * @returns {null}
-  */
-  const onBoundaryUpdate = (boundaryObj) => {
-    const {
-      xBoundary = boundaryObj.x,
-      yBoundary = boundaryObj.y,
-      width,
-      height,
-    } = boundaryObj;
-    const newBoundaries = {
-      x: xBoundary,
-      y: yBoundary,
-      x2: xBoundary + width,
-      y2: yBoundary + height,
-    };
-    setBoundaries(newBoundaries);
-    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
-    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
-    setBottomLeftLatLong(bottomLeft);
-    setTopRightLatLong(topRight);
-    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
-    setMapViewChecked(false);
-    if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
-  };
-
   const onLatLongChange = (coordsArray) => {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
     const topRight = [coordsArray[2], coordsArray[3]];
@@ -1054,6 +1071,9 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateEndDate(date) {
     dispatch(changeChartingEndDate(date));
   },
+  closeModal() {
+    dispatch(onClose());
+  },
 });
 
 export default connect(
@@ -1080,6 +1100,7 @@ ChartingModeOptions.propTypes = {
   displaySimpleStats: PropTypes.func,
   displayChart: PropTypes.func,
   openChartingErrorModal: PropTypes.func,
+  closeModal: PropTypes.func,
   olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
   renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
