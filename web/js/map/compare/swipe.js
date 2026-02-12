@@ -59,7 +59,8 @@ const setRectClipMask = function(context, coordinates) {
   context.clip();
 };
 
-const dragLine = function(listenerObjArg, lineCaseEl, map) {
+const dragLine = function(listenerObjArg, lineCase, map) {
+  const lineCaseEl = lineCase;
   function move(evt) {
     if (!dragging) {
       dragging = true;

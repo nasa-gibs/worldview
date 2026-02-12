@@ -404,7 +404,8 @@ function ChartingModeOptions(props) {
     return rechartsData;
   }
 
-  function combineData(inputArr) {
+  function combineData(input) {
+    const inputArr = input;
     if (!inputArr || inputArr.length === 0) return inputArr;
     if (inputArr.length === 1) {
       if (inputArr[0].body && Object.prototype.hasOwnProperty.call(inputArr[0].body, 'errors')) {

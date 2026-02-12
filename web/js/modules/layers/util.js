@@ -1108,7 +1108,8 @@ export function dateOverlap(period, dateRanges) {
   });
 
   const reducedRanges = sortedRanges.reduce(
-    (result, current, idx, arr) => {
+    (resultArg, current, idx, arr) => {
+      const result = resultArg;
       // get the previous range
       if (idx === 0) {
         return result;

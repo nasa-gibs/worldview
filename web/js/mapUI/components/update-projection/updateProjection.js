@@ -26,7 +26,7 @@ import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/const
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette as requestPaletteAction } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
-import { addTEMPODateRanges } from '../../../modules/layers/actions';
+import { addTEMPODateRanges as addTEMPODateRangesAction } from '../../../modules/layers/actions';
 
 function UpdateProjection(props) {
   const {
@@ -463,7 +463,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(requestPaletteAction(id));
   },
   addTEMPODateRanges: (layer, dateRanges, activeString) => {
-    dispatch(addTEMPODateRanges(layer, dateRanges, activeString));
+    dispatch(addTEMPODateRangesAction(layer, dateRanges, activeString));
   },
 });
 
