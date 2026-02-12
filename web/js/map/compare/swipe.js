@@ -59,7 +59,7 @@ const setRectClipMask = function(context, coordinates) {
   context.clip();
 };
 
-const dragLine = function(listenerObj, lineCase, map) {
+const dragLine = function(listenerObjArg, lineCase, map) {
   const lineCaseEl = lineCase;
   function move(evt) {
     if (!dragging) {
@@ -67,10 +67,10 @@ const dragLine = function(listenerObj, lineCase, map) {
       events.trigger(COMPARE_MOVE_START);
     }
     const windowWidth = window.innerWidth;
-    if (listenerObj.type === 'default') evt.preventDefault();
+    if (listenerObjArg.type === 'default') evt.preventDefault();
     evt.stopPropagation();
 
-    if (listenerObj.type === 'touch') {
+    if (listenerObjArg.type === 'touch') {
       swipeOffset = evt.touches[0].pageX;
     } else {
       swipeOffset = evt.clientX;

@@ -42,7 +42,7 @@ import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
-import { promiseImageryForTour } from '../modules/map/util';
+import { promiseImageryForTour as promiseImageryForTourUtil } from '../modules/map/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -623,7 +623,7 @@ const mapStateToProps = (state) => {
       layers,
       dateString,
       activeString,
-    ) => promiseImageryForTour(state, layers, dateString, activeString),
+    ) => promiseImageryForTourUtil(state, layers, dateString, activeString),
   };
 };
 

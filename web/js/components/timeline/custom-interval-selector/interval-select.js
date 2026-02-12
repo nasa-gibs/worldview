@@ -27,8 +27,8 @@ function IntervalSelect(props) {
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
   const handleChangeZoomLevel = (e) => {
-    const zoomLevel = e.target.value;
-    changeZoomLevel(zoomLevel);
+    const zoomLevelValue = e.target.value;
+    changeZoomLevel(zoomLevelValue);
   };
 
   const handleChangeZoomLevelMobile = (increment) => {

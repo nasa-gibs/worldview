@@ -121,8 +121,8 @@ export const getGranuleFootprints = (layer) => {
   const { endDate, startDate } = def;
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-  const reduceFunc = (granuleDates, { date, polygon }) => {
-    const dates = granuleDates;
+  const reduceFunc = (granuleDatesArr, { date, polygon }) => {
+    const dates = granuleDatesArr;
     const granuleDate = new Date(date);
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
       dates[date] = polygon;

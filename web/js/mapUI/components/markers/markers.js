@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { reverseGeocode } from '../../../modules/location-search/util-api';
 import { getNormalizedCoordinate } from '../../../components/location-search/util';
 import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } from '../../../modules/location-search/util';
-import { setGeocodeResults, removeMarker } from '../../../modules/location-search/actions';
+import {
+  setGeocodeResults as setGeocodeResultsAction,
+  removeMarker as removeMarkerAction,
+} from '../../../modules/location-search/actions';
 import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
 function Markers(props) {
@@ -190,10 +193,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setGeocodeResults: (value) => {
-    dispatch(setGeocodeResults(value));
+    dispatch(setGeocodeResultsAction(value));
   },
   removeMarker: (value) => {
-    dispatch(removeMarker(value));
+    dispatch(removeMarkerAction(value));
   },
 });
 
