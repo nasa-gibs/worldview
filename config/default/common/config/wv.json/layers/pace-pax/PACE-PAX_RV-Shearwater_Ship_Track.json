@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "Time_Start",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "PACE-PAX_RV-Shearwater_Ship_Track",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

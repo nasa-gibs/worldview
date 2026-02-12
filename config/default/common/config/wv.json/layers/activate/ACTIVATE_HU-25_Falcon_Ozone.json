@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "GPS_Alt_m_",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "ACTIVATE_HU-25_Falcon_Ozone",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }
