@@ -88,6 +88,8 @@ function ChartingModeOptions(props) {
   if (!olMap) return null;
 
   const isMounted = useRef(false);
+  const chartData = useRef({});
+  const isErrordaysExpanded = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
@@ -147,6 +149,11 @@ function ChartingModeOptions(props) {
       return filteredLayerList[0];
     }
     return null;
+  }
+
+  function toggleErrorDaysExpanded(val) {
+    isErrordaysExpanded.current = val;
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
   }
 
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
@@ -237,6 +244,11 @@ function ChartingModeOptions(props) {
     }
   }, [isModalOpen, modalId]);
 
+  useEffect(() => {
+    if (!chartData.current || Object.keys(chartData.current).length === 0) return;
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }, [screenWidth]);
+
   /**
    * Provides a default AOI of the entire map if unspecified,
    * and modifies the Openlayers coordinates for use with imageStat API
@@ -299,14 +311,15 @@ function ChartingModeOptions(props) {
    * @param {String} simpleStatsURI
    */
   async function getImageStatData(simpleStatsURI) {
-    const requestOptions = {
+    /* const requestOptions = {
       method: 'GET',
       redirect: 'follow',
-    };
+    }; */
 
     try {
-      const response = await fetch(simpleStatsURI, requestOptions);
-      const data = await response.text();
+      // const response = await fetch(simpleStatsURI, requestOptions);
+      // const data = await response.text();
+      const data = '{"mean": {"2025-01-25T00:00:00Z": 0.05764121312338625, "2025-01-27T00:00:00Z": 0.055062081772484235}, "median": {"2025-01-25T00:00:00Z": "0.0575", "2025-01-27T00:00:00Z": "0.055"}, "max": {"2025-01-25T00:00:00Z": 0.1325, "2025-01-27T00:00:00Z": 0.1275}, "min": {"2025-01-25T00:00:00Z": 0.0075, "2025-01-27T00:00:00Z": 0.0025}, "stdev": {"2025-01-25T00:00:00Z": 0.018391197719837507, "2025-01-27T00:00:00Z": 0.017188272324989}, "stderr": "2.9391079740906122e-05", "hist": [["0.0025", "2863"], ["0.015500000000000002", "22296"], ["0.0285", "43104"], ["0.04150000000000001", "89680"], ["0.05450000000000001", "121601"], ["0.0675", "61075"], ["0.08050000000000002", "19809"], ["0.09350000000000001", "9326"], ["0.10650000000000001", "2065"], ["0.11950000000000001", "845"]], "errors": {"error_count": 9, "error_days": "[\'2025-01-22T00:00:00Z\', \'2025-01-23T00:00:00Z\', \'2025-01-24T00:00:00Z\', \'2025-01-26T00:00:00Z\', \'2025-01-28T00:00:00Z\', \'2025-01-29T00:00:00Z\', \'2025-01-30T00:00:00Z\', \'2025-01-31T00:00:00Z\', \'2025-02-01T00:00:00Z\']"}}';
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -530,7 +543,7 @@ function ChartingModeOptions(props) {
         const numPoints = STEP_NUM - (
           data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0
         );
-        displayChart({
+        chartData.current = {
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
           unit: dataToRender.unit,
@@ -545,7 +558,8 @@ function ChartingModeOptions(props) {
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
           layerId: layerInfo.id,
-        });
+        };
+        displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
         displaySimpleStats(dataToRender);
@@ -979,7 +993,11 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  displayChart: (liveData) => {
+  displayChart: (liveData, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded) => {
+    const isWideModal = screenWidth >= 1150;
+    const width = isWideModal ? 1150 : 650;
+    const height = isWideModal ? 475 + (isErrordaysExpanded.current ? 35 : 0) : 855;
+    const offsetTop = isWideModal ? 50 : 25;
     dispatch(
       openCustomContent('CHARTING-CHART', {
         headerText: (
@@ -1002,14 +1020,16 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: 'chart-dialog',
         isDraggable: true,
         dragHandle: '.modal-header',
-        offsetLeft: 'calc(50% - 575px)',
-        offsetTop: 50,
-        width: 1150,
-        height: 420,
+        offsetLeft: `calc(50% - ${width / 2}px)`,
+        offsetTop,
+        width,
+        height,
         stayOnscreen: true,
+        autoSetHeight: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
+          toggleErrorDaysExpanded,
         },
       }),
     );

@@ -672,7 +672,7 @@ div#group-overlays-checkbox-case {
 .charting-chart-text {
   display: inline-block;
   vertical-align: top;
-  width: 55%;
+  width: 600px;
 }
 
 .charting-chart-container .charting-disclaimer {
@@ -867,6 +867,7 @@ div#group-overlays-checkbox-case {
   margin: 0 !important;
 
   .modal-header {
+    max-height: 5vh;
     cursor: move;
 
     .charting-chart-subheader {
@@ -874,6 +875,42 @@ div#group-overlays-checkbox-case {
       font-weight: normal;
       font-size: 90%;
       color: #c7c7c7;
+    }
+  }
+
+  .modal-body {
+    max-height: 89.5vh;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 1149px) {
+  #charting-chart {
+    max-width: 650px;
+
+    .charting-chart-inner {
+      display:flex;
+      flex-flow: column;
+
+      .charting-chart-text {
+        order: 1;
+      }
+
+      .charting-stat-text {
+        order: 3;
+        width: 600px;
+
+        #charting-minimap-container {
+          width: 61%;
+          margin-right: 0;
+        }
+      }
+
+      .charting-disclaimer {
+        order: 2;
+        width: 600px;
+        margin-top: 0;
+      }
     }
   }
 }
@@ -898,7 +935,7 @@ button#charting-simple-stats-button {
 
 .charting-stat-text {
   display: inline-block;
-  width: 45%;
+  width: 522px;
 }
 
 .charting-stat-text > div {
