@@ -121,9 +121,10 @@ export function getLocalStorageCollapseState() {
  */
 export function mapLocationToLocationSearchState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const { s } = parameters;
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
