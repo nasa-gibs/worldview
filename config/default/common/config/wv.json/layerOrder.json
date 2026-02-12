@@ -1234,6 +1234,8 @@
 		"OrbitTracks_METOP-B_Descending",
 		"OrbitTracks_METOP-C_Ascending",
 		"OrbitTracks_METOP-C_Descending",
+		"OrbitTracks_NISAR_Ascending",
+		"OrbitTracks_NISAR_Descending",
 		"OrbitTracks_NOAA-20_Ascending",
 		"OrbitTracks_NOAA-20_Descending",
 		"OrbitTracks_NOAA-21_Ascending",
