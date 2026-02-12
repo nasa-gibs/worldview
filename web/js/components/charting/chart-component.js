@@ -142,6 +142,7 @@ function ChartComponent(props) {
     createLayer,
     overviewMapLayerDef,
     layers,
+    toggleErrorDaysExpanded,
   } = props;
 
   const [errorCollapsed, setErrorCollapsed] = useState(true);
@@ -162,6 +163,11 @@ function ChartComponent(props) {
     errors,
     layerId,
   } = liveData;
+
+  function toggleErrorCollapsed(val) {
+    setErrorCollapsed(val);
+    toggleErrorDaysExpanded(!val);
+  }
 
   // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
   const errorDatesDisplay = useMemo(() => errors?.error_days
@@ -550,7 +556,7 @@ function ChartComponent(props) {
                 </div>
               )}
               <div className="error-expand-button">
-                <span className="error-expand-button-inner" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+                <span className="error-expand-button-inner" onClick={() => toggleErrorCollapsed(!errorCollapsed)}>
                   {errorCollapsed ? 'more' : 'less'}
                   <FontAwesomeIcon
                     className="layer-group-collapse"
@@ -593,6 +599,7 @@ ChartComponent.propTypes = {
   createLayer: PropTypes.func,
   overviewMapLayerDef: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layers: PropTypes.shape,
+  toggleErrorDaysExpanded: PropTypes.func,
 };
 
 CustomXAxisTick.propTypes = {

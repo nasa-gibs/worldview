@@ -25,7 +25,7 @@ import {
   changeChartingStartDate,
   changeChartingEndDate,
 } from '../../modules/charting/actions';
-import { openCustomContent } from '../../modules/modal/actions';
+import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import ChartingInfo from '../charting/charting-info';
 import ChartingError from '../charting/charting-error';
@@ -54,6 +54,7 @@ function ChartingModeOptions(props) {
     crs,
     displayChart,
     displaySimpleStats,
+    closeModal,
     isChartingActive,
     isMobile,
     onChartDateButtonClick,
@@ -88,6 +89,8 @@ function ChartingModeOptions(props) {
   if (!olMap) return null;
 
   const isMounted = useRef(false);
+  const chartData = useRef({});
+  const isErrordaysExpanded = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
@@ -103,6 +106,7 @@ function ChartingModeOptions(props) {
   } = boundaries;
 
   const debouncedUpdateAOICoordinates = lodashDebounce(updateAOICoordinates, 50);
+  const debouncedModalClose = lodashDebounce(closeModal, 0);
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
@@ -149,6 +153,45 @@ function ChartingModeOptions(props) {
     return null;
   }
 
+  function toggleErrorDaysExpanded(val) {
+    isErrordaysExpanded.current = val;
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }
+
+  /**
+  * Update latitude longitude values on
+  * crop change
+  * @param {Object} boundaries
+  *
+  * @returns {null}
+  */
+  const onBoundaryUpdate = (boundaryObj) => {
+    const {
+      xBoundary = boundaryObj.x,
+      yBoundary = boundaryObj.y,
+      width,
+      height,
+    } = boundaryObj;
+    const newBoundaries = {
+      x: xBoundary,
+      y: yBoundary,
+      x2: xBoundary + width,
+      y2: yBoundary + height,
+    };
+    setBoundaries(newBoundaries);
+    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
+    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
+    setBottomLeftLatLong(bottomLeft);
+    setTopRightLatLong(topRight);
+    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
+    setMapViewChecked(false);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
+  };
+
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
   const secondaryDate = formatDateString(initialEndDate);
@@ -185,6 +228,17 @@ function ChartingModeOptions(props) {
       init = true;
     }
   }, [projections]);
+
+  useEffect(() => {
+    if (!isMounted.current) return;
+    const boundariesObj = {
+      x,
+      y,
+      width: x2 - x,
+      height: y2 - y,
+    };
+    onBoundaryUpdate(boundariesObj);
+  }, [screenWidth, screenHeight]);
 
   useEffect(() => {
     isMounted.current = true;
@@ -236,6 +290,15 @@ function ChartingModeOptions(props) {
       }
     }
   }, [isModalOpen, modalId]);
+
+  useEffect(() => {
+    if (!chartData.current || Object.keys(chartData.current).length === 0 || !isModalOpen || timeSpanSelection !== 'range') return;
+    if (screenWidth < 768) {
+      debouncedModalClose();
+      updateModalOpen(false);
+    }
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }, [screenWidth]);
 
   /**
    * Provides a default AOI of the entire map if unspecified,
@@ -530,7 +593,7 @@ function ChartingModeOptions(props) {
         const numPoints = STEP_NUM - (
           data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0
         );
-        displayChart({
+        chartData.current = {
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
           unit: dataToRender.unit,
@@ -545,7 +608,8 @@ function ChartingModeOptions(props) {
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
           layerId: layerInfo.id,
-        });
+        };
+        displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
         displaySimpleStats(dataToRender);
@@ -637,40 +701,6 @@ function ChartingModeOptions(props) {
       setIsWithinWings(inLeftWing || inRightWing);
     }
   });
-
-  /**
-  * Update latitude longitude values on
-  * crop change
-  * @param {Object} boundaries
-  *
-  * @returns {null}
-  */
-  const onBoundaryUpdate = (boundaryObj) => {
-    const {
-      xBoundary = boundaryObj.x,
-      yBoundary = boundaryObj.y,
-      width,
-      height,
-    } = boundaryObj;
-    const newBoundaries = {
-      x: xBoundary,
-      y: yBoundary,
-      x2: xBoundary + width,
-      y2: yBoundary + height,
-    };
-    setBoundaries(newBoundaries);
-    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
-    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
-    setBottomLeftLatLong(bottomLeft);
-    setTopRightLatLong(topRight);
-    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
-    setMapViewChecked(false);
-    if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
-  };
 
   const onLatLongChange = (coordsArray) => {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
@@ -979,7 +1009,11 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  displayChart: (liveData) => {
+  displayChart: (liveData, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded) => {
+    const isWideModal = screenWidth >= 1150;
+    const width = isWideModal ? 1150 : 650;
+    const height = isWideModal ? 475 + (isErrordaysExpanded.current ? 35 : 0) : 855;
+    const offsetTop = isWideModal ? 50 : 25;
     dispatch(
       openCustomContent('CHARTING-CHART', {
         headerText: (
@@ -1002,14 +1036,16 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: 'chart-dialog',
         isDraggable: true,
         dragHandle: '.modal-header',
-        offsetLeft: 'calc(50% - 575px)',
-        offsetTop: 50,
-        width: 1150,
-        height: 420,
+        offsetLeft: `calc(50% - ${width / 2}px)`,
+        offsetTop,
+        width,
+        height,
         stayOnscreen: true,
+        autoSetHeight: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
+          toggleErrorDaysExpanded,
         },
       }),
     );
@@ -1033,6 +1069,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onUpdateEndDate(date) {
     dispatch(changeChartingEndDate(date));
+  },
+  closeModal() {
+    dispatch(onClose());
   },
 });
 
@@ -1060,6 +1099,7 @@ ChartingModeOptions.propTypes = {
   displaySimpleStats: PropTypes.func,
   displayChart: PropTypes.func,
   openChartingErrorModal: PropTypes.func,
+  closeModal: PropTypes.func,
   olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
   renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
