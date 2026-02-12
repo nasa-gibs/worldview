@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "O3_UCATS",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "DCOTSS_ER-2_UCATS_Ozone",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }
