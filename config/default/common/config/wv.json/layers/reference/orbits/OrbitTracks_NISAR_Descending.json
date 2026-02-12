@@ -1,34 +1,34 @@
 {
   "layers": {
-    "OrbitTracks_Sentinel-1C_Descending": {
-      "id": "OrbitTracks_Sentinel-1C_Descending",
-      "description": "reference/orbits/OrbitTracks_Sentinel-1C_Descending",
-      "tags": "tracks day vector",
+    "OrbitTracks_NISAR_Descending": {
+      "id": "OrbitTracks_NISAR_Descending",
+      "description": "reference/orbits/OrbitTracks_NISAR_Descending",
+      "tags": "tracks vector",
       "group": "overlays",
       "type": "vector",
       "period": "daily",
       "layergroup": "Orbital Track",
       "track": "descending",
-      "associatedLayers": ["OrbitTracks_Sentinel-1C_Ascending"],
+      "associatedLayers": ["OrbitTracks_NISAR_Ascending"],
       "palette": {
-        "id": "OrbitTracks_Sentinel-1C_Descending",
+        "id": "OrbitTracks_NISAR_Descending",
         "immutable": true
       },
       "clickDisabledFeatures": [
         "LineString"
       ],
       "vectorStyle": {
-        "id": "OrbitTracks_Sentinel-1C_Descending",
+        "id": "OrbitTracks_NISAR_Descending",
         "antarctic": {
-          "id": "OrbitTracks_Sentinel-1C_Descending_polar"
+          "id": "OrbitTracks_NISAR_Descending_polar"
         },
         "arctic": {
-          "id": "OrbitTracks_Sentinel-1C_Descending_polar"
+          "id": "OrbitTracks_NISAR_Descending_polar"
         }
       },
       "modalShouldFollowClicks": true,
       "breakPointLayer": {
-        "id": "OrbitTracks_Sentinel-1C_Descending",
+        "id": "OrbitTracks_NISAR_Descending",
         "type": "wms",
         "format": "image/png",
         "breakPointType": "max",
