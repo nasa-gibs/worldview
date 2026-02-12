@@ -18,14 +18,14 @@ import ImagerySearch from './imagery-search';
 
 
 import {
-  palettesTranslate,
+  palettesTranslate as palettesTranslateUtil,
 } from '../../../modules/palettes/util';
 import {
-  getDefaultLegend,
-  getCustomPalette,
-  getPaletteLegends,
-  getPalette,
-  getPaletteLegend,
+  getDefaultLegend as getDefaultLegendSelector,
+  getCustomPalette as getCustomPaletteSelector,
+  getPaletteLegends as getPaletteLegendsSelector,
+  getPalette as getPaletteSelector,
+  getPaletteLegend as getPaletteLegendSelector,
   isPaletteAllowed,
 } from '../../../modules/palettes/selectors';
 import {
@@ -34,8 +34,8 @@ import {
 } from '../../../modules/layers/selectors';
 import {
   setThresholdRangeAndSquash,
-  setCustomPalette,
-  clearCustomPalette,
+  setCustomPalette as setCustomPaletteAction,
+  clearCustomPalette as clearCustomPaletteAction,
   setToggledClassification,
   refreshDisabledClassification,
 } from '../../../modules/palettes/actions';
@@ -49,9 +49,9 @@ import {
   getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
 import {
-  updateGranuleLayerOptions,
-  resetGranuleLayerDates,
-  setOpacity,
+  updateGranuleLayerOptions as updateGranuleLayerOptionsAction,
+  resetGranuleLayerDates as resetGranuleLayerDatesAction,
+  setOpacity as setOpacityAction,
 } from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
 
@@ -376,12 +376,17 @@ function mapStateToProps(state, ownProps) {
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
-    palettesTranslate,
-    getDefaultLegend: (layerId, index) => getDefaultLegend(layerId, index, state),
-    getCustomPalette: (id) => getCustomPalette(id, custom),
-    getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
-    getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
-    getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
+    palettesTranslate: palettesTranslateUtil,
+    getDefaultLegend: (layerId, index) => getDefaultLegendSelector(layerId, index, state),
+    getCustomPalette: (id) => getCustomPaletteSelector(id, custom),
+    getPaletteLegend: (layerId, index) => getPaletteLegendSelector(
+      layerId,
+      index,
+      groupName,
+      state,
+    ),
+    getPaletteLegends: (layerId) => getPaletteLegendsSelector(layerId, groupName, state),
+    getPalette: (layerId, index) => getPaletteSelector(layerId, index, groupName, state),
     getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
     vectorStyles: config.vectorStyles,
   };
@@ -408,10 +413,10 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
-    dispatch(setCustomPalette(layerId, paletteId, index, groupName));
+    dispatch(setCustomPaletteAction(layerId, paletteId, index, groupName));
   },
   clearCustomPalette: (layerId, index, groupName) => {
-    dispatch(clearCustomPalette(layerId, index, groupName));
+    dispatch(clearCustomPaletteAction(layerId, index, groupName));
   },
   setStyle: (layer, vectorStyleId, groupName) => {
     dispatch(setStyle(layer, vectorStyleId, groupName));
@@ -420,13 +425,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(clearStyle(layer, vectorStyleId, groupName));
   },
   setOpacity: (id, opacity) => {
-    dispatch(setOpacity(id, opacity));
+    dispatch(setOpacityAction(id, opacity));
   },
   updateGranuleLayerOptions: (dates, def, count) => {
-    dispatch(updateGranuleLayerOptions(dates, def, count));
+    dispatch(updateGranuleLayerOptionsAction(dates, def, count));
   },
   resetGranuleLayerDates: (id) => {
-    dispatch(resetGranuleLayerDates(id));
+    dispatch(resetGranuleLayerDatesAction(id));
   },
 });
 

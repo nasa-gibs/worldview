@@ -15,16 +15,16 @@ import googleTagManager from 'googleTagManager';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
 import {
-  getPalette,
+  getPalette as getPaletteSelector,
   getPaletteLegends,
 } from '../../modules/palettes/selectors';
 import { toggleCustomContent, openCustomContent } from '../../modules/modal/actions';
 import LayerInfo from '../../components/layer/info/info';
 import LayerSettings from '../../components/layer/settings/layer-settings';
-import { requestPalette } from '../../modules/palettes/actions';
+import { requestPalette as requestPaletteAction } from '../../modules/palettes/actions';
 import {
-  toggleVisibility,
-  removeLayer,
+  toggleVisibility as toggleVisibilityAction,
+  removeLayer as removeLayerAction,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 import Zot from './zot';
@@ -41,7 +41,10 @@ import {
 } from '../../modules/charting/actions';
 import AlertUtil from '../../components/util/alert';
 import {
-  enableDDVZoomAlert, enableDDVLocationAlert, disableDDVLocationAlert, disableDDVZoomAlert,
+  enableDDVZoomAlert as enableDDVZoomAlertAction,
+  enableDDVLocationAlert as enableDDVLocationAlertAction,
+  disableDDVLocationAlert as disableDDVLocationAlertAction,
+  disableDDVZoomAlert as disableDDVZoomAlertAction,
 } from '../../modules/alerts/actions';
 
 const { events } = util;
@@ -187,28 +190,28 @@ function LayerRow (props) {
 
   // hook that checks if the ddv layer zoom alert should be enabled or disabled
   useEffect(() => {
-    const { title } = layer;
+    const { layerTitle = title } = layer;
     // if layer is ddv && layer IS NOT already in zoom alert list && zoom is at alertable level
     if (isLayerNotificationDismissable && !ddvLayerZoomNoticeActive && showZoomAlert) {
-      enableDDVZoomAlert(title);
+      enableDDVZoomAlert(layerTitle);
     // if layer is ddv && layer IS already in zoom alert list && zoom is NOT at alertable level
     } else if (isLayerNotificationDismissable && ddvLayerZoomNoticeActive && !showZoomAlert) {
-      disableDDVZoomAlert(title);
+      disableDDVZoomAlert(layerTitle);
     }
   }, [showZoomAlert]);
 
   // hook that checks if the ddv layer location alert should be enabled or disabled
   useEffect(() => {
-    const { title } = layer;
+    const { layerTitle = title } = layer;
     // if layer is ddv && layer IS NOT already in location alert list
     // && location is at alertable coordinates
     if (isLayerNotificationDismissable && !ddvLayerLocationNoticeActive && showGranuleAlert) {
-      enableDDVLocationAlert(title);
+      enableDDVLocationAlert(layerTitle);
       // if layer is ddv && layer IS NOT already in location alert list
       // && location is at alertable coordinates
     } else if (isLayerNotificationDismissable
       && ddvLayerLocationNoticeActive && !showGranuleAlert) {
-      disableDDVLocationAlert(title);
+      disableDDVLocationAlert(layerTitle);
     }
   }, [showGranuleAlert]);
 
@@ -272,12 +275,12 @@ function LayerRow (props) {
     }
   }, [layer.id]);
 
-  const getDisabledTitle = (layer) => {
+  const getDisabledTitle = (layerArg) => {
     const {
       endDate,
       period,
       startDate,
-    } = layer;
+    } = layerArg;
 
     // start date
     let layerStartDate;
@@ -306,14 +309,14 @@ function LayerRow (props) {
 
   // function called on click when removing a layer
   const removeLayer = () => {
-    const { id, title } = layer;
+    const { id, layerTitle = title } = layer;
     // remove ddv location alert
     if (ddvLayerLocationNoticeActive) {
-      disableDDVLocationAlert(title);
+      disableDDVLocationAlert(layerTitle);
     }
     // remove ddv zoom alert
     if (ddvLayerZoomNoticeActive) {
-      disableDDVZoomAlert(title);
+      disableDDVZoomAlert(layerTitle);
     }
     // remove layer
     onRemoveClick(id);
@@ -403,20 +406,20 @@ function LayerRow (props) {
     const classNames = hasClickableFeature
       ? 'layer-pointer-icon'
       : 'layer-pointer-icon disabled';
-    const title = hasClickableFeature
+    const titleStr = hasClickableFeature
       ? 'You can click the features of this layer to see associated metadata.'
       : 'Zoom in further to click features.';
     const layerVectorBtnId = `layer-vector-hand-btn-${encodedLayerId}`;
     return (
       <div
         id={layerVectorBtnId}
-        aria-label={title}
+        aria-label={titleStr}
         className={runningDataObj ? `${classNames} running` : classNames}
         onMouseDown={stopPropagation}
         onClick={openVectorAlertModal}
       >
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerVectorBtnId}>
-          {title}
+          {titleStr}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="hand-pointer" fixedWidth widthAuto />
       </div>
@@ -424,17 +427,17 @@ function LayerRow (props) {
   };
 
   const renderChartingIcon = () => {
-    const title = 'Select Start Charting to create time series charts or get statistics for this layer';
+    const titleStr = 'Select Start Charting to create time series charts or get statistics for this layer';
     const layerChartableBtnId = `layer-chartable-btn-${encodedLayerId}`;
     return (
       <div
         id={layerChartableBtnId}
-        aria-label={title}
+        aria-label={titleStr}
         className="layer-chartable-icon"
         onMouseDown={stopPropagation}
       >
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerChartableBtnId}>
-          {title}
+          {titleStr}
         </UncontrolledTooltip>
         <i />
       </div>
@@ -495,9 +498,9 @@ function LayerRow (props) {
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
 
-  const makeActiveForCharting = (layer) => {
-    if (layer !== activeChartingLayer) {
-      updateActiveChartingLayer(layer);
+  const makeActiveForCharting = (layerArg) => {
+    if (layerArg !== activeChartingLayer) {
+      updateActiveChartingLayer(layerArg);
     }
   };
 
@@ -720,7 +723,7 @@ const makeMapStateToProps = () => {
       hasClickableFeature: isVector && isVisible
       && isVectorLayerClickable(layer, mapRes, proj.id, isMobile),
       hasPalette,
-      getPalette: (layerId, i) => getPalette(layer.id, i, compareState, state),
+      getPalette: (layerId, i) => getPaletteSelector(layer.id, i, compareState, state),
       paletteLegends,
       palettes,
       map,
@@ -733,7 +736,7 @@ const makeMapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch) => ({
   toggleVisibility: (id, isVisible) => {
-    dispatch(toggleVisibility(id, isVisible));
+    dispatch(toggleVisibilityAction(id, isVisible));
   },
   openVectorAlertModal: () => {
     const { id, props } = vectorModalProps;
@@ -748,7 +751,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(openCustomContent(id, props));
   },
   onRemoveClick: (id) => {
-    dispatch(removeLayer(id));
+    dispatch(removeLayerAction(id));
   },
   onOptionsClick: (layer, title, zot) => {
     const key = `LAYER_OPTIONS_MODAL-${layer.id}`;
@@ -797,22 +800,22 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   requestPalette: (id) => {
-    dispatch(requestPalette(id));
+    dispatch(requestPaletteAction(id));
   },
   updateActiveChartingLayer: (layersId) => {
     dispatch(updateActiveChartingLayerAction(layersId));
   },
   enableDDVZoomAlert: (title) => {
-    dispatch(enableDDVZoomAlert(title));
+    dispatch(enableDDVZoomAlertAction(title));
   },
   enableDDVLocationAlert: (title) => {
-    dispatch(enableDDVLocationAlert(title));
+    dispatch(enableDDVLocationAlertAction(title));
   },
   disableDDVLocationAlert: (title) => {
-    dispatch(disableDDVLocationAlert(title));
+    dispatch(disableDDVLocationAlertAction(title));
   },
   disableDDVZoomAlert: (title) => {
-    dispatch(disableDDVZoomAlert(title));
+    dispatch(disableDDVZoomAlertAction(title));
   },
 });
 

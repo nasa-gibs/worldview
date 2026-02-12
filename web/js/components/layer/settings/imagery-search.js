@@ -60,7 +60,7 @@ export default function ImagerySearch({ layer }) {
     return smallerExtent;
   };
 
-  const getOlderGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+  const getOlderGranules = async (layerArg, refDate = selectedDate, pageNum = 1) => {
     const smallerExtent = getSmallerExtent();
     try {
       const olderUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${smallerExtent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`;
@@ -74,7 +74,7 @@ export default function ImagerySearch({ layer }) {
     }
   };
 
-  const getNewerGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+  const getNewerGranules = async (layerArg, refDate = selectedDate, pageNum = 1) => {
     const smallerExtent = getSmallerExtent();
     try {
       const newerUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${smallerExtent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`;
@@ -88,9 +88,9 @@ export default function ImagerySearch({ layer }) {
     }
   };
 
-  const loadNewerDates = async (layer, pageNum = 1) => {
+  const loadNewerDates = async (layerArg, pageNum = 1) => {
     setGranulesStartStatus('loading');
-    const newerDates = await getNewerGranules(layer, newerGranuleDates[0], pageNum);
+    const newerDates = await getNewerGranules(layerArg, newerGranuleDates[0], pageNum);
     const dates = [
       ...newerGranuleDates,
       ...newerDates,
@@ -99,9 +99,9 @@ export default function ImagerySearch({ layer }) {
     setGranulesStartStatus('loaded');
   };
 
-  const loadOlderDates = async (layer, pageNum = 1) => {
+  const loadOlderDates = async (layerArg, pageNum = 1) => {
     setGranulesEndStatus('loading');
-    const olderDates = await getOlderGranules(layer, olderGranuleDates.at(-1), pageNum);
+    const olderDates = await getOlderGranules(layerArg, olderGranuleDates.at(-1), pageNum);
     const dates = [
       ...olderGranuleDates,
       ...olderDates,
@@ -110,8 +110,8 @@ export default function ImagerySearch({ layer }) {
     setGranulesEndStatus('loaded');
   };
 
-  const handleSelection = (date) => {
-    selectDate(new Date(date));
+  const handleSelection = (dateArg) => {
+    selectDate(new Date(dateArg));
   };
 
   useEffect(() => {
@@ -132,10 +132,10 @@ export default function ImagerySearch({ layer }) {
       ...newerGranuleDates,
     ].sort((a, b) => Date.parse(b) - Date.parse(a));
     const renderedDates = [
-      ...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions))),
-    ].map((date, i) => (
-      <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
-        {date}
+      ...new Set(granuleDates.map((granuleDate) => granuleDate.toLocaleDateString('en-US', dateOptions))),
+    ].map((granuleDate, i) => (
+      <li className="lazyload-list-item" key={granuleDate} onClick={() => handleSelection(granuleDate)}>
+        {granuleDate}
       </li>
     ));
     return renderedDates;

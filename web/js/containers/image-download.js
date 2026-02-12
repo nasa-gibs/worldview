@@ -14,7 +14,7 @@ import {
 } from '../modules/image-download/util';
 import util from '../util/util';
 import {
-  getLayers,
+  getLayers as getLayersSelector,
   subdailyLayersActive,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
@@ -25,7 +25,7 @@ import {
   fileTypesPolar,
 } from '../modules/image-download/constants';
 import {
-  onPanelChange,
+  onPanelChange as onPanelChangeAction,
   updateBoundaries,
 } from '../modules/image-download/actions';
 import { getNormalizedCoordinate } from '../components/location-search/util';
@@ -271,7 +271,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     markerCoordinates,
     date: getSelectedDate(state),
-    getLayers: () => getLayers(
+    getLayers: () => getLayersSelector(
       state,
       {
         reverse: true,
@@ -285,7 +285,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onToggle());
   },
   onPanelChange: (type, value) => {
-    dispatch(onPanelChange(type, value));
+    dispatch(onPanelChangeAction(type, value));
   },
   onBoundaryChange: (obj) => {
     dispatch(updateBoundaries(obj));

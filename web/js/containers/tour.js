@@ -42,7 +42,7 @@ import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
-import { promiseImageryForTour } from '../modules/map/util';
+import { promiseImageryForTour as promiseImageryForTourUtil } from '../modules/map/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -508,8 +508,8 @@ class Tour extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  processStepLink: (currentStoryId, currentStep, totalSteps, search, config, rendered) => {
-    search = search.split('/?').pop();
+  processStepLink: (currentStoryId, currentStep, totalSteps, s, config, rendered) => {
+    const search = s.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search },
     });
@@ -553,8 +553,8 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
-  preProcessStepLink: async (search, config, promiseImageryForTour) => {
-    search = search.split('/?').pop();
+  preProcessStepLink: async (s, config, promiseImageryForTour) => {
+    const search = s.split('/?').pop();
     const parameters = util.fromQueryString(search);
     let layersA = [];
     let layersB = [];
@@ -623,7 +623,7 @@ const mapStateToProps = (state) => {
       layers,
       dateString,
       activeString,
-    ) => promiseImageryForTour(state, layers, dateString, activeString),
+    ) => promiseImageryForTourUtil(state, layers, dateString, activeString),
   };
 };
 

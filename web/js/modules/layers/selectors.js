@@ -80,11 +80,11 @@ export function addLayer(
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
 
-    const findLastRefLayer = (layers) => {
+    const findLastRefLayer = (layersArg) => {
       let lastRefIndex = 0;
       let index = 0;
 
-      layers.forEach((layer) => {
+      layersArg.forEach((layer) => {
         if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
           lastRefIndex = index;
           index += 1;
@@ -491,7 +491,8 @@ export function getLayers(state, spec = {}, layersParam) {
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, bLayers, state) {
+export function isRenderable(id, layers, dateString, bLayers, state) {
+  let date = dateString;
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });
@@ -643,36 +644,11 @@ export const subdailyLayers = createSelector(
  * @param {Object} state
  */
 export function getSmallestIntervalValue(state) {
-  const oneMinute = 1;
-  const oneHour = 60;
-  const oneDay = 1440;
-  const timeUnitLookup = {
-    S: oneMinute / 60,
-    M: oneMinute,
-    H: oneHour,
-    D: oneDay,
-  };
   const layers = getActiveLayers(state);
-  let smallestDelta = timeUnitLookup.D; // 1 day in minutes
+  let smallestDelta = 1440; // 1 day in minutes
   if (layers && layers.length) {
     for (let i = 0; i < layers.length; i += 1) {
-      let interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
-      const variablePeriod = layers[i]?.hasVariablePeriod;
-      if (variablePeriod) {
-        const numberMatch = variablePeriod.match(/[0-9]+/g);
-        const unitMatch = variablePeriod.match(/[a-zA-Z]+/g);
-        const time = numberMatch.reduce((acc, val, idx) => {
-          const number = Number(val);
-          const unit = unitMatch[idx];
-          const minutes = number * timeUnitLookup[unit?.toUpperCase?.()];
-          const invalid = Number.isNaN(minutes);
-          const valueToAdd = invalid ? (console.warn(`Invalid period: ${variablePeriod}`), 0) : minutes; // eslint-disable-line no-console
-
-          return acc + valueToAdd;
-        }, 0);
-
-        interval = time;
-      }
+      const interval = lodashGet(layers[i], 'dateRanges[0].dateInterval');
       if (layers[i].period === 'subdaily' && interval < smallestDelta) {
         smallestDelta = Number(interval);
       }

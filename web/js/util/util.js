@@ -9,7 +9,8 @@ import safeLocalStorage from './local-storage';
 
 const { COORDINATE_FORMAT } = safeLocalStorage.keys;
 
-export default (function(self) {
+export default (function(selfObj) {
+  const self = selfObj;
   let canvas = null;
 
   // Export other util methods
@@ -25,7 +26,8 @@ export default (function(self) {
     return result;
   };
 
-  self.pad = function(value, width, padding) {
+  self.pad = function(valueStr, width, padding) {
+    let value = valueStr;
     value = `${value}`;
     if (value.length < width) {
       const add = width - value.length;
@@ -54,7 +56,8 @@ export default (function(self) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(queryString) {
+  self.fromQueryString = function(queryStringValue) {
+    let queryString = queryStringValue;
     if (!queryString) {
       return {};
     }
@@ -237,7 +240,8 @@ export default (function(self) {
    * @param  {Boolean} shouldRemoveTime if the time should be removed from the date
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
-  self.toISOStringSeconds = function(date, shouldRemoveTime = false) {
+  self.toISOStringSeconds = function(dateToConvert, shouldRemoveTime = false) {
+    let date = dateToConvert;
     const isString = typeof date === 'string' || date instanceof String;
     if (shouldRemoveTime) date = self.clearTimeUTC(date);
     const dateString = isString ? date : date.toISOString();
@@ -586,7 +590,8 @@ export default (function(self) {
     DOWN: 40,
   };
 
-  function formatDegrees(value, type, withSeconds) {
+  function formatDegrees(degreeValue, type, withSeconds) {
+    let value = degreeValue;
     let width; let
       signs;
     if (type === 'longitude') {
@@ -672,7 +677,8 @@ export default (function(self) {
     return formatted;
   };
 
-  self.toArray = function(value) {
+  self.toArray = function(nonArrayValue) {
+    let value = nonArrayValue;
     if (!value) {
       return [];
     }
