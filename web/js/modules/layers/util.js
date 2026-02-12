@@ -630,11 +630,13 @@ const getSubdailyDateRange = ({
   }
   let minMinuteDate;
   if (rangeLimitsProvided) {
+    const hourBeforeStartDateLimitCompare = hourBeforeStartDateLimit
+    > minMinuteDateMinusIntervalOffset
+      ? hourBeforeStartDateLimit
+      : minDate;
     minMinuteDate = hourBeforeStartDateLimit < minDate
       ? hourBeforeStartDateLimit
-      : hourBeforeStartDateLimit > minMinuteDateMinusIntervalOffset
-        ? hourBeforeStartDateLimit
-        : minDate;
+      : hourBeforeStartDateLimitCompare;
   } else {
     minMinuteDate = hourBeforeStartDateLimit < minDate
       ? minDate

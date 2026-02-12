@@ -118,11 +118,12 @@ export function getStampProps(
   } else {
     stampWidth = width * 0.4;
     stampHeightByImageWidth = stampWidth / stampWidthRatio;
+    const largerStampHeightWidth = stampHeightByImageWidth > 60
+      ? 60
+      : stampHeightByImageWidth;
     stampHeight = stampHeightByImageWidth < 20
       ? 20
-      : stampHeightByImageWidth > 60
-        ? 60
-        : stampHeightByImageWidth;
+      : largerStampHeightWidth;
     dateStamp.fontSize = dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
     dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
     dateStamp.x = width * 0.01;
