@@ -64,8 +64,8 @@ function RightClickMenu(props) {
     return events.trigger(`measure:${action}`);
   }
 
-  function addPlaceMarkerHandler(coords, olMap, crs) {
-    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crs);
+  function addPlaceMarkerHandler(coords, olMap, crsValue) {
+    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crsValue);
     setShow(false);
   }
 
@@ -79,7 +79,7 @@ function RightClickMenu(props) {
   };
 
   useEffect(() => {
-    if (isCoordinateSearchActive) return false;
+    if (isCoordinateSearchActive) return undefined;
     events.on(MAP_SINGLE_CLICK, handleClick);
     events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {

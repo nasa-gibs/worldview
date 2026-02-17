@@ -1,7 +1,9 @@
 The Tropospheric Emissions: Monitoring of Pollution (TEMPO) Level 2 (L2) Cloud Fraction layer provides information on the effective cloud fraction at 466 nm derived from the O<sub>2</sub>-O<sub>2</sub> cloud retrieval algorithm and is a unitless quantity.
 
-Imagery is available as approximately six-minute granules for daylight hours over North America. The sensor’s native spatial resolution is ~2 km x 4.75 km at the center of TEMPO’s field of regard (FOR), and the imagery resolution is 1 km. The layer is filtered to display high-quality pixels with solar zenith angles less than 80 degrees.
+Imagery is available as approximately six-minute granules for daylight hours over North America. The sensor’s native spatial resolution is ~2 km x 4.75 km at the center of TEMPO’s field of regard (FOR). The imagery is generated at 1 km resolution by projecting the data onto a regular grid using an Elliptically Weighted Averaging Nearest Neighbor interpolation method.
 
 O<sub>2</sub>-O<sub>2</sub> cloud Level 2 files provide cloud information at TEMPO’s native spatial resolution for individual granules. Each granule covers the entire North-South TEMPO FOR but only a portion of the East-West FOR. The temporal resolution of a nominal scan is approximately one hour during daylight hours, with more frequent scans in the morning over the eastern portion of the FOR and in the evenings over the western portion of the FOR.
 
-References: TEMPO_CLDO4_L2 [doi:10.5067/IS-40e/TEMPO/CLDO4_L2.003](https://doi.org/10.5067/IS-40e/TEMPO/CLDO4_L2.003)
+TEMPO Near Real-Time (NRT) imagery is available approximately 3-4 hours after data retrieval. This imagery is replaced by the standard product imagery as it becomes available. TEMPO NRT data are produced using a fast version of the TEMPO baseline retrieval processor. The NRT processing optimizes radiance calibration, image navigation and registration, and cloud and trace gas retrievals for rapid processing, while ensuring that product quality is sufficient for most NRT applications.
+
+References: TEMPO_CLDO4_L2_NRT [10.5067/IS-40e/TEMPO/CLDO4_NRT_L2.002](https://doi.org/10.5067/IS-40e/TEMPO/CLDO4_NRT_L2.002); TEMPO_CLDO4_L2 [doi:10.5067/IS-40e/TEMPO/CLDO4_L2.003](https://doi.org/10.5067/IS-40e/TEMPO/CLDO4_L2.003)

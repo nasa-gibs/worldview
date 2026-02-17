@@ -7,7 +7,13 @@ import LayerInfo from '../../info/info';
 
 function MeasurementMetadataDetail (props) {
   const {
-    isMobile, source, layers, categoryTitle, showPreviewImage, selectedProjection,
+    isMobile,
+    source,
+    layers,
+    categoryTitle,
+    showPreviewImage,
+    selectedProjection,
+    describeDomainsUrl,
   } = props;
   const [isMetadataExpanded, setMetadataExpansion] = useState(false);
   const [metadata, setMetadata] = useState({});
@@ -66,7 +72,7 @@ function MeasurementMetadataDetail (props) {
               </a>
             </div>
           )}
-          <LayerInfo key={l.id} layer={l} />
+          <LayerInfo key={l.id} layer={l} describeDomainsUrl={describeDomainsUrl} />
         </div>
       ));
   };
@@ -152,6 +158,7 @@ MeasurementMetadataDetail.propTypes = {
   source: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showPreviewImage: PropTypes.bool,
   selectedProjection: PropTypes.string,
+  describeDomainsUrl: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -165,6 +172,7 @@ const mapStateToProps = (state) => {
   const { layerConfig } = layers;
   const settings = source ? source.settings : [];
   const layersForSource = settings.map((id) => layerConfig[id]);
+  const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
 
   return {
     categoryTitle: category && category.title,
@@ -172,6 +180,7 @@ const mapStateToProps = (state) => {
     layers: layersForSource,
     selectedProjection: proj.id,
     showPreviewImage: config.features.previewSnapshots,
+    describeDomainsUrl,
   };
 };
 

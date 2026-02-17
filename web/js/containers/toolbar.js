@@ -18,7 +18,7 @@ import Share from './share';
 import HoverTooltip from '../components/util/hover-tooltip';
 import ErrorBoundary from './error-boundary';
 import {
-  requestNotifications,
+  requestNotifications as requestNotificationsAction,
   setNotifications,
 } from '../modules/notifications/actions';
 import { clearCustomsSnapshot, refreshPalettes } from '../modules/palettes/actions';
@@ -30,7 +30,10 @@ import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
 import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import LocationSearch from '../components/location-search/location-search';
-import { toggleShowLocationSearch, toggleDialogVisible } from '../modules/location-search/actions';
+import {
+  toggleShowLocationSearch as toggleShowLocationSearchAction,
+  toggleDialogVisible as toggleDialogVisibleAction,
+} from '../modules/location-search/actions';
 import { isLocationSearchFeatureEnabled } from '../modules/location-search/util';
 import { getAllActiveLayers } from '../modules/layers/selectors';
 import { hasNonDownloadableVisibleLayer, getNonDownloadableLayerWarning, getNonDownloadableLayers } from '../modules/image-download/util';
@@ -515,10 +518,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleDistractionFreeMode());
   },
   toggleDialogVisible: (isVisible) => {
-    dispatch(toggleDialogVisible(isVisible));
+    dispatch(toggleDialogVisibleAction(isVisible));
   },
   toggleShowLocationSearch: () => {
-    dispatch(toggleShowLocationSearch());
+    dispatch(toggleShowLocationSearchAction());
   },
   refreshStateAfterImageDownload: (activePalettes, rotation, nonDownloadableLayers) => {
     if (activePalettes) {
@@ -573,7 +576,7 @@ const mapDispatchToProps = (dispatch) => ({
   }),
   requestNotifications: (location) => {
     const promise = dispatch(
-      requestNotifications(location),
+      requestNotificationsAction(location),
     );
     promise.then((data) => {
       const obj = JSON.parse(data);

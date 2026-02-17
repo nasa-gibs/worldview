@@ -2,6 +2,7 @@ import googleTagManager from 'googleTagManager';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -98,7 +99,16 @@ export function changeCustomInterval(delta, customInterval) {
     });
   };
 }
-export function selectInterval(delta, interval, customSelected) {
+export function changeAutoInterval(autoSelected) {
+  return (dispatch, getState) => {
+    dispatch(clearPreload());
+    dispatch({
+      type: CHANGE_AUTO_INTERVAL,
+      autoSelected,
+    });
+  };
+}
+export function selectInterval(delta, interval, customSelected, autoSelected) {
   return (dispatch, getState) => {
     dispatch(clearPreload());
     dispatch({
@@ -106,6 +116,7 @@ export function selectInterval(delta, interval, customSelected) {
       interval,
       delta,
       customSelected,
+      autoSelected,
     });
   };
 }

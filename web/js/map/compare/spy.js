@@ -109,8 +109,8 @@ const removeInverseListenersFromLayers = function(layers) {
 const applyEventsToBaseLayers = function(layer, map, callback) {
   const layers = layer.get('layers');
   if (layers) {
-    lodashEach(layers.getArray(), (layer) => {
-      applyEventsToBaseLayers(layer, map, callback);
+    lodashEach(layers.getArray(), (layerArg) => {
+      applyEventsToBaseLayers(layerArg, map, callback);
     });
   } else {
     callback(layer);

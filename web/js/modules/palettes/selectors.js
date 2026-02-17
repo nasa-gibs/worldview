@@ -29,15 +29,20 @@ export function getRenderedPalette(layerId, index, state) {
  * Gets a single colormap (entries / legend combo)
  *
  *
- * @method get
+ * @method getPalette
  * @static
- * @param str {string} The ID of the layer
- * @param number {Number} The index of the colormap for this layer, default 0
+ * @param layerIdStr {string} The ID of the layer
+ * @param indexNum {Number} The index of the colormap for this layer, default 0
  * object.
+ * @param groupStr {String}
+ * @param stateObj {Object}
  * @return {object} object including the entries and legend
  */
-export function getPalette(layerId, index, groupStr, state) {
-  groupStr = groupStr || state.compare.activeString;
+export function getPalette(layerIdStr, indexNum, groupStr, state) {
+  const layerId = layerIdStr;
+  let index = indexNum;
+  let group = groupStr;
+  group = group || state.compare.activeString;
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedPalette = lodashGet(
     state,
@@ -45,7 +50,7 @@ export function getPalette(layerId, index, groupStr, state) {
   );
   const customPalette = lodashGet(
     state,
-    `palettes['${groupStr}']['${layerId}'].maps[${index}]`,
+    `palettes['${group}']['${layerId}'].maps[${index}]`,
   );
 
   if (customPalette) {
@@ -117,7 +122,8 @@ export function getCustomPalette(paletteId, customsPaletteConfig) {
 const useLookup = function(layerId, palettesObj, state) {
   let use = false;
   const active = palettesObj[layerId].maps;
-  lodashEach(active, (palette, index) => {
+  lodashEach(active, (paletteObj, index) => {
+    const palette = paletteObj;
     if (palette.custom) {
       use = true;
       return false;
@@ -143,7 +149,8 @@ const useLookup = function(layerId, palettesObj, state) {
 };
 
 // Looks up options/colormaps/layer.xml colormap entry
-export function getLookup(layerId, groupstr, state) {
+export function getLookup(layerId, group, state) {
+  let groupstr = group;
   groupstr = groupstr || state.compare.activeString;
   return state.palettes[groupstr][layerId].lookup;
 }
@@ -184,16 +191,16 @@ const updateLookup = function(layerId, palettesObj, state) {
     const targetCount = target.length;
     const appliedLegends = [];
     const disabled = palette.disabled || [];
-    lodashEach(source, (color, index) => {
+    lodashEach(source, (color, indexArg) => {
       let targetColor;
-      if (index < min || index > max || disabled.includes(index)) {
+      if (indexArg < min || indexArg > max || disabled.includes(indexArg)) {
         targetColor = '00000000';
       } else {
         let sourcePercent; let
           targetIndex;
         if (palette.squash) {
-          sourcePercent = (index - min) / (max - min);
-          if (index === max) {
+          sourcePercent = (indexArg - min) / (max - min);
+          if (indexArg === max) {
             sourcePercent = 1.0;
           }
           targetIndex = Math.floor(sourcePercent * targetCount);
@@ -201,12 +208,12 @@ const updateLookup = function(layerId, palettesObj, state) {
             targetIndex = targetCount - 1;
           }
         } else {
-          sourcePercent = index / sourceCount;
+          sourcePercent = indexArg / sourceCount;
           targetIndex = Math.round(sourcePercent * targetCount);
         }
         targetColor = target[targetIndex];
       }
-      const colormapRef = entries.refs[index];
+      const colormapRef = entries.refs[indexArg];
       const refIndex = refs.indexOf(colormapRef);
 
       if (~refIndex && !appliedLegends.includes(colormapRef)) {
@@ -246,7 +253,7 @@ const toggleLookup = function(layerId, palettesObj, state) {
   }
   const lookup = {};
   const active = newPalettes[layerId].maps;
-  lodashEach(active, (palette, index) => {
+  lodashEach(active, (palette) => {
     const { entries } = palette;
     const { refs } = palette.legend;
     const source = entries.colors;
@@ -292,14 +299,15 @@ const toggleLookup = function(layerId, palettesObj, state) {
   return update(newPalettes, { [layerId]: { lookup: { $set: lookup } } });
 };
 
-export function findIndex(layerId, value, index, groupStr, state) {
+export function findIndex(layerId, value, indexArg, groupStr, state) {
+  let index = indexArg;
   index = index || 0;
   const { values } = getPalette(layerId, index, groupStr, state).entries;
   let result;
-  lodashEach(values, (check, index) => {
+  lodashEach(values, (check, indexLodash) => {
     const min = getMinValue(check);
     if (value === min) {
-      result = index;
+      result = indexLodash;
       return false;
     }
     return true;
@@ -325,8 +333,9 @@ function prepare(layerId, palettesObj, state) {
   return newPalettes;
 }
 
-export function setCustomSelector(layerId, paletteId, index, groupName, state) {
+export function setCustomSelector(layerId, paletteId, indexObj, groupName, state) {
   const { config, palettes } = state;
+  let index = indexObj;
   if (!config.layers[layerId]) {
     throw new Error(`Invalid layer: ${layerId}`);
   }
@@ -341,18 +350,19 @@ export function setCustomSelector(layerId, paletteId, index, groupName, state) {
   return updateLookup(layerId, newPalettes, state);
 }
 
-export function isActive(layerId, group, state) {
+export function isActive(layerId, groupStr, state) {
+  let group = groupStr;
   group = group || state.compare.activeString;
   return state.palettes[group][layerId];
 }
 
 export function getKey(layerId, groupStr, state) {
-  groupStr = groupStr || state.compare.activeString;
-  if (!isActive(layerId, groupStr, state)) {
+  const group = groupStr || state.compare.activeString;
+  if (!isActive(layerId, group, state)) {
     return '';
   }
-  const def = getPalette(layerId, undefined, groupStr, state);
-  const { values } = getPalette(layerId, 0, groupStr, state).entries;
+  const def = getPalette(layerId, undefined, group, state);
+  const { values } = getPalette(layerId, 0, group, state).entries;
   const keys = [];
   if (def.custom) {
     keys.push(`palette=${def.custom}`);
@@ -446,7 +456,8 @@ export function setDisabledSelector(
   return updateLookup(layerId, newPalettes, state);
 }
 
-export function setRange(layerId, props, index, palettes, state) {
+export function setRange(layerId, props, indexInt, palettes, state) {
+  let index = indexInt;
   let { min } = props;
   let { max } = props;
   const { squash } = props;
@@ -482,7 +493,8 @@ export function setRange(layerId, props, index, palettes, state) {
   return updateLookup(layerId, newPalettes, state);
 }
 
-export function clearCustomSelector(layerId, index, palettes, state) {
+export function clearCustomSelector(layerId, indexInt, palettes, state) {
+  let index = indexInt;
   index = lodashIsUndefined(index) ? 0 : index;
   const active = palettes[layerId];
   if (!active) {

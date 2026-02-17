@@ -9,7 +9,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
-import { changeCoordinateFormat } from '../../modules/settings/actions';
+import { changeCoordinateFormat as changeCoordinateFormatAction } from '../../modules/settings/actions';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 import { CRS } from '../../modules/map/constants';
 
@@ -172,7 +172,7 @@ function mapStateToProps (state) {
 
 const mapDispatchToProps = (dispatch) => ({
   changeCoordinateFormat: (value) => {
-    dispatch(changeCoordinateFormat(value));
+    dispatch(changeCoordinateFormatAction(value));
   },
 });
 

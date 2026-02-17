@@ -257,7 +257,7 @@ class CoverageItemList extends Component {
     } = def;
     const { dateInterval, startDate, endDate } = range;
 
-    const layerPeriod = this.getFormattedTimePeriod(period);
+    const layerPeriod = CoverageItemList.getFormattedTimePeriod(period);
     const rangeInterval = Number(dateInterval);
     let rangeEnd;
 
@@ -385,7 +385,7 @@ class CoverageItemList extends Component {
           if (isValidLayer) {
             multipleCoverageRanges = dateRanges.length > 1;
           }
-          let layerPeriod = this.getFormattedTimePeriod(period);
+          let layerPeriod = CoverageItemList.getFormattedTimePeriod(period);
 
           // get layer scale number to determine relation to current axis zoom level
           const timeScaleNumber = TIME_SCALE_TO_NUMBER[timeScale];

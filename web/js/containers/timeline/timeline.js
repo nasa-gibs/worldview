@@ -31,7 +31,7 @@ import {
 } from '../../components/timeline/date-util';
 import {
   dateRange as getDateRange,
-  hasSubDaily,
+  hasSubDaily as hasSubDailySelector,
   subdailyLayersActive,
   subdailyLayers,
   getActiveLayers,
@@ -41,23 +41,25 @@ import {
 import { getSelectedDate, getDeltaIntervalUnit } from '../../modules/date/selectors';
 import {
   selectDate as selectDateAction,
-  changeTimeScale,
+  changeTimeScale as changeTimeScaleAction,
   selectInterval,
   changeCustomInterval as changeCustomIntervalAction,
-  updateAppNow,
+  changeAutoInterval as changeAutoIntervalAction,
+  updateAppNow as updateAppNowAction,
   toggleCustomModal,
-  triggerTodayButton,
+  triggerTodayButton as triggerTodayButtonAction,
 } from '../../modules/date/actions';
 import {
   checkHasFutureLayers,
   filterProjLayersWithStartDate,
   getNextTimeSelection,
+  getNextImageryDelta,
 } from '../../modules/date/util';
-import { toggleActiveCompareState } from '../../modules/compare/actions';
-import { addGranuleDateRanges } from '../../modules/layers/actions';
+import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
+import { addGranuleDateRanges as addGranuleDateRangesAction } from '../../modules/layers/actions';
 import {
-  onActivate as openAnimation,
-  onClose as closeAnimation,
+  onActivate as openAnimationAction,
+  onClose as closeAnimationAction,
   changeStartAndEndDate,
   changeStartDate,
   changeEndDate,
@@ -109,7 +111,10 @@ const checkRightArrowDisabled = (
   delta,
   timeScaleChangeUnit,
   timelineEndDateLimit,
+  autoSelected,
 ) => {
+  if (autoSelected) return false;
+
   const nextIncMoment = moment.utc(date).add(delta, timeScaleChangeUnit);
 
   const startOfDayNextIncrement = nextIncMoment.startOf('day').valueOf();
@@ -290,6 +295,7 @@ class Timeline extends React.Component {
       animStartLocationDate,
       animEndLocationDate,
       changeCustomInterval,
+      changeAutoInterval,
       customInterval,
       dateA,
       dateB,
@@ -298,6 +304,7 @@ class Timeline extends React.Component {
       isAnimationWidgetOpen,
       isGifActive,
       hasSubdailyLayers,
+      hasTempoProduct,
       subDailyLayersList,
       newCustomDelta,
     } = this.props;
@@ -325,20 +332,25 @@ class Timeline extends React.Component {
     }
 
     const subdailyRemoved = !hasSubdailyLayers && prevProps.hasSubdailyLayers;
+    const tempoRemoved = !hasTempoProduct && prevProps.hasTempoProduct;
     const subDailyCountChanged = subDailyLayersList.length !== prevProps.subDailyLayersList.length;
     const subdailyInterval = customInterval > 3 || interval > 3;
 
+    if (tempoRemoved) {
+      changeAutoInterval();
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, false);
+    }
     if (subdailyRemoved && subdailyInterval) {
       changeCustomInterval();
-      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false);
+      selectInterval(1, TIME_SCALE_TO_NUMBER.day, false, false);
     }
 
     const isSubDaily = newCustomDelta < 1440; // 1440 == 1 day in minutes
     if (subDailyCountChanged) {
-      if (isSubDaily) {
+      if (hasTempoProduct) {
+        changeAutoInterval(true);
+      } else if (isSubDaily) {
         changeCustomInterval(newCustomDelta, TIME_SCALE_TO_NUMBER.minute);
-      } else {
-        changeCustomInterval(1, TIME_SCALE_TO_NUMBER.day);
       }
     }
 
@@ -597,6 +609,7 @@ class Timeline extends React.Component {
   handleArrowDateChange(signConstant) {
     const {
       customSelected,
+      autoSelected,
       deltaChangeAmt,
       timeScaleChangeUnit,
       selectedDate,
@@ -604,9 +617,22 @@ class Timeline extends React.Component {
       leftArrowDisabled,
       timelineEndDateLimit,
       timelineStartDateLimit,
+      subDailyLayersList,
+      activeString,
+      dateA,
+      dateB,
     } = this.props;
 
     let delta = customSelected && deltaChangeAmt ? deltaChangeAmt : 1;
+    let timescale = timeScaleChangeUnit;
+    if (autoSelected && subDailyLayersList && subDailyLayersList.length) {
+      delta = getNextImageryDelta(
+        subDailyLayersList,
+        activeString === 'active' ? dateA : dateB,
+        signConstant,
+      );
+      timescale = 'minute';
+    }
     if (!timeScaleChangeUnit) { // undefined custom will not allow arrow change
       return;
     }
@@ -617,7 +643,7 @@ class Timeline extends React.Component {
       const maxDate = new Date(timelineEndDateLimit);
       this.onDateChange(getNextTimeSelection(
         delta,
-        timeScaleChangeUnit,
+        timescale,
         selectedDate,
         minDate,
         maxDate,
@@ -1168,6 +1194,7 @@ class Timeline extends React.Component {
       draggerSelected,
       hasFutureLayers,
       hasSubdailyLayers,
+      hasTempoProduct,
       hideTimeline,
       isAnimationPlaying,
       isAnimatingToEvent,
@@ -1190,6 +1217,7 @@ class Timeline extends React.Component {
       timeScaleChangeUnit,
       toggleActiveCompareState,
       proj,
+      describeDomainsUrl,
     } = this.props;
     const {
       animationEndLocation,
@@ -1275,6 +1303,7 @@ class Timeline extends React.Component {
                       <TimeScaleIntervalChange
                         timeScaleChangeUnit={timeScaleChangeUnit}
                         hasSubdailyLayers={hasSubdailyLayers}
+                        hasTempoProduct={hasTempoProduct}
                         modalType={customModalType.TIMELINE}
                       />
 
@@ -1351,6 +1380,7 @@ class Timeline extends React.Component {
                         isTimelineDragging={isTimelineDragging}
                         matchingTimelineCoverage={matchingTimelineCoverage}
                         proj={proj}
+                        describeDomainsUrl={describeDomainsUrl}
                       />
 
                       <AxisHoverLine
@@ -1531,13 +1561,14 @@ function mapStateToProps(state) {
     customDelta,
     customInterval,
     customSelected,
+    autoSelected,
     interval,
     selected,
     selectedB,
     selectedZoom,
     timelineCustomModalOpen,
   } = date;
-  const { isCompareA } = compare;
+  const { isCompareA, activeString } = compare;
   const isCompareModeActive = compare.active;
   const isChartingActive = charting.active;
   const { isDistractionFreeModeActive, isKioskModeActive, displayStaticMap } = ui;
@@ -1557,12 +1588,13 @@ function mapStateToProps(state) {
   const projection = proj.id;
   const activeLayersFiltered = filterProjLayersWithStartDate(activeLayers, projection);
   const hasSubdailyLayers = isCompareModeActive
-    ? hasSubDaily(layers.active.layers) || hasSubDaily(layers.activeB.layers)
+    ? hasSubDailySelector(layers.active.layers) || hasSubDailySelector(layers.activeB.layers)
     : subdailyLayersActive(state);
   const subDailyLayersList = isCompareModeActive
     ? [...getSubDaily(layers.active.layers), ...getSubDaily(layers.activeB.layers)]
     : subdailyLayers(state);
   const newCustomDelta = getSmallestIntervalValue(state);
+  const hasTempoProduct = layers[activeString].layers.filter((layer) => layer.visible && layer.id.includes('TEMPO')).length > 0;
 
   // if future layers are included, timeline axis end date will extend past appNow
   const hasFutureLayers = checkHasFutureLayers(state);
@@ -1607,6 +1639,7 @@ function mapStateToProps(state) {
     delta,
     unit,
     timelineEndDateLimit,
+    autoSelected,
   );
   const nowButtonDisabled = checkNowButtonDisabled(
     selectedDate,
@@ -1615,6 +1648,8 @@ function mapStateToProps(state) {
     nowOverride,
     appNow,
   );
+  const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
+
   return {
     appNow,
     activeLayers: activeLayersFiltered,
@@ -1631,12 +1666,15 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     subDailyLayersList,
     customSelected,
+    autoSelected,
     isCompareModeActive,
     isChartingActive,
     isAnimatingToEvent,
     hasFutureLayers,
+    hasTempoProduct,
     dateA: getISODateFormatted(selected),
     dateB: getISODateFormatted(selectedB),
+    activeString,
     timelineStartDateLimit: config.startDate, // same as startDate
     isAnimationWidgetOpen: animation.isActive,
     animStartLocationDate: animation.startDate,
@@ -1674,17 +1712,18 @@ function mapStateToProps(state) {
     displayStaticMap,
     newCustomDelta,
     proj: proj.selected,
+    describeDomainsUrl,
   };
 }
 
 const mapDispatchToProps = (dispatch) => ({
   // updates the relative application now to allow up to date coverage
   updateAppNow: (date) => {
-    dispatch(updateAppNow(date));
+    dispatch(updateAppNowAction(date));
   },
   // sets date to NOW based on state.date.appNow
   triggerTodayButton: () => {
-    dispatch(triggerTodayButton());
+    dispatch(triggerTodayButtonAction());
   },
   // changes date of active dragger 'selected' or 'selectedB'
   selectDate: (val) => {
@@ -1694,9 +1733,13 @@ const mapDispatchToProps = (dispatch) => ({
   changeCustomInterval: (delta, timeScale) => {
     dispatch(changeCustomIntervalAction(delta, timeScale));
   },
+  // changes/sets auto delta and timescale interval
+  changeAutoInterval: (autoSelected) => {
+    dispatch(changeAutoIntervalAction(autoSelected));
+  },
   // changes timescale (scale of grids vs. what LEFT/RIGHT arrow do)
   changeTimeScale: (val) => {
-    dispatch(changeTimeScale(val));
+    dispatch(changeTimeScaleAction(val));
   },
   // changes to non-custom timescale interval, sets customSelected to TRUE/FALSE
   selectInterval: (delta, timeScale, customSelected) => {
@@ -1706,13 +1749,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(toggleCustomModal(open, toggleBy));
   },
   openAnimation: () => {
-    dispatch(openAnimation());
+    dispatch(openAnimationAction());
   },
   closeAnimation: () => {
-    dispatch(closeAnimation());
+    dispatch(closeAnimationAction());
   },
   toggleActiveCompareState: () => {
-    dispatch(toggleActiveCompareState());
+    dispatch(toggleActiveCompareStateAction());
   },
   // update animation startDate
   onUpdateStartDate: (date) => {
@@ -1734,7 +1777,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(pauseAnimation());
   },
   addGranuleDateRanges: (layer, dateRanges) => {
-    dispatch(addGranuleDateRanges(layer, dateRanges));
+    dispatch(addGranuleDateRangesAction(layer, dateRanges));
   },
 });
 
@@ -1753,16 +1796,20 @@ Timeline.propTypes = {
   axisWidth: PropTypes.number,
   breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   changeCustomInterval: PropTypes.func,
+  changeAutoInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   dateA: PropTypes.string,
   dateB: PropTypes.string,
+  activeString: PropTypes.string,
   deltaChangeAmt: PropTypes.number,
   displayStaticMap: PropTypes.bool,
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   subDailyLayersList: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hideTimeline: PropTypes.bool,
@@ -1807,4 +1854,5 @@ Timeline.propTypes = {
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  describeDomainsUrl: PropTypes.string,
 };

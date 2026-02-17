@@ -35,8 +35,8 @@ export default function MapRunningData(compareUi, store) {
 
     // Determine if we should do anything with this vector layer
     const shouldNotProcessVectorLayer = (layer) => {
-      const state = store.getState();
-      const { sidebar: { isCollapsed } } = state;
+      const storeState = store.getState();
+      const { sidebar: { isCollapsed } } = storeState;
       const def = lodashGet(layer, 'wv.def');
       if (!def) return true;
       const { wrapX, wrapadjacentdays } = def;
@@ -100,8 +100,8 @@ export default function MapRunningData(compareUi, store) {
 
     // Determine if we should do anything with this raster layer
     const shouldNotProcessRasterLayer = (layer) => {
-      const state = store.getState();
-      const { sidebar: { isCollapsed } } = state;
+      const storeState = store.getState();
+      const { sidebar: { isCollapsed } } = storeState;
       const type = lodashGet(layer, 'wv.def.type');
       const isGranule = type === 'granule' && !layer.get('granuleGroup');
       const hasPalette = !!lodashGet(layer, 'wv.def.palette');
