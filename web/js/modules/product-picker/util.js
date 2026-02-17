@@ -27,6 +27,7 @@ export function getRecentLayers(layerConfig, proj) {
     if (a.count < b.count) return 1;
     if (a.dateAdded > b.dateAdded) return 1;
     if (a.dateAdded < b.dateAdded) return -1;
+    return undefined;
   };
 
   const toLayerObj = ({ id }) => layerConfig[id];

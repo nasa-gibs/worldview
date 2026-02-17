@@ -59,5 +59,5 @@ export default function Zot (props) {
 Zot.propTypes = {
   isMobile: PropTypes.bool,
   layer: PropTypes.string,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

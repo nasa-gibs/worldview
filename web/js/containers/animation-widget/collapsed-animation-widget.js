@@ -48,6 +48,7 @@ function CollapsedAnimationWidget (props) {
     } if (isMobileTablet && isLandscape) {
       return `-tablet-landscape${subdailyID}`;
     }
+    return undefined;
   };
 
   const widgetIDs = getWidgetIDs();
@@ -85,8 +86,8 @@ function CollapsedAnimationWidget (props) {
 }
 
 CollapsedAnimationWidget.propTypes = {
-  breakpoints: PropTypes.object,
-  collapsedWidgetPosition: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  collapsedWidgetPosition: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,

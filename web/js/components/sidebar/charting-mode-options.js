@@ -509,6 +509,7 @@ function ChartingModeOptions(props) {
           isTruncated: false,
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
+          layerId: layerInfo.id,
         });
         updateChartRequestStatus(false);
       } else {
@@ -1003,12 +1004,12 @@ export default connect(
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeLayer: PropTypes.string,
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   chartRequestInProgress: PropTypes.bool,
-  aoiCoordinates: PropTypes.array,
+  aoiCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   timeSpanSelection: PropTypes.string,
   timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
@@ -1021,10 +1022,10 @@ ChartingModeOptions.propTypes = {
   displaySimpleStats: PropTypes.func,
   displayChart: PropTypes.func,
   openChartingErrorModal: PropTypes.func,
-  olMap: PropTypes.object,
+  olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
-  renderedPalettes: PropTypes.object,
-  projections: PropTypes.array,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  projections: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   aoiActive: PropTypes.bool,
   timelineStartDate: PropTypes.instanceOf(Date),
   timelineEndDate: PropTypes.instanceOf(Date),
@@ -1033,9 +1034,9 @@ ChartingModeOptions.propTypes = {
   isModalOpen: PropTypes.bool,
   modalId: PropTypes.string,
   sidebarHeight: PropTypes.number,
-  viewExtent: PropTypes.array,
-  maxExtent: PropTypes.array,
-  date: PropTypes.object,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  maxExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   onUpdateStartDate: PropTypes.func,

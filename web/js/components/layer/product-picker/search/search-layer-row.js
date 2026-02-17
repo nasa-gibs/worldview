@@ -210,11 +210,11 @@ SearchLayerRow.propTypes = {
   clearSingleRecentLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layerNotices: PropTypes.string,
   removeLayer: PropTypes.func,
   scrollIntoView: PropTypes.bool,
-  selectedLayer: PropTypes.object,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showLayerMetadata: PropTypes.func,
 };
 

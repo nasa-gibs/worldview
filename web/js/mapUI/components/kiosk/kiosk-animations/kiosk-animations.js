@@ -96,7 +96,7 @@ function KioskAnimations({ ui }) {
 }
 
 KioskAnimations.propTypes = {
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default KioskAnimations;

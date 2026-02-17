@@ -225,7 +225,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     const featureId = feature.getId();
     if (featureId === 'coordinates-map-marker') {
       isCoordinatesMarker = true;
-      return;
+      return true;
     }
     if (lengthCheck(metaArray)) {
       exceededLengthLimit = true;
@@ -233,13 +233,13 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
     const def = lodashGet(layer, 'wv.def');
     if (!def) {
-      return;
+      return false;
     }
 
     const type = feature.getGeometry().getType();
     if (lodashIncludes(def.clickDisabledFeatures, type)
       || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
-      return;
+      return true;
     }
     if (def.vectorData && def.vectorData.id && def.title) {
       const layerId = def.id;
@@ -254,7 +254,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
 
       const uniqueIdentifier = features[uniqueIdentifierKey];
       const title = titleKey ? features[titleKey] : 'Unknown title';
-      if (selected[layerId].includes(uniqueIdentifier)) return;
+      if (selected[layerId].includes(uniqueIdentifier)) return true;
       if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
       const obj = {
         legend: properties,
@@ -285,6 +285,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       metaArray.push(obj);
       selected[layerId].push(layerId);
     }
+    return undefined;
   }, featureOptions);
   return {
     selected, metaArray, exceededLengthLimit, isCoordinatesMarker, modalShouldFollowClicks,

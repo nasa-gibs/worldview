@@ -173,20 +173,20 @@ function LatLongSelect(props) {
 export default LatLongSelect;
 
 const {
-  number, array, func, string,
+  number, arrayOf, func, string,
 } = PropTypes;
 LatLongSelect.propTypes = {
   onLatLongChange: func,
-  geoLatLong: array,
-  viewExtent: array,
+  geoLatLong: arrayOf,
+  viewExtent: arrayOf,
   crs: string,
 };
 Input.propTypes = {
   onLatLongChange: func,
   index: number,
   title: string,
-  boundingBoxArray: array,
+  boundingBoxArray: arrayOf,
   inputNumber: string,
-  viewExtent: array,
+  viewExtent: arrayOf,
   crs: string,
 };

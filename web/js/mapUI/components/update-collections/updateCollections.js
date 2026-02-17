@@ -26,7 +26,7 @@ function UpdateCollections () {
   };
 
   const getHeaders = async (def, date) => {
-    if (def.layergroup === 'Reference') return; // Don't query static layers
+    if (def.layergroup === 'Reference') return undefined; // Don't query static layers
     const { id, period } = def;
     const { matrixSet } = def.projections[proj.id];
     const isoStringDate = util.toISOStringSeconds(util.roundTimeOneMinute(selectedDate));

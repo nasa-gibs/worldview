@@ -166,6 +166,7 @@ class VectorStyleSelect extends React.Component {
                 const item = this.customLegend(styleLayerObject);
                 return item;
               }
+              return false;
             })
           }
         </Scrollbar>
@@ -179,9 +180,9 @@ VectorStyleSelect.propTypes = {
   clearStyle: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setStyle: PropTypes.func,
-  vectorStyles: PropTypes.object,
+  vectorStyles: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default VectorStyleSelect;

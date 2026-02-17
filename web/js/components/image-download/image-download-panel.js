@@ -144,6 +144,7 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
   const renderWorldfileSelect = () => {
@@ -169,6 +170,7 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
   const crossesDatelineAlert = () => datelineMessage && (
@@ -261,24 +263,24 @@ ImageDownloadPanel.propTypes = {
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
-  fileTypes: PropTypes.object,
+  fileTypes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
   isWorldfile: PropTypes.bool,
-  lonlats: PropTypes.array,
-  map: PropTypes.object,
+  lonlats: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   maxImageSize: PropTypes.string,
-  markerCoordinates: PropTypes.array,
+  markerCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onPanelChange: PropTypes.func,
-  projection: PropTypes.object,
-  date: PropTypes.object,
+  projection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resolution: PropTypes.string,
-  resolutions: PropTypes.object,
+  resolutions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   secondLabel: PropTypes.string,
   url: PropTypes.string,
-  viewExtent: PropTypes.array,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   worldFileOptions: PropTypes.bool,
-  geoLatLong: PropTypes.array,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onLatLongChange: PropTypes.func,
 };
 

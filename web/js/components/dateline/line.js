@@ -56,6 +56,7 @@ export default function Line (props) {
       toggleTextActive(false);
     }
     if (overlay !== '') return overlay.setPosition([lineX, lineY]);
+    return undefined;
   });
 
   const mouseOver = () => {
@@ -138,16 +139,16 @@ export default function Line (props) {
 
 Line.propTypes = {
   alwaysShow: PropTypes.bool,
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   height: PropTypes.number,
   id: PropTypes.string,
   isCompareActive: PropTypes.bool,
   lineX: PropTypes.number,
   lineY: PropTypes.number,
-  map: PropTypes.object,
-  style: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setTextCoords: PropTypes.func,
-  textCoords: PropTypes.array,
+  textCoords: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hideText: PropTypes.bool,
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,

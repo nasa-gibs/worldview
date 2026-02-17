@@ -186,6 +186,7 @@ const addLineOverlay = function(map, dateA, dateB) {
   return lineCaseEl;
 };
 
+const getSwipeOffset = function() { return swipeOffset; };
 export default class Swipe {
   constructor(
     olMap,
@@ -195,6 +196,7 @@ export default class Swipe {
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
+    this.getSwipeOffset = getSwipeOffset;
     percentSwipe = valueOverride / 100;
     this.create(store);
     window.addEventListener('resize', () => {
@@ -227,8 +229,6 @@ export default class Swipe {
     layersSideA = [];
     layersSideB = [];
   };
-
-  getSwipeOffset = () => swipeOffset;
 
   update(store) {
     const state = store.getState();

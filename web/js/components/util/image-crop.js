@@ -135,23 +135,23 @@ Crop.defaultProps = {
 };
 
 RenderCoordinates.propTypes = {
-  coordinates: PropTypes.object,
-  topRightStyle: PropTypes.object,
-  bottomLeftStyle: PropTypes.object,
+  coordinates: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  topRightStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  bottomLeftStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 Crop.propTypes = {
   onChange: PropTypes.func.isRequired,
   onClose: PropTypes.func,
   onDragStop: PropTypes.func,
-  bottomLeftStyle: PropTypes.object,
-  coordinates: PropTypes.object,
+  bottomLeftStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  coordinates: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   height: PropTypes.number,
   maxHeight: PropTypes.number,
   maxWidth: PropTypes.number,
   keepSelection: PropTypes.bool,
   showCoordinates: PropTypes.bool,
-  topRightStyle: PropTypes.object,
+  topRightStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   width: PropTypes.number,
   x: PropTypes.number,
   y: PropTypes.number,

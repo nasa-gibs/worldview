@@ -160,9 +160,9 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
   const serializeCoordinates = ({ longitude, latitude }) => {
     const coordinateValues = [longitude, latitude];
-    if (!map.ui.selected) return;
+    if (!map.ui.selected) return undefined;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
-    if (!coordinatesWithinExtent) return;
+    if (!coordinatesWithinExtent) return undefined;
     return coordinateValues;
   };
 
@@ -174,6 +174,7 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
+  return undefined;
 }
 
 /**

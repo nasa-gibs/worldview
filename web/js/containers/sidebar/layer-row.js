@@ -261,6 +261,7 @@ function LayerRow (props) {
         />
       );
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -821,7 +822,7 @@ LayerRow.defaultProps = {
 };
 
 LayerRow.propTypes = {
-  compare: PropTypes.object,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getPalette: PropTypes.func,
   hasPalette: PropTypes.bool,
   globalTemperatureUnit: PropTypes.string,
@@ -835,26 +836,26 @@ LayerRow.propTypes = {
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isVisible: PropTypes.bool,
-  layer: PropTypes.object,
-  collections: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  collections: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareState: PropTypes.string,
   measurementDescriptionPath: PropTypes.string,
-  names: PropTypes.object,
+  names: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onInfoClick: PropTypes.func,
   onOptionsClick: PropTypes.func,
   onRemoveClick: PropTypes.func,
   updateActiveChartingLayer: PropTypes.func,
-  palette: PropTypes.object,
-  palettes: PropTypes.object,
-  paletteLegends: PropTypes.array,
-  renderedPalette: PropTypes.object,
+  palette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  palettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  paletteLegends: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  renderedPalette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
   toggleVisibility: PropTypes.func,
   hasClickableFeature: PropTypes.bool,
-  tracksForLayer: PropTypes.array,
+  tracksForLayer: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   openVectorAlertModal: PropTypes.func,
   openGranuleAlertModal: PropTypes.func,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isVectorLayer: PropTypes.bool,
   isChartableLayer: PropTypes.bool,
   isAnimating: PropTypes.bool,
@@ -865,10 +866,10 @@ LayerRow.propTypes = {
   isDDVLocationAlertPresent: PropTypes.bool,
   isDDVZoomAlertPresent: PropTypes.bool,
   openZoomAlertModal: PropTypes.func,
-  ddvLocationAlerts: PropTypes.array,
-  ddvZoomAlerts: PropTypes.array,
+  ddvLocationAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  ddvZoomAlerts: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   disableDDVLocationAlert: PropTypes.func,
   disableDDVZoomAlert: PropTypes.func,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDate: PropTypes.instanceOf(Date),
 };

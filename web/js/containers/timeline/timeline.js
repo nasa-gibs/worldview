@@ -970,7 +970,7 @@ class Timeline extends React.Component {
           if (!userIsInteracting && !isAnimationPlaying) {
             return resolve();
           }
-          setTimeout(waitForSafeUpdate, 1000);
+          return setTimeout(waitForSafeUpdate, 1000);
         }());
       });
     };
@@ -1745,13 +1745,13 @@ export default connect(
 
 Timeline.propTypes = {
   addGranuleDateRanges: PropTypes.func,
-  appNow: PropTypes.object,
-  activeLayers: PropTypes.array,
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   animationDisabled: PropTypes.bool,
-  animEndLocationDate: PropTypes.object,
-  animStartLocationDate: PropTypes.object,
+  animEndLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  animStartLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   changeCustomInterval: PropTypes.func,
   changeTimeScale: PropTypes.func,
   closeAnimation: PropTypes.func,
@@ -1764,7 +1764,7 @@ Timeline.propTypes = {
   draggerSelected: PropTypes.string,
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
-  subDailyLayersList: PropTypes.object,
+  subDailyLayersList: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hideTimeline: PropTypes.bool,
   interval: PropTypes.number,
   isAnimationPlaying: PropTypes.bool,
@@ -1797,7 +1797,7 @@ Timeline.propTypes = {
   rightArrowDisabled: PropTypes.bool,
   screenWidth: PropTypes.number,
   selectDate: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   timelineCustomModalOpen: PropTypes.bool,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,
@@ -1806,5 +1806,5 @@ Timeline.propTypes = {
   toggleActiveCompareState: PropTypes.func,
   triggerTodayButton: PropTypes.func,
   updateAppNow: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

@@ -190,7 +190,7 @@ class EventMarkers extends React.Component {
       return collection;
     }, []);
 
-    this.setState({ markers }, () => {
+    return this.setState({ markers }, () => {
       map.getView().changed();
       map.renderSync(); // Marker position will be off until this is called
     });
@@ -309,16 +309,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 EventMarkers.propTypes = {
-  eventsData: PropTypes.array,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   eventsDataIsLoading: PropTypes.bool,
   highlightEvent: PropTypes.func,
   isAnimatingToEvent: PropTypes.bool,
   isMobile: PropTypes.bool,
-  map: PropTypes.object,
-  mapUi: PropTypes.object,
-  proj: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  mapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectEvent: PropTypes.func,
-  selectedEvent: PropTypes.object,
+  selectedEvent: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   unHighlightEvent: PropTypes.func,
 };
 

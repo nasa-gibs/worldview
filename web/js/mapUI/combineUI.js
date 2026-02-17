@@ -129,7 +129,7 @@ function CombineUI(props) {
 export default CombineUI;
 
 CombineUI.propTypes = {
-  config: PropTypes.object,
-  models: PropTypes.object,
-  store: PropTypes.object,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  models: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  store: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

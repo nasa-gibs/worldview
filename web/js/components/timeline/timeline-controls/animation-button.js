@@ -43,6 +43,7 @@ function AnimationButton(props) {
     } if (isMobileTablet && isLandscape) {
       return `tablet-landscape${subdailyID}`;
     }
+    return undefined;
   };
 
   const buttonClass = getButtonClassName();
@@ -71,7 +72,7 @@ function AnimationButton(props) {
 }
 
 AnimationButton.propTypes = {
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
   label: PropTypes.string,

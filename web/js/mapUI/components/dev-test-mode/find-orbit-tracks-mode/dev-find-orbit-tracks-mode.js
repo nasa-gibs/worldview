@@ -113,6 +113,7 @@ function FindOrbitTracksMode () {
     } catch (error) {
       console.error(`No image available for ${layerSelection.id} on ${date}: `, error);
     }
+    return undefined;
   };
 
   const findOrbitalImagery = async () => {
@@ -120,7 +121,7 @@ function FindOrbitTracksMode () {
     const verifyQuery = verifyExtent();
     if (!verifyQuery) {
       setIsLoading(false);
-      return;
+      return undefined;
     }
     const dateRange = getOrbitalDateRange();
     for (let i = 0; i < dateRange.length; i += 1) {
@@ -135,7 +136,7 @@ function FindOrbitTracksMode () {
         return setDateFound(date);
       }
     }
-    setIsLoading(false);
+    return setIsLoading(false);
   };
 
   const orangeStyle = { backgroundColor: '#d54e21' };

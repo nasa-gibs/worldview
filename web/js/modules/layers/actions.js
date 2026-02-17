@@ -179,7 +179,7 @@ export function removeLayer(id) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
     const def = activeLayers[index];
-    dispatch({
+    return dispatch({
       type: REMOVE_LAYER,
       activeString,
       layersToRemove: [def],
@@ -258,7 +258,7 @@ export function setOpacity(id, opacity) {
     if (index === -1) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
-    dispatch({
+    return dispatch({
       type: UPDATE_OPACITY,
       id,
       opacity: Number(opacity),

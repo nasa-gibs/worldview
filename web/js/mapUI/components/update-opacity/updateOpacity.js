@@ -101,12 +101,12 @@ export default connect(
 )(UpdateOpacity);
 
 UpdateOpacity.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compare: PropTypes.object,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   findLayer: PropTypes.func,
   isCompareActive: PropTypes.bool,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
 };

@@ -5,6 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Autocomplete from '../../util/reactAutocomplete';
 
 class SearchBox extends Component {
+  // render search result menu item container
+  static renderMenu(children) {
+    return (
+      <div className="location-search-results-menu">
+        {children}
+      </div>
+    );
+  }
+
   constructor(props) {
     super(props);
     this.highlightedItem = null;
@@ -69,13 +78,6 @@ class SearchBox extends Component {
       }
     }
   };
-
-  // render search result menu item container
-  renderMenu = (children) => (
-    <div className="location-search-results-menu">
-      {children}
-    </div>
-  );
 
   // render individual menu items with conditional styling
   renderItem = (item, isHighlighted) => {
@@ -241,7 +243,7 @@ class SearchBox extends Component {
           getItemValue={(item) => item.text}
           onSelect={onSelect}
           onChange={onChange}
-          renderMenu={this.renderMenu}
+          renderMenu={SearchBox.renderMenu}
           renderItem={this.renderItem}
         />
         {this.renderClearInput()}
@@ -255,7 +257,7 @@ class SearchBox extends Component {
 SearchBox.propTypes = {
   activeAlert: PropTypes.bool,
   clearInput: PropTypes.func,
-  coordinatesPending: PropTypes.array,
+  coordinatesPending: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   locationSearchMobileModalOpen: PropTypes.bool,
   inputValue: PropTypes.string,
   isMobile: PropTypes.bool,
@@ -263,7 +265,7 @@ SearchBox.propTypes = {
   onChange: PropTypes.func,
   onCoordinateInputSelect: PropTypes.func,
   onSelect: PropTypes.func,
-  suggestions: PropTypes.array,
+  suggestions: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default SearchBox;

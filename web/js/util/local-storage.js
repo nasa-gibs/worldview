@@ -13,6 +13,7 @@ const enabled = (function() {
     console.warn('Local storage disabled.');
     return false;
   }
+  return undefined;
 }());
 
 export default {

@@ -111,6 +111,7 @@ export const isWithinBounds = (crs, granule) => {
   if (crs === CRS.ARCTIC) {
     return granule.polygon.every(([lat, lon]) => lon > 40);
   }
+  return undefined;
 };
 
 export const getGranuleFootprints = (layer) => {
@@ -186,6 +187,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
     } catch (e) {
       console.error(`Could not get shortName for a collection associated with layer ${def.id}`);
     }
+    return undefined;
   };
 
   if (def.conceptIds[0].type === 'NRT') {

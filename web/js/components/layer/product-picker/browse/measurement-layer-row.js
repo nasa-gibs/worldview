@@ -81,7 +81,7 @@ function MeasurementLayerRow (props) {
                 </MonospaceDate>
               </div>
             )}
-            {layerNotices && (<div>{{ __html: layerNotices }}</div>)}
+            {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
           </UncontrolledTooltip>
         )}
       </Checkbox>
@@ -93,11 +93,11 @@ MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layerNotices: PropTypes.string,
   measurementId: PropTypes.string,
   removeLayer: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   title: PropTypes.string,
 };
 

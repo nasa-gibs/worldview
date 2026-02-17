@@ -102,6 +102,6 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
 }
 
 LayerInfo.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   measurementDescriptionPath: PropTypes.string,
 };

@@ -99,5 +99,5 @@ export default function BandSelectionParentInfoMenu({ layer }) {
 }
 
 BandSelectionParentInfoMenu.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

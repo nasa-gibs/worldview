@@ -21,6 +21,42 @@ import {
 } from '../date-util';
 
 class TimelineAxis extends Component {
+  /**
+  * @desc get DOM coverage line
+  * @param {Object} lineCoverageOptions
+  * @param {Number} transformX
+  * @returns {Object} DOM SVG object
+  */
+  static createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) {
+    return lineCoverageOptions.map(({
+      leftOffset,
+      visible, width,
+    }, i) => (
+      <g
+        key={`matchingCoverageLine-${crypto.randomUUID()}`}
+        className="axis-matching-layer-coverage-line"
+        transform={`translate(${-transformX})`}
+        clipPath="url(#matchingCoverage)"
+      >
+        <rect
+          style={{
+            left: leftOffset,
+            visibility: visible ? 'visible' : 'hidden',
+            margin: '0 0 6px 0',
+          }}
+          rx={0}
+          ry={0}
+          width={width}
+          height={10}
+          transform={`translate(${transformX + leftOffset})`}
+          fill="rgba(0, 119, 212, 0.5)"
+          stroke="rgba(0, 69, 123, 0.8)"
+          strokeWidth={3}
+        />
+      </g>
+    ));
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -1420,7 +1456,7 @@ class TimelineAxis extends Component {
         const xmlDoc = parser.parseFromString(event.data, 'text/xml');
         const domains = xmlDoc.querySelector('Domain')?.textContent;
         if (!domains) worker.terminate();
-        worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
+        return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
       };
       worker.onerror = () => worker.terminate();
       let startDate = new Date(def.startDate);
@@ -1497,40 +1533,6 @@ class TimelineAxis extends Component {
       };
     });
   };
-
-  /**
-  * @desc get DOM coverage line
-  * @param {Object} lineCoverageOptions
-  * @param {Number} transformX
-  * @returns {Object} DOM SVG object
-  */
-  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => lineCoverageOptions.map(({
-    leftOffset,
-    visible, width,
-  }, i) => (
-    <g
-      key={`matchingCoverageLine-${crypto.randomUUID()}`}
-      className="axis-matching-layer-coverage-line"
-      transform={`translate(${-transformX})`}
-      clipPath="url(#matchingCoverage)"
-    >
-      <rect
-        style={{
-          left: leftOffset,
-          visibility: visible ? 'visible' : 'hidden',
-          margin: '0 0 6px 0',
-        }}
-        rx={0}
-        ry={0}
-        width={width}
-        height={10}
-        transform={`translate(${transformX + leftOffset})`}
-        fill="rgba(0, 119, 212, 0.5)"
-        stroke="rgba(0, 69, 123, 0.8)"
-        strokeWidth={3}
-      />
-    </g>
-  ));
 
   render() {
     const {
@@ -1622,7 +1624,7 @@ class TimelineAxis extends Component {
                   </pattern>
                 </defs>
                 {shouldDisplayMatchingCoverageLine
-                  && this.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
+                  && TimelineAxis.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
                 <Draggable
                   axis="x"
                   handle=".axis-grid-container"
@@ -1652,13 +1654,13 @@ class TimelineAxis extends Component {
 }
 
 TimelineAxis.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   addGranuleDateRanges: PropTypes.func,
   animationEndLocation: PropTypes.number,
   animationStartLocation: PropTypes.number,
-  animEndLocationDate: PropTypes.object,
-  animStartLocationDate: PropTypes.object,
-  appNow: PropTypes.object,
+  animEndLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  animStartLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   dateA: PropTypes.string,
@@ -1683,11 +1685,11 @@ TimelineAxis.propTypes = {
   isTimelineDragging: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftOffset: PropTypes.number,
-  matchingTimelineCoverage: PropTypes.array,
+  matchingTimelineCoverage: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onDateChange: PropTypes.func,
   parentOffset: PropTypes.number,
   position: PropTypes.number,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showHover: PropTypes.func,
   showHoverOff: PropTypes.func,
   showHoverOn: PropTypes.func,

@@ -245,13 +245,13 @@ class DraggerContainer extends PureComponent {
             null,
             true,
           );
-          return;
+          return true;
         }
         return false;
       }
 
       // update parent dragger positioning
-      updateDraggerDatePosition(
+      return updateDraggerDatePosition(
         newDraggerTime,
         draggerSelected,
         newDraggerPosition,

@@ -70,14 +70,14 @@ function Facets(props) {
 }
 
 Facets.propTypes = {
-  collapsedFacets: PropTypes.object,
-  facets: PropTypes.object,
-  filters: PropTypes.array,
+  collapsedFacets: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  facets: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  filters: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   screenWidth: PropTypes.number,
   removeFilter: PropTypes.func,
-  results: PropTypes.array,
+  results: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   showMobileFacets: PropTypes.bool,
   toggleCollapseFacet: PropTypes.func,
   toggleMobileFacets: PropTypes.func,

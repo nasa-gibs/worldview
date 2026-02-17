@@ -89,6 +89,7 @@ export function findIndex(layerId, type, value, index, groupStr, state) {
       result = index;
       return false;
     }
+    return true;
   });
   return result;
 }
@@ -171,7 +172,7 @@ export function setStyleFunction(opts) {
     styleSelection = false,
   } = opts;
   const map = lodashGet(state, 'map.ui.selected');
-  if (!map) return;
+  if (!map) return undefined;
   const { proj } = state;
   const { selected } = state.vectorStyles;
   const { resolutions } = proj.selected;
@@ -204,7 +205,7 @@ export function setStyleFunction(opts) {
   }
 
   if (!layer || layer.isWMS || glStyle === undefined) {
-    return;
+    return undefined;
   }
 
   // This is required to bust the openlayers functionCache
@@ -241,6 +242,7 @@ export function setStyleFunction(opts) {
         }
         return styleFunction(feature, resolution);
       }
+      return undefined;
     });
   }
 
@@ -252,6 +254,7 @@ export function isActive(layerId, group, state) {
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
+  return undefined;
 }
 
 export function getKey(layerId, groupStr, state) {
@@ -296,6 +299,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       if ((minute && minute[1] % 5 === 0) || feature.getGeometry().getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
+      return undefined;
     });
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });

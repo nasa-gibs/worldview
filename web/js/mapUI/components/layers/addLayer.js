@@ -87,6 +87,7 @@ function AddLayer(props) {
     } else if (action.type === DISPLAY_STATIC_MAP) {
       addStaticLayer();
     }
+    return undefined;
   }, [action]);
 
   return null;
@@ -120,14 +121,14 @@ export default React.memo(
 );
 
 AddLayer.propTypes = {
-  activeLayersState: PropTypes.array,
+  activeLayersState: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  action: PropTypes.object,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareDate: PropTypes.instanceOf(Date),
-  compareMapUi: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   mode: PropTypes.string,
   preloadNextTiles: PropTypes.func,
-  selected: PropTypes.object,
+  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

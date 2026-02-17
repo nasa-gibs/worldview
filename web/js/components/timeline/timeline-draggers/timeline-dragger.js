@@ -66,7 +66,7 @@ class Dragger extends PureComponent {
     } if (deltaX > 0 && draggerAtEnd) {
       return false;
     }
-    handleDragDragger(e, d);
+    return handleDragDragger(e, d);
   };
 
   /**

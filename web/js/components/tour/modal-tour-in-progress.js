@@ -66,7 +66,7 @@ class ModalInProgress extends React.Component {
 
 ModalInProgress.propTypes = {
   currentStep: PropTypes.number.isRequired,
-  currentStory: PropTypes.object.isRequired,
+  currentStory: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   decreaseStep: PropTypes.func.isRequired,
   endTour: PropTypes.func.isRequired,
   isKioskModeActive: PropTypes.bool.isRequired,

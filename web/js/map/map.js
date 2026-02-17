@@ -33,6 +33,7 @@ export function mapIsExtentValid(extent) {
       valid = false;
       return false;
     }
+    return true;
   });
   return valid;
 }

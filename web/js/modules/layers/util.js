@@ -41,6 +41,7 @@ export function getOrbitTrackTitle(def, includeSatName = true) {
   } if (daynightValue) {
     return `${lodashStartCase(daynightValue)}${satelliteName}`;
   }
+  return undefined;
 }
 
 /**

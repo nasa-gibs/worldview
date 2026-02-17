@@ -88,7 +88,6 @@
         "no-nested-ternary": "off",    // 164 errors across 40 files
         "no-shadow": "warn",           // 110 errors across 40 files
         "max-len": "error",
-        "consistent-return": "off",    // 95 errors across 58 files
         "no-underscore-dangle": "error",
         "no-param-reassign": [         // 198 errors across 46 files
           "warn",
@@ -153,9 +152,7 @@
             }
           }
         ],
-        "react/forbid-prop-types": "off",                  // 411 errors across 139 files
         "react/require-default-props": "off",              // 1644 errors across > 80 files
-        "class-methods-use-this": "warn",                  // 15 errors across 13 files
         "react/no-unused-class-component-methods": "error",
         "react/no-unknown-property": "error",
         "react/jsx-no-useless-fragment": "error",

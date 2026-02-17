@@ -18,6 +18,18 @@ import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
  * @class DateInputColumn
  */
 class DateInputColumn extends Component {
+  static onKeyPress(e) {
+    const { keyCode } = e;
+    const entered = keyCode === 13;
+    const tabbed = keyCode === 9;
+    const shiftTab = e.shiftKey && keyCode === 9;
+
+    if (entered || tabbed || shiftTab) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
   constructor(props) {
     super(props);
     const { type, subDailyMode } = props;
@@ -126,18 +138,6 @@ class DateInputColumn extends Component {
   updateValue = () => {
     const { value } = this.props;
     this.setState({ value });
-  };
-
-  onKeyPress = (e) => {
-    const { keyCode } = e;
-    const entered = keyCode === 13;
-    const tabbed = keyCode === 9;
-    const shiftTab = e.shiftKey && keyCode === 9;
-
-    if (entered || tabbed || shiftTab) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
   };
 
   onKeyUp = (e) => {
@@ -320,7 +320,7 @@ class DateInputColumn extends Component {
           className={inputClassName}
           value={value}
           onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyPress}
+          onKeyDown={DateInputColumn.onKeyPress}
           onChange={this.onChange}
           style={fontSizeStyle}
           onBlur={this.blur}
@@ -342,7 +342,7 @@ class DateInputColumn extends Component {
 }
 
 DateInputColumn.propTypes = {
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fontSize: PropTypes.number,
   idSuffix: PropTypes.string,
   isKioskModeActive: PropTypes.bool,
@@ -350,8 +350,8 @@ DateInputColumn.propTypes = {
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onFocus: PropTypes.func,
   subDailyMode: PropTypes.bool,
   type: PropTypes.string,

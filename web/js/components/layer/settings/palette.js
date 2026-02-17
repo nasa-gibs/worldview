@@ -159,6 +159,7 @@ function PaletteSelect (props) {
         activePalette === target.id,
       );
     }
+    return undefined;
   };
 
   const recommended = layer.palette.recommended || [];
@@ -180,6 +181,7 @@ function PaletteSelect (props) {
                 return item;
               }
             }
+            return undefined;
           })
         }
       </Scrollbar>
@@ -189,14 +191,14 @@ function PaletteSelect (props) {
 
 PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
-  canvas: PropTypes.object,
+  canvas: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   clearCustomPalette: PropTypes.func,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
-  layer: PropTypes.object,
-  paletteOrder: PropTypes.array,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,
   setCustomPalette: PropTypes.func,
 };

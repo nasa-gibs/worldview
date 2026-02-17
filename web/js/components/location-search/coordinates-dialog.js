@@ -209,7 +209,7 @@ CoordinatesDialog.propTypes = {
   removeMarker: PropTypes.func,
   removeCoordinatesDialog: PropTypes.func,
   title: PropTypes.string,
-  coordinates: PropTypes.array,
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   tooltipId: PropTypes.string,
 };

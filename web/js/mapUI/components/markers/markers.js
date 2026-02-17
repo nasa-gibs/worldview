@@ -86,7 +86,7 @@ function Markers(props) {
     coordinatesObject,
   ) => {
     const results = geocodeResults;
-    if (!results) return;
+    if (!results) return undefined;
     const remove = () => removeMarker(coordinatesObject);
     const marker = getCoordinatesMarker(
       proj,
@@ -109,7 +109,7 @@ function Markers(props) {
       flyToMarker(coordinatesObject);
     }
 
-    setGeocodeResults(geocodeResults);
+    return setGeocodeResults(geocodeResults);
   };
 
   /**
@@ -161,6 +161,7 @@ function Markers(props) {
       default:
         break;
     }
+    return undefined;
   }, [action]);
 
   return null;
@@ -204,17 +205,17 @@ export default React.memo(
 );
 
 Markers.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
-  config: PropTypes.object,
-  coordinates: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
-  selectedMap: PropTypes.object,
-  selectedMapMarkers: PropTypes.array,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedMapMarkers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   setGeocodeResults: PropTypes.func,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 

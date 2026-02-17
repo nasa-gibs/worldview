@@ -40,7 +40,7 @@ export default (function events() {
     const [event] = args;
     const listeners = events[event];
     if (!listeners && !allListeners) {
-      return;
+      return undefined;
     }
     const eventArguments = args.slice(1);
     lodashEach(events[event], (listener) => {

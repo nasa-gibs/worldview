@@ -60,7 +60,7 @@ class Tooltip extends React.Component {
 }
 
 Tooltip.propTypes = {
-  dataArray: PropTypes.array.isRequired,
+  dataArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };

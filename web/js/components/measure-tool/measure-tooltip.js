@@ -72,6 +72,7 @@ export default function MeasureTooltip(props) {
         ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
         : `${roundAndLocale(imperialLength)} ft`;
     }
+    return undefined;
   };
 
   /**
@@ -91,6 +92,7 @@ export default function MeasureTooltip(props) {
         ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
         : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
     }
+    return undefined;
   };
 
   const getMeasurementValue = () => {
@@ -103,6 +105,7 @@ export default function MeasureTooltip(props) {
     if (geometry instanceof OlLineString) {
       return getFormattedLength(geometry);
     }
+    return undefined;
   };
 
   const checkGeographicCoordValidity = (val) => val.indexOf('NaN') < 0;
@@ -145,8 +148,8 @@ MeasureTooltip.defaultProps = {
 MeasureTooltip.propTypes = {
   active: PropTypes.bool,
   crs: PropTypes.string,
-  geometry: PropTypes.object,
+  geometry: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onRemove: PropTypes.func,
   unitOfMeasure: PropTypes.string,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

@@ -109,7 +109,7 @@ class ProductPicker extends React.Component {
 ProductPicker.propTypes = {
   categoryType: PropTypes.string,
   closeModal: PropTypes.func,
-  filters: PropTypes.array,
+  filters: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   mode: PropTypes.string,
   saveSearchState: PropTypes.func,
   searchTerm: PropTypes.string,

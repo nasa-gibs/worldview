@@ -36,6 +36,7 @@ function BrowseLayerList (props) {
                 />
               );
             }
+            return undefined;
           })
         }
       </div>
@@ -44,9 +45,9 @@ function BrowseLayerList (props) {
 }
 
 BrowseLayerList.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
+  measurementConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedMeasurement: PropTypes.string,
 };
 

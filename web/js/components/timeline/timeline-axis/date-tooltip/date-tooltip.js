@@ -181,13 +181,13 @@ class DateTooltip extends Component {
 }
 
 DateTooltip.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
   isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   leftOffset: PropTypes.number,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDraggerPosition: PropTypes.number,
   shouldIncludeHiddenLayers: PropTypes.bool,
   showDraggerTime: PropTypes.bool,

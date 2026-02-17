@@ -205,7 +205,7 @@ function EventTrack () {
   };
 
   const removeTrack = (mapArg) => {
-    if (!mapArg) return;
+    if (!mapArg) return undefined;
     const overlayMapping = createOverlayMapping(mapArg);
     const { track, pointsAndArrows } = trackDetailsRef.current;
     removeTrackById(mapArg, overlayMapping, track);

@@ -38,7 +38,7 @@ HoverTooltip.defaultProps = {
 };
 
 HoverTooltip.propTypes = {
-  delay: PropTypes.object,
+  delay: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fade: PropTypes.bool,
   innerClassName: PropTypes.string,
   isMobile: PropTypes.bool,
