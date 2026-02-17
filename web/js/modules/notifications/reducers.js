@@ -19,11 +19,11 @@ export const notificationReducerState = {
   object: {},
 };
 
-export function notificationsRequest(state = {}, action) {
+export function notificationsRequest(action, state = {}) {
   return requestReducer(REQUEST_NOTIFICATIONS, state, action);
 }
 
-export function notificationsReducer(state = notificationReducerState, action) {
+export function notificationsReducer(action, state = notificationReducerState) {
   switch (action.type) {
     case SET_NOTIFICATIONS:
       if (action.array.length > 0) {

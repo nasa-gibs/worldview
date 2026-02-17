@@ -15,35 +15,35 @@ const config = fixtures.config();
 
 test('SET_THRESHOLD_RANGE_AND_SQUASH action updates active palette Object [palettes-reducer-threshold]', () => {
   const initialPaletteState = getInitialPaletteState(config);
-  const response = paletteReducer(initialPaletteState, {
+  const response = paletteReducer({
     type: SET_THRESHOLD_RANGE_AND_SQUASH,
     layerId: 'terra-aod',
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] },
-  });
+  }, initialPaletteState);
   expect(initialPaletteState.active['terra-aod']).toEqual(undefined);
   expect(response.active['terra-aod']).toBeDefined();
 });
 
 test('CLEAR_CUSTOM action updates active palette Object [palettes-reducer-clear-custom]', () => {
   const initialPaletteState = getInitialPaletteState(config);
-  const response = paletteReducer(initialPaletteState, {
+  const response = paletteReducer({
     type: CLEAR_CUSTOM,
     layerId: 'terra-aod',
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] },
-  });
+  }, initialPaletteState);
   expect(initialPaletteState.active['terra-aod']).toEqual(undefined);
   expect(response.active['terra-aod']).toBeDefined();
 });
 test('SET_CUSTOM action updates active palette Object [palettes-reducer-set-custom]', () => {
   const initialPaletteState = getInitialPaletteState(config);
-  const response = paletteReducer(initialPaletteState, {
+  const response = paletteReducer({
     type: SET_CUSTOM,
     layerId: 'terra-aod',
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] },
-  });
+  }, initialPaletteState);
   expect(initialPaletteState.active['terra-aod']).toEqual(undefined);
   expect(response.active['terra-aod']).toBeDefined();
 });
@@ -52,31 +52,31 @@ test('INIT_SECOND_LAYER_GROUP action updates active palette Object [palettes-red
   const previousState = update(initialPaletteState, {
     active: { $set: { test: 'tests' } },
   });
-  const response = paletteReducer(previousState, {
+  const response = paletteReducer({
     type: INIT_SECOND_LAYER_GROUP,
     layerId: 'terra-aod',
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] },
-  });
+  }, previousState);
   expect(previousState.activeB.test).toBeUndefined();
   expect(response.activeB.test).toEqual('tests');
 });
 test('REQUEST_PALETTE_START action updates active palette Object [palettes-reducer-request-palette]', () => {
   const initialPaletteState = getInitialPaletteState(config);
-  const response = paletteReducer(initialPaletteState, {
+  const response = paletteReducer({
     type: REQUEST_PALETTE_START,
     id: 'test',
-  });
+  }, initialPaletteState);
   expect(initialPaletteState.isLoading.test).toBeUndefined();
   expect(response.isLoading.test).toBeTruthy();
 });
 test('REQUEST_PALETTE_SUCCESS action updates active palette Object [palettes-reducer-success]', () => {
   const initialPaletteState = getInitialPaletteState(config);
-  const response = paletteReducer(initialPaletteState, {
+  const response = paletteReducer({
     type: REQUEST_PALETTE_SUCCESS,
     id: 'test',
     response: 'test-response',
-  });
+  }, initialPaletteState);
   expect(initialPaletteState.rendered.test).toBeUndefined();
   expect(response.rendered.test).toEqual('test-response');
 });
@@ -86,11 +86,11 @@ test('BULK_PALETTE_RENDERING_SUCCESS action merges rendered palettes with new pa
   const updatedState = update(initialPaletteState, {
     rendered: { $set: { 'test-1': 'test-1' } },
   });
-  const response = paletteReducer(updatedState, {
+  const response = paletteReducer({
     type: BULK_PALETTE_RENDERING_SUCCESS,
     id: 'test-2',
     rendered: { 'test-2': 'test-2' },
-  });
+  }, updatedState);
   expect(updatedState.rendered['test-2']).toBeUndefined();
   expect(updatedState.rendered['test-1']).toEqual('test-1');
   expect(response.rendered['test-2']).toEqual('test-2');

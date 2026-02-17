@@ -19,7 +19,7 @@ export function getInitialVectorStyleState(config) {
   return lodashAssign({}, defaultVectorStyleState, { custom, customDefault });
 }
 
-export function vectorStyleReducer(state = defaultVectorStyleState, action) {
+export function vectorStyleReducer(action, state = defaultVectorStyleState) {
   const groupName = action.groupName || 'active';
   switch (action.type) {
     case SET_FILTER_RANGE:

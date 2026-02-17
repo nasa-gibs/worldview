@@ -9,7 +9,7 @@ const INITIAL_STATE = {
   active: false,
 };
 
-export default function tourReducer(state = INITIAL_STATE, action) {
+export default function tourReducer(action, state = INITIAL_STATE) {
   switch (action.type) {
     case END_TOUR:
       return lodashAssign({}, state, {

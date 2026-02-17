@@ -29,7 +29,7 @@ export function getInitialState() {
   };
 }
 
-export const settingsReducer = (state = initialState, action) => {
+export const settingsReducer = (action, state = initialState) => {
   switch (action.type) {
     case CHANGE_TEMPERATURE_UNIT:
       return {

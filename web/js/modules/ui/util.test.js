@@ -18,7 +18,7 @@ describe('uiReducers', () => {
       isKioskModeActive: isActive,
     };
 
-    expect(uiReducers(uiState, action)).toEqual(expectedState);
+    expect(uiReducers(action, uiState)).toEqual(expectedState);
   });
 
   it('Handles display static map action [ui-reducer-display-static-map]', () => {
@@ -33,7 +33,7 @@ describe('uiReducers', () => {
       displayStaticMap: isActive,
     };
 
-    expect(uiReducers(uiState, action)).toEqual(expectedState);
+    expect(uiReducers(action, uiState)).toEqual(expectedState);
   });
 
   it('Handles ready for kiosk animation action [ui-reducer-ready-for-animation]', () => {
@@ -48,6 +48,6 @@ describe('uiReducers', () => {
       readyForKioskAnimation: toggleAnimation,
     };
 
-    expect(uiReducers(uiState, action)).toEqual(expectedState);
+    expect(uiReducers(action, uiState)).toEqual(expectedState);
   });
 });

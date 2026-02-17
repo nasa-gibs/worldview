@@ -22,7 +22,7 @@ export function getInitialState(config) {
   };
 }
 
-export function smartHandoffReducer(state = initialState, action) {
+export function smartHandoffReducer(action, state = initialState) {
   switch (action.type) {
     case SELECT_COLLECTION:
       return {

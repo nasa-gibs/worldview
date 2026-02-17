@@ -19,7 +19,7 @@ export const getInitialState = () => ({
   },
 });
 
-export const screenSizeReducer = (state = initialState, action) => {
+export const screenSizeReducer = (action, state = initialState) => {
   switch (action.type) {
     case SET_SCREEN_INFO:
       return {

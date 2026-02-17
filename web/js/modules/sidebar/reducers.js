@@ -19,7 +19,7 @@ export const sidebarState = {
   mobileCollapsed: true,
 };
 
-export default function sidebarReducer(state = sidebarState, action) {
+export default function sidebarReducer(action, state = sidebarState) {
   switch (action.type) {
     case CHANGE_TAB:
       return lodashAssign({}, state, {

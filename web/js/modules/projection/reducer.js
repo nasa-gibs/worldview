@@ -5,7 +5,7 @@ export const projectionState = {
   selected: {},
 };
 
-export default function projectionReducer(state = projectionState, action) {
+export default function projectionReducer(action, state = projectionState) {
   switch (action.type) {
     case CHANGE_PROJECTION:
       return {

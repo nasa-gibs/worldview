@@ -8,13 +8,13 @@ import { defaultRequestState } from '../core/reducers';
 
 describe('notificationsRequest reducer', () => {
   test('should return the initial state', () => {
-    expect(notificationsRequest([], {})).toEqual(defaultRequestState);
+    expect(notificationsRequest({}, [])).toEqual(defaultRequestState);
   });
   test('Should set isLoading to true on Request Start [notifications-reducer-loading]', () => {
     expect(
-      notificationsRequest([], {
+      notificationsRequest({
         type: constants.REQUEST_NOTIFICATIONS_START,
-      }),
+      }, []),
     ).toEqual({
       isLoading: true,
       error: null,
@@ -24,10 +24,10 @@ describe('notificationsRequest reducer', () => {
   });
   test('Should return response upon request success [notifications-reducer-success]', () => {
     expect(
-      notificationsRequest([], {
+      notificationsRequest({
         type: constants.REQUEST_NOTIFICATIONS_SUCCESS,
         response: constants.MOCK_RESPONSE_BODY,
-      }),
+      }, []),
     ).toEqual({
       isLoading: false,
       error: null,
@@ -38,7 +38,7 @@ describe('notificationsRequest reducer', () => {
 });
 describe('notificationsReducer', () => {
   test('should return the initial state [notifications-reducer-initial-state]', () => {
-    expect(notificationsReducer(undefined, {})).toEqual(
+    expect(notificationsReducer({}, undefined)).toEqual(
       notificationReducerState,
     );
   });
@@ -47,10 +47,10 @@ describe('notificationsReducer', () => {
     } action type should return object containing sorted mock object [notification-reducer-mock-object]`,
     () => {
       expect(
-        notificationsReducer([], {
+        notificationsReducer({
           type: constants.SET_NOTIFICATIONS,
           array: constants.MOCK_RESPONSE_BODY,
-        }),
+        }, []),
       ).toEqual({
         number: 1,
         numberOutagesUnseen: 1,
@@ -67,9 +67,9 @@ describe('notificationsReducer', () => {
     } action type should return object containing sorted mock object [notification-reducer-mock-object-seen]`,
     () => {
       expect(
-        notificationsReducer(notificationReducerState, {
+        notificationsReducer({
           type: constants.NOTIFICATIONS_SEEN,
-        }),
+        }, notificationReducerState),
       ).toEqual({
         number: null,
         numberUnseen: null,

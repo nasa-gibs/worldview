@@ -115,7 +115,7 @@ class App extends React.Component {
     const main = () => {
       // Load any additional scripts as needed
       if (config.scripts) {
-        util.loadScripts(config.scripts);
+        util.loadScripts(undefined, config.scripts);
       }
 
       if (Brand.release()) {

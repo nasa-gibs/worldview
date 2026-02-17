@@ -26,7 +26,7 @@ export const uiState = {
   scenario: '', // the scenario id that corresponds to the current EIC scenario to query backend
 };
 
-export default function uiReducers(state = uiState, action) {
+export default function uiReducers(action, state = uiState) {
   switch (action.type) {
     case TOGGLE_DISTRACTION_FREE_MODE:
       return {

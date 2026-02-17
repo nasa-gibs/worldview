@@ -35,7 +35,7 @@ export function getInitialPaletteState(config) {
   });
 }
 
-export function paletteReducer(state = defaultPaletteState, action) {
+export function paletteReducer(action, state = defaultPaletteState) {
   const groupName = action.groupName || 'active';
   switch (action.type) {
     case REQUEST_PALETTE_START:

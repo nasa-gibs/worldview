@@ -26,7 +26,7 @@ export const modalState = {
 const aboutModalState = {
   isOpen: false,
 };
-export function modalAboutReducer(state = aboutModalState, action) {
+export function modalAboutReducer(action, state = aboutModalState) {
   switch (action.type) {
     case OPEN_ABOUT:
       return { ...state, isOpen: true };
@@ -36,7 +36,7 @@ export function modalAboutReducer(state = aboutModalState, action) {
       return state;
   }
 }
-export function modalReducer(state = modalState, action) {
+export function modalReducer(action, state = modalState) {
   switch (action.type) {
     case TOGGLE:
       return lodashAssign({}, state, {

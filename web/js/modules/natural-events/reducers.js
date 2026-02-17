@@ -75,7 +75,7 @@ export function getInitialEventsState(config) {
   };
 }
 
-export function eventsReducer(state = eventsReducerState, action) {
+export function eventsReducer(action, state = eventsReducerState) {
   switch (action.type) {
     case SELECT_EVENT: {
       const {
@@ -189,10 +189,10 @@ export function eventsRequestReducer(actionName, state, action) {
   }
 }
 
-export function requestedEvents(state = {}, action) {
+export function requestedEvents(action, state = {}) {
   return eventsRequestReducer(REQUEST_EVENTS, state, action);
 }
 
-export function requestedEventSources(state = {}, action) {
+export function requestedEventSources(action, state = {}) {
   return eventsRequestReducer(REQUEST_SOURCES, state, action);
 }

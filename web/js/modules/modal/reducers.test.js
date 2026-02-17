@@ -5,14 +5,14 @@ import util from '../../util/util';
 
 describe('main modalReducer', () => {
   test('should return the initial state', () => {
-    expect(modalReducer(undefined, {})).toEqual(modalState);
+    expect(modalReducer({}, undefined)).toEqual(modalState);
   });
   test(`${constants.TOGGLE}action type should toggle open value [modal-reducer-toggle]`, () => {
     const modalToggledOpenObj = { isOpen: true };
     expect(
-      modalReducer([], {
+      modalReducer({
         type: constants.TOGGLE,
-      }),
+      }, []),
     ).toEqual(modalToggledOpenObj);
   });
   test(
@@ -29,12 +29,12 @@ describe('main modalReducer', () => {
       };
 
       expect(
-        modalReducer([], {
+        modalReducer({
           type: constants.OPEN_BASIC,
           headerText: constants.TEST_HEADER,
           bodyText: constants.TEST_BODY,
           key: util.encodeId(`__BASIC_MODAL__${constants.TEST_HEADER}`),
-        }),
+        }, []),
       ).toEqual(basicOpenModalObject);
     },
   );
@@ -50,11 +50,11 @@ describe('main modalReducer', () => {
         template: null,
       });
       expect(
-        modalReducer(modalState, {
+        modalReducer({
           type: constants.OPEN_CUSTOM,
           key: constants.TEST_KEY,
           customProps,
-        }),
+        }, modalState),
       ).toEqual(modalCustomObject);
     },
   );
@@ -71,12 +71,12 @@ describe('main modalReducer', () => {
         isCustom: false,
       });
       expect(
-        modalReducer(modalState, {
+        modalReducer({
           type: constants.RENDER_TEMPLATE,
           key: util.encodeId(constants.TEST_KEY),
           headerText: constants.TEST_HEADER,
           template,
-        }),
+        }, modalState),
       ).toEqual(modalCustomObject);
     },
   );

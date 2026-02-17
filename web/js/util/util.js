@@ -796,7 +796,7 @@ export default (function(selfObj) {
    * @param {*} scripts
    * @param {*} fn
    */
-  self.loadScripts = (scripts = [], fn) => {
+  self.loadScripts = (fn, scripts = []) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {
       if (scripts.length > index) {

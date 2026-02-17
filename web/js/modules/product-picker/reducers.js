@@ -56,7 +56,7 @@ export function getInitialState({ categories, categoryGroupOrder }) {
   };
 }
 
-export function productPickerReducer(state = productPickerState, action) {
+export function productPickerReducer(action, state = productPickerState) {
   switch (action.type) {
     case INIT_STATE: {
       const { searchConfig, projection } = action;

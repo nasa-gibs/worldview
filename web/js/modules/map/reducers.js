@@ -19,7 +19,7 @@ const INITIAL_STATE = {
   isClickable: false,
 };
 
-export default function mapReducer(state = INITIAL_STATE, action) {
+export default function mapReducer(action, state = INITIAL_STATE) {
   switch (action.type) {
     case UPDATE_MAP_EXTENT:
       return update(state, {
