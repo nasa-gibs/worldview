@@ -13,7 +13,8 @@ export const naturalEventsClusterCreateObject = (proj) => new Supercluster({
   radius: proj.selected.id === 'geographic' ? 0 : 60, // pixel radius where points are clustered
   maxZoom: 12,
   map: (props) => ({ startDate: props.date, endDate: props.date }),
-  reduce: (accumulated, properties) => {
+  reduce: (accumulator, properties) => {
+    const accumulated = accumulator;
     const newDate = properties.startDate;
     const pastStartDate = accumulated.startDate;
     const pastEndDate = accumulated.endDate;

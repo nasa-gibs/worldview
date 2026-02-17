@@ -77,9 +77,9 @@ function UpdateDate(props) {
     const layerGroup = getActiveLayerGroup(layerState);
     const mapLayerCollection = layerGroup.getLayers();
     const layers = mapLayerCollection.getArray();
-    const activeLayers = getAllActiveLayers(state);
+    const activeLayersArray = getAllActiveLayers(state);
 
-    const visibleLayers = activeLayers.filter(({ id, visible }) => layers
+    const visibleLayers = activeLayersArray.filter(({ id, visible }) => layers
       .findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
 
     const layerPromises = visibleLayers.map(async (def) => {

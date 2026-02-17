@@ -104,8 +104,8 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const getUpdatedDateRanges = (def, callback, group) => {
     const state = store.getState();
-    const { config, proj } = state;
-    const describeDomainsUrl = config?.features?.describeDomains?.url
+    const { config: stateConfig, proj } = state;
+    const describeDomainsUrl = stateConfig?.features?.describeDomains?.url
       || 'https://gibs.earthdata.nasa.gov';
     const {
       id,
@@ -149,11 +149,13 @@ export default function mapLayerBuilder(config, cache, store) {
     worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
     // While worker is running, format any problematic existing dateRanges
     if (def.dateRanges && def.dateRanges.length > 0) {
-      oldRanges = def.dateRanges.map(({ startDate, endDate, dateInterval }) => ({
-        startDate,
-        endDate: startDate === endDate
-          ? new Date(new Date(endDate).getTime() + (Number(dateInterval) * 60000)).toISOString()
-          : endDate,
+      oldRanges = def.dateRanges.map(({
+        startDate: startDateArg, endDate: endDateArg, dateInterval,
+      }) => ({
+        startDate: startDateArg,
+        endDate: startDateArg === endDateArg
+          ? new Date(new Date(endDateArg).getTime() + (Number(dateInterval) * 60000)).toISOString()
+          : endDateArg,
         dateInterval,
       }));
     }
@@ -294,10 +296,11 @@ export default function mapLayerBuilder(config, cache, store) {
    * @method createLayer
    * @static
    * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
+   * @param {object} optionsObj - Layer options
    * @returns {object} OpenLayers layer
    */
-  const createLayer = async (def, options = {}) => {
+  const createLayer = async (def, optionsObj = {}) => {
+    const options = optionsObj;
     const state = store.getState();
     const { compare: { activeString } } = state;
     const { ui: { isKioskModeActive, displayStaticMap } } = state;
@@ -1054,7 +1057,7 @@ export default function mapLayerBuilder(config, cache, store) {
       dateTimeTile.push('23:59:59Z');
       const lastDateTile = dateTimeTile.join('T');
 
-      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
+      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
       const params = assets.map((asset) => `bands=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
@@ -1270,14 +1273,15 @@ export default function mapLayerBuilder(config, cache, store) {
 
   /**
    * Create a new OpenLayers Layer
-   * @param {object} def
+   * @param {object} definition
    * @param {object} key
    * @param {object} options
    * @param {object} dateOptions
    * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
-  const createLayerWrapper = async (def, key, options, dateOptions) => {
+  const createLayerWrapper = async (definition, key, options, dateOptions) => {
+    let def = definition;
     const state = store.getState();
     const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;

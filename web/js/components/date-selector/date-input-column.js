@@ -180,39 +180,40 @@ class DateInputColumn extends Component {
     const {
       date, type, minDate, maxDate, updateTimeUnitInput,
     } = this.props;
+    let inputValue = value;
     let newDate;
     const validateDate = (dateParam) => dateParam > minDate && dateParam <= maxDate && dateParam;
     switch (type) {
       case 'year':
-        newDate = yearValidation(value, date, validateDate);
+        newDate = yearValidation(inputValue, date, validateDate);
         break;
       case 'month':
-        newDate = monthValidation(value, date, validateDate);
+        newDate = monthValidation(inputValue, date, validateDate);
         // transform month number to string (e.g., 3 -> 'MAR')
         // eslint-disable-next-line no-restricted-globals
-        if (newDate !== null && !isNaN(value)) {
-          value = MONTH_STRING_ARRAY[value - 1];
+        if (newDate !== null && !isNaN(inputValue)) {
+          inputValue = MONTH_STRING_ARRAY[inputValue - 1];
         }
         break;
       case 'day':
-        newDate = dayValidation(value, date, validateDate);
+        newDate = dayValidation(inputValue, date, validateDate);
         break;
       case 'hour':
-        newDate = hourValidation(value, date, validateDate);
+        newDate = hourValidation(inputValue, date, validateDate);
         break;
       case 'minute':
-        newDate = minuteValidation(value, date, validateDate);
+        newDate = minuteValidation(inputValue, date, validateDate);
         break;
       default:
         break;
     }
     // add leading '0' to single string number
-    if (newDate !== null && value.length === 1) {
-      value = `0${value}`;
+    if (newDate !== null && inputValue.length === 1) {
+      inputValue = `0${inputValue}`;
     }
-    // update parent level time unit type value
+    // update parent level time unit type inputValue
     if (newDate !== null) {
-      updateTimeUnitInput(type, value);
+      updateTimeUnitInput(type, inputValue);
     }
     return newDate;
   };

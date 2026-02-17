@@ -168,9 +168,9 @@ export default class GifStream {
       const reader = gifStream.getReader();
       const chunks = [];
       let processedImages = 1;
-      const finished = (chunks) => {
+      const finished = (chunksArg) => {
         const callbackObj = {
-          blob: new Blob(chunks, { type: 'image/gif' }),
+          blob: new Blob(chunksArg, { type: 'image/gif' }),
           error: '',
         };
         callback(callbackObj);
@@ -234,10 +234,11 @@ export default class GifStream {
   /**
    * Generate GIF-creating Stream
    * @param  {Array} frames Array of GIF image objects
-   * @param  {Object} ctx    2d Canvas Cntext
+   * @param  {Object} context    2d Canvas Context
    * @return {Object}        Returns GifWriter Stream
    */
-  getStream(frames, ctx) {
+  getStream(frames, context) {
+    let ctx = context;
     const { options } = this;
     const width = options.gifWidth;
     const height = options.gifHeight;

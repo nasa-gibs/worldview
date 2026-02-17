@@ -6,7 +6,7 @@ import OlCoordinates from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 
-jest.mock('react-redux', () => ({ connect: () => (OlCoordinates) => OlCoordinates }));
+jest.mock('react-redux', () => ({ connect: () => (OlCoordinatesMock) => OlCoordinatesMock }));
 
 const { events } = util;
 let container;
