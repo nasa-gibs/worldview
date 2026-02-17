@@ -6,6 +6,9 @@ import PQueue, { TimeoutError } from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
+import {
+  getNextImageryDelta,
+} from '../../modules/date/util';
 
 // We assume anything this fast or faster is a frame that was pulled from the cache
 const MIN_REQUEST_TIME_MS = 200;
@@ -262,7 +265,15 @@ class PlayQueue extends React.Component {
   };
 
   nextDate(date) {
-    const { interval, delta } = this.props;
+    const {
+      interval,
+      delta,
+      autoSelected,
+      layers,
+    } = this.props;
+    if (autoSelected) {
+      return util.dateAdd(date, 'minute', getNextImageryDelta(layers, date, 1));
+    }
     return util.dateAdd(date, interval, delta);
   }
 
@@ -464,23 +475,25 @@ class PlayQueue extends React.Component {
 }
 
 PlayQueue.propTypes = {
-  endDate: PropTypes.shape.isRequired,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   isPlaying: PropTypes.bool.isRequired,
   promiseImageryForTime: PropTypes.func.isRequired,
   selectDate: PropTypes.func.isRequired,
   speed: PropTypes.number.isRequired,
-  startDate: PropTypes.shape.isRequired,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   togglePlaying: PropTypes.func.isRequired,
-  currentDate: PropTypes.shape,
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
   interval: PropTypes.string,
   isLoopActive: PropTypes.bool,
   onClose: PropTypes.func,
   numberOfFrames: PropTypes.number,
-  snappedCurrentDate: PropTypes.shape,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
-  map: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  autoSelected: PropTypes.bool,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default PlayQueue;

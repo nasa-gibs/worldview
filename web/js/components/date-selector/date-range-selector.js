@@ -47,10 +47,10 @@ export default function DateRangeSelector (props) {
 DateRangeSelector.propTypes = {
   idSuffix: PropTypes.string,
   isDisabled: PropTypes.bool,
-  startDate: PropTypes.shape,
-  endDate: PropTypes.shape,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setDateRange: PropTypes.func,
-  minDate: PropTypes.shape,
-  maxDate: PropTypes.shape,
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
 };

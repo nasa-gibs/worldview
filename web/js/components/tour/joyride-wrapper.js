@@ -86,10 +86,11 @@ export default function JoyrideWrapper ({
 
   /**
    * Set a placeholder DOM element's position based on map coords
-   * @param {*} element
+   * @param {*} el
    * @param {*} targetCoordinates
    */
-  function setPlaceholderLocation (element, targetCoordinates) {
+  function setPlaceholderLocation (el, targetCoordinates) {
+    const element = { ...el };
     const { topLeft, bottomRight } = targetCoordinates;
     let [x1, y1] = map.getPixelFromCoordinate(topLeft) || [0, 0];
     let [x2, y2] = map.getPixelFromCoordinate(bottomRight) || [0, 0];
@@ -237,9 +238,9 @@ export default function JoyrideWrapper ({
 
 JoyrideWrapper.propTypes = {
   currentTourStep: PropTypes.number,
-  map: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   proj: PropTypes.string,
   tourComplete: PropTypes.bool,
-  tourSteps: PropTypes.arrayOf,
+  tourSteps: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   resetProductPicker: PropTypes.func,
 };

@@ -83,9 +83,9 @@ function ProductFacet(props) {
 }
 
 ProductFacet.propTypes = {
-  config: PropTypes.shape,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   collapsed: PropTypes.bool,
-  data: PropTypes.arrayOf,
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleCollapse: PropTypes.func,
 };
 

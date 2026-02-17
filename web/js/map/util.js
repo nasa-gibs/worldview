@@ -141,11 +141,12 @@ const getBestZoom = function(distance, start, end, view) {
 /**
    * Moves the map with a "flying" animation
    *
-   * @param  {Array} endPoint  Ending coordinates
+   * @param  {Array} endPointArray  Ending coordinates
    * @param  {integer} endZoom Ending Zoom Level
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
-export function fly (map, proj, endPoint, endZoom = 5, rotation = 0, isKioskModeActive) {
+export function fly (map, proj, endPointArray, endZoom = 5, rotation = 0, isKioskModeActive) {
+  let endPoint = endPointArray;
   const view = map.getView();
   const polarProjectionCheck = proj.selected.id !== 'geographic'; // boolean if current projection is polar
   view.cancelAnimations();

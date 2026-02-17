@@ -20,6 +20,10 @@ export const GRANULE_LIMIT = 30;
  */
 export function getLatestIntervalTime(layerDefs, dateTime) {
   const subDailyDefs = layerDefs.filter((def) => def.period === 'subdaily') || [];
+  const tempoDefs = subDailyDefs.filter((def) => def.id.includes('TEMPO')) || [];
+  if (tempoDefs.length > 0) {
+    return dateTime;
+  }
   const defsSortedByInterval = subDailyDefs.sort((defA, defB) => {
     const intervalA = Number(lodashGet(defA, 'dateRanges[0].dateInterval'));
     const intervalB = Number(lodashGet(defB, 'dateRanges[0].dateInterval'));

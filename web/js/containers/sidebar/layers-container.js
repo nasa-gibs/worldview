@@ -225,8 +225,8 @@ export default connect(
 )(LayersContainer);
 
 LayersContainer.propTypes = {
-  activeLayersMap: PropTypes.shape,
-  baselayers: PropTypes.arrayOf,
+  activeLayersMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  baselayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   compareState: PropTypes.string,
   groupOverlays: PropTypes.bool,
   height: PropTypes.number,
@@ -235,11 +235,11 @@ LayersContainer.propTypes = {
   isCompareActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  overlayGroups: PropTypes.arrayOf,
-  overlays: PropTypes.arrayOf,
+  overlayGroups: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  overlays: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   reorderOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
-  breakpoints: PropTypes.shape,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isPlaying: PropTypes.bool,
   screenWidth: PropTypes.number,
   addLayers: PropTypes.func,

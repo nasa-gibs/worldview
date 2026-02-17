@@ -43,9 +43,9 @@ function GlobalSelectCheckbox(props) {
 }
 GlobalSelectCheckbox.propTypes = {
   onLatLongChange: PropTypes.func,
-  geoLatLong: PropTypes.arrayOf,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   proj: PropTypes.string,
-  map: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default GlobalSelectCheckbox;

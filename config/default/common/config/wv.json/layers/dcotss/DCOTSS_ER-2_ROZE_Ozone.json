@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "O3_ROZE",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "DCOTSS_ER-2_ROZE_Ozone",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

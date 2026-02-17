@@ -38,7 +38,7 @@ Button.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
   onClick: PropTypes.func,
-  style: PropTypes.shape,
-  text: PropTypes.string,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   valid: PropTypes.bool,
 };

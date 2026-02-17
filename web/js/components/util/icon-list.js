@@ -55,7 +55,7 @@ IconList.defaultProps = {
 IconList.propTypes = {
   active: PropTypes.string,
   disabled: PropTypes.bool,
-  list: PropTypes.arrayOf,
+  list: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   listClass: PropTypes.string,
   onClick: PropTypes.func,
   size: PropTypes.string,

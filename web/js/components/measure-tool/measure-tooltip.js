@@ -148,8 +148,8 @@ MeasureTooltip.defaultProps = {
 MeasureTooltip.propTypes = {
   active: PropTypes.bool,
   crs: PropTypes.string,
-  geometry: PropTypes.shape,
+  geometry: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onRemove: PropTypes.func,
   unitOfMeasure: PropTypes.string,
-  proj: PropTypes.shape,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

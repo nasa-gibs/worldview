@@ -51,10 +51,10 @@ export default React.memo(
 );
 
 RemoveLayer.propTypes = {
-  action: PropTypes.shape,
-  compare: PropTypes.shape,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   findLayer: PropTypes.func,
-  map: PropTypes.shape,
-  ui: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
 };

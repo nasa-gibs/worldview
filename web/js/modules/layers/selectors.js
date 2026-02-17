@@ -80,11 +80,11 @@ export function addLayer(
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
 
-    const findLastRefLayer = (layers) => {
+    const findLastRefLayer = (layersArg) => {
       let lastRefIndex = 0;
       let index = 0;
 
-      layers.forEach((layer) => {
+      layersArg.forEach((layer) => {
         if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
           lastRefIndex = index;
           index += 1;
@@ -421,8 +421,14 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
  */
 export function available(id, date, layers, parameters) {
   const range = dateRange({ layer: id }, layers, parameters);
-  if (range && (date < range.start || date > range.end)) {
-    return false;
+  if (range) {
+    // Standardize time by removing milliseconds before comparison
+    range.start.setMilliseconds(0);
+    range.end.setMilliseconds(0);
+    date.setMilliseconds(0);
+    if (date < range.start || date > range.end) {
+      return false;
+    }
   }
   return true;
 }
@@ -485,7 +491,8 @@ export function getLayers(state, spec = {}, layersParam) {
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, bLayers, state) {
+export function isRenderable(id, layers, dateString, bLayers, state) {
+  let date = dateString;
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });

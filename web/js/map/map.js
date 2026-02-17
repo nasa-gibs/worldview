@@ -14,12 +14,13 @@ export const CRS_WGS_84_QUERY_EXTENT = [-180, -60, 180, 60];
  * @method isExtentValid
  * @static
  *
- * @param extent {OpenLayers.Bound} The extent to check.
+ * @param extentBound {OpenLayers.Bound} The extent to check.
  *
  * @return {boolean} False if any of the values is NaN, otherwise returns
  * true.
  */
-export function mapIsExtentValid(extent) {
+export function mapIsExtentValid(extentBound) {
+  let extent = extentBound;
   if (lodashIsUndefined(extent)) {
     return false;
   }
@@ -43,19 +44,20 @@ export function mapIsExtentValid(extent) {
  * then it is changed from a string to an array which is then
  * made a global object.
  *
- * @method parse
+ * @method mapParser
  * @static
  *
- * @param {string} extents string
+ * @param {object} stateObj object
  *
- * @param {obj} Error
+ * @param {object} errors
  *
  * @returns {void}
  *
  * @todo would benefit by returning the array instead of attaching it to a global var
  */
-export function mapParser(state, errors) {
+export function mapParser(stateObj, errors) {
   // 1.1 support
+  const state = stateObj;
   if (state.map) {
     state.v = state.map;
     delete state.map;
@@ -82,10 +84,11 @@ export function mapParser(state, errors) {
  * @method setOpacity
  * @static
  *
- * @param layer {OpenLayers.Layer} The layer to set the opacity
+ * @param olLayer {OpenLayers.Layer} The layer to set the opacity
  * @param opacity {float} A value from 0 (transparent) to 1 (opaque).
  */
-export function setOpacity(layer, opacity) {
+export function setOpacity(olLayer, opacity) {
+  const layer = olLayer;
   layer.setOpacity(opacity);
   if (opacity === 1) {
     const effect = layer.originalTransitionEffect || 'resize';
@@ -104,7 +107,7 @@ export function setOpacity(layer, opacity) {
  * @method setVisibility
  * @static
  *
- * @param layer {OpenLayers.Layer} The layer to set the visibility.
+ * @param olLayer {OpenLayers.Layer} The layer to set the visibility.
  *
  * @param visible {boolean} True if the layer should be visible, otherwise
  * false.
@@ -112,7 +115,8 @@ export function setOpacity(layer, opacity) {
  * @param opacity {float} The opacity that this layer should be if it
  * is visible. A value from 0 (transparent) to 1 (opaque).
  */
-export function setVisibility(layer, visible, opacity) {
+export function setVisibility(olLayer, visible, opacity) {
+  const layer = olLayer;
   if (layer.isControl) {
     layer.setVisibility(visible);
   } else {

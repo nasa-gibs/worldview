@@ -18,6 +18,18 @@ import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
  * @class DateInputColumn
  */
 class DateInputColumn extends Component {
+  static onKeyPress(e) {
+    const { keyCode } = e;
+    const entered = keyCode === 13;
+    const tabbed = keyCode === 9;
+    const shiftTab = e.shiftKey && keyCode === 9;
+
+    if (entered || tabbed || shiftTab) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }
+
   constructor(props) {
     super(props);
     const { type, subDailyMode } = props;
@@ -128,18 +140,6 @@ class DateInputColumn extends Component {
     this.setState({ value });
   };
 
-  onKeyPress = (e) => {
-    const { keyCode } = e;
-    const entered = keyCode === 13;
-    const tabbed = keyCode === 9;
-    const shiftTab = e.shiftKey && keyCode === 9;
-
-    if (entered || tabbed || shiftTab) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  };
-
   onKeyUp = (e) => {
     const { type } = this.props;
     const { keyCode } = e;
@@ -180,39 +180,40 @@ class DateInputColumn extends Component {
     const {
       date, type, minDate, maxDate, updateTimeUnitInput,
     } = this.props;
+    let inputValue = value;
     let newDate;
     const validateDate = (dateParam) => dateParam > minDate && dateParam <= maxDate && dateParam;
     switch (type) {
       case 'year':
-        newDate = yearValidation(value, date, validateDate);
+        newDate = yearValidation(inputValue, date, validateDate);
         break;
       case 'month':
-        newDate = monthValidation(value, date, validateDate);
+        newDate = monthValidation(inputValue, date, validateDate);
         // transform month number to string (e.g., 3 -> 'MAR')
         // eslint-disable-next-line no-restricted-globals
-        if (newDate !== null && !isNaN(value)) {
-          value = MONTH_STRING_ARRAY[value - 1];
+        if (newDate !== null && !isNaN(inputValue)) {
+          inputValue = MONTH_STRING_ARRAY[inputValue - 1];
         }
         break;
       case 'day':
-        newDate = dayValidation(value, date, validateDate);
+        newDate = dayValidation(inputValue, date, validateDate);
         break;
       case 'hour':
-        newDate = hourValidation(value, date, validateDate);
+        newDate = hourValidation(inputValue, date, validateDate);
         break;
       case 'minute':
-        newDate = minuteValidation(value, date, validateDate);
+        newDate = minuteValidation(inputValue, date, validateDate);
         break;
       default:
         break;
     }
     // add leading '0' to single string number
-    if (newDate !== null && value.length === 1) {
-      value = `0${value}`;
+    if (newDate !== null && inputValue.length === 1) {
+      inputValue = `0${inputValue}`;
     }
-    // update parent level time unit type value
+    // update parent level time unit type inputValue
     if (newDate !== null) {
-      updateTimeUnitInput(type, value);
+      updateTimeUnitInput(type, inputValue);
     }
     return newDate;
   };
@@ -320,7 +321,7 @@ class DateInputColumn extends Component {
           className={inputClassName}
           value={value}
           onKeyUp={this.onKeyUp}
-          onKeyDown={this.onKeyPress}
+          onKeyDown={DateInputColumn.onKeyPress}
           onChange={this.onChange}
           style={fontSizeStyle}
           onBlur={this.blur}
@@ -342,7 +343,7 @@ class DateInputColumn extends Component {
 }
 
 DateInputColumn.propTypes = {
-  date: PropTypes.shape,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fontSize: PropTypes.number,
   idSuffix: PropTypes.string,
   isKioskModeActive: PropTypes.bool,
@@ -350,8 +351,8 @@ DateInputColumn.propTypes = {
   isStartDate: PropTypes.bool,
   isEndDate: PropTypes.bool,
   isDisabled: PropTypes.bool,
-  maxDate: PropTypes.shape,
-  minDate: PropTypes.shape,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onFocus: PropTypes.func,
   subDailyMode: PropTypes.bool,
   type: PropTypes.string,

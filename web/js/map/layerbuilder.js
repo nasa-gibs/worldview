@@ -99,6 +99,69 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
+   * For TEMPO layers, get and set the product's dateRanges
+   * so that they are up-to-date and not stale from build-time
+   */
+  const getUpdatedDateRanges = (def, callback, group) => {
+    const state = store.getState();
+    const { config: stateConfig, proj } = state;
+    const describeDomainsUrl = stateConfig?.features?.describeDomains?.url
+      || 'https://gibs.earthdata.nasa.gov';
+    const {
+      id,
+    } = def;
+    let oldRanges = [];
+    const worker = new Worker('js/workers/describe-domains.worker.js');
+    worker.onmessage = (event) => {
+      if (Array.isArray(event.data)) { // our final format is an array
+        worker.terminate(); // terminate the worker
+        const newRanges = event.data.map(([startDate, endDate, dateInterval]) => ({
+          startDate, endDate, dateInterval,
+        }));
+        return callback(def, [...oldRanges, ...newRanges], group);
+      }
+      // DOMParser is not available in workers so we parse the xml
+      // on the main thread before sending it back to the worker
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(event.data, 'text/xml');
+      const domains = xmlDoc.querySelector('Domain')?.textContent;
+      if (!domains) {
+        worker.terminate();
+        return callback(def, oldRanges, group);
+      }
+      return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000, true] });
+    };
+    worker.onerror = () => worker.terminate();
+    let startDate = new Date(def.startDate);
+    const endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString();
+    // If there are any existing dateRanges, find any after the latest one
+    if (def.dateRanges && def.dateRanges.length > 0) {
+      startDate = new Date(def.dateRanges[def.dateRanges.length - 1].endDate);
+      startDate.setSeconds(startDate.getSeconds() + 1);
+    }
+    const params = {
+      startDate,
+      endDate,
+      id,
+      proj: proj.selected.crs,
+      baseUrl: describeDomainsUrl,
+    };
+    worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
+    // While worker is running, format any problematic existing dateRanges
+    if (def.dateRanges && def.dateRanges.length > 0) {
+      oldRanges = def.dateRanges.map(({
+        startDate: startDateArg, endDate: endDateArg, dateInterval,
+      }) => ({
+        startDate: startDateArg,
+        endDate: startDateArg === endDateArg
+          ? new Date(new Date(endDateArg).getTime() + (Number(dateInterval) * 60000)).toISOString()
+          : endDateArg,
+        dateInterval,
+      }));
+    }
+  };
+
+  /**
    *
    * @function layerKey
    * @static
@@ -197,7 +260,10 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     if (def.period === 'subdaily') {
-      closestDate = def.id.includes('TEMPO_L2') ? closestDate : nearestInterval(def, closestDate);
+      // Skip interval snapping for non-variable subdaily products
+      const directIntervalProducts = ['TEMPO', 'PREFIRE'];
+      const useDirectInterval = directIntervalProducts.some((key) => def.id.includes(key));
+      closestDate = useDirectInterval ? closestDate : nearestInterval(def, closestDate);
     } else if (previousDateFromRange) {
       closestDate = util.clearTimeUTC(previousDateFromRange);
     } else {
@@ -230,15 +296,23 @@ export default function mapLayerBuilder(config, cache, store) {
    * @method createLayer
    * @static
    * @param {object} def - Layer Specs
-   * @param {object} options - Layer options
+   * @param {object} optionsObj - Layer options
    * @returns {object} OpenLayers layer
    */
-  const createLayer = async (def, options = {}) => {
+  const createLayer = async (def, optionsObj = {}) => {
+    const options = optionsObj;
     const state = store.getState();
     const { compare: { activeString } } = state;
     const { ui: { isKioskModeActive, displayStaticMap } } = state;
+    const { tempoCallback } = options;
 
     options.group = options.group || activeString;
+
+    // If layer is a TEMPO layer, fetch updated date ranges
+    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+      tempoCallback(def, [], options.group);
+      getUpdatedDateRanges(def, tempoCallback, options.group);
+    }
 
     // if gibs/dns failure, display static image layer
     if (displayStaticMap && isKioskModeActive) {
@@ -378,6 +452,9 @@ export default function mapLayerBuilder(config, cache, store) {
       tileSize: tileSize[0],
     };
 
+    // force currently selected time to be 59 seconds.
+    // This is to compensate for the inability to select seconds in the timeline
+    layerDate.setSeconds(59);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
@@ -406,7 +483,7 @@ export default function mapLayerBuilder(config, cache, store) {
     // Because granule footprints from CMR are imprecise, setting an extent on granule
     // layers can crop valid imagery. So extents are only applied to non-granule layers.
     if (!isGranule) {
-      layerTile.extent = extent;
+      layerTile.setExtent(extent);
     }
     return layerTile;
   };
@@ -980,7 +1057,7 @@ export default function mapLayerBuilder(config, cache, store) {
       dateTimeTile.push('23:59:59Z');
       const lastDateTile = dateTimeTile.join('T');
 
-      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((b) => b);
+      const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
       const params = assets.map((asset) => `bands=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
@@ -1196,14 +1273,15 @@ export default function mapLayerBuilder(config, cache, store) {
 
   /**
    * Create a new OpenLayers Layer
-   * @param {object} def
+   * @param {object} definition
    * @param {object} key
    * @param {object} options
    * @param {object} dateOptions
    * @param {object} granuleAttributes
    * @returns {object} Openlayers TileLayer or LayerGroup
    */
-  const createLayerWrapper = async (def, key, options, dateOptions) => {
+  const createLayerWrapper = async (definition, key, options, dateOptions) => {
+    let def = definition;
     const state = store.getState();
     const { sidebar: { activeTab } } = state;
     const proj = state.proj.selected;
@@ -1242,40 +1320,41 @@ export default function mapLayerBuilder(config, cache, store) {
       const wrapDefined = wrapadjacentdays === true || wrapX;
       const wrapLayer = proj.id === 'geographic' && !isDataDownloadTabActive && wrapDefined;
 
-      if (!isGranule) {
-        switch (def.type) {
-          case 'wmts':
-            layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
-            break;
-          case 'vector':
-            layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
-            break;
-          case 'wms':
-            layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
-            break;
-          case 'titiler':
-            layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'xyz':
-            layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'indexedVector':
-            layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
-            break;
-          case 'composite:wmts':
-            layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
-            break;
-          case 'esriMapServer':
-            layer = await getLayer(createLayerEsri, def, options, attributes, wrapLayer);
-            break;
-          default:
-            throw new Error(`Unknown layer type: ${type}`);
-        }
+      switch (def.type) {
+        case 'wmts':
+          layer = await getLayer(createLayerWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'vector':
+          layer = await getLayer(createLayerVector, def, options, attributes, wrapLayer);
+          break;
+        case 'wms':
+          layer = await getLayer(createLayerWMS, def, options, attributes, wrapLayer);
+          break;
+        case 'titiler':
+          layer = await getLayer(createTitilerLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'xyz':
+          layer = await getLayer(createXYZLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'indexedVector':
+          layer = await getLayer(createIndexedVectorLayer, def, options, attributes, wrapLayer);
+          break;
+        case 'composite:wmts':
+          layer = await getLayer(createLayerCompositeWMTS, def, options, attributes, wrapLayer);
+          break;
+        case 'esriMapServer':
+          layer = await getLayer(createLayerEsri, def, options, attributes, wrapLayer);
+          break;
+        case 'granule':
+          layer = await getGranuleLayer(def, attributes, options);
+          break;
+        default:
+          throw new Error(`Unknown layer type: ${type}`);
+      }
+      if (def.type !== 'granule') {
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
         if (def.type !== 'titiler') layer.setVisible(false);
-      } else {
-        layer = await getGranuleLayer(def, attributes, options);
       }
     }
     layer.setOpacity(opacity || 1.0);

@@ -12,8 +12,8 @@ const propTypes = {
   disableImagesLoaded: PropTypes.bool,
   onImagesLoaded: PropTypes.func,
   updateOnEachImageLoad: PropTypes.bool,
-  options: PropTypes.shape,
-  imagesLoadedOptions: PropTypes.shape,
+  options: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  imagesLoadedOptions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   elementType: PropTypes.string,
   onLayoutComplete: PropTypes.func,
   onRemoveComplete: PropTypes.func

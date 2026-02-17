@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { reverseGeocode } from '../../../modules/location-search/util-api';
 import { getNormalizedCoordinate } from '../../../components/location-search/util';
 import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } from '../../../modules/location-search/util';
-import { setGeocodeResults, removeMarker } from '../../../modules/location-search/actions';
+import {
+  setGeocodeResults as setGeocodeResultsAction,
+  removeMarker as removeMarkerAction,
+} from '../../../modules/location-search/actions';
 import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
 function Markers(props) {
@@ -190,10 +193,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setGeocodeResults: (value) => {
-    dispatch(setGeocodeResults(value));
+    dispatch(setGeocodeResultsAction(value));
   },
   removeMarker: (value) => {
-    dispatch(removeMarker(value));
+    dispatch(removeMarkerAction(value));
   },
 });
 
@@ -205,17 +208,17 @@ export default React.memo(
 );
 
 Markers.propTypes = {
-  action: PropTypes.shape,
-  activeLayers: PropTypes.arrayOf,
-  config: PropTypes.shape,
-  coordinates: PropTypes.arrayOf,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
-  proj: PropTypes.shape,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
-  selectedMap: PropTypes.shape,
-  selectedMapMarkers: PropTypes.arrayOf,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedMapMarkers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   setGeocodeResults: PropTypes.func,
-  ui: PropTypes.shape,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 

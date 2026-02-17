@@ -15,7 +15,7 @@ import { onClose } from '../../../../modules/modal/actions';
 export default function BandSelection({ layer }) {
   const dispatch = useDispatch();
   const { activeLayers } = useSelector((state) => ({
-    activeLayers: getActiveLayers(state, state.compare.activeString).map((layer) => layer),
+    activeLayers: getActiveLayers(state, state.compare.activeString).map((layerObj) => layerObj),
   }));
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
   const currentSelectedPreset = useSelector(
@@ -131,5 +131,5 @@ export default function BandSelection({ layer }) {
 }
 
 BandSelection.propTypes = {
-  layer: PropTypes.shape,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

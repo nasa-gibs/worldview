@@ -231,17 +231,17 @@ class ProductPickerHeader extends React.Component {
 }
 
 ProductPickerHeader.propTypes = {
-  category: PropTypes.shape,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
-  filters: PropTypes.arrayOf,
+  filters: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
   layerCount: PropTypes.number,
   mode: PropTypes.string,
-  results: PropTypes.arrayOf,
+  results: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   saveSearchState: PropTypes.func,
-  searchConfig: PropTypes.shape,
+  searchConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setSearchTerm: PropTypes.func,
-  selectedLayer: PropTypes.shape,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedProjection: PropTypes.string,
   searchTerm: PropTypes.string,
   showMobileFacets: PropTypes.bool,

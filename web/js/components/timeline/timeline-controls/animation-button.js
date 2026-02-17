@@ -72,7 +72,7 @@ function AnimationButton(props) {
 }
 
 AnimationButton.propTypes = {
-  breakpoints: PropTypes.shape,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   clickAnimationButton: PropTypes.func,
   disabled: PropTypes.bool,
   label: PropTypes.string,

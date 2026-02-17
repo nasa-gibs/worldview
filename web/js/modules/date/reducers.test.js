@@ -5,6 +5,7 @@ import {
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -57,6 +58,24 @@ describe('dateReducer', () => {
     },
   );
   test(
+    `${CHANGE_AUTO_INTERVAL
+    }action type and true as autoSelected `
+      + 'should return new state [date-reducer-auto-interval]',
+    () => {
+      expect(
+        dateReducer(dateReducerState, {
+          type: CHANGE_AUTO_INTERVAL,
+          interval: 3,
+          delta: 1,
+          autoSelected: true,
+        }),
+      ).toEqual({
+        ...dateReducerState,
+        autoSelected: true,
+      });
+    },
+  );
+  test(
     `${CHANGE_INTERVAL
     }action type and 1 as delta and 2 as interval `
       + 'should return new state [date-reducer-interval]',
@@ -67,12 +86,14 @@ describe('dateReducer', () => {
           interval: 2,
           delta: 1,
           customSelected: false,
+          autoSelected: false,
         }),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
         delta: 1,
         customSelected: false,
+        autoSelected: false,
       });
     },
   );

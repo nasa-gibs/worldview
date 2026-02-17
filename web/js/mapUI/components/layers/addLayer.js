@@ -121,14 +121,14 @@ export default React.memo(
 );
 
 AddLayer.propTypes = {
-  activeLayersState: PropTypes.arrayOf,
+  activeLayersState: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  action: PropTypes.shape,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareDate: PropTypes.instanceOf(Date),
-  compareMapUi: PropTypes.shape,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   mode: PropTypes.string,
   preloadNextTiles: PropTypes.func,
-  selected: PropTypes.shape,
+  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
-  ui: PropTypes.shape,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

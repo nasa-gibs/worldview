@@ -5,9 +5,9 @@ import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '../error-boundary';
 import PlayQueue from '../../components/animation-widget/play-queue';
-import { promiseImageryForTime } from '../../modules/map/util';
+import { promiseImageryForTime as promiseImageryForTimeUtil } from '../../modules/map/util';
 import {
-  selectDate,
+  selectDate as selectDateAction,
   selectInterval,
   toggleCustomModal,
 } from '../../modules/date/actions';
@@ -27,7 +27,7 @@ import {
 import { getSelectedDate } from '../../modules/date/selectors';
 import {
   play,
-  onClose,
+  onClose as onCloseAction,
   stop,
   toggleLooping,
   changeFrameRate,
@@ -90,6 +90,8 @@ function AnimationWidget (props) {
     startDate,
     subDailyMode,
     map,
+    autoSelected,
+    layers,
   } = props;
 
   const widgetWidth = 334;
@@ -196,10 +198,14 @@ function AnimationWidget (props) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
       const startMinutes = startDateZeroed.getMinutes();
       const endMinutes = endDateZeroed.getMinutes();
-      startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      if (!autoSelected) {
+        startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      }
       startDateZeroed.setUTCSeconds(0);
       startDateZeroed.setUTCMilliseconds(0);
-      endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      if (!autoSelected) {
+        endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      }
       endDateZeroed.setUTCSeconds(0);
       endDateZeroed.setUTCMilliseconds(0);
     } else {
@@ -215,10 +221,10 @@ function AnimationWidget (props) {
 
   const onPushPlayFunc = () => {
     const {
-      startDate,
-      endDate,
+      startDateZeroed = startDate,
+      endDateZeroed = endDate,
     } = zeroDates();
-    onUpdateStartAndEndDate(startDate, endDate);
+    onUpdateStartAndEndDate(startDateZeroed, endDateZeroed);
     onPushPlay();
   };
 
@@ -252,6 +258,8 @@ function AnimationWidget (props) {
             promiseImageryForTime={promiseImageryForTime}
             onClose={onPushPause}
             map={map}
+            autoSelected={autoSelected}
+            layers={layers}
           />
         ) : null
       }
@@ -359,12 +367,14 @@ const mapStateToProps = (state) => {
     screenSize,
     ui,
     proj,
+    layers,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed, autoplay,
   } = animation;
   const {
     customSelected,
+    autoSelected,
     delta,
     customDelta,
     appNow,
@@ -416,6 +426,8 @@ const mapStateToProps = (state) => {
     TIME_SCALE_FROM_NUMBER[useInterval],
     useDelta,
     frameLimit,
+    autoSelected,
+    layers.active.layers,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
@@ -473,19 +485,21 @@ const mapStateToProps = (state) => {
     looping: loop,
     map,
     proj,
-    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
+    promiseImageryForTime: (dateArg) => promiseImageryForTimeUtil(state, dateArg),
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1
       : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    autoSelected,
+    layers: layers.active.layers,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
-    dispatch(selectDate(val));
+    dispatch(selectDateAction(val));
   },
   onClose: () => {
-    dispatch(onClose());
+    dispatch(onCloseAction());
   },
   onPushPlay: () => {
     dispatch(play());
@@ -520,15 +534,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 AnimationWidget.propTypes = {
-  appNow: PropTypes.shape,
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   animationCustomModalOpen: PropTypes.bool,
   autoplay: PropTypes.bool,
-  breakpoints: PropTypes.shape,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   checkAnimationAvailability: PropTypes.bool,
-  snappedCurrentDate: PropTypes.shape,
-  currentDate: PropTypes.shape,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
-  endDate: PropTypes.shape,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
@@ -544,9 +558,9 @@ AnimationWidget.propTypes = {
   isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
-  map: PropTypes.shape,
-  maxDate: PropTypes.shape,
-  minDate: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
@@ -564,8 +578,10 @@ AnimationWidget.propTypes = {
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speedRedux: PropTypes.number,
-  startDate: PropTypes.shape,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
+  autoSelected: PropTypes.bool,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default connect(

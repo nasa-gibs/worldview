@@ -21,7 +21,6 @@ import { Vector as OlVectorSource } from 'ol/source';
 import { getCenter } from 'ol/extent';
 import { inAndOut } from 'ol/easing';
 import {
-  Fill as OlStyleFill,
   Stroke as OlStyleStroke,
   Style as OlStyle,
 } from 'ol/style';
@@ -100,8 +99,9 @@ function formatToThreeDigits(str) {
 }
 
 function CustomTooltip({
-  active, payload, label, unit,
+  active, payload, label, unit, setHoveredDate,
 }) {
+  setHoveredDate(label);
   const formattedUnit = unit ? ` (${unit})` : '';
   if (active && payload && payload.length) {
     if (!Number.isNaN(payload[0].value)) {
@@ -135,16 +135,20 @@ function CustomTooltip({
   return null;
 }
 
-function ChartComponent (props) {
+function ChartComponent(props) {
   const {
     liveData,
     mapView,
     createLayer,
     overviewMapLayerDef,
+    layers,
+    toggleErrorDaysExpanded,
   } = props;
 
   const [errorCollapsed, setErrorCollapsed] = useState(true);
+  const [hoveredDate, setHoveredDate] = useState(null);
   const mapInstanceRef = useRef(null);
+  const layerListRef = useRef([]);
 
   const {
     data,
@@ -157,38 +161,16 @@ function ChartComponent (props) {
     numPoints,
     coordinates,
     errors,
+    layerId,
   } = liveData;
 
-  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
-  const errorDaysArr = useMemo(() => {
-    const raw = errors?.error_days;
-    if (Array.isArray(raw)) return raw.map((s) => String(s));
-    if (raw == null) return [];
-    if (typeof raw !== 'string') return [String(raw)];
-
-    const trimmed = raw.trim();
-
-    // Try JSON parse if looks like an array; tolerate single quotes
-    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
-      try {
-        const jsonish = trimmed.replace(/'/g, '"');
-        const arr = JSON.parse(jsonish);
-        if (Array.isArray(arr)) return arr.map((s) => String(s));
-      } catch {
-        // fall through to manual split
-      }
-    }
-
-    // Fallback: strip brackets, split on comma, strip surrounding quotes
-    return trimmed
-      .replace(/^\[|\]$/g, '')
-      .split(',')
-      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
-      .filter(Boolean);
-  }, [errors]);
+  function toggleErrorCollapsed(val) {
+    setErrorCollapsed(val);
+    toggleErrorDaysExpanded(!val);
+  }
 
   // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
-  const errorDatesDisplay = useMemo(() => errorDaysArr
+  const errorDatesDisplay = useMemo(() => errors?.error_days
     .map((item) => {
       const dateStr = typeof item === 'string'
         ? item
@@ -196,14 +178,12 @@ function ChartComponent (props) {
       return (dateStr || '').split('T')[0];
     })
     .filter(Boolean)
-    .join(', \u00A0\u00A0'), [errorDaysArr]);
+    .join(', \u00A0\u00A0'), [errors?.error_days]);
   const format = util.getCoordinateFormat();
 
   // Arbitrary array of colors to use
   const lineColors = ['#A3905D', '#82CA9D', 'orange', 'pink', 'green', 'red', 'yellow', 'aqua', 'maroon'];
   const formattedUnit = unit ? ` (${unit})` : '';
-
-
 
   /**
    * Return an array of provided min & max values buffered by 10%
@@ -235,11 +215,6 @@ function ChartComponent (props) {
 
     return bufferYAxisMinAndMax(lowestMin, highestMax);
   }
-
-
-
-
-
 
   const yAxisValuesArr = getYAxisValues(data);
 
@@ -342,6 +317,8 @@ function ChartComponent (props) {
   }
 
   useEffect(() => {
+    if (hoveredDate === null) return;
+
     const boxFeature = new OlFeature({
       geometry: fromExtent(coordinates),
     });
@@ -349,9 +326,6 @@ function ChartComponent (props) {
       stroke: new OlStyleStroke({
         color: 'rgba(255, 255, 255, .6)',
         width: 1,
-      }),
-      fill: new OlStyleFill({
-        color: 'rgba(255, 255, 255, .3)',
       }),
     }));
     const boxLayer = new OlVectorLayer({
@@ -368,6 +342,7 @@ function ChartComponent (props) {
       backgroundLayerGroup.getLayers().getArray().forEach((layer) => {
         layersList.push(new OlLayerTile({
           source: layer.getSource(),
+          zIndex: 99,
         }));
       });
       const copiedLayerGroup = new OlLayerGroup({
@@ -402,13 +377,53 @@ function ChartComponent (props) {
       });
     };
 
-    createLayerWrapper();
+    const createHoveredLayerWrapper = async () => {
+      const selectedLayerDef = layers.layerConfig[layerId];
+      const layerOptions = {
+        date: new Date(hoveredDate),
+      };
+      const foregroundLayer = await createLayer(selectedLayerDef, layerOptions);
+      foregroundLayer.setVisible(true);
 
-    return () => {
-      mapInstanceRef.current.setTarget(null);
-      mapInstanceRef.current = null;
+      if (foregroundLayer instanceof OlLayerGroup) {
+        foregroundLayer.getLayers().getArray().forEach((layer) => {
+          layerListRef.current.push(new OlLayerTile({
+            source: layer.getSource(),
+            opacity: 0.15,
+          }));
+          layerListRef.current.push(new OlLayerTile({
+            source: layer.getSource(),
+            extent: coordinates,
+          }));
+        });
+      } else {
+        layerListRef.current.push(new OlLayerTile({
+          source: foregroundLayer.getSource(),
+          opacity: 0.15,
+        }));
+        layerListRef.current.push(new OlLayerTile({
+          source: foregroundLayer.getSource(),
+          extent: coordinates,
+        }));
+      }
+      layerListRef.current.forEach((layer) => {
+        mapInstanceRef.current.addLayer(layer);
+      });
     };
-  }, [overviewMapLayerDef]);
+
+    if (!mapInstanceRef.current) {
+      createLayerWrapper();
+    }
+
+    layerListRef.current.forEach((layer, i) => {
+      mapInstanceRef.current.removeLayer(layer);
+    });
+    layerListRef.current = [];
+
+    if (hoveredDate) {
+      createHoveredLayerWrapper();
+    }
+  }, [overviewMapLayerDef, layerId, hoveredDate]);
 
   return (
     <div className="charting-chart-container">
@@ -425,7 +440,7 @@ function ChartComponent (props) {
               bottom: 10,
             }}
           >
-            <Tooltip content={<CustomTooltip unit={unit} />} />
+            <Tooltip content={<CustomTooltip unit={unit} setHoveredDate={setHoveredDate} />} />
             {' '}
             {getLineChart(data)}
             <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick data={data} />} tickLine={false} />
@@ -541,7 +556,7 @@ function ChartComponent (props) {
                 </div>
               )}
               <div className="error-expand-button">
-                <span className="error-expand-button-inner" onClick={() => setErrorCollapsed(!errorCollapsed)}>
+                <span className="error-expand-button-inner" onClick={() => toggleErrorCollapsed(!errorCollapsed)}>
                   {errorCollapsed ? 'more' : 'less'}
                   <FontAwesomeIcon
                     className="layer-group-collapse"
@@ -574,14 +589,17 @@ const mapStateToProps = (state) => {
     mapView: ui.selected.getView(),
     createLayer: ui.createLayer,
     overviewMapLayerDef: layers.layerConfig[layerId],
+    layers,
   };
 };
 
 ChartComponent.propTypes = {
-  liveData: PropTypes.shape,
-  mapView: PropTypes.shape,
+  liveData: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  mapView: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   createLayer: PropTypes.func,
-  overviewMapLayerDef: PropTypes.shape,
+  overviewMapLayerDef: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layers: PropTypes.shape,
+  toggleErrorDaysExpanded: PropTypes.func,
 };
 
 CustomXAxisTick.propTypes = {
@@ -591,15 +609,16 @@ CustomXAxisTick.propTypes = {
   textAnchor: PropTypes.string,
   visibleTicksCount: PropTypes.number,
   index: PropTypes.number,
-  payload: PropTypes.shape,
-  data: PropTypes.arrayOf,
+  payload: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 CustomTooltip.propTypes = {
   active: PropTypes.bool,
-  payload: PropTypes.arrayOf,
+  payload: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   label: PropTypes.string,
   unit: PropTypes.string,
+  setHoveredDate: PropTypes.func,
 };
 
 export default connect(

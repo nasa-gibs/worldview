@@ -62,8 +62,8 @@ GranuleCountSlider.defaultProps = {
   count: DEFAULT_NUM_GRANULES,
 };
 GranuleCountSlider.propTypes = {
-  granuleDates: PropTypes.arrayOf,
-  def: PropTypes.shape,
+  granuleDates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  def: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   count: PropTypes.number,
   granulePlatform: PropTypes.string,
   updateGranuleLayerOptions: PropTypes.func,

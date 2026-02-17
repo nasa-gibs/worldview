@@ -85,7 +85,7 @@ function SimpleStatistics(props) {
 }
 
 SimpleStatistics.propTypes = {
-  data: PropTypes.shape,
+  data: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default SimpleStatistics;

@@ -26,6 +26,12 @@ import CoverageItemList from './coverage-item-list';
  */
 
 class TimelineLayerCoveragePanel extends Component {
+  static stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -297,12 +303,6 @@ class TimelineLayerCoveragePanel extends Component {
     return undefined;
   };
 
-  stopPropagation = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
-  };
-
   /**
   * @desc render info button for layer coverage panel coverage info modal
   * @returns {DOM Object}
@@ -317,7 +317,7 @@ class TimelineLayerCoveragePanel extends Component {
         id={layerInfoBtnId}
         aria-label={layerInfoBtnTitle}
         className={layerInfoBtnId}
-        onMouseDown={this.stopPropagation}
+        onMouseDown={TimelineLayerCoveragePanel.stopPropagation}
         onClick={() => onInfoClick()}
       >
         <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" widthAuto />
@@ -509,8 +509,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 TimelineLayerCoveragePanel.propTypes = {
-  activeLayers: PropTypes.arrayOf,
-  appNow: PropTypes.shape,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

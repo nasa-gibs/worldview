@@ -89,5 +89,5 @@ export default connect(
 Embed.propTypes = {
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  selectedDate: PropTypes.shape,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

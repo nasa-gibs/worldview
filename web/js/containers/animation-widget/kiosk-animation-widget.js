@@ -27,8 +27,8 @@ function KioskAnimationWidget(props) {
 }
 
 KioskAnimationWidget.propTypes = {
-  startDate: PropTypes.shape,
-  endDate: PropTypes.shape,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasSubdailyLayers: PropTypes.bool,
 };
 

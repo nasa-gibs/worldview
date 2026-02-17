@@ -77,9 +77,9 @@ function UpdateDate(props) {
     const layerGroup = getActiveLayerGroup(layerState);
     const mapLayerCollection = layerGroup.getLayers();
     const layers = mapLayerCollection.getArray();
-    const activeLayers = getAllActiveLayers(state);
+    const activeLayersArray = getAllActiveLayers(state);
 
-    const visibleLayers = activeLayers.filter(({ id, visible }) => layers
+    const visibleLayers = activeLayersArray.filter(({ id, visible }) => layers
       .findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
 
     const layerPromises = visibleLayers.map(async (def) => {
@@ -169,19 +169,19 @@ export default connect(
 )(UpdateDate);
 
 UpdateDate.propTypes = {
-  action: PropTypes.shape,
-  activeLayers: PropTypes.arrayOf,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compareMapUi: PropTypes.shape,
-  config: PropTypes.shape,
-  dateCompareState: PropTypes.shape,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getGranuleOptions: PropTypes.func,
-  granuleState: PropTypes.shape,
+  granuleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCompareActive: PropTypes.bool,
-  layerState: PropTypes.shape,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadNextTiles: PropTypes.func,
-  state: PropTypes.shape,
-  ui: PropTypes.shape,
+  state: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
-  vectorStyleState: PropTypes.shape,
+  vectorStyleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

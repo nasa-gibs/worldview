@@ -15,19 +15,19 @@ import Alert from '../util/alert';
 import HoverTooltip from '../util/hover-tooltip';
 import { isValidCoordinates } from './util';
 import {
-  clearSuggestions,
-  getSuggestions,
-  setPlaceMarker,
-  setSuggestion,
-  toggleReverseGeocodeActive,
-  toggleShowLocationSearch,
+  clearSuggestions as clearSuggestionsAction,
+  getSuggestions as getSuggestionsAction,
+  setPlaceMarker as setPlaceMarkerAction,
+  setSuggestion as setSuggestionAction,
+  toggleReverseGeocodeActive as toggleReverseGeocodeActiveAction,
+  toggleShowLocationSearch as toggleShowLocationSearchAction,
 } from '../../modules/location-search/actions';
 import {
   areCoordinatesWithinExtent,
 } from '../../modules/location-search/util';
 import {
-  processMagicKey,
-  reverseGeocode,
+  processMagicKey as processMagicKeyUtil,
+  reverseGeocode as reverseGeocodeUtil,
 } from '../../modules/location-search/util-api';
 
 class LocationSearchModal extends Component {
@@ -430,8 +430,8 @@ const mapStateToProps = (state) => {
     ),
     isCoordinateSearchActive,
     isMobile,
-    processMagicKey: (magicKey) => processMagicKey(magicKey, config),
-    reverseGeocode: (coords) => reverseGeocode(coords, config),
+    processMagicKey: (magicKey) => processMagicKeyUtil(magicKey, config),
+    reverseGeocode: (coords) => reverseGeocodeUtil(coords, config),
     suggestions,
     suggestedPlace,
   };
@@ -439,29 +439,29 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setPlaceMarker: (coordinates, addressAttributes) => {
-    dispatch(setPlaceMarker(coordinates, addressAttributes, true));
+    dispatch(setPlaceMarkerAction(coordinates, addressAttributes, true));
   },
   toggleReverseGeocodeActive: (isActive) => {
-    dispatch(toggleReverseGeocodeActive(isActive));
+    dispatch(toggleReverseGeocodeActiveAction(isActive));
   },
   toggleShowLocationSearch: () => {
-    dispatch(toggleShowLocationSearch());
+    dispatch(toggleShowLocationSearchAction());
   },
   getSuggestions: (val) => {
-    dispatch(getSuggestions(val));
+    dispatch(getSuggestionsAction(val));
   },
   clearSuggestions: () => {
-    dispatch(clearSuggestions());
+    dispatch(clearSuggestionsAction());
   },
   setSuggestion: (suggestion) => {
-    dispatch(setSuggestion(suggestion));
+    dispatch(setSuggestionAction(suggestion));
   },
 });
 
 LocationSearchModal.propTypes = {
   clearSuggestions: PropTypes.func,
-  coordinates: PropTypes.arrayOf,
-  coordinatesPending: PropTypes.arrayOf,
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  coordinatesPending: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   locationSearchMobileModalOpen: PropTypes.bool,
   getSuggestions: PropTypes.func,
   inputValue: PropTypes.string,
@@ -473,8 +473,8 @@ LocationSearchModal.propTypes = {
   reverseGeocode: PropTypes.func,
   setPlaceMarker: PropTypes.func,
   setSuggestion: PropTypes.func,
-  suggestions: PropTypes.arrayOf,
-  suggestedPlace: PropTypes.arrayOf,
+  suggestions: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  suggestedPlace: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,

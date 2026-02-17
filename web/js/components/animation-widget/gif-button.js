@@ -192,8 +192,8 @@ export default connect(
 )(GifButton);
 
 GifButton.propTypes = {
-  activePalettes: PropTypes.shape,
-  visibleLayersForProj: PropTypes.arrayOf,
+  activePalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  visibleLayersForProj: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hasCustomPalettes: PropTypes.bool,
   hasNonDownloadableLayer: PropTypes.bool,
   isGifActive: PropTypes.bool,

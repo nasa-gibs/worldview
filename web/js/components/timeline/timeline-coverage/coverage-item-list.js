@@ -26,28 +26,6 @@ const ignoredLayer = {
  * @class CoverageItemList
  */
 class CoverageItemList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hoveredLayer: undefined,
-    };
-
-    // cache for queried date arrays
-    this.layerDateArrayCache = {};
-  }
-
-  componentDidMount() {
-    events.on(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
-  }
-
-  componentWillUnmount() {
-    events.off(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
-  }
-
-  layerHoverCallback = (id, active) => {
-    this.setState({ hoveredLayer: active ? id : undefined });
-  };
-
   /**
   * @desc get layer header with title, subtitle, and full date range
   * @param {Object} layer
@@ -56,7 +34,7 @@ class CoverageItemList extends Component {
   * @param {String} background color
   * @returns {DOM Element} header
   */
-  getHeaderDOMEl = (layer, visible, layerItemBackground, inactiveLayers) => {
+  static getHeaderDOMEl(layer, visible, layerItemBackground, inactiveLayers) {
     const titleColor = visible ? '#000' : '#999';
     const textColor = visible ? '#222' : '#999';
     const {
@@ -105,20 +83,64 @@ class CoverageItemList extends Component {
         </div>
       </div>
     );
-  };
+  }
+
+  /**
+  * @desc get empty layers message DOM element
+  * @returns {DOM Element} div contained message
+  */
+  static createEmptyLayersDOMEl() {
+    return (
+      <div className="layer-coverage-list-empty">
+        <div className="layer-coverage-item-empty">
+          <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" widthAuto />
+          <p>
+            No visible layers with defined coverage. Add layers or toggle
+            &quot;Include Hidden Layers&quot; if current layers are hidden.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
 
   /**
   * @desc get formatted time period name
   * @param {String} period
   * @returns {String} formatted period
   */
-  getFormattedTimePeriod = (period) => (period === 'daily'
-    ? 'day'
-    : period === 'monthly'
-      ? 'month'
-      : period === 'yearly'
-        ? 'year'
-        : 'minute');
+  static getFormattedTimePeriod (period) {
+    return period === 'daily'
+      ? 'day'
+      : period === 'monthly'
+        ? 'month'
+        : period === 'yearly'
+          ? 'year'
+          : 'minute';
+  }
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      hoveredLayer: undefined,
+    };
+
+    // cache for queried date arrays
+    this.layerDateArrayCache = {};
+  }
+
+  componentDidMount() {
+    events.on(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
+  }
+
+  componentWillUnmount() {
+    events.off(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
+  }
+
+  layerHoverCallback = (id, active) => {
+    this.setState({ hoveredLayer: active ? id : undefined });
+  };
 
   /**
   * @desc get range date end with added interval based on period
@@ -235,7 +257,7 @@ class CoverageItemList extends Component {
     } = def;
     const { dateInterval, startDate, endDate } = range;
 
-    const layerPeriod = this.getFormattedTimePeriod(period);
+    const layerPeriod = CoverageItemList.getFormattedTimePeriod(period);
     const rangeInterval = Number(dateInterval);
     let rangeEnd;
 
@@ -327,22 +349,6 @@ class CoverageItemList extends Component {
     };
   };
 
-  /**
-  * @desc get empty layers message DOM element
-  * @returns {DOM Element} div contained message
-  */
-  createEmptyLayersDOMEl = () => (
-    <div className="layer-coverage-list-empty">
-      <div className="layer-coverage-item-empty">
-        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" widthAuto />
-        <p>
-          No visible layers with defined coverage. Add layers or toggle
-          &quot;Include Hidden Layers&quot; if current layers are hidden.
-        </p>
-      </div>
-    </div>
-  );
-
   render() {
     const {
       activeLayers,
@@ -358,7 +364,7 @@ class CoverageItemList extends Component {
     return (
       <div className="layer-coverage-layer-list">
         {/* Empty layer coverage message */
-          emptyLayers && this.createEmptyLayersDOMEl()
+          emptyLayers && CoverageItemList.createEmptyLayersDOMEl()
         }
 
         {/* Build individual layer coverage components */
@@ -379,7 +385,7 @@ class CoverageItemList extends Component {
           if (isValidLayer) {
             multipleCoverageRanges = dateRanges.length > 1;
           }
-          let layerPeriod = this.getFormattedTimePeriod(period);
+          let layerPeriod = CoverageItemList.getFormattedTimePeriod(period);
 
           // get layer scale number to determine relation to current axis zoom level
           const timeScaleNumber = TIME_SCALE_TO_NUMBER[timeScale];
@@ -422,7 +428,7 @@ class CoverageItemList extends Component {
               }}
             >
               {/* Layer Header DOM El */
-                this.getHeaderDOMEl(layer, visible, layerItemBackground, inactiveLayers)
+                CoverageItemList.getHeaderDOMEl(layer, visible, layerItemBackground, inactiveLayers)
               }
               <div
                 className="layer-coverage-line-container"
@@ -455,8 +461,8 @@ class CoverageItemList extends Component {
 }
 
 CoverageItemList.propTypes = {
-  activeLayers: PropTypes.arrayOf,
-  appNow: PropTypes.shape,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

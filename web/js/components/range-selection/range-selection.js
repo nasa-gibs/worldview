@@ -226,29 +226,31 @@ class TimelineRangeSelector extends React.Component {
     const startDate = new Date(animationStartLocationDate);
     const endDate = new Date(animationEndLocationDate);
 
+    let newDraggerEndLocation = draggerEndLocation;
+    let newDraggerStartLocation = draggerStartLocation;
     // prevent draggers to be dragger BEFORE start date limit
     if (endDate < startDateLimit) {
-      draggerEndLocation = endLocation;
+      newDraggerEndLocation = endLocation;
       animationEndLocationDate = startDateLimit;
     }
     if (startDate < startDateLimit) {
-      draggerStartLocation = startLocation;
+      newDraggerStartLocation = startLocation;
       animationStartLocationDate = startDateLimit;
     }
     // prevent draggers to be dragger AFTER end date limit
     if (endDate > endDateLimit) {
-      draggerEndLocation = endLocation;
+      newDraggerEndLocation = endLocation;
       animationEndLocationDate = endDateLimit;
     }
     if (startDate > endDateLimit) {
-      draggerStartLocation = startLocation;
+      newDraggerStartLocation = startLocation;
       animationStartLocationDate = endDateLimit;
     }
     updateAnimationDateAndLocation(
       animationStartLocationDate,
       animationEndLocationDate,
-      draggerStartLocation,
-      draggerEndLocation,
+      newDraggerStartLocation,
+      newDraggerEndLocation,
       isDragging,
     );
   };
@@ -353,17 +355,17 @@ TimelineRangeSelector.propTypes = {
   axisWidth: PropTypes.number,
   endColor: PropTypes.string,
   endLocation: PropTypes.number,
-  endLocationDate: PropTypes.shape,
+  endLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   endTriangleColor: PropTypes.string,
   frontDate: PropTypes.string,
-  max: PropTypes.shape,
+  max: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   pinWidth: PropTypes.number,
   position: PropTypes.number,
   rangeColor: PropTypes.string,
   rangeOpacity: PropTypes.number,
   startColor: PropTypes.string,
   startLocation: PropTypes.number,
-  startLocationDate: PropTypes.shape,
+  startLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   startTriangleColor: PropTypes.string,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,

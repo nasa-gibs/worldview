@@ -256,7 +256,7 @@ FooterContent.propTypes = {
   chartingModeAccessible: PropTypes.bool,
   compareFeature: PropTypes.bool,
   compareMode: PropTypes.string,
-  eventsData: PropTypes.arrayOf,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isChartingActive: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isMobile: PropTypes.bool,

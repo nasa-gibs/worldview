@@ -191,14 +191,14 @@ function PaletteSelect (props) {
 
 PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
-  canvas: PropTypes.shape,
+  canvas: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   clearCustomPalette: PropTypes.func,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
-  layer: PropTypes.shape,
-  paletteOrder: PropTypes.arrayOf,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,
   setCustomPalette: PropTypes.func,
 };

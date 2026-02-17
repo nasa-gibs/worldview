@@ -21,8 +21,8 @@ import * as olProj from 'ol/proj';
 import util from '../../../util/util';
 import {
   refreshRotation,
-  updateRenderedState,
-  updateMapUI,
+  updateRenderedState as updateRenderedStateAction,
+  updateMapUI as updateMapUIAction,
 } from '../../../modules/map/actions';
 import { saveRotation } from '../../../map/util';
 import {
@@ -32,7 +32,11 @@ import {
   MAP_MOVE_START,
   MAP_ZOOMING,
 } from '../../../util/constants';
-import { startLoading, stopLoading, MAP_LOADING } from '../../../modules/loading/actions';
+import {
+  startLoading as startLoadingAction,
+  stopLoading as stopLoadingAction,
+  MAP_LOADING,
+} from '../../../modules/loading/actions';
 import { granuleFootprint } from '../../../map/granule/util';
 
 const { events } = util;
@@ -64,15 +68,16 @@ function CreateMap(props) {
   /**
    * Create map object
    *
-   * @method createMap
+   * @method mapCreation
    * @static
    *
    * @param {object} proj - Projection properties
-   * @param {object} dateSelected
+   * @param {object} uiCopyObj
    *
    * @returns {object} OpenLayers Map Object
    */
-  const mapCreation = (proj, uiCopy) => {
+  const mapCreation = (proj, uiCopyObj) => {
+    const uiCopy = uiCopyObj;
     const mapContainerEl = document.getElementById('wv-map');
     const mapEl = document.createElement('div');
     const id = `wv-map-${proj.id}`;
@@ -247,16 +252,16 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(refreshRotation(rotation));
   },
   updateRenderedState: () => {
-    dispatch(updateRenderedState());
+    dispatch(updateRenderedStateAction());
   },
   updateMapUI: (ui, rotation) => {
-    dispatch(updateMapUI(ui, rotation));
+    dispatch(updateMapUIAction(ui, rotation));
   },
   startLoading: (key) => {
-    dispatch(startLoading(key));
+    dispatch(startLoadingAction(key));
   },
   stopLoading: (key) => {
-    dispatch(stopLoading(key));
+    dispatch(stopLoadingAction(key));
   },
 });
 
@@ -266,7 +271,7 @@ export default connect(
 )(CreateMap);
 
 CreateMap.propTypes = {
-  config: PropTypes.shape,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isMapSet: PropTypes.bool,
   preloadForCompareMode: PropTypes.func,
   setGranuleFootprints: PropTypes.func,
@@ -274,7 +279,7 @@ CreateMap.propTypes = {
   setUI: PropTypes.func,
   startLoading: PropTypes.func,
   stopLoading: PropTypes.func,
-  ui: PropTypes.shape,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateExtent: PropTypes.func,
   updateMapUI: PropTypes.func,
   updateRenderedState: PropTypes.func,

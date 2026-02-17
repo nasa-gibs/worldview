@@ -133,9 +133,9 @@ const mapStateToProps = (state) => {
 };
 
 DateLines.propTypes = {
-  map: PropTypes.shape,
-  proj: PropTypes.shape,
-  date: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,

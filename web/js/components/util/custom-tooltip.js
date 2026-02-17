@@ -96,7 +96,7 @@ function CustomTooltip (props) {
 }
 
 CustomTooltip.propTypes = {
-  children: PropTypes.shape,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   id: PropTypes.string,
   text: PropTypes.string,
   hideTooltip: PropTypes.bool,

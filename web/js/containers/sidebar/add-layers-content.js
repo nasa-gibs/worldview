@@ -116,7 +116,7 @@ AddLayersContent.propTypes = {
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   toggleOverlayGroups: PropTypes.func,
-  breakpoints: PropTypes.shape,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   screenWidth: PropTypes.number,
   addLayers: PropTypes.func,
 };

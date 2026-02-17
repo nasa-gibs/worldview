@@ -42,7 +42,7 @@ import { changeTab as changeTabAction } from '../modules/sidebar/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
-import { promiseImageryForTour } from '../modules/map/util';
+import { promiseImageryForTour as promiseImageryForTourUtil } from '../modules/map/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -64,6 +64,10 @@ const prepareLayersList = function(layersString, config) {
 };
 
 class Tour extends React.Component {
+  static getKioskParam(isKioskModeActive) {
+    return isKioskModeActive ? '&kiosk=true' : '';
+  }
+
   constructor(props) {
     super(props);
     const { storyOrder, stories, currentStoryId } = props;
@@ -154,7 +158,7 @@ class Tour extends React.Component {
       isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     if (e) e.preventDefault();
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -266,7 +270,7 @@ class Tour extends React.Component {
       config, renderedPalettes, processStepLink, isKioskModeActive, activeTab,
       changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
 
     if (activeTab === 'events') changeTab('layers');
 
@@ -299,10 +303,6 @@ class Tour extends React.Component {
     }
   }
 
-  getKioskParam(isKioskModeActive) {
-    return isKioskModeActive ? '&kiosk=true' : '';
-  }
-
   decreaseStep(e) {
     const {
       config, renderedPalettes, processStepLink,
@@ -311,7 +311,7 @@ class Tour extends React.Component {
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
 
     if (activeTab === 'events') changeTab('layers');
 
@@ -508,8 +508,8 @@ class Tour extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  processStepLink: (currentStoryId, currentStep, totalSteps, search, config, rendered) => {
-    search = search.split('/?').pop();
+  processStepLink: (currentStoryId, currentStep, totalSteps, s, config, rendered) => {
+    const search = s.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search },
     });
@@ -553,8 +553,8 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
-  preProcessStepLink: async (search, config, promiseImageryForTour) => {
-    search = search.split('/?').pop();
+  preProcessStepLink: async (s, config, promiseImageryForTour) => {
+    const search = s.split('/?').pop();
     const parameters = util.fromQueryString(search);
     let layersA = [];
     let layersB = [];
@@ -623,7 +623,7 @@ const mapStateToProps = (state) => {
       layers,
       dateString,
       activeString,
-    ) => promiseImageryForTour(state, layers, dateString, activeString),
+    ) => promiseImageryForTourUtil(state, layers, dateString, activeString),
   };
 };
 
@@ -635,11 +635,11 @@ export default connect(
 Tour.propTypes = {
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
-  config: PropTypes.shape.isRequired,
-  map: PropTypes.shape,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectTour: PropTypes.func.isRequired,
-  stories: PropTypes.shape.isRequired,
-  storyOrder: PropTypes.arrayOf.isRequired,
+  stories: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  storyOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
@@ -648,7 +648,7 @@ Tour.propTypes = {
   processStepLink: PropTypes.func,
   promiseImageryForTour: PropTypes.func,
   preProcessStepLink: PropTypes.func,
-  renderedPalettes: PropTypes.shape,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
   startTour: PropTypes.func,

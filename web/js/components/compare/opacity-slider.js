@@ -20,13 +20,13 @@ function OpacitySlider ({
     onSlide(val);
   };
 
-  const getDateTextOptions = (dateA, dateB) => {
-    const isSameDate = dateA === dateB;
+  const getDateTextOptions = (dateOne, dateTwo) => {
+    const isSameDate = dateOne === dateTwo;
     let dateAText = '';
     let dateBText = '';
     if (!isSameDate) {
-      dateAText += `: ${dateA}`;
-      dateBText += `: ${dateB}`;
+      dateAText += `: ${dateOne}`;
+      dateBText += `: ${dateTwo}`;
     }
     const labelStyle = isSameDate ? {} : { width: '105px', paddingLeft: '3px' };
     const caseStyle = { width: isSameDate ? '178px' : '420px' };

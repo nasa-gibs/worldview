@@ -86,8 +86,8 @@ function CollapsedAnimationWidget (props) {
 }
 
 CollapsedAnimationWidget.propTypes = {
-  breakpoints: PropTypes.shape,
-  collapsedWidgetPosition: PropTypes.shape,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  collapsedWidgetPosition: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,

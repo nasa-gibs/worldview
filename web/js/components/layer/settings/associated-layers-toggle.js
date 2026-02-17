@@ -77,8 +77,8 @@ export default connect(
 )(AssociatedLayersToggle);
 
 AssociatedLayersToggle.propTypes = {
-  activeLayers: PropTypes.shape,
+  activeLayers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   addLayer: PropTypes.func,
   removeLayer: PropTypes.func,
-  associatedLayers: PropTypes.arrayOf,
+  associatedLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };

@@ -309,16 +309,16 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 EventMarkers.propTypes = {
-  eventsData: PropTypes.arrayOf,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   eventsDataIsLoading: PropTypes.bool,
   highlightEvent: PropTypes.func,
   isAnimatingToEvent: PropTypes.bool,
   isMobile: PropTypes.bool,
-  map: PropTypes.shape,
-  mapUi: PropTypes.shape,
-  proj: PropTypes.shape,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  mapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectEvent: PropTypes.func,
-  selectedEvent: PropTypes.shape,
+  selectedEvent: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   unHighlightEvent: PropTypes.func,
 };
 

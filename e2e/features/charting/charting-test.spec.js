@@ -88,7 +88,7 @@ test('Date selector opens datepicker modal', async () => {
   if (isChartingEnabled) {
     await page.locator('#chart-toggle-button').click()
     await page.locator('#charting-date-button').click()
-    const chartingDateModal = page.locator('#charting-date-modal > div > div > div.modal-header > h5')
+    const chartingDateModal = page.locator('#charting-date-modal > div > div > div > div.modal-header > h5')
     await expect(chartingDateModal).toHaveText('Charting Mode Date Selection')
   }
 })
@@ -98,9 +98,9 @@ test('Info modal opens on mode start & on icon click', async () => {
   const isChartingEnabled = await page.$('#chart-toggle-button')
   if (isChartingEnabled) {
     await page.locator('#chart-toggle-button').click()
-    const infoModal = page.locator('#charting_info_modal > div > div > div.modal-header > h5')
+    const infoModal = page.locator('#charting_info_modal > div > div > div > div.modal-header > h5')
     await expect(infoModal).toHaveText('Charting Tool - BETA')
-    await page.locator('#charting_info_modal > div > div > div.modal-header > button').click()
+    await page.locator('#charting_info_modal > div > div > div > div.modal-header > button').click()
     await expect(infoModal).toHaveCount(0)
     await page.locator('#charting-info-container svg').click()
     await expect(infoModal).toHaveText('Charting Tool - BETA')

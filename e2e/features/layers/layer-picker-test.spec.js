@@ -45,7 +45,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(16)
+  await expect(layersSearchRow).toHaveCount(20)
 })
 
 test('Updating input changes results', async () => {

@@ -2,7 +2,7 @@
             target="_blank" rel="noopener noreferrer">Release
             Notes</a>)</span></h1>
 <div class="right">
-    <div class="caption"><a href="https://wiki.earthdata.nasa.gov/pages/viewrecentblogposts.action?key=GIBS"
+    <div class="caption"><a href="https://www.earthdata.nasa.gov/news?field_tools_target_id[21910]=21910&items_per_page=8"
             target="_blank" rel="noopener noreferrer"> What's new in @OFFICIAL_NAME@! </a></div>
 </div>
 <p>This <a href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">open source

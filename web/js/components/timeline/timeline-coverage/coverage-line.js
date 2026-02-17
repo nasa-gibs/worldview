@@ -20,7 +20,7 @@ class CoverageLine extends PureComponent {
   *   @param {String} dateRangeEnd
   *   @param {String} toolTipText
   */
-  getFormattedDisplayDates = (lineType, startDate, endDate, layerPeriod) => {
+  static getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod) {
     let dateRangeStart;
     let dateRangeEnd;
     let toolTipText;
@@ -55,7 +55,7 @@ class CoverageLine extends PureComponent {
       dateRangeEnd,
       toolTipText,
     };
-  };
+  }
 
   /**
   * @desc get line DOM element from full/partial (interval) date range with tooltip
@@ -96,7 +96,7 @@ class CoverageLine extends PureComponent {
       dateRangeStart,
       dateRangeEnd,
       toolTipText,
-    } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
+    } = CoverageLine.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
 
     // candy stripe color
@@ -181,7 +181,7 @@ CoverageLine.propTypes = {
   index: PropTypes.string,
   layerPeriod: PropTypes.string,
   lineType: PropTypes.string,
-  options: PropTypes.arrayOf,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   positionTransformX: PropTypes.number,
   startDate: PropTypes.string,
 };

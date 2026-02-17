@@ -43,7 +43,7 @@ OpacitySelect.defaultProps = {
   start: 100,
 };
 OpacitySelect.propTypes = {
-  layer: PropTypes.shape,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setOpacity: PropTypes.func,
   start: PropTypes.number,
 };
