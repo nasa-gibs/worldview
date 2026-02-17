@@ -52,7 +52,7 @@ import { getInitialState as getInitialSettingsState, settingsReducer } from './s
 import { getInitialState as getInitialScreenSizeState, screenSizeReducer } from './screen-size/reducer';
 import { loadingReducer } from './loading/reducers';
 
-function lastAction(state = null, action) {
+function lastAction(action) {
   return action;
 }
 
@@ -84,7 +84,7 @@ export function getInitialState(models, config, parameters) {
     vectorStyles: getInitialVectorStyleState(config),
   };
 }
-const locationReducer = (state = { key: '' }, action) => {
+const locationReducer = (action, state = { key: '' }) => {
   if (action.type === LOCATION_POP_ACTION) {
     return lodashAssign({}, state, { key: action.payload.key });
   }

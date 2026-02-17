@@ -22,7 +22,7 @@ export const defaultAlertState = {
   ddvLocationAlerts: [],
 };
 
-export function alertReducer(state = defaultAlertState, action) {
+export function alertReducer(action, state = defaultAlertState) {
   switch (action.type) {
     case DISABLE_VECTOR_ZOOM_ALERT:
       return lodashAssign({}, state, {

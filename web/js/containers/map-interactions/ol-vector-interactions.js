@@ -89,7 +89,7 @@ export class VectorInteractions extends React.Component {
 
     // only allow hover footprints on selected side of A/B comparison
     if (compareActive
-      && !isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset)) {
+      && !isFromActiveCompareRegion(pixels, activeString, swipeOffset, compareState)) {
       return;
     }
 
@@ -139,7 +139,7 @@ export class VectorInteractions extends React.Component {
         const isRenderedFeature = isWrapped ? lon > -250
         || lon < 250 || lat > -90 || lat < 90 : true;
         if (isRenderedFeature
-          && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
+          && isFromActiveCompareRegion(pixel, layer.wv.group, swipeOffset, compareState)) {
           isActiveLayer = true;
         }
       });

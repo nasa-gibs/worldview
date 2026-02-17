@@ -37,7 +37,7 @@ export function getInitialState(config) {
   };
 }
 
-export function animationReducer(state = defaultState, action) {
+export function animationReducer(action, state = defaultState) {
   switch (action.type) {
     case OPEN_ANIMATION:
       return {

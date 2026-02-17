@@ -41,7 +41,7 @@ export function getInitialState(config) {
   };
 }
 
-export function dateReducer(state = dateReducerState, action) {
+export function dateReducer(action, state = dateReducerState) {
   switch (action.type) {
     case CHANGE_TIME_SCALE:
       return {

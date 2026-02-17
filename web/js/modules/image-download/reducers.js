@@ -15,7 +15,7 @@ export const defaultState = {
   resolution: '',
 };
 
-export function imageDownloadReducer(state = defaultState, action) {
+export function imageDownloadReducer(action, state = defaultState) {
   switch (action.type) {
     case UPDATE_BOUNDARIES:
       return lodashAssign({}, state, {

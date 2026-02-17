@@ -14,7 +14,7 @@ export const initialCompareState = {
   activeString: 'active',
   bStatesInitiated: false,
 };
-export function compareReducer(state = initialCompareState, action) {
+export function compareReducer(action, state = initialCompareState) {
   switch (action.type) {
     case CHANGE_STATE: {
       const newIsCompareA = !state.isCompareA;

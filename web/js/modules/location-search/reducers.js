@@ -21,7 +21,7 @@ export const locationSearchState = {
   suggestedPlace: [],
 };
 
-export function locationSearchReducer(state = locationSearchState, action) {
+export function locationSearchReducer(action, state = locationSearchState) {
   switch (action.type) {
     case TOGGLE_SHOW_LOCATION_SEARCH:
       return {

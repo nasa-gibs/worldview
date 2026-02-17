@@ -8,9 +8,9 @@ describe('shortLink reducer', () => {
   });
   test('Should set isLoading to true on Request Start', () => {
     expect(
-      shortLink([], {
+      shortLink({
         type: constants.REQUEST_SHORT_LINK_START,
-      }),
+      }, []),
     ).toEqual({
       isLoading: true,
       error: null,
@@ -20,10 +20,10 @@ describe('shortLink reducer', () => {
   });
   test('Should return response upon request success [link-reducer-success-response]', () => {
     expect(
-      shortLink([], {
+      shortLink({
         type: constants.REQUEST_SHORT_LINK_SUCCESS,
         response: constants.MOCK_SHORT_LINK_RESPONSE_BODY,
-      }),
+      }, []),
     ).toEqual({
       isLoading: false,
       error: null,
@@ -34,7 +34,7 @@ describe('shortLink reducer', () => {
 });
 describe('linkReducer', () => {
   test('should return the initial state [link-reducer-return-initial-state]', () => {
-    expect(linkReducer(undefined, {})).toEqual(defaultLinkState);
+    expect(linkReducer({}, undefined)).toEqual(defaultLinkState);
   });
   test(
     `${constants.UPDATE_PERMALINK
@@ -42,10 +42,10 @@ describe('linkReducer', () => {
     () => {
       const testString = 'thisIsATestString';
       expect(
-        linkReducer([], {
+        linkReducer({
           type: constants.UPDATE_PERMALINK,
           queryString: testString,
-        }),
+        }, []),
       ).toEqual({
         queryString: testString,
       });

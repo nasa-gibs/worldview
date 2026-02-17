@@ -130,7 +130,6 @@ export function addLayer(id) {
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
       overlays.length || 0,

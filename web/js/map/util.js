@@ -141,11 +141,14 @@ const getBestZoom = function(distance, start, end, view) {
 /**
    * Moves the map with a "flying" animation
    *
-   * @param  {Array} endPointArray  Ending coordinates
-   * @param  {integer} endZoom Ending Zoom Level
-   * @return {Promise}         Promise that is fulfilled when animation completes
+   * @param  {Object} map - OpenLayers Map Object
+   * @param  {string} proj - The specified projection ex: 'geographic', 'arctic' etc..
+   * @param  {Boolean} isKioskModeActive -  Boolean for whether kiosk mode is active
+   * @param  {Array} endPointArray -  Ending coordinates
+   * @param  {integer} endZoom - Ending Zoom Level
+   * @return {Promise} Promise that is fulfilled when animation completes
    */
-export function fly (map, proj, endPointArray, endZoom = 5, rotation = 0, isKioskModeActive) {
+export function fly (map, proj, endPointArray, isKioskModeActive, endZoom = 5, rotation = 0) {
   let endPoint = endPointArray;
   const view = map.getView();
   const polarProjectionCheck = proj.selected.id !== 'geographic'; // boolean if current projection is polar

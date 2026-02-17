@@ -23,7 +23,6 @@ const getLayerId = (state, { layer }) => layer && layer.id;
 
 export function addLayer(
   id,
-  spec = {},
   layersParam,
   layerConfig,
   overlayLength,
@@ -31,6 +30,7 @@ export function addLayer(
   groupOverlays,
   bandComboParam,
   selectedPresetParam,
+  spec = {},
 ) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
@@ -123,7 +123,7 @@ export function resetLayers(config) {
   let layers = [];
   if (startingLayers) {
     lodashEach(startingLayers, (start) => {
-      layers = addLayer(start.id, start, layers, layerConfig, null, projection);
+      layers = addLayer(start.id, layers, layerConfig, null, projection, start);
     });
   }
   return layers;
@@ -433,7 +433,7 @@ export function available(id, date, layers, parameters) {
   return true;
 }
 
-function forGroup(group, spec = {}, activeLayers, state) {
+function forGroup(group, activeLayers, state, spec = {}) {
   const projId = state.proj.id;
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
@@ -464,10 +464,10 @@ function forGroup(group, spec = {}, activeLayers, state) {
  * @param {*} spec
  * @param {*} state
  */
-export function getLayers(state, spec = {}, layersParam) {
+export function getLayers(state, layersParam, spec = {}) {
   const layers = layersParam || getActiveLayers(state);
-  const baselayers = forGroup('baselayers', spec, layers, state);
-  const overlays = forGroup('overlays', spec, layers, state);
+  const baselayers = forGroup('baselayers', layers, state, spec);
+  const overlays = forGroup('overlays', layers, state, spec);
   if (spec.group === 'baselayers') {
     return baselayers;
   }
@@ -505,7 +505,7 @@ export function isRenderable(id, layers, dateString, bLayers, state) {
     return true;
   }
   let obscured = false;
-  const baselayers = bLayers || getLayers(state, { group: 'baselayers' }, layers);
+  const baselayers = bLayers || getLayers(state, layers, { group: 'baselayers' });
   lodashEach(
     baselayers,
     (otherDef) => {
@@ -693,12 +693,12 @@ export function getTitles(config, layerId, projId) {
 
 export const getAllActiveLayers = createSelector(
   [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}),
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}, {}),
 );
 
 export const getAllActiveOverlaysBaselayers = createSelector(
   [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}, { group: 'all' }),
 );
 
 /**
@@ -754,15 +754,15 @@ export function activateLayersForEventCategory(state, category) {
         [index]: { visible: { $set: visible } },
       });
     } else {
-      const overlays = getLayers(state, { group: 'overlays' }, newLayers);
+      const overlays = getLayers(state, newLayers, { group: 'overlays' });
       newLayers = addLayer(
         id,
-        { visible },
         newLayers,
         layerConfig,
         overlays.length,
         projection,
         null,
+        { visible },
       );
     }
   });

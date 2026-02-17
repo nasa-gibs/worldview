@@ -25,7 +25,7 @@ export const initialChartingState = {
   fromButton: false,
   isChartOpen: false,
 };
-export function chartingReducer(state = initialChartingState, action) {
+export function chartingReducer(action, state = initialChartingState) {
   switch (action.type) {
     case TOGGLE_ON_OFF:
       if (state.active) {

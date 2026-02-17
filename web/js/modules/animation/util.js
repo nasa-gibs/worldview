@@ -45,10 +45,10 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
  * @param {Date} end              | The date of the last frame of animation
  * @param {String} interval       | The animation step value (Year/Month/Day/Custom)
  *                                  separating frames
- * @param {Number} stateDelta          | Rate of change between states; defaults to 1 second
  * @param {Number} maxToCheck     | The limit on the total number of frames to be used
  * @param {Boolean} autoSelected  | Is auto interval selected
  * @param {Array} layers          | List of layers
+ * @param {Number} stateDelta          | Rate of change between states; defaults to 1 second
  *
  * @return {Number} | The total number of frames required
  */
@@ -56,10 +56,10 @@ export function getNumberOfSteps(
   start,
   end,
   interval,
-  stateDelta = 1,
   maxToCheck,
   autoSelected,
   layers,
+  stateDelta = 1,
 ) {
   let delta = stateDelta;
   if (autoSelected) {

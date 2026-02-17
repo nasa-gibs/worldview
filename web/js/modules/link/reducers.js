@@ -6,11 +6,11 @@ export const defaultLinkState = {
   queryString: '',
 };
 
-export function shortLink(state = {}, action) {
+export function shortLink(action, state = {}) {
   return requestReducer(REQUEST_SHORT_LINK, state, action);
 }
 
-export function linkReducer(state = defaultLinkState, action) {
+export function linkReducer(action, state = defaultLinkState) {
   switch (action.type) {
     case UPDATE_PERMALINK:
       return lodashAssign({}, state, {

@@ -81,7 +81,7 @@ export function getInitialState(config) {
 }
 
 
-export function layerReducer(state = initialState, action) {
+export function layerReducer(action, state = initialState) {
   const compareState = action.activeString;
   const getPrevOverlayGroups = () => state[compareState].overlayGroups;
   const getLayerIndex = () => {

@@ -24,7 +24,7 @@ const coordinatesObject = { id: 1234, latitude: 72, longitude: 40 };
 
 describe('locationSearch', () => {
   test('locationSearch should return the initial state [locationstate-reducer-initial-state]', () => {
-    expect(locationSearchReducer(undefined, {})).toEqual(
+    expect(locationSearchReducer({}, undefined)).toEqual(
       locationSearchState,
     );
   });
@@ -34,13 +34,13 @@ describe('locationSearch', () => {
       + 'should return new state [locationsearch-reducer-toggle]',
     () => {
       expect(
-        locationSearchReducer(locationSearchState, {
+        locationSearchReducer({
           type: TOGGLE_SHOW_LOCATION_SEARCH,
           value: true,
-        }),
+        }, locationSearchState),
       ).toEqual({
-        ...locationSearchState,
         isExpanded: true,
+        ...locationSearchState,
       });
     },
   );
@@ -50,10 +50,10 @@ describe('locationSearch', () => {
       + 'should return new state [locationsearch-reducer-reverse-geocode]',
     () => {
       expect(
-        locationSearchReducer(locationSearchState, {
+        locationSearchReducer({
           type: TOGGLE_REVERSE_GEOCODE,
           value: true,
-        }),
+        }, locationSearchState),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: true,
@@ -66,11 +66,11 @@ describe('locationSearch', () => {
     + 'and sets isCoordinateSearchActive to false and should return new state [locationsearch-reducer-set-marker]',
     () => {
       expect(
-        locationSearchReducer(locationSearchState, {
+        locationSearchReducer({
           type: SET_MARKER,
           coordinates: coordinatesObject,
           reverseGeocodeResults,
-        }),
+        }, locationSearchState),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
@@ -85,10 +85,10 @@ describe('locationSearch', () => {
       + 'should return new state [locationsearch-reducer-set-suggestion]',
     () => {
       expect(
-        locationSearchReducer(locationSearchState, {
+        locationSearchReducer({
           type: SET_SUGGESTION,
           value: suggestion,
-        }),
+        }, locationSearchState),
       ).toEqual({
         ...locationSearchState,
         suggestedPlace: suggestion,
@@ -101,14 +101,14 @@ describe('locationSearch', () => {
       + 'should return new state [locationsearch-reducer-clear-suggestion]',
     () => {
       expect(
-        locationSearchReducer(locationSearchState, {
+        locationSearchReducer({
           type: CLEAR_SUGGESTIONS,
           value: [],
-        }),
+        }, locationSearchState),
       ).toEqual({
-        ...locationSearchState,
         suggestions: [],
         suggestedPlace: [],
+        ...locationSearchState,
       });
     },
   );

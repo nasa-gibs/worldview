@@ -6,7 +6,7 @@ export const initialState = {
   isLoading: false,
 };
 
-export function loadingReducer (state = initialState, action) {
+export function loadingReducer (action, state = initialState) {
   const { type, key, msg } = action;
 
   const isLoading = (loadingMap) => {

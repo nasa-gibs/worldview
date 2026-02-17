@@ -452,10 +452,10 @@ function mapStateToProps(state) {
       customSelected
         ? TIME_SCALE_FROM_NUMBER[customInterval]
         : TIME_SCALE_FROM_NUMBER[interval],
-      customSelected ? customDelta : 1,
       null,
       autoSelected,
       layers.active.layers,
+      customSelected ? customDelta : 1,
     ),
     getImageArrayFunc: (options, dimensions) => getImageArray(
       options,

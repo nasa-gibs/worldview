@@ -18,7 +18,7 @@ const selectedZoom = 2;
 
 describe('dateReducer', () => {
   test('should return the initial state [date-reducer-initial-state]', () => {
-    expect(dateReducer(undefined, {})).toEqual(
+    expect(dateReducer({}, undefined)).toEqual(
       dateReducerState,
     );
   });
@@ -28,10 +28,10 @@ describe('dateReducer', () => {
       + 'should return new state [date-reducer-time-scale]',
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: CHANGE_TIME_SCALE,
           value: selectedZoom,
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         selectedZoom,
@@ -44,11 +44,11 @@ describe('dateReducer', () => {
       + 'should return new state [date-reducer-custom-interval]',
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: CHANGE_CUSTOM_INTERVAL,
           interval: 4,
           delta: 10,
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         customInterval: 4,
@@ -63,12 +63,12 @@ describe('dateReducer', () => {
       + 'should return new state [date-reducer-auto-interval]',
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: CHANGE_AUTO_INTERVAL,
           interval: 3,
           delta: 1,
           autoSelected: true,
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         autoSelected: true,
@@ -81,13 +81,13 @@ describe('dateReducer', () => {
       + 'should return new state [date-reducer-interval]',
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: CHANGE_INTERVAL,
           interval: 2,
           delta: 1,
           customSelected: false,
           autoSelected: false,
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
@@ -102,11 +102,11 @@ describe('dateReducer', () => {
       + 'as activeString should return new state [date-reducer-selected]',
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: SELECT_DATE,
           value: mockDate,
           activeString: 'selected',
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         selected: mockDate,
@@ -119,11 +119,11 @@ describe('dateReducer', () => {
       + 'as activeString should return new state [date-reducer-selectedB]',
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: SELECT_DATE,
           value: mockDate,
           activeString: 'selectedB',
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         selectedB: mockDate,
@@ -135,10 +135,10 @@ describe('dateReducer', () => {
     }action type and ${mockDate} as value should return new state [date-reducer-update-app-now]`,
     () => {
       expect(
-        dateReducer(dateReducerState, {
+        dateReducer({
           type: UPDATE_APP_NOW,
           value: mockDate,
-        }),
+        }, dateReducerState),
       ).toEqual({
         ...dateReducerState,
         appNow: mockDate,
