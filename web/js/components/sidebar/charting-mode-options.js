@@ -379,10 +379,6 @@ function ChartingModeOptions(props) {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
 
-      await new Promise((r) => {
-        setTimeout(r, 5000);
-      }); // Mock loading time
-
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
