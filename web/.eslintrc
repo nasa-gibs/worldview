@@ -155,6 +155,18 @@
         "prefer-regex-literals": "error",
         "no-promise-executor-return": "error"
       }
+    },
+    {
+      "files": [
+        "**/reducer.js",
+        "**/reducer.test.js",
+        "**/reducers.js",
+        "**/reducers.test.js",
+        "**/combine-reducers.js"
+      ],
+      "rules": {
+        "default-param-last": "warn"
+      }
     }
   ]
 }
