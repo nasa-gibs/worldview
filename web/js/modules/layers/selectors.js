@@ -25,12 +25,11 @@ export function addLayer(
   id,
   layersParam,
   layerConfig,
-  overlayLength,
-  projection,
-  groupOverlays,
-  bandComboParam,
-  selectedPresetParam,
   spec = {},
+  overlayLength = null,
+  groupOverlays = null,
+  bandComboParam = null,
+  selectedPresetParam = null,
 ) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
@@ -119,11 +118,11 @@ export function addLayer(
  * @param {*} layerConfig
  */
 export function resetLayers(config) {
-  const { defaults: { startingLayers, projection }, layers: layerConfig } = config;
+  const { defaults: { startingLayers }, layers: layerConfig } = config;
   let layers = [];
   if (startingLayers) {
     lodashEach(startingLayers, (start) => {
-      layers = addLayer(start.id, layers, layerConfig, null, projection, start);
+      layers = addLayer(start.id, layers, layerConfig, start);
     });
   }
   return layers;
@@ -759,10 +758,8 @@ export function activateLayersForEventCategory(state, category) {
         id,
         newLayers,
         layerConfig,
-        overlays.length,
-        projection,
-        null,
         { visible },
+        overlays.length,
       );
     }
   });

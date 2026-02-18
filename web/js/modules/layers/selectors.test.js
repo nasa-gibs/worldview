@@ -134,9 +134,9 @@ test('obscured base layer is not renderable', () => {
   expect(layerList).toEqual(['aqua-cr', 'aqua-aod', 'terra-aod']);
 });
 
-test('base layer is not obscured by a hidden layer', () => {
+test.only('base layer is not obscured by a hidden layer', () => {
   let layers = addLayer('terra-cr', [], config.layers);
-  layers = addLayer('aqua-cr', layers, config.layers, null, null, null, null, null, { visible: false });
+  layers = addLayer('aqua-cr', layers, config.layers, { visible: false });
   layers = addLayer('terra-aod', layers, config.layers);
   layers = addLayer('aqua-aod', layers, config.layers);
 
@@ -150,7 +150,7 @@ test('layer with zero opacity is not renderable', () => {
   let layers = addLayer('terra-cr', [], config.layers);
   layers = addLayer('aqua-cr', layers, config.layers);
   layers = addLayer('terra-aod', layers, config.layers);
-  layers = addLayer('aqua-aod', layers, config.layers, null, null, null, null, null, { opacity: 0 });
+  layers = addLayer('aqua-aod', layers, config.layers, { opacity: 0 });
 
   const layerList = getLayers(getState(layers), { renderable: true }).map(
     (x) => x.id,

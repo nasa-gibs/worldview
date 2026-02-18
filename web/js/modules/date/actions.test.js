@@ -136,7 +136,7 @@ describe('Date timescale changes', () => {
         lastArrowDirection: 'right',
         outOfStep: false,
       };
-      let layers = addLayer('terra-cr', [], config.layers, 0, {});
+      let layers = addLayer('terra-cr', [], config.layers, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {
