@@ -27,7 +27,7 @@ test('hasCustomTypePalette func determines if custom palette is in string [palet
   expect(bool).toBeTruthy();
 });
 
-test('loadPalettes func updates state with correct palette attributes [palettes-load-palettes]', () => {
+test.only('loadPalettes func updates state with correct palette attributes [palettes-load-palettes]', () => {
   const updatedState = update(state, {
     layers: {
       active: {

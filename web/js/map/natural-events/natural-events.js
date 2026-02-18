@@ -186,7 +186,7 @@ class NaturalEvents extends React.Component {
     } else {
       coordinates = olProj.transform(geometry.coordinates, CRS.GEOGRAPHIC, crs);
     }
-    return fly(map, proj, coordinates, zoom, null, isKioskModeActive);
+    return fly(map, proj, coordinates, isKioskModeActive, zoom, null);
   };
 
   render() {

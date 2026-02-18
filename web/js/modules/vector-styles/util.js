@@ -238,7 +238,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
 
     const type = feature.getGeometry().getType();
     if (lodashIncludes(def.clickDisabledFeatures, type)
-      || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
+      || !isFromActiveCompareRegion(pixels, layer.wv.group, swipeOffset, compareState)) {
       return true;
     }
     if (def.vectorData && def.vectorData.id && def.title) {

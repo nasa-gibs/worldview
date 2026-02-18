@@ -56,10 +56,10 @@ export function getNumberOfSteps(
   start,
   end,
   interval,
-  stateDelta = 1,
   maxToCheck,
   autoSelected,
   layers,
+  stateDelta = 1,
 ) {
   let delta = stateDelta;
   if (autoSelected) {

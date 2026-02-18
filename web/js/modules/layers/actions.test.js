@@ -42,11 +42,10 @@ function getState(layers) {
 function addMockLayer(layerId, layerArray, proj) {
   return addLayer(
     layerId,
-    {},
     layerArray,
     config.layers,
+    {},
     getLayers(getState(layerArray), { group: 'all' }, layerArray).overlays.length,
-    proj,
   );
 }
 
@@ -56,7 +55,7 @@ describe('Layer actions', () => {
 
   beforeEach(() => {
     layers = [];
-    layers = addLayer('terra-cr', {}, [], config.layers, 0);
+    layers = addLayer('terra-cr', [], config.layers, 0);
     layers = addMockLayer('aqua-cr', layers);
     layers = addMockLayer('terra-aod', layers);
     layers = addMockLayer('aqua-aod', layers);
