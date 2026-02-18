@@ -460,11 +460,11 @@ function forGroup(group, activeLayers, state, spec = {}) {
 
 /**
  *
- * @param {*} layers
- * @param {*} spec
  * @param {*} state
+ * @param {*} spec
+ * @param {*} layersParam
  */
-export function getLayers(state, layersParam, spec = {}) {
+export function getLayers(state, spec = {}, layersParam = null) {
   const layers = layersParam || getActiveLayers(state);
   const baselayers = forGroup('baselayers', layers, state, spec);
   const overlays = forGroup('overlays', layers, state, spec);
@@ -505,7 +505,7 @@ export function isRenderable(id, layers, dateString, bLayers, state) {
     return true;
   }
   let obscured = false;
-  const baselayers = bLayers || getLayers(state, layers, { group: 'baselayers' });
+  const baselayers = bLayers || getLayers(state, { group: 'baselayers' }, layers);
   lodashEach(
     baselayers,
     (otherDef) => {
@@ -693,12 +693,12 @@ export function getTitles(config, layerId, projId) {
 
 export const getAllActiveLayers = createSelector(
   [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}, {}),
+  (proj, compare, layers) => getLayers({ proj, compare, layers }),
 );
 
 export const getAllActiveOverlaysBaselayers = createSelector(
   [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}, { group: 'all' }),
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
 );
 
 /**
@@ -754,7 +754,7 @@ export function activateLayersForEventCategory(state, category) {
         [index]: { visible: { $set: visible } },
       });
     } else {
-      const overlays = getLayers(state, newLayers, { group: 'overlays' });
+      const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
         newLayers,

@@ -1071,11 +1071,14 @@ const createLayerArrayFromState = function(layers, config) {
     }
     layerArray = addLayer(
       layerDef.id,
-      getLayerSpec(layerDef.attributes),
       layerArray,
       config.layers,
       null,
       projection,
+      null,
+      null,
+      null,
+      getLayerSpec(layerDef.attributes),
     );
   });
   return layerArray;

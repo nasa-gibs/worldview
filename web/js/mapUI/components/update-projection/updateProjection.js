@@ -97,7 +97,7 @@ function UpdateProjection(props) {
   ) {
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
-    const layers = getLayers(state, { reverse: true }, compareSideLayers)
+    const layers = getLayers(state, compareSideLayers, { reverse: true })
       .map(async (def) => {
         const options = {
           ...getGranuleOptions(state, def, compareActiveString, granuleOptions),
