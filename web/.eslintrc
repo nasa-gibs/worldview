@@ -152,9 +152,20 @@
         "react/no-unstable-nested-components": "error",
         "react/prop-types": "error",
         "react/no-unused-prop-types": "error",
-        "default-param-last": "warn",                      // 42 errors across 34 files
         "prefer-regex-literals": "error",
         "no-promise-executor-return": "error"
+      }
+    },
+    {
+      "files": [
+        "**/reducer.js",
+        "**/reducer.test.js",
+        "**/reducers.js",
+        "**/reducers.test.js",
+        "**/combine-reducers.js"
+      ],
+      "rules": {
+        "default-param-last": "warn"
       }
     }
   ]
