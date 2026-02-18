@@ -894,11 +894,13 @@ function ChartingModeOptions(props) {
             left: x,
             top: y2 + 5,
             width: x2 - x,
+            zIndex: 2,
           }}
           topRightStyle={{
             left: x,
             top: y - 20,
             width: x2 - x,
+            zIndex: 2,
           }}
           coordinates={{
             bottomLeft: util.formatCoordinate(bottomLeftLatLong),
