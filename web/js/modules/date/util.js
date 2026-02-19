@@ -278,8 +278,17 @@ export function mapLocationToDateState(
 ) {
   let stateFromLocation = stateFromLocationObj;
   const appNow = get(state, 'date.appNow');
-  // legacy time permalink
+  if (parameters.rt) {
+    const relativeTimeInMinutes = Math.abs(moment.duration(parameters.rt).asMinutes());
+    const date = util.earliestValidDate(util.dateAdd(appNow, 'minute', -relativeTimeInMinutes));
+    stateFromLocation = update(stateFromLocation, {
+      date: {
+        selected: { $set: date },
+      },
+    });
+  }
 
+  // legacy time permalink
   if (parameters.time && !parameters.t && appNow) {
     const date = tryCatchDate(parameters.time, appNow);
     if (date && date !== appNow) {

@@ -340,6 +340,12 @@ export default (function(selfObj) {
     return newDate;
   };
 
+  self.earliestValidDate = function(date) {
+    const currDate = new Date(date);
+    const earliestDate = self.parseDateUTC('1948-01-01-T00:00:00Z');
+    return currDate < earliestDate ? earliestDate : currDate;
+  };
+
   self.daysInYear = function(date) {
     const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
     const jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
