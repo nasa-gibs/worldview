@@ -34,12 +34,16 @@ function MobileComparisonToggle (props) {
       <div
         className={`compare-toggle-selected-btn ${classA}`}
         onClick={() => toggleCompareASelected(true)}
+        role="button"
+        tabIndex={0}
       >
         A
       </div>
       <div
         className={`compare-toggle-selected-btn ${classB}`}
         onClick={() => toggleCompareASelected(false)}
+        role="button"
+        tabIndex={0}
       >
         B
       </div>

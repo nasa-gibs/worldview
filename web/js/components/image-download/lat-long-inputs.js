@@ -100,7 +100,13 @@ function LatLongSelect(props) {
 
   return (
     <div className="wv-image-input-case">
-      <div className="wv-image-input-title" onClick={() => { setShowCoordinates(!showCoordinates); }}>
+      <div
+        className="wv-image-input-title"
+        role="button"
+        aria-pressed={showCoordinates}
+        tabIndex={0}
+        onClick={() => { setShowCoordinates(!showCoordinates); }}
+      >
         <span>{coordText}</span>
         <span
           title="Hide coordinates"

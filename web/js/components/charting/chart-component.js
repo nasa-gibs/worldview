@@ -555,7 +555,12 @@ function ChartComponent(props) {
                 </div>
               )}
               <div className="error-expand-button">
-                <span className="error-expand-button-inner" onClick={() => toggleErrorCollapsed(!errorCollapsed)}>
+                <span
+                  className="error-expand-button-inner"
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => toggleErrorCollapsed(!errorCollapsed)}
+                >
                   {errorCollapsed ? 'more' : 'less'}
                   <FontAwesomeIcon
                     className="layer-group-collapse"

@@ -12,9 +12,11 @@ function LoopButton({ looping, onLoop, isMobile }) {
   const labelText = looping ? 'Disable animation loop' : 'Enable animation loop';
   const buttonId = 'loop-button';
   return (
-    <a
+    <button
       id={buttonId}
       aria-label={labelText}
+      type="button"
+      tabIndex={0}
       className={
             looping
               ? 'wv-loop-icon-case wv-icon-case no-drag active'
@@ -33,7 +35,7 @@ function LoopButton({ looping, onLoop, isMobile }) {
           </UncontrolledTooltip>
         )}
       <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" widthAuto />
-    </a>
+    </button>
   );
 }
 
