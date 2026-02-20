@@ -110,13 +110,14 @@ export default function MapRunningData(compareUi, store) {
 
     // Running data for raster layers
     map.getAllLayers().forEach((layer) => {
+      console.log(layer)
       if (shouldNotProcessRasterLayer(layer)) return;
       const { wv: { def: { id } } } = layer;
-      const hasPalette = state.palettes &&
-        state.palettes.rendered &&
-        state.palettes.rendered[id];
+      // const hasPalette = state.palettes &&
+      //   state.palettes.rendered &&
+      //   state.palettes.rendered[id];
 
-      if (!hasPalette) return;
+      // if (!hasPalette) return;
 
       const data = layer.getData(pixel);
       if (!data) return;
