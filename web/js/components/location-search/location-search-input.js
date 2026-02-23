@@ -221,10 +221,11 @@ class SearchBox extends Component {
     const mobileStyle = isMobile ? {
       width: '100%', display: 'flex',
     } : {
-      display: 'flex', width: '85%',
+      display: 'flex', width: '85%', background: 'inherit', border: 'none',
     };
     return (
-      <div
+      <button
+        type="button"
         className="location-search-input-container"
         onKeyDown={this.handleKeyPress}
         style={mobileStyle}
@@ -248,7 +249,7 @@ class SearchBox extends Component {
         {this.renderClearInput()}
         {this.renderAlertIcon()}
         {this.renderSubmitButton()}
-      </div>
+      </button>
     );
   }
 }

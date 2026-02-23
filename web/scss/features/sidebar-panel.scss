@@ -3,7 +3,7 @@
 .sidebar-expand {
   position: relative;
 
-  > a {
+  > button {
     float: left;
     left: 10px;
     position: absolute;
@@ -42,7 +42,7 @@
     }
   }
 
-  &.mobile > a {
+  &.mobile > button {
     height: 45px;
     width: 56px;
     background-image: none;
@@ -60,7 +60,6 @@
     & span.layer-count {
       color: #fff;
       position: relative;
-      top: 8px;
       font-size: 18px;
       font-weight: 600;
       background: #333;

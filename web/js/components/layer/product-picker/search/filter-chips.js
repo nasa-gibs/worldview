@@ -23,9 +23,10 @@ export default function FilterChips(props) {
       {filterValues.map(({
         field, displayValue, value,
       }) => (
-        <div
+        <button
           key={field + value}
           className="filter-chip"
+          type="button"
           onClick={() => removeFilter(field, value)}
         >
           <span dangerouslySetInnerHTML={{ __html: displayValue }} />
@@ -34,7 +35,7 @@ export default function FilterChips(props) {
             fixedWidth
             widthAuto
           />
-        </div>
+        </button>
       ))}
     </div>
   );
