@@ -43,6 +43,7 @@ function addMockLayer(layerId, layerArray) {
     layerId,
     layerArray,
     config.layers,
+    {},
     getLayers(getState(layerArray), { group: 'all' }).overlays
       .length,
   );
@@ -93,7 +94,7 @@ describe('Date timescale changes', () => {
         lastArrowDirection: 'left',
         outOfStep: true,
       };
-      let layers = addLayer('terra-cr', [], config.layers, 0);
+      let layers = addLayer('terra-cr', [], config.layers, {}, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {
@@ -136,7 +137,7 @@ describe('Date timescale changes', () => {
         lastArrowDirection: 'right',
         outOfStep: false,
       };
-      let layers = addLayer('terra-cr', [], config.layers, 0);
+      let layers = addLayer('terra-cr', [], config.layers, {}, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {

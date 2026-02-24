@@ -27,9 +27,9 @@ function getState(layers) {
 }
 
 test('adds base layer', () => {
-  let layers = addLayer('terra-cr', [], config.layers, 0);
-  layers = addLayer('terra-aod', layers, config.layers, 0);
-  layers = addLayer('mask', layers, config.layers, 1);
+  let layers = addLayer('terra-cr', [], config.layers, {}, 0);
+  layers = addLayer('terra-aod', layers, config.layers, {}, 0);
+  layers = addLayer('mask', layers, config.layers, {}, 1);
 
   const layerList = getLayers(getState(layers), {}).map((x) => x.id);
 
@@ -37,18 +37,18 @@ test('adds base layer', () => {
 });
 
 test('adds overlay layer', () => {
-  let layers = addLayer('terra-cr', [], config.layers, 0);
-  layers = addLayer('terra-aod', layers, config.layers, 0);
-  layers = addLayer('combo-aod', layers, config.layers, 1);
+  let layers = addLayer('terra-cr', [], config.layers, {}, 0);
+  layers = addLayer('terra-aod', layers, config.layers, {}, 0);
+  layers = addLayer('combo-aod', layers, config.layers, {}, 1);
 
   const layerList = getLayers(getState(layers), {}).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'combo-aod', 'terra-aod']);
 });
 
 test('does not add duplicate layer', () => {
-  let layers = addLayer('terra-cr', [], config.layers, 0);
-  layers = addLayer('terra-aod', layers, config.layers, 0);
-  layers = addLayer('terra-cr', layers, config.layers, 1);
+  let layers = addLayer('terra-cr', [], config.layers, {}, 0);
+  layers = addLayer('terra-aod', layers, config.layers, {}, 0);
+  layers = addLayer('terra-cr', layers, config.layers, {}, 1);
 
   const layerList = getLayers(getState(layers)).map((x) => x.id);
   expect(layerList).toEqual(['terra-cr', 'terra-aod']);
@@ -134,7 +134,7 @@ test('obscured base layer is not renderable', () => {
   expect(layerList).toEqual(['aqua-cr', 'aqua-aod', 'terra-aod']);
 });
 
-test.only('base layer is not obscured by a hidden layer', () => {
+test('base layer is not obscured by a hidden layer', () => {
   let layers = addLayer('terra-cr', [], config.layers);
   layers = addLayer('aqua-cr', layers, config.layers, { visible: false });
   layers = addLayer('terra-aod', layers, config.layers);
@@ -333,7 +333,7 @@ test('date range for ended layers', () => {
 test('date range with one layer', () => {
   let state = getState([]);
   state = getDateRangesTestState(state);
-  const layers = addLayer('historical_1', {}, [], state.config.layers);
+  const layers = addLayer('historical_1', [], state.config.layers);
   const range = dateRange({}, layers, state.config);
   const expectedStartTime = new Date(Date.UTC(2000, 0, 1)).getTime();
   const expectedEndTime = new Date(Date.UTC(2010, 0, 1, 0, 0, 59)).getTime();
