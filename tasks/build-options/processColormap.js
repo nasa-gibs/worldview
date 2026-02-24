@@ -75,17 +75,18 @@ const walk = (dir) => {
 
 async function main () {
   const files = await walk(inputDir)
-  const promises = files.map(async (file) => {
-    const { id, xml } = await readFileAsync(file)
-    return processFile(id, xml)
-  })
-  const results = await Promise.allSettled(promises)
-  const { fulfilled = [], rejected = [] } = Object.groupBy(results, (item) => item.status)
+  for (const file of files) {
+    try {
+      const { id, xml } = await readFileAsync(file)
+      await processFile(id, xml)
+      fileCount += 1
+    } catch (error) {
+      console.error(error)
 
-  rejected.forEach(({ reason }) => console.error(`${prog}: ERROR: ${reason}`))
-
-  fileCount += fulfilled.length
-  errorCount += rejected.length
+      console.error(`${prog}: ERROR: ${error}`)
+      errorCount += 1
+    }
+  }
 
   try {
     const wmtsFiles = fs.readdirSync(layersDir)
