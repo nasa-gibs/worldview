@@ -128,7 +128,7 @@ class CoverageItemContainer extends Component {
 
     // get line container dimensions
     const containerLineDimensions = getMatchingCoverageLineDimensions(layer)
-      .filter(({ isVisible = visible }) => isVisible);
+      .filter(({ visible: isVisible }) => isVisible);
     return (
       <div
         className="layer-coverage-line"
@@ -157,7 +157,7 @@ class CoverageItemContainer extends Component {
                 layer,
                 dateObj,
                 rangeDateEnd,
-              ).filter(({ isVisible = visible }) => isVisible);
+              ).filter(({ visible: isVisible }) => isVisible);
               // create DOM line element
               const key = `${id}-${multiIndex}`;
               return (
