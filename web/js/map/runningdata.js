@@ -9,7 +9,7 @@ import { getPalette } from '../modules/palettes/selectors';
 import {
   isFromActiveCompareRegion,
 } from '../modules/compare/util';
-import { FLIGHT_TRACK_KEYS, MAP_RUNNING_DATA } from '../util/constants';
+import { MAP_RUNNING_DATA } from '../util/constants';
 
 const { events } = util;
 
@@ -89,9 +89,8 @@ export default function MapRunningData(compareUi, store) {
           color = legend.colors[colorIndex];
         }
       } else if (isContinuousVectorLayer) {
-        const flightTrackDataKey = FLIGHT_TRACK_KEYS[layer.wv.def.id];
-        const featureValue = featureProps[flightTrackDataKey];
-        const numericValue = parseFloat(featureValue);
+        const measurementValue = featureProps.Value;
+        const numericValue = parseFloat(measurementValue);
         if (Number.isNaN(numericValue)) return;
 
         const colorIndex = legend.tooltips.findIndex((tooltip) => {
