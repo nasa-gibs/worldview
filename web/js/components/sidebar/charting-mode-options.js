@@ -163,14 +163,14 @@ function ChartingModeOptions(props) {
   /**
   * Update latitude longitude values on
   * crop change
-  * @param {Object} boundaries
+  * @param {Object} boundaryObj
   *
   * @returns {null}
   */
   const onBoundaryUpdate = (boundaryObj) => {
     const {
-      xBoundary = boundaryObj.x,
-      yBoundary = boundaryObj.y,
+      x: xBoundary,
+      y: yBoundary,
       width,
       height,
     } = boundaryObj;

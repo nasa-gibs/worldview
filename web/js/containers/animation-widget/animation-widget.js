@@ -221,8 +221,8 @@ function AnimationWidget (props) {
 
   const onPushPlayFunc = () => {
     const {
-      startDateZeroed = startDate,
-      endDateZeroed = endDate,
+      startDate: startDateZeroed,
+      endDate: endDateZeroed,
     } = zeroDates();
     onUpdateStartAndEndDate(startDateZeroed, endDateZeroed);
     onPushPlay();

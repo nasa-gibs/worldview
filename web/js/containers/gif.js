@@ -179,7 +179,7 @@ class GIF extends Component {
 
   createGIF(width, height) {
     const {
-      getImageArrayFunc = getImageArray, startDate, endDate, url,
+      getImageArrayFunc, startDate, endDate, url,
     } = this.props;
     const { boundaries, showDates } = this.state;
     const dimensions = {
