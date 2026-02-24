@@ -484,8 +484,8 @@ function LayerRow (props) {
     return baseClasses;
   };
 
-  const handleDisabledTitle = disabled ? getDisabledTitle(layer) : 'Hide layer';
-  const visibilityTitle = !isVisible && !disabled ? 'Show layer' : handleDisabledTitle;
+  const disabledTitle = disabled ? getDisabledTitle(layer) : 'Hide layer';
+  const visibilityTitle = !isVisible && !disabled ? 'Show layer' : disabledTitle;
 
   const visibilityIcon = !isVisible ? ['fas', 'eye-slash'] : ['fas', 'eye'];
   const visibilityIconClass = disabled ? 'ban' : visibilityIcon;

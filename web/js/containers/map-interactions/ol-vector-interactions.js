@@ -196,16 +196,16 @@ export class VectorInteractions extends React.Component {
     let clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
-    const getAeronetMobileSize = isAeronet ? 250 : 445;
+    const aeronetMobileSize = isAeronet ? 250 : 445;
     clickObj = getDialogObject(pixels, map, isMobile
-      ? screenSize.screenWidth : getAeronetMobileSize);
+      ? screenSize.screenWidth : aeronetMobileSize);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
     const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const exceededLengthLimit = clickObj.exceededLengthLimit || false;
-    const handleVectorModalOpen = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
-    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : handleVectorModalOpen;
+    const vectorModalOpenId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
+    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : vectorModalOpenId;
 
     if (isCoordinatesMarker) return;
 

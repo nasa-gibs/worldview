@@ -237,13 +237,13 @@ class TimelineAxis extends Component {
     const hasFutureLayersUpdated = prevProps.hasFutureLayers !== hasFutureLayers;
     const isTimelineInteracting = isDraggerDragging || isTimelineDragging;
     const didTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
-    const isDraggerGreaterTimeline = new Date(draggerDate) > new Date(timelineEndDateLimit)
+    const draggerGreaterDate = new Date(draggerDate) > new Date(timelineEndDateLimit)
       ? timelineEndDateLimit
       : draggerDate;
     if (didTimelineEndDateLimitUpdate
       && (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
       const updatedDraggerDate = hasFutureLayersUpdated
-        ? isDraggerGreaterTimeline
+        ? draggerGreaterDate
         : draggerDate;
       onDateChange(new Date(updatedDraggerDate));
       this.updateScale(updatedDraggerDate, timeScale, 0.5);
@@ -323,12 +323,12 @@ class TimelineAxis extends Component {
     const options = timeScaleOptions[timeScale].timeAxis;
     const { gridWidth } = options;
     const timelineAxisWidth = axisWidth;
-    const isLeftOffsetZero = leftOffset === 0
+    const nonZeroLeftOffset = leftOffset === 0
       ? timelineAxisWidth * 0.8
       : leftOffset;
     const hoverLeftOffset = leftOffsetFixedCoefficient
       ? timelineAxisWidth * leftOffsetFixedCoefficient
-      : isLeftOffsetZero;
+      : nonZeroLeftOffset;
 
     // visible tiles based on timeline axis width (screen/browser size dependent)
     const numberOfVisibleTiles = Number((timelineAxisWidth / gridWidth).toFixed(8));

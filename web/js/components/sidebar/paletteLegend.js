@@ -376,7 +376,6 @@ class PaletteLegend extends React.Component {
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
-    const trackLabelOrLegendTooltip = layer.track ? trackLabel : legendTooltip;
     return (
       <VisibilitySensor
         key={`${legend.id}-${legendIndex}vis-sensor`}
@@ -393,6 +392,7 @@ class PaletteLegend extends React.Component {
               const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${util.encodeId(layer.id)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
+              const trackLabelOrLegendTooltip = layer.track ? trackLabel : legendTooltip;
               const tooltipText = singleKey ? trackLabelOrLegendTooltip : keyLabel;
               const isInvisible = color === '00000000';
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
