@@ -190,7 +190,7 @@ function LayerRow (props) {
 
   // hook that checks if the ddv layer zoom alert should be enabled or disabled
   useEffect(() => {
-    const { layerTitle = title } = layer;
+    const { title: layerTitle } = layer;
     // if layer is ddv && layer IS NOT already in zoom alert list && zoom is at alertable level
     if (isLayerNotificationDismissable && !ddvLayerZoomNoticeActive && showZoomAlert) {
       enableDDVZoomAlert(layerTitle);
@@ -202,7 +202,7 @@ function LayerRow (props) {
 
   // hook that checks if the ddv layer location alert should be enabled or disabled
   useEffect(() => {
-    const { layerTitle = title } = layer;
+    const { title: layerTitle } = layer;
     // if layer is ddv && layer IS NOT already in location alert list
     // && location is at alertable coordinates
     if (isLayerNotificationDismissable && !ddvLayerLocationNoticeActive && showGranuleAlert) {
@@ -309,7 +309,7 @@ function LayerRow (props) {
 
   // function called on click when removing a layer
   const removeLayer = () => {
-    const { id, layerTitle = title } = layer;
+    const { id, title: layerTitle } = layer;
     // remove ddv location alert
     if (ddvLayerLocationNoticeActive) {
       disableDDVLocationAlert(layerTitle);

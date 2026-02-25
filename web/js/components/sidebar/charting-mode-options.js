@@ -34,6 +34,7 @@ import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
 import LatLongSelect from '../image-download/lat-long-inputs';
 import Checkbox from '../util/checkbox';
+import WaitOverlay from '../util/wait';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -91,6 +92,7 @@ function ChartingModeOptions(props) {
   const isMounted = useRef(false);
   const chartData = useRef({});
   const isErrordaysExpanded = useRef(false);
+  const cancelChartRef = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
@@ -161,14 +163,14 @@ function ChartingModeOptions(props) {
   /**
   * Update latitude longitude values on
   * crop change
-  * @param {Object} boundaries
+  * @param {Object} boundaryObj
   *
   * @returns {null}
   */
   const onBoundaryUpdate = (boundaryObj) => {
     const {
-      xBoundary = boundaryObj.x,
-      yBoundary = boundaryObj.y,
+      x: xBoundary,
+      y: yBoundary,
       width,
       height,
     } = boundaryObj;
@@ -300,6 +302,12 @@ function ChartingModeOptions(props) {
     displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
   }, [screenWidth]);
 
+  function onCancelChart() {
+    updateModalOpen(false);
+    updateChartRequestStatus(false);
+    cancelChartRef.current = true;
+  }
+
   /**
    * Provides a default AOI of the entire map if unspecified,
    * and modifies the Openlayers coordinates for use with imageStat API
@@ -370,6 +378,7 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
+
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -520,6 +529,7 @@ function ChartingModeOptions(props) {
   async function onRequestChartClick() {
     if (chartRequestInProgress) return;
     updateChartRequestStatus(true);
+    cancelChartRef.current = false;
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
       updateChartRequestStatus(false);
@@ -560,6 +570,10 @@ function ChartingModeOptions(props) {
       }
       const dataArr = await Promise.all(promises);
       const data = combineData(dataArr);
+
+      if (cancelChartRef.current) {
+        return;
+      }
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
@@ -855,6 +869,12 @@ function ChartingModeOptions(props) {
           text={requestBtnText}
         />
       </div>
+      {chartRequestInProgress && (
+        <WaitOverlay
+          statusText="Creating chart..."
+          onCancel={() => onCancelChart()}
+        />
+      )}
       {aoiActive && isPostRender && (
         <Crop
           x={x}
@@ -870,11 +890,13 @@ function ChartingModeOptions(props) {
             left: x,
             top: y2 + 5,
             width: x2 - x,
+            zIndex: 2,
           }}
           topRightStyle={{
             left: x,
             top: y - 20,
             width: x2 - x,
+            zIndex: 2,
           }}
           coordinates={{
             bottomLeft: util.formatCoordinate(bottomLeftLatLong),

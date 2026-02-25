@@ -181,7 +181,8 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
 
   const getShortName = (nrt) => {
     try {
-      const { shortName } = def.conceptIds[0];
+      const { shortName } = [...def.conceptIds]
+        .sort((a, b) => (b.type === 'NRT') - (a.type === 'NRT'))[0];
       if (nrt) return shortName;
       // remove _NRT from shortName
       return shortName.replace('_NRT', '');
@@ -191,7 +192,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
     return undefined;
   };
 
-  if (def.conceptIds[0].type === 'NRT') {
+  if (def.conceptIds.filter((id) => id.type === 'NRT').length > 0) {
     return [
       {
         shortName: getShortName(false),
