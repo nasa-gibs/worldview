@@ -228,6 +228,8 @@ button:focus {
     width: 35px;
     margin: auto;
     text-align: center;
+    background: none;
+    border: none;
   }
 
   & .date-arrows svg {
@@ -324,6 +326,8 @@ button:focus {
     top: 16px;
     right: 4px;
     background-color: transparent;
+    border: none;
+    padding: 0;
 
     & svg {
       top: 5px;
@@ -566,8 +570,14 @@ button:focus {
   border-radius: 3px;
 }
 
-#timeline-header #timeline-interval-btn-container,
-#zoom-btn-container-axis {
+#timeline-interval-btn-container {
+  display: block;
+  background: none;
+  border: none;
+  padding: none;
+}
+
+#timeline-header #zoom-btn-container-axis {
   display: block;
 }
 
@@ -697,6 +707,7 @@ button:focus {
   position: absolute;
   height: 19px;
   width: 57px;
+  padding: 0;
   top: -20px;
   cursor: pointer;
   border-top-right-radius: 5px;
@@ -811,6 +822,7 @@ button:focus {
   border-radius: 5px;
   white-space: nowrap;
   cursor: pointer;
+  padding: 0;
 
   & .mobile-date-picker-select-btn-text {
     height: 44px;

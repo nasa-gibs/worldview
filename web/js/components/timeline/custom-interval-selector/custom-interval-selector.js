@@ -63,6 +63,7 @@ function CustomIntervalSelector(props) {
     <div
       onKeyDown={handleKeyPress}
       className={`custom-interval-widget ${hasSubdailyLayers ? 'subdaily' : ''}`}
+      role="button"
       tabIndex={0}
       ref={(widget) => { customIntervalWidget = widget; }}
     >

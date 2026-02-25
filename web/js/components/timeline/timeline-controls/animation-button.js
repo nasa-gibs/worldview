@@ -58,7 +58,8 @@ function AnimationButton(props) {
     animationButtonClassName = `button-action-group mobile-animate-button animate-button-${buttonClass}`;
   }
   return (
-    <div
+    <button
+      type="button"
       onClick={clickAnimationButton}
       className={animationButtonClassName}
       aria-label={labelText}
@@ -76,7 +77,7 @@ function AnimationButton(props) {
           )}
         <FontAwesomeIcon icon="video" className="wv-animate" size="2x" widthAuto />
       </div>
-    </div>
+    </button>
   );
 }
 

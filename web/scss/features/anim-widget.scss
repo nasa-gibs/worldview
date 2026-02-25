@@ -441,6 +441,11 @@ button .wv-animation-widget-icon {
     justify-content: flex-end;
     align-items: center;
 
+    & button {
+      border: none;
+      background: none;
+    }
+
     & .wv-minimize {
       font-size: 26px;
       font-weight: 400;

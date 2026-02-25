@@ -537,7 +537,7 @@ class SmartHandoff extends Component {
               </h1>
               <hr />
               <h2>
-                <a className="help-link" onClick={showNotAvailableModal}>
+                <a role="link" tabIndex={0} className="help-link" onClick={showNotAvailableModal}>
                   Why are my layers not available?
                 </a>
               </h2>
@@ -592,9 +592,9 @@ class SmartHandoff extends Component {
             application.
           </div>
           <h2>
-            <a className="help-link" onClick={showNotAvailableModal}>
+            <button type="button" className="help-link" onClick={showNotAvailableModal}>
               Why are some layers not available?
-            </a>
+            </button>
           </h2>
           <hr />
           {this.renderLayerChoices()}
