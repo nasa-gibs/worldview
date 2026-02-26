@@ -99,7 +99,6 @@ function GifButton(props) {
         id="create-gif-button"
         aria-label={labelText}
         type="button"
-        tabIndex="0"
         className={gifDisabled ? 'wv-icon-case no-drag disabled' : 'wv-icon-case no-drag'}
         onClick={openGif}
       >

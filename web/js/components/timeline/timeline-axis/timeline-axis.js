@@ -1567,7 +1567,7 @@ class TimelineAxis extends Component {
 
     return (
       <div
-        role="button"
+        role="toolbar"
         tabIndex={0}
         className="timeline-axis-container"
         style={{ width: axisWidthStr }}

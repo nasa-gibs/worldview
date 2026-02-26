@@ -100,11 +100,10 @@ function LatLongSelect(props) {
 
   return (
     <div className="wv-image-input-case">
-      <div
+      <button
         className="wv-image-input-title"
-        role="button"
+        type="button"
         aria-pressed={showCoordinates}
-        tabIndex={0}
         onClick={() => { setShowCoordinates(!showCoordinates); }}
       >
         <span>{coordText}</span>
@@ -114,7 +113,7 @@ function LatLongSelect(props) {
         >
           <FontAwesomeIcon icon="caret-right" size="lg" rotation={showCoordinates ? 90 : 0} widthAuto />
         </span>
-      </div>
+      </button>
       {showCoordinates && (
         <>
           <div className="row">

@@ -16,7 +16,6 @@ function LoopButton({ looping, onLoop, isMobile }) {
       id={buttonId}
       aria-label={labelText}
       type="button"
-      tabIndex={0}
       className={
             looping
               ? 'wv-loop-icon-case wv-icon-case no-drag active'

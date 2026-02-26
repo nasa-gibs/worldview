@@ -23,7 +23,6 @@ function PlayButton({
       id={buttonId}
       aria-label={labelText}
       type="button"
-      tabIndex={0}
       className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
     >
