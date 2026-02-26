@@ -72,6 +72,7 @@
 }
 
 .sidebar-collapse {
+  background: none;
   position: absolute;
   right: 2px;
   height: 30px;
@@ -268,6 +269,7 @@ li.item.productsitem.inmotion,
   border-color: #fff;
 }
 
+.productsitem button.visibility,
 .productsitem a.visibility {
   width: 30px;
   background-color: #ccc;
@@ -275,7 +277,9 @@ li.item.productsitem.inmotion,
   top: 0;
   bottom: 0;
   cursor: pointer;
+  border: none;
   border-right: 1px solid #333;
+  padding: 0;
 
   &.layer-enabled:hover {
     background: #fff;
@@ -294,12 +298,15 @@ li.item.productsitem.inmotion,
     }
   }
 
-  &.layer-hidden.disabled:hover {
+  &.layer-hidden {
     background: #666;
-    cursor: not-allowed;
 
-    .svg-inline--fa {
-      color: #c5c5c8;
+    &.disabled:hover {
+      cursor: not-allowed;
+
+      .svg-inline--fa {
+        color: #c5c5c8;
+      }
     }
   }
 
@@ -307,9 +314,9 @@ li.item.productsitem.inmotion,
     text-align: center;
     display: inline-block;
     width: 100%;
-    position: absolute;
-    top: 50%;
-    margin-top: -10px;
+    // position: absolute;
+    // top: 50%;
+    // margin-top: -10px;
     font-size: 18px;
   }
 }
@@ -341,7 +348,13 @@ li.item.productsitem.inmotion,
 /* ***********************************
  * Vector layer pointer icon *
  *************************************/
-.productsitem .layer-pointer-icon svg.svg-inline--fa {
+.productsitem button.layer-pointer-icon {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+ .productsitem .layer-pointer-icon svg.svg-inline--fa {
   color: #22a;
 }
 
@@ -418,12 +431,15 @@ li.item.productsitem.inmotion,
  * End -- Granule active footprint toggle *
  ************************************/
 
-.productsitem a.wv-layers-info,
-.productsitem a.wv-layers-options {
+.productsitem button.wv-layers-info,
+.productsitem button.wv-layers-options {
   position: relative;
   width: 20px;
   height: 20px;
   float: right;
+  border: none;
+  padding: 0;
+  background: inherit;
 }
 
 .productsitem.inmotion {
@@ -431,9 +447,9 @@ li.item.productsitem.inmotion,
   list-style: none;
 }
 
-.productsitem a.wv-layers-close:hover,
-.productsitem a.wv-layers-info:hover,
-.productsitem a.wv-layers-options:hover {
+.productsitem button.wv-layers-close:hover,
+.productsitem button.wv-layers-info:hover,
+.productsitem button.wv-layers-options:hover {
   background: #fff;
 }
 
@@ -444,7 +460,6 @@ li.item.productsitem.inmotion,
   text-align: center;
   border-radius: 50%;
   padding: 1px;
-  margin-top: 3px;
 }
 
 .layer-info svg.svg-inline--fa.wv-layers-options-icon {
@@ -545,15 +560,18 @@ li.item.productsitem.inmotion,
   }
 }
 
-.productsitem a.button.wv-layers-close {
+.productsitem button.wv-layers-close {
   display: block;
   float: right;
   width: 20px;
   height: 20px;
   position: relative;
+  border: none;
+  padding: 0;
+  background: none;
 }
 
-.productsitem a.button.wv-layers-close svg.svg-inline--fa {
+.productsitem button.button.wv-layers-close svg.svg-inline--fa {
   width: 12px;
   pointer-events: none;
   position: absolute;

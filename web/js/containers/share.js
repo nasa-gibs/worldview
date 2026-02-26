@@ -156,7 +156,7 @@ class ShareLinkContainer extends Component {
   };
 
   handleKeyDown = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    if (e.key === 'Enter') {
       return this.openFeedback();
     }
     return null;
