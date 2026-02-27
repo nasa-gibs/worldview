@@ -12,7 +12,7 @@ import {
 import { getActiveLayers } from '../../../../modules/layers/selectors';
 import { onClose } from '../../../../modules/modal/actions';
 
-export default function BandSelection({ layer }) {
+export default function BandSelection({ layerObj: layer }) {
   const dispatch = useDispatch();
   const { activeLayers } = useSelector((state) => ({
     activeLayers: getActiveLayers(state, state.compare.activeString).map((layerObj) => layerObj),
@@ -131,5 +131,5 @@ export default function BandSelection({ layer }) {
 }
 
 BandSelection.propTypes = {
-  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layerObj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
