@@ -15,6 +15,7 @@ function Arrow({
     <button
       type="button"
       onClick={onClick}
+      aria-label={direction === 'up' ? `Increment ${type}` : `Decrement ${type}`}
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >

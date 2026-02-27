@@ -102,6 +102,7 @@ class DateChangeArrows extends PureComponent {
           onMouseUp={leftArrowUp}
           onMouseLeave={leftArrowUp}
           aria-disabled={leftArrowDisabled}
+          aria-label="Decrement date"
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -121,6 +122,7 @@ class DateChangeArrows extends PureComponent {
           onMouseUp={rightArrowUp}
           onMouseLeave={rightArrowUp}
           aria-disabled={rightArrowDisabled}
+          aria-label="Increment date"
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -138,6 +140,8 @@ class DateChangeArrows extends PureComponent {
           id="now-button-group"
           onClick={handleSelectNowButton}
           aria-disabled={nowButtonDisabled}
+          aria-label="Latest available date"
+
         >
           <HoverTooltip
             isMobile={isMobile}
