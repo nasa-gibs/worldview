@@ -555,10 +555,9 @@ function ChartComponent(props) {
                 </div>
               )}
               <div className="error-expand-button">
-                <span
+                <button
                   className="error-expand-button-inner"
-                  role="button"
-                  tabIndex={0}
+                  type="button"
                   onClick={() => toggleErrorCollapsed(!errorCollapsed)}
                 >
                   {errorCollapsed ? 'more' : 'less'}
@@ -567,7 +566,7 @@ function ChartComponent(props) {
                     icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
                     widthAuto
                   />
-                </span>
+                </button>
               </div>
             </div>
           )}
