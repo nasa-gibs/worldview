@@ -572,13 +572,8 @@ button:focus {
   border-radius: 3px;
 }
 
-#timeline-interval-btn-container {
-  background: none;
-  border: none;
-  padding: none;
-}
-
-#timeline-header #zoom-btn-container-axis {
+#timeline-header #timeline-interval-btn-container,
+#zoom-btn-container-axis {
   display: block;
 }
 

@@ -233,8 +233,9 @@ class TimeScaleIntervalChange extends PureComponent {
     const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
     const spanInnerText = autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`;
     return (
-      <button
-        type="button"
+      <div
+        role="menu"
+        tabIndex={0}
         id="timeline-interval-btn-container"
         className="interval-btn-container noselect no-drag"
         onMouseEnter={() => this.setTooltipState(true)}
@@ -251,7 +252,7 @@ class TimeScaleIntervalChange extends PureComponent {
 
         {!isDisabled ? this.renderTooltip() : null}
 
-      </button>
+      </div>
     );
   }
 }
