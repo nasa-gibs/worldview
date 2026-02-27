@@ -25,7 +25,7 @@ import {
   changeChartingStartDate,
   changeChartingEndDate,
 } from '../../modules/charting/actions';
-import { openCustomContent } from '../../modules/modal/actions';
+import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import ChartingInfo from '../charting/charting-info';
 import ChartingError from '../charting/charting-error';
@@ -34,6 +34,7 @@ import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
 import LatLongSelect from '../image-download/lat-long-inputs';
 import Checkbox from '../util/checkbox';
+import WaitOverlay from '../util/wait';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
@@ -54,6 +55,7 @@ function ChartingModeOptions(props) {
     crs,
     displayChart,
     displaySimpleStats,
+    closeModal,
     isChartingActive,
     isMobile,
     onChartDateButtonClick,
@@ -88,6 +90,9 @@ function ChartingModeOptions(props) {
   if (!olMap) return null;
 
   const isMounted = useRef(false);
+  const chartData = useRef({});
+  const isErrordaysExpanded = useRef(false);
+  const cancelChartRef = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
@@ -103,6 +108,7 @@ function ChartingModeOptions(props) {
   } = boundaries;
 
   const debouncedUpdateAOICoordinates = lodashDebounce(updateAOICoordinates, 50);
+  const debouncedModalClose = lodashDebounce(closeModal, 0);
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
@@ -125,19 +131,19 @@ function ChartingModeOptions(props) {
   function getLatLongFromPixelValue(pixelX, pixelY) {
     const coordinate = olMap.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
     if (!coordinate) return [0, 0];
-    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
+    const [olProjX, olProjY] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
-    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
+    return [Number(olProjX.toFixed(4)), Number(olProjY.toFixed(4))];
   }
 
   const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
   const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
 
   function formatDateString(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getUTCFullYear();
-    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
-    const day = `0${date.getUTCDate()}`.slice(-2);
+    const dateString = new Date(dateObj);
+    const year = dateString.getUTCFullYear();
+    const month = dateString.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${dateString.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
@@ -148,6 +154,45 @@ function ChartingModeOptions(props) {
     }
     return null;
   }
+
+  function toggleErrorDaysExpanded(val) {
+    isErrordaysExpanded.current = val;
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }
+
+  /**
+  * Update latitude longitude values on
+  * crop change
+  * @param {Object} boundaryObj
+  *
+  * @returns {null}
+  */
+  const onBoundaryUpdate = (boundaryObj) => {
+    const {
+      x: xBoundary,
+      y: yBoundary,
+      width,
+      height,
+    } = boundaryObj;
+    const newBoundaries = {
+      x: xBoundary,
+      y: yBoundary,
+      x2: xBoundary + width,
+      y2: yBoundary + height,
+    };
+    setBoundaries(newBoundaries);
+    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
+    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
+    setBottomLeftLatLong(bottomLeft);
+    setTopRightLatLong(topRight);
+    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
+    setMapViewChecked(false);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
+  };
 
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
@@ -187,6 +232,17 @@ function ChartingModeOptions(props) {
   }, [projections]);
 
   useEffect(() => {
+    if (!isMounted.current) return;
+    const boundariesObj = {
+      x,
+      y,
+      width: x2 - x,
+      height: y2 - y,
+    };
+    onBoundaryUpdate(boundariesObj);
+  }, [screenWidth, screenHeight]);
+
+  useEffect(() => {
     isMounted.current = true;
     onUpdateStartDate(initialStartDate);
     onUpdateEndDate(initialEndDate);
@@ -217,10 +273,10 @@ function ChartingModeOptions(props) {
   }, [fromButton]);
 
   function formatDateForImageStat(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getUTCFullYear();
-    const month = `0${date.getUTCMonth() + 1}`.slice(-2);
-    const day = `0${date.getUTCDate()}`.slice(-2);
+    const dateString = new Date(dateObj);
+    const year = dateString.getUTCFullYear();
+    const month = `0${dateString.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${dateString.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
@@ -236,6 +292,21 @@ function ChartingModeOptions(props) {
       }
     }
   }, [isModalOpen, modalId]);
+
+  useEffect(() => {
+    if (!chartData.current || Object.keys(chartData.current).length === 0 || !isModalOpen || timeSpanSelection !== 'range') return;
+    if (screenWidth < 768) {
+      debouncedModalClose();
+      updateModalOpen(false);
+    }
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }, [screenWidth]);
+
+  function onCancelChart() {
+    updateModalOpen(false);
+    updateChartRequestStatus(false);
+    cancelChartRef.current = true;
+  }
 
   /**
    * Provides a default AOI of the entire map if unspecified,
@@ -307,6 +378,7 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
+
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -348,6 +420,34 @@ function ChartingModeOptions(props) {
     return parseFloat(parseFloat(str).toFixed(3));
   }
 
+  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  function normalizeErrorDays(errors) {
+    const raw = errors?.error_days;
+    if (Array.isArray(raw)) return raw.map((s) => String(s));
+    if (raw == null) return [];
+    if (typeof raw !== 'string') return [String(raw)];
+
+    const trimmed = raw.trim();
+
+    // Try JSON parse if looks like an array; tolerate single quotes
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const jsonish = trimmed.replace(/'/g, '"');
+        const arr = JSON.parse(jsonish);
+        if (Array.isArray(arr)) return arr.map((s) => String(s));
+      } catch {
+        // fall through to manual split
+      }
+    }
+
+    // Fallback: strip brackets, split on comma, strip surrounding quotes
+    return trimmed
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+  }
+
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
    * @param {Object} data | This contains the name (dates)
@@ -376,9 +476,15 @@ function ChartingModeOptions(props) {
     return rechartsData;
   }
 
-  function combineData(inputArr) {
+  function combineData(input) {
+    const inputArr = input;
     if (!inputArr || inputArr.length === 0) return inputArr;
-    if (inputArr.length === 1) return inputArr[0];
+    if (inputArr.length === 1) {
+      if (inputArr[0].body && Object.prototype.hasOwnProperty.call(inputArr[0].body, 'errors')) {
+        inputArr[0].body.errors.error_days = normalizeErrorDays(inputArr[0].body.errors);
+      }
+      return inputArr[0];
+    }
     const output = {
       ok: true,
       body: {
@@ -404,8 +510,9 @@ function ChartingModeOptions(props) {
       if (dataset.ok && !!dataset.body) {
         Object.keys(dataset.body).forEach((key) => {
           if (key === 'errors') {
+            const errorDays = normalizeErrorDays(dataset.body.errors.error_days);
             output.body.errors.error_count += dataset.body.errors.error_count;
-            output.body.errors.error_days.push(...dataset.body.errors.error_days.replaceAll(/('|\[|\])/gi, '').split(', '));
+            output.body.errors.error_days.push(...errorDays);
           } else if (key === 'hist') {
             output.body.hist.push(...dataset.body.hist);
           } else if (key === 'stderr') {
@@ -422,6 +529,7 @@ function ChartingModeOptions(props) {
   async function onRequestChartClick() {
     if (chartRequestInProgress) return;
     updateChartRequestStatus(true);
+    cancelChartRef.current = false;
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
       updateChartRequestStatus(false);
@@ -463,6 +571,10 @@ function ChartingModeOptions(props) {
       const dataArr = await Promise.all(promises);
       const data = combineData(dataArr);
 
+      if (cancelChartRef.current) {
+        return;
+      }
+
       if (!isMounted.current) {
         updateChartRequestStatus(false);
         return;
@@ -495,7 +607,7 @@ function ChartingModeOptions(props) {
         const numPoints = STEP_NUM - (
           data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0
         );
-        displayChart({
+        chartData.current = {
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
           unit: dataToRender.unit,
@@ -510,7 +622,8 @@ function ChartingModeOptions(props) {
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
           layerId: layerInfo.id,
-        });
+        };
+        displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
         displaySimpleStats(dataToRender);
@@ -603,37 +716,6 @@ function ChartingModeOptions(props) {
     }
   });
 
-  /**
-  * Update latitude longitude values on
-  * crop change
-  * @param {Object} boundaries
-  *
-  * @returns {null}
-  */
-  const onBoundaryUpdate = (boundaries) => {
-    const {
-      x, y, width, height,
-    } = boundaries;
-    const newBoundaries = {
-      x,
-      y,
-      x2: x + width,
-      y2: y + height,
-    };
-    setBoundaries(newBoundaries);
-    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
-    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
-    setBottomLeftLatLong(bottomLeft);
-    setTopRightLatLong(topRight);
-    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
-    setMapViewChecked(false);
-    if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
-  };
-
   const onLatLongChange = (coordsArray) => {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
     const topRight = [coordsArray[2], coordsArray[3]];
@@ -661,13 +743,13 @@ function ChartingModeOptions(props) {
     if (!mapViewChecked) {
       onLatLongChange(viewExtent);
     } else {
-      const boundaries = {
+      const boundariesObj = {
         x: screenWidth / 2 - 100,
         y: screenHeight / 2 - 100,
         width: 200,
         height: 200,
       };
-      onBoundaryUpdate(boundaries);
+      onBoundaryUpdate(boundariesObj);
     }
     setMapViewChecked(!mapViewChecked);
   };
@@ -787,6 +869,12 @@ function ChartingModeOptions(props) {
           text={requestBtnText}
         />
       </div>
+      {chartRequestInProgress && (
+        <WaitOverlay
+          statusText="Creating chart..."
+          onCancel={() => onCancelChart()}
+        />
+      )}
       {aoiActive && isPostRender && (
         <Crop
           x={x}
@@ -802,11 +890,13 @@ function ChartingModeOptions(props) {
             left: x,
             top: y2 + 5,
             width: x2 - x,
+            zIndex: 2,
           }}
           topRightStyle={{
             left: x,
             top: y - 20,
             width: x2 - x,
+            zIndex: 2,
           }}
           coordinates={{
             bottomLeft: util.formatCoordinate(bottomLeftLatLong),
@@ -941,7 +1031,11 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  displayChart: (liveData) => {
+  displayChart: (liveData, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded) => {
+    const isWideModal = screenWidth >= 1150;
+    const width = isWideModal ? 1150 : 650;
+    const height = isWideModal ? 475 + (isErrordaysExpanded.current ? 35 : 0) : 855;
+    const offsetTop = isWideModal ? 50 : 25;
     dispatch(
       openCustomContent('CHARTING-CHART', {
         headerText: (
@@ -964,14 +1058,16 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: 'chart-dialog',
         isDraggable: true,
         dragHandle: '.modal-header',
-        offsetLeft: 'calc(50% - 575px)',
-        offsetTop: 50,
-        width: 1150,
-        height: 420,
+        offsetLeft: `calc(50% - ${width / 2}px)`,
+        offsetTop,
+        width,
+        height,
         stayOnscreen: true,
+        autoSetHeight: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
+          toggleErrorDaysExpanded,
         },
       }),
     );
@@ -995,6 +1091,9 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onUpdateEndDate(date) {
     dispatch(changeChartingEndDate(date));
+  },
+  closeModal() {
+    dispatch(onClose());
   },
 });
 
@@ -1022,6 +1121,7 @@ ChartingModeOptions.propTypes = {
   displaySimpleStats: PropTypes.func,
   displayChart: PropTypes.func,
   openChartingErrorModal: PropTypes.func,
+  closeModal: PropTypes.func,
   olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
   renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),

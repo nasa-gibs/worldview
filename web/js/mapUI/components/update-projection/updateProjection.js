@@ -6,8 +6,8 @@ import {
   get as lodashGet,
 } from 'lodash';
 import {
-  fitToLeadingExtent,
-  updateMapUI,
+  fitToLeadingExtent as fitToLeadingExtentAction,
+  updateMapUI as updateMapUIAction,
 } from '../../../modules/map/actions';
 import { getLeadingExtent } from '../../../modules/map/util';
 import {
@@ -24,8 +24,9 @@ import * as vectorStyleConstants from '../../../modules/vector-styles/constants'
 import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
-import { requestPalette } from '../../../modules/palettes/actions';
+import { requestPalette as requestPaletteAction } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
+import { addTEMPODateRanges as addTEMPODateRangesAction } from '../../../modules/layers/actions';
 
 function UpdateProjection(props) {
   const {
@@ -52,6 +53,7 @@ function UpdateProjection(props) {
     ui,
     renderedPalettes,
     requestPalette,
+    addTEMPODateRanges,
   } = props;
 
   const layerStateRef = useRef(layerState);
@@ -106,6 +108,9 @@ function UpdateProjection(props) {
         if (def.palette) {
           requestPalette(def.id);
         }
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
+        }
         return createLayer(def, options);
       });
     const compareLayerGroup = await Promise.all(layers);
@@ -143,6 +148,9 @@ function UpdateProjection(props) {
           compare.activeString,
           granuleOptions,
         );
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
+        }
         return createLayer(def, options);
       });
       const layerResults = await Promise.allSettled(layerPromises);
@@ -179,12 +187,12 @@ function UpdateProjection(props) {
  * @method hideMap
  * @static
  *
- * @param {object} map - Openlayers Map obj
+ * @param {object} mapObj - Openlayers Map obj
  *
  * @returns {void}
  */
-  function hideMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function hideMap(mapObj) {
+    const el = document.getElementById(`${mapObj.getTarget()}`);
     if (el) el.style.display = 'none';
   }
 
@@ -198,8 +206,8 @@ function UpdateProjection(props) {
  *
  * @returns {void}
  */
-  function showMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function showMap(mapObj) {
+    const el = document.getElementById(`${mapObj.getTarget()}`);
     if (el) el.style.display = 'block';
   }
 
@@ -229,10 +237,10 @@ function UpdateProjection(props) {
       hideMap(ui.selected);
     }
     ui.selected = ui.proj[proj.id];
-    const map = ui.selected;
+    const mapObj = ui.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const currentRotation = isProjectionRotatable ? mapObj.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
     const rotation = start ? rotationStart : currentRotation;
 
@@ -243,9 +251,9 @@ function UpdateProjection(props) {
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
     // using the previous value.
-    showMap(map);
+    showMap(mapObj);
 
-    map.updateSize();
+    mapObj.updateSize();
 
     if (ui.selected.previousCenter) {
       ui.selected.setCenter(ui.selected.previousCenter);
@@ -260,19 +268,19 @@ function UpdateProjection(props) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const view = map.getView();
-          const extent = view.calculateExtent(map.getSize());
-          fitToLeadingExtent(extent);
+          const view = mapObj.getView();
+          const calculatedExtent = view.calculateExtent(mapObj.getSize());
+          fitToLeadingExtent(calculatedExtent);
         };
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const view = map.getView();
+          const view = mapObj.getView();
           view.setRotation(rotationStart);
         };
       }
       if (extent) {
-        map.getView().fit(extent, {
+        mapObj.getView().fit(extent, {
           constrainResolution: false,
           callback,
         });
@@ -440,19 +448,22 @@ const mapStateToProps = (state) => {
     proj,
     map,
     renderedPalettes,
-    requestPalette,
+    requestPaletteAction,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   fitToLeadingExtent: (extent) => {
-    dispatch(fitToLeadingExtent(extent));
+    dispatch(fitToLeadingExtentAction(extent));
   },
   updateMapUI: (ui, rotation) => {
-    dispatch(updateMapUI(ui, rotation));
+    dispatch(updateMapUIAction(ui, rotation));
   },
   requestPalette: (id) => {
-    dispatch(requestPalette(id));
+    dispatch(requestPaletteAction(id));
+  },
+  addTEMPODateRanges: (layer, dateRanges, activeString) => {
+    dispatch(addTEMPODateRangesAction(layer, dateRanges, activeString));
   },
 });
 
@@ -485,4 +496,5 @@ UpdateProjection.propTypes = {
   updateMapUI: PropTypes.func,
   renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
+  addTEMPODateRanges: PropTypes.func,
 };

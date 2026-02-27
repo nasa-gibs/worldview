@@ -121,7 +121,8 @@ export const getGranuleFootprints = (layer) => {
   const { endDate, startDate } = def;
   const mostRecentGranuleDate = granuleDates[0];
   const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
-  const reduceFunc = (dates, { date, polygon }) => {
+  const reduceFunc = (granuleDatesArr, { date, polygon }) => {
+    const dates = granuleDatesArr;
     const granuleDate = new Date(date);
     if (!isMostRecentDateOutOfRange && isWithinDateRange(granuleDate, startDate, endDate)) {
       dates[date] = polygon;
@@ -180,7 +181,8 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
 
   const getShortName = (nrt) => {
     try {
-      const { shortName } = def.conceptIds[0];
+      const { shortName } = [...def.conceptIds]
+        .sort((a, b) => (b.type === 'NRT') - (a.type === 'NRT'))[0];
       if (nrt) return shortName;
       // remove _NRT from shortName
       return shortName.replace('_NRT', '');
@@ -190,7 +192,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
     return undefined;
   };
 
-  if (def.conceptIds[0].type === 'NRT') {
+  if (def.conceptIds.filter((id) => id.type === 'NRT').length > 0) {
     return [
       {
         shortName: getShortName(false),

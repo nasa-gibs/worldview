@@ -179,7 +179,7 @@ class GIF extends Component {
 
   createGIF(width, height) {
     const {
-      getImageArray, startDate, endDate, url,
+      getImageArrayFunc, startDate, endDate, url,
     } = this.props;
     const { boundaries, showDates } = this.state;
     const dimensions = {
@@ -198,7 +198,7 @@ class GIF extends Component {
         boundaries,
         showDates,
       };
-      const imageArray = getImageArray(options, { width, height });
+      const imageArray = getImageArrayFunc(options, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
@@ -408,18 +408,21 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    screenSize, proj, animation, map, date, config,
+    screenSize, proj, animation, map, date, config, layers,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
   } = animation;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    customSelected, interval, customInterval, customDelta,
+    customSelected, autoSelected, interval, customInterval, customDelta,
   } = date;
-  const increment = customSelected
+  const customIncrement = customSelected
     ? `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`
     : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
+  const increment = autoSelected
+    ? 'Auto Interval'
+    : customIncrement;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -450,8 +453,11 @@ function mapStateToProps(state) {
         ? TIME_SCALE_FROM_NUMBER[customInterval]
         : TIME_SCALE_FROM_NUMBER[interval],
       customSelected ? customDelta : 1,
+      null,
+      autoSelected,
+      layers.active.layers,
     ),
-    getImageArray: (options, dimensions) => getImageArray(
+    getImageArrayFunc: (options, dimensions) => getImageArray(
       options,
       dimensions,
       state,
@@ -475,7 +481,7 @@ GIF.propTypes = {
   endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   startDateStr: PropTypes.string,
   endDateStr: PropTypes.string,
-  getImageArray: PropTypes.func,
+  getImageArrayFunc: PropTypes.func,
   increment: PropTypes.string,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,

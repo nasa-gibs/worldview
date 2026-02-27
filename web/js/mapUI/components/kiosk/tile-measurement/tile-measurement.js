@@ -56,11 +56,11 @@ function TileMeasurement({ ui }) {
   };
 
   // returns the date of the first layer that has a best date
-  function findBestDate(layers, bestDates) {
+  function findBestDate(layers, bestDatesArg) {
     // eslint-disable-next-line no-restricted-syntax
     for (const layer of layers) {
-      if (bestDates[layer.id]) {
-        return bestDates[layer.id].date;
+      if (bestDatesArg[layer.id]) {
+        return bestDatesArg[layer.id].date;
       }
     }
     return undefined;

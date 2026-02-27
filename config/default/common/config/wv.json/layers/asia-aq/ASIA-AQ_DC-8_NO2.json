@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "MSL_GPS_AI",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "ASIA-AQ_DC-8_NO2",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

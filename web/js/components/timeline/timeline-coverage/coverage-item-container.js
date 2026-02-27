@@ -57,7 +57,8 @@ class CoverageItemContainer extends Component {
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
 
-    const multiDateToDisplay = dateRanges.reduce((multiCoverageDates, range, innerIndex) => {
+    const multiDateToDisplay = dateRanges.reduce((dates, range, innerIndex) => {
+      const multiCoverageDates = { ...dates };
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
@@ -127,7 +128,7 @@ class CoverageItemContainer extends Component {
 
     // get line container dimensions
     const containerLineDimensions = getMatchingCoverageLineDimensions(layer)
-      .filter(({ visible }) => visible);
+      .filter(({ visible: isVisible }) => isVisible);
     return (
       <div
         className="layer-coverage-line"
@@ -156,7 +157,7 @@ class CoverageItemContainer extends Component {
                 layer,
                 dateObj,
                 rangeDateEnd,
-              ).filter(({ visible }) => visible);
+              ).filter(({ visible: isVisible }) => isVisible);
               // create DOM line element
               const key = `${id}-${multiIndex}`;
               return (

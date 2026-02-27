@@ -34,6 +34,7 @@ import {
   UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -55,7 +56,10 @@ export function activateLayersForEventCategory(category) {
     const overlayGroups = getOverlayGroups(newLayers);
 
     const newEventLayers = findEventLayers(originalLayers, newLayers);
-    overlayGroups.forEach((group) => { group.collapsed = true; });
+    overlayGroups.forEach((groupObj) => {
+      const group = groupObj;
+      group.collapsed = true;
+    });
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
@@ -225,7 +229,8 @@ export function toggleGroupVisibility(ids, visible) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeLayers = getActiveLayersSelector(getState());
-    activeLayers.forEach((layer) => {
+    activeLayers.forEach((layerObj) => {
+      const layer = layerObj;
       if (ids.includes(layer.id)) {
         layer.visible = visible;
       }
@@ -447,6 +452,19 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
       activeString: compare.activeString,
       layers: newLayers,
       layerIndex,
+    });
+  };
+}
+
+export function addTEMPODateRanges(layer, tempoDateRanges, activeString) {
+  return (dispatch) => {
+    const { id } = layer;
+
+    dispatch({
+      type: ADD_TEMPO_DATE_RANGES,
+      activeString,
+      id,
+      tempoDateRanges,
     });
   };
 }

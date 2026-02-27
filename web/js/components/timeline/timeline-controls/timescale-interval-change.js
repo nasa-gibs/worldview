@@ -89,6 +89,7 @@ class TimeScaleIntervalChange extends PureComponent {
       customInterval, customDelta, selectInterval, toggleCustomModal, modalType,
     } = this.props;
     const customSelected = timeScale === 'custom';
+    const autoSelected = timeScale === 'auto';
     let delta;
     let newTimeScale = timeScale;
 
@@ -100,11 +101,14 @@ class TimeScaleIntervalChange extends PureComponent {
     if (customSelected && customInterval && customDelta) {
       newTimeScale = customInterval;
       delta = customDelta;
+    } else if (autoSelected) {
+      newTimeScale = 5;
+      delta = 1;
     } else {
       newTimeScale = Number(TIME_SCALE_TO_NUMBER[newTimeScale]);
       delta = 1;
     }
-    selectInterval(delta, newTimeScale, customSelected);
+    selectInterval(delta, newTimeScale, customSelected, autoSelected);
   };
 
   // set custom text for custom interval
@@ -124,7 +128,7 @@ class TimeScaleIntervalChange extends PureComponent {
 
   renderTooltip = () => {
     const { toolTipHovered, customIntervalText } = this.state;
-    const { hasSubdailyLayers } = this.props;
+    const { hasSubdailyLayers, hasTempoProduct } = this.props;
     return (
       <div
         className="wv-tooltip"
@@ -170,6 +174,15 @@ class TimeScaleIntervalChange extends PureComponent {
               </span>
             </>
           ) : null}
+          {hasTempoProduct ? (
+            <span
+              id="interval-auto"
+              className="interval-btn interval-auto"
+              onClick={() => this.handleClickInterval('auto')}
+            >
+              Auto
+            </span>
+          ) : null}
           <span
             id="interval-custom"
             className="interval-btn interval-custom custom-interval-text"
@@ -196,6 +209,7 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.state;
     const {
       customSelected,
+      autoSelected,
       interval,
       isDisabled,
     } = this.props;
@@ -214,7 +228,7 @@ class TimeScaleIntervalChange extends PureComponent {
           id="current-interval"
           className={className}
         >
-          {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
+          {customSelected ? customIntervalText : autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
         </span>
 
         {!isDisabled ? this.renderTooltip() : null}
@@ -228,21 +242,22 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCustomModal: (isOpen, modalType) => {
     dispatch(toggleCustomModalAction(isOpen, modalType));
   },
-  selectInterval: (delta, timeScale, customSelected) => {
-    dispatch(selectIntervalAction(delta, timeScale, customSelected));
+  selectInterval: (delta, timeScale, customSelected, autoSelected) => {
+    dispatch(selectIntervalAction(delta, timeScale, customSelected, autoSelected));
   },
 });
 
 const mapStateToProps = (state) => {
   const { date } = state;
   const {
-    interval, customInterval, customDelta, customSelected,
+    interval, customInterval, customDelta, customSelected, autoSelected,
   } = date;
   return {
     interval,
     customInterval,
     customDelta,
     customSelected,
+    autoSelected,
   };
 };
 
@@ -250,7 +265,9 @@ TimeScaleIntervalChange.propTypes = {
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   interval: PropTypes.number,
   isDisabled: PropTypes.bool,
   selectInterval: PropTypes.func,

@@ -272,13 +272,23 @@ export function getLayersActiveAtDate(layers, date) {
  */
 export function mapLocationToDateState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const appNow = get(state, 'date.appNow');
-  // legacy time permalink
+  if (parameters.rt) {
+    const relativeTimeInMinutes = Math.abs(moment.duration(parameters.rt).asMinutes());
+    const date = util.earliestValidDate(util.dateAdd(appNow, 'minute', -relativeTimeInMinutes));
+    stateFromLocation = update(stateFromLocation, {
+      date: {
+        selected: { $set: date },
+      },
+    });
+  }
 
+  // legacy time permalink
   if (parameters.time && !parameters.t && appNow) {
     const date = tryCatchDate(parameters.time, appNow);
     if (date && date !== appNow) {
@@ -539,3 +549,107 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
   newDate = new Date(util.clamp(newDate, newMinDate, newMaxDate));
   return newDate;
 };
+
+/**
+ * Gets the next imagery delta for auto increments
+ *
+ * @method getNextImageryDelta
+ * @param  {Array} layers
+ * @param  {object} date Selected date
+ * @param  {Number} signConstant Direction of increment
+ * @returns {array} Array of visible layers within the date.
+ */
+export function getNextImageryDelta(layers, date, signConstant) {
+  let delta = 0;
+  let invalidLayerCount = 0;
+  const dateAObj = new Date(date);
+  let hasDeltaChanged = false;
+  let dateRanges;
+  for (let i = 0; i < layers.length; i += 1) {
+    if (Object.prototype.hasOwnProperty.call(layers[i], 'tempoDateRanges')) {
+      dateRanges = layers[i].tempoDateRanges;
+    } else if (Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges')) {
+      dateRanges = layers[i].dateRanges;
+    }
+    if (!dateRanges || !layers[i].visible) {
+      invalidLayerCount += 1;
+    } else if (signConstant > 0) {
+      // Forward in time
+      const foundIndex = dateRanges.findIndex(
+        (element) => element.startDate > date,
+      );
+      const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
+      // endingIndex gives 10 tries to find a valid next interval
+      const endingIndex = foundIndex + 5 > dateRanges.length
+        ? dateRanges.length : foundIndex + 5;
+      for (let j = startingIndex; j < endingIndex; j += 1) {
+        const obj = dateRanges[j];
+        const startDateObj = new Date(obj.startDate);
+        const endDateObj = new Date(obj.endDate);
+        const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
+        if (dateAObj < startDateObj) {
+          const possibleDelta = Math.ceil(((startDateObj - dateAObj) / 1000) / 60);
+          if (possibleDelta >= 1) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+        if (dateAObj < endDateObj) {
+          const possibleDate = new Date(dateAObj.getTime() + (minDelta * 60000));
+          const possibleDelta = possibleDate > endDateObj
+            ? Math.floor(((endDateObj - dateAObj) / 1000) / 60) : minDelta;
+          if (possibleDelta >= minDelta && possibleDate.getTime() !== endDateObj.getTime()) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+      }
+      if (hasDeltaChanged) {
+        break;
+      }
+    } else {
+      // Backward in time
+      const foundIndex = [...dateRanges].reverse().findIndex(
+        (element) => element.endDate < date,
+      );
+      const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
+      // endingIndex gives 10 tries to find a valid next interval
+      const endingIndex = foundIndex + 5 > dateRanges.length
+        ? dateRanges.length : foundIndex + 5;
+      for (let j = startingIndex; j < endingIndex; j += 1) {
+        const obj = [...dateRanges].reverse()[j];
+        const startDateObj = new Date(obj.startDate);
+        const endDateObj = new Date(obj.endDate);
+        const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
+        if (dateAObj > endDateObj) {
+          const possibleDelta = Math.ceil(((dateAObj - endDateObj) / 1000) / 60);
+          if (possibleDelta >= minDelta) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+        if (dateAObj > startDateObj) {
+          const possibleDate = new Date(dateAObj.getTime() - (minDelta * 60000));
+          const possibleDelta = possibleDate < startDateObj
+            ? Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
+          if (possibleDelta >= minDelta && possibleDate.getTime() !== startDateObj.getTime()) {
+            delta = possibleDelta;
+            hasDeltaChanged = true;
+            break;
+          }
+        }
+      }
+      if (hasDeltaChanged) {
+        break;
+      }
+    }
+  }
+  // If all layers are hidden/invalid, make delta 1
+  if (invalidLayerCount === layers.length) {
+    delta = 1;
+  }
+  return delta;
+}
