@@ -5,8 +5,7 @@
       "description": "tropomi/TROPOMI_L2_Nitrogen_Dioxide_Tropospheric_Column",
       "tags": "no2 nitrogen dioxide",
       "group": "overlays",
-      "layergroup": "Nitrogen Dioxide",
-      "wrapadjacentdays": true
+      "layergroup": "Nitrogen Dioxide"
     }
   }
 }
