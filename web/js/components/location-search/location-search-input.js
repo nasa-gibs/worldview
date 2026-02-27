@@ -224,8 +224,9 @@ class SearchBox extends Component {
       display: 'flex', width: '85%', background: 'inherit', border: 'none',
     };
     return (
-      <button
-        type="button"
+      <div
+        role="searchbox"
+        tabIndex={0}
         className="location-search-input-container"
         onKeyDown={this.handleKeyPress}
         style={mobileStyle}
@@ -249,7 +250,7 @@ class SearchBox extends Component {
         {this.renderClearInput()}
         {this.renderAlertIcon()}
         {this.renderSubmitButton()}
-      </button>
+      </div>
     );
   }
 }
