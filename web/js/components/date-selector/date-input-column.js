@@ -326,6 +326,7 @@ class DateInputColumn extends Component {
           onFocus={this.handleFocus}
           onTouchStart={this.handleFocus}
           disabled={isDisabled}
+          aria-label={`${inputId} input`}
         />
         <Arrow
           direction="down"

@@ -221,10 +221,12 @@ class SearchBox extends Component {
     const mobileStyle = isMobile ? {
       width: '100%', display: 'flex',
     } : {
-      display: 'flex', width: '85%',
+      display: 'flex', width: '85%', background: 'inherit', border: 'none',
     };
     return (
       <div
+        role="searchbox"
+        tabIndex={0}
         className="location-search-input-container"
         onKeyDown={this.handleKeyPress}
         style={mobileStyle}

@@ -19,6 +19,7 @@ function Zoom({
       <button
         type="button"
         disabled={zoomInDisabled}
+        aria-label="Zoom in view"
         className="wv-map-zoom wv-map-zoom-in"
         onClick={() => { mapUtilZoomAction(map, 1); }}
         onMouseMove={(e) => e.stopPropagation()}
@@ -36,6 +37,7 @@ function Zoom({
       <button
         type="button"
         disabled={zoomOutDisabled}
+        aria-label="Zoom out view"
         className="wv-map-zoom wv-map-zoom-out"
         onClick={() => { mapUtilZoomAction(map, -1); }}
         onMouseMove={(e) => e.stopPropagation()}

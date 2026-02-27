@@ -155,6 +155,13 @@ class ShareLinkContainer extends Component {
     if (feedbackEnabled) sendFeedback(feedbackIsInitiated, isMobile);
   };
 
+  handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      return this.openFeedback();
+    }
+    return null;
+  };
+
   renderNavTabs = () => {
     const { embedDisableNavLink, isMobile } = this.props;
     const { activeTab } = this.state;
@@ -295,7 +302,7 @@ class ShareLinkContainer extends Component {
             <p>
               Please
               {' '}
-              <a onClick={this.openFeedback} id="feedback-url">contact us</a>
+              <a role="link" tabIndex={0} onKeyDown={this.handleKeyDown} onClick={this.openFeedback} id="feedback-url">contact us</a>
               {' '}
               to enable Worldview embedding on your website.
             </p>

@@ -729,6 +729,10 @@ div#group-overlays-checkbox-case {
     padding: 5px;
     display: flex;
     justify-content: center;
+    background: none;
+    border: none;
+    color: inherit;
+    width:100%;
 
     svg {
       margin-left: 10px;

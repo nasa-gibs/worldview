@@ -10,12 +10,19 @@ function ChartingInfo(props) {
     feedbackIsInitiated,
     isMobile,
   } = props;
+
+  const handleKeyDown = (e, feedbackIsInitiatedArg, isMobileArg) => {
+    if (e.key === 'Enter') {
+      return sendFeedback(feedbackIsInitiatedArg, isMobileArg);
+    }
+    return null;
+  };
   return (
     <div className="charting-info-container">
       <div className="charting-info-text">
         <p className="charting-info">
           The charting feature is available for beta testing and evaluation.&nbsp;
-          <span className="charting-feedback" onClick={() => sendFeedback(feedbackIsInitiated, isMobile)}>Please send comments and feedback to us.</span>
+          <span className="charting-feedback" role="link" tabIndex={0} onKeyDown={(e, feedbackIsInitiatedArg, isMobileArg) => handleKeyDown(e, feedbackIsInitiatedArg, isMobileArg)} onClick={() => sendFeedback(feedbackIsInitiated, isMobile)}>Please send comments and feedback to us.</span>
         </p>
         <p className="charting-info">The Charting Tool provides the option to create a line chart for a date range showing change over time, and statistics for a single date (median, mean, minimum, maximum, and standard deviation) for an area of interest.</p>
 

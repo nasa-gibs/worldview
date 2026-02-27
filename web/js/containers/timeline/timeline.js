@@ -1496,7 +1496,8 @@ class Timeline extends React.Component {
                   />
 
                   {/* Open/Close Chevron */}
-                  <div
+                  <button
+                    type="button"
                     id="timeline-hide"
                     aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                     onClick={this.toggleHideTimeline}
@@ -1507,7 +1508,7 @@ class Timeline extends React.Component {
                     <div
                       className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
                     />
-                  </div>
+                  </button>
                 </section>
               )}
           </ErrorBoundary>

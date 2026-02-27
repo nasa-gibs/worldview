@@ -158,6 +158,8 @@
       bottom: 0;
       height: 20px;
       width: 23px;
+      background: inherit;
+      border: none;
     }
   }
 
@@ -176,9 +178,13 @@
 
   .close-tooltip,
   .minimize-tooltip {
-    padding-left: 6px;
+    padding: 0 0 0 6px;
     margin-left: 8px;
     border-left: 1px solid #777;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    background: none;
 
     &.close-coordinates-tooltip,
     &.minimize-coordinates-tooltip {

@@ -49,29 +49,29 @@ function IntervalSelect(props) {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem>
-                <span onClick={() => handleChangeZoomLevelMobile('year')}>
+                <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('year')}>
                   Year
                 </span>
               </DropdownItem>
               <DropdownItem>
-                <span onClick={() => handleChangeZoomLevelMobile('month')}>
+                <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('month')}>
                   Month
                 </span>
               </DropdownItem>
               <DropdownItem>
-                <span onClick={() => handleChangeZoomLevelMobile('day')}>
+                <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('day')}>
                   Day
                 </span>
               </DropdownItem>
               {hasSubdailyLayers ? (
                 <>
                   <DropdownItem>
-                    <span onClick={() => handleChangeZoomLevelMobile('hour')}>
+                    <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('hour')}>
                       Hour
                     </span>
                   </DropdownItem>
                   <DropdownItem>
-                    <span onClick={() => handleChangeZoomLevelMobile('minute')}>
+                    <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('minute')}>
                       Minute
                     </span>
                   </DropdownItem>

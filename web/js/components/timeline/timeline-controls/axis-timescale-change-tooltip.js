@@ -63,6 +63,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             </label>
             <span
               id="zoom-years"
+              role="menuitem"
+              tabIndex={-1}
               className="zoom-btn zoom-years"
               onClick={this.changeTimeScaleYear}
             >
@@ -70,6 +72,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             </span>
             <span
               id="zoom-months"
+              role="menuitem"
+              tabIndex={-1}
               className="zoom-btn zoom-months"
               onClick={this.changeTimeScaleMonth}
             >
@@ -77,6 +81,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             </span>
             <span
               id="zoom-days"
+              role="menuitem"
+              tabIndex={-1}
               className="zoom-btn zoom-days"
               onClick={this.changeTimeScaleDay}
             >
@@ -86,6 +92,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
               <>
                 <span
                   id="zoom-hours"
+                  role="menuitem"
+                  tabIndex={-1}
                   className="zoom-btn zoom-hours"
                   onClick={this.changeTimeScaleHour}
                 >
@@ -93,6 +101,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
                 </span>
                 <span
                   id="zoom-minutes"
+                  role="menuitem"
+                  tabIndex={-1}
                   className="zoom-btn zoom-minutes"
                   onClick={this.changeTimeScaleMinute}
                 >
