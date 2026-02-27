@@ -483,6 +483,10 @@ class Tour extends React.Component {
       return null;
     }
 
+    const renderModalInProgress = modalInProgress
+      ? this.renderTourInProgress()
+      : this.renderTourComplete();
+
     return (
       <ErrorBoundary>
         <div>
@@ -498,9 +502,7 @@ class Tour extends React.Component {
           )}
           {modalStart
             ? this.renderTourStart()
-            : modalInProgress
-              ? this.renderTourInProgress()
-              : this.renderTourComplete()}
+            : renderModalInProgress}
         </div>
       </ErrorBoundary>
     );

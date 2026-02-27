@@ -62,6 +62,9 @@ function Switch(props) {
       </div>
       <div className="react-switch-label-case switch-col">
         <span
+          role="switch"
+          aria-checked={isActive}
+          tabIndex={0}
           className="switch-label-text"
           onClick={toggleSwitch}
         >

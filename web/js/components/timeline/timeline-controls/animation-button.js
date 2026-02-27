@@ -47,11 +47,21 @@ function AnimationButton(props) {
   };
 
   const buttonClass = getButtonClassName();
-
+  let animationButtonClassName;
+  if (isKioskModeActive) {
+    animationButtonClassName = 'd-none';
+  } else if (disabled) {
+    animationButtonClassName = 'wv-disabled-button button-action-group animate-button';
+  } else if (!isMobile && !isEmbedModeActive) {
+    animationButtonClassName = 'button-action-group animate-button';
+  } else {
+    animationButtonClassName = `button-action-group mobile-animate-button animate-button-${buttonClass}`;
+  }
   return (
-    <div
+    <button
+      type="button"
       onClick={clickAnimationButton}
-      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={animationButtonClassName}
       aria-label={labelText}
     >
       <div id={buttonId}>
@@ -67,7 +77,7 @@ function AnimationButton(props) {
           )}
         <FontAwesomeIcon icon="video" className="wv-animate" size="2x" widthAuto />
       </div>
-    </div>
+    </button>
   );
 }
 

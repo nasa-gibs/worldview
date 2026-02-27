@@ -40,10 +40,13 @@ export default class VectorMetaTable extends React.Component {
                     } = properties;
 
                     const isIntegerToStyle = Function !== 'Identify' && (DataType === 'int');
+                    const metaFeaturesIdentifierValue = metaFeatures[Identifier]
+                      ? metaFeatures[Identifier] : null;
+                    const metaFeaturesResult = isIntegerToStyle ? metaFeatures[Identifier].toLocaleString('en')
+                      : metaFeaturesIdentifierValue;
                     const value = ValueMap
                       ? ValueMap[metaFeatures[Identifier]]
-                      : isIntegerToStyle ? metaFeatures[Identifier].toLocaleString('en')
-                        : metaFeatures[Identifier] ? metaFeatures[Identifier] : null;
+                      : metaFeaturesResult;
                     const id = util.cleanId(String(`${title}-${metaIndex + index}`));
 
                     if (!value) return undefined;

@@ -211,8 +211,9 @@ class CategoryLayerRow extends React.Component {
         id={`accordion-${category.id}-${measurement.id}`}
         key={`${category.id}-${measurement.id}`}
       >
-        <div
+        <button
           onClick={() => selectMeasurement(id)}
+          type="button"
           className="measurement-row-header"
         >
           <h3>{measurement.title}</h3>
@@ -220,7 +221,7 @@ class CategoryLayerRow extends React.Component {
           {isSelected
             ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" widthAuto />
             : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" widthAuto />}
-        </div>
+        </button>
         {isSelected ? this.renderContent() : ''}
       </div>
     );

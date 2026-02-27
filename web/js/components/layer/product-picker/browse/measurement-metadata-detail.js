@@ -91,14 +91,15 @@ function MeasurementMetadataDetail (props) {
           {renderMetadataForLayers()}
         </div>
         {doesMetaDataNeedExpander && (
-          <div
+          <button
             className="metadata-more"
+            type="button"
             onClick={() => setMetadataExpansion(!isMetadataExpanded)}
           >
             <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
               {isMetadataExpanded ? '^' : '...'}
             </span>
-          </div>
+          </button>
         )}
       </div>
     );

@@ -28,14 +28,15 @@ export function parseEvent(eventString) {
 export function serializeEvent(currentItemState) {
   const eventId = lodashGet(currentItemState, 'selected.id');
   const eventDate = lodashGet(currentItemState, 'selected.date');
-  const eventsTabActive = currentItemState.active;
+  const eventsTabActive = currentItemState.active
+    ? 'true'
+    : undefined;
+  const eventIdAndEventsTabActive = eventId && eventsTabActive
+    ? eventId
+    : eventsTabActive;
   return eventsTabActive && eventDate && eventId
     ? [eventId, eventDate].join(',')
-    : eventId && eventsTabActive
-      ? eventId
-      : eventsTabActive
-        ? 'true'
-        : undefined;
+    : eventIdAndEventsTabActive;
 }
 
 export function parseEventFilterDates(eventFilterDatesString) {

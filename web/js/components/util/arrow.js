@@ -12,13 +12,15 @@ function Arrow({
   const arrowClassName = `${direction}arrow`;
 
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
+      aria-label={direction === 'up' ? `Increment ${type}` : `Decrement ${type}`}
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
       <ArrowFilledUp className={arrowClassName} size={arrowSize} />
-    </div>
+    </button>
   );
 }
 

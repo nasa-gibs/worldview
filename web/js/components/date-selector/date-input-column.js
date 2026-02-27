@@ -295,11 +295,8 @@ class DateInputColumn extends Component {
     const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
     const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
     const fontSizeStyle = fontSize ? { fontSize: `${fontSize}px` } : {};
-    const inputId = isStartDate
-      ? `${type}-${idSuffix}-start`
-      : isEndDate
-        ? `${type}-${idSuffix}-end`
-        : `${type}-${idSuffix}`;
+    const isEndDateString = isEndDate ? `${type}-${idSuffix}-end` : `${type}-${idSuffix}`;
+    const inputId = isStartDate ? `${type}-${idSuffix}-start` : isEndDateString;
 
     return (
       <div
@@ -329,6 +326,7 @@ class DateInputColumn extends Component {
           onFocus={this.handleFocus}
           onTouchStart={this.handleFocus}
           disabled={isDisabled}
+          aria-label={`${inputId} input`}
         />
         <Arrow
           direction="down"

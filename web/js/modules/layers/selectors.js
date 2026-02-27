@@ -23,14 +23,13 @@ const getLayerId = (state, { layer }) => layer && layer.id;
 
 export function addLayer(
   id,
-  spec = {},
   layersParam,
   layerConfig,
-  overlayLength,
-  projection,
-  groupOverlays,
-  bandComboParam,
-  selectedPresetParam,
+  spec = {},
+  overlayLength = null,
+  groupOverlays = null,
+  bandComboParam = null,
+  selectedPresetParam = null,
 ) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
@@ -119,11 +118,11 @@ export function addLayer(
  * @param {*} layerConfig
  */
 export function resetLayers(config) {
-  const { defaults: { startingLayers, projection }, layers: layerConfig } = config;
+  const { defaults: { startingLayers }, layers: layerConfig } = config;
   let layers = [];
   if (startingLayers) {
     lodashEach(startingLayers, (start) => {
-      layers = addLayer(start.id, start, layers, layerConfig, null, projection);
+      layers = addLayer(start.id, layers, layerConfig, start);
     });
   }
   return layers;
@@ -176,12 +175,13 @@ export const getActiveLayerGroup = (state) => {
   const { active, activeString } = compare || {};
   if (active) {
     const layerGroups = map.ui.selected.getLayers().getArray();
+    const selectedLayerGroup = layerGroups[1]?.get('group') === activeString
+      ? layerGroups[1]
+      : map.ui.selected;
     if (layerGroups.length > 1) {
       return layerGroups[0].get('group') === activeString
         ? layerGroups[0]
-        : layerGroups[1].get('group') === activeString
-          ? layerGroups[1]
-          : map.ui.selected;
+        : selectedLayerGroup;
     }
   }
   return map.ui.selected;
@@ -433,7 +433,7 @@ export function available(id, date, layers, parameters) {
   return true;
 }
 
-function forGroup(group, spec = {}, activeLayers, state) {
+function forGroup(group, activeLayers, state, spec = {}) {
   const projId = state.proj.id;
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
@@ -464,10 +464,10 @@ function forGroup(group, spec = {}, activeLayers, state) {
  * @param {*} spec
  * @param {*} state
  */
-export function getLayers(state, spec = {}, layersParam) {
+export function getLayers(state, spec = {}, layersParam = null) {
   const layers = layersParam || getActiveLayers(state);
-  const baselayers = forGroup('baselayers', spec, layers, state);
-  const overlays = forGroup('overlays', spec, layers, state);
+  const baselayers = forGroup('baselayers', layers, state, spec);
+  const overlays = forGroup('overlays', layers, state, spec);
   if (spec.group === 'baselayers') {
     return baselayers;
   }
@@ -757,12 +757,10 @@ export function activateLayersForEventCategory(state, category) {
       const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
-        { visible },
         newLayers,
         layerConfig,
+        { visible },
         overlays.length,
-        projection,
-        null,
       );
     }
   });

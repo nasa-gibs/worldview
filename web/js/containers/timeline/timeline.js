@@ -1127,6 +1127,12 @@ class Timeline extends React.Component {
       timelineStartDateLimit,
     } = this.props;
 
+    const dataDownloadLabel = isDataDownload
+      ? 'Animation feature is deactivated when Data Download feature is active'
+      : '';
+    const chartingActiveLabel = isChartingActive
+      ? 'Animation feature is deactivated when Charting feature is active'
+      : dataDownloadLabel;
     return (
       <div id="timeline-header" className="timeline-header-mobile">
         <MobileDatePicker
@@ -1162,15 +1168,9 @@ class Timeline extends React.Component {
             isKioskModeActive={isKioskModeActive}
             isEmbedModeActive={isEmbedModeActive}
             disabled={animationDisabled}
-            label={
-                    isCompareModeActive
-                      ? 'Animation feature is deactivated when Compare feature is active'
-                      : isChartingActive
-                        ? 'Animation feature is deactivated when Charting feature is active'
-                        : isDataDownload
-                          ? 'Animation feature is deactivated when Data Download feature is active'
-                          : ''
-                  }
+            label={isCompareModeActive
+              ? 'Animation feature is deactivated when Compare feature is active'
+              : chartingActiveLabel}
           />
           )}
         </div>
@@ -1265,6 +1265,14 @@ class Timeline extends React.Component {
     const containerDisplayStyle = {
       display: isDistractionFreeModeActive ? 'block' : 'block',
     };
+
+    const dataDownloadLabel = isDataDownload
+      ? 'Animation feature is deactivated when Data Download feature is active'
+      : '';
+    const chartingActiveLabel = isChartingActive
+      ? 'Animation feature is deactivated when Charting feature is active'
+      : dataDownloadLabel;
+
     return (
       <div
         className="timeline-container"
@@ -1315,15 +1323,9 @@ class Timeline extends React.Component {
                       isKioskModeActive={isKioskModeActive}
                       screenWidth={screenWidth}
                       breakpoints={breakpoints}
-                      label={
-                      isCompareModeActive
+                      label={isCompareModeActive
                         ? 'Animation feature is deactivated when Compare feature is active'
-                        : isChartingActive
-                          ? 'Animation feature is deactivated when Charting feature is active'
-                          : isDataDownload
-                            ? 'Animation feature is deactivated when Data Download feature is active'
-                            : ''
-                    }
+                        : chartingActiveLabel}
                     />
                   </div>
 
@@ -1494,7 +1496,8 @@ class Timeline extends React.Component {
                   />
 
                   {/* Open/Close Chevron */}
-                  <div
+                  <button
+                    type="button"
                     id="timeline-hide"
                     aria-label={isTimelineHidden ? 'Show timeline' : 'Hide timeline'}
                     onClick={this.toggleHideTimeline}
@@ -1505,7 +1508,7 @@ class Timeline extends React.Component {
                     <div
                       className={`wv-timeline-hide wv-timeline-hide-double-chevron-${chevronDirection}`}
                     />
-                  </div>
+                  </button>
                 </section>
               )}
           </ErrorBoundary>

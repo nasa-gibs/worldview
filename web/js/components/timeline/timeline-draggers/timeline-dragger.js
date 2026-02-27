@@ -128,16 +128,10 @@ class Dragger extends PureComponent {
       ? false
       : isHoveredDrag || isHoveredDragging;
     // handle fill for hover vs non-hover and slightly different A/B draggers
-    const draggerFill = disabled
-      ? isHovered
-        ? '#8e8e8e'
-        : '#666666'
-      : isHovered
-        ? isCompareModeActive
-          ? '#a3a3a3'
-          : '#8e8e8e'
-        : '#ccc';
-
+    const disabledFillColor = isHovered ? '#8e8e8e' : '#666666';
+    const comparedModeFillColor = isCompareModeActive ? '#a3a3a3' : '#8e8e8e';
+    const enabledFillColor = isHovered ? comparedModeFillColor : '#ccc';
+    const draggerFill = disabled ? disabledFillColor : enabledFillColor;
     const draggerStroke = isHovered
       ? '#ccc'
       : '#333';

@@ -11,16 +11,18 @@ function PlayButton({
   playing, pause, play, isDisabled, isMobile,
 }) {
   const buttonId = 'play-button';
+  const isPlayingString = playing ? 'Pause animation' : 'Play animation';
   const labelText = isDisabled
     ? 'Too many animation frames. Reduce time range or increase increment size.'
-    : playing
-      ? 'Pause animation' : 'Play animation';
-  const onClick = isDisabled ? () => {} : playing ? pause : play;
+    : isPlayingString;
+  const isPlaying = playing ? pause : play;
+  const onClick = isDisabled ? () => {} : isPlaying;
 
   return (
-    <a
+    <button
       id={buttonId}
       aria-label={labelText}
+      type="button"
       className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
     >
@@ -36,7 +38,7 @@ function PlayButton({
       {playing
         ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" widthAuto />
         : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" widthAuto />}
-    </a>
+    </button>
   );
 }
 

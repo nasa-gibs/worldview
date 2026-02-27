@@ -120,6 +120,8 @@ function Event (props) {
                 {selectedDate === date ? (
                   <span
                     className="active"
+                    role="textbox"
+                    tabIndex={0}
                     onClick={(e) => e.stopPropagation()}
                   >
                     {formatDisplayDate(date)}
@@ -128,6 +130,8 @@ function Event (props) {
                   : (
                     <a
                       className="'date item-selected"
+                      role="link"
+                      tabIndex={0}
                       onClick={(e) => {
                         e.stopPropagation();
                         onEventSelect(date);
