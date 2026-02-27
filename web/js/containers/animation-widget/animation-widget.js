@@ -430,10 +430,10 @@ const mapStateToProps = (state) => {
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
-    useDelta,
     frameLimit,
     autoSelected,
     layers.active.layers,
+    useDelta,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;

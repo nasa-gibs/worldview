@@ -803,6 +803,7 @@ export default (function(selfObj) {
    * @param {*} scripts
    * @param {*} fn
    */
+  // eslint-disable-next-line default-param-last
   self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {

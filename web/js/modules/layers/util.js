@@ -1064,7 +1064,6 @@ const createLayerArrayFromState = function(layers, config) {
   if (lodashIsUndefined(layers)) {
     return layerArray;
   }
-  const projection = lodashGet(config, 'parameters.p') || 'geographic';
   layers.reverse().forEach((layerDef) => {
     if (!config.layers[layerDef.id]) {
       // eslint-disable-next-line no-console
@@ -1073,11 +1072,9 @@ const createLayerArrayFromState = function(layers, config) {
     }
     layerArray = addLayer(
       layerDef.id,
-      getLayerSpec(layerDef.attributes),
       layerArray,
       config.layers,
-      null,
-      projection,
+      getLayerSpec(layerDef.attributes),
     );
   });
   return layerArray;
