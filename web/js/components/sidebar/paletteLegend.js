@@ -195,10 +195,18 @@ class PaletteLegend extends React.Component {
   }
 
   /**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
+   * Finds the legend object that corresponds to a given hex color.
+   *
+   * @param {Object} legend - The legend object containing colors and tooltips.
+   * @param {string[]} legend.colors - Array of hex color strings in the legend.
+   * @param {string[]} legend.tooltips - Array of tooltip strings corresponding to colors.
+   * @param {string} [legend.units] - Optional units for the legend values.
+   * @param {string} hex - The hex color to match against the legend.
+   * @param {number} acceptableDifference - The maximum allowed difference between colors.
+   *                                        Lower values require closer color matches.
+   *
+   * @returns {Object|null} The matched legend object or null if no match is found.
+   *
    */
   getLegendObject(legend, hex, acceptableDifference) {
     const { globalTemperatureUnit } = this.props;
@@ -249,7 +257,9 @@ class PaletteLegend extends React.Component {
     const toolTipLength = legend.tooltips.length;
     // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = this.getLegendObject(legend, colorHex, 3); // {label,len,index}
+      const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
+      const acceptableDifference = isContinuousVectorLayer ? 1 : 3;
+      legendObj = this.getLegendObject(legend, colorHex, acceptableDifference); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
