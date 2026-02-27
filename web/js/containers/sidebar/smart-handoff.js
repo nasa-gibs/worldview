@@ -343,11 +343,12 @@ class SmartHandoff extends Component {
       showZoomedIntoDatelineAlert,
     } = this.state;
 
+    const zoomedInDatelineAlertMsg = showZoomedIntoDatelineAlert
+      ? 'The map is zoomed into an area with no available data.'
+      : '';
     const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
       ? 'The selection is outside the available map area.'
-      : showZoomedIntoDatelineAlert
-        ? 'The map is zoomed into an area with no available data.'
-        : '';
+      : zoomedInDatelineAlertMsg;
 
     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
     <AlertUtil

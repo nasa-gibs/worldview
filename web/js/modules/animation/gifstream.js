@@ -69,20 +69,25 @@ export default class GifStream {
       waterMarkXCoordinate,
       waterMarkYCoordinate,
     } = options;
+    const textAlignRightGifWidth = textAlign === 'right'
+      ? gifWidth
+      : gifWidth / 2;
+    const textAlignGifWidth = textAlign === 'left'
+      ? 1
+      : textAlignRightGifWidth;
     const textXCoordinate = options.textXCoordinate
       ? options.textXCoordinate
-      : textAlign === 'left'
-        ? 1
-        : textAlign === 'right'
-          ? gifWidth
-          : gifWidth / 2;
+      : textAlignGifWidth;
+
+    const textBaselineCenterGifHeight = textBaseline === 'center'
+      ? gifHeight / 2
+      : gifHeight;
+    const textBaselineGifHeight = textBaseline === 'top'
+      ? 1
+      : textBaselineCenterGifHeight;
     const textYCoordinate = options.textYCoordinate
       ? options.textYCoordinate
-      : textBaseline === 'top'
-        ? 1
-        : textBaseline === 'center'
-          ? gifHeight / 2
-          : gifHeight;
+      : textBaselineGifHeight;
     const font = `${fontWeight} ${fontSize} ${fontFamily}`;
     const textToUse = frameText && options.showFrameText ? frameText : text;
 

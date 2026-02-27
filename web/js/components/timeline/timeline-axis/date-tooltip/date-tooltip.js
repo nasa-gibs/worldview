@@ -151,12 +151,13 @@ class DateTooltip extends Component {
 
     const tooltipStyle = this.getTooltipStyle(showDraggerTooltip, showHoverTooltip);
 
+    const doyValue = dayOfYear < 100
+      ? `0${dayOfYear}`
+      : dayOfYear;
     // add leading zero(s) for single digits
     dayOfYear = dayOfYear < 10
       ? `00${dayOfYear}`
-      : dayOfYear < 100
-        ? `0${dayOfYear}`
-        : dayOfYear;
+      : doyValue;
 
     const tooltipClass = `date-tooltip ${shouldDisplayDraggerTooltip ? 'date-tooltip-fade' : ''}`;
     return (

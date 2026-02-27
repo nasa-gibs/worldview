@@ -11,11 +11,12 @@ function PlayButton({
   playing, pause, play, isDisabled, isMobile,
 }) {
   const buttonId = 'play-button';
+  const isPlayingString = playing ? 'Pause animation' : 'Play animation';
   const labelText = isDisabled
     ? 'Too many animation frames. Reduce time range or increase increment size.'
-    : playing
-      ? 'Pause animation' : 'Play animation';
-  const onClick = isDisabled ? () => {} : playing ? pause : play;
+    : isPlayingString;
+  const isPlaying = playing ? pause : play;
+  const onClick = isDisabled ? () => {} : isPlaying;
 
   return (
     <a

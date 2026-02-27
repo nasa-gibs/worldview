@@ -110,13 +110,10 @@ class CoverageItemList extends Component {
   * @returns {String} formatted period
   */
   static getFormattedTimePeriod (period) {
-    return period === 'daily'
-      ? 'day'
-      : period === 'monthly'
-        ? 'month'
-        : period === 'yearly'
-          ? 'year'
-          : 'minute';
+    if (period === 'daily') return 'day';
+    if (period === 'monthly') return 'monthly';
+    if (period === 'yearly') return 'year';
+    return 'minute';
   }
 
 

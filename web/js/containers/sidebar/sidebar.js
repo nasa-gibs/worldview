@@ -115,7 +115,8 @@ class Sidebar extends React.Component {
     } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const addLayersHeight = lodashGet(this, 'addLayersElement.clientHeight') || 30;
-    const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
+    const compareModeHeight = isCompareMode ? 80 : 40;
+    const tabHeight = isMobile ? compareModeHeight : 32;
     const groupCheckboxHeight = 35;
     let newHeight;
     if (!isMobile) {
@@ -326,35 +327,38 @@ class Sidebar extends React.Component {
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
 
+    const embedModeHeight = isEmbedModeActive
+      ? '95vh'
+      : `${screenHeight}px`;
     const maxHeight = isCollapsed
       ? '0'
-      : isEmbedModeActive
-        ? '95vh'
-        : `${screenHeight}px`;
+      : embedModeHeight;
     const displayStyle = isDistractionFreeModeActive ? 'none' : 'block';
 
     const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile ? {
       position: 'static',
     } : null;
 
+    const mobileProductHolderStyle = !isDistractionFreeModeActive && isMobile && !isEmbedModeActive
+      ? {
+        cssFloat: 'left',
+        left: '0',
+        minWidth: '238px',
+        width: '100%',
+        height: '100%',
+        position: 'absolute !important',
+        overflow: 'hidden',
+        background: 'rgb(38 43 49)',
+        top: '0',
+        zIndex: 1000,
+        maxHeight: `${maxHeight}`,
+        display: `{${displayStyle}} !important`,
+      } : {
+        maxHeight: `${maxHeight}`,
+      };
     const productsHolderStyle = isDistractionFreeModeActive && !isMobile ? {
       display: 'none',
-    } : !isDistractionFreeModeActive && isMobile && !isEmbedModeActive ? {
-      cssFloat: 'left',
-      left: '0',
-      minWidth: '238px',
-      width: '100%',
-      height: '100%',
-      position: 'absolute !important',
-      overflow: 'hidden',
-      background: 'rgb(38 43 49)',
-      top: '0',
-      zIndex: 1000,
-      maxHeight: `${maxHeight}`,
-      display: `{${displayStyle}} !important`,
-    } : {
-      maxHeight: `${maxHeight}`,
-    };
+    } : mobileProductHolderStyle;
 
     return (
       <ErrorBoundary>

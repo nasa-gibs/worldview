@@ -194,11 +194,10 @@ class SearchBox extends Component {
     } = this.props;
 
     // handle mobile/desktop input padding with/without alert
-    const paddingRightStyle = inputValue
-      ? activeAlert
-        ? isMobile ? '68px' : '84px'
-        : isMobile ? '42px' : '60px'
-      : '0';
+    const mobileSmallPadding = isMobile ? '42px' : '60px';
+    const mobileLargerPadding = isMobile ? '68px' : '84px';
+    const mobileActiveAlertSize = activeAlert ? mobileLargerPadding : mobileSmallPadding;
+    const paddingRightStyle = inputValue ? mobileActiveAlertSize : '0';
 
     return {
       width: isMobile ? '90%' : '298px',

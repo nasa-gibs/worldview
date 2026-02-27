@@ -666,8 +666,9 @@ export default (function(selfObj) {
     if (Math.abs(longitude) < 180) return longitude;
     const isNegative = longitude < 0;
     const remainder = longitude % 360;
+    const remainderGT180 = !isNegative && remainder > 180 ? remainder - 360 : remainder;
     return isNegative && remainder < -180
-      ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+      ? remainder + 360 : remainderGT180;
   };
 
   // Allows simple printf functionality with strings

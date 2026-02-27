@@ -176,12 +176,13 @@ export const getActiveLayerGroup = (state) => {
   const { active, activeString } = compare || {};
   if (active) {
     const layerGroups = map.ui.selected.getLayers().getArray();
+    const selectedLayerGroup = layerGroups[1]?.get('group') === activeString
+      ? layerGroups[1]
+      : map.ui.selected;
     if (layerGroups.length > 1) {
       return layerGroups[0].get('group') === activeString
         ? layerGroups[0]
-        : layerGroups[1].get('group') === activeString
-          ? layerGroups[1]
-          : map.ui.selected;
+        : selectedLayerGroup;
     }
   }
   return map.ui.selected;

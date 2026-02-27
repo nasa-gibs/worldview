@@ -76,11 +76,10 @@ const dragLine = function(listenerObjArg, lineCase, map) {
       swipeOffset = evt.clientX;
     }
     // Prevent swiper from being swiped off screen
+    const swipeOffsetValue = swipeOffset < SWIPE_PADDING ? SWIPE_PADDING : swipeOffset;
     swipeOffset = swipeOffset > windowWidth - SWIPE_PADDING
       ? windowWidth - SWIPE_PADDING
-      : swipeOffset < SWIPE_PADDING
-        ? SWIPE_PADDING
-        : swipeOffset;
+      : swipeOffsetValue;
     percentSwipe = swipeOffset / windowWidth;
     lineCaseEl.style.transform = `translateX( ${swipeOffset}px)`;
     map.render();

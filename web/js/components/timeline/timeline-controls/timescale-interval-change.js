@@ -215,6 +215,7 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.props;
 
     const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
+    const spanInnerText = autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`;
     return (
       <div
         id="timeline-interval-btn-container"
@@ -228,7 +229,7 @@ class TimeScaleIntervalChange extends PureComponent {
           id="current-interval"
           className={className}
         >
-          {customSelected ? customIntervalText : autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
+          {customSelected ? customIntervalText : spanInnerText}
         </span>
 
         {!isDisabled ? this.renderTooltip() : null}

@@ -64,12 +64,12 @@ function Events(props) {
 
   const startDate = formatDisplayDate(selectedStartDate);
   const endDate = formatDisplayDate(selectedEndDate);
-
+  const requestErrorMessage = hasRequestError
+    ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
+    : '';
   const errorOrLoadingText = isLoading
     ? 'Loading ...'
-    : hasRequestError
-      ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
-      : '';
+    : requestErrorMessage;
 
   const renderFilterControls = () => (
     <div className="filter-controls">
