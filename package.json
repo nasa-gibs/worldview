@@ -102,10 +102,7 @@
     "css-minimizer-webpack-plugin": "^8.0.0",
     "css-url-relative-plugin": "^1.1.0",
     "cssnano": "^7.1.1",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-import-resolver-webpack": "^0.13.10",
+    "eslint": "^9.39.3",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^29.15.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -227,9 +224,6 @@
     "eslint-config-standard": {
       "eslint-plugin-n": "^17.19.0",
       "eslint-plugin-promise": "^7.2.1"
-    },
-    "eslint-config-airbnb": {
-      "eslint-plugin-react-hooks": "^7.0.1"
     }
   },
   "browserslist": [
