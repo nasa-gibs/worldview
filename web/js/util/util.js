@@ -666,8 +666,9 @@ export default (function(selfObj) {
     if (Math.abs(longitude) < 180) return longitude;
     const isNegative = longitude < 0;
     const remainder = longitude % 360;
+    const remainderGT180 = !isNegative && remainder > 180 ? remainder - 360 : remainder;
     return isNegative && remainder < -180
-      ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+      ? remainder + 360 : remainderGT180;
   };
 
   // Allows simple printf functionality with strings
@@ -802,6 +803,7 @@ export default (function(selfObj) {
    * @param {*} scripts
    * @param {*} fn
    */
+  // eslint-disable-next-line default-param-last
   self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {

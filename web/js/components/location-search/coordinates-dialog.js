@@ -154,8 +154,9 @@ class CoordinatesDialog extends Component {
       && showTooltips;
 
     return (
-      <div
+      <button
         id={buttonId}
+        type="button"
         className={buttonId}
         onClick={() => this.copyToClipboard(formattedCoordinates)}
         onTouchEnd={() => this.copyToClipboard(formattedCoordinates)}
@@ -171,7 +172,7 @@ class CoordinatesDialog extends Component {
           </UncontrolledTooltip>
         )}
         <FontAwesomeIcon icon="copy" fixedWidth widthAuto />
-      </div>
+      </button>
     );
   };
 

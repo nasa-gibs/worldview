@@ -155,6 +155,13 @@ class ShareLinkContainer extends Component {
     if (feedbackEnabled) sendFeedback(feedbackIsInitiated, isMobile);
   };
 
+  handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      return this.openFeedback();
+    }
+    return null;
+  };
+
   renderNavTabs = () => {
     const { embedDisableNavLink, isMobile } = this.props;
     const { activeTab } = this.state;
@@ -240,18 +247,20 @@ class ShareLinkContainer extends Component {
       activeTab,
       isShort,
     } = this.state;
-    const value = shortLink.isLoading && isShort
-      ? 'Please wait...'
-      : isShort
+    const shortLinkValue = isShort
           && shortLink.response
           && shortLink.response.link
-        ? shortLink.response.link
-        : this.getPermalink();
+      ? shortLink.response.link
+      : this.getPermalink();
+    const value = shortLink.isLoading && isShort
+      ? 'Please wait...'
+      : shortLinkValue;
 
     const url = window.location.href;
     const preventShorten = url.length > 2048;
     const isDisabled = shortLink.isLoading || preventShorten;
-    const tooltipText = isDisabled ? preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time' : '';
+    const shortenWarning = preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time';
+    const tooltipText = isDisabled ? shortenWarning : '';
 
     return (
       <TabPane tabId="link" className="share-tab-link">
@@ -293,7 +302,7 @@ class ShareLinkContainer extends Component {
             <p>
               Please
               {' '}
-              <a onClick={this.openFeedback} id="feedback-url">contact us</a>
+              <a role="link" tabIndex={0} onKeyDown={this.handleKeyDown} onClick={this.openFeedback} id="feedback-url">contact us</a>
               {' '}
               to enable Worldview embedding on your website.
             </p>

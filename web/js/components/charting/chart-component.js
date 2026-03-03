@@ -172,9 +172,8 @@ function ChartComponent(props) {
   // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
   const errorDatesDisplay = useMemo(() => errors?.error_days
     .map((item) => {
-      const dateStr = typeof item === 'string'
-        ? item
-        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+      const isItemObject = item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
+      const dateStr = typeof item === 'string' ? item : isItemObject;
       return (dateStr || '').split('T')[0];
     })
     .filter(Boolean)
@@ -556,14 +555,18 @@ function ChartComponent(props) {
                 </div>
               )}
               <div className="error-expand-button">
-                <span className="error-expand-button-inner" onClick={() => toggleErrorCollapsed(!errorCollapsed)}>
+                <button
+                  className="error-expand-button-inner"
+                  type="button"
+                  onClick={() => toggleErrorCollapsed(!errorCollapsed)}
+                >
                   {errorCollapsed ? 'more' : 'less'}
                   <FontAwesomeIcon
                     className="layer-group-collapse"
                     icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
                     widthAuto
                   />
-                </span>
+                </button>
               </div>
             </div>
           )}

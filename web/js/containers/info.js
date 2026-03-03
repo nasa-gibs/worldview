@@ -41,14 +41,15 @@ function InfoList (props) {
 
   function getNotificationListItem() {
     const { numberUnseen, type, object } = notifications;
+    const iconName = () => {
+      if (type === 'message') return 'gift';
+      if (type === 'outage') return 'exclamation-circle';
+      return ['fas', 'bolt'];
+    };
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
-      iconName: type === 'message'
-        ? 'gift'
-        : type === 'outage'
-          ? 'exclamation-circle'
-          : ['fas', 'bolt'],
+      iconName: iconName(),
       id: 'notifications_info_item',
       badge: type ? numberUnseen : 0,
       className: type ? `${type}-notification` : '',

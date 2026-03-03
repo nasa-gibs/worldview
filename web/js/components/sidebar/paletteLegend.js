@@ -195,10 +195,18 @@ class PaletteLegend extends React.Component {
   }
 
   /**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
+   * Finds the legend object that corresponds to a given hex color.
+   *
+   * @param {Object} legend - The legend object containing colors and tooltips.
+   * @param {string[]} legend.colors - Array of hex color strings in the legend.
+   * @param {string[]} legend.tooltips - Array of tooltip strings corresponding to colors.
+   * @param {string} [legend.units] - Optional units for the legend values.
+   * @param {string} hex - The hex color to match against the legend.
+   * @param {number} acceptableDifference - The maximum allowed difference between colors.
+   *                                        Lower values require closer color matches.
+   *
+   * @returns {Object|null} The matched legend object or null if no match is found.
+   *
    */
   getLegendObject(legend, hex, acceptableDifference) {
     const { globalTemperatureUnit } = this.props;
@@ -249,7 +257,9 @@ class PaletteLegend extends React.Component {
     const toolTipLength = legend.tooltips.length;
     // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = this.getLegendObject(legend, colorHex, 3); // {label,len,index}
+      const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
+      const acceptableDifference = isContinuousVectorLayer ? 1 : 3;
+      legendObj = this.getLegendObject(legend, colorHex, acceptableDifference); // {label,len,index}
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
@@ -287,6 +297,8 @@ class PaletteLegend extends React.Component {
       marginRight: '0',
       marginLeft: '0',
     } : null;
+
+    const translateXOffset = xOffset > 0 ? xOffset + 0.5 : 0;
     return (
       <div
         className={
@@ -319,7 +331,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              transform: `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
+              transform: `translateX(${isHoveringLegend ? 0 : translateXOffset}px)`,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden',
             }}
           />
@@ -390,9 +402,8 @@ class PaletteLegend extends React.Component {
               const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${util.encodeId(layer.id)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
-              const tooltipText = singleKey
-                ? layer.track ? trackLabel : legendTooltip
-                : keyLabel;
+              const trackLabelOrLegendTooltip = layer.track ? trackLabel : legendTooltip;
+              const tooltipText = singleKey ? trackLabelOrLegendTooltip : keyLabel;
               const isInvisible = color === '00000000';
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
               let legendColor = color;
@@ -463,7 +474,8 @@ class PaletteLegend extends React.Component {
       paletteId, layer, isCustomPalette, showingVectorHand, showingChartingIcon,
     } = this.props;
     const { isHoveringLegend } = this.state;
-    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : isCustomPalette ? ' is_custom' : '';
+    const customPaletteClassName = isCustomPalette ? ' is_custom' : '';
+    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : customPaletteClassName;
     if (!layer.palette) return undefined;
     return (
       <div

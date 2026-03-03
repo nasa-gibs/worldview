@@ -85,7 +85,6 @@
         /* Error Counts compiled 8/22/2023 */
 
         // Base rule overrides
-        "no-nested-ternary": "off",    // 164 errors across 40 files
         "max-len": "error",
         "no-underscore-dangle": "error",
         // Import rules overrides
@@ -99,7 +98,6 @@
         "jsx-a11y/label-has-associated-control": "off",           // 5 errors across 4 files
         "jsx-a11y/alt-text": "off",                               // 15 errors across 10 files
         "jsx-a11y/mouse-events-have-key-events": "off",           // 7 errors across 4 files
-        "jsx-a11y/no-static-element-interactions": "off",         // 71 errors across 39 files
         "jsx-a11y/click-events-have-key-events": "off",           // 70 errors across 39 files
         // React rules overrides
         "react/jsx-props-no-spreading": "error",
@@ -152,9 +150,20 @@
         "react/no-unstable-nested-components": "error",
         "react/prop-types": "error",
         "react/no-unused-prop-types": "error",
-        "default-param-last": "warn",                      // 42 errors across 34 files
         "prefer-regex-literals": "error",
         "no-promise-executor-return": "error"
+      }
+    },
+    {
+      "files": [
+        "**/reducer.js",
+        "**/reducer.test.js",
+        "**/reducers.js",
+        "**/reducers.test.js",
+        "**/combine-reducers.js"
+      ],
+      "rules": {
+        "default-param-last": "warn"
       }
     }
   ]

@@ -586,21 +586,26 @@ export function getNextImageryDelta(layers, date, signConstant) {
         const obj = dateRanges[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
-        const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
+        const exactDateInterval = ((endDateObj - startDateObj) / 1000) / 60;
+        const correctedDateInterval = Math.floor(exactDateInterval) === Number(obj.dateInterval)
+          ? Math.ceil(exactDateInterval) : Number(obj.dateInterval);
+        const minDelta = Number(obj.dateInterval) === 1 ? 60 : correctedDateInterval;
         if (dateAObj < startDateObj) {
           const possibleDelta = Math.ceil(((startDateObj - dateAObj) / 1000) / 60);
           if (possibleDelta >= 1) {
-            delta = possibleDelta;
+            const possibleDate = new Date(dateAObj.getTime() + (possibleDelta * 60000));
+            // Increase delta by 1 minute if it falls exactly on the starting date/time
+            const correctedDelta = startDateObj.getTime() === possibleDate.getTime()
+              ? possibleDelta + 1 : possibleDelta;
+            delta = correctedDelta;
             hasDeltaChanged = true;
             break;
           }
         }
         if (dateAObj < endDateObj) {
           const possibleDate = new Date(dateAObj.getTime() + (minDelta * 60000));
-          const possibleDelta = possibleDate > endDateObj
-            ? Math.floor(((endDateObj - dateAObj) / 1000) / 60) : minDelta;
-          if (possibleDelta >= minDelta && possibleDate.getTime() !== endDateObj.getTime()) {
-            delta = possibleDelta;
+          if (possibleDate <= endDateObj && possibleDate.getTime() !== endDateObj.getTime()) {
+            delta = minDelta;
             hasDeltaChanged = true;
             break;
           }
@@ -622,21 +627,26 @@ export function getNextImageryDelta(layers, date, signConstant) {
         const obj = [...dateRanges].reverse()[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
-        const minDelta = Number(obj.dateInterval) === 1 ? 60 : Number(obj.dateInterval);
+        const exactDateInterval = ((endDateObj - startDateObj) / 1000) / 60;
+        const correctedDateInterval = Math.floor(exactDateInterval) === Number(obj.dateInterval)
+          ? Math.ceil(exactDateInterval) : Number(obj.dateInterval);
+        const minDelta = Number(obj.dateInterval) === 1 ? 60 : correctedDateInterval;
         if (dateAObj > endDateObj) {
           const possibleDelta = Math.ceil(((dateAObj - endDateObj) / 1000) / 60);
           if (possibleDelta >= minDelta) {
-            delta = possibleDelta;
+            const possibleDate = new Date(dateAObj.getTime() - (possibleDelta * 60000));
+            // Increase delta by 1 minute if it falls exactly on the ending date/time
+            const correctedDelta = endDateObj.getTime() === possibleDate.getTime()
+              ? possibleDelta + 1 : possibleDelta;
+            delta = correctedDelta;
             hasDeltaChanged = true;
             break;
           }
         }
         if (dateAObj > startDateObj) {
           const possibleDate = new Date(dateAObj.getTime() - (minDelta * 60000));
-          const possibleDelta = possibleDate < startDateObj
-            ? Math.floor(((dateAObj - startDateObj) / 1000) / 60) : minDelta;
-          if (possibleDelta >= minDelta && possibleDate.getTime() !== startDateObj.getTime()) {
-            delta = possibleDelta;
+          if (possibleDate >= startDateObj && possibleDate.getTime() !== startDateObj.getTime()) {
+            delta = minDelta;
             hasDeltaChanged = true;
             break;
           }

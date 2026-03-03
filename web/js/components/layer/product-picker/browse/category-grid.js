@@ -31,8 +31,9 @@ function CategoryGrid(props) {
     gutter: 10,
   };
   categories.forEach((item) => {
+    const itemPlacementInteger = item.placement === 'last' ? 3 : 2;
     let { sortOrder } = item;
-    sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
+    sortOrder = item.placement === 'first' ? 1 : itemPlacementInteger;
     return sortOrder;
   });
   const orderedCategories = lodashOrderBy(

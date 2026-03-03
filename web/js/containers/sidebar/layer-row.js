@@ -363,7 +363,8 @@ function LayerRow (props) {
     <>
       {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
       {!isChartingActive && (
-      <a
+      <button
+        type="button"
         id={removeLayerBtnId}
         aria-label={removeLayerBtnTitle}
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
@@ -373,9 +374,10 @@ function LayerRow (props) {
           {removeLayerBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="times" fixedWidth widthAuto />
-      </a>
+      </button>
       )}
-      <a
+      <button
+        type="button"
         id={layerOptionsBtnId}
         aria-label={layerOptionsBtnTitle}
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
@@ -386,8 +388,9 @@ function LayerRow (props) {
           {layerOptionsBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="sliders-h" className="wv-layers-options-icon" widthAuto />
-      </a>
-      <a
+      </button>
+      <button
+        type="button"
         id={layerInfoBtnId}
         aria-label={layerInfoBtnTitle}
         className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
@@ -398,7 +401,7 @@ function LayerRow (props) {
           {layerInfoBtnTitle}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="fa-solid fa-info" className="wv-layers-info-icon" widthAuto />
-      </a>
+      </button>
     </>
   );
 
@@ -411,7 +414,8 @@ function LayerRow (props) {
       : 'Zoom in further to click features.';
     const layerVectorBtnId = `layer-vector-hand-btn-${encodedLayerId}`;
     return (
-      <div
+      <button
+        type="button"
         id={layerVectorBtnId}
         aria-label={titleStr}
         className={runningDataObj ? `${classNames} running` : classNames}
@@ -422,7 +426,7 @@ function LayerRow (props) {
           {titleStr}
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="hand-pointer" fixedWidth widthAuto />
-      </div>
+      </button>
     );
   };
 
@@ -431,6 +435,7 @@ function LayerRow (props) {
     const layerChartableBtnId = `layer-chartable-btn-${encodedLayerId}`;
     return (
       <div
+        role="note"
         id={layerChartableBtnId}
         aria-label={titleStr}
         className="layer-chartable-icon"
@@ -484,30 +489,32 @@ function LayerRow (props) {
     return baseClasses;
   };
 
-  const visibilityTitle = !isVisible && !disabled
-    ? 'Show layer'
-    : disabled
-      ? getDisabledTitle(layer)
-      : 'Hide layer';
+  const disabledTitle = disabled ? getDisabledTitle(layer) : 'Hide layer';
+  const visibilityTitle = !isVisible && !disabled ? 'Show layer' : disabledTitle;
 
-  const visibilityIconClass = disabled
-    ? 'ban'
-    : !isVisible
-      ? ['fas', 'eye-slash']
-      : ['fas', 'eye'];
+  const visibilityIcon = !isVisible ? ['fas', 'eye-slash'] : ['fas', 'eye'];
+  const visibilityIconClass = disabled ? 'ban' : visibilityIcon;
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
+  const vectorLayerMinHeight = isVectorLayer ? '60px' : '40px';
 
   const makeActiveForCharting = (layerArg) => {
     if (layerArg !== activeChartingLayer) {
       updateActiveChartingLayer(layerArg);
     }
   };
+  const handleKeyDown = (e, layerId) => {
+    if (e.key === 'Enter') {
+      return makeActiveForCharting(layerId);
+    }
+    return null;
+  };
 
   const renderLayerRow = () => (
     <>
       {(!isEmbedModeActive && !isChartingActive) && (
-        <a
+        <button
+          type="button"
           id={`hide${encodedLayerId}`}
           className={getVisibilityToggleClass()}
           aria-label={visibilityTitle}
@@ -523,16 +530,20 @@ function LayerRow (props) {
           </UncontrolledTooltip>
           )}
           <FontAwesomeIcon icon={visibilityIconClass} className="layer-eye-icon" widthAuto />
-        </a>
+        </button>
       )}
       {isChartingActive && (
         !layer.shouldHide ? (
           <>
             <div />
             <a
+              role="radio"
+              tabIndex={0}
+              aria-checked={layer.id === activeChartingLayer}
               id={`activate-${encodedLayerId}`}
               className={layer.id === activeChartingLayer ? 'layer-visible visibility active-chart' : 'layer-visible visibility'}
               onClick={() => makeActiveForCharting(layer.id)}
+              onKeyDown={(e) => handleKeyDown(e, layer.id)}
             >
               <UncontrolledTooltip
                 id="center-align-tooltip"
@@ -563,7 +574,7 @@ function LayerRow (props) {
       <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
-        <div className="layer-info" style={{ minHeight: layer.shouldHide ? '22px' : isVectorLayer ? '60px' : '40px' }}>
+        <div className="layer-info" style={{ minHeight: layer.shouldHide ? '22px' : vectorLayerMinHeight }}>
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>

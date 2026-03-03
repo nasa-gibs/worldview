@@ -168,7 +168,8 @@ export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
   if (acceptableExtent) {
     return lon > acceptableExtent[0] && lon < acceptableExtent[2];
   }
-  return wrap === -1 ? lon < 250 && lon > 180 : wrap === 1 ? lon > -250 && lon < -180 : false;
+  const isWrap = wrap === 1 ? lon > -250 && lon < -180 : false;
+  return wrap === -1 ? lon < 250 && lon > 180 : isWrap;
 }
 
 /**
@@ -238,7 +239,7 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
 
     const type = feature.getGeometry().getType();
     if (lodashIncludes(def.clickDisabledFeatures, type)
-      || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
+      || !isFromActiveCompareRegion(pixels, layer.wv.group, swipeOffset, compareState)) {
       return true;
     }
     if (def.vectorData && def.vectorData.id && def.title) {

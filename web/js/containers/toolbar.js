@@ -326,13 +326,15 @@ class toolbarContainer extends Component {
       isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
+    const activeImageDownloadLabel = !isImageDownloadActive
+      ? 'You must exit data download mode to use the snapshot feature'
+      : 'Take a snapshot';
+    const activeChartingLabel = isChartingActive
+      ? 'You must exit charting mode to use the snapshot feature'
+      : activeImageDownloadLabel;
     const labelText = isCompareActive
       ? 'You must exit comparison mode to use the snapshot feature'
-      : isChartingActive
-        ? 'You must exit charting mode to use the snapshot feature'
-        : !isImageDownloadActive
-          ? 'You must exit data download mode to use the snapshot feature'
-          : 'Take a snapshot';
+      : activeChartingLabel;
     const mobileWVImageButtonStyle = isMobile ? {
       display: 'none',
     } : null;
