@@ -253,10 +253,6 @@ function mapStateToProps(state) {
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
   }
-  if ('imageDownload' in config.parameters) {
-    url = config.parameters.imageDownload;
-    util.warn(`Redirecting image download to: ${url}`);
-  }
 
   return {
     proj,
