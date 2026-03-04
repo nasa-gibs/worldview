@@ -1,12 +1,11 @@
-import { defineConfig, globalIgnores } from 'eslint/config'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import js from '@eslint/js'
+import { defineConfig, globalIgnores } from 'eslint/config'
 import { FlatCompat } from '@eslint/eslintrc'
-
+import js from '@eslint/js'
+import stylistic from '@stylistic/eslint-plugin'
 import babelParser from '@babel/eslint-parser'
 import globals from 'globals'
-
 import importPlugin from 'eslint-plugin-import'
 import react from 'eslint-plugin-react'
 import jest from 'eslint-plugin-jest'
@@ -28,9 +27,7 @@ export default defineConfig([
     '**/dist/**',
     '**/coverage/**',
     '**/reports/**',
-
     'e2e/reports/**',
-
     'web/build/**',
     'web/dist/**',
     'web/ext/**',
@@ -75,10 +72,11 @@ export default defineConfig([
   {
     files: ['web/**/*.js'],
     plugins: {
-      react,
-      jest,
       import: importPlugin,
-      'jsx-a11y': jsxA11y
+      jest,
+      'jsx-a11y': jsxA11y,
+      react,
+      stylistic
     },
     languageOptions: {
       sourceType: 'module',
@@ -107,10 +105,8 @@ export default defineConfig([
       },
     },
     rules: {
-
       camelcase: ['error', { allow: ['^UNSAFE_'], properties: 'never' }],
       'max-len': ['error', { code: 120 }],
-      'no-extra-parens': 'error',
       'no-multiple-empty-lines': 'off',
       'no-promise-executor-return': 'error',
       'no-restricted-globals': ['error', 'localStorage', 'sessionStorage'],
@@ -128,6 +124,8 @@ export default defineConfig([
       'import/extensions': 'off',
       'import/no-cycle': 'warn',
 
+      'jsx-a11y/no-access-key': 'error',
+      'jsx-a11y/aria-role': 'error',
       'jsx-a11y/alt-text': 'off',
       'jsx-a11y/anchor-has-content': 'off',
       'jsx-a11y/anchor-is-valid': 'off',
@@ -137,12 +135,25 @@ export default defineConfig([
       'jsx-a11y/mouse-events-have-key-events': 'off',
       'jsx-a11y/no-noninteractive-tabindex': 'off',
       'jsx-a11y/no-noninteractive-element-interactions': 'off',
+      'jsx-a11y/img-redundant-alt': 'error',
 
+      'react/jsx-boolean-value': 'error',
+      'react/jsx-closing-bracket-location': 'error',
       'react/jsx-filename-extension': 'off',
-      'react/jsx-props-no-spreading': 'error',
       'react/jsx-no-bind': 'error',
+      'react/jsx-no-useless-fragment': 'error',
+      'react/jsx-pascal-case': 'error',
+      'react/jsx-props-no-spreading': 'error',
+      'react/jsx-tag-spacing': 'error',
       'react/jsx-uses-vars': 'error',
-
+      'react/jsx-wrap-multilines': 'error',
+      'react/no-unknown-property': 'error',
+      'react/no-unstable-nested-components': 'error',
+      'react/no-unused-class-component-methods': 'error',
+      'react/no-unused-prop-types': 'error',
+      'react/prop-types': 'error',
+      'react/require-default-props': 'off',
+      'react/self-closing-comp': 'error',
       'react/sort-comp': ['error', {
         order: ['static-methods', 'lifecycle', 'everything-else', 'render'],
         groups: {
@@ -176,13 +187,19 @@ export default defineConfig([
         },
       }],
 
-      'react/jsx-no-useless-fragment': 'error',
-      'react/no-unknown-property': 'error',
-      'react/no-unstable-nested-components': 'error',
-      'react/no-unused-class-component-methods': 'error',
-      'react/no-unused-prop-types': 'error',
-      'react/prop-types': 'error',
-      'react/require-default-props': 'off',
+      'stylistic/indent': ['error', 2],
+      'stylistic/jsx-quotes': 'error',
+      'stylistic/no-multi-spaces': 'error',
+      'stylistic/space-before-blocks': 'error',
+      'stylistic/keyword-spacing': 'error',
+      'stylistic/space-infix-ops': 'error',
+      'stylistic/eol-last': 'error',
+      'stylistic/newline-per-chained-call': 'error',
+      'stylistic/space-in-parens': 'error',
+      'stylistic/array-bracket-spacing': 'error',
+      'stylistic/object-curly-spacing': 'off',
+      'stylistic/comma-style': 'error',
+      'stylistic/semi': 'error',
     },
   }
 ])
