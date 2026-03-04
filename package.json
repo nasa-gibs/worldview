@@ -220,10 +220,6 @@
     "semver": "^7.5.4",
     "redux-location-state": {
       "redux": "^5.0.1"
-    },
-    "eslint-config-standard": {
-      "eslint-plugin-n": "^17.19.0",
-      "eslint-plugin-promise": "^7.2.1"
     }
   },
   "browserslist": [
