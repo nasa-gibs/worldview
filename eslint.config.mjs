@@ -140,7 +140,7 @@ export default defineConfig([
       'react/jsx-boolean-value': 'error',
       'react/jsx-closing-bracket-location': 'error',
       'react/jsx-filename-extension': 'off',
-      'react/jsx-no-bind': 'error',
+      'react/jsx-no-bind': ['error', { allowFunctions: true, allowArrowFunctions: true }],
       'react/jsx-no-useless-fragment': 'error',
       'react/jsx-pascal-case': 'error',
       'react/jsx-props-no-spreading': 'error',
