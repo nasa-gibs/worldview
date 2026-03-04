@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "GPS_Alt_m_",
+        "property": "Altitude",
         "order": "descending"
       }
     }

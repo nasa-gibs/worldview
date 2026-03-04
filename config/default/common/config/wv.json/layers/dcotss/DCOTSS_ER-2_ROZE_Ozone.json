@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "O3_ROZE",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {

@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "MSL_GPS_AI",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {
