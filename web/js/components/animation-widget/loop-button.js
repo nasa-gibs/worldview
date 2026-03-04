@@ -1,4 +1,4 @@
-/* eslint-disable react/destructuring-assignment */
+ 
 import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -24,7 +24,7 @@ function LoopButton({ looping, onLoop, isMobile }) {
       onClick={onLoop}
     >
       {isMobile ? null
-        : (
+        : 
           <UncontrolledTooltip
             id="center-align-tooltip"
             placement="top"
@@ -32,7 +32,7 @@ function LoopButton({ looping, onLoop, isMobile }) {
           >
             {labelText}
           </UncontrolledTooltip>
-        )}
+        }
       <FontAwesomeIcon icon="retweet" className="wv-animation-widget-icon" widthAuto />
     </button>
   );

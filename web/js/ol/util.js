@@ -81,7 +81,7 @@ const extractIndexedData = (pixels, palette, width, height, alphaValues) => {
     const g = palette[i + 1];
     const b = palette[i + 2];
     // Alpha is 255 unless specified in tRNS
-    const a = alphaValues && (i / 3) < alphaValues.length ? alphaValues[i / 3] : 255;
+    const a = alphaValues && i / 3 < alphaValues.length ? alphaValues[i / 3] : 255;
     const key = `${r},${g},${b},${a}`;
     paletteMap.set(key, i / 3);
   }

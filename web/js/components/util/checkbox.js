@@ -23,9 +23,9 @@ export default function Checkbox (props) {
   const showDisabledToolTip = disabled && id && title;
   return (
     <>
-      {showDisabledToolTip && (
+      {showDisabledToolTip && 
         <HoverTooltip target={`#${id}-case`} labelText={title} placement={tooltipPlacement} />
-      )}
+      }
       <div id={`${id}-case`} className={caseClassName}>
         <input
           type="checkbox"
@@ -37,9 +37,9 @@ export default function Checkbox (props) {
           onChange={showDisabledToolTip ? () => null : onCheck}
           tabIndex="0"
         />
-        {checked && (
+        {checked && 
           <Check class="check" size="15px" />
-        )}
+        }
         {children}
         <label htmlFor={id}>
           <span>{label}</span>

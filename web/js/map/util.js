@@ -164,7 +164,7 @@ export function fly (map, proj, endPointArray, isKioskModeActive, endZoom = 5, r
     ? Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000))
     // approx 6 seconds to go 360 degrees
     : Math.min(6000, Math.floor(
-      distanceDuration * (15 * (startZoom + endZoom)) + (100 * (startZoom + endZoom)) + 1000,
+      distanceDuration * (15 * (startZoom + endZoom)) + 100 * (startZoom + endZoom) + 1000,
     ));
 
   const animationPromise = function(...args) {
@@ -221,9 +221,9 @@ export const getOverDateLineCoordinates = (coordinates) => {
     : [-Math.abs(180 + 180 - Math.abs(long)), lat];
 };
 
-export const getExtent = (proj) => (proj.selected.id === 'geographic'
+export const getExtent = (proj) => proj.selected.id === 'geographic'
   ? [-250, -90, 250, 90]
-  : [-180, -90, 180, 90]);
+  : [-180, -90, 180, 90];
 
 // Called in formatReduxDate when subdaily layers are active
 // The timezone in the tile request URL parameter & selected date in redux are different

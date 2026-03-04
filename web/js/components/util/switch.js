@@ -71,7 +71,7 @@ function Switch(props) {
           {label}
         </span>
         {tooltip
-          && (
+          && 
             <>
               <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} tabIndex="-1" widthAuto />
               <Tooltip
@@ -85,7 +85,7 @@ function Switch(props) {
                 {tooltip}
               </Tooltip>
             </>
-          )}
+          }
       </div>
     </div>
   );

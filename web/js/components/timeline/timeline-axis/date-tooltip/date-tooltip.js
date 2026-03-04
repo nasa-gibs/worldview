@@ -103,9 +103,9 @@ class DateTooltip extends Component {
     tooltipHeightOffset = -100;
     if (isTimelineLayerCoveragePanelOpen) {
       tooltipHeightOffset = -136;
-      const layers = activeLayers.filter((layer) => (shouldIncludeHiddenLayers
+      const layers = activeLayers.filter((layer) => shouldIncludeHiddenLayers
         ? layer.startDate
-        : layer.startDate && layer.visible));
+        : layer.startDate && layer.visible);
       // min 1 layer for error message display
       const layerLengthCoef = Math.max(layers.length, 1);
       const addHeight = Math.min(layerLengthCoef, 5) * 40;
@@ -165,7 +165,7 @@ class DateTooltip extends Component {
         className={tooltipClass}
         style={tooltipStyle}
       >
-        {shouldDisplayDraggerTooltip && (
+        {shouldDisplayDraggerTooltip && 
           <>
             { tooltipDate }
             {' '}
@@ -175,7 +175,7 @@ class DateTooltip extends Component {
               )
             </span>
           </>
-        )}
+        }
       </div>
     );
   }

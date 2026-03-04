@@ -43,11 +43,11 @@ class ModalStart extends React.Component {
       modalStart, endTour, toggleModalStart, className, height, stories, storyOrder, selectTour,
     } = this.props;
     const { checked } = this.state;
-    const closeBtn = (
+    const closeBtn = 
       <button className="tour-close-btn" onClick={endTour} type="button">
         <Close class="add-plus" size="14px" />
       </button>
-    );
+    ;
     return (
       <Modal
         isOpen={modalStart}
@@ -73,7 +73,7 @@ class ModalStart extends React.Component {
           </ModalBody>
         </Scrollbars>
 
-        {safeLocalStorage.enabled && (
+        {safeLocalStorage.enabled && 
           <ModalFooter>
             <InputGroup>
               <InputGroupText className="w-100">
@@ -90,7 +90,7 @@ class ModalStart extends React.Component {
               </InputGroupText>
             </InputGroup>
           </ModalFooter>
-        )}
+        }
       </Modal>
     );
   }

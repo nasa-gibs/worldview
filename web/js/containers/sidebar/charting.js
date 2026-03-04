@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+ 
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -46,7 +46,7 @@ function ChartingLayerMenu (props) {
     }
   }, [renderedPalettes]);
 
-  return isActive && (
+  return isActive && 
     <div id="layers-scroll-container" style={scrollContainerStyles}>
       <div className="layer-container sidebar-panel">
         <LayerList
@@ -58,7 +58,7 @@ function ChartingLayerMenu (props) {
         />
       </div>
     </div>
-  );
+  ;
 }
 
 const mapStateToProps = (state, ownProps) => {

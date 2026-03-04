@@ -201,7 +201,7 @@ class Tour extends React.Component {
       description: 'Loading story description...',
     });
     fetch(uri)
-      .then((res) => (res.ok ? res.text() : errorMessage))
+      .then((res) => res.ok ? res.text() : errorMessage)
       .then((body) => {
         const isMetadataSnippet = !body.match(
           /<(head|body|html|style|script)[^>]*>/i,
@@ -490,7 +490,7 @@ class Tour extends React.Component {
     return (
       <ErrorBoundary>
         <div>
-          {currentStory && currentStory.steps && currentStep && (
+          {currentStory && currentStory.steps && currentStep && 
             <JoyrideWrapper
               currentTourStep={currentStep}
               tourSteps={currentStory.steps}
@@ -499,7 +499,7 @@ class Tour extends React.Component {
               resetProductPicker={resetProductPicker}
               tourComplete={!modalInProgress}
             />
-          )}
+          }
           {modalStart
             ? this.renderTourStart()
             : renderModalInProgress}
@@ -533,8 +533,8 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(clearCustoms());
     }
     if (
-      ((parameters.l && hasCustomTypePalette(parameters.l))
-      || (parameters.l1 && hasCustomTypePalette(parameters.l1)))
+      (parameters.l && hasCustomTypePalette(parameters.l)
+      || parameters.l1 && hasCustomTypePalette(parameters.l1))
       && !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
     ) {
       layers = layersParse12(parameters.l, config);

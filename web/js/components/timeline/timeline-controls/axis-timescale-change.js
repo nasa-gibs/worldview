@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax */
+ 
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeControls from './axis-timescale-change-controls';
@@ -93,7 +93,7 @@ class AxisTimeScaleChange extends PureComponent {
         }}
       >
         { timeScale
-          ? (
+          ? 
             <div
               onMouseEnter={this.toolTipHoverOn}
               onMouseLeave={this.toolTipHoverOff}
@@ -107,7 +107,7 @@ class AxisTimeScaleChange extends PureComponent {
                 decrementTimeScale={this.decrementTimeScale}
               />
             </div>
-          )
+          
           : null}
       </div>
     );

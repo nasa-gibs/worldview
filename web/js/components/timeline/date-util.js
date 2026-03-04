@@ -12,7 +12,7 @@ export const getIsBetween = (date, frontDate, backDate) => {
 export const getDaysInYear = (date) => {
   const dateObj = new Date(date);
   const start = new Date(dateObj.getUTCFullYear(), 0, 0);
-  const diff = (dateObj - start) + (start.getTimezoneOffset() * 60 * 1000);
+  const diff = dateObj - start + start.getTimezoneOffset() * 60 * 1000;
   return Math.floor(diff / 86400000);
 };
 

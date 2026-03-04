@@ -135,8 +135,8 @@ window.onload = () => {
       // Determine which layers need to be preloaded
       let layers = [];
       if (
-        (parameters.l && hasCustomTypePalette(parameters.l))
-        || (parameters.l1 && hasCustomTypePalette(parameters.l1))
+        parameters.l && hasCustomTypePalette(parameters.l)
+        || parameters.l1 && hasCustomTypePalette(parameters.l1)
       ) {
         if (parameters.l && hasCustomTypePalette(parameters.l)) {
           layers.push(...layersParse12(parameters.l, config));

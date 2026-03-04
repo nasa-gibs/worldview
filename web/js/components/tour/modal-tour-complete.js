@@ -10,30 +10,30 @@ function ModalComplete(props) {
     currentStory, modalComplete, resetTour, endTour,
   } = props;
   const { readMoreLinks } = currentStory;
-  const closeBtn = (
+  const closeBtn = 
     <button className="tour-close-btn" onClick={endTour} type="button">
       <Close class="add-plus" size="14px" />
     </button>
-  );
+  ;
   let list;
   if (
     readMoreLinks
       && (Array.isArray(readMoreLinks) && readMoreLinks.length)
   ) {
-    list = (
+    list = 
       <>
         <p>Read more about this story at the links below:</p>
         <ul>
-          {readMoreLinks.map((linkId) => (
+          {readMoreLinks.map((linkId) => 
             <li key={linkId}>
               <a href={linkId.link} target="_blank" rel="noopener noreferrer">
                 {linkId.title}
               </a>
             </li>
-          ))}
+          )}
         </ul>
       </>
-    );
+    ;
   }
   return (
     <div>

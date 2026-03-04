@@ -14,7 +14,7 @@ function HoverTooltip(props) {
     delay, fade, innerClassName, isMobile, labelText, placement, target,
   } = props;
 
-  return !isMobile && (
+  return !isMobile && 
     <UncontrolledTooltip
       id="center-align-tooltip"
       trigger="hover"
@@ -27,7 +27,7 @@ function HoverTooltip(props) {
     >
       {labelText}
     </UncontrolledTooltip>
-  );
+  ;
 }
 
 HoverTooltip.defaultProps = {

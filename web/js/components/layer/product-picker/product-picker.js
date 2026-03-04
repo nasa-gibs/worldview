@@ -81,11 +81,11 @@ class ProductPicker extends React.Component {
       mode,
       width,
     } = this.props;
-    const closeBtn = (
+    const closeBtn = 
       <button className="layer-btn-close" onClick={closeModal} style={mode === 'search' ? { top: '-10px' } : {}} type="button">
         &times;
       </button>
-    );
+    ;
     return (
       <>
         <ModalHeader toggle={closeModal} close={closeBtn}>
@@ -97,8 +97,8 @@ class ProductPicker extends React.Component {
         <ModalBody>
           <div id="layer-modal-content" className="layer-modal-content">
             {mode !== 'search'
-              ? (<BrowseLayers width={width} />)
-              : (<SearchLayers />)}
+              ? <BrowseLayers width={width} />
+              : <SearchLayers />}
           </div>
         </ModalBody>
       </>

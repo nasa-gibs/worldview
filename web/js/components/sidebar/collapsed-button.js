@@ -30,16 +30,16 @@ class CollapsedButton extends PureComponent {
           </UncontrolledTooltip>
           <FontAwesomeIcon className="layer-icon" icon="layer-group" widthAuto />
           {isMobile
-            ? (
+            ? 
               <span className="layer-count mobile">
                 {numberOfLayers.toString()}
               </span>
-            )
-            : (
+            
+            : 
               <span className="layer-count ">
                 {`${numberOfLayers.toString()} Layers`}
               </span>
-            )}
+            }
           {!isMobile && <FontAwesomeIcon className="expand-icon" icon="caret-down" widthAuto />}
         </button>
       </div>

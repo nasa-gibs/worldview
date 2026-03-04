@@ -218,7 +218,7 @@ export default function JoyrideWrapper ({
     }
   });
 
-  return !projMatches || isInitializing ? null : (
+  return !projMatches || isInitializing ? null : 
     <Joyride
       run={run}
       stepIndex={stepIndex}
@@ -233,7 +233,7 @@ export default function JoyrideWrapper ({
       disableScrolling
       disableScrollParentFix
     />
-  );
+  ;
 }
 
 JoyrideWrapper.propTypes = {

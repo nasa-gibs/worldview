@@ -71,21 +71,21 @@ function Events(props) {
     ? 'Loading ...'
     : requestErrorMessage;
 
-  const renderFilterControls = () => (
+  const renderFilterControls = () => 
     <div className="filter-controls">
       <div className="filter-dates-icons">
         <div className="filter-dates">
           {showDates && `${startDate} - ${endDate}`}
         </div>
         <div className="filter-icons">
-          {selectedCategories.map(({ title, id }) => (
+          {selectedCategories.map(({ title, id }) => 
             <EventIcon
               id="filter-"
               key={id}
               category={id}
               title={title}
             />
-          ))}
+          )}
         </div>
       </div>
       <Button
@@ -101,12 +101,12 @@ function Events(props) {
         <FontAwesomeIcon icon="filter" widthAuto />
       </Button>
     </div>
-  );
-  const renderEventList = () => (
-    eventsData && eventsData.length ? (
+  ;
+  const renderEventList = () => 
+    eventsData && eventsData.length ? 
       <div className="wv-eventslist sidebar-panel">
         <ul id="wv-eventscontent" className="content map-item-list">
-          {sources && eventsData.map((event) => (
+          {sources && eventsData.map((event) => 
             <Event
               showAlert={showAlert}
               key={event.id}
@@ -126,13 +126,13 @@ function Events(props) {
               defaultEventLayer={defaultEventLayer}
               layers={layers}
             />
-          ))}
+          )}
         </ul>
       </div>
-    ) : !isLoading && (
+     : !isLoading && 
       <h3 className="no-events"> No events meet current criteria</h3>
-    )
-  );
+    
+  ;
 
   return (
     <div className="event-container">
@@ -142,14 +142,14 @@ function Events(props) {
         style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
-          {isLoading || hasRequestError ? (
+          {isLoading || hasRequestError ? 
             // notranslate included below to prevent
             // Google Translate extension from crashing the page
             <div className="events-loading-text notranslate">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
+              {hasRequestError && <FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />}
               {errorOrLoadingText}
             </div>
-          ) : renderEventList()}
+           : renderEventList()}
         </div>
       </Scrollbars>
     </div>

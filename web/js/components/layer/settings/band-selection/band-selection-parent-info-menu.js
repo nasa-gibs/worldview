@@ -33,7 +33,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
     expression,
   } = layer.bandCombo;
 
-  const isValidBandSelection = () => (r !== 'undefined' && r !== undefined) && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
+  const isValidBandSelection = () => r !== 'undefined' && r !== undefined && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
 
 
   return (
@@ -42,7 +42,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
       <p>Channels and bands assigned:</p>
       {
         isValidBandSelection()
-          ? (
+          ? 
             <div className="current-band-info">
               <div>
                 <span className="band-color">Red:</span>
@@ -69,8 +69,8 @@ export default function BandSelectionParentInfoMenu({ layer }) {
                 </span>
               </div>
             </div>
-          )
-          : (
+          
+          : 
             <div className="current-band-info">
               <div>
                 <span className="band-color">Expression:</span>
@@ -79,7 +79,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
                 </span>
               </div>
             </div>
-          )
+          
       }
       <div className="customize-bands-button-container">
         <Button

@@ -26,7 +26,7 @@ function RecentLayersList(props) {
 
   return (
     <>
-      {!isMobile && !!recentLayers.length && (
+      {!isMobile && !!recentLayers.length && 
       <div className="recent-layers-header">
         <h2> Recently Used Layers </h2>
         <Tooltip
@@ -51,17 +51,17 @@ function RecentLayersList(props) {
           Clear List
         </Button>
       </div>
-      )}
+      }
       <div className="search-layers-container recent-layers">
         <div className="layer-list-detail-container">
           <div className="layer-list-container search">
             <SearchLayerList results={recentLayers} />
           </div>
-          { !selectedLayer && smallView ? null : !!recentLayers.length && (
+          { !selectedLayer && smallView ? null : !!recentLayers.length && 
           <div className="layer-detail-container layers-all search">
             <LayerMetadataDetail layer={selectedLayer} />
           </div>
-          )}
+          }
         </div>
       </div>
     </>

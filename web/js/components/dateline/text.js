@@ -89,7 +89,7 @@ class LineText extends React.Component {
         className="dateline-text"
         style={svgStyle}
       >
-        {active && (
+        {active && 
           <>
             <rect
               width={leftTextWidth + 10}
@@ -121,7 +121,7 @@ class LineText extends React.Component {
               {dateRight}
             </text>
           </>
-        )}
+        }
       </svg>
     );
   }

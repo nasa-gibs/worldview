@@ -14,7 +14,7 @@ import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
 import { getSelectedDate } from '../date/selectors';
 
-const getConfigParameters = ({ config }) => (config ? config.parameters : {});
+const getConfigParameters = ({ config }) => config ? config.parameters : {};
 const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
 const getLayerState = ({ layers }) => layers;
@@ -439,7 +439,7 @@ function forGroup(group, activeLayers, state, spec = {}) {
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
-    // eslint-disable-next-line no-use-before-define
+     
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
       activeLayers,

@@ -35,7 +35,7 @@ export const datelineShiftGranules = (granules, currentDate, crs) => {
     const { date, polygon } = granule;
     const sameDay = currentDayDate === new Date(date).getUTCDate();
     const westSide = polygon.some(([lon]) => lon < 0);
-    const shifted = !sameDay || (sameDay && westSide);
+    const shifted = !sameDay || sameDay && westSide;
     return {
       date,
       polygon: shifted ? polygon.map(([lon, lat]) => [lon + 360, lat]) : polygon,

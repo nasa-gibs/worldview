@@ -18,11 +18,11 @@ export default function FilterChips(props) {
     }));
   });
 
-  return !filters.length ? null : (
+  return !filters.length ? null : 
     <div className="bag-o-chips">
       {filterValues.map(({
         field, displayValue, value,
-      }) => (
+      }) => 
         <button
           key={field + value}
           className="filter-chip"
@@ -36,9 +36,9 @@ export default function FilterChips(props) {
             widthAuto
           />
         </button>
-      ))}
+      )}
     </div>
-  );
+  ;
 }
 
 FilterChips.propTypes = {

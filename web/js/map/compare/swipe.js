@@ -89,7 +89,7 @@ const dragLine = function(listenerObjArg, lineCase, map) {
     dragging = false;
     events.trigger(
       'compare:moveend',
-      lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
+      lodashRound(swipeOffset / mapCase.offsetWidth * 100, 0),
     );
     window.removeEventListener(listenerObj.move, move);
     window.removeEventListener(listenerObj.end, end);

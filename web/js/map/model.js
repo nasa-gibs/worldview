@@ -97,7 +97,7 @@ export default function mapModel(models, config) {
     }
     // get rotation if it exists
     if (state.p === 'arctic' || state.p === 'antarctic') {
-      // eslint-disable-next-line no-restricted-globals
+       
       if (!isNaN(state.r)) {
         self.rotation = state.r * (Math.PI / 180.0);
       } // convert to radians

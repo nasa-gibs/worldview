@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
+ 
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -33,7 +33,7 @@ function AddLayersContent (props) {
     googleTagManager.pushEvent({ event: 'add_layers' });
   };
 
-  return isActive && !isEmbedModeActive && (
+  return isActive && !isEmbedModeActive && 
     <>
       <div className="product-buttons">
         <Button
@@ -59,7 +59,7 @@ function AddLayersContent (props) {
       </div>
       <hr className="product-section-break" />
     </>
-  );
+  ;
 }
 
 const mapStateToProps = (state, ownProps) => {

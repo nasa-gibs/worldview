@@ -52,9 +52,9 @@ class GridRange extends PureComponent {
         className="axis-grid-container"
         transform={`translate(${transformX})`}
       >
-        {timeRange.map((item, index) => (
+        {timeRange.map((item, index) => 
           item.withinRange
-            ? (
+            ? 
           /* eslint react/no-array-index-key: 1 */
               <React.Fragment key={index}>
                 <TileRect
@@ -65,18 +65,18 @@ class GridRange extends PureComponent {
                   timeScale={timeScale}
                 />
                 {tileTextCondition(item.dateObject)
-                  ? (
+                  ? 
                     <TileText
                       item={item}
                       index={index}
                       gridWidth={gridWidth}
                     />
-                  )
+                  
                   : null }
               </React.Fragment>
-            )
+            
             : null
-        ))}
+        )}
       </g>
     );
   }

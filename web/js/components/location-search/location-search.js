@@ -56,7 +56,7 @@ class LocationSearch extends Component {
       return null;
     }
 
-    const shouldShowComponent = isMobile || (isExpanded && !shouldCollapseFromOtherUI);
+    const shouldShowComponent = isMobile || isExpanded && !shouldCollapseFromOtherUI;
     return (
       <div>
         {shouldShowComponent && this.renderSearchComponent()}

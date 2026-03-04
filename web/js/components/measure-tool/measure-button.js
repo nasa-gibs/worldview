@@ -60,7 +60,7 @@ const MeasureButton = function () {
 
   return (
     <>
-      {shouldShowAlert && (
+      {shouldShowAlert && 
       <AlertUtil
         id="measurement-alert"
         isOpen
@@ -69,9 +69,9 @@ const MeasureButton = function () {
         message={message}
         onDismiss={dismissAlert}
       />
-      )}
+      }
 
-      {!isDistractionFreeModeActive && (
+      {!isDistractionFreeModeActive && 
       <Button
         id={buttonId}
         className="wv-measure-button wv-toolbar-button"
@@ -90,7 +90,7 @@ const MeasureButton = function () {
         </UncontrolledTooltip>
         <FontAwesomeIcon icon="ruler" size={faSize} widthAuto />
       </Button>
-      )}
+      }
     </>
   );
 };

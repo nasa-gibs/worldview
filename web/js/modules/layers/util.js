@@ -86,8 +86,8 @@ export function prevDateInDateRange(def, date, dateArray) {
   const isYearPeriod = def.period === 'yearly';
 
   if (!dateArray
-    || (isMonthPeriod && isFirstDayOfMonth)
-    || (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
+    || isMonthPeriod && isFirstDayOfMonth
+    || isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear) {
     return date;
   }
 
@@ -207,7 +207,7 @@ const getMinStartDate = (timeDiff, period, interval, startDateLimit, minYear, mi
   const startDateLimitTime = startDateLimit.getTime();
   let minStartDate;
   let prevDate;
-  for (let i = 0; i <= (timeDiff + 1); i += 1) {
+  for (let i = 0; i <= timeDiff + 1; i += 1) {
     if (!minStartDate) {
       let timeUnit;
       if (period === 'monthly') {
@@ -421,7 +421,7 @@ const getYearDateRange = (currentDateTime, minDate, maxDate, interval, dateArray
     yearDifference = util.yearDiff(minDate, maxYearDate);
   }
 
-  for (let i = 0; i <= (yearDifference + 1); i += 1) {
+  for (let i = 0; i <= yearDifference + 1; i += 1) {
     let year = new Date(minYear + i * interval, minMonth, minDay);
     if (year.getTime() < maxYearDateTime) {
       year = util.getTimezoneOffsetDate(year);
@@ -475,7 +475,7 @@ const getMonthDateRange = ({
       && getMinStartDate(monthDifference, 'monthly', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
   }
 
-  for (let i = 0; i <= (monthDifference + 1); i += 1) {
+  for (let i = 0; i <= monthDifference + 1; i += 1) {
     let month = new Date(minYear, minMonth + i * dateIntervalNum, minDay);
     month = util.getTimezoneOffsetDate(month);
     const monthTime = month.getTime();
@@ -544,7 +544,7 @@ const getDayDateRange = ({
     && getMinStartDate(dayDifference, 'daily', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
   }
 
-  for (let i = 0; i <= (dayDifference + 1); i += 1) {
+  for (let i = 0; i <= dayDifference + 1; i += 1) {
     let day = new Date(minYear, minMonth, minDay + i * dateIntervalNum);
     day = util.getTimezoneOffsetDate(day);
     const dayTime = day.getTime();
@@ -619,14 +619,14 @@ const getSubdailyDateRange = ({
     const endDateLimitSetMinutes = new Date(endDateLimit).setMinutes(minMinute);
 
     hourBeforeStartDateLimit = new Date(
-      startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000),
+      startDateLimitSetMinutes - startDateLimitOffset - 60 * 60000,
     );
-    hourAfterEndDateLimit = new Date(endDateLimitSetMinutes - endDateLimitOffset + (60 * 60000));
+    hourAfterEndDateLimit = new Date(endDateLimitSetMinutes - endDateLimitOffset + 60 * 60000);
   } else {
     // limit date range request to +/- one hour from current date
     const currentSetMinutes = new Date(currentDateTime).setMinutes(minMinute);
-    hourBeforeStartDateLimit = new Date(currentSetMinutes - (60 * 60000));
-    hourAfterEndDateLimit = new Date(currentSetMinutes + (60 * 60000));
+    hourBeforeStartDateLimit = new Date(currentSetMinutes - 60 * 60000);
+    hourAfterEndDateLimit = new Date(currentSetMinutes + 60 * 60000);
   }
   let minMinuteDate;
   if (rangeLimitsProvided) {
@@ -662,7 +662,7 @@ const getSubdailyDateRange = ({
     minuteDifference = util.minuteDiff(minMinuteDate, maxMinuteDate);
   }
 
-  for (let i = 0; i <= (minuteDifference + 1); i += dateIntervalNum) {
+  for (let i = 0; i <= minuteDifference + 1; i += dateIntervalNum) {
     let subdailyTime = new Date(
       minMinuteDate.getUTCFullYear(),
       minMinuteDate.getUTCMonth(),
@@ -879,7 +879,7 @@ export function serializeLayers(layers, state, groupName) {
     }
     if (def.palette
       && (def.custom || def.min || def.max || def.squash || def.disabled
-        || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
+        || palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1)) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
@@ -954,7 +954,7 @@ const getLayerSpec = (attributes) => {
     }
     if (attr.id === 'opacity') {
       opacity = util.clamp(parseFloat(attr.value), 0, 1);
-      // eslint-disable-next-line no-restricted-globals
+       
       if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
     }
     if (attr.id === 'disabled') {
@@ -980,7 +980,7 @@ const getLayerSpec = (attributes) => {
         }
         const maxValue = parseFloat(value);
         if (lodashIsNaN(maxValue)) {
-          // eslint-disable-next-line no-console
+           
           console.warn(`Invalid max value: ${value}`);
         } else {
           maxArray.push(maxValue);
@@ -998,7 +998,7 @@ const getLayerSpec = (attributes) => {
         }
         const minValue = parseFloat(value);
         if (lodashIsNaN(minValue)) {
-          // eslint-disable-next-line no-console
+           
           console.warn(`Invalid min value: ${value}`);
         } else {
           minArray.push(minValue);
@@ -1066,7 +1066,7 @@ const createLayerArrayFromState = function(layers, config) {
   }
   layers.reverse().forEach((layerDef) => {
     if (!config.layers[layerDef.id]) {
-      // eslint-disable-next-line no-console
+       
       console.warn(`No such layer: ${layerDef.id}`);
       return;
     }
@@ -1185,7 +1185,7 @@ export function layersParse11(str, config) {
       id = config.redirects.layers[id] || id;
     }
     if (!config.layers[id]) {
-      // eslint-disable-next-line no-console
+       
       console.warn(`No such layer: ${id}`);
       return;
     }
@@ -1260,9 +1260,9 @@ export function layersParse12(stateObj, config) {
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {
-    // eslint-disable-next-line no-console
+     
     console.warn(`Error Parsing layers: ${e}`);
-    // eslint-disable-next-line no-console
+     
     console.log('reverting to default layers');
     return resetLayers(config);
   }

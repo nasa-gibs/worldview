@@ -47,7 +47,7 @@ function GranuleCountSlider(props) {
           onChange(val);
         }}
         style={{
-          '--value-percent': `${((granuleCount - MIN_GRANULES) / (MAX_GRANULES - MIN_GRANULES)) * 100}%`,
+          '--value-percent': `${(granuleCount - MIN_GRANULES) / (MAX_GRANULES - MIN_GRANULES) * 100}%`,
         }}
 
       />

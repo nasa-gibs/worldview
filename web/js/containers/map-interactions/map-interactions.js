@@ -40,9 +40,9 @@ class MapInteractions extends PureComponent {
         <OlVectorInteractions />
         <OlMeasureTool />
         <OlCoordinatesMarker />
-        {isNaturalEventsActive && (
+        {isNaturalEventsActive && 
           <NaturalEvents />
-        )}
+        }
         <DateLines />
       </>
     );

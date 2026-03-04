@@ -136,7 +136,7 @@ function AnimationWidget (props) {
       const useWidth = subDailyMode ? subdailyWidgetWidth : widgetWidth;
 
       setWidgetPosition({
-        x: (screenWidth / 2) - (useWidth / 2),
+        x: screenWidth / 2 - useWidth / 2,
         y: 0,
       });
     }
@@ -228,7 +228,7 @@ function AnimationWidget (props) {
     onPushPlay();
   };
 
-  const renderPlayQueue = isPlaying ? (
+  const renderPlayQueue = isPlaying ? 
     <PlayQueue
       isMobile={isMobile}
       isLoopActive={looping}
@@ -250,9 +250,9 @@ function AnimationWidget (props) {
       autoSelected={autoSelected}
       layers={layers}
     />
-  ) : null;
+   : null;
 
-  const renderAnimationTileCheck = checkAnimationAvailability ? (
+  const renderAnimationTileCheck = checkAnimationAvailability ? 
     <AnimationTileCheck
       startDate={startDate}
       endDate={endDate}
@@ -260,9 +260,9 @@ function AnimationWidget (props) {
       delta={delta}
       isPlaying={isPlaying}
     />
-  ) : renderPlayQueue;
+   : renderPlayQueue;
 
-  const renderDesktopAnimationWidget = (
+  const renderDesktopAnimationWidget = 
     <DesktopAnimationWidget
       animationCustomModalOpen={animationCustomModalOpen}
       autoplay={autoplay}
@@ -295,8 +295,8 @@ function AnimationWidget (props) {
       widgetPosition={widgetPosition}
       zeroDates={zeroDates}
     />
-  );
-  const renderMobileOrDesktopWidget = isMobile ? (
+  ;
+  const renderMobileOrDesktopWidget = isMobile ? 
     <MobileAnimationWidget
       breakpoints={breakpoints}
       endDate={endDate}
@@ -326,8 +326,8 @@ function AnimationWidget (props) {
       subDailyMode={subDailyMode}
       toggleCollapse={toggleCollapse}
     />
-  ) : renderDesktopAnimationWidget;
-  const renderCollapsedAnimationWidget = isCollapsed ? (
+   : renderDesktopAnimationWidget;
+  const renderCollapsedAnimationWidget = isCollapsed ? 
     <CollapsedAnimationWidget
       isDistractionFreeModeActive={isDistractionFreeModeActive}
       hasSubdailyLayers={hasSubdailyLayers}
@@ -348,15 +348,15 @@ function AnimationWidget (props) {
       onPushPlay={onPushPlayFunc}
       toggleCollapse={toggleCollapse}
     />
-  ) : renderMobileOrDesktopWidget;
+   : renderMobileOrDesktopWidget;
 
 
-  const renderWidget = () => (
+  const renderWidget = () => 
     <ErrorBoundary>
       {renderAnimationTileCheck}
       {renderCollapsedAnimationWidget}
     </ErrorBoundary>
-  );
+  ;
   return isActive ? renderWidget() : null;
 }
 

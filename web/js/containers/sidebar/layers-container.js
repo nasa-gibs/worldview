@@ -61,14 +61,14 @@ function LayersContainer (props) {
   const renderLayerList = (group, idx) => {
     const { groupName, layers, collapsed } = group;
     const layersForGroup = layers.map((id) => activeLayersMap[id]);
-    return layers && (
+    return layers && 
       <Draggable
         key={groupName}
         draggableId={groupName}
         index={idx}
         isDragDisabled={isEmbedModeActive || isAnimating}
       >
-        {(provided) => (
+        {(provided) => 
           <li
             id={`${compareState}-${util.cleanId(groupName)}`}
             ref={provided.innerRef}
@@ -85,19 +85,19 @@ function LayersContainer (props) {
               dragHandleProps={provided.dragHandleProps}
             />
           </li>
-        )}
+        }
       </Draggable>
-    );
+    ;
   };
 
-  const renderOverlayGroups = () => (
+  const renderOverlayGroups = () => 
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable
         droppableId="layerGroup"
         type="overlayGroups"
         direction="vertical"
       >
-        {(provided, snapshot) => (
+        {(provided, snapshot) => 
           <ul
             ref={provided.innerRef}
             {...provided.droppableProps}
@@ -105,10 +105,10 @@ function LayersContainer (props) {
             {overlayGroups.map(renderLayerList)}
             {provided.placeholder}
           </ul>
-        )}
+        }
       </Droppable>
     </DragDropContext>
-  );
+  ;
 
   let minHeight = '100px';
   let maxHeight = height;
@@ -127,11 +127,11 @@ function LayersContainer (props) {
   };
   const shouldHideForEmbedNoOverlays = isEmbedModeActive && overlays.length === 0;
   const shouldHideForEmbedNoBaseLayers = isEmbedModeActive && baselayers.length === 0;
-  return isActive && (
+  return isActive && 
     <div id="layers-scroll-container" style={scrollContainerStyles}>
       <div className="layer-container sidebar-panel">
 
-        {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
+        {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && 
         <LayerList
           title="Overlays"
           groupId="overlays"
@@ -141,9 +141,9 @@ function LayersContainer (props) {
           layers={overlays}
           layerSplit={overlays.length}
         />
-        )}
+        }
 
-        {!shouldHideForEmbedNoBaseLayers && (
+        {!shouldHideForEmbedNoBaseLayers && 
           <div className="layer-group-baselayers">
             <LayerList
               title="Base Layers"
@@ -155,10 +155,10 @@ function LayersContainer (props) {
               layerSplit={overlays.length}
             />
           </div>
-        )}
+        }
       </div>
     </div>
-  );
+  ;
 }
 
 const mapStateToProps = (state, ownProps) => {

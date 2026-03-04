@@ -1,4 +1,4 @@
-/* eslint-disable react/no-danger */
+ 
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -44,7 +44,7 @@ export default function MeasureTooltip(props) {
    * @return {String} - The measurement, converted based on factor and locale
    */
   const roundAndLocale = (measurement, factor = 1) => {
-    const number = Math.round((measurement / factor) * 100) / 100;
+    const number = Math.round(measurement / factor * 100) / 100;
     const format = (num, decimal) => Number(num.toFixed(decimal)).toLocaleString();
     if (number < 10) {
       return format(number, 2);
@@ -68,7 +68,7 @@ export default function MeasureTooltip(props) {
     }
     if (unitOfMeasure === 'mi') {
       const imperialLength = metersToFeet(metricLength);
-      return imperialLength > (ftPerMile / 4)
+      return imperialLength > ftPerMile / 4
         ? `${roundAndLocale(imperialLength, ftPerMile)} mi`
         : `${roundAndLocale(imperialLength)} ft`;
     }
@@ -88,7 +88,7 @@ export default function MeasureTooltip(props) {
     }
     if (unitOfMeasure === 'mi') {
       const imperialArea = squareMetersToFeet(metricArea);
-      return imperialArea > (sqFtPerSqMile / 8)
+      return imperialArea > sqFtPerSqMile / 8
         ? `${roundAndLocale(imperialArea, sqFtPerSqMile)} mi<sup>2</sup>`
         : `${roundAndLocale(imperialArea)} ft<sup>2</sup>`;
     }
@@ -131,11 +131,11 @@ export default function MeasureTooltip(props) {
     return (
       <div className={`tooltip-measure tooltip-custom-black ${activeStaticClass}`}>
         <span dangerouslySetInnerHTML={{ __html: tooltipValue }} />
-        {!active && (
+        {!active && 
           <button type="button" className="close-tooltip" onClick={onRemove} onTouchEnd={onRemove}>
             <FontAwesomeIcon icon="times" fixedWidth widthAuto />
           </button>
-        )}
+        }
       </div>
     );
   }

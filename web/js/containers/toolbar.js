@@ -204,7 +204,7 @@ class toolbarContainer extends Component {
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
     } : null;
-    return !isDistractionFreeModeActive && (
+    return !isDistractionFreeModeActive && 
       <Button
         id={buttonId}
         className="wv-toolbar-button"
@@ -218,7 +218,7 @@ class toolbarContainer extends Component {
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="share-square" size={faSize} widthAuto />
       </Button>
-    );
+    ;
   }
 
   renderProjectionButton() {
@@ -245,7 +245,7 @@ class toolbarContainer extends Component {
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
     } : null;
-    return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
+    return config.ui && config.ui.projections && !isDistractionFreeModeActive && 
       <Button
         id={buttonId}
         aria-label={labelText}
@@ -261,7 +261,7 @@ class toolbarContainer extends Component {
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="globe-asia" size={faSize} widthAuto />
       </Button>
-    );
+    ;
   }
 
   // handle rendering of Location Search button
@@ -292,7 +292,7 @@ class toolbarContainer extends Component {
       )
       : () => toggleShowLocationSearch();
 
-    const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded)
+    const showButton = (isMobile || !isMobile && !isLocationSearchExpanded
     || shouldBeCollapsed) && !isDistractionFreeModeActive;
     const mobileWvToolbarButtonStyle = isMobile ? {
       fontSize: '14.3px',
@@ -300,7 +300,7 @@ class toolbarContainer extends Component {
       margin: '0 0 0 4px',
       padding: '5.72px 9.1px',
     } : null;
-    return showButton && (
+    return showButton && 
       <div id="location-search-wrapper">
         <Button
           id={buttonId}
@@ -313,7 +313,7 @@ class toolbarContainer extends Component {
           <FontAwesomeIcon icon="search-location" size={faSize} widthAuto />
         </Button>
       </div>
-    );
+    ;
   };
 
   renderSnapshotsButton () {
@@ -339,7 +339,7 @@ class toolbarContainer extends Component {
       display: 'none',
     } : null;
 
-    return !isDistractionFreeModeActive && (
+    return !isDistractionFreeModeActive && 
       <div id="snapshot-btn-wrapper">
         {this.renderTooltip('snapshot-btn-wrapper', labelText)}
         <Button
@@ -358,7 +358,7 @@ class toolbarContainer extends Component {
         </Button>
       </div>
 
-    );
+    ;
   }
 
   renderInfoButton() {
@@ -382,7 +382,7 @@ class toolbarContainer extends Component {
       padding: '5.72px 9.1px',
     } : null;
 
-    return !isDistractionFreeModeActive && (
+    return !isDistractionFreeModeActive && 
       <Button
         id={buttonId}
         aria-label={labelText}
@@ -394,7 +394,7 @@ class toolbarContainer extends Component {
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="info-circle" size={faSize} widthAuto />
       </Button>
-    );
+    ;
   }
 
   renderDistractionFreeExitButton() {
@@ -409,7 +409,7 @@ class toolbarContainer extends Component {
     } : null;
     const buttonId = 'wv-exit-distraction-free-mode-button';
     const labelText = 'Exit distraction free mode';
-    return isDistractionFreeModeActive && (
+    return isDistractionFreeModeActive && 
       <Button
         id={buttonId}
         className="wv-toolbar-button wv-exit-distraction-free-mode-button"
@@ -420,7 +420,7 @@ class toolbarContainer extends Component {
         {this.renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} widthAuto />
       </Button>
-    );
+    ;
   }
 
   render() {

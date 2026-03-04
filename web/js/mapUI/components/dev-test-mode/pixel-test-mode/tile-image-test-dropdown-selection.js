@@ -22,11 +22,11 @@ function TileImageTestModeDropdown({ activeLayers, layerSelection, setLayerSelec
         {layerSelection.id}
       </DropdownToggle>
       <DropdownMenu style={{ transform: 'translate3d(-30px, 0px, 0px)' }} className="bg-dark">
-        {activeLayers.map((layer) => (
+        {activeLayers.map((layer) => 
           <DropdownItem key={layer.id} onClick={() => handleSelection(layer)} className="text-white bg-dark">
             {layer.id}
           </DropdownItem>
-        ))}
+        )}
       </DropdownMenu>
     </Dropdown>
   );

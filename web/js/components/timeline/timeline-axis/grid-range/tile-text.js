@@ -43,7 +43,7 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
         {dateText}
       </text>
       {item.timeScale === 'day'
-        ? (
+        ? 
           <text
             className="axis-grid-text axis-grid-text-year"
             x="40"
@@ -53,7 +53,7 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
           >
             {dateTextYear}
           </text>
-        )
+        
         : null}
     </g>
   );

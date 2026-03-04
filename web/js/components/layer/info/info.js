@@ -31,12 +31,12 @@ export default function LayerInfo ({ layer, measurementDescriptionPath, describe
         setFn(metadataHtml || 'No description was found for this layer.');
       } catch (e) {
         if (!controller.signal.aborted) {
-          // eslint-disable-next-line no-console
+           
           console.error(e);
         }
       }
     })();
-    return () => (controller ? controller.abort() : null);
+    return () => controller ? controller.abort() : null;
   };
 
   useEffect(fetchMetadata(measurementDescriptionPath, setMeasurementMetadata), [layer]);
@@ -57,46 +57,46 @@ export default function LayerInfo ({ layer, measurementDescriptionPath, describe
 
   return (
     <div id="layer-description" className="layer-description">
-      {(startDate || endDate) && (
+      {(startDate || endDate) && 
         <div id="layer-date-range" className="layer-date-range">
           <span id={`${id}-startDate`} className="layer-date-start">
-            {startDate && (
+            {startDate && 
               <>
                 Temporal Coverage:
                 {' '}
                 <FormattedStartDate />
               </>
-            )}
+            }
           </span>
           <span id={`${id}-endDate`} className="layer-date-end">
-            {isRange ? (
+            {isRange ? 
               <>
                 -
                 <FormattedEndDate />
               </>
-            ) : startDate && ' - Present'}
+             : startDate && ' - Present'}
           </span>
           {needDateRanges && <DateRanges layer={layer} describeDomainsUrl={describeDomainsUrl} />}
         </div>
-      )}
-      {layerMetadata ? (
+      }
+      {layerMetadata ? 
         <div
           id="layer-metadata"
           className="layer-metadata"
           dangerouslySetInnerHTML={{ __html: layerMetadata }}
         />
-      ) : (
+       : 
         <div id="layer-metadata" className="layer-metadata">
           <p>Loading Layer Description...</p>
         </div>
-      )}
+      }
 
-      {measurementMetadata && (
+      {measurementMetadata && 
         <div
           className="source-metadata"
           dangerouslySetInnerHTML={{ __html: measurementMetadata }}
         />
-      )}
+      }
     </div>
   );
 }

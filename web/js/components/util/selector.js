@@ -21,12 +21,12 @@ export default function Selector (props) {
       id={id}
       onChange={handleChange}
     >
-      {optionArray.values.map((dataEl, i) => (
+      {optionArray.values.map((dataEl, i) => 
         /* eslint react/no-array-index-key: 1 */
         <option key={`${dataEl.value}-${i}`} value={dataEl.value}>
           {dataEl.text}
         </option>
-      ))}
+      )}
     </select>
   );
 }

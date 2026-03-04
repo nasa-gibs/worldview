@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable func-names */
+ 
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
 import { decodePNG, processImage } from './util';
@@ -29,9 +29,9 @@ function getColormap(rawColormap) {
   // Fill with colors from PLTE
   for (let i = 0; i < numColors; i += 1) {
     colorMapArr[i * 4] = rawColormap[i * 3]; // R
-    colorMapArr[(i * 4) + 1] = rawColormap[(i * 3) + 1]; // G
-    colorMapArr[(i * 4) + 2] = rawColormap[(i * 3) + 2]; // B
-    colorMapArr[(i * 4) + 3] = 255; // A
+    colorMapArr[i * 4 + 1] = rawColormap[i * 3 + 1]; // G
+    colorMapArr[i * 4 + 2] = rawColormap[i * 3 + 2]; // B
+    colorMapArr[i * 4 + 3] = 255; // A
   }
 
   return colorMapArr;
@@ -110,7 +110,7 @@ LookupImageTile.prototype.load = async function () {
           for (let i = 0; i < pixelData.length; i += 1) {
             const outputIndex = i * 4;
             // Make sure the index is valid
-            const index = Math.min(pixelData[i], (colorMapArr.length / 4) - 1);
+            const index = Math.min(pixelData[i], colorMapArr.length / 4 - 1);
             const lookupIndex = index * 4;
 
             // Determine desired RGBA for this pixel
@@ -190,7 +190,7 @@ LookupImageTile.prototype.load = async function () {
       } catch (error) {
         that.state = OlTileState.ERROR;
         that.changed();
-        // eslint-disable-next-line no-console
+         
         console.error('Error:', error);
       }
     } else {

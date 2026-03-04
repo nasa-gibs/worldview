@@ -55,13 +55,13 @@ const subDailyDateConfig = {
 // change to UTC offset time for date picker controls
 const convertToUTCDateObject = (dateString) => {
   const date = new Date(dateString);
-  const dateUTC = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+  const dateUTC = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
   return dateUTC;
 };
 
 // change to offset time used in parent component date setting functions
 const convertToLocalDateObject = (date) => {
-  const dateLocal = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
+  const dateLocal = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
   return dateLocal;
 };
 
@@ -113,17 +113,17 @@ function MobileDatePicker(props) {
     onDateChange(getISODateFormatted(newDate));
   };
 
-  const getHeaderTime = (newTime, isSubdaily) => (
+  const getHeaderTime = (newTime, isSubdaily) => 
     <div className="datepicker-header">
       {getDisplayDate(new Date(convertToLocalDateObject(newTime)), isSubdaily)}
     </div>
-  );
+  ;
 
   const displayDate = getDisplayDate(date, hasSubdailyLayers);
   const headerTime = getHeaderTime(time, hasSubdailyLayers);
 
   return (
-    time && (
+    time && 
       <>
         <button
           type="button"
@@ -150,7 +150,7 @@ function MobileDatePicker(props) {
           onSelect={handleSelect}
         />
       </>
-    )
+    
   );
 }
 

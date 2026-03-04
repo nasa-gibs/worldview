@@ -48,13 +48,13 @@ function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
   };
 
   return (
-    isEmbedModeActive && (
+    isEmbedModeActive && 
       <div
         id={!hasClicked ? 'embed-mode-wrapper' : ''}
         onMouseEnter={() => !hasClicked && setShowClickToInteractMessage(true)}
         onMouseLeave={() => !hasClicked && setShowClickToInteractMessage(false)}
       >
-        {showClickToInteractMessage && (
+        {showClickToInteractMessage && 
           <>
             <div role="region" onClick={handleOverlayClick} className="embed-overlay-bg" />
             <div className="embed-overlay-btn">
@@ -62,10 +62,10 @@ function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
               <p>Click anywhere to interact</p>
             </div>
           </>
-        )}
+        }
         {renderEmbedLinkBtn()}
       </div>
-    )
+    
   );
 }
 

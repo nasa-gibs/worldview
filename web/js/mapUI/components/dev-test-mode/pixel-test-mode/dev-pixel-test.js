@@ -53,7 +53,7 @@ function PixelTestMode () {
       img.onload = async () => {
         // Process the loaded image here
         const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
-        // eslint-disable-next-line no-unsafe-optional-chaining
+         
         const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
 
         const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `;

@@ -200,13 +200,13 @@ class Sidebar extends React.Component {
     let msg;
     if (isEmbedModeActive) {
       msg = 'Do you want to open full featured @NAME@ in a new tab with current content loaded?';
-      // eslint-disable-next-line no-alert
+       
       if (window.confirm(msg)) {
         window.open(permalink, '_blank');
       }
     } else {
       msg = 'Do you want to reset @NAME@ to its defaults? You will lose your current state.';
-      // eslint-disable-next-line no-alert
+       
       if (window.confirm(msg)) {
         googleTagManager.pushEvent({
           event: 'logo_page_reset',
@@ -269,7 +269,7 @@ class Sidebar extends React.Component {
       };
 
     return (
-      isKioskModeActive ? (
+      isKioskModeActive ? 
         <span
           id="wv-logo"
           className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
@@ -277,7 +277,7 @@ class Sidebar extends React.Component {
         >
           {wvName}
         </span>
-      ) : (
+       : 
         <a
           href={embedWVLogoLink}
           title={WVLogoTitle}
@@ -288,7 +288,7 @@ class Sidebar extends React.Component {
         >
           {wvName}
         </a>
-      )
+      
     );
   }
 
@@ -364,14 +364,14 @@ class Sidebar extends React.Component {
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
           {!displayStaticMap && this.renderSidebarLogo()}
-          {!isDistractionFreeModeActive && isCollapsed && (
+          {!isDistractionFreeModeActive && isCollapsed && 
           <CollapsedButton
             isMobile={isMobile}
             isEmbed={isEmbedModeActive}
             onclick={this.toggleSidebar}
             numberOfLayers={numberOfLayers}
           />
-          )}
+          }
           <div
             id="products-holder"
             className="products-holder-case"
@@ -400,7 +400,7 @@ class Sidebar extends React.Component {
                   compareState={activeString}
                 />
               </TabPane>
-              {naturalEvents && activeTab === 'events' && (
+              {naturalEvents && activeTab === 'events' && 
                 <TabPane tabId="events">
                   <Events
                     height={subComponentHeight}
@@ -410,17 +410,17 @@ class Sidebar extends React.Component {
                     sources={eventsSources}
                   />
                 </TabPane>
-              )}
-              {smartHandoffs && activeTab === 'download' && (
+              }
+              {smartHandoffs && activeTab === 'download' && 
                 <TabPane tabId="download">
                   <SmartHandoff
                     isActive={activeTab === 'download'}
                     tabTypes={tabTypes}
                   />
                 </TabPane>
-              )}
+              }
               {
-                !isKioskModeActive && (
+                !isKioskModeActive && 
                   <FooterContent
                     // eslint-disable-next-line react/no-unused-class-component-methods
                     ref={(el) => { this.footerElement = el; }}
@@ -429,7 +429,7 @@ class Sidebar extends React.Component {
                     chartingModeAccessible={chartingModeAccessible}
                     sidebarHeight={sidebarHeight}
                   />
-                )
+                
               }
             </TabContent>
           </div>

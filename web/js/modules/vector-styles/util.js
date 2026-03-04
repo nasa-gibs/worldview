@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-syntax */
+ 
 import {
   assign as lodashAssign,
   find as lodashFind,
@@ -188,7 +188,7 @@ function getModalOffset(dimensionProps) {
   const modalWidthVal = modalWidth || (isMobile ? 250 : 445);
   const modalHeight = 300;
   let offsetLeft = isOnLeft ? x + 20 : x - modalWidthVal - 20;
-  let offsetTop = y - (modalHeight / 2);
+  let offsetTop = y - modalHeight / 2;
   if (offsetLeft < 0) {
     offsetLeft = 20;
   } else if (offsetLeft + modalWidthVal > screenWidth) {

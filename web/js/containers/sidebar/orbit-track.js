@@ -32,7 +32,7 @@ function OrbitTrack(props) {
       requestPalette(trackLayer.id);
       return;
     }
-    setPalette((
+    setPalette(
       <PaletteLegend
         layer={trackLayer}
         parentLayer={parentLayer}
@@ -41,7 +41,7 @@ function OrbitTrack(props) {
         isDistractionFreeModeActive={isDistractionFreeModeActive}
         isMobile={isMobile}
       />
-    ));
+    );
   }, [renderedPalette]);
 
   return (

@@ -22,12 +22,12 @@ function LoadingIndicator() {
       zIndex: 999,
     };
 
-  return shouldSpinnerShow && (
+  return shouldSpinnerShow && 
     <div style={spinnerStyle}>
       <Spinner color="light" size="sm" />
       {msg}
     </div>
-  );
+  ;
 }
 
 export default LoadingIndicator;

@@ -59,7 +59,7 @@ function CustomIntervalSelector(props) {
     }
   };
 
-  return modalOpen && (
+  return modalOpen && 
     <button
       onKeyDown={handleKeyPress}
       className={`custom-interval-widget ${hasSubdailyLayers ? 'subdaily' : ''}`}
@@ -80,7 +80,7 @@ function CustomIntervalSelector(props) {
       </div>
       <FontAwesomeIcon icon="times" className="wv-close" onClick={closeModal} widthAuto />
     </button>
-  );
+  ;
 }
 
 CustomIntervalSelector.propTypes = {

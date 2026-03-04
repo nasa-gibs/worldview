@@ -108,8 +108,8 @@ export function getStampProps(
   let stampHeightByImageWidth;
   // Set Logo-stamp dimensions based upon smallest total image dimension
   if (dimensions.w < breakPoint) {
-    stampHeight = (width * 0.7) / stampWidthRatio < 60
-      ? (width * 0.7) / stampWidthRatio
+    stampHeight = width * 0.7 / stampWidthRatio < 60
+      ? width * 0.7 / stampWidthRatio
       : 60;
     dateStamp.fontSize = dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
     dateStamp.align = 'left';
@@ -163,7 +163,7 @@ export function mapLocationToAnimationState(
     });
   } else if (
     parameters.ab !== 'on'
-    && (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+    && (!parameters.ae || !parameters.as && (!!endDate || !!startDate))
   ) {
     // wipe anim start & end dates on tour change
 

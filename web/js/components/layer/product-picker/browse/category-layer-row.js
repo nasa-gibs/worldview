@@ -93,14 +93,14 @@ class CategoryLayerRow extends React.Component {
     return (
       <div>
         {LayerSouceList.length > 0
-          ? (
+          ? 
             <ListGroup className="source-sub-group">
               {LayerSouceList}
             </ListGroup>
-          )
+          
           : ''}
         {OrbitSourceList.length > 0
-          ? (
+          ? 
             <>
               <h3 className="source-orbits-title">Orbital Tracks:</h3>
               <ListGroup
@@ -110,7 +110,7 @@ class CategoryLayerRow extends React.Component {
                 {OrbitSourceList}
               </ListGroup>
             </>
-          )
+          
           : ''}
       </div>
     );
@@ -181,12 +181,12 @@ class CategoryLayerRow extends React.Component {
           <TabPane>
             {this.renderSourceSettings(sources[validActiveIndex])}
             {isMobile
-              && (
+              && 
               <MeasurementMetadataDetail
                 source={sources[validActiveIndex]}
                 isMobile={isMobile}
               />
-              )}
+              }
           </TabPane>
         </TabContent>
       </div>

@@ -39,7 +39,7 @@ export default class VectorMetaTable extends React.Component {
                       Function, ValueMap, DataType, Title, Identifier, Units, Description,
                     } = properties;
 
-                    const isIntegerToStyle = Function !== 'Identify' && (DataType === 'int');
+                    const isIntegerToStyle = Function !== 'Identify' && DataType === 'int';
                     const metaFeaturesIdentifierValue = metaFeatures[Identifier]
                       ? metaFeatures[Identifier] : null;
                     const metaFeaturesResult = isIntegerToStyle ? metaFeatures[Identifier].toLocaleString('en')
@@ -53,19 +53,19 @@ export default class VectorMetaTable extends React.Component {
                     return (
                       <tr key={`vector-row-${id}`}>
                         <td>
-                          {Description ? (
+                          {Description ? 
                             <VectorMetaTooltip id={id} index={index} description={Description} />
-                          ) : undefined}
+                           : undefined}
                           <div className="vector-feature-name-cell">{Title || Identifier}</div>
                         </td>
                         <td>
                           <span>{value}</span>
-                          {Units && (
+                          {Units && 
                             <span>
                               {' '}
                               {Units}
                             </span>
-                          )}
+                          }
                         </td>
                       </tr>
                     );

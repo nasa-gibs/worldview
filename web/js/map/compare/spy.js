@@ -22,10 +22,10 @@ const inverseClip = function(event) {
     // only show a circle around the mouse
     const pixel = getRenderPixel(event, mousePosition);
     const offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
-    const canvasRadius = Math.sqrt(((offset[0] - pixel[0]) ** 2) + ((offset[1] - pixel[1]) ** 2));
+    const canvasRadius = Math.sqrt((offset[0] - pixel[0]) ** 2 + (offset[1] - pixel[1]) ** 2);
     ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
     ctx.closePath();
-    ctx.lineWidth = (5 * canvasRadius) / radius;
+    ctx.lineWidth = 5 * canvasRadius / radius;
     ctx.strokeStyle = 'rgba(0,0,0,0.5)';
     ctx.clip();
     ctx.clearRect(0, 0, offset, offset);
@@ -43,9 +43,9 @@ const clip = function(event) {
     // only show a circle around the mouse
     const pixel = getRenderPixel(event, mousePosition);
     const offset = getRenderPixel(event, [mousePosition[0] + radius, mousePosition[1]]);
-    const canvasRadius = Math.sqrt(((offset[0] - pixel[0]) ** 2) + ((offset[1] - pixel[1]) ** 2));
+    const canvasRadius = Math.sqrt((offset[0] - pixel[0]) ** 2 + (offset[1] - pixel[1]) ** 2);
     ctx.arc(pixel[0], pixel[1], canvasRadius, 0, 2 * Math.PI);
-    ctx.lineWidth = (5 * canvasRadius) / radius;
+    ctx.lineWidth = 5 * canvasRadius / radius;
     ctx.strokeStyle = 'rgba(0,0,0,0.5)';
     ctx.stroke();
   }
@@ -198,7 +198,7 @@ export default class Spy {
   updateSpy(e) {
     mousePosition = e.pixel || this.map.getEventPixel(e);
     radius = DEFAULT_RADIUS;
-    const offSetXandY = Math.sqrt((radius * radius) / 2);
+    const offSetXandY = Math.sqrt(radius * radius / 2);
     label.style.top = `${mousePosition[1] + offSetXandY - 10}px`;
     label.style.left = `${mousePosition[0] + offSetXandY - 5}px`;
     this.map.render();

@@ -15,7 +15,7 @@ function componentizedPaletteToArray(paletteRGB) {
     r = paletteRGB[i];
     g = paletteRGB[i + 1];
     b = paletteRGB[i + 2];
-    paletteArray.push((r << 16) | (g << 8) | b); // eslint-disable-line no-bitwise
+    paletteArray.push(r << 16 | g << 8 | b);  
   }
   return paletteArray;
 }
@@ -192,7 +192,7 @@ export default class GifStream {
           } else {
             chunks.push(new Uint8Array(chunk));
             options.progressCallback(
-              Math.round((processedImages / imageLength) * 100),
+              Math.round(processedImages / imageLength * 100),
             );
             processedImages++;
             setTimeout(

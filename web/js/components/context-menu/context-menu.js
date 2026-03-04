@@ -28,7 +28,7 @@ function RightClickMenu(props) {
   } = props;
   const { crs } = proj.selected;
   const measurementsInProj = !!(Object.keys(allMeasurements[crs]) || []).length;
-  const handleClick = () => (show ? setShow(false) : null);
+  const handleClick = () => show ? setShow(false) : null;
 
   function handleContextEvent(event) {
     if (measurementIsActive) return;
@@ -90,7 +90,7 @@ function RightClickMenu(props) {
 
   const mobileStyle = isMobile ? 'react-contextmenu-mobile' : '';
 
-  return show && (
+  return show && 
     <div id="context-menu">
       <CopyClipboardTooltip
         tooltipToggleTime={toolTipToggleTime}
@@ -130,7 +130,7 @@ function RightClickMenu(props) {
           Measure Area
         </MenuItem>
         {measurementsInProj
-        && (
+        && 
         <MenuItem
           onClick={() => handleMeasurementMenu('clear')}
           attributes={{ id: 'context-menu-clear-measurements' }}
@@ -138,7 +138,7 @@ function RightClickMenu(props) {
         >
           Remove Measurements
         </MenuItem>
-        )}
+        }
         <MenuItem
           onClick={() => handleMeasurementMenu('units')}
           attributes={{ id: 'context-menu-change-units' }}
@@ -150,7 +150,7 @@ function RightClickMenu(props) {
         </MenuItem>
       </ContextMenu>
     </div>
-  );
+  ;
 }
 
 function mapStateToProps(state) {

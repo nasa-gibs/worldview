@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+ 
 export const SELECT_COLLECTION = 'SMART_HANDOFF/SELECT_COLLECTION';
 export const SET_AVAILABLE_TOOLS = 'SMART_HANDOFF/SET_AVAILABLE_TOOLS';
 export const SET_VALID_LAYERS_CONCEPTIDS = 'SMART_HANDOFF/SET_VALID_LAYERS_CONCEPTIDS';

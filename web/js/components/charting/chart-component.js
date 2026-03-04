@@ -38,7 +38,7 @@ function getTickPositions(dataLength) {
   gapsArr[gapsArr.length - 1] = Math.max(Math.floor(dataLength / 4), 3);
 
   const gapsTotal = gapsArr.reduce((a, b) => a + b, 0);
-  let leftoverGap = (dataLength - 1) - gapsTotal;
+  let leftoverGap = dataLength - 1 - gapsTotal;
 
   let i = 0;
   // Reduce gaps that are too large due to last gap size
@@ -235,14 +235,14 @@ function ChartComponent(props) {
   function getLineChart(chartData) {
     const chartLineName = getLineNames(chartData);
 
-    const chartLinesArr = chartLineName.map((id, index) => (
+    const chartLinesArr = chartLineName.map((id, index) => 
       <Line
         type="linear"
         key={id}
         dataKey={chartLineName[index]}
         stroke={lineColors[index]}
       />
-    ));
+    );
     return chartLinesArr;
   }
 
@@ -505,7 +505,7 @@ function ChartComponent(props) {
             be used for initial basic exploratory purposes.
           </span>
           {isTruncated
-          && (
+          && 
             <div className="charting-disclaimer-upper">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
@@ -533,9 +533,9 @@ function ChartComponent(props) {
                 .
               </i>
             </div>
-          )}
+          }
           {errors && errors.error_count > 0
-          && (
+          && 
             <div className="charting-disclaimer-lower">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
@@ -547,13 +547,13 @@ function ChartComponent(props) {
                 {`${errors.error_count} `}
                 {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
               </i>
-              {!errorCollapsed && (
+              {!errorCollapsed && 
                 <div className="charting-disclaimer-dates">
                   <i className="charting-disclaimer-block">
                     {errorDatesDisplay}
                   </i>
                 </div>
-              )}
+              }
               <div className="error-expand-button">
                 <button
                   className="error-expand-button-inner"
@@ -569,7 +569,7 @@ function ChartComponent(props) {
                 </button>
               </div>
             </div>
-          )}
+          }
         </div>
       </div>
     </div>

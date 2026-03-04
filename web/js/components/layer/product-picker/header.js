@@ -137,17 +137,17 @@ class ProductPickerHeader extends React.Component {
     const recentLayersMode = categoryType === 'recent';
     const featuredLayersMode = categoryType === 'featured';
     const showBackButton = searchMode
-      || (categoryId !== 'featured-all'
+      || categoryId !== 'featured-all'
       && selectedProjection === 'geographic'
       && mode !== 'category'
       && !featuredLayersMode
-      && !recentLayersMode);
+      && !recentLayersMode;
     const isBreadCrumb = showBackButton && !searchMode && width > 650;
     const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
     const showFilterBtnMobile = recentLayersMode
       || (searchMode ? !showMobileFacets : !selectedLayer);
     const showFilterBnDesktop = recentLayersMode
-      || (!searchMode && !selectedLayer);
+      || !searchMode && !selectedLayer;
     const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
     const filterBtnFn = !searchMode ? toggleSearchMode : toggleMobileFacets;
     const inputClass = !searchMode && searchTerm ? 'faded' : '';
@@ -155,7 +155,7 @@ class ProductPickerHeader extends React.Component {
     return (
       <>
         <InputGroup id="layer-search" className="layer-search">
-          {showBackButton && (
+          {showBackButton && 
             <>
               <Button
                 id="layer-back-button"
@@ -174,18 +174,18 @@ class ProductPickerHeader extends React.Component {
               </Button>
               {isBreadCrumb && this.renderBreadCrumb()}
             </>
-          )}
+          }
 
-          {showReset && (
+          {showReset && 
             <Button
               className="clear-filters"
               onClick={() => this.resetSearch()}
             >
               Reset
             </Button>
-          )}
+          }
 
-          {showFilterBn && (
+          {showFilterBn && 
             <Button
               id="layer-filter-button"
               className="filter-button"
@@ -201,7 +201,7 @@ class ProductPickerHeader extends React.Component {
               </UncontrolledTooltip>
               <FontAwesomeIcon icon="filter" widthAuto />
             </Button>
-          )}
+          }
 
           <Input
             className={inputClass}
@@ -211,12 +211,12 @@ class ProductPickerHeader extends React.Component {
             value={searchTerm}
             placeholder="Search"
             type="search"
-            // eslint-disable-next-line no-return-assign
-            innerRef={(c) => (this.input = c)}
+             
+            innerRef={(c) => this.input = c}
           />
         </InputGroup>
 
-        {mode === 'search' && (
+        {mode === 'search' && 
           <div className="header-filter-container">
             <div className="results-text">
               {results.length === layerCount
@@ -224,7 +224,7 @@ class ProductPickerHeader extends React.Component {
                 : `Showing ${results.length} out of ${layerCount}`}
             </div>
           </div>
-        )}
+        }
       </>
     );
   }

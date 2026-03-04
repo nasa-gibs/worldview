@@ -58,7 +58,7 @@ function SmartHandoffModal({
       </div>
 
       { showMoreInfo
-      && (
+      && 
       <div className="smart-handoff-about">
         <hr />
         <h1 className="about-heading">About Earthdata Search</h1>
@@ -97,7 +97,7 @@ function SmartHandoffModal({
           </p>
         </div>
       </div>
-      )}
+      }
 
       <button type="button" className="toggle-more-info" onClick={() => toggleInfo(!showMoreInfo)}>
         <h2><span>{showMoreInfo ? 'Hide Info' : 'Show More Info'}</span></h2>
@@ -122,12 +122,12 @@ function SmartHandoffModal({
           {selectedLayer.subtitle}
         </div>
 
-        {dateRanges && (
+        {dateRanges && 
           <>
             <h1> Date:</h1>
             <div className="handoff-modal-date">{displayDate}</div>
           </>
-        )}
+        }
 
       </div>
 

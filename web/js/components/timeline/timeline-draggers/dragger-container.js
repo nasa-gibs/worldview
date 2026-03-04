@@ -215,7 +215,7 @@ class DraggerContainer extends PureComponent {
         newDraggerTime = draggerDateAdded.add(remainderMilliseconds);
       } else {
         const diffFactor = diffZeroValues / gridWidth;
-        newDraggerTime = draggerTimeValue + (diffFactor * deltaX);
+        newDraggerTime = draggerTimeValue + diffFactor * deltaX;
       }
 
       // check if new dragger date is within valid date range and format or RETURN out of function
@@ -283,7 +283,7 @@ class DraggerContainer extends PureComponent {
     const selectedDraggerClipBClipWidth = Math.max(draggerWidth, draggerWidth + draggerPositionB);
     return (
       draggerSelected === 'selectedB'
-        ? (
+        ? 
           <svg className="dragger-container" width={axisWidth} height={65}>
             <defs>
               {/* clip dragger */}
@@ -296,7 +296,7 @@ class DraggerContainer extends PureComponent {
               </clipPath>
             </defs>
             {isCompareModeActive
-              ? (
+              ? 
                 <Dragger
                   axisWidth={axisWidth}
                   toggleShowDraggerTime={toggleShowDraggerTime}
@@ -309,7 +309,7 @@ class DraggerContainer extends PureComponent {
                   draggerPosition={draggerPosition}
                   draggerVisible={draggerVisible}
                 />
-              )
+              
               : null}
             <Dragger
               axisWidth={axisWidth}
@@ -324,8 +324,8 @@ class DraggerContainer extends PureComponent {
               draggerVisible={draggerVisibleB}
             />
           </svg>
-        )
-        : (
+        
+        : 
           <svg className="dragger-container" width={axisWidth} height={65}>
             <defs>
               {/* clip dragger */}
@@ -338,7 +338,7 @@ class DraggerContainer extends PureComponent {
               </clipPath>
             </defs>
             {isCompareModeActive
-              ? (
+              ? 
                 <Dragger
                   axisWidth={axisWidth}
                   toggleShowDraggerTime={toggleShowDraggerTime}
@@ -351,7 +351,7 @@ class DraggerContainer extends PureComponent {
                   draggerPosition={draggerPositionB}
                   draggerVisible={draggerVisibleB}
                 />
-              )
+              
               : null}
             <Dragger
               axisWidth={axisWidth}
@@ -366,7 +366,7 @@ class DraggerContainer extends PureComponent {
               draggerVisible={draggerVisible}
             />
           </svg>
-        )
+        
     );
   }
 }

@@ -185,7 +185,7 @@ class GranuleDateList extends PureComponent {
       hoveredItem,
       lastMovedItem,
     } = this.state;
-    const renderDownBtn = () => index < items.length - 1 && (
+    const renderDownBtn = () => index < items.length - 1 && 
       <button
         type="button"
         className="granule-date-item-down-button"
@@ -193,8 +193,8 @@ class GranuleDateList extends PureComponent {
       >
         <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth widthAuto />
       </button>
-    );
-    const renderUpBtn = () => index > 0 && (
+    ;
+    const renderUpBtn = () => index > 0 && 
       <button
         type="button"
         className="granule-date-item-up-button"
@@ -202,7 +202,7 @@ class GranuleDateList extends PureComponent {
       >
         <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth widthAuto />
       </button>
-    );
+    ;
 
     return (
       <Draggable
@@ -211,7 +211,7 @@ class GranuleDateList extends PureComponent {
         index={index}
         direction="vertical"
       >
-        {(provided, snapshot) => (
+        {(provided, snapshot) => 
           <div
             className="granule-date-item"
             onMouseEnter={() => this.handleMouseOverItem(date)}
@@ -234,7 +234,7 @@ class GranuleDateList extends PureComponent {
               {renderUpBtn()}
             </div>
           </div>
-        )}
+        }
       </Draggable>
     );
   };
@@ -265,7 +265,7 @@ class GranuleDateList extends PureComponent {
           </span>
         </h2>
         {items.length > 0
-          ? (
+          ? 
 
             <DragDropContext onDragEnd={this.onDragEnd}>
               <Droppable
@@ -273,7 +273,7 @@ class GranuleDateList extends PureComponent {
                 direction="vertical"
                 type="granule"
               >
-                {(provided, snapshot) => (
+                {(provided, snapshot) => 
                   <div
                     ref={provided.innerRef}
                     style={getListStyle(needsScrollBar, items, screenHeight)}
@@ -282,17 +282,17 @@ class GranuleDateList extends PureComponent {
                     {items.map(this.renderDraggableGranule)}
                     {provided.placeholder}
                   </div>
-                )}
+                }
               </Droppable>
             </DragDropContext>
 
-          )
-          : (
+          
+          : 
             <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
               <p className="granule-date-item-no-granules-available">No granules available.</p>
               <br />
             </div>
-          )}
+          }
       </div>
     );
   }

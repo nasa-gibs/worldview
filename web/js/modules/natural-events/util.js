@@ -119,7 +119,7 @@ export function getEventsRequestURL (state) {
   const baseUrl = lodashGet(config, 'features.naturalEvents.host');
   const mockEvents = lodashGet(config, 'parameters.mockEvents');
   if (mockEvents) {
-    // eslint-disable-next-line no-console
+     
     console.warn(`Using mock events data: ${mockEvents}`);
     return mockEvents === 'true'
       ? 'mock/events_data.json'

@@ -553,7 +553,7 @@ function ChartingModeOptions(props) {
       const promises = [];
       for (let i = 0; i < requestsNeeded; i += 1) {
         const requestStartDate = new Date(initialStartDate.getTime());
-        requestStartDate.setDate(requestStartDate.getDate() + (i * requestsSize));
+        requestStartDate.setDate(requestStartDate.getDate() + i * requestsSize);
         let requestEndDate = new Date(requestStartDate.getTime());
         requestEndDate.setDate(requestEndDate.getDate() + requestsSize - 1);
         if (requestEndDate > initialEndDate) {
@@ -773,12 +773,12 @@ function ChartingModeOptions(props) {
   const dateRangeValue = timeSpanSelection === 'range' ? `${primaryDate} - ${secondaryDate}` : primaryDate;
   let requestBtnText = timeSpanSelection === 'date' ? 'Generate Statistics' : 'Generate Chart';
   if (chartRequestInProgress) {
-    requestBtnText = (
+    requestBtnText = 
       <div>
         In Progress&nbsp;
         <Spinner style={spinnerStyle} color="light" />
       </div>
-    );
+    ;
   }
   const lonlats = [
     bottomLeftLatLong,
@@ -876,13 +876,13 @@ function ChartingModeOptions(props) {
           text={requestBtnText}
         />
       </div>
-      {chartRequestInProgress && (
+      {chartRequestInProgress && 
         <WaitOverlay
           statusText="Creating chart..."
           onCancel={() => onCancelChart()}
         />
-      )}
-      {aoiActive && isPostRender && (
+      }
+      {aoiActive && isPostRender && 
         <Crop
           x={x}
           y={y}
@@ -911,7 +911,7 @@ function ChartingModeOptions(props) {
           }}
           showCoordinates
         />
-      )}
+      }
     </div>
   );
 }
@@ -1045,7 +1045,7 @@ const mapDispatchToProps = (dispatch) => ({
     const offsetTop = isWideModal ? 50 : 25;
     dispatch(
       openCustomContent('CHARTING-CHART', {
-        headerText: (
+        headerText: 
           <>
             BETA |
             {` ${liveData.title} `}
@@ -1058,7 +1058,7 @@ const mapDispatchToProps = (dispatch) => ({
               {liveData.endDateFormatted}
             </span>
           </>
-        ),
+        ,
         backdrop: false,
         bodyComponent: ChartComponent,
         wrapClassName: 'unclickable-behind-modal',

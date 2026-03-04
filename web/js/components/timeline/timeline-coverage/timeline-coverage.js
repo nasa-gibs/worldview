@@ -87,7 +87,7 @@ class TimelineLayerCoveragePanel extends Component {
     }
 
     const updatedActiveLayers = this.getActiveLayers(activeLayers);
-    // eslint-disable-next-line react/destructuring-assignment
+     
     const layersChange = !lodashIsEqual(updatedActiveLayers, this.state.activeLayers);
     const projectionChange = prevProps.projection !== projection;
     const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
@@ -117,7 +117,7 @@ class TimelineLayerCoveragePanel extends Component {
   */
   getActiveLayers = (layers) => {
     const { shouldIncludeHiddenLayers } = this.state;
-    return layers.filter((layer) => (shouldIncludeHiddenLayers ? true : layer.visible));
+    return layers.filter((layer) => shouldIncludeHiddenLayers ? true : layer.visible);
   };
 
   /**
@@ -269,7 +269,7 @@ class TimelineLayerCoveragePanel extends Component {
   * @param {Array} layers
   * @returns {void}
   */
-  // eslint-disable-next-line react/destructuring-assignment
+   
   addMatchingCoverageToTimeline = async (isChecked, layers) => {
     const { setMatchingTimelineCoverage } = this.props;
     const dateRange = this.getNewMatchingDatesRange(layers);
@@ -425,7 +425,7 @@ class TimelineLayerCoveragePanel extends Component {
         >
           {/* Timeline Layer Coverage Panel */}
           {isTimelineLayerCoveragePanelOpen
-          && (
+          && 
           <div
             className="timeline-layer-coverage"
             style={layerCoverageStyle}
@@ -459,7 +459,7 @@ class TimelineLayerCoveragePanel extends Component {
               />
             </Scrollbars>
           </div>
-          )}
+          }
         </div>
       </>
     );

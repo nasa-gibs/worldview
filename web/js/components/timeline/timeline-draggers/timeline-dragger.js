@@ -143,7 +143,7 @@ class Dragger extends PureComponent {
       : 'B';
     return (
       draggerVisible
-        ? (
+        ? 
           <Draggable
             axis="x"
             onMouseDown={this.selectDragger}
@@ -176,7 +176,7 @@ class Dragger extends PureComponent {
               h-34.932z"
               />
               {isCompareModeActive
-                ? (
+                ? 
                   <text
                     fontSize="26px"
                     fontWeight="400"
@@ -187,8 +187,8 @@ class Dragger extends PureComponent {
                   >
                     {draggerLetter}
                   </text>
-                )
-                : (
+                
+                : 
                   <>
                     <rect
                       pointerEvents="none"
@@ -215,10 +215,10 @@ class Dragger extends PureComponent {
                       y="18"
                     />
                   </>
-                )}
+                }
             </g>
           </Draggable>
-        )
+        
         : null
     );
   }

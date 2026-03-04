@@ -35,14 +35,14 @@ class LayerMetadataDetail extends React.Component {
   renderNoSelection() {
     const { categoryType } = this.props;
     return categoryType === 'recent'
-      ? (<RecentLayersInfo />)
-      : (
+      ? <RecentLayersInfo />
+      : 
         <div className="no-results">
           <FontAwesomeIcon icon="globe-americas" widthAuto />
           <h3> No layer selected. </h3>
           <h5> Select a layer to view details here!</h5>
         </div>
-      );
+      ;
   }
 
   render() {
@@ -67,13 +67,13 @@ class LayerMetadataDetail extends React.Component {
           <RenderSplitLayerTitle layer={layer} />
         </div>
         {showPreviewImage
-          && (
+          && 
           <div className="text-center">
             <a href={previewUrl} rel="noopener noreferrer" target="_blank">
               <img className="img-fluid layer-preview" src={previewUrl} />
             </a>
           </div>
-          )}
+          }
         <div className="text-center">
           <Button className={btnClass} onClick={this.toggleLayer}>
             <FontAwesomeIcon icon={btnIconClass} widthAuto />

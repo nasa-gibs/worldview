@@ -59,9 +59,9 @@ function MeasurementLayerRow (props) {
         label={title}
         classNames="settings-check"
       >
-        {layerIsUnavailable && (<FontAwesomeIcon icon="ban" id="availability-info" widthAuto />)}
-        {layerNotices && (<FontAwesomeIcon icon="exclamation-triangle" id="notice-info" widthAuto />)}
-        {(layerNotices || layerIsUnavailable) && (
+        {layerIsUnavailable && <FontAwesomeIcon icon="ban" id="availability-info" widthAuto />}
+        {layerNotices && <FontAwesomeIcon icon="exclamation-triangle" id="notice-info" widthAuto />}
+        {(layerNotices || layerIsUnavailable) && 
           <UncontrolledTooltip
             id="center-align-tooltip"
             target={itemElementId}
@@ -72,7 +72,7 @@ function MeasurementLayerRow (props) {
             autohide={isMobile}
             delay={isMobile ? { show: 300, hide: 300 } : { show: 50, hide: 300 }}
           >
-            {layerIsUnavailable && (
+            {layerIsUnavailable && 
               <div>
                 This layer has no visible content on the selected date:
                 {' '}
@@ -80,10 +80,10 @@ function MeasurementLayerRow (props) {
                   <SelectedDate />
                 </MonospaceDate>
               </div>
-            )}
-            {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
+            }
+            {layerNotices && <div dangerouslySetInnerHTML={{ __html: layerNotices }} />}
           </UncontrolledTooltip>
-        )}
+        }
       </Checkbox>
     </ListGroupItem>
   );

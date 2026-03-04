@@ -60,7 +60,7 @@ function generateMeasurements (layers, measurementsConfig) {
     if (id.toLowerCase().includes('orbit')) {
       measurementsMap[id] = 'Orbital Track'
     } else {
-      // eslint-disable-next-line prefer-destructuring
+       
       measurementsMap[id] = measurements[0]
     }
   })

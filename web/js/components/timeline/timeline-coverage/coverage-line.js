@@ -25,19 +25,19 @@ class CoverageLine extends PureComponent {
     let dateRangeEnd;
     let toolTipText;
 
-    // eslint-disable-next-line default-case
+     
     switch (lineType) {
       case 'SINGLE':
-        dateRangeStart = (startDate && formatDisplayDate(new Date(startDate))) || 'Start';
-        dateRangeEnd = (endDate && formatDisplayDate(new Date(endDate))) || 'Present';
+        dateRangeStart = startDate && formatDisplayDate(new Date(startDate)) || 'Start';
+        dateRangeEnd = endDate && formatDisplayDate(new Date(endDate)) || 'Present';
         toolTipText = `${dateRangeStart} to ${dateRangeEnd}`;
         break;
       case 'MULTI':
         // handle minutes range display text (ex: '14:50 to 15:00')
         if (layerPeriod === 'minutes') {
-          // eslint-disable-next-line prefer-destructuring
+           
           dateRangeStart = startDate.split('T')[1];
-          // eslint-disable-next-line prefer-destructuring
+           
           dateRangeEnd = endDate.split('T')[1];
           toolTipText = `${dateRangeStart.split(':', 2).join(':')} to ${dateRangeEnd.split(':', 2).join(':')}`;
           dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
@@ -111,14 +111,14 @@ class CoverageLine extends PureComponent {
 
     // determine line radius for line start/end vs. partial large width lines
     let lineRadius = !isWidthGreaterThanRendered
-      || (leftOffset !== 0 && isWidthGreaterThanRendered)
+      || leftOffset !== 0 && isWidthGreaterThanRendered
       ? '6'
       : '0';
 
     // handle "false transform" line edge to simulate line movement for striped background
     if (leftOffset === 0
-      && ((isWidthGreaterThanRendered && layerEndBeforeAxisBack)
-      || (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
+      && (isWidthGreaterThanRendered && layerEndBeforeAxisBack
+      || !isWidthGreaterThanRendered && layerStartBeforeAxisFront)) {
       lineWidth -= positionTransformX;
       rectTransform += positionTransformX;
       lineRadius = '6';
@@ -157,7 +157,7 @@ class CoverageLine extends PureComponent {
       layerPeriod,
       index,
     } = this.props;
-    return options.map((option) => (
+    return options.map((option) => 
       <g clipPath="url(#coverageLineBoundary)">
         {this.createMatchingCoverageLineDOMEl(
           id,
@@ -170,7 +170,7 @@ class CoverageLine extends PureComponent {
           index,
         )}
       </g>
-    ));
+    );
   }
 }
 

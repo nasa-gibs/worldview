@@ -54,13 +54,13 @@ function GifButton(props) {
   const gifDisabled = numberOfFrames >= maxGifFrames;
   const elemExists = document.querySelector('#create-gif-button');
   const showWarning = elemExists && gifDisabled;
-  const warningMessage = (
+  const warningMessage = 
     <span>
       Too many frames were selected.
       <br />
       Please request less than 40 frames if you would like to generate a GIF.
     </span>
-  );
+  ;
   const labelText = 'Create an animated GIF';
   const getPromise = (bool, type, action) => {
     if (bool) {

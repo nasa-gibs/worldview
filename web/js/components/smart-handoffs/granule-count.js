@@ -34,8 +34,8 @@ export default function GranuleCount (props) {
   };
 
   const getDownloadSize = (entries) => entries.reduce(
-    (prev, curr) => (
-      curr.granule_size ? prev + parseFloat(curr.granule_size, 10) : 0),
+    (prev, curr) => 
+      curr.granule_size ? prev + parseFloat(curr.granule_size, 10) : 0,
     0,
   );
 
@@ -100,9 +100,9 @@ export default function GranuleCount (props) {
 
   const granulesExist = !isLoading && totalGranules !== 0;
 
-  const renderLoading = () => (
+  const renderLoading = () => 
     <span className="loading-granule-count" />
-  );
+  ;
 
   const renderDownloadSize = () => {
     const printSize = (s) => {
@@ -118,9 +118,9 @@ export default function GranuleCount (props) {
     }
     return (
       <>
-        { granulesExist && (
+        { granulesExist && 
           <span className="granule-size fade-in">{`(${sizeText})`}</span>
-        )}
+        }
         <button type="button" className="help-link" onClick={showGranuleHelpModal}>
           <FontAwesomeIcon icon="question-circle" widthAuto />
         </button>
@@ -137,12 +137,12 @@ export default function GranuleCount (props) {
 
       <div className="granule-count-info">
 
-        {!isLoading && (
+        {!isLoading && 
           <span className="fade-in">
               {currentExtent && granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
               {granulesExist ? totalGranules : 'NONE'}
           </span>
-        )}
+        }
 
         {!isLoading ? renderDownloadSize() : renderLoading()}
 

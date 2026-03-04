@@ -24,7 +24,7 @@ export function createParamsString(qp) {
     const valueString = qp[key].toString();
     if (
       isNotDefined(valueString)
-      || (Array.isArray(valueString) && !valueString.length)
+      || Array.isArray(valueString) && !valueString.length
     ) {
       return prev;
     }

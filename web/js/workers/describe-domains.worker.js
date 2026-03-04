@@ -121,8 +121,8 @@ function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
 
-    if ((bufferedStartTime >= lastRangeStartTime
-      && bufferedStartTime <= lastRangeEndTime)
+    if (bufferedStartTime >= lastRangeStartTime
+      && bufferedStartTime <= lastRangeEndTime
       && (bufferedEndTime >= lastRangeStartTime
         && bufferedEndTime <= lastRangeEndTime)) { // within current range, ignore
       return acc;

@@ -45,17 +45,17 @@ export default function BandSelection({ layerObj: layer }) {
   };
 
   // eslint-disable-next-line no-unused-vars
-  const rwbInfo = (
+  const rwbInfo = 
     <div className="band-selection-rwb-info">
       <p>Resolution = 10m/px</p>
       <p>Wavelength = 490nm</p>
       <p>Bandwidth = 65nm</p>
     </div>
-  );
+  ;
 
   const presetOptions = layer.id === 'HLS_Customizable_Landsat' ? 'landsat' : 'sentinel';
 
-  const isValidBandSelection = () => (bandSelection.r !== 'undefined' && bandSelection.r !== undefined) && (bandSelection.g !== 'undefined' && bandSelection.g !== undefined) && (bandSelection.b !== 'undefined' && bandSelection.b !== undefined);
+  const isValidBandSelection = () => bandSelection.r !== 'undefined' && bandSelection.r !== undefined && (bandSelection.g !== 'undefined' && bandSelection.g !== undefined) && (bandSelection.b !== 'undefined' && bandSelection.b !== undefined);
 
   return (
     <div className="customize-bands-container">
@@ -65,7 +65,7 @@ export default function BandSelection({ layerObj: layer }) {
         setBandSelection={setBandSelection}
         presetOptions={presetOptions}
       />
-      {isValidBandSelection() && (
+      {isValidBandSelection() && 
       <div>
         <div className="band-selection-title-row">
           <h3>Select a band for each channel:</h3>
@@ -113,7 +113,7 @@ export default function BandSelection({ layerObj: layer }) {
           {/* {rwbInfo} */}
         </div>
       </div>
-      )}
+      }
       <div className="band-selection-button-row">
         <Button
           id="confirm-band-selection"

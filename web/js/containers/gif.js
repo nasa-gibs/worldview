@@ -275,7 +275,7 @@ class GIF extends Component {
         isDownloading: false,
         downloadedObject: {
           blob: obj.blob,
-          size: lodashRound((obj.blob.size / 1024) * 0.001, 2),
+          size: lodashRound(obj.blob.size / 1024 * 0.001, 2),
           width,
           height,
         },
@@ -377,11 +377,11 @@ class GIF extends Component {
           <ModalBody>
             {progress > 0
               ? <Progress value={progress} />
-              : (
+              : 
                 <div style={spinnerStyle}>
                   <Spinner color="light" />
                 </div>
-              )}
+              }
           </ModalBody>
         </Modal>
       );

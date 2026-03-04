@@ -43,7 +43,7 @@ function Notifications(props) {
 }
 function mapStateToProps(state) {
   const { object, numberOutagesUnseen } = state.notifications;
-  const kioskModeEnabled = (state.ui.eic !== null && state.ui.eic !== '') || state.ui.isKioskModeActive;
+  const kioskModeEnabled = state.ui.eic !== null && state.ui.eic !== '' || state.ui.isKioskModeActive;
   return {
     kioskModeEnabled,
     numberOutagesUnseen,

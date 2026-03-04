@@ -82,7 +82,7 @@ function Input({
         onBlur={update}
         onChange={(e) => setInputValue(e.target.value)}
       />
-      {isInvalid && (<span className="red-font invalid">Not Visible</span>)}
+      {isInvalid && <span className="red-font invalid">Not Visible</span>}
     </div>
   );
 }
@@ -114,7 +114,7 @@ function LatLongSelect(props) {
           <FontAwesomeIcon icon="caret-right" size="lg" rotation={showCoordinates ? 90 : 0} widthAuto />
         </span>
       </button>
-      {showCoordinates && (
+      {showCoordinates && 
         <>
           <div className="row">
             <div className="col-12">
@@ -171,7 +171,7 @@ function LatLongSelect(props) {
             </div>
           </div>
         </>
-      )}
+      }
     </div>
   );
 }
