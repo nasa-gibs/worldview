@@ -101,6 +101,7 @@ module.exports = {
           options: {
             compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
             cacheDirectory: devMode,
+            configFile: path.resolve(__dirname, 'babel.config.js'),
             plugins: [devMode && require.resolve('react-refresh/babel')].filter(Boolean)
           }
         },
