@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 function CategoryCell(props) {
@@ -69,7 +68,7 @@ function CategoryCell(props) {
                 return index === 6 ? (
                   <li
                     className="layer-category-item"
-                      /* eslint react/no-array-index-key: 1 */
+                    /* eslint react/no-array-index-key: 1 */
                     key={category.id + index}
                   >
                     <button
@@ -85,8 +84,8 @@ function CategoryCell(props) {
                     className="layer-category-item"
                     key={category.id + index}
                     id={
-                        `layer-category-item-${category.id}-${current.id}`
-                      }
+                      `layer-category-item-${category.id}-${current.id}`
+                    }
                   >
                     <button
                       className="layer-category-name"

@@ -182,10 +182,10 @@ class CategoryLayerRow extends React.Component {
             {this.renderSourceSettings(sources[validActiveIndex])}
             {isMobile
               && (
-              <MeasurementMetadataDetail
-                source={sources[validActiveIndex]}
-                isMobile={isMobile}
-              />
+                <MeasurementMetadataDetail
+                  source={sources[validActiveIndex]}
+                  isMobile={isMobile}
+                />
               )}
           </TabPane>
         </TabContent>

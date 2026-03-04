@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -53,7 +53,8 @@ function PixelTestMode () {
       img.onload = async () => {
         // Process the loaded image here
         const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
-        // eslint-disable-next-line no-unsafe-optional-chaining
+
+        // eslint-disable-next-line no-constant-binary-expression
         const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
 
         const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `;

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
@@ -10,7 +10,6 @@ import PropTypes from 'prop-types';
 class AxisTimeScaleChangeTooltip extends PureComponent {
   // Handle change axis timescale
   changeTimeScale = (timeScale) => {
-    // eslint-disable-next-line react/destructuring-assignment
     this.props.changeTimeScale(timeScale);
   };
 
@@ -42,8 +41,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
         <span
           id="current-zoom"
           className={
-              `zoom-btn zoom-level-display-text zoom-${timeScale.toLowerCase()}`
-            }
+            `zoom-btn zoom-level-display-text zoom-${timeScale.toLowerCase()}`
+          }
         >
           {timeScale}
         </span>

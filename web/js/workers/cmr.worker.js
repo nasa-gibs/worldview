@@ -60,7 +60,6 @@ async function requestGranules(params) {
   let hits = Infinity;
   let searchAfter = false;
   const url = `https://cmr.earthdata.nasa.gov/search/granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
-  /* eslint-disable no-await-in-loop */
   do { // run the query at least once
     const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'Worldview' } : { 'Client-Id': 'Worldview' };
     const res = await fetch(url, { headers });

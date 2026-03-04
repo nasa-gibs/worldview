@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-syntax */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import copy from 'copy-to-clipboard';

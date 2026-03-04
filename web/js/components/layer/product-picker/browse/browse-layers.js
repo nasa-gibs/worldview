@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -95,9 +95,9 @@ function BrowseLayers (props) {
             </div>
           </div>
           { !isMobile && (
-          <div className="layer-detail-container layers-all browse">
-            <MeasurementMetadataDetail />
-          </div>
+            <div className="layer-detail-container layers-all browse">
+              <MeasurementMetadataDetail />
+            </div>
           )}
         </div>
       );
@@ -205,12 +205,12 @@ function BrowseLayers (props) {
     <>
       { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
       {
-      isCategoryDisplay
-        ? (
-          <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
-            <CategoryGrid width={width} />
-          </div>
-        ) : renderContent()
+        isCategoryDisplay
+          ? (
+            <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
+              <CategoryGrid width={width} />
+            </div>
+          ) : renderContent()
       }
     </>
   );

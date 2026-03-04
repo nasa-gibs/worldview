@@ -1,4 +1,3 @@
-/* eslint-disable quote-props */
 import { useEffect } from 'react';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';

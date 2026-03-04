@@ -7,7 +7,6 @@ import whatInput from 'what-input';
 // Utils
 import util from './util/util';
 import { STARTUP } from './util/constants';
-// eslint-disable-next-line import/no-named-as-default
 import MapInteractions from './containers/map-interactions/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
