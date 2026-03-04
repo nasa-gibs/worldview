@@ -370,14 +370,16 @@ function ChartingModeOptions(props) {
    * @param {String} simpleStatsURI
    */
   async function getImageStatData(simpleStatsURI) {
-    const requestOptions = {
+    /* const requestOptions = {
       method: 'GET',
       redirect: 'follow',
-    };
+    }; */
 
     try {
-      const response = await fetch(simpleStatsURI, requestOptions);
-      const data = await response.text();
+      // const response = await fetch(simpleStatsURI, requestOptions);
+      // const data = await response.text();
+      // Temporary mock data
+      const data = '{"median": "0.5", "mean": 0.6246037045387537, "max": 2.875, "min": 0.0, "stdev": 0.5111531030401216, "hist": [["0.0", "38673"], ["0.2875", "24081"], ["0.575", "18909"], ["0.8624999999999999", "12625"], ["1.15", "10968"], ["1.4375", "6563"], ["1.7249999999999999", "2303"], ["2.0124999999999997", "660"], ["2.3", "280"], ["2.5875", "256"]]}';
 
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
@@ -626,7 +628,14 @@ function ChartingModeOptions(props) {
         displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
-        displaySimpleStats(dataToRender);
+        chartData.current = {
+          title: dataToRender.title,
+          subtitle: dataToRender.subtitle,
+          unit: dataToRender.unit,
+          statData: { ...data.body },
+          date: primaryDate,
+        };
+        displaySimpleStats(chartData.current);
         updateChartRequestStatus(false);
       }
     } else {
@@ -1022,7 +1031,7 @@ const mapDispatchToProps = (dispatch) => ({
         offsetLeft: 'calc(50% - 150px)',
         offsetTop: 50,
         width: 300,
-        height: 360,
+        height: 340,
         stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
