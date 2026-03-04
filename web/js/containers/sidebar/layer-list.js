@@ -120,7 +120,7 @@ function LayerList(props) {
     );
   };
 
-  const renderDropdownMenu = () => !isAnimating && !isChartingActive && 
+  const renderDropdownMenu = () => (!isAnimating && !isChartingActive) && (
     <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
       <DropdownToggle>
         <FontAwesomeIcon
@@ -141,9 +141,9 @@ function LayerList(props) {
         </DropdownItem>
       </DropdownMenu>
     </Dropdown>
-  ;
+  );
 
-  const renderHeader = () => 
+  const renderHeader = () => (
     <div
       className="layer-group-header"
       onMouseEnter={mouseEnter}
@@ -156,17 +156,17 @@ function LayerList(props) {
       </h3>
       <div className="layer-group-icons">
         {showDropdownBtn || isMobile ? renderDropdownMenu() : null}
-        {!isChartingActive && 
+        {!isChartingActive && (
           <FontAwesomeIcon
             className="layer-group-collapse"
             icon={!collapsed ? 'caret-down' : 'caret-left'}
             onClick={() => toggleCollapse(groupId, !collapsed)}
             widthAuto
           />
-        }
+        )}
       </div>
     </div>
-  ;
+  );
 
   return (
     <div
@@ -182,7 +182,7 @@ function LayerList(props) {
           type={`layerGroup${groupId}`}
           direction="vertical"
         >
-          {(provided, snapshot) => 
+          {(provided, snapshot) => (
             <ul
               className={collapsed ? 'category hidden' : 'category'}
               ref={provided.innerRef}
@@ -197,7 +197,7 @@ function LayerList(props) {
               }).map(renderLayer)}
               {provided.placeholder}
             </ul>
-          }
+          )}
         </Droppable>
       </DragDropContext>
     </div>

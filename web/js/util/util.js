@@ -171,7 +171,7 @@ export default (function(selfObj) {
       second,
       millisecond,
     ));
-     
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
@@ -485,7 +485,7 @@ export default (function(selfObj) {
     const g2 = parseInt(hex2.substring(2, 4), 16);
     const b2 = parseInt(hex2.substring(4, 6), 16);
     // calculate differences in 3D Space
-     
+    // eslint-disable-next-line no-restricted-properties
     return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
   };
 
@@ -493,9 +493,9 @@ export default (function(selfObj) {
     return new Promise(
       (resolve, reject) => {
         fetch(url)
-          .then((response) => mimeType === 'application/json'
+          .then((response) => (mimeType === 'application/json'
             ? response.json()
-            : response.text())
+            : response.text()))
           .then(resolve)
           .catch(reject);
       },
@@ -503,7 +503,7 @@ export default (function(selfObj) {
   };
 
   self.errorReport = function(errors) {
-     
+    // eslint-disable-next-line no-unused-vars
     lodashEach(errors, (error) => {
       const cause = error.cause ? `: ${error.cause}` : '';
       self.warn(error.message + cause);
@@ -611,9 +611,9 @@ export default (function(selfObj) {
     value = Math.abs(value);
 
     const degrees = Math.floor(value);
-    const minutes = Math.floor(value * 60 - degrees * 60);
-    const fminutes = value * 60 - degrees * 60;
-    const seconds = Math.floor(value * 3600 - degrees * 3600 - minutes * 60);
+    const minutes = Math.floor((value * 60) - (degrees * 60));
+    const fminutes = (value * 60) - (degrees * 60);
+    const seconds = Math.floor((value * 3600) - (degrees * 3600) - (minutes * 60));
 
     if (withSeconds) {
       const sdegrees = self.pad(degrees, width, ' ');
@@ -703,7 +703,7 @@ export default (function(selfObj) {
    * @return {Object} offsetDate  An offset date object
    */
   self.getTimezoneOffsetDate = (date) => {
-    const offsetDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    const offsetDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000));
     return offsetDate;
   };
 
@@ -803,7 +803,7 @@ export default (function(selfObj) {
    * @param {*} scripts
    * @param {*} fn
    */
-   
+  // eslint-disable-next-line default-param-last
   self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {

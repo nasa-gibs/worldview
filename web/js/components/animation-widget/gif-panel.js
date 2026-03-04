@@ -63,7 +63,7 @@ export default class GifPanel extends React.Component {
     const dimensions = getDimensions(projId, lonlats, resolution);
     const { height } = dimensions;
     const { width } = dimensions;
-    const requestSize = (width * height * 24 / 8388608).toFixed(2) * numberOfFrames;
+    const requestSize = ((width * height * 24) / 8388608).toFixed(2) * numberOfFrames;
     const valid = isFileSizeValid(requestSize, height, width);
     return (
       <div className="gif-dialog">

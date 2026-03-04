@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { act } from 'react-dom/test-utils';
@@ -23,7 +23,7 @@ afterEach(() => {
 describe('formats', () => {
   const formats = ['latlon-dd', 'latlon-dm', 'latlon-dms'];
   for (const format of formats) {
-     
+    // eslint-disable-next-line no-loop-func
     test(`coordinate in ${format} format`, () => {
       act(() => {
         root.render(<Coordinates

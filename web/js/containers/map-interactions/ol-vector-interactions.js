@@ -245,7 +245,7 @@ export class VectorInteractions extends React.Component {
       activateVectorZoomAlert();
     }
     if (Object.entries(selected).length
-    || Object.entries(lastSelected).length && !isVectorModalOpen) {
+    || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       if (isMobile && hasNonClickableVectorLayerType) return;
       selectVectorFeatures(selected);
     } else if (isVectorModalOpen && !Object.entries(selected).length) {

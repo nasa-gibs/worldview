@@ -395,9 +395,9 @@ function EventTrack () {
     () => {
       const selectedDateChange = (selectedDate && selectedDate.valueOf())
         !== (prevSelectedDate && prevSelectedDate?.valueOf());
-      const eventDeselect = selectedEvent !== prevSelectedEvent?.id && !selectedEvent?.id;
+      const eventDeselect = (selectedEvent !== prevSelectedEvent?.id) && !selectedEvent?.id;
       const finishedAnimating = !isAnimatingToEvent
-        && isAnimatingToEvent !== prevIsAnimatingToEvent;
+        && (isAnimatingToEvent !== prevIsAnimatingToEvent);
       const eventsLoaded = eventsData && eventsData.length;
       const extentChange = prevExtent
         && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);

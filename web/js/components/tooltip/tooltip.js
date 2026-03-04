@@ -42,7 +42,7 @@ class Tooltip extends React.Component {
           style={hovered ? { visibility: 'visible' } : {}}
         >
           <ul>
-            {dataArray.map((dataEl, i) => 
+            {dataArray.map((dataEl, i) => (
               <li
                 /* eslint react/no-array-index-key: 1 */
                 key={`tooltip-${dataEl}-${i}`}
@@ -51,7 +51,7 @@ class Tooltip extends React.Component {
               >
                 {dataEl}
               </li>
-            )}
+            ))}
           </ul>
         </div>
       </div>

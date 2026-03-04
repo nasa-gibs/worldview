@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-restricted-syntax */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -106,7 +106,7 @@ class CoordinatesDialog extends Component {
           onTouchEnd={this.removeMarker}
         >
           {tooltipVisibilityCondition
-          && 
+          && (
             <UncontrolledTooltip
               id="center-align-tooltip"
               trigger="hover"
@@ -116,7 +116,7 @@ class CoordinatesDialog extends Component {
             >
               {closeButtonLabelText}
             </UncontrolledTooltip>
-          }
+          )}
           <FontAwesomeIcon onClick={this.removeMarker} icon="times" fixedWidth widthAuto />
         </span>
         <span
@@ -125,7 +125,7 @@ class CoordinatesDialog extends Component {
           onTouchEnd={this.minimizeDialog}
         >
           {tooltipVisibilityCondition
-          && 
+          && (
             <UncontrolledTooltip
               id="center-align-tooltip"
               trigger="hover"
@@ -135,7 +135,7 @@ class CoordinatesDialog extends Component {
             >
               {minimizeButtonLabelText}
             </UncontrolledTooltip>
-          }
+          )}
           <FontAwesomeIcon onClick={this.minimizeDialog} icon="minus" fixedWidth widthAuto />
         </span>
       </>
@@ -161,7 +161,7 @@ class CoordinatesDialog extends Component {
         onClick={() => this.copyToClipboard(formattedCoordinates)}
         onTouchEnd={() => this.copyToClipboard(formattedCoordinates)}
       >
-        {tooltipVisibilityCondition && 
+        {tooltipVisibilityCondition && (
           <UncontrolledTooltip
             id="center-align-tooltip"
             placement="bottom"
@@ -170,7 +170,7 @@ class CoordinatesDialog extends Component {
           >
             {labelText}
           </UncontrolledTooltip>
-        }
+        )}
         <FontAwesomeIcon icon="copy" fixedWidth widthAuto />
       </button>
     );
@@ -189,13 +189,13 @@ class CoordinatesDialog extends Component {
 
     return (
       <div className={`tooltip-custom-black tooltip-static tooltip-coordinates-container ${tooltipId}`}>
-        {showTooltips && 
+        {showTooltips && (
           <CopyClipboardTooltip
             tooltipToggleTime={tooltipToggleTime}
             clearCopyToClipboardTooltip={this.clearCopyToClipboardTooltip}
             placement="bottom"
           />
-        }
+        )}
         <div className="tooltip-coordinates-title">{title}</div>
         <div className="tooltip-coordinates">{formattedCoordinates}</div>
         {this.renderDialogButtonControls()}

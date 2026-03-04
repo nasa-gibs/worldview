@@ -18,11 +18,11 @@ class SearchUiProvider extends React.Component {
 
   render() {
     const { searchConfig } = this.props;
-    return !searchConfig ? null : 
+    return !searchConfig ? null : (
       <SearchProvider config={searchConfig}>
         <ProductPicker />
       </SearchProvider>
-    ;
+    );
   }
 }
 

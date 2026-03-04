@@ -11,7 +11,7 @@ export default function ClassificationToggle(props) {
   } = props;
   const switchLength = legend.colors.length;
 
-  const [isEnableAllSelected, toggleEnableAll] = useState(lodashGet(palette, 'disabled.length') === switchLength && switchLength);
+  const [isEnableAllSelected, toggleEnableAll] = useState((lodashGet(palette, 'disabled.length') === switchLength) && switchLength);
 
   const { tooltips } = legend;
 
@@ -21,7 +21,7 @@ export default function ClassificationToggle(props) {
       <div className="classification-switch-header">
         <h2 className="wv-header">Disable/Enable</h2>
         {toggleAll
-          && 
+          && (
             <Switch
               id="header-disable"
               key="header-disable"
@@ -34,7 +34,7 @@ export default function ClassificationToggle(props) {
                 toggleEnableAll(!isEnableAllSelected);
               }}
             />
-          }
+          )}
       </div>
       <Scrollbar className="classification-list" style={{ maxHeight: `${height}px` }}>
         {legend.colors.map((color, index) => {

@@ -86,42 +86,42 @@ function BrowseLayers (props) {
 
   function renderContent () {
     return categoryType === 'recent'
-      ? <RecentLayersList />
-      : 
+      ? (<RecentLayersList />)
+      : (
         <div className="search-layers-container browse">
           <div className="layer-list-container browse">
             <div className="product-outer-list-case">
               <BrowseLayerList />
             </div>
           </div>
-          { !isMobile && 
+          { !isMobile && (
           <div className="layer-detail-container layers-all browse">
             <MeasurementMetadataDetail />
           </div>
-          }
+          )}
         </div>
-      ;
+      );
   }
 
   function renderDesktopTabs () {
-    const tabClass = (sortKey) => sortKey === 'recent'
+    const tabClass = (sortKey) => (sortKey === 'recent'
       ? 'recent-tab layer-category-navigation'
-      : 'layer-category-navigation';
-    const recentTab = (sortKey) => 
+      : 'layer-category-navigation');
+    const recentTab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
         <FontAwesomeIcon icon="clock" widthAuto />
         Recent
       </NavLink>
-    ;
-    const tab = (sortKey) => 
+    );
+    const tab = (sortKey) => (
       <NavLink onClick={() => selectTab(sortKey)}>
         {sortKey}
       </NavLink>
-    ;
+    );
 
     return (
       <Nav id="categories-nav" className="categories-nav">
-        {categoryKeys.map((sortKey) => 
+        {categoryKeys.map((sortKey) => (
           <NavItem
             key={sortKey}
             className={tabClass(sortKey)}
@@ -129,7 +129,7 @@ function BrowseLayers (props) {
           >
             {sortKey === 'recent' ? recentTab(sortKey) : tab(sortKey)}
           </NavItem>
-        )}
+        ))}
       </Nav>
     );
   }
@@ -137,7 +137,7 @@ function BrowseLayers (props) {
   function recentLayersHeader() {
     return !(recentLayers.length && categoryType === 'recent')
       ? null
-      : 
+      : (
         <div className="recent-layers-mobile-header">
           <Tooltip
             id="center-align-tooltip"
@@ -167,7 +167,7 @@ function BrowseLayers (props) {
             Clear List
           </Button>
         </div>
-      ;
+      );
   }
 
   function renderMobileDropdown() {
@@ -179,11 +179,11 @@ function BrowseLayers (props) {
           className="categories-dropdown"
         >
           <DropdownToggle caret>
-            {categoryType === 'recent' && <FontAwesomeIcon icon="clock" widthAuto />}
+            {categoryType === 'recent' && (<FontAwesomeIcon icon="clock" widthAuto />)}
             {categoryType}
           </DropdownToggle>
           <DropdownMenu className="categories-dropdown-menu">
-            {categoryKeys.map((sortKey) => 
+            {categoryKeys.map((sortKey) => (
               <DropdownItem
                 key={sortKey}
                 className="categories-dropdown-item"
@@ -191,7 +191,7 @@ function BrowseLayers (props) {
               >
                 {sortKey}
               </DropdownItem>
-            )}
+            ))}
           </DropdownMenu>
         </Dropdown>
         {recentLayersHeader()}
@@ -206,11 +206,11 @@ function BrowseLayers (props) {
       { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
       {
       isCategoryDisplay
-        ? 
+        ? (
           <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
             <CategoryGrid width={width} />
           </div>
-         : renderContent()
+        ) : renderContent()
       }
     </>
   );

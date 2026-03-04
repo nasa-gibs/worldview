@@ -26,19 +26,19 @@ export default function RenderSplitLayerTitle(props) {
   }
 
   return splitIdx < 0
-    ? 
+    ? (
       <>
         <h3>{layerTitle}</h3>
-        {subtitle && <h5>{subtitle}</h5>}
+        {subtitle && (<h5>{subtitle}</h5>)}
       </>
-    
-    : 
+    )
+    : (
       <>
         <h3>{titleName}</h3>
         <h4>{attrs}</h4>
-        {subtitle && <h5>{subtitle}</h5>}
+        {subtitle && (<h5>{subtitle}</h5>)}
       </>
-    ;
+    );
 }
 
 RenderSplitLayerTitle.propTypes = {

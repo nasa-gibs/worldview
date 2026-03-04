@@ -139,13 +139,13 @@ class SearchLayerRow extends React.Component {
             checked={isEnabled}
             onChange={this.toggleEnabled}
           />
-          {isEnabled && 
+          {isEnabled && (
             <Check class="check" size="15px" />
-          }
+          )}
         </div>
-        {(chartableLayer || layerNotices) && 
+        {(chartableLayer || layerNotices) && (
           <div className="layer-notices">
-            {chartableLayer && 
+            {chartableLayer && (
               <div className="layer-notice-wrapper">
                 <i
                   id={`${encodedId}-chartable-info`}
@@ -163,8 +163,8 @@ class SearchLayerRow extends React.Component {
                   <div dangerouslySetInnerHTML={{ __html: 'Create time series charts or get statistics for this layer' }} />
                 </UncontrolledTooltip>
               </div>
-            }
-            {layerNotices && 
+            )}
+            {layerNotices && (
               <div className="layer-notice-wrapper">
                 <FontAwesomeIcon
                   id={`${encodedId}-notice-info`}
@@ -184,12 +184,12 @@ class SearchLayerRow extends React.Component {
                   <div dangerouslySetInnerHTML={{ __html: layerNotices }} />
                 </UncontrolledTooltip>
               </div>
-            }
+            )}
           </div>
-        }
+        )}
         <button type="button" className={headerClassName} onClick={this.onRowClick}>
           <RenderSplitLayerTitle layer={layer} />
-          {recentLayerMode && showDeleteIcon && 
+          {recentLayerMode && showDeleteIcon && (
             <Button
               className="recent-layer-delete"
               color="danger"
@@ -198,7 +198,7 @@ class SearchLayerRow extends React.Component {
             >
               <FontAwesomeIcon icon="trash" widthAuto />
             </Button>
-          }
+          )}
         </button>
       </div>
     );

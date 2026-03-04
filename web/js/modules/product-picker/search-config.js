@@ -99,7 +99,7 @@ function layerMatchesFilters(layer, filters) {
     fieldVal = Array.isArray(fieldVal) ? fieldVal : [fieldVal];
     const noneSelected = values.includes('None');
     const matches = values.some((value) => fieldVal.includes(value));
-    return matches || noneSelected && !fieldVal[0];
+    return matches || (noneSelected && !fieldVal[0]);
   });
 }
 
@@ -142,7 +142,7 @@ function updateCoverageFilter (filters, selectedDate) {
     const f = filter;
     if (f.field !== 'coverage') return;
     f.values = f.values.map(
-      (value) => oldValueMatch(value) ? `Available ${formattedDate}` : value,
+      (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value),
     );
   });
 }

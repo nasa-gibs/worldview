@@ -74,7 +74,7 @@ export function mapIsExtentValid(extentBound) {
     extent = extent.toArray();
   }
   lodashEach(extent, (value) => {
-     
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -138,12 +138,12 @@ export function getMapParameterSetup(
       initialState: 0,
       options: {
         serializeNeedsGlobalState: true,
-         
-        parse: (state) => isNaN(state) ? state * (Math.PI / 180.0) : 0,
-        serialize: (currentItemState, currentState) => currentItemState
+        // eslint-disable-next-line no-restricted-globals
+        parse: (state) => (isNaN(state) ? state * (Math.PI / 180.0) : 0),
+        serialize: (currentItemState, currentState) => (currentItemState
             && currentState.proj.selected.id !== 'geographic'
           ? (currentItemState * (180.0 / Math.PI)).toPrecision(6)
-          : undefined,
+          : undefined),
       },
     },
   };

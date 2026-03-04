@@ -1,4 +1,4 @@
- 
+/* eslint-disable quote-props */
 import { useEffect } from 'react';
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
@@ -80,10 +80,10 @@ function DateRangeTileCheck(props) {
       maxTileCol,
       minTileRow,
     } = matrixSetLimits[limitIndex];
-    const minX = extent[0] + minTileCol * tileWidth;
-    const minY = extent[3] - (maxTileRow + 1) * tileHeight;
-    const maxX = extent[0] + (maxTileCol + 1) * tileWidth;
-    const maxY = extent[3] - minTileRow * tileHeight;
+    const minX = extent[0] + (minTileCol * tileWidth);
+    const minY = extent[3] - ((maxTileRow + 1) * tileHeight);
+    const maxX = extent[0] + ((maxTileCol + 1) * tileWidth);
+    const maxY = extent[3] - (minTileRow * tileHeight);
 
     return {
       origin,
@@ -228,7 +228,7 @@ function DateRangeTileCheck(props) {
     const framesWithMissingTiles = uniqueDatesBelowThreshold.size;
 
     // Calculate how many frames are missing tiles as a percentage
-    const percentMissing = framesWithMissingTiles / frameDates.length * 100;
+    const percentMissing = (framesWithMissingTiles / frameDates.length) * 100;
 
     // If there are less than 40% of frames with missing
     // tiles we dispatch action to allow animation to play

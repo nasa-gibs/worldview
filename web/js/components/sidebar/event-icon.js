@@ -16,7 +16,7 @@ export default function EventIcon (props) {
         id={id + category}
         className={`event-icon event-icon-${category}`}
       />
-      {!hideTooltip && 
+      {!hideTooltip && (
         <UncontrolledTooltip
           id={`center-align-tooltip ${category}-${id}`}
           className="event-icon-tooltip"
@@ -27,7 +27,7 @@ export default function EventIcon (props) {
         >
           {title || category}
         </UncontrolledTooltip>
-      }
+      )}
     </div>
   );
 }

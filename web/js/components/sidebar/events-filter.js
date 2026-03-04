@@ -137,7 +137,7 @@ function EventFilterModalBody (props) {
         })}
       </div>
 
-      {!isPolarProj && 
+      {!isPolarProj && (
         <>
           <Checkbox
             id="map-extent-filter"
@@ -156,7 +156,7 @@ function EventFilterModalBody (props) {
             to update the results.
           </UncontrolledTooltip>
         </>
-      }
+      )}
 
       <Checkbox
         id="show-all-tracks-filter"

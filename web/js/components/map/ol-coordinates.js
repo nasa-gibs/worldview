@@ -67,7 +67,7 @@ class OlCoordinates extends React.Component {
       return;
     }
     let pcoord = transform(coord, crs, CRS.GEOGRAPHIC);
-     
+    // eslint-disable-next-line prefer-const
     let [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
       this.clearCoord();
@@ -139,7 +139,7 @@ class OlCoordinates extends React.Component {
 
     return (
       <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>
-        {hasMouse && show && 
+        {hasMouse && show && (
           <>
             <Coordinates
               format={format}
@@ -148,13 +148,13 @@ class OlCoordinates extends React.Component {
               crs={crs}
               onFormatChange={this.changeFormat}
             />
-            {latitude && latitude && 
+            {latitude && latitude && (
               <UncontrolledTooltip id="center-align-tooltip" placement="bottom" target="ol-coords-case">
                 Change coordinates format
               </UncontrolledTooltip>
-            }
+            )}
           </>
-        }
+        )}
       </div>
     );
   }

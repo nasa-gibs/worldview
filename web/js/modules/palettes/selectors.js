@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-bitwise */
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
@@ -446,7 +446,7 @@ export function setDisabledSelector(
       maps: {
         [index]: {
           $merge: {
-             
+            // eslint-disable-next-line no-restricted-globals
             disabled: isNaN(classIndex) ? [] : oldDisabled,
           },
         },

@@ -27,11 +27,11 @@ function Facets(props) {
     toggleCollapseFacet,
   } = props;
 
-  const showFacets = !isMobile && results.length || showMobileFacets;
+  const showFacets = (!isMobile && results.length) || showMobileFacets;
 
   const classNames = isMobile || screenWidth < breakpoints.small ? 'facet-container-mobile facet-container' : 'facet-container';
 
-  return !showFacets ? null : 
+  return !showFacets ? null : (
     <div className={classNames}>
 
       <FilterChips
@@ -43,7 +43,7 @@ function Facets(props) {
       <div className="inner-container">
         {facetConfig.map((config) => {
           const facet = facets[config.field];
-          const data = facet && facet.length && facet[0].data || [];
+          const data = (facet && facet.length && facet[0].data) || [];
 
           return (
             <ProductFacet
@@ -57,16 +57,16 @@ function Facets(props) {
         })}
       </div>
 
-      {isMobile && showMobileFacets && 
+      {isMobile && showMobileFacets && (
         <Button
           className="apply-facets"
           onClick={toggleMobileFacets}
         >
           Apply
         </Button>
-      }
+      )}
     </div>
-  ;
+  );
 }
 
 Facets.propTypes = {

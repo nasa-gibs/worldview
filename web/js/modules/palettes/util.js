@@ -102,13 +102,13 @@ export function drawSidebarPaletteOnCanvas(
 
     colors.forEach((color, i) => {
       ctx.fillStyle = util.hexToRGBA(color);
-      ctx.fillRect(Math.floor(binWidth * i + 1), colorbarStartY, drawWidth, barHeight);
+      ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, barHeight);
     });
     ctx.rect(
       2 - thickness,
       colorbarStartY - thickness,
-      width - 3 + thickness * 2,
-      barHeight + thickness * 2,
+      width - 3 + (thickness * 2),
+      barHeight + (thickness * 2),
     );
     ctx.stroke();
   }
@@ -140,13 +140,13 @@ export function drawTravelModePaletteOnCanvas(
 
     colors.forEach((color, i) => {
       ctx.fillStyle = util.hexToRGBA(color);
-      ctx.fillRect(Math.floor(binWidth * i + 1), colorbarStartY, drawWidth, height);
+      ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, height);
     });
     ctx.rect(
       2 - thickness,
       colorbarStartY - thickness,
-      width - 3 + thickness * 2,
-      height + thickness * 2,
+      width - 3 + (thickness * 2),
+      height + (thickness * 2),
     );
     ctx.stroke();
   }
@@ -356,7 +356,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     }
 
     [palObj, minObj, maxObj, squashObj, disabledObj].forEach((obj) => {
-      if (obj.isActive || obj.key === 'disabled' && obj.value !== '') {
+      if (obj.isActive || (obj.key === 'disabled' && obj.value !== '')) {
         attrArray.push({
           id: obj.key === 'custom' ? 'palette' : obj.key,
           value: obj.value,

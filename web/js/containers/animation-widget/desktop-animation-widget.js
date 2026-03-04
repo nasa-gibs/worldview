@@ -101,7 +101,7 @@ function DesktopAnimationWidget(props) {
                 value={speed}
                 onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
                 disabled={isPlaying}
-                style={{ '--value-percent': `${(speed - 0.5) / (10 - 0.5) * 100}%` }}
+                style={{ '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%` }}
               />
             </div>
             <span className="wv-slider-label mt-1">

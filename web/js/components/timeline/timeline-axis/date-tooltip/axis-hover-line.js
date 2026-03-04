@@ -33,9 +33,9 @@ class AxisHoverLine extends PureComponent {
     let lineHeightInner = 63;
     let linePosition = hoverLinePosition;
 
-    const layers = activeLayers.filter((layer) => shouldIncludeHiddenLayers
+    const layers = activeLayers.filter((layer) => (shouldIncludeHiddenLayers
       ? layer.startDate
-      : layer.startDate && layer.visible);
+      : layer.startDate && layer.visible));
 
     const layerLengthCoef = Math.max(layers.length, 1);
     // handle active layer count dependent tooltip height
@@ -55,7 +55,7 @@ class AxisHoverLine extends PureComponent {
     }
 
     return (
-      shouldDisplayHoverLine && 
+      shouldDisplayHoverLine && (
         <svg
           className="axis-hover-line-container"
           width={axisWidth}
@@ -73,7 +73,7 @@ class AxisHoverLine extends PureComponent {
             transform={`translate(${linePosition + 1})`}
           />
         </svg>
-      
+      )
     );
   }
 }

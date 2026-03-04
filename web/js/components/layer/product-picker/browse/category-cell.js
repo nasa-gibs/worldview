@@ -66,7 +66,7 @@ function CategoryCell(props) {
                         + 'in measurement list!',
                   );
                 }
-                return index === 6 ? 
+                return index === 6 ? (
                   <li
                     className="layer-category-item"
                       /* eslint react/no-array-index-key: 1 */
@@ -80,7 +80,7 @@ function CategoryCell(props) {
                       ...
                     </button>
                   </li>
-                 : 
+                ) : (
                   <li
                     className="layer-category-item"
                     key={category.id + index}
@@ -97,7 +97,7 @@ function CategoryCell(props) {
                     </button>
                     {' '}
                   </li>
-                ;
+                );
               })}
           </ul>
         </div>

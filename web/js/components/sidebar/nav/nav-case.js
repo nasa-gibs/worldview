@@ -25,7 +25,7 @@ function NavCase (props) {
   const dataDownloadClassName = isChartMode
     ? `${tabClasses} third-tab disabled`
     : `${tabClasses} third-tab`;
-  const renderDataDownload = () => tabTypes.download && 
+  const renderDataDownload = () => tabTypes.download && (
     <CustomNavItem
       isMobile={isMobile}
       shouldHideInMobile
@@ -46,7 +46,7 @@ function NavCase (props) {
           : isCompareMode || dataDownloadClassName
       }
     />
-  ;
+  );
 
   const eventsTabLabel = isChartMode
     ? 'You must exit charting mode to use the natural events feature'
@@ -54,7 +54,7 @@ function NavCase (props) {
   const eventsTabClassName = isCompareMode || isChartMode
     ? `${tabClasses} second-tab disabled`
     : `${tabClasses} second-tab`;
-  const renderEvents = () => tabTypes.events && 
+  const renderEvents = () => tabTypes.events && (
     <CustomNavItem
       id="events"
       isMobile={isMobile}
@@ -75,7 +75,7 @@ function NavCase (props) {
           : eventsTabClassName
       }
     />
-  ;
+  );
   const sidebarCollapseMobile = isMobile ? {
     height: '48px',
     width: '45px',

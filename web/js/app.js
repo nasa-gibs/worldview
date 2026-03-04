@@ -7,7 +7,7 @@ import whatInput from 'what-input';
 // Utils
 import util from './util/util';
 import { STARTUP } from './util/constants';
- 
+// eslint-disable-next-line import/no-named-as-default
 import MapInteractions from './containers/map-interactions/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
@@ -192,7 +192,7 @@ function mapStateToProps(state) {
   const {
     numberOutagesUnseen, numberUnseen, type, object,
   } = notifications;
-  const kioskModeEnabled = state.ui.eic !== null && state.ui.eic !== '' || state.ui.isKioskModeActive;
+  const kioskModeEnabled = (state.ui.eic !== null && state.ui.eic !== '') || state.ui.isKioskModeActive;
   const e2eModeEnabled = state.ui.isE2eModeActive;
   const githubActionsRunning = process.env.GITHUB_ACTIONS === 'true';
   const locallyHosted = /localhost/.test(window.location.href);

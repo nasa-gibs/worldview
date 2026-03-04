@@ -14,7 +14,7 @@ function Zoom({
 
   const zoomButtonClass = isMobile ? 'wv-zoom-buttons-mobile' : 'wv-zoom-buttons';
 
-  return !isDistractionFreeModeActive && !isChartingActive && 
+  return !isDistractionFreeModeActive && !isChartingActive && (
     <div className={zoomButtonClass}>
       <button
         type="button"
@@ -24,14 +24,14 @@ function Zoom({
         onClick={() => { mapUtilZoomAction(map, 1); }}
         onMouseMove={(e) => e.stopPropagation()}
       >
-        {!zoomInDisabled && 
+        {!zoomInDisabled && (
         <HoverTooltip
           isMobile={isMobile}
           labelText="Zoom in view"
           placement="left"
           target=".wv-map-zoom-in"
         />
-        }
+        )}
         <FontAwesomeIcon icon="plus" widthAuto />
       </button>
       <button
@@ -42,18 +42,18 @@ function Zoom({
         onClick={() => { mapUtilZoomAction(map, -1); }}
         onMouseMove={(e) => e.stopPropagation()}
       >
-        {!zoomOutDisabled && 
+        {!zoomOutDisabled && (
         <HoverTooltip
           isMobile={isMobile}
           labelText="Zoom out view"
           placement="left"
           target=".wv-map-zoom-out"
         />
-        }
+        )}
         <FontAwesomeIcon icon="minus" widthAuto />
       </button>
     </div>
-  ;
+  );
 }
 
 const mapStateToProps = (state) => {

@@ -51,7 +51,7 @@ class SearchLayerList extends React.Component {
     }
     // Select first item in list on initial load
     if (!selectedLayer && results && results.length && !firstLoadAutoSelect) {
-       
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ firstLoadAutoSelect: true }, () => {
         const { id } = results[0];
         this.showLayerMetadata(id);
@@ -125,13 +125,13 @@ class SearchLayerList extends React.Component {
   renderNoResults() {
     const { recentLayerMode } = this.props;
     return recentLayerMode
-      ? <RecentLayersInfo />
-      : 
+      ? (<RecentLayersInfo />)
+      : (
         <div className="no-results">
           <FontAwesomeIcon icon="meteor" size="5x" widthAuto />
           <h3> No layers found! </h3>
         </div>
-      ;
+      );
   }
 
   render() {
@@ -144,7 +144,7 @@ class SearchLayerList extends React.Component {
 
     return !results.length
       ? this.renderNoResults()
-      : 
+      : (
         <InfiniteScroll
           pageStart={0}
           loadMore={this.loadMoreItems}
@@ -153,8 +153,8 @@ class SearchLayerList extends React.Component {
           getScrollParent={() => this.scrollParent}
         >
           <div className="product-outer-list-case layers-all">
-            {visibleItems.map((layer) => isMobile && recentLayerMode
-              ? 
+            {visibleItems.map((layer) => (isMobile && recentLayerMode
+              ? (
                 <SwipeToDelete
                   key={layer.id}
                   item={layer}
@@ -166,17 +166,17 @@ class SearchLayerList extends React.Component {
                     showLayerMetadata={(id) => this.showLayerMetadata(id)}
                   />
                 </SwipeToDelete>
-              
-              : 
+              )
+              : (
                 <SearchLayerRow
                   key={layer.id}
                   layer={layer}
                   showLayerMetadata={(id) => this.showLayerMetadata(id)}
                 />
-              )}
+              )))}
           </div>
         </InfiniteScroll>
-      ;
+      );
   }
 }
 

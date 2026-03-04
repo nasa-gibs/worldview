@@ -46,7 +46,7 @@ export const parseDate = (dateAsString) => {
     millisecond = hhmmss[3] || 0;
   }
   const date = new Date(year, month, day, hour, minute, second, millisecond);
-   
+  // eslint-disable-next-line no-restricted-globals
   if (isNaN(date.getTime())) {
     throw new Error(`Invalid date: ${dateAsString}`);
   }
@@ -320,7 +320,7 @@ export const formatDisplayDate = (date, subdaily) => {
  */
 export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
   let date;
-   
+  // eslint-disable-next-line default-case
   switch (increment) {
     case 'year':
       date = new Date(
@@ -409,7 +409,7 @@ export const coverageDateFormatter = (dateType, date, period) => {
       dateString = formatDisplayDate(parsedDate);
       break;
   }
-  return <MonospaceDate date={dateString} />;
+  return (<MonospaceDate date={dateString} />);
 };
 
 export const formatISODate = (date) => moment(date).format('YYYY-MM-DD');
@@ -586,12 +586,12 @@ export function getNextImageryDelta(layers, date, signConstant) {
         const obj = dateRanges[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
-        const exactDateInterval = (endDateObj - startDateObj) / 1000 / 60;
+        const exactDateInterval = ((endDateObj - startDateObj) / 1000) / 60;
         const correctedDateInterval = Math.floor(exactDateInterval) === Number(obj.dateInterval)
           ? Math.ceil(exactDateInterval) : Number(obj.dateInterval);
         const minDelta = Number(obj.dateInterval) === 1 ? 60 : correctedDateInterval;
         if (dateAObj < startDateObj) {
-          const possibleDelta = Math.ceil((startDateObj - dateAObj) / 1000 / 60);
+          const possibleDelta = Math.ceil(((startDateObj - dateAObj) / 1000) / 60);
           if (possibleDelta >= 1) {
             const possibleDate = new Date(dateAObj.getTime() + (possibleDelta * 60000));
             // Increase delta by 1 minute if it falls exactly on the starting date/time
@@ -603,7 +603,7 @@ export function getNextImageryDelta(layers, date, signConstant) {
           }
         }
         if (dateAObj < endDateObj) {
-          const possibleDate = new Date(dateAObj.getTime() + minDelta * 60000);
+          const possibleDate = new Date(dateAObj.getTime() + (minDelta * 60000));
           if (possibleDate <= endDateObj && possibleDate.getTime() !== endDateObj.getTime()) {
             delta = minDelta;
             hasDeltaChanged = true;
@@ -627,12 +627,12 @@ export function getNextImageryDelta(layers, date, signConstant) {
         const obj = [...dateRanges].reverse()[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
-        const exactDateInterval = (endDateObj - startDateObj) / 1000 / 60;
+        const exactDateInterval = ((endDateObj - startDateObj) / 1000) / 60;
         const correctedDateInterval = Math.floor(exactDateInterval) === Number(obj.dateInterval)
           ? Math.ceil(exactDateInterval) : Number(obj.dateInterval);
         const minDelta = Number(obj.dateInterval) === 1 ? 60 : correctedDateInterval;
         if (dateAObj > endDateObj) {
-          const possibleDelta = Math.ceil((dateAObj - endDateObj) / 1000 / 60);
+          const possibleDelta = Math.ceil(((dateAObj - endDateObj) / 1000) / 60);
           if (possibleDelta >= minDelta) {
             const possibleDate = new Date(dateAObj.getTime() - (possibleDelta * 60000));
             // Increase delta by 1 minute if it falls exactly on the ending date/time
@@ -644,7 +644,7 @@ export function getNextImageryDelta(layers, date, signConstant) {
           }
         }
         if (dateAObj > startDateObj) {
-          const possibleDate = new Date(dateAObj.getTime() - minDelta * 60000);
+          const possibleDate = new Date(dateAObj.getTime() - (minDelta * 60000));
           if (possibleDate >= startDateObj && possibleDate.getTime() !== startDateObj.getTime()) {
             delta = minDelta;
             hasDeltaChanged = true;

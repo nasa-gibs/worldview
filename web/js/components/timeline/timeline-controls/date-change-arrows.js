@@ -86,12 +86,12 @@ class DateChangeArrows extends PureComponent {
 
     return (
       <div className="arrow-group">
-        {arrowDown && !tilesPreloaded && 
+        {arrowDown && !tilesPreloaded && (
           <LoadingIndicator
             title="Loading ..."
             bodyMsg="Keep holding to animate the map!"
           />
-        }
+        )}
 
         {/* LEFT ARROW */}
         <button

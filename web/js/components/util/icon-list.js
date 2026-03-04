@@ -28,7 +28,7 @@ export default function IconList(props) {
           : null;
         const onClickFn = item.onClick ? item.onClick : propsOnClick;
 
-        return !hidden && 
+        return !hidden && (
           <ListGroupItem
             key={key || id || ''}
             tag={tagType}
@@ -44,7 +44,7 @@ export default function IconList(props) {
             {text || ''}
             {badge ? <Badge pill>{badge}</Badge> : ''}
           </ListGroupItem>
-        ;
+        );
       })}
     </ListGroup>
   );

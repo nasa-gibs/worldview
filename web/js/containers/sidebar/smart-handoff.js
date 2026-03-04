@@ -1,4 +1,4 @@
- 
+/* eslint-disable react/no-did-update-set-state */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -350,20 +350,20 @@ class SmartHandoff extends Component {
       ? 'The selection is outside the available map area.'
       : zoomedInDatelineAlertMsg;
 
-    return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && 
+    return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
     <AlertUtil
       id="data-download-unavailable-dateline-alert"
       isOpen
       title="Data Download Unavailable"
       message={message}
     />
-    ;
+    );
   };
 
   renderCollectionTooltip = ({ value, title }, tooltipTarget) => {
     const { getConceptUrl } = this.props;
     const url = value && `${getConceptUrl(value)}.html`;
-    return url && 
+    return url && (
       <UncontrolledTooltip
         id="center-align-tooltip"
         className="zot-tooltip"
@@ -379,7 +379,7 @@ class SmartHandoff extends Component {
           <a href={url} target="_blank" rel="noreferrer"> View Collection Details </a>
         </div>
       </UncontrolledTooltip>
-    ;
+    );
   };
 
   /**
@@ -466,7 +466,7 @@ class SmartHandoff extends Component {
       x, y, x2, y2,
     } = boundaries;
 
-    return selectedCollection && selectedLayer && proj.id === 'geographic' && 
+    return selectedCollection && selectedLayer && proj.id === 'geographic' && (
       <>
         <div className="smart-handoff-crop-toggle">
           <Checkbox
@@ -479,7 +479,7 @@ class SmartHandoff extends Component {
           />
         </div>
 
-        { showBoundingBox && 
+        { showBoundingBox && (
           <Crop
             x={x}
             y={y}
@@ -509,10 +509,10 @@ class SmartHandoff extends Component {
             showCoordinates
             zIndex={1}
           />
-        }
+        )}
         <hr />
       </>
-    ;
+    );
   }
 
   /**
@@ -524,13 +524,13 @@ class SmartHandoff extends Component {
     return (
       <div className="smart-handoff-side-panel error">
         {requestFailed
-          ? 
+          ? (
             <h1>
               Data records from the Common Metadata Repository (CMR) could not be reached. Data
               downloads are not possible at this time.
             </h1>
-          
-          : 
+          )
+          : (
             <>
               <h1>
                 None of your current layers are available for download.
@@ -542,7 +542,7 @@ class SmartHandoff extends Component {
                 </a>
               </h2>
             </>
-          }
+          )}
       </div>
     );
   };
@@ -600,7 +600,7 @@ class SmartHandoff extends Component {
           {this.renderLayerChoices()}
           <hr />
           {this.renderCropBox()}
-          {isValidDownload && 
+          {isValidDownload && (
             <GranuleCount
               displayDate={displayDate}
               granuleLayers={granuleLayers}
@@ -612,7 +612,7 @@ class SmartHandoff extends Component {
               showGranuleHelpModal={showGranuleHelpModal}
               getGranulesUrl={getGranulesUrl}
             />
-          }
+          )}
           <Button
             onClick={this.onClickDownload}
             text="DOWNLOAD VIA EARTHDATA SEARCH"

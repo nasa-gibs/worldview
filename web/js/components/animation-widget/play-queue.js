@@ -1,7 +1,7 @@
- 
+/* eslint-disable no-console */
 import React from 'react';
 import PropTypes from 'prop-types';
- 
+// eslint-disable-next-line import/no-unresolved
 import PQueue, { TimeoutError } from 'p-queue';
 import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
@@ -25,7 +25,7 @@ const toDate = (dateString) => util.parseDateUTC(dateString);
  */
 const getInitialBufferSize = (numberOfFrames, speed) => {
   const defaultSize = 10;
-  const buffer = defaultSize + speed * 1.5;
+  const buffer = defaultSize + (speed * 1.5);
   return numberOfFrames < buffer ? numberOfFrames : buffer;
 };
 
@@ -368,7 +368,7 @@ class PlayQueue extends React.Component {
       const roundedElapsedTime = Math.round(elapsedTime / ms) * ms;
       const targetNext = start + roundedElapsedTime + ms;
       const delay = targetNext - performance.now();
-       
+      // eslint-disable-next-line no-use-before-define
       setTimeout(() => requestAnimationFrame(frame), delay);
     };
     const frame = (time) => {
@@ -438,7 +438,7 @@ class PlayQueue extends React.Component {
     }
     const currentDateStr = toString(currentDate);
     const position = this.frameDates.indexOf(currentDateStr) + 1;
-    const percentage = position / this.frameDates.length * 100;
+    const percentage = (position / this.frameDates.length) * 100;
     return percentage;
   }
 
@@ -455,14 +455,14 @@ class PlayQueue extends React.Component {
     };
 
     return isAnimating
-      ? isMobile && 
+      ? isMobile && (
         <Progress
           style={mobileProgressStyle}
           value={this.getPlaybackPosition()}
           color="dark"
         />
-      
-      : 
+      )
+      : (
         <LoadingIndicator
           title={title}
           onClose={onClose}
@@ -470,7 +470,7 @@ class PlayQueue extends React.Component {
           totalItems={this.minBufferLength || 100}
           isKioskModeActive={isKioskModeActive}
         />
-      ;
+      );
   }
 }
 

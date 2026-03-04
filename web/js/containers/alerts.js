@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -110,7 +110,7 @@ class DismissableAlerts extends React.Component {
     const showDDVLocationAlert = isDDVLocationAlertPresent && !hasDismissedDDVLocation;
 
     return isDistractionFreeModeActive
-      ? !hasDismissedDistractionFree && 
+      ? !hasDismissedDistractionFree && (
       <AlertUtil
         id="distraction-free-mode-active-alert"
         isOpen
@@ -118,9 +118,9 @@ class DismissableAlerts extends React.Component {
         onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
         message="You are now in distraction free mode. Click the eye button to exit."
       />
-       : 
+      ) : (
         <>
-          {showEventsAlert && 
+          {showEventsAlert && (
           <AlertUtil
             id="event-alert"
             isOpen
@@ -129,8 +129,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
             message="Events may not be visible at all times."
           />
-          }
-          {showCompareAlert && 
+          )}
+          {showCompareAlert && (
           <AlertUtil
             isOpen
             noPortal
@@ -138,8 +138,8 @@ class DismissableAlerts extends React.Component {
             onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
             message="You are now in comparison mode."
           />
-          }
-          {isVectorZoomAlertPresent && 
+          )}
+          {isVectorZoomAlertPresent && (
           <AlertUtil
             isOpen
             noPortal
@@ -147,16 +147,16 @@ class DismissableAlerts extends React.Component {
             onDismiss={dismissVectorZoomAlert}
             message="Vector features may not be clickable at all zoom levels."
           />
-          }
-          {isVectorExceededAlertPresent && 
+          )}
+          {isVectorExceededAlertPresent && (
           <AlertUtil
             isOpen
             noPortal
             onDismiss={dismissVectorExceededAlert}
             message="Too many results at selected point. Zoom in map to see more individual points."
           />
-          }
-          {showAnimationAlert && 
+          )}
+          {showAnimationAlert && (
             <AlertUtil
               isOpen
               noPortal
@@ -164,9 +164,9 @@ class DismissableAlerts extends React.Component {
               message="Some animations may use a large amount of data (>100MB)"
               onDismiss={() => {}}
             />
-          }
+          )}
           {showDDVZoomAlert
-            && ddvZoomAlerts.map((layer) => 
+            && ddvZoomAlerts.map((layer) => (
               <AlertUtil
                 id="zoom-alert"
                 isOpen
@@ -177,9 +177,9 @@ class DismissableAlerts extends React.Component {
                 onDismiss={() => this.dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
                 onClick={openZoomAlertModal}
               />
-            )}
+            ))}
           { showDDVLocationAlert
-            && ddvLocationAlerts.map((layer) => 
+            && ddvLocationAlerts.map((layer) => (
               <AlertUtil
                 id="granule-alert"
                 isOpen
@@ -190,9 +190,9 @@ class DismissableAlerts extends React.Component {
                 onDismiss={() => this.dismissAlert(DISSMISSED_DDV_LOCATION_ALERT, 'hasDismissedDDVLocation')}
                 onClick={openGranuleAlertModal}
               />
-            )}
+            ))}
         </>
-      ;
+      );
   }
 }
 const mapDispatchToProps = (dispatch) => ({

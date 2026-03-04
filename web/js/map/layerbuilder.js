@@ -1,5 +1,5 @@
- 
- 
+/* eslint-disable import/no-duplicates */
+/* eslint-disable no-multi-assign */
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -154,7 +154,7 @@ export default function mapLayerBuilder(config, cache, store) {
       }) => ({
         startDate: startDateArg,
         endDate: startDateArg === endDateArg
-          ? new Date(new Date(endDateArg).getTime() + Number(dateInterval) * 60000).toISOString()
+          ? new Date(new Date(endDateArg).getTime() + (Number(dateInterval) * 60000)).toISOString()
           : endDateArg,
         dateInterval,
       }));
@@ -331,7 +331,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
-     
+    // eslint-disable-next-line no-use-before-define
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     return layer;
@@ -383,10 +383,10 @@ export default function mapLayerBuilder(config, cache, store) {
       maxTileCol,
       minTileRow,
     } = matrixSetLimits[limitIndex];
-    const minX = extent[0] + minTileCol * tileWidth;
-    const minY = extent[3] - (maxTileRow + 1) * tileHeight;
-    const maxX = extent[0] + (maxTileCol + 1) * tileWidth;
-    const maxY = extent[3] - minTileRow * tileHeight;
+    const minX = extent[0] + (minTileCol * tileWidth);
+    const minY = extent[3] - ((maxTileRow + 1) * tileHeight);
+    const maxX = extent[0] + ((maxTileCol + 1) * tileWidth);
+    const maxY = extent[3] - (minTileRow * tileHeight);
 
     return {
       origin,
@@ -768,7 +768,7 @@ export default function mapLayerBuilder(config, cache, store) {
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
           // For inactive data points, either hide or color them gray depending on if disabled
-          if (def.disabled === true || Array.isArray(def.disabled) && def.disabled.includes('0')) {
+          if (def.disabled === true || (Array.isArray(def.disabled) && def.disabled.includes('0'))) {
             return null;
           }
           valueIndex = -1;
@@ -776,10 +776,10 @@ export default function mapLayerBuilder(config, cache, store) {
         }
         // Ignore data points that fall outside of the defined range
         if (fillColor === '#000000'
-          || def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value)
-          || def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value)
-          || def.min && !Array.isArray(def.min) && def.min > valueIndex
-          || def.max && !Array.isArray(def.max) && def.max < valueIndex) {
+          || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
+          || (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value))
+          || (def.min && !Array.isArray(def.min) && def.min > valueIndex)
+          || (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
           return null;
         }
         // Return the style for the current feature

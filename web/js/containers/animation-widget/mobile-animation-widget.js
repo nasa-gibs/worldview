@@ -47,11 +47,11 @@ function MobileAnimationWidget (props) {
   const startingDate = getISODateFormatted(startDate);
 
   const getMobileIDs = () => {
-    if (isMobilePhone && isLandscape
-      || !isMobilePhone && !isMobileTablet && screenHeight < 800) {
+    if ((isMobilePhone && isLandscape)
+      || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
       return 'mobile-phone-landscape';
-    } if (isMobilePhone && isPortrait
-      || !isMobilePhone && !isMobileTablet && screenWidth < 550) {
+    } if ((isMobilePhone && isPortrait)
+      || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
       return 'mobile-phone-portrait';
     } if (isMobileTablet || screenWidth <= breakpoints.small) {
       return 'tablet';
@@ -137,7 +137,7 @@ function MobileAnimationWidget (props) {
                     onChange={(e) => onFrameSliderChange(parseFloat(e.target.value))}
                     disabled={isPlaying}
                     style={{
-                      '--value-percent': `${(speed - 0.5) / (10 - 0.5) * 100}%`,
+                      '--value-percent': `${((speed - 0.5) / (10 - 0.5)) * 100}%`,
                       width: '300px',
                     }}
                   />

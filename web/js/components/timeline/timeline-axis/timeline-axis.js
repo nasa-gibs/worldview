@@ -31,7 +31,7 @@ class TimelineAxis extends Component {
     return lineCoverageOptions.map(({
       leftOffset,
       visible, width,
-    }, i) => 
+    }, i) => (
       <g
         key={`matchingCoverageLine-${crypto.randomUUID()}`}
         className="axis-matching-layer-coverage-line"
@@ -54,7 +54,7 @@ class TimelineAxis extends Component {
           strokeWidth={3}
         />
       </g>
-    );
+    ));
   }
 
   constructor(props) {
@@ -216,7 +216,7 @@ class TimelineAxis extends Component {
         leftOffset = 0.8;
       }
       // add updateTimeScale flag to indicate showHover should not fire immediately
-       
+      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({
         updatedTimeScale: true,
       });
@@ -250,7 +250,7 @@ class TimelineAxis extends Component {
     }
 
     // handle switching A/B dragger axis focus if switched from A/B sidebar tabs
-    if (isCompareModeActive && draggerSelected !== prevProps.draggerSelected) {
+    if (isCompareModeActive && (draggerSelected !== prevProps.draggerSelected)) {
       if (draggerSelected === 'selected') {
         const draggerCheck = this.checkDraggerMoveOrUpdateScale(prevProps.dateA);
         if (!draggerCheck.withinRange) {
@@ -349,7 +349,7 @@ class TimelineAxis extends Component {
     // this is the middle on the axis based on number of tiles determined from width of axis and
     // grid width this is used to determine position and also to "reset" position after an axis
     // drag has stopped
-     
+    // eslint-disable-next-line no-mixed-operators
     const midPoint = numberOfVisibleTiles / 2 * gridWidth - gridWidth * gridNumber / 2;
 
     // horizontal scroll will disable this, so use frontDate in that case
@@ -1105,7 +1105,7 @@ class TimelineAxis extends Component {
         const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         newDraggerTime = Math.floor(draggerDateAddedValue + remainderMilliseconds);
       } else { // known scaleMs (e.g. 86400000 for day)
-        newDraggerTime = draggerDateAddedValue + diffZeroValues * gridWidthCoefficientRemainder;
+        newDraggerTime = draggerDateAddedValue + (diffZeroValues * gridWidthCoefficientRemainder);
       }
 
       // check other dragger visibility on update
@@ -1406,7 +1406,7 @@ class TimelineAxis extends Component {
         // calculate based on known diffZeroValues (days, hours, minutes)
         const diffFactor = diffZeroValues / gridWidth;
         const hoverDelta = (leftOffset - midPoint) / gridWidth;
-        hoverTimeDate = getISODateFormatted(newHoverTimeValue + diffFactor * hoverDelta);
+        hoverTimeDate = getISODateFormatted(newHoverTimeValue + (diffFactor * hoverDelta));
       }
     } else {
       hoverTimeDate = hoverTime;
@@ -1580,7 +1580,7 @@ class TimelineAxis extends Component {
         onTouchEnd={this.setLineTimeTouch}
       >
         {currentTimeRange
-            && 
+            && (
               <svg
                 className="timeline-axis-svg"
                 id="timeline-footer-svg"
@@ -1655,7 +1655,7 @@ class TimelineAxis extends Component {
                   </g>
                 </Draggable>
               </svg>
-            }
+            )}
       </div>
     );
   }

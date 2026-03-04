@@ -164,7 +164,7 @@ function OlMeasureTool (props) {
     };
 
     root.current[overlay.ol_uid].render(
-      
+      (
         <MeasureTooltip
           active={!!tooltipElement}
           geometry={feature.getGeometry()}
@@ -174,7 +174,7 @@ function OlMeasureTool (props) {
           olMap={olMap}
           proj={proj}
         />
-      ,
+      ),
     );
   };
 

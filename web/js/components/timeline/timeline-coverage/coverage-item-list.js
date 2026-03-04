@@ -43,11 +43,11 @@ class CoverageItemList extends Component {
     const formattedStartDate = startDate && formatDisplayDate(new Date(startDate));
     const formattedEndDate = endDate && formatDisplayDate(new Date(endDate));
     const baseStyle = { width: '110px', display: 'inline-block' };
-    const getStyle = (date) => 
+    const getStyle = (date) => (
       date
         ? { ...baseStyle, textAlign: 'center' }
         : { ...baseStyle, paddingLeft: '2px' }
-    ;
+    );
 
     return (
       <div className="layer-coverage-item-header">

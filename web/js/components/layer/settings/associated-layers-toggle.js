@@ -33,7 +33,7 @@ function AssociatedLayersToggle(props) {
       { associatedLayers.map((layer) => {
         const { id } = layer;
         const isEnabled = !!activeLayers[id];
-        const onCheck = () => isEnabled ? removeLayer(id) : addLayer(id);
+        const onCheck = () => (isEnabled ? removeLayer(id) : addLayer(id));
         return (
           <Checkbox
             id={id}

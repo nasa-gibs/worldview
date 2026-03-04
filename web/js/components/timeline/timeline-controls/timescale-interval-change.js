@@ -162,7 +162,7 @@ class TimeScaleIntervalChange extends PureComponent {
           >
             Day
           </span>
-          {hasSubdailyLayers ? 
+          {hasSubdailyLayers ? (
             <>
               <span
                 id="interval-hours"
@@ -183,8 +183,8 @@ class TimeScaleIntervalChange extends PureComponent {
                 Minute
               </span>
             </>
-           : null}
-          {hasTempoProduct ? 
+          ) : null}
+          {hasTempoProduct ? (
             <span
               id="interval-auto"
               role="menuitem"
@@ -194,7 +194,7 @@ class TimeScaleIntervalChange extends PureComponent {
             >
               Auto
             </span>
-           : null}
+          ) : null}
           <span
             id="interval-custom"
             role="menuitem"

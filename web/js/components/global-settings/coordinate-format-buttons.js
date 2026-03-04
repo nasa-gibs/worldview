@@ -23,7 +23,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
         </UncontrolledTooltip>
       </h3>
       <ButtonGroup>
-        {COORDINATE_FORMATS.map((format, i) => 
+        {COORDINATE_FORMATS.map((format, i) => (
           <Button
             key={`${format}-button`}
             aria-label={`Set ${format} Format`}
@@ -35,7 +35,7 @@ function CoordinateFormatButtons ({ changeCoordinateFormat, coordinateFormat }) 
           >
             {coordinateMenuOptions[i]}
           </Button>
-        )}
+        ))}
       </ButtonGroup>
     </div>
   );

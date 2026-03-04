@@ -43,7 +43,7 @@ function ChartingDateSelector (props) {
     <div className="charting-date-container wv-date-range-selector">
       {/* single date mode */}
       {timeSpanSelection === 'date'
-        ? 
+        ? (
           <DateSelector
             idSuffix="charting-date-picker"
             date={validStartDate}
@@ -54,8 +54,8 @@ function ChartingDateSelector (props) {
             isDisabled={false}
             isEndDate
           />
-        
-        : 
+        )
+        : (
           <DateRangeSelector
             idSuffix="charting-date-picker"
             startDate={validStartDate}
@@ -66,7 +66,7 @@ function ChartingDateSelector (props) {
             subDailyMode={false}
             isDisabled={false}
           />
-        }
+        )}
 
     </div>
   );

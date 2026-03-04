@@ -17,7 +17,7 @@ const getProjection = ({ proj }) => proj.selected;
  * so that an inappropriate icon does not show.  (E.g. event belongs to
  * "Severe Storms" and "Snow" but was returned from a search for "Snow")
  */
- 
+// eslint-disable-next-line import/prefer-default-export
 export const getFilteredEvents = createSelector(
   [getActiveCategories, getEvents, getProjection],
   (activeCategories, events, proj) => {

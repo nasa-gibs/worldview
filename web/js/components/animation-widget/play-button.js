@@ -26,7 +26,7 @@ function PlayButton({
       className={`wv-anim-play-case wv-icon-case no-drag ${isDisabled ? 'disabled' : ''}`}
       onClick={onClick}
     >
-      {!isMobile && 
+      {!isMobile && (
         <UncontrolledTooltip
           id="center-align-tooltip"
           target={buttonId}
@@ -34,7 +34,7 @@ function PlayButton({
         >
           {labelText}
         </UncontrolledTooltip>
-      }
+      )}
       {playing
         ? <FontAwesomeIcon icon="pause" className="wv-animation-widget-icon" widthAuto />
         : <FontAwesomeIcon icon="play" className="wv-animation-widget-icon" widthAuto />}

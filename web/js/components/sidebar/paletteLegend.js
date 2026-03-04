@@ -170,7 +170,7 @@ class PaletteLegend extends React.Component {
         const ctxStr = `canvas_${index}`;
         if (this[ctxStr]) {
           const newWidth = this[ctxStr].current.getBoundingClientRect().width;
-           
+          // eslint-disable-next-line react/destructuring-assignment
           if (newWidth && newWidth !== this.state.width) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
@@ -255,7 +255,7 @@ class PaletteLegend extends React.Component {
     let xOffset;
     let legendObj;
     const toolTipLength = legend.tooltips.length;
-     
+    // eslint-disable-next-line react/destructuring-assignment
     if (isRunningData && colorHex && this.state.width > 0) {
       const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
       const acceptableDifference = isContinuousVectorLayer ? 1 : 3;
@@ -263,7 +263,7 @@ class PaletteLegend extends React.Component {
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
-         
+        // eslint-disable-next-line react/destructuring-assignment
         xOffset = Math.floor(this.state.width * percent);
         if (isEmbedModeActive) {
           // adjust xOffset per css scale transform
@@ -307,9 +307,9 @@ class PaletteLegend extends React.Component {
         id={`${util.encodeId(layer.id)}_${util.encodeId(legend.id)}_${index}`}
         key={`${layer.id}_${legend.id}_${index}`}
       >
-        {isMoreThanOneColorBar ? 
+        {isMoreThanOneColorBar ? (
           <div className="wv-palettes-title">{legend.title}</div>
-        
+        )
           : ''}
         <div className="colorbar-case">
           <canvas
@@ -392,7 +392,7 @@ class PaletteLegend extends React.Component {
         containment={scrollContainerEl}
         partialVisibility
       >
-        {({ isVisible }) => 
+        {({ isVisible }) => (
           <div className={legendClass} key={`${legend.id}_${legendIndex}`}>
             {legend.colors.map((color, keyIndex) => {
               const isActiveKey = activeKeyObj?.index === keyIndex;
@@ -424,15 +424,15 @@ class PaletteLegend extends React.Component {
                     dangerouslySetInnerHTML={{ __html: '&nbsp' }}
                   />
 
-                  {singleKey && !isSubLayer && 
+                  {singleKey && !isSubLayer && (
                     <div className="wv-running-category-label-case">
                       <span className="wv-running-category-label">
                         {layer.track ? trackLabel : legendTooltip}
                       </span>
                     </div>
-                  }
+                  )}
 
-                  {isVisible && 
+                  {isVisible && (
                     <Tooltip
                       id="center-align-tooltip"
                       placement={singleKey ? 'right' : 'bottom'}
@@ -442,12 +442,12 @@ class PaletteLegend extends React.Component {
                     >
                       {tooltipText}
                     </Tooltip>
-                  }
+                  )}
                 </React.Fragment>
               );
             })}
           </div>
-        }
+        )}
       </VisibilitySensor>
     );
   }
@@ -457,7 +457,7 @@ class PaletteLegend extends React.Component {
    */
   renderPaletteLegends() {
     const { paletteLegends } = this.props;
-     
+    // eslint-disable-next-line array-callback-return
     return paletteLegends.map((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
         this[`canvas_${index}`] = React.createRef();
@@ -475,7 +475,7 @@ class PaletteLegend extends React.Component {
     } = this.props;
     const { isHoveringLegend } = this.state;
     const customPaletteClassName = isCustomPalette ? ' is_custom' : '';
-    const customClass = showingVectorHand && layer.id.includes('AERONET') || showingChartingIcon ? ' bottomspace-palette' : customPaletteClassName;
+    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : customPaletteClassName;
     if (!layer.palette) return undefined;
     return (
       <div

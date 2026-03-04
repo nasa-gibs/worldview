@@ -182,14 +182,14 @@ class ShareLinkContainer extends Component {
                 active={activeTab === type}
                 disabled={isDisabled[type]}
               >
-                {isDisabled[type] && 
+                {isDisabled[type] && (
                   <HoverTooltip
                     isMobile={isMobile}
                     labelText={navDisabledMessage}
                     target={`.${navTitleClass}`}
                     placement="top"
                   />
-                }
+                )}
                 {navTitle}
               </NavLink>
             </NavItem>
@@ -199,7 +199,7 @@ class ShareLinkContainer extends Component {
     );
   };
 
-  renderInputGroup = (value, type) => 
+  renderInputGroup = (value, type) => (
     <InputGroup>
       <Input
         type="text"
@@ -218,9 +218,9 @@ class ShareLinkContainer extends Component {
         COPY
       </Button>
     </InputGroup>
-  ;
+  );
 
-  renderTextareaGroup = (value, type) => 
+  renderTextareaGroup = (value, type) => (
     <InputGroup>
       <textarea
         value={value}
@@ -239,7 +239,7 @@ class ShareLinkContainer extends Component {
         COPY
       </Button>
     </InputGroup>
-  ;
+  );
 
   renderLinkTab = () => {
     const { shortLink, urlShortening } = this.props;
@@ -264,14 +264,14 @@ class ShareLinkContainer extends Component {
 
     return (
       <TabPane tabId="link" className="share-tab-link">
-        {activeTab === 'link' && 
+        {activeTab === 'link' && (
           <>
             {this.renderInputGroup(value, 'link')}
             <p>
               Copy URL to share link.
             </p>
             {' '}
-            {urlShortening && 
+            {urlShortening && (
               <Checkbox
                 label="Shorten link"
                 id="wv-link-shorten"
@@ -280,9 +280,9 @@ class ShareLinkContainer extends Component {
                 disabled={isDisabled}
                 title={tooltipText}
               />
-            }
+            )}
           </>
-        }
+        )}
       </TabPane>
     );
   };
@@ -296,7 +296,7 @@ class ShareLinkContainer extends Component {
 
     return (
       <TabPane tabId="embed" className="share-tab-embed">
-        {activeTab === 'embed' && 
+        {activeTab === 'embed' && (
           <>
             {this.renderInputGroup(embedIframeHTMLCode, 'embed')}
             <p>
@@ -314,7 +314,7 @@ class ShareLinkContainer extends Component {
               to learn how to directly access the imagery via GIBS.
             </p>
           </>
-        }
+        )}
       </TabPane>
     );
   };
@@ -327,11 +327,11 @@ class ShareLinkContainer extends Component {
 
     return (
       <TabPane tabId="cite-us" className="share-tab-cite-us">
-        {activeTab === 'cite-us' && 
+        {activeTab === 'cite-us' && (
           <>
             {this.renderTextareaGroup(citeUsValue, 'cite-us')}
           </>
-        }
+        )}
       </TabPane>
     );
   };

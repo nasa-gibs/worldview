@@ -100,7 +100,7 @@ class LayerSettings extends React.Component {
     lodashEach(paletteLegends, (legend, i) => {
       const activeClass = activeIndex === i ? 'active' : '';
       const dualStr = paletteLegends.length === 2 ? ' dual' : '';
-      const navItemEl = 
+      const navItemEl = (
         <NavItem
           key={`${legend.id}nav`}
           className={`settings-customs-title ${activeClass}${dualStr}`}
@@ -109,7 +109,7 @@ class LayerSettings extends React.Component {
             {legend.title}
           </NavLink>
         </NavItem>
-      ;
+      );
       const palette = getPalette(layer.id, i);
       const max = legend.colors.length - 1;
       const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
@@ -117,7 +117,7 @@ class LayerSettings extends React.Component {
       let paneItemEl;
 
       if (legend.type === 'classification' && (legend.colors.length > 1 || layer.id.includes('AERONET'))) {
-        paneItemEl = 
+        paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
             <ClassificationToggle
               height={Math.ceil(screenHeight / 3)}
@@ -129,21 +129,21 @@ class LayerSettings extends React.Component {
               }}
             />
           </TabPane>
-        ;
+        );
       } else if (
         legend.type !== 'continuous'
         && legend.type !== 'discrete'
         && legend.colors.length > 1
       ) {
-        paneItemEl = 
+        paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
             No customizations available for this palette.
           </TabPane>
-        ;
+        );
       } else {
-        paneItemEl = 
+        paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
-            {legend.type !== 'classification' ? 
+            {legend.type !== 'classification' ? (
               <PaletteThreshold
                 key={`${layer.id + i}_threshold`}
                 legend={legend}
@@ -159,7 +159,7 @@ class LayerSettings extends React.Component {
                 index={i}
                 palette={palette}
               />
-             : null}
+            ) : null}
 
             <Palette
               setCustomPalette={setCustomPalette}
@@ -175,7 +175,7 @@ class LayerSettings extends React.Component {
               paletteOrder={paletteOrder}
             />
           </TabPane>
-        ;
+        );
       }
 
       paneElements.push(paneItemEl);
@@ -237,7 +237,7 @@ class LayerSettings extends React.Component {
     return (
       <>
         {legend.type !== 'classification'
-          && 
+          && (
             <PaletteThreshold
               key={`${layer.id}0_threshold`}
               legend={legend}
@@ -253,7 +253,7 @@ class LayerSettings extends React.Component {
               index={0}
               palette={palette}
             />
-          }
+          )}
         <Palette
           setCustomPalette={setCustomPalette}
           clearCustomPalette={clearCustomPalette}
@@ -285,7 +285,7 @@ class LayerSettings extends React.Component {
     const { allowGranuleReorder } = this.state;
     const { count, dates, granulePlatform } = granuleOptions;
     return dates
-      ? 
+      ? (
         <>
           <GranuleCountSlider
             def={layer}
@@ -293,7 +293,7 @@ class LayerSettings extends React.Component {
             granuleDates={dates}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
           />
-          {allowGranuleReorder && 
+          {allowGranuleReorder && (
             <GranuleLayerDateList
               def={layer}
               screenHeight={screenHeight}
@@ -303,9 +303,9 @@ class LayerSettings extends React.Component {
               resetGranuleLayerDates={resetGranuleLayerDates}
               granulePlatform={granulePlatform}
             />
-          }
+          )}
         </>
-       : null;
+      ) : null;
   };
 
   render() {

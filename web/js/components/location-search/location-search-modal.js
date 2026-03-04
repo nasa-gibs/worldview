@@ -258,7 +258,7 @@ class LocationSearchModal extends Component {
     } = this.state;
     const message = `${isTouchDevice ? 'Tap' : 'Click'} on map to identify a location.${isTouchDevice ? '' : ' Right click to cancel.'}`;
 
-    return showReverseGeocodeAlert && 
+    return showReverseGeocodeAlert && (
       <Alert
         id="location-search-select-coordinates-alert"
         isOpen
@@ -268,7 +268,7 @@ class LocationSearchModal extends Component {
         message={message}
         onDismiss={this.dismissReverseGeocodeAlert}
       />
-    ;
+    );
   };
 
   // render alert message to indicate entered location is outside of map extent
@@ -278,7 +278,7 @@ class LocationSearchModal extends Component {
     } = this.state;
     const message = 'Provided location is outside of the map extent. Revise or try a different projection.';
 
-    return showExtentAlert && 
+    return showExtentAlert && (
       <Alert
         id="location-search-select-coordinates-extent-alert"
         isOpen
@@ -287,7 +287,7 @@ class LocationSearchModal extends Component {
         message={message}
         onDismiss={() => this.setExtentAlert(false)}
       />
-    ;
+    );
   };
 
   // render alert message to indicate no suggestions for input value
@@ -297,7 +297,7 @@ class LocationSearchModal extends Component {
     } = this.state;
     const message = 'No suggested places available. Check your text or try a different place.';
 
-    return showNoSuggestionsAlert && 
+    return showNoSuggestionsAlert && (
       <Alert
         id="location-search-no-suggestions-available-alert"
         isOpen
@@ -306,7 +306,7 @@ class LocationSearchModal extends Component {
         message={message}
         onDismiss={() => this.setNoSuggestionsAlert(false)}
       />
-    ;
+    );
   };
 
   // render Location Search component minimize button (not visible in mobile)

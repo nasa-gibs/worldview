@@ -37,13 +37,13 @@ function CollapsedAnimationWidget (props) {
   const getWidgetIDs = () => {
     if (isDistractionFreeModeActive && screenWidth < 670 && isPortrait) {
       return '-phone-portrait-distraction-free';
-    } if (isMobilePhone && isPortrait
-      || !isMobileTablet && screenWidth < 670 && hasSubdailyLayers
-      || !isMobileTablet && screenWidth < 575 && !hasSubdailyLayers) {
+    } if ((isMobilePhone && isPortrait)
+      || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers)
+      || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
       return `-phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `-phone-landscape${subdailyID}`;
-    } if (isMobileTablet && isPortrait || !isMobilePhone && screenWidth < breakpoints.small) {
+    } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
       return `-tablet-portrait${subdailyID}`;
     } if (isMobileTablet && isLandscape) {
       return `-tablet-landscape${subdailyID}`;
@@ -53,7 +53,7 @@ function CollapsedAnimationWidget (props) {
 
   const widgetIDs = getWidgetIDs();
 
-  return !dontShow && 
+  return !dontShow && (
     <Draggable
       bounds="body"
       cancel={cancelSelector}
@@ -82,7 +82,7 @@ function CollapsedAnimationWidget (props) {
         </div>
       </div>
     </Draggable>
-  ;
+  );
 }
 
 CollapsedAnimationWidget.propTypes = {

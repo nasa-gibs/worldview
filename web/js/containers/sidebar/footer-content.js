@@ -68,7 +68,7 @@ const FooterContent = React.forwardRef((props, ref) => {
     googleTagManager.pushEvent({ event: 'charting_mode' });
   };
 
-  const renderLayersFooter = () => 
+  const renderLayersFooter = () => (
     <>
       <div>
         <CompareModeOptions
@@ -77,17 +77,17 @@ const FooterContent = React.forwardRef((props, ref) => {
           selected={compareMode}
           onclick={changeCompareMode}
         />
-        {isChartingActive && 
+        {isChartingActive && (
         <ChartingModeOptions
           isChartingActive={isChartingActive}
           isMobile={isMobile}
           sidebarHeight={sidebarHeight}
         />
-        }
+        )}
       </div>
       <div className="product-buttons">
         {!isMobile && !isCompareActive && chartFeature
-          && 
+          && (
           <>
             <Button
               id="chart-toggle-button"
@@ -98,7 +98,7 @@ const FooterContent = React.forwardRef((props, ref) => {
               text={chartBtnText}
             />
             {!chartingModeAccessible
-            && 
+            && (
               <UncontrolledTooltip
                 id="center-align-tooltip"
                 placement="bottom"
@@ -106,11 +106,11 @@ const FooterContent = React.forwardRef((props, ref) => {
               >
                 Add a layer with a color palette to create a time series chart of a single variable
               </UncontrolledTooltip>
-            }
+            )}
           </>
-          }
+          )}
         {!isChartingActive
-          && 
+          && (
           <Button
             id="compare-toggle-button"
             aria-label={compareBtnText}
@@ -119,17 +119,17 @@ const FooterContent = React.forwardRef((props, ref) => {
             onClick={!isChartingActive ? onClickToggleCompare : null}
             text={compareBtnText}
           />
-          }
+          )}
       </div>
     </>
-  ;
+  );
 
   const renderEventsFooter = () => {
     const eventLimitReach = eventsData && eventsData.length === LIMIT_EVENT_REQUEST_COUNT;
     const numEvents = eventsData ? eventsData.length : 0;
     return (
       <div className="event-count">
-        {eventsData && eventLimitReach ? 
+        {eventsData && eventLimitReach ? (
           <>
             <span>
               {`Showing the first ${numEvents} events`}
@@ -147,11 +147,11 @@ const FooterContent = React.forwardRef((props, ref) => {
               </div>
             </UncontrolledTooltip>
           </>
-         : 
+        ) : (
           <span>
             {`Showing ${numEvents} events`}
           </span>
-        }
+        )}
       </div>
     );
   };

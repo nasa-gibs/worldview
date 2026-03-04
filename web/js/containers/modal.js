@@ -16,7 +16,7 @@ import usePrevious from '../util/customHooks';
 const InteractionWrap = ({
   condition,
   wrapper, children,
-}) => condition ? wrapper(children) : children;
+}) => (condition ? wrapper(children) : children);
 const toggleWithClose = (onToggle, onClose, isOpen) => {
   if (onClose && isOpen) {
     return () => {
@@ -152,14 +152,14 @@ function ModalContainer(props) {
 
   function getTemplateBody() {
     const { bodyTemplate } = props;
-    return bodyTemplate.isLoading ? 
+    return bodyTemplate.isLoading ? (
       <span> Loading </span>
-     : 
+    ) : (
       <div
         id="template-content"
         dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
       />
-    ;
+    );
   }
 
   const handleCreateChildren = (children) => {
@@ -184,7 +184,7 @@ function ModalContainer(props) {
         bounds={bounds}
       >
         {isResizable
-          ? 
+          ? (
             <Resizable
               className="resize-box"
               resizeHandles={['se']}
@@ -198,7 +198,7 @@ function ModalContainer(props) {
             >
               {children}
             </Resizable>
-          
+          )
           : children}
       </Draggable>
     );
@@ -230,9 +230,9 @@ function ModalContainer(props) {
     wrapClassName,
   } = newProps;
 
-  const isRestrictedDisplay = isMobile && desktopOnly
-    || !isMobile && mobileOnly
-    || isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL');
+  const isRestrictedDisplay = (isMobile && desktopOnly)
+    || (!isMobile && mobileOnly)
+    || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
   if (isRestrictedDisplay) {
     return null;
   }
@@ -242,12 +242,12 @@ function ModalContainer(props) {
   const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
   const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
   const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-  const closeBtn = 
+  const closeBtn = (
     <button className="modal-close-btn" onClick={toggleFunction} type="button">
       &times;
     </button>
-  ;
-  const renderModalBodyText = isTemplateModal ? getTemplateBody() : <p>{bodyText}</p> || '';
+  );
+  const renderModalBodyText = isTemplateModal ? getTemplateBody() : (<p>{bodyText}</p>) || '';
   return (
     <ErrorBoundary>
       <InteractionWrap
@@ -269,7 +269,7 @@ function ModalContainer(props) {
         >
           <div ref={handleElement}>
             {CompletelyCustomModal
-              ? 
+              ? (
                 <CompletelyCustomModal
                   key={`custom_${lowerCaseId}`}
                   modalHeight={height || newProps.height}
@@ -278,20 +278,20 @@ function ModalContainer(props) {
                   {...customProps}
                   toggleWithClose={toggleFunction}
                 />
-              
-              : 
+              )
+              : (
                 <DetectOuterClick
                   onClick={toggleFunction}
                   disabled={allowOuterClick}
                 >
-                  {(headerComponent || headerText) && 
+                  {(headerComponent || headerText) && (
                   <ModalHeader toggle={toggleFunction} close={closeBtn}>
                     {headerComponent ? <headerComponent /> : headerText || ''}
                   </ModalHeader>
-                  }
+                  )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? 
+                    {BodyComponent ? (
                       <BodyComponent
                         // eslint-disable-next-line react/jsx-props-no-spreading
                         {...bodyComponentProps}
@@ -299,12 +299,12 @@ function ModalContainer(props) {
                         screenHeight={screenHeight}
                         closeModal={toggleFunction}
                       />
-                    
+                    )
                       : renderModalBodyText}
                   </ModalBody>
-                  {footer && <ModalFooter />}
+                  {footer && (<ModalFooter />)}
                 </DetectOuterClick>
-              }
+              )}
           </div>
         </Modal>
       </InteractionWrap>

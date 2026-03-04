@@ -324,7 +324,7 @@ export default function PresetOptions(props) {
         <p>Other selectable presets (optional):</p>
       </div>
       <div className="band-selection-presets-scrollable">
-        {presets.map((preset) => 
+        {presets.map((preset) => (
           <Card
             key={preset.id}
             onClick={() => handlePresetSelect(preset)}
@@ -340,7 +340,7 @@ export default function PresetOptions(props) {
               }
             </CardBody>
           </Card>
-        )}
+        ))}
       </div>
 
     </div>

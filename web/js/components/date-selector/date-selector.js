@@ -347,7 +347,7 @@ function DateSelector(props) {
         isDisabled={isDisabled}
         isKioskModeActive={isKioskModeActive}
       />
-      { subDailyMode && 
+      { subDailyMode && (
         <>
           <DateInputColumn
             {...sharedProps}
@@ -368,7 +368,7 @@ function DateSelector(props) {
           />
           <div className={isKioskModeActive ? 'input-time-zmark-kiosk' : 'input-time-zmark'}>Z</div>
         </>
-      }
+      )}
     </div>
   );
 }

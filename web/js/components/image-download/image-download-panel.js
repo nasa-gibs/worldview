@@ -152,11 +152,11 @@ function ImageDownloadPanel(props) {
       const value = currIsWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {currFileType === 'application/vnd.google-earth.kmz' ? 
+          {currFileType === 'application/vnd.google-earth.kmz' ? (
             <select disabled>
               <option value={0}>No</option>
             </select>
-           : 
+          ) : (
             <select
               id="wv-image-worldfile"
               value={value}
@@ -165,7 +165,7 @@ function ImageDownloadPanel(props) {
               <option value="0">No</option>
               <option value="1">Yes</option>
             </select>
-          }
+          )}
           Worldfile (.zip)
         </div>
       );
@@ -173,14 +173,14 @@ function ImageDownloadPanel(props) {
     return false;
   };
 
-  const crossesDatelineAlert = () => datelineMessage && 
+  const crossesDatelineAlert = () => datelineMessage && (
     <AlertUtil
       id="snapshot-dateline-alert"
       isOpen
       title="Crosses Dateline Alert"
       message={datelineMessage}
     />
-  ;
+  );
 
   const { crs } = projection.selected;
   const dimensions = getDimensions(projection.id, lonlats, currResolution);
@@ -225,19 +225,19 @@ function ImageDownloadPanel(props) {
           proj={projection.id}
           map={map}
         />
-        {showGranuleWarning && 
+        {showGranuleWarning && (
           <p>
             Warning: A snapshot will capture a max. of
             {GRANULE_LIMIT}
             {' '}
             granules, additional
             granules are omitted.
-          </p>  
-        }
+          </p> // eslint-disable-line react/jsx-one-expression-per-line
+        )}
         <ResTable
           width={width}
           height={height}
-          fileSize={(width * height * 24 / 8388608).toFixed(2)}
+          fileSize={((width * height * 24) / 8388608).toFixed(2)}
           maxImageSize={maxImageSize}
           validSize={imageSizeValid(height, width, MAX_DIMENSION_SIZE)}
           validLayers={layerList.length > 0}

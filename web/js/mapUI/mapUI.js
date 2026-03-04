@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
- 
- 
- 
- 
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-shadow */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-nested-ternary */
 import { each as lodashEach, find as lodashFind } from 'lodash';
 import AddLayer from './components/layers/addLayer';
 import RemoveLayer from './components/layers/removeLayer';
@@ -412,14 +412,14 @@ function MapUI(props) {
       <BufferQuickAnimate action={quickAnimateAction} />
       <UpdateCollections />
       { isEICModeActive
-      && 
+      && (
       <>
         <EIC />
         <KioskAnimations ui={ui} />
         <TileMeasurement ui={ui} />
-        { isTravelModeActive && !isStaticMapActive && <TravelMode /> }
+        { (isTravelModeActive && !isStaticMapActive) && <TravelMode /> }
       </>
-      }
+      )}
       {devTestMode && <DevTestButton />}
 
     </>

@@ -78,7 +78,7 @@ export default class AlertUtil extends React.Component {
             </em>
           </div>
         </div>
-        {onDismiss && 
+        {onDismiss && (
           <button
             type="button"
             id={`${id}-close`}
@@ -87,7 +87,7 @@ export default class AlertUtil extends React.Component {
           >
             <FontAwesomeIcon icon="times" className="exit" size="1x" widthAuto />
           </button>
-        }
+        )}
       </Alert>
     );
   }

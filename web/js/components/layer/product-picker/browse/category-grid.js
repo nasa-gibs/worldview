@@ -43,7 +43,7 @@ function CategoryGrid(props) {
   );
   return (
     <MasonryComponent className="category-masonry-case" options={masonryOptions}>
-      {orderedCategories.map((category) => 
+      {orderedCategories.map((category) => (
         <CategoryCell
           key={category.id}
           category={category}
@@ -52,7 +52,7 @@ function CategoryGrid(props) {
           drawMeasurements={showMeasurements}
           hasMeasurementSource={hasMeasurementSource}
         />
-      )}
+      ))}
     </MasonryComponent>
   );
 }

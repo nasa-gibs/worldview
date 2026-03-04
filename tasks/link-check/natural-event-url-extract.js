@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-restricted-syntax */
 const fetch = require('node-fetch')
 const path = require('path')
 const prog = path.basename(__filename)

@@ -119,7 +119,7 @@ class SearchBox extends Component {
           onClick={this.handleSubmitClick}
           className={buttonId}
         >
-          {tooltipVisibilityCondition && 
+          {tooltipVisibilityCondition && (
           <UncontrolledTooltip
             id="center-align-tooltip"
             trigger="hover"
@@ -129,7 +129,7 @@ class SearchBox extends Component {
           >
             {labelText}
           </UncontrolledTooltip>
-          }
+          )}
           <FontAwesomeIcon icon="search-location" size="1x" widthAuto />
         </Button>
       </div>
@@ -143,11 +143,11 @@ class SearchBox extends Component {
     } = this.props;
 
     return (
-      activeAlert && 
+      activeAlert && (
         <div className="location-search-input-group-addon location-search-input-alert-icon">
           <FontAwesomeIcon icon="exclamation-triangle" size="1x" widthAuto />
         </div>
-      
+      )
     );
   };
 
@@ -161,14 +161,14 @@ class SearchBox extends Component {
     const tooltipVisibilityCondition = inputValue && !isMobile;
     const positionStyle = isMobile ? { left: '-21px' } : { left: '-34px' };
     return (
-      inputValue && 
+      inputValue && (
         <Button
           id={buttonId}
           onClick={clearInput}
           className={buttonId}
           style={positionStyle}
         >
-          {tooltipVisibilityCondition && 
+          {tooltipVisibilityCondition && (
           <UncontrolledTooltip
             id="center-align-tooltip"
             trigger="hover"
@@ -178,10 +178,10 @@ class SearchBox extends Component {
           >
             {labelText}
           </UncontrolledTooltip>
-          }
+          )}
           <FontAwesomeIcon icon="times" size="1x" widthAuto />
         </Button>
-      
+      )
     );
   };
 

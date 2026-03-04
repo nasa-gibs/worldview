@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -16,7 +16,7 @@ class VectorDialog extends React.Component {
   }
 
   updateIndex(activeIndex) {
-     
+    // eslint-disable-next-line react/destructuring-assignment
     if (activeIndex === this.state.activeIndex) return;
     this.setState({ activeIndex });
   }
@@ -51,15 +51,15 @@ class VectorDialog extends React.Component {
       i += 1;
     }
     const activeMetaArray = vectorMetaObject[keyArray[activeIndex]];
-    const closeBtn = 
+    const closeBtn = (
       <button onClick={toggleWithClose} type="button" className="vector-close-btn">
         &times;
       </button>
-    ;
+    );
     return (
       <div className="draggable-modal-content">
         {activeMetaArray[0].id.includes('AERONET')
-          ? 
+          ? (
             <div style={{ padding: '10px', position: 'relative' }}>
               <span style={{ position: 'absolute', right: '0px', top: '3px' }}>{closeBtn}</span>
               <div style={{ marginBottom: '5px', fontSize: '16px', color: '#2222aa' }}>
@@ -80,19 +80,19 @@ class VectorDialog extends React.Component {
               <div style={{ marginBottom: '5px' }}>
                 {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
               </div>
-              {activeMetaArray[0].features.active && 
+              {activeMetaArray[0].features.active && (
               <div style={{ marginBottom: '5px' }}>
                 <b>
                   {`Most recent reading: ${activeMetaArray[0].features.value}`}
                 </b>
               </div>
-              }
-              {activeMetaArray[0].features.active && 
+              )}
+              {activeMetaArray[0].features.active && (
               <div style={{ marginBottom: '15px' }}>
                 {`As of ${activeMetaArray[0].features.date.toUTCString().split(' ').slice(1).join(' ')
                   .replace('GMT', 'UTC')}`}
               </div>
-              }
+              )}
               <div>
                 <a
                   style={{ color: '#2222aa' }}
@@ -106,7 +106,7 @@ class VectorDialog extends React.Component {
                 </a>
               </div>
             </div>
-           : 
+          ) : (
             <div>
               <ModalHeader toggle={toggleWithClose} close={closeBtn}>
                 <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
@@ -124,7 +124,7 @@ class VectorDialog extends React.Component {
                 </Scrollbars>
               </ModalBody>
             </div>
-          }
+          )}
       </div>
     );
   }

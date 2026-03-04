@@ -17,24 +17,24 @@ function SearchLayers(props) {
     results,
   } = props;
 
-  const showFacets = width > mediumBreakpoint && !isMobile || showMobileFacets;
+  const showFacets = (width > mediumBreakpoint && !isMobile) || showMobileFacets;
   const showListAndDetails = isMobile ? !showFacets : true;
 
   return (
     <div className="search-layers-container">
       <Facets />
-      {showListAndDetails && 
+      {showListAndDetails && (
         <div className="layer-list-detail-container">
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          {!selectedLayer && smallView ? null : !!results.length && 
+          {!selectedLayer && smallView ? null : !!results.length && (
             <div className="layer-detail-container layers-all search">
               <LayerMetadataDetail layer={selectedLayer} />
             </div>
-          }
+          )}
         </div>
-      }
+      )}
     </div>
   );
 }

@@ -51,7 +51,7 @@ export default class ContextMenu extends AbstractMenu {
         });
     }
 
-    getSubMenuType() {  
+    getSubMenuType() { // eslint-disable-line class-methods-use-this
         return SubMenu;
     }
 

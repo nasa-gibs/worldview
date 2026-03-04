@@ -144,10 +144,10 @@ class PaletteThreshold extends React.Component {
       endLabel += ` ${units}`;
     }
 
-    const minWidth = thumbsize + (avg - min) / (max - min) * (sliderWidth - 2 * thumbsize);
-    const maxWidth = thumbsize + (max - avg) / (max - min) * (sliderWidth - 2 * thumbsize);
-    const minPercent = (start - min) / (avg - min) * 100;
-    const maxPercent = (end - avg) / (max - avg) * 100;
+    const minWidth = thumbsize + ((avg - min) / (max - min)) * (sliderWidth - (2 * thumbsize));
+    const maxWidth = thumbsize + ((max - avg) / (max - min)) * (sliderWidth - (2 * thumbsize));
+    const minPercent = ((start - min) / (avg - min)) * 100;
+    const maxPercent = ((end - avg) / (max - avg)) * 100;
     const styles = {
       min: {
         width: minWidth,

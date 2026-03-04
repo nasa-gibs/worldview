@@ -34,11 +34,11 @@ export default function BandsDropdown(props) {
         {bandValue}
       </DropdownToggle>
       <DropdownMenu style={{ transform: 'translate3d(-30px, 0px, 0px)' }}>
-        {activeBandChoices.map((band) => 
+        {activeBandChoices.map((band) => (
           <DropdownItem key={band} onClick={() => handleSelection(band)}>
             {band}
           </DropdownItem>
-        )}
+        ))}
       </DropdownMenu>
     </Dropdown>
   );

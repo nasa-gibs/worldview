@@ -1,5 +1,5 @@
 import React from 'react';
- 
+// eslint-disable-next-line no-unused-vars
 import PixelTestMode from './pixel-test-mode/dev-pixel-test';
 import ConsoleTestMode from './dev-console-test';
 import PresetConsoleCommands from './dev-preset-console-commands';

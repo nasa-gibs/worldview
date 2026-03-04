@@ -59,9 +59,9 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
-        {isSelected && 
+        {isSelected && (
           <span className="dot" />
-        }
+        )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <span
             className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
@@ -102,9 +102,9 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
-        {isSelected && 
+        {isSelected && (
           <span className="dot" />
-        }
+        )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
@@ -141,8 +141,8 @@ function PaletteSelect (props) {
     const target = getCustomPalette(id);
     const targetType = target.colors.length === 1 ? 'classification' : 'continuous';
 
-    if (source.type === 'continuous' && targetType === 'continuous'
-       || source.type === 'discrete' && targetType === 'continuous') {
+    if ((source.type === 'continuous' && targetType === 'continuous')
+       || (source.type === 'discrete' && targetType === 'continuous')) {
       const translated = palettesTranslate(source.colors, target.colors);
       return renderSelectorItemScale(
         translated,
@@ -173,7 +173,7 @@ function PaletteSelect (props) {
       <Scrollbar style={{ maxHeight: '200px' }}>
         {renderDefault()}
         {
-           
+          // eslint-disable-next-line array-callback-return
           paletteOrder.map((id) => {
             if (lodashIndexOf(recommended, id) < 0) {
               const item = customLegend(id);

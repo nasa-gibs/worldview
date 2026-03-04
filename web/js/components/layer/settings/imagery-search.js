@@ -52,10 +52,10 @@ export default function ImagerySearch({ layer }) {
     const yDiff = Math.abs(extent[1] - extent[3]);
     // Reduce width by 40% and height by 20%, to show only centered data
     const smallerExtent = [
-      extent[0] + xDiff * 0.2,
-      extent[1] + yDiff * 0.1,
-      extent[2] - xDiff * 0.2,
-      extent[3] - yDiff * 0.1,
+      extent[0] + (xDiff * 0.2),
+      extent[1] + (yDiff * 0.1),
+      extent[2] - (xDiff * 0.2),
+      extent[3] - (yDiff * 0.1),
     ];
     return smallerExtent;
   };
@@ -133,11 +133,11 @@ export default function ImagerySearch({ layer }) {
     ].sort((a, b) => Date.parse(b) - Date.parse(a));
     const renderedDates = [
       ...new Set(granuleDates.map((granuleDate) => granuleDate.toLocaleDateString('en-US', dateOptions))),
-    ].map((granuleDate, i) => 
+    ].map((granuleDate, i) => (
       <li className="lazyload-list-item" key={granuleDate} onClick={() => handleSelection(granuleDate)}>
         {granuleDate}
       </li>
-    );
+    ));
     return renderedDates;
   };
 

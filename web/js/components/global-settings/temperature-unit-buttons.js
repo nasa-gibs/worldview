@@ -20,7 +20,7 @@ function TemperatureUnitButtons({ changeTemperatureUnit, globalTemperatureUnit }
         </UncontrolledTooltip>
       </h3>
       <ButtonGroup>
-        {TEMPERATURE_UNITS.map((unit) => 
+        {TEMPERATURE_UNITS.map((unit) => (
           <Button
             key={`${unit}-button`}
             aria-label={`Set ${unit} Unit`}
@@ -31,7 +31,7 @@ function TemperatureUnitButtons({ changeTemperatureUnit, globalTemperatureUnit }
           >
             {unit}
           </Button>
-        )}
+        ))}
         <Button
           aria-label="Reset to Default Unit"
           outline

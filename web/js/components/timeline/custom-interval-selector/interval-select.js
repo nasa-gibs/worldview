@@ -41,7 +41,7 @@ function IntervalSelect(props) {
 
   return (
     <div>
-      {isMobile ? 
+      {isMobile ? (
         <div className="mobile-timescale-dropdown">
           <Dropdown isOpen={dropdownOpen} toggle={toggle}>
             <DropdownToggle caret>
@@ -63,7 +63,7 @@ function IntervalSelect(props) {
                   Day
                 </span>
               </DropdownItem>
-              {hasSubdailyLayers ? 
+              {hasSubdailyLayers ? (
                 <>
                   <DropdownItem>
                     <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('hour')}>
@@ -76,11 +76,11 @@ function IntervalSelect(props) {
                     </span>
                   </DropdownItem>
                 </>
-               : null}
+              ) : null}
             </DropdownMenu>
           </Dropdown>
         </div>
-       : 
+      ) : (
         <form
           className="custom-interval-timescale-select-form-container no-drag"
           onSubmit={handleSubmit}
@@ -94,16 +94,16 @@ function IntervalSelect(props) {
             <option className="custom-interval-timescale-select-option no-drag" value="month">month</option>
             <option className="custom-interval-timescale-select-option no-drag" value="day">day</option>
             {hasSubdailyLayers
-              ? 
+              ? (
                 <>
                   <option className="custom-interval-timescale-select-option no-drag" value="hour">hour</option>
                   <option className="custom-interval-timescale-select-option no-drag" value="minute">minute</option>
                 </>
-              
+              )
               : null}
           </select>
         </form>
-      }
+      )}
     </div>
   );
 }

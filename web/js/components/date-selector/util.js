@@ -25,7 +25,7 @@ export const yearValidation = (value, dateParam, validate) => {
 export const monthValidation = (value, dateParam, validate) => {
   const date = new Date(dateParam);
   let newDate;
-   
+  // eslint-disable-next-line no-restricted-globals
   if (!isNaN(value) && value < 13 && value > 0) {
     newDate = new Date(date.setUTCMonth(value - 1));
     if (newDate) {

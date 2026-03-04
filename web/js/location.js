@@ -169,9 +169,9 @@ const getParameters = function(config, parameters) {
       options: {
         serializeNeedsGlobalState: false,
         setAsEmptyItem: true,
-        serialize: (currentItemState) => currentItemState
+        serialize: (currentItemState) => (currentItemState
           ? util.toISOStringSeconds(currentItemState)
-          : undefined,
+          : undefined),
         parse: (str) => tryCatchDate(str, now),
       },
     },
@@ -190,7 +190,7 @@ const getParameters = function(config, parameters) {
           }
           return zoom === 3 ? undefined : zoom.toString();
         },
-        parse: (str) => str ? Number(str) : 3,
+        parse: (str) => (str ? Number(str) : 3),
       },
     },
     i: {
@@ -208,7 +208,7 @@ const getParameters = function(config, parameters) {
           }
           return interval === 3 ? undefined : interval.toString();
         },
-        parse: (str) => str ? Number(str) : 3,
+        parse: (str) => (str ? Number(str) : 3),
       },
     },
     ics: {
@@ -479,7 +479,7 @@ const getParameters = function(config, parameters) {
       stateKey: 'compare.mode',
       initialState: 'swipe',
       options: {
-        parse: (param) => config.initialIsMobile ? 'swipe' : param,
+        parse: (param) => (config.initialIsMobile ? 'swipe' : param),
       },
     },
     cv: {
@@ -487,7 +487,7 @@ const getParameters = function(config, parameters) {
       initialState: 50,
       type: 'number',
       options: {
-        parse: (param) => config.initialIsMobile ? 50 : param,
+        parse: (param) => (config.initialIsMobile ? 50 : param),
       },
     },
     cha: {
@@ -575,7 +575,7 @@ const getParameters = function(config, parameters) {
       stateKey: 'animation.isActive',
       initialState: false,
       options: {
-        serialize: (boo) => boo ? 'on' : undefined,
+        serialize: (boo) => (boo ? 'on' : undefined),
         parse: (str) => str === 'on',
       },
     },
@@ -583,7 +583,7 @@ const getParameters = function(config, parameters) {
       stateKey: 'animation.autoplay',
       initialState: false,
       options: {
-        serialize: (boo) => boo ? 'true' : undefined,
+        serialize: (boo) => (boo ? 'true' : undefined),
         parse: (str) => str === 'true',
       },
     },
@@ -591,7 +591,7 @@ const getParameters = function(config, parameters) {
       stateKey: 'modalAbout.isOpen',
       initialState: false,
       options: {
-        serialize: (boo) => boo ? 'on' : undefined,
+        serialize: (boo) => (boo ? 'on' : undefined),
         parse: (str) => str === 'on',
       },
     },

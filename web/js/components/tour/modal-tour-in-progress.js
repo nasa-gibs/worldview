@@ -20,11 +20,11 @@ class ModalInProgress extends React.Component {
       incrementStep,
       isKioskModeActive,
     } = this.props;
-    const closeBtn = 
+    const closeBtn = (
       <button className={isKioskModeActive ? 'd-none' : 'end-tour-close-btn'} onClick={endTour} type="button">
         <Close class="add-plus" size="14px" />
       </button>
-    ;
+    );
     return (
       <div>
         <Modal
@@ -42,12 +42,12 @@ class ModalInProgress extends React.Component {
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>
           <ModalBody>
-            { }
+            {/* eslint-disable */}
             <div
               ref="stepContent"
               dangerouslySetInnerHTML={{ __html: description }}
             />
-            { }
+            {/* eslint-enable */}
           </ModalBody>
           <ModalFooter>
             <Steps

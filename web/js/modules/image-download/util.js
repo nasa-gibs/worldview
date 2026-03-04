@@ -432,10 +432,10 @@ export function getDimensions(projection, bounds, resolution) {
   return { width: imgWidth, height: imgHeight };
 }
 export function getPercentageFromPixel(maxDimension, dimension) {
-  return Math.round(dimension / maxDimension * 100);
+  return Math.round((dimension / maxDimension) * 100);
 }
 export function getPixelFromPercentage(maxDimension, percent) {
-  return Math.round(percent / 100 * maxDimension);
+  return Math.round((percent / 100) * maxDimension);
 }
 
 /**

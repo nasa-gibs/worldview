@@ -13,9 +13,9 @@ export default function LoadingIndicator(props) {
     minHeight: 30, margin: '30px 0', fontSize: 14, textAlign: 'center',
   };
   const barStyle = { margin: 12 };
-  const progressValue = (loadedItems / totalItems * 100).toFixed(0);
+  const progressValue = ((loadedItems / totalItems) * 100).toFixed(0);
 
-  const renderProgressBar = () => 
+  const renderProgressBar = () => (
     <div style={barStyle}>
       <Progress
         animated
@@ -23,15 +23,15 @@ export default function LoadingIndicator(props) {
         value={progressValue}
       />
     </div>
-  ;
+  );
 
-  const closeBtn = 
+  const closeBtn = (
     <button className="modal-close-btn" onClick={onClose} type="button">
       &times;
     </button>
-  ;
+  );
 
-  return !isKioskModeActive && 
+  return !isKioskModeActive && (
     <Modal
       isOpen
       toggle={onClose}
@@ -41,13 +41,13 @@ export default function LoadingIndicator(props) {
     >
       <ModalHeader close={closeBtn}>{title}</ModalHeader>
       <ModalBody>
-        {bodyMsg && 
+        {bodyMsg && (
           <div style={msgStyle}>{bodyMsg}</div>
-        }
+        )}
         {totalItems && renderProgressBar()}
       </ModalBody>
     </Modal>
-  ;
+  );
 }
 
 LoadingIndicator.propTypes = {

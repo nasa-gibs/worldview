@@ -177,7 +177,7 @@ class CoverageItemContainer extends Component {
                 </React.Fragment>
               );
             })
-            : 
+            : (
               <CoverageLine
                 axisWidth={axisWidth}
                 positionTransformX={positionTransformX}
@@ -190,7 +190,7 @@ class CoverageItemContainer extends Component {
                 layerPeriod={layerPeriod}
                 index={`${id}-0`}
               />
-            }
+            )}
         </svg>
       </div>
     );

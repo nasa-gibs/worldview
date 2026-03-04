@@ -95,9 +95,9 @@ function Event (props) {
         {formattedunit === ' NM' ? 'Surface Area: ' : 'Wind Speed: '}
         {magnitudeValue.toLocaleString()}
         {formattedunit}
-        {formattedunit === ' NM' && 
+        {formattedunit === ' NM' && (
           <sup>2</sup>
-        }
+        )}
       </p>
     );
   }
@@ -117,7 +117,7 @@ function Event (props) {
             return (
               <li key={`${event.id}-${date}`} className="date">
 
-                {selectedDate === date ? 
+                {selectedDate === date ? (
                   <span
                     className="active"
                     role="textbox"
@@ -126,8 +126,8 @@ function Event (props) {
                   >
                     {formatDisplayDate(date)}
                   </span>
-                
-                  : 
+                )
+                  : (
                     <a
                       className="'date item-selected"
                       role="link"
@@ -139,7 +139,7 @@ function Event (props) {
                     >
                       {formatDisplayDate(date)}
                     </a>
-                  }
+                  )}
                 {magnitudeOutput(geometry)}
               </li>
             );
@@ -213,11 +213,11 @@ function Event (props) {
         {' '}
         <br />
         {' '}
-        {!isSelected && 
+        {!isSelected && (
           <MonospaceDate date={dateString} />
-        }
+        )}
       </h4>
-      {isSelected && <p className="subtitle">{renderReferenceList()}</p>}
+      {isSelected && (<p className="subtitle">{renderReferenceList()}</p>)}
       {renderDateLists()}
     </li>
   );

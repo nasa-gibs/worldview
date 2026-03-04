@@ -55,7 +55,7 @@ function Rotation() {
     });
   };
 
-  return !isDistractionFreeModeActive && isPolarProj && 
+  return !isDistractionFreeModeActive && isPolarProj && (
     <div className={rotationButtonClass}>
       <button
         type="button"
@@ -108,7 +108,7 @@ function Rotation() {
         <FontAwesomeIcon icon="redo" className="cursor-pointer" widthAuto />
       </button>
     </div>
-  ;
+  );
 }
 
 export default Rotation;

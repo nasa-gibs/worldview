@@ -22,7 +22,7 @@ export default function Wait(props) {
             <span>{statusText}</span>
           </div>
           <div className="wv-wait-progress-actions">
-            {!complete && 
+            {!complete && (
               <Button
                 autoFocus
                 text="Cancel"
@@ -30,7 +30,7 @@ export default function Wait(props) {
                 className="wv-button gray"
                 id="wv-wait-cancel-button"
               />
-            }
+            )}
           </div>
         </div>
       </dialog>

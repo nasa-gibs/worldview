@@ -38,14 +38,14 @@ function MeasurementMetadataDetail (props) {
       } catch (e) {
         if (!controller.signal.aborted) {
           setLoading(false);
-           
+          // eslint-disable-next-line no-console
           console.error(e);
         }
       }
     } else {
       setLoading(false);
     }
-    return () => controller ? controller.abort() : null;
+    return () => (controller ? controller.abort() : null);
   }, [source]);
 
   const renderMetadataForLayers = () => {
@@ -55,10 +55,10 @@ function MeasurementMetadataDetail (props) {
     // Then, filter those layers based on the 'selectedProjection'
     return layersWithProjection
       .filter(({ projections }) => !!projections[selectedProjection])
-      .map((l) => 
+      .map((l) => (
         <div className="layer-description" key={l.id}>
           <h3>{l.title}</h3>
-          {showPreviewImage && 
+          {showPreviewImage && (
             <div className="text-center">
               <a
                 href={`images/layers/previews/${selectedProjection}/${l.id}.jpg`}
@@ -71,10 +71,10 @@ function MeasurementMetadataDetail (props) {
                 />
               </a>
             </div>
-          }
+          )}
           <LayerInfo key={l.id} layer={l} describeDomainsUrl={describeDomainsUrl} />
         </div>
-      );
+      ));
   };
 
   const renderMobile = () => {
@@ -90,7 +90,7 @@ function MeasurementMetadataDetail (props) {
           <div dangerouslySetInnerHTML={{ __html: metadataForSource }} />
           {renderMetadataForLayers()}
         </div>
-        {doesMetaDataNeedExpander && 
+        {doesMetaDataNeedExpander && (
           <button
             className="metadata-more"
             type="button"
@@ -100,7 +100,7 @@ function MeasurementMetadataDetail (props) {
               {isMetadataExpanded ? '^' : '...'}
             </span>
           </button>
-        }
+        )}
       </div>
     );
   };

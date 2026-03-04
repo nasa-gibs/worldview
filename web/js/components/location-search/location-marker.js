@@ -36,7 +36,7 @@ export default function LocationMarker ({
 
   return (
     <div className="location-dialog-pin-wrapper ">
-      {showDialog && 
+      {showDialog && (
         <CoordinatesDialog
           title={title}
           coordinates={coordinates}
@@ -45,7 +45,7 @@ export default function LocationMarker ({
           isMobile={isMobile}
           tooltipId={tooltipId}
         />
-      }
+      )}
       <img
         id="marker-pin"
         src="images/map-pin.png"

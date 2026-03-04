@@ -519,7 +519,7 @@ class Timeline extends React.Component {
     draggerVisibleB,
     animationStartLocation,
     animationEndLocation,
-   
+  // eslint-disable-next-line react/destructuring-assignment
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
       isTimelineDragging,
@@ -579,7 +579,7 @@ class Timeline extends React.Component {
     isTimelineDragging,
     position,
     transformX,
-   
+  // eslint-disable-next-line react/destructuring-assignment
   }, hoverTime = this.state.hoverTime) => {
     this.setState({
       isTimelineDragging,
@@ -1025,7 +1025,7 @@ class Timeline extends React.Component {
   * @param {String} draggerSelected - default to props draggerSelected
   * @returns {void}
   */
-   
+  // eslint-disable-next-line react/destructuring-assignment
   onDateChange = (date, draggerSelected = this.props.draggerSelected) => {
     const dateObj = new Date(date);
     const dateISOFormatted = getISODateFormatted(date);
@@ -1154,7 +1154,7 @@ class Timeline extends React.Component {
           </div>
         </div>
         <div>
-          {!isCompareModeActive && !isChartingActive && 
+          {!isCompareModeActive && !isChartingActive && (
           <AnimationButton
             isMobile={isMobile}
             breakpoints={breakpoints}
@@ -1172,7 +1172,7 @@ class Timeline extends React.Component {
               ? 'Animation feature is deactivated when Compare feature is active'
               : chartingActiveLabel}
           />
-          }
+          )}
         </div>
       </div>
     );
@@ -1279,13 +1279,13 @@ class Timeline extends React.Component {
         style={containerDisplayStyle}
       >
         {initialLoadComplete && !isDistractionFreeModeActive
-          && 
+          && (
           <ErrorBoundary>
             {isMobile || isEmbedModeActive
             /* Mobile Timeline Size */
               ? this.renderMobile()
               /* Normal Timeline Size */
-              : !isDistractionFreeModeActive && 
+              : !isDistractionFreeModeActive && (
                 <section id="timeline" className="timeline-inner clearfix">
                   <div
                     id="timeline-header"
@@ -1330,7 +1330,7 @@ class Timeline extends React.Component {
                   </div>
 
                   {!isTimelineHidden
-                    && 
+                    && (
                     <div id="timeline-footer" className="notranslate">
                       {/* Axis */}
                       <TimelineAxis
@@ -1415,7 +1415,7 @@ class Timeline extends React.Component {
                       />
 
                       {isAnimationWidgetReady
-                        && 
+                        && (
                         <TimelineRangeSelector
                           axisWidth={axisWidth}
                           position={position}
@@ -1431,10 +1431,10 @@ class Timeline extends React.Component {
                           updateAnimationDateAndLocation={this.updateAnimationDateAndLocation}
                           max={rangeSelectorMax}
                         />
-                        }
+                        )}
 
                       {frontDate
-                        && 
+                        && (
                         <DraggerContainer
                           axisWidth={axisWidth}
                           position={position}
@@ -1459,10 +1459,10 @@ class Timeline extends React.Component {
                           isDraggerDragging={isDraggerDragging}
                           isAnimationPlaying={isAnimationPlaying}
                         />
-                        }
+                        )}
 
                       {!isTimelineDragging
-                        && 
+                        && (
                         <DateTooltip
                           activeLayers={activeLayers}
                           shouldIncludeHiddenLayers={shouldIncludeHiddenLayers}
@@ -1476,9 +1476,9 @@ class Timeline extends React.Component {
                           showHoverLine={showHoverLine}
                           isTimelineLayerCoveragePanelOpen={isTimelineLayerCoveragePanelOpen}
                         />
-                        }
+                        )}
                     </div>
-                    }
+                    )}
 
                   {/* Custom Interval Selector Widget */}
                   <CustomIntervalSelector
@@ -1510,11 +1510,11 @@ class Timeline extends React.Component {
                     />
                   </button>
                 </section>
-              }
+              )}
           </ErrorBoundary>
-          }
+          )}
         {initialLoadComplete && isDistractionFreeModeActive
-        && 
+        && (
           <ErrorBoundary>
             <section id="distraction-free-timeline" className="clearfix">
               <div
@@ -1535,7 +1535,7 @@ class Timeline extends React.Component {
               </div>
             </section>
           </ErrorBoundary>
-        }
+        )}
       </div>
     );
   }
@@ -1698,7 +1698,7 @@ function mapStateToProps(state) {
     rightArrowDisabled,
     nowButtonDisabled,
     hideTimeline:
-      modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT' || animation.gifActive,
+      (modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT') || animation.gifActive,
     animationDisabled:
       !lodashGet(map, 'ui.selected.frameState_')
       || sidebar.activeTab === 'download'

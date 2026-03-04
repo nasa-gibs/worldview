@@ -95,13 +95,13 @@ function Crop(props) {
 
   return createPortal(
     <>
-      {showCoordinates && 
+      {showCoordinates && (
         <RenderCoordinates
           coordinates={coordinates}
           topRightStyle={topRightStyle}
           bottomLeftStyle={bottomLeftStyle}
         />
-      }
+      )}
 
       <ReactCrop
         crop={crop}

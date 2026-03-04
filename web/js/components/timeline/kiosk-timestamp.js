@@ -64,7 +64,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
         {year}
       </div>
 
-      {subdaily && 
+      {subdaily && (
         <>
           <div className="kiosk-hours">
             {hour}
@@ -85,7 +85,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
             {timeZoneLabel}
           </div>
         </>
-      }
+      )}
     </>
   );
 }

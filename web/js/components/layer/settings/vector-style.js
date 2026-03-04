@@ -57,7 +57,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | colormap Id
    * @param {String} description | Colormap name
    */
-   
+  // eslint-disable-next-line class-methods-use-this
   renderLegendMultiItem(vectorStyle, vectorStyleId, description) {
     const caseDefaultClassName = 'wv-palette-selector-row ';
     const array = Array.from(vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']);
@@ -85,7 +85,7 @@ class VectorStyleSelect extends React.Component {
         console.warn('Irregular conditional');
       }
     }
-    return organizedArray.map((obj, i) => 
+    return organizedArray.map((obj, i) => (
       /* eslint react/no-array-index-key: 1 */
       <div key={vectorStyleId + i} className={caseDefaultClassName}>
         <label>
@@ -98,7 +98,7 @@ class VectorStyleSelect extends React.Component {
           <span className="wv-palette-label">{obj.label}</span>
         </label>
       </div>
-    );
+    ));
   }
 
   /**
@@ -123,9 +123,9 @@ class VectorStyleSelect extends React.Component {
           name="wv-palette-radio"
           onClick={() => this.onChangeVectorStyle(vectorStyleId)}
         />
-        {isSelected && 
+        {isSelected && (
           <span className="dot" />
-        }
+        )}
         <label htmlFor={`wv-palette-radio-${vectorStyleId}`}>
           <span
             className="wv-palettes-class"
@@ -160,7 +160,7 @@ class VectorStyleSelect extends React.Component {
         <h2 className="wv-header">Vector Styles</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
           {
-             
+            // eslint-disable-next-line array-callback-return
             uniqueStyleLayers.map((styleLayerObject) => {
               if (styleLayerObject && styleLayerObject) {
                 const item = this.customLegend(styleLayerObject);

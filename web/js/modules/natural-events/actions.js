@@ -39,7 +39,7 @@ export function requestSources() {
     let sourcesURL = `${baseUrl}/sources`;
 
     if (mockSources) {
-       
+      // eslint-disable-next-line no-console
       console.warn(`Using mock sources data: ${mockSources}`);
       sourcesURL = `mock/sources_data.json-${mockSources}`;
     }
@@ -89,7 +89,7 @@ export function setEventsFilter(categories, start, end, showAll, showAllTracks) 
       showAllTracks,
     });
     // Only make request if something has changed
-    if (!showAll || prevShowAll !== showAll || !sameCategories || !sameDates) {
+    if (!showAll || (prevShowAll !== showAll) || !sameCategories || !sameDates) {
       dispatch(requestEvents(requestUrl));
     }
   };

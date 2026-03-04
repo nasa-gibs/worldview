@@ -24,7 +24,7 @@ function ProductFacet(props) {
     view,
   } = config;
 
-  const renderHeaderIcons = () => 
+  const renderHeaderIcons = () => (
     <>
       <Tooltip
         id="center-align-tooltip"
@@ -50,26 +50,26 @@ function ProductFacet(props) {
         widthAuto
       />
     </>
-  ;
+  );
 
   const noResults = !data.length;
 
   return collapsed || noResults
-    ? 
+    ? (
       <div id={`${field}-facet`} className="facet-wrapper">
         {renderHeaderIcons()}
         <fieldset className="sui-facet">
           <legend className="sui-facet__title">{label}</legend>
         </fieldset>
-        {noResults && !collapsed && 
+        {noResults && !collapsed && (
           <div className="no-matches">No matches.</div>
-        }
+        )}
       </div>
-    
-    : 
+    )
+    : (
       <div id={`${field}-facet`} className="facet-wrapper">
         {renderHeaderIcons()}
-        {!collapsed && 
+        {!collapsed && (
           <Facet
             field={field}
             label={booleanOptionLabel || label}
@@ -77,9 +77,9 @@ function ProductFacet(props) {
             show={show}
             view={view}
           />
-        }
+        )}
       </div>
-    ;
+    );
 }
 
 ProductFacet.propTypes = {

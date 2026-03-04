@@ -222,7 +222,7 @@ export function setStyleFunction(opts) {
   const selectedFeatures = selected[layerId];
 
   // Process style of feature selected/clicked in UI
-  if (glStyle.name !== 'Orbit Tracks' && selectedFeatures) {
+  if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
     const extentStartX = layer.getExtent()[0];
     const fallbackExtent = extentStartX === -250
       ? [110, -90, 180, 90]
@@ -300,7 +300,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, s
       if (minutes) {
         minute = minutes.split(':');
       }
-      if (minute && minute[1] % 5 === 0 || feature.getGeometry().getType() === 'LineString') {
+      if ((minute && minute[1] % 5 === 0) || feature.getGeometry().getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
       return undefined;
