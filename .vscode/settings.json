@@ -13,6 +13,7 @@
   "[json]": {
     "editor.tabSize": 2
   },
+  "json.validate.enable": true,
   "json.schemas": [
     {
       "fileMatch": [
@@ -22,9 +23,19 @@
       "url": "./schemas/layer-config.json"
     }
   ],
-  "eslint.enable": true,
   "eslint.lintTask.enable": true,
   "eslint.format.enable": true,
-  "eslint.useFlatConfig": true,
-  "eslint.validate": ["javascript", "javascriptreact"],
+  "stylelint.configFile": ".stylelintrc",
+  "stylelint.snippet": [
+      "css",
+      "less",
+      "postcss",
+      "scss"
+  ],
+  "stylelint.validate": [
+      "css",
+      "less",
+      "postcss",
+      "scss"
+  ],
 }
