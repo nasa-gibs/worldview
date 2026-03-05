@@ -47,6 +47,10 @@ class PaletteLegend extends React.Component {
       width: props.width,
       scrollContainerEl: null,
     };
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.hideValue = this.hideValue.bind(this);
+    this.onHoverColorbar = this.onHoverColorbar.bind(this);
+    this.onMove = this.onMove.bind(this);
   }
 
   componentDidMount() {
@@ -323,11 +327,11 @@ class PaletteLegend extends React.Component {
             width={width}
             height={24}
             ref={this[`canvas_${index}`]}
-            onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
-            onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
+            onMouseEnter={!isMobile ? this.onMouseEnter : null}
+            onMouseLeave={!isMobile ? this.hideValue : null}
             onMouseMove={
               !isMobile
-                ? this.onHoverColorbar.bind(this, this[`canvas_${index}`])
+                ? (event) => this.onHoverColorbar(this[`canvas_${index}`], event)
                 : null
             }
           />
@@ -422,9 +426,9 @@ class PaletteLegend extends React.Component {
                     id={keyId}
                     className={inActive ? `${palletteClass} disabled-classification` : palletteClass}
                     style={isInvisible ? null : { backgroundColor: util.hexToRGBA(legendColor) }}
-                    onMouseMove={this.onMove.bind(this, legendColor)}
-                    onMouseEnter={this.onMouseEnter.bind(this)}
-                    onMouseLeave={this.hideValue.bind(this)}
+                    onMouseMove={(event) => this.onMove(legendColor, event)}
+                    onMouseEnter={this.onMouseEnter}
+                    onMouseLeave={this.hideValue}
                     dangerouslySetInnerHTML={{ __html: '&nbsp' }}
                   />
 

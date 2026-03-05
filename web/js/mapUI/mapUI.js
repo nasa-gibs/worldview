@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -411,7 +412,6 @@ function MapUI(props) {
       { isEICModeActive &&
       (
         <>
-          // eslint-disable-next-line react/jsx-pascal-case
           <EIC />
           <KioskAnimations ui={ui} />
           <TileMeasurement ui={ui} />
