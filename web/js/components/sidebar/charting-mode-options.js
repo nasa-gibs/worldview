@@ -626,7 +626,14 @@ function ChartingModeOptions(props) {
         displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
-        displaySimpleStats(dataToRender);
+        chartData.current = {
+          title: dataToRender.title,
+          subtitle: dataToRender.subtitle,
+          unit: dataToRender.unit,
+          statData: { ...data.body },
+          date: primaryDate,
+        };
+        displaySimpleStats(chartData.current);
         updateChartRequestStatus(false);
       }
     } else {
@@ -1022,7 +1029,7 @@ const mapDispatchToProps = (dispatch) => ({
         offsetLeft: 'calc(50% - 150px)',
         offsetTop: 50,
         width: 300,
-        height: 360,
+        height: 340,
         stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
