@@ -53,7 +53,7 @@ const MeasureMenu = function () {
   const isTouchDevice = useSelector((state) => state.modal.customProps.touchDevice);
   const unitOfMeasure = useSelector((state) => state.measure.unitOfMeasure);
   const measurementsInProj = useSelector((state) => !!Object.keys(
-    state.measure.allMeasurements[state.proj.selected.crs],
+    state.measure.allMeasurements[state.proj.selected.crs]
   ).length);
 
   const listSize = isTouchDevice ? 'large' : 'small';

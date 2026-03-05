@@ -28,7 +28,7 @@ class TimelineRangeSelector extends React.Component {
 
   componentDidUpdate() {
     const { startLocation, endLocation } = this.props;
-    // eslint-disable-next-line react/destructuring-assignment
+
     if (startLocation !== this.state.startLocation || endLocation !== this.state.endLocation) {
       this.updateLocation();
     }
@@ -130,7 +130,7 @@ class TimelineRangeSelector extends React.Component {
     animLocationDate,
     animDraggerLocation,
     deltaX,
-    { diffZeroValues, diffFactor },
+    { diffZeroValues, diffFactor }
   ) => {
     if (!diffZeroValues) { // month or year
       const {
@@ -143,8 +143,8 @@ class TimelineRangeSelector extends React.Component {
       const options = timeScaleOptions[timeScale].timeAxis;
       const { gridWidth } = options;
 
-      const startDraggerPositionRelativeToFrontDate = animDraggerLocation
-      - position - transformX + deltaX;
+      const startDraggerPositionRelativeToFrontDate = animDraggerLocation -
+      position - transformX + deltaX;
       const gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
       const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
       const draggerDateAddedValue = draggerDateAdded.valueOf();
@@ -208,7 +208,7 @@ class TimelineRangeSelector extends React.Component {
           animationStartLocationDate,
           startLocation,
           deltaXStart,
-          sharedAnimLocationUpdateParams,
+          sharedAnimLocationUpdateParams
         );
       }
       if (deltaXEnd !== 0) { // update new end date
@@ -216,7 +216,7 @@ class TimelineRangeSelector extends React.Component {
           animationEndLocationDate,
           endLocation,
           deltaXEnd,
-          sharedAnimLocationUpdateParams,
+          sharedAnimLocationUpdateParams
         );
       }
     }
@@ -251,7 +251,7 @@ class TimelineRangeSelector extends React.Component {
       animationEndLocationDate,
       newDraggerStartLocation,
       newDraggerEndLocation,
-      isDragging,
+      isDragging
     );
   };
 

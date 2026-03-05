@@ -19,7 +19,7 @@ function AnimationTileCheck(props) {
   const zoom = useSelector((state) => Math.floor(state.map.ui.selected.getView().getZoom()));
   const activeLayers = useSelector(
     (state) => getActiveLayers(state, state.compare.activeString),
-    shallowEqual,
+    shallowEqual
   );
 
   const [frameDates, setFrameDates] = useState([]);

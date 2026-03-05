@@ -7,6 +7,7 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isMobileOnly, isTablet } from 'react-device-detect';
+
 import googleTagManager from 'googleTagManager';
 import ChartingInfo from '../../components/charting/charting-info';
 import Button from '../../components/util/button';
@@ -78,27 +79,27 @@ const FooterContent = React.forwardRef((props, ref) => {
           onclick={changeCompareMode}
         />
         {isChartingActive && (
-        <ChartingModeOptions
-          isChartingActive={isChartingActive}
-          isMobile={isMobile}
-          sidebarHeight={sidebarHeight}
-        />
+          <ChartingModeOptions
+            isChartingActive={isChartingActive}
+            isMobile={isMobile}
+            sidebarHeight={sidebarHeight}
+          />
         )}
       </div>
       <div className="product-buttons">
-        {!isMobile && !isCompareActive && chartFeature
-          && (
-          <>
-            <Button
-              id="chart-toggle-button"
-              aria-label={chartBtnText}
-              className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
-              style={!chartFeature ? { display: 'none' } : null}
-              onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
-              text={chartBtnText}
-            />
-            {!chartingModeAccessible
-            && (
+        {!isMobile && !isCompareActive && chartFeature &&
+          (
+            <>
+              <Button
+                id="chart-toggle-button"
+                aria-label={chartBtnText}
+                className={!isCompareActive && chartingModeAccessible ? 'chart-toggle-button btn' : 'chart-toggle-button btn disabled'}
+                style={!chartFeature ? { display: 'none' } : null}
+                onClick={!isCompareActive && chartingModeAccessible ? onClickToggleCharting : null}
+                text={chartBtnText}
+              />
+              {!chartingModeAccessible &&
+            (
               <UncontrolledTooltip
                 id="center-align-tooltip"
                 placement="bottom"
@@ -107,18 +108,18 @@ const FooterContent = React.forwardRef((props, ref) => {
                 Add a layer with a color palette to create a time series chart of a single variable
               </UncontrolledTooltip>
             )}
-          </>
+            </>
           )}
-        {!isChartingActive
-          && (
-          <Button
-            id="compare-toggle-button"
-            aria-label={compareBtnText}
-            className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
-            style={!compareFeature ? { display: 'none' } : null}
-            onClick={!isChartingActive ? onClickToggleCompare : null}
-            text={compareBtnText}
-          />
+        {!isChartingActive &&
+          (
+            <Button
+              id="compare-toggle-button"
+              aria-label={compareBtnText}
+              className={!isChartingActive ? 'compare-toggle-button btn' : 'compare-toggle-button btn disabled'}
+              style={!compareFeature ? { display: 'none' } : null}
+              onClick={!isChartingActive ? onClickToggleCompare : null}
+              text={compareBtnText}
+            />
           )}
       </div>
     </>
@@ -129,29 +130,31 @@ const FooterContent = React.forwardRef((props, ref) => {
     const numEvents = eventsData ? eventsData.length : 0;
     return (
       <div className="event-count">
-        {eventsData && eventLimitReach ? (
-          <>
+        {eventsData && eventLimitReach
+          ? (
+            <>
+              <span>
+                {`Showing the first ${numEvents} events`}
+              </span>
+              <FontAwesomeIcon id="filter-info-icon" icon="info-circle" widthAuto />
+              <UncontrolledTooltip
+                placement="right"
+                target="filter-info-icon"
+              >
+                <div>
+                  More than
+                  {` ${LIMIT_EVENT_REQUEST_COUNT} `}
+                  events match the current filter criteria. Narrow your search by date, event type
+                  and/or map view.
+                </div>
+              </UncontrolledTooltip>
+            </>
+          )
+          : (
             <span>
-              {`Showing the first ${numEvents} events`}
+              {`Showing ${numEvents} events`}
             </span>
-            <FontAwesomeIcon id="filter-info-icon" icon="info-circle" widthAuto />
-            <UncontrolledTooltip
-              placement="right"
-              target="filter-info-icon"
-            >
-              <div>
-                More than
-                {` ${LIMIT_EVENT_REQUEST_COUNT} `}
-                events match the current filter criteria. Narrow your search by date, event type
-                and/or map view.
-              </div>
-            </UncontrolledTooltip>
-          </>
-        ) : (
-          <span>
-            {`Showing ${numEvents} events`}
-          </span>
-        )}
+          )}
       </div>
     );
   };
@@ -211,7 +214,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      }),
+      })
     );
   },
   openChartingDateModal: () => {
@@ -222,7 +225,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      }),
+      })
     );
   },
   addLayers: (isPlaying) => {
@@ -237,7 +240,7 @@ const mapDispatchToProps = (dispatch) => ({
         backdrop: true,
         CompletelyCustomModal: SearchUiProvider,
         wrapClassName: '',
-      }),
+      })
     );
   },
 });
@@ -246,7 +249,7 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
   null,
-  { forwardRef: true },
+  { forwardRef: true }
 )(FooterContent);
 
 FooterContent.propTypes = {

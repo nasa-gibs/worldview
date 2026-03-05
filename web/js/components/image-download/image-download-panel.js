@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import googleTagManager from 'googleTagManager';
 import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
@@ -61,15 +62,16 @@ function ImageDownloadPanel(props) {
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
   const activePalettes = useSelector((state) => getActivePalettes(
     state,
-    state.compare.activeString,
+    state.compare.activeString
   ));
 
   useEffect(() => {
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
-      layer.wv.id,
-      layer.wv.granuleDates,
-    ]));
+    const granuleDatesMap = new Map(map.getLayers().getArray()
+      .map((layer) => [
+        layer.wv.id,
+        layer.wv.granuleDates,
+      ]));
     const layerDefs = layerList.map((def) => ({
       ...def, granuleDates: granuleDatesMap.get(def.id),
     }));
@@ -82,9 +84,10 @@ function ImageDownloadPanel(props) {
     const time = new Date(date.getTime());
 
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
-      layer.wv.id, layer.wv.granuleDates,
-    ]));
+    const granuleDatesMap = new Map(map.getLayers().getArray()
+      .map((layer) => [
+        layer.wv.id, layer.wv.granuleDates,
+      ]));
     const layerDefs = layerList.map((def) => ({
       ...def, granuleDates: granuleDatesMap.get(def.id),
     }));
@@ -98,7 +101,7 @@ function ImageDownloadPanel(props) {
       currFileType,
       currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
       markerCoordinates,
-      activePalettes,
+      activePalettes
     );
 
     window.open(dlURL, '_blank');
@@ -152,20 +155,22 @@ function ImageDownloadPanel(props) {
       const value = currIsWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {currFileType === 'application/vnd.google-earth.kmz' ? (
-            <select disabled>
-              <option value={0}>No</option>
-            </select>
-          ) : (
-            <select
-              id="wv-image-worldfile"
-              value={value}
-              onChange={(e) => handleChange('worldfile', e.target.value)}
-            >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </select>
-          )}
+          {currFileType === 'application/vnd.google-earth.kmz'
+            ? (
+              <select disabled>
+                <option value={0}>No</option>
+              </select>
+            )
+            : (
+              <select
+                id="wv-image-worldfile"
+                value={value}
+                onChange={(e) => handleChange('worldfile', e.target.value)}
+              >
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            )}
           Worldfile (.zip)
         </div>
       );
@@ -232,7 +237,7 @@ function ImageDownloadPanel(props) {
             {' '}
             granules, additional
             granules are omitted.
-          </p> // eslint-disable-line react/jsx-one-expression-per-line
+          </p>
         )}
         <ResTable
           width={width}

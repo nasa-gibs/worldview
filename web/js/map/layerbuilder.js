@@ -1,5 +1,3 @@
-/* eslint-disable import/no-duplicates */
-/* eslint-disable no-multi-assign */
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -105,8 +103,8 @@ export default function mapLayerBuilder(config, cache, store) {
   const getUpdatedDateRanges = (def, callback, group) => {
     const state = store.getState();
     const { config: stateConfig, proj } = state;
-    const describeDomainsUrl = stateConfig?.features?.describeDomains?.url
-      || 'https://gibs.earthdata.nasa.gov';
+    const describeDomainsUrl = stateConfig?.features?.describeDomains?.url ||
+      'https://gibs.earthdata.nasa.gov';
     const {
       id,
     } = def;
@@ -213,9 +211,9 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const dateTime = closestDate.getTime();
     // if current date is outside previous and next available dates, recheck date range
-    if (previousLayerDate && nextLayerDate
-      && dateTime > previousLayerDate.getTime()
-      && dateTime < nextLayerDate.getTime()
+    if (previousLayerDate && nextLayerDate &&
+      dateTime > previousLayerDate.getTime() &&
+      dateTime < nextLayerDate.getTime()
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
@@ -331,7 +329,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
-    // eslint-disable-next-line no-use-before-define
+
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     return layer;
@@ -437,10 +435,11 @@ export default function mapLayerBuilder(config, cache, store) {
       configMatrixSet,
       matrixSetLimits,
       day,
-      proj.selected,
+      proj.selected
     );
     const sizes = !tileMatrices
-      ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+      ? []
+      : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -715,7 +714,8 @@ export default function mapLayerBuilder(config, cache, store) {
                 coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
                 MAIN_USE: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.value : 'inactivesite',
                 date: featuresObj[rowObj.Site_Name].properties
-                  ? featuresObj[rowObj.Site_Name].properties.date : new Date(date.toUTCString()),
+                  ? featuresObj[rowObj.Site_Name].properties.date
+                  : new Date(date.toUTCString()),
               };
               takenNamesAll[rowObj.Site_Name] = true;
             }
@@ -762,8 +762,8 @@ export default function mapLayerBuilder(config, cache, store) {
         let valueIndex;
         // For active data points, define a color based on their value via the color palette
         if (active) {
-          valueIndex = values.findIndex((range) => value >= range[0]
-            && (range.length < 2 || value < range[1]));
+          valueIndex = values.findIndex((range) => value >= range[0] &&
+            (range.length < 2 || value < range[1]));
           fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
@@ -775,11 +775,11 @@ export default function mapLayerBuilder(config, cache, store) {
           fillColor = '#808080';
         }
         // Ignore data points that fall outside of the defined range
-        if (fillColor === '#000000'
-          || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
-          || (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value))
-          || (def.min && !Array.isArray(def.min) && def.min > valueIndex)
-          || (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
+        if (fillColor === '#000000' ||
+          (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value)) ||
+          (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value)) ||
+          (def.min && !Array.isArray(def.min) && def.min > valueIndex) ||
+          (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
           return null;
         }
         // Return the style for the current feature
@@ -1205,7 +1205,7 @@ export default function mapLayerBuilder(config, cache, store) {
         transformRequest(url, type) {
           if (type === 'Source') {
             return new Request(
-              url.replace('/VectorTileServer', '/VectorTileServer/'),
+              url.replace('/VectorTileServer', '/VectorTileServer/')
             );
           }
           return undefined;
@@ -1223,7 +1223,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const selectedDate = date || getSelectedDate(state);
     const isoDate = selectedDate.toISOString();
     const selectedDateString = isoDate.split('T')[0].split('-').join('');
-    const matchedLayers = def.layers.filter((layerName) => layerName.match(/([0-9])+/g)[0] === selectedDateString);
+    const matchedLayers = def.layers.filter((layerName) =>
+      layerName.match(/([0-9])+/g)[0] === selectedDateString);
     // create wmts defs from def.layers
     const wmtsDefs = matchedLayers.map((layerID) => ({
       ...def,
@@ -1247,7 +1248,7 @@ export default function mapLayerBuilder(config, cache, store) {
         configMatrixSet,
         matrixSetLimits,
         day,
-        proj.selected,
+        proj.selected
       );
 
       const sourceOptions = {

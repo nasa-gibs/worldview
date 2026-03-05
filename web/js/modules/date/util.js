@@ -46,7 +46,7 @@ export const parseDate = (dateAsString) => {
     millisecond = hhmmss[3] || 0;
   }
   const date = new Date(year, month, day, hour, minute, second, millisecond);
-  // eslint-disable-next-line no-restricted-globals
+
   if (isNaN(date.getTime())) {
     throw new Error(`Invalid date: ${dateAsString}`);
   }
@@ -56,8 +56,8 @@ export const parseDate = (dateAsString) => {
 export function serializeDate(date) {
   return (
     `${date.toISOString().split('T')[0]
-    }-`
-    + `T${
+    }-` +
+    `T${
       date
         .toISOString()
         .split('T')[1]
@@ -274,7 +274,7 @@ export function mapLocationToDateState(
   parameters,
   stateFromLocationObj,
   state,
-  config,
+  config
 ) {
   let stateFromLocation = stateFromLocationObj;
   const appNow = get(state, 'date.appNow');
@@ -320,31 +320,31 @@ export const formatDisplayDate = (date, subdaily) => {
  */
 export const getNextTimeSelection = (delta, increment, prevDate, minDate, maxDate) => {
   let date;
-  // eslint-disable-next-line default-case
+
   switch (increment) {
     case 'year':
       date = new Date(
-        new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta),
+        new Date(prevDate).setUTCFullYear(prevDate.getUTCFullYear() + delta)
       );
       break;
     case 'month':
       date = new Date(
-        new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta),
+        new Date(prevDate).setUTCMonth(prevDate.getUTCMonth() + delta)
       );
       break;
     case 'day':
       date = new Date(
-        new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta),
+        new Date(prevDate).setUTCDate(prevDate.getUTCDate() + delta)
       );
       break;
     case 'hour':
       date = new Date(
-        new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta),
+        new Date(prevDate).setUTCHours(prevDate.getUTCHours() + delta)
       );
       break;
     case 'minute':
       date = new Date(
-        new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta),
+        new Date(prevDate).setUTCMinutes(prevDate.getUTCMinutes() + delta)
       );
       break;
   }
@@ -402,7 +402,8 @@ export const coverageDateFormatter = (dateType, date, period) => {
 
     case 'monthly':
       if (dateType === 'END-DATE') parsedDate.setMonth(parsedDate.getMonth());
-      dateString = moment.utc(parsedDate).format('YYYY MMM').toUpperCase();
+      dateString = moment.utc(parsedDate).format('YYYY MMM')
+        .toUpperCase();
       break;
 
     default:
@@ -576,19 +577,21 @@ export function getNextImageryDelta(layers, date, signConstant) {
     } else if (signConstant > 0) {
       // Forward in time
       const foundIndex = dateRanges.findIndex(
-        (element) => element.startDate > date,
+        (element) => element.startDate > date
       );
       const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
       // endingIndex gives 10 tries to find a valid next interval
       const endingIndex = foundIndex + 5 > dateRanges.length
-        ? dateRanges.length : foundIndex + 5;
+        ? dateRanges.length
+        : foundIndex + 5;
       for (let j = startingIndex; j < endingIndex; j += 1) {
         const obj = dateRanges[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
         const exactDateInterval = ((endDateObj - startDateObj) / 1000) / 60;
         const correctedDateInterval = Math.floor(exactDateInterval) === Number(obj.dateInterval)
-          ? Math.ceil(exactDateInterval) : Number(obj.dateInterval);
+          ? Math.ceil(exactDateInterval)
+          : Number(obj.dateInterval);
         const minDelta = Number(obj.dateInterval) === 1 ? 60 : correctedDateInterval;
         if (dateAObj < startDateObj) {
           const possibleDelta = Math.ceil(((startDateObj - dateAObj) / 1000) / 60);
@@ -617,19 +620,21 @@ export function getNextImageryDelta(layers, date, signConstant) {
     } else {
       // Backward in time
       const foundIndex = [...dateRanges].reverse().findIndex(
-        (element) => element.endDate < date,
+        (element) => element.endDate < date
       );
       const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
       // endingIndex gives 10 tries to find a valid next interval
       const endingIndex = foundIndex + 5 > dateRanges.length
-        ? dateRanges.length : foundIndex + 5;
+        ? dateRanges.length
+        : foundIndex + 5;
       for (let j = startingIndex; j < endingIndex; j += 1) {
         const obj = [...dateRanges].reverse()[j];
         const startDateObj = new Date(obj.startDate);
         const endDateObj = new Date(obj.endDate);
         const exactDateInterval = ((endDateObj - startDateObj) / 1000) / 60;
         const correctedDateInterval = Math.floor(exactDateInterval) === Number(obj.dateInterval)
-          ? Math.ceil(exactDateInterval) : Number(obj.dateInterval);
+          ? Math.ceil(exactDateInterval)
+          : Number(obj.dateInterval);
         const minDelta = Number(obj.dateInterval) === 1 ? 60 : correctedDateInterval;
         if (dateAObj > endDateObj) {
           const possibleDelta = Math.ceil(((dateAObj - endDateObj) / 1000) / 60);

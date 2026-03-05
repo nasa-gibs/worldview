@@ -91,7 +91,7 @@ function DateSelector(props) {
         const maxDayDate = new Date(
           newDate.getUTCFullYear(),
           newDate.getUTCMonth() + 1,
-          0,
+          0
         ).getDate();
 
         let dateCheck;
@@ -115,13 +115,13 @@ function DateSelector(props) {
         const maxDatePrev = new Date(
           newDate.getUTCFullYear(),
           newDate.getUTCMonth() + 1,
-          0,
+          0
         ).getDate();
 
         const maxDateNew = new Date(
           newDate.getUTCFullYear(),
           realMonth + 1,
-          0,
+          0
         ).getDate();
 
         if (maxDatePrev > maxDateNew && tempDay > maxDateNew) {
@@ -139,7 +139,7 @@ function DateSelector(props) {
           const maxDayDate = new Date(
             newDate.getUTCFullYear(),
             newDate.getUTCMonth() + 1,
-            0,
+            0
           ).getDate();
 
           if (inputDate.getDate() > maxDayDate) {
@@ -159,7 +159,7 @@ function DateSelector(props) {
         const maxDayDate = new Date(
           newDate.getUTCFullYear(),
           newDate.getUTCMonth() + 1,
-          0,
+          0
         ).getDate();
 
         let dateCheck;

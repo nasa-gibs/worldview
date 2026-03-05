@@ -1,11 +1,11 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
 import { hasVectorLayers } from '../modules/layers/util';
-import { DISABLE_VECTOR_ZOOM_ALERT,
+import {
+  DISABLE_VECTOR_ZOOM_ALERT,
   DISABLE_VECTOR_EXCEEDED_ALERT,
   MODAL_PROPERTIES
 } from '../modules/alerts/constants';
@@ -47,8 +47,8 @@ class DismissableAlerts extends React.Component {
   componentDidUpdate(prevProps) {
     const { isDistractionFreeModeActive } = this.props;
     const { distractionFreeModeInitLoad } = this.state;
-    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive
-    && !isDistractionFreeModeActive;
+    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive &&
+    !isDistractionFreeModeActive;
     if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
       this.toggleDistractionFreeModeInitLoad(false);
     }
@@ -101,9 +101,9 @@ class DismissableAlerts extends React.Component {
       hasDismissedDDVLocation,
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
-    const hasFailCondition = !HAS_LOCAL_STORAGE
-    || isEmbedModeActive
-    || distractionFreeModeInitLoad;
+    const hasFailCondition = !HAS_LOCAL_STORAGE ||
+    isEmbedModeActive ||
+    distractionFreeModeInitLoad;
     if (hasFailCondition) return null;
 
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
@@ -121,7 +121,8 @@ class DismissableAlerts extends React.Component {
           onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
           message="You are now in distraction free mode. Click the eye button to exit."
         />
-      ) : (
+      )
+      : (
         <>
           {showEventsAlert && (
             <AlertUtil
@@ -168,8 +169,8 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-          {showDDVZoomAlert
-            && ddvZoomAlerts.map((layer) => (
+          {showDDVZoomAlert &&
+            ddvZoomAlerts.map((layer) => (
               <AlertUtil
                 id="zoom-alert"
                 isOpen
@@ -181,8 +182,8 @@ class DismissableAlerts extends React.Component {
                 onClick={openZoomAlertModal}
               />
             ))}
-          { showDDVLocationAlert
-            && ddvLocationAlerts.map((layer) => (
+          { showDDVLocationAlert &&
+            ddvLocationAlerts.map((layer) => (
               <AlertUtil
                 id="granule-alert"
                 isOpen
@@ -247,7 +248,7 @@ const mapStateToProps = (state) => {
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {

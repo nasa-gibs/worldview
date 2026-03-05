@@ -15,7 +15,7 @@ function componentizedPaletteToArray(paletteRGB) {
     r = paletteRGB[i];
     g = paletteRGB[i + 1];
     b = paletteRGB[i + 2];
-    paletteArray.push((r << 16) | (g << 8) | b); // eslint-disable-line no-bitwise
+    paletteArray.push((r << 16) | (g << 8) | b);
   }
   return paletteArray;
 }
@@ -112,7 +112,7 @@ export default class GifStream {
           waterMarkXCoordinate,
           waterMarkYCoordinate,
           waterMarkWidth,
-          waterMarkHeight,
+          waterMarkHeight
         );
       }
       return ctx;
@@ -192,7 +192,7 @@ export default class GifStream {
           } else {
             chunks.push(new Uint8Array(chunk));
             options.progressCallback(
-              Math.round((processedImages / imageLength) * 100),
+              Math.round((processedImages / imageLength) * 100)
             );
             processedImages++;
             setTimeout(
@@ -200,7 +200,7 @@ export default class GifStream {
               // This was needed in order for callback to be applied
                 pull();
               },
-              10,
+              10
             );
           }
         });

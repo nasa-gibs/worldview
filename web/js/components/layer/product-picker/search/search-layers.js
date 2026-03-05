@@ -28,11 +28,13 @@ function SearchLayers(props) {
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          {!selectedLayer && smallView ? null : !!results.length && (
-            <div className="layer-detail-container layers-all search">
-              <LayerMetadataDetail layer={selectedLayer} />
-            </div>
-          )}
+          {!selectedLayer && smallView
+            ? null
+            : !!results.length && (
+              <div className="layer-detail-container layers-all search">
+                <LayerMetadataDetail layer={selectedLayer} />
+              </div>
+            )}
         </div>
       )}
     </div>
@@ -65,8 +67,8 @@ function mapStateToProps(state) {
   };
 }
 export default withSearch(
-  ({ facets, results }) => ({ facets, results }),
+  ({ facets, results }) => ({ facets, results })
 )(connect(
   mapStateToProps,
-  null,
+  null
 )(SearchLayers));

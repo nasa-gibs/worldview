@@ -76,8 +76,8 @@ function AddLayer(props) {
   };
 
   useEffect(() => {
-    if (action.type === layerConstants.ADD_LAYER
-      || action.type === layerConstants.UPDATE_DDV_LAYER) {
+    if (action.type === layerConstants.ADD_LAYER ||
+      action.type === layerConstants.UPDATE_DDV_LAYER) {
       const def = lodashFind(action.layers, { id: action.id });
       if (def.type === 'granule') {
         return granuleLayerAdd(def);
@@ -116,8 +116,8 @@ const mapDispatchToProps = (dispatch) => ({
 export default React.memo(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
-  )(AddLayer),
+    mapDispatchToProps
+  )(AddLayer)
 );
 
 AddLayer.propTypes = {

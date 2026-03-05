@@ -21,7 +21,6 @@ afterEach(() => {
 describe('formats', () => {
   const formats = ['latlon-dd', 'latlon-dm', 'latlon-dms'];
   for (const format of formats) {
-
     test(`coordinate in ${format} format`, () => {
       act(() => {
         root.render(

@@ -39,7 +39,7 @@ test(
     const expectedSecond = { type: CONSTANTS.CHANGE_STATE };
     expect(firstResponse).toEqual(expectedFirst);
     expect(secondResponse).toEqual(expectedSecond);
-  },
+  }
 );
 test(
   `setValue returns ${CONSTANTS.CHANGE_VALUE} action type and value [compare-action-set-value]`,
@@ -49,7 +49,7 @@ test(
       value: 3,
     };
     expect(setValue(3)).toEqual(expectedAction);
-  },
+  }
 );
 
 test(
@@ -60,5 +60,5 @@ test(
       mode: 'some-mode',
     };
     expect(changeMode('some-mode')).toEqual(expectedAction);
-  },
+  }
 );

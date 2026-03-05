@@ -124,7 +124,7 @@ describe('permalink 1.0', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
 
@@ -158,7 +158,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     expect(stateFromLocation.layers.active.layers[0].id).toBe('terra-cr');
   });
@@ -170,7 +170,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
 
     expect(stateFromLocation.layers.active.layers[0].id).toBe('terra-aod');
@@ -183,7 +183,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
@@ -198,7 +198,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers).toHaveLength(0);
@@ -211,7 +211,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers.find((x) => x.id === 'terra-cr')).toBeTruthy();
@@ -225,7 +225,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers).toHaveLength(0);
@@ -238,7 +238,7 @@ describe('permalink 1.1', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     expect(activeLayers[0].id).toBe('terra-cr');
@@ -270,7 +270,7 @@ describe('Date range building', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     adjustActiveDateRanges(activeLayers, new Date('2021-04-30T16:00:00Z'));
@@ -287,7 +287,7 @@ describe('Date range building', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesInDateRanges(activeLayers[0], new Date('2020-01-01'));
@@ -302,7 +302,7 @@ describe('Date range building', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesInDateRanges(activeLayers[0], new Date('1990-01-01'));
@@ -317,7 +317,7 @@ describe('Date range building', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesInDateRanges(activeLayers[0], new Date('2030-01-01'));
@@ -332,7 +332,7 @@ describe('Date range building', () => {
       parameters,
       defaultStateFromLocation,
       globalState,
-      config,
+      config
     );
     const activeLayers = stateFromLocation.layers.active.layers;
     const dates = datesInDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));

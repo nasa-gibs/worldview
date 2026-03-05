@@ -89,7 +89,8 @@ function UpdateCollections () {
       const { signal } = abortController;
       const requestSelectedDateHeaders = () => getHeaders(def, selectedDate, signal);
       if (def.type !== 'granule') return requestSelectedDateHeaders(); // non-granule layers only need one header request
-      const layerGroup = map?.getLayers()?.getArray()?.find((l) => l?.wv?.id === def.id);
+      const layerGroup = map?.getLayers()?.getArray()
+        ?.find((l) => l?.wv?.id === def.id);
       // if we can't find the layer in the map, just do a single request
       if (!layerGroup) return requestSelectedDateHeaders();
       const granuleLayerArray = layerGroup.getLayersArray() || [];
@@ -121,7 +122,7 @@ function UpdateCollections () {
     const layersToUpdate = findLayerCollections(
       formattedDailyDate,
       formattedSubdailyDate,
-      forceUpdate,
+      forceUpdate
     );
     const headerPromises = getAllHeaders(layersToUpdate);
 

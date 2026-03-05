@@ -104,8 +104,8 @@ class CoordinatesDialog extends Component {
           className={`close-tooltip ${closeButtonClassName}`}
           onTouchEnd={this.removeMarker}
         >
-          {tooltipVisibilityCondition
-          && (
+          {tooltipVisibilityCondition &&
+          (
             <UncontrolledTooltip
               id="center-align-tooltip"
               trigger="hover"
@@ -123,8 +123,8 @@ class CoordinatesDialog extends Component {
           className={`minimize-tooltip ${minimizeButtonClassName}`}
           onTouchEnd={this.minimizeDialog}
         >
-          {tooltipVisibilityCondition
-          && (
+          {tooltipVisibilityCondition &&
+          (
             <UncontrolledTooltip
               id="center-align-tooltip"
               trigger="hover"
@@ -148,9 +148,9 @@ class CoordinatesDialog extends Component {
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
-    const tooltipVisibilityCondition = !isMobile
-      && !isCopyToClipboardTooltipVisible
-      && showTooltips;
+    const tooltipVisibilityCondition = !isMobile &&
+      !isCopyToClipboardTooltipVisible &&
+      showTooltips;
 
     return (
       <button

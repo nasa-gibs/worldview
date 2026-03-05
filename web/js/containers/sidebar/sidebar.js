@@ -123,10 +123,10 @@ class Sidebar extends React.Component {
       const iconHeight = 53;
       const topOffset = 10;
       const basePadding = 130;
-      newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight
-          + basePadding + footerHeight + addLayersHeight)
-        - 10;
+      newHeight = screenHeight -
+        (iconHeight + topOffset + tabHeight + groupCheckboxHeight +
+          basePadding + footerHeight + addLayersHeight) -
+        10;
     } else {
       newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
     }
@@ -200,13 +200,13 @@ class Sidebar extends React.Component {
     let msg;
     if (isEmbedModeActive) {
       msg = 'Do you want to open full featured @NAME@ in a new tab with current content loaded?';
-      // eslint-disable-next-line no-alert
+
       if (window.confirm(msg)) {
         window.open(permalink, '_blank');
       }
     } else {
       msg = 'Do you want to reset @NAME@ to its defaults? You will lose your current state.';
-      // eslint-disable-next-line no-alert
+
       if (window.confirm(msg)) {
         googleTagManager.pushEvent({
           event: 'logo_page_reset',
@@ -232,18 +232,19 @@ class Sidebar extends React.Component {
     const mobileImgURL = 'brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
     const wvName = !isMobile ? 'Worldview' : '';
 
-    const sidebarStyle = isMobile ? {
-      background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
-      display: 'block',
-      height: '42px',
-      width: '56px',
-      padding: '5px',
-      top: '10px',
-      left: '10px',
-      borderRadius: '5px',
-      border: '1px solid #333',
-      position: 'absolute',
-    }
+    const sidebarStyle = isMobile
+      ? {
+        background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+        display: 'block',
+        height: '42px',
+        width: '56px',
+        padding: '5px',
+        top: '10px',
+        left: '10px',
+        borderRadius: '5px',
+        border: '1px solid #333',
+        position: 'absolute',
+      }
       : {
         background: `url(${mobileImgURL}) no-repeat 15px center/52px rgb(40 40 40 / 85%)`,
         display: 'block',
@@ -269,26 +270,28 @@ class Sidebar extends React.Component {
       };
 
     return (
-      isKioskModeActive ? (
-        <span
-          id="wv-logo"
-          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-          style={sidebarStyle}
-        >
-          {wvName}
-        </span>
-      ) : (
-        <a
-          href={embedWVLogoLink}
-          title={WVLogoTitle}
-          id="wv-logo"
-          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-          style={sidebarStyle}
-          onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-        >
-          {wvName}
-        </a>
-      )
+      isKioskModeActive
+        ? (
+          <span
+            id="wv-logo"
+            className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+            style={sidebarStyle}
+          >
+            {wvName}
+          </span>
+        )
+        : (
+          <a
+            href={embedWVLogoLink}
+            title={WVLogoTitle}
+            id="wv-logo"
+            className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+            style={sidebarStyle}
+            onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
+          >
+            {wvName}
+          </a>
+        )
     );
   }
 
@@ -335,9 +338,11 @@ class Sidebar extends React.Component {
       : embedModeHeight;
     const displayStyle = isDistractionFreeModeActive ? 'none' : 'block';
 
-    const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile ? {
-      position: 'static',
-    } : null;
+    const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile
+      ? {
+        position: 'static',
+      }
+      : null;
 
     const mobileProductHolderStyle = !isDistractionFreeModeActive && isMobile && !isEmbedModeActive
       ? {
@@ -353,24 +358,27 @@ class Sidebar extends React.Component {
         zIndex: 1000,
         maxHeight: `${maxHeight}`,
         display: `{${displayStyle}} !important`,
-      } : {
+      }
+      : {
         maxHeight: `${maxHeight}`,
       };
-    const productsHolderStyle = isDistractionFreeModeActive && !isMobile ? {
-      display: 'none',
-    } : mobileProductHolderStyle;
+    const productsHolderStyle = isDistractionFreeModeActive && !isMobile
+      ? {
+        display: 'none',
+      }
+      : mobileProductHolderStyle;
 
     return (
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
           {!displayStaticMap && this.renderSidebarLogo()}
           {!isDistractionFreeModeActive && isCollapsed && (
-          <CollapsedButton
-            isMobile={isMobile}
-            isEmbed={isEmbedModeActive}
-            onclick={this.toggleSidebar}
-            numberOfLayers={numberOfLayers}
-          />
+            <CollapsedButton
+              isMobile={isMobile}
+              isEmbed={isEmbedModeActive}
+              onclick={this.toggleSidebar}
+              numberOfLayers={numberOfLayers}
+            />
           )}
           <div
             id="products-holder"
@@ -459,10 +467,10 @@ const mapStateToProps = (state) => {
   } = state;
 
   const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting).length > 0;
-  const isLoadingEvents = requestedEvents.isLoading
-    || requestedEventSources.isLoading;
-  const hasEventRequestError = !!(requestedEvents.error
-    || requestedEventSources.error);
+  const isLoadingEvents = requestedEvents.isLoading ||
+    requestedEventSources.isLoading;
+  const hasEventRequestError = !!(requestedEvents.error ||
+    requestedEventSources.error);
 
   const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
@@ -540,9 +548,8 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Sidebar);
-
 
 Sidebar.propTypes = {
   activeString: PropTypes.string,

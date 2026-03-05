@@ -18,7 +18,6 @@ import {
 } from '../palettes/selectors';
 import util from '../../util/util';
 
-
 /**
  * Get OpenLayers layers from state that were created from WV vector
  * layer definitions. NOTE: This currently also will include the associate WMS
@@ -65,7 +64,7 @@ export function getVectorStyle(layerId, indexInt, state) {
   const index = lodashIsUndefined(indexInt) ? 0 : indexInt;
   const renderedVectorStyle = lodashGet(
     state,
-    `vectorStyles.${layerId}.layers.${index}`,
+    `vectorStyles.${layerId}.layers.${index}`
   );
   if (renderedVectorStyle) {
     return renderedVectorStyle;

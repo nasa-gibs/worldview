@@ -38,7 +38,6 @@ function PresetConsoleCommands () {
     console.log(parameters);
   };
 
-
   return (
     <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-3">
       <div className="d-flex flex-row justify-content-center align-items-center">

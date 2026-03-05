@@ -66,7 +66,6 @@ function getTickPositions(dataLength) {
   return tickPosArr;
 }
 
-
 function CustomXAxisTick(props) {
   const {
     x, y, fill, textAnchor, visibleTicksCount, index, payload, data,
@@ -521,8 +520,8 @@ function ChartComponent(props) {
             Numerical analyses performed on imagery should only
             be used for initial basic exploratory purposes.
           </span>
-          {isTruncated
-          && (
+          {isTruncated &&
+          (
             <div className="charting-disclaimer-upper">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
@@ -551,8 +550,8 @@ function ChartComponent(props) {
               </i>
             </div>
           )}
-          {errors && errors.error_count > 0
-          && (
+          {errors && errors.error_count > 0 &&
+          (
             <div className="charting-disclaimer-lower">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
@@ -644,5 +643,5 @@ CustomTooltip.propTypes = {
 };
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps
 )(ChartComponent);

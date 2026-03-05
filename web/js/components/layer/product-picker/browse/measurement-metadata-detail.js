@@ -38,7 +38,7 @@ function MeasurementMetadataDetail (props) {
       } catch (e) {
         if (!controller.signal.aborted) {
           setLoading(false);
-          // eslint-disable-next-line no-console
+
           console.error(e);
         }
       }
@@ -186,5 +186,5 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps
 )(MeasurementMetadataDetail);

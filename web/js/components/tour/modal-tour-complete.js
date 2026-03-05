@@ -17,8 +17,8 @@ function ModalComplete(props) {
   );
   let list;
   if (
-    readMoreLinks
-      && (Array.isArray(readMoreLinks) && readMoreLinks.length)
+    readMoreLinks &&
+      (Array.isArray(readMoreLinks) && readMoreLinks.length)
   ) {
     list = (
       <>

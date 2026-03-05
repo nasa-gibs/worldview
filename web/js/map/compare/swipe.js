@@ -89,7 +89,7 @@ const dragLine = function(listenerObjArg, lineCase, map) {
     dragging = false;
     events.trigger(
       'compare:moveend',
-      lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0),
+      lodashRound((swipeOffset / mapCase.offsetWidth) * 100, 0)
     );
     window.removeEventListener(listenerObj.move, move);
     window.removeEventListener(listenerObj.end, end);
@@ -165,7 +165,7 @@ const addLineOverlay = function(map, dateA, dateB) {
         };
         dragLine(listenerObj, lineCaseEl, map);
       },
-      true,
+      true
     );
 
     el.addEventListener(
@@ -179,7 +179,7 @@ const addLineOverlay = function(map, dateA, dateB) {
         };
         dragLine(listenerObj, lineCaseEl, map);
       },
-      true,
+      true
     );
   });
 
@@ -192,7 +192,7 @@ export default class Swipe {
     olMap,
     store,
     eventListenerStringObj,
-    valueOverride,
+    valueOverride
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;

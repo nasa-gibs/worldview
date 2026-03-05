@@ -153,4 +153,3 @@ Line.propTypes = {
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
 };
-

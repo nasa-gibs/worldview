@@ -90,7 +90,7 @@ function PaletteSelect (props) {
       ctx,
       palette,
       canvas.width,
-      canvas.height,
+      canvas.height
     );
     const dataURL = canvas.toDataURL('image/png');
 
@@ -120,14 +120,14 @@ function PaletteSelect (props) {
         legend.colors,
         '__default',
         legend,
-        activePalette === '__default',
+        activePalette === '__default'
       );
     }
     return renderSelectorItemSingle(
       legend,
       '__default',
       'Default',
-      activePalette === '__default',
+      activePalette === '__default'
     );
   };
 
@@ -141,14 +141,14 @@ function PaletteSelect (props) {
     const target = getCustomPalette(id);
     const targetType = target.colors.length === 1 ? 'classification' : 'continuous';
 
-    if ((source.type === 'continuous' && targetType === 'continuous')
-       || (source.type === 'discrete' && targetType === 'continuous')) {
+    if ((source.type === 'continuous' && targetType === 'continuous') ||
+       (source.type === 'discrete' && targetType === 'continuous')) {
       const translated = palettesTranslate(source.colors, target.colors);
       return renderSelectorItemScale(
         translated,
         id,
         target,
-        activePalette === target.id,
+        activePalette === target.id
       );
     }
     if (source.type === 'classification' && targetType === 'classification') {
@@ -156,7 +156,7 @@ function PaletteSelect (props) {
         target,
         id,
         target.name,
-        activePalette === target.id,
+        activePalette === target.id
       );
     }
     return undefined;
@@ -173,7 +173,7 @@ function PaletteSelect (props) {
       <Scrollbar style={{ maxHeight: '200px' }}>
         {renderDefault()}
         {
-          // eslint-disable-next-line array-callback-return
+
           paletteOrder.map((id) => {
             if (lodashIndexOf(recommended, id) < 0) {
               const item = customLegend(id);

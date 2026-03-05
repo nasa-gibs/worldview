@@ -27,41 +27,43 @@ function RecentLayersList(props) {
   return (
     <>
       {!isMobile && !!recentLayers.length && (
-      <div className="recent-layers-header">
-        <h2> Recently Used Layers </h2>
-        <Tooltip
-          id="center-align-tooltip"
-          className="facet-tooltip-content"
-          isOpen={tooltipVisible}
-          target="recent-layer-tooltip-target"
-          placement="bottom"
-          toggle={() => toggleTooltip(!tooltipVisible)}
-          delay={{ show: 0, hide: 300 }}
-        >
-          <p>{recentLayerInfo}</p>
-        </Tooltip>
-        <FontAwesomeIcon
-          id="recent-layer-tooltip-target"
-          className="tooltip-icon"
-          size="lg"
-          icon="question-circle"
-          widthAuto
-        />
-        <Button id="clear-recent-layers" size="sm" onClick={clearRecentLayers}>
-          Clear List
-        </Button>
-      </div>
+        <div className="recent-layers-header">
+          <h2> Recently Used Layers </h2>
+          <Tooltip
+            id="center-align-tooltip"
+            className="facet-tooltip-content"
+            isOpen={tooltipVisible}
+            target="recent-layer-tooltip-target"
+            placement="bottom"
+            toggle={() => toggleTooltip(!tooltipVisible)}
+            delay={{ show: 0, hide: 300 }}
+          >
+            <p>{recentLayerInfo}</p>
+          </Tooltip>
+          <FontAwesomeIcon
+            id="recent-layer-tooltip-target"
+            className="tooltip-icon"
+            size="lg"
+            icon="question-circle"
+            widthAuto
+          />
+          <Button id="clear-recent-layers" size="sm" onClick={clearRecentLayers}>
+            Clear List
+          </Button>
+        </div>
       )}
       <div className="search-layers-container recent-layers">
         <div className="layer-list-detail-container">
           <div className="layer-list-container search">
             <SearchLayerList results={recentLayers} />
           </div>
-          { !selectedLayer && smallView ? null : !!recentLayers.length && (
-          <div className="layer-detail-container layers-all search">
-            <LayerMetadataDetail layer={selectedLayer} />
-          </div>
-          )}
+          { !selectedLayer && smallView
+            ? null
+            : !!recentLayers.length && (
+              <div className="layer-detail-container layers-all search">
+                <LayerMetadataDetail layer={selectedLayer} />
+              </div>
+            )}
         </div>
       </div>
     </>
@@ -102,5 +104,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(RecentLayersList);

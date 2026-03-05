@@ -71,7 +71,6 @@ function LayerList(props) {
     setDropdownBtnVisible(false);
   };
 
-
   /**
    * Update Layer order after drag
    * @param {Object} result | Result of layer drag
@@ -96,7 +95,7 @@ function LayerList(props) {
       layerId,
       nextLayerId,
       Array.from(activeLayers),
-      layerSplit,
+      layerSplit
     );
     reorderLayers(newLayers);
   };
@@ -191,9 +190,11 @@ function LayerList(props) {
               {layers.sort((layerA, layerB) => {
                 const shouldHideLayerB = layerB.shouldHide ? -1 : 1;
                 const shouldHideLayers = layerB.shouldHide === layerA.shouldHide
-                  ? 0 : shouldHideLayerB;
+                  ? 0
+                  : shouldHideLayerB;
                 return isChartingActive
-                  ? shouldHideLayers : 0;
+                  ? shouldHideLayers
+                  : 0;
               }).map(renderLayer)}
               {provided.placeholder}
             </ul>
@@ -273,5 +274,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(LayerList);

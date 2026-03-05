@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Button, InputGroup,
@@ -9,6 +9,7 @@ import {
   get as lodashGet,
 } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import googleTagManager from 'googleTagManager';
 import SearchBox from './location-search-input';
 import Alert from '../util/alert';
@@ -46,7 +47,7 @@ class LocationSearchModal extends Component {
       {
         leading: true,
         trailing: true,
-      },
+      }
     );
   }
 
@@ -73,8 +74,8 @@ class LocationSearchModal extends Component {
     if (inputValue && suggestions.length === 0 && prevProps.suggestions.length > 0) {
       const prevInputValue = prevProps.inputValue;
       const prevSuggestedPlace = prevProps.suggestedPlace;
-      const newSuggestedPlaceSelected = prevInputValue
-        && prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
+      const newSuggestedPlaceSelected = prevInputValue &&
+        prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
       const isCoordinates = isValidCoordinates(inputValue);
       // prevent flag error on new place/coordinates being copy pasted
       if (!newSuggestedPlaceSelected && !isCoordinates) {
@@ -82,8 +83,8 @@ class LocationSearchModal extends Component {
         this.setInputAlertIcon(true);
       }
     } else if (
-      (showNoSuggestionsAlert || showInputAlert)
-      && (!inputValue || suggestions.length > 0)) {
+      (showNoSuggestionsAlert || showInputAlert) &&
+      (!inputValue || suggestions.length > 0)) {
       this.setNoSuggestionsAlert(false);
       this.setInputAlertIcon(false);
     }
@@ -178,7 +179,8 @@ class LocationSearchModal extends Component {
           setPlaceMarker([x, y], addressAttributes);
         }
       }
-    }).catch((error) => console.error(error));
+    })
+      .catch((error) => console.error(error));
   };
 
   // handle input value change including text/coordinates typing, pasting, cutting
@@ -357,14 +359,18 @@ class LocationSearchModal extends Component {
       showInputAlert,
     } = this.state;
 
-    const locationSearchMobileStyle = isMobile ? {
-      position: 'static',
-      width: '100%',
-    } : null;
+    const locationSearchMobileStyle = isMobile
+      ? {
+        position: 'static',
+        width: '100%',
+      }
+      : null;
 
-    const locationSearchInputGroupMobileStyle = isMobile ? {
-      width: '100% !important',
-    } : null;
+    const locationSearchInputGroupMobileStyle = isMobile
+      ? {
+        width: '100% !important',
+      }
+      : null;
 
     return (
       <div id="location-search-wrapper" className="location-search-expanded" style={locationSearchMobileStyle}>
@@ -426,7 +432,7 @@ const mapStateToProps = (state) => {
     locationSearchMobileModalOpen,
     isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(
       proj,
-      targetCoordinates,
+      targetCoordinates
     ),
     isCoordinateSearchActive,
     isMobile,
@@ -483,5 +489,5 @@ LocationSearchModal.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(LocationSearchModal);

@@ -62,9 +62,9 @@ export default function mapCompare(store) {
     const state = store.getState();
     const { proj, compare } = state;
 
-    if (compareMode === mode && comparison
-        && selectedProj === proj.selected
-        && self.value === compare.value) {
+    if (compareMode === mode && comparison &&
+        selectedProj === proj.selected &&
+        self.value === compare.value) {
       comparison.update(store);
     } else if (comparison) {
       mode = compareMode;
@@ -73,7 +73,7 @@ export default function mapCompare(store) {
         map,
         store,
         self.EventTypeObject,
-        compare.value || null,
+        compare.value || null
       ); // e.g. new self.swipe()
     } else {
       mode = compareMode;
@@ -81,7 +81,7 @@ export default function mapCompare(store) {
         map,
         store,
         self.EventTypeObject,
-        compare.value || null,
+        compare.value || null
       ); // e.g. new self.swipe()
     }
     self.value = state.compare.value || 50;

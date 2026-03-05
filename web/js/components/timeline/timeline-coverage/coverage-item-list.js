@@ -103,7 +103,6 @@ class CoverageItemList extends Component {
     );
   }
 
-
   /**
   * @desc get formatted time period name
   * @param {String} period
@@ -115,7 +114,6 @@ class CoverageItemList extends Component {
     if (period === 'yearly') return 'year';
     return 'minute';
   }
-
 
   constructor(props) {
     super(props);
@@ -153,7 +151,7 @@ class CoverageItemList extends Component {
     rangeDate,
     layerPeriod,
     itemRangeInterval,
-    nextDate,
+    nextDate
   ) => {
     const { appNow } = this.props;
     const { endDate, futureTime } = layer;
@@ -174,7 +172,7 @@ class CoverageItemList extends Component {
       minMonth + monthAdd,
       minDay + dayAdd,
       minHour + hourAdd,
-      minMinute + minuteAdd,
+      minMinute + minuteAdd
     );
 
     let rangeDateEnd = util.getTimezoneOffsetDate(rangeDateEndLocal);
@@ -297,7 +295,7 @@ class CoverageItemList extends Component {
           startDateLimit,
           startDateLimit,
           endDateLimit,
-          appNow,
+          appNow
         );
         this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
       } else {
@@ -406,13 +404,13 @@ class CoverageItemList extends Component {
 
             // conditional check to determine how layer coverage line
             // will be built in child component
-            const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom
-          && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
-            const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom
-          && dateRangeIntervalZeroIndex > 1;
+            const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom &&
+          (multipleCoverageRanges || dateRangeIntervalZeroIndex);
+            const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom &&
+          dateRangeIntervalZeroIndex > 1;
             // determine date range building vs using startDate to endDate single coverage
-            const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage
-            || isLayerEqualZoomWithMultipleCoverage));
+            const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage ||
+            isLayerEqualZoomWithMultipleCoverage));
             const encodedId = util.encodeId(id);
             const key = `layer-coverage-item-${encodedId}-${index}`;
 

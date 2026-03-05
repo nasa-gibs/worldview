@@ -1,4 +1,3 @@
-/* eslint-disable n/no-missing-import */
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isMobileOnly, isTablet } from 'react-device-detect';
@@ -100,14 +99,14 @@ const mapDispatchToProps = (dispatch) => ({
         backdrop: true,
         CompletelyCustomModal: SearchUiProvider,
         wrapClassName: '',
-      }),
+      })
     );
   },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(AddLayersContent);
 
 AddLayersContent.propTypes = {

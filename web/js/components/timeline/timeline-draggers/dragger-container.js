@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import Dragger from './timeline-dragger';
 
-
 import { getISODateFormatted, getIsBetween } from '../date-util';
 import { timeScaleOptions } from '../../../modules/date/constants';
 
@@ -118,16 +117,16 @@ class DraggerContainer extends PureComponent {
     const { gridWidth } = options;
     const frontDateObj = moment.utc(frontDate);
     const pixelsToAddToDraggerNew = Math.abs(
-      frontDateObj.diff(inputTime, timeScale, true) * gridWidth,
+      frontDateObj.diff(inputTime, timeScale, true) * gridWidth
     );
     newDraggerPosition = pixelsToAddToDraggerNew + position - draggerWidth + transformX + 2;
 
     // determine max timelineEndDate position for dragger
     const endDateLimitPositionFromFront = Math.abs(
-      frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth,
+      frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth
     );
-    const endDatePosition = endDateLimitPositionFromFront
-    + position - draggerWidth + transformX + 2;
+    const endDatePosition = endDateLimitPositionFromFront +
+    position - draggerWidth + transformX + 2;
 
     // checks to prevent positioning outside of valid timeline range
     const isBeforeFrontDate = new Date(inputTime) < new Date(frontDate);
@@ -197,8 +196,8 @@ class DraggerContainer extends PureComponent {
       if (!diffZeroValues) {
         // calculate based on frontDate due to varying
         // number of days per month and per year (leap years)
-        const draggerPositionRelativeToFrontDate = draggerWidth - 2
-        + newDraggerPosition - position - transformX;
+        const draggerPositionRelativeToFrontDate = draggerWidth - 2 +
+        newDraggerPosition - position - transformX;
         const gridWidthCoefficient = draggerPositionRelativeToFrontDate / gridWidth;
         const draggerDateAdded = moment.utc(frontDate)
           .add(Math.floor(gridWidthCoefficient), timeScale);
@@ -209,8 +208,8 @@ class DraggerContainer extends PureComponent {
         } else if (timeScale === 'month') {
           daysCount = draggerDateAdded.daysInMonth();
         }
-        const gridWidthCoefficientRemainder = gridWidthCoefficient
-        - Math.floor(gridWidthCoefficient);
+        const gridWidthCoefficientRemainder = gridWidthCoefficient -
+        Math.floor(gridWidthCoefficient);
         const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         newDraggerTime = draggerDateAdded.add(remainderMilliseconds);
       } else {
@@ -222,7 +221,7 @@ class DraggerContainer extends PureComponent {
       const isBetweenValidTimeline = getIsBetween(
         newDraggerTime,
         timelineStartDateLimit,
-        timelineEndDateLimit,
+        timelineEndDateLimit
       );
       if (isBetweenValidTimeline) {
         newDraggerTime = getISODateFormatted(newDraggerTime);
@@ -232,10 +231,10 @@ class DraggerContainer extends PureComponent {
         if (newDraggerTime > timelineEndDateLimitTime) {
           const frontDateObj = moment.utc(frontDate);
           const endDateLimitPositionFromFront = Math.abs(
-            frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth,
+            frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth
           );
-          const endDatePosition = endDateLimitPositionFromFront
-          + position - draggerWidth + transformX + 2;
+          const endDatePosition = endDateLimitPositionFromFront +
+          position - draggerWidth + transformX + 2;
 
           updateDraggerDatePosition(
             timelineEndDateLimit,
@@ -243,7 +242,7 @@ class DraggerContainer extends PureComponent {
             endDatePosition,
             null,
             null,
-            true,
+            true
           );
           return true;
         }
@@ -257,7 +256,7 @@ class DraggerContainer extends PureComponent {
         newDraggerPosition,
         null,
         null,
-        true,
+        true
       );
     });
   };

@@ -25,22 +25,21 @@ function mergeSortedGranuleDateRanges(granules) {
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
     // within current range, ignore
-    if ((startTime >= lastRangeStartTime
-      && startTime <= lastRangeEndTime)
-      && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) {
+    if ((startTime >= lastRangeStartTime &&
+      startTime <= lastRangeEndTime) &&
+      (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) {
       return acc;
     }
     if (startTime > lastRangeEndTime) { // discontinuous, add new range
       return [...acc, [start, end]];
     }
-    if (startTime <= lastRangeEndTime
-      && endTime > lastRangeEndTime) { // intersects current range, merge
+    if (startTime <= lastRangeEndTime &&
+      endTime > lastRangeEndTime) { // intersects current range, merge
       return acc.with(-1, [acc.at(-1)[0], end]);
     }
     return acc;
   }, []);
 }
-
 
 /**
  * @method requestGranules
@@ -112,7 +111,6 @@ async function getLayerGranuleRanges(layer) {
 
   return mergedGranuleDateRanges;
 }
-
 
 const functions = {
   getLayerGranuleRanges,

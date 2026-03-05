@@ -35,7 +35,7 @@ export default function Wait(props) {
         </div>
       </dialog>
     </div>,
-    root,
+    root
   );
 }
 

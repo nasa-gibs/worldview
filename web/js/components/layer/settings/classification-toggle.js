@@ -4,7 +4,6 @@ import lodashGet from 'lodash/get';
 import Switch from '../../util/switch';
 import Scrollbar from '../../util/scrollbar';
 
-
 export default function ClassificationToggle(props) {
   const {
     legend, toggle, palette, height, toggleAll,
@@ -15,13 +14,12 @@ export default function ClassificationToggle(props) {
 
   const { tooltips } = legend;
 
-
   return (
     <div className="layer-classification-toggle settings-component">
       <div className="classification-switch-header">
         <h2 className="wv-header">Disable/Enable</h2>
-        {toggleAll
-          && (
+        {toggleAll &&
+          (
             <Switch
               id="header-disable"
               key="header-disable"

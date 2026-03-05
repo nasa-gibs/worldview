@@ -19,9 +19,9 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   }
   if (item.timeScale === 'hour') {
     const timeScaleUnit = item.dateObject.hours;
-    dateText = timeScaleUnit === 12
-      || timeScaleUnit === 6
-      || timeScaleUnit === 18
+    dateText = timeScaleUnit === 12 ||
+      timeScaleUnit === 6 ||
+      timeScaleUnit === 18
       ? `${timeScaleUnit}:00`
       : item.date;
   }

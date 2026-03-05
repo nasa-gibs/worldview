@@ -94,7 +94,7 @@ function FindOrbitTracksMode () {
         img.onload = async () => {
           // Process the loaded image here
           const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
-          // eslint-disable-next-line no-constant-binary-expression
+
           const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
           const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${date}... `;
           const thresholdMessage = currentThreshold ? `The current threshold for ${layerSelection.id} is ${currentThreshold}%` : `There is no current threshold for ${layerSelection.id} ...`;

@@ -38,4 +38,4 @@ module.exports = {
 
   // skip tour
   skipTour: 'http://localhost:3000/?e2e=true&lg=false&t=2023-02-28-T18%3A32%3A41Z'
-}
+};

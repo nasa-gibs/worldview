@@ -9,12 +9,13 @@ function LoadingIndicator() {
   const isKioskModeActive = useSelector((state) => state.ui.isKioskModeActive);
   const shouldSpinnerShow = isLoading && !isKioskModeActive;
 
-  const spinnerStyle = isMobile ? {
-    position: 'absolute',
-    top: 10,
-    left: 80,
-    zIndex: 999,
-  }
+  const spinnerStyle = isMobile
+    ? {
+      position: 'absolute',
+      top: 10,
+      left: 80,
+      zIndex: 999,
+    }
     : {
       position: 'absolute',
       top: 10,

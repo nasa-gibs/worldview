@@ -59,7 +59,7 @@ export function getNumberOfSteps(
   maxToCheck,
   autoSelected,
   layers,
-  stateDelta = 1,
+  stateDelta = 1
 ) {
   let delta = stateDelta;
   if (autoSelected) {
@@ -100,7 +100,7 @@ export function getStampProps(
   stampWidthInt,
   dimensions,
   width,
-  height,
+  height
 ) {
   let stampWidth = stampWidthInt;
   const dateStamp = {};
@@ -152,7 +152,7 @@ export function mapLocationToAnimationState(
   parameters,
   stateFromLocationObj,
   state,
-  config,
+  config
 ) {
   let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
@@ -162,8 +162,8 @@ export function mapLocationToAnimationState(
       animation: { isPlaying: { $set: true } },
     });
   } else if (
-    parameters.ab !== 'on'
-    && (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+    parameters.ab !== 'on' &&
+    (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
   ) {
     // wipe anim start & end dates on tour change
 

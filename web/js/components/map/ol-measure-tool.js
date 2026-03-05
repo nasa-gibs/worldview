@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
@@ -174,7 +173,7 @@ function OlMeasureTool (props) {
           olMap={olMap}
           proj={proj}
         />
-      ),
+      )
     );
   };
 
@@ -264,7 +263,7 @@ function OlMeasureTool (props) {
       ({ feature, overlay }) => {
         olMap.removeOverlay(overlay);
         sources[crs].removeFeature(feature);
-      },
+      }
     );
 
     allMeasurements[crs] = {};
@@ -342,7 +341,7 @@ function OlMeasureTool (props) {
           renderTooltip(feature, overlay);
           feature.getGeometry().changed();
           overlay.setOffset([0, -7]);
-        },
+        }
       );
     });
   }
@@ -399,5 +398,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(OlMeasureTool);

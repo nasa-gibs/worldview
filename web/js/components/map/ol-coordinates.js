@@ -67,8 +67,8 @@ class OlCoordinates extends React.Component {
       return;
     }
     let pcoord = transform(coord, crs, CRS.GEOGRAPHIC);
-    // eslint-disable-next-line prefer-const
-    let [lon, lat] = pcoord;
+
+    const [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
       this.clearCoord();
       return;
@@ -130,9 +130,10 @@ class OlCoordinates extends React.Component {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
     const { show, isMobile } = this.props;
-    const coordContainerStyle = isMobile ? {
-      display: 'none',
-    }
+    const coordContainerStyle = isMobile
+      ? {
+        display: 'none',
+      }
       : {
         width,
       };
@@ -185,5 +186,5 @@ OlCoordinates.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(OlCoordinates);

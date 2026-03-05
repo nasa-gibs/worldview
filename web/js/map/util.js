@@ -133,8 +133,8 @@ const getBestZoom = function(distance, start, end, view) {
     zoom,
     pixels: distance / view.getResolutionForZoom(zoom),
   }));
-  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels)
-  - Math.abs(idealLength - b.pixels))[0];
+  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels) -
+  Math.abs(idealLength - b.pixels))[0];
   return Math.max(2, Math.min(bestFit.zoom, start - 1, end - 1));
 };
 
@@ -164,7 +164,7 @@ export function fly (map, proj, endPointArray, isKioskModeActive, endZoom = 5, r
     ? Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000))
     // approx 6 seconds to go 360 degrees
     : Math.min(6000, Math.floor(
-      distanceDuration * (15 * (startZoom + endZoom)) + (100 * (startZoom + endZoom)) + 1000,
+      distanceDuration * (15 * (startZoom + endZoom)) + (100 * (startZoom + endZoom)) + 1000
     ));
 
   const animationPromise = function(...args) {
@@ -206,7 +206,7 @@ export function fly (map, proj, endPointArray, isKioskModeActive, endZoom = 5, r
         duration: duration / 2,
         rotation,
       },
-      { zoom: endZoom, duration: duration / 2, rotation },
+      { zoom: endZoom, duration: duration / 2, rotation }
     ),
   ]);
 }

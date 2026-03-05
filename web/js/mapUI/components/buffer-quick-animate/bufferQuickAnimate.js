@@ -23,7 +23,8 @@ function BufferQuickAnimate(props) {
     const selectedDate = getSelectedDate(dateCompareState);
     const dateState = { date };
     const currentBuffer = preloaded
-      ? getNumberStepsBetween(dateState, selectedDate, lastPreloadDate) : 0;
+      ? getNumberStepsBetween(dateState, selectedDate, lastPreloadDate)
+      : 0;
 
     if (currentBuffer >= BUFFER_SIZE) {
       return;
@@ -79,7 +80,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(BufferQuickAnimate);
 
 BufferQuickAnimate.propTypes = {

@@ -103,35 +103,37 @@ function Events(props) {
     </div>
   );
   const renderEventList = () => (
-    eventsData && eventsData.length ? (
-      <div className="wv-eventslist sidebar-panel">
-        <ul id="wv-eventscontent" className="content map-item-list">
-          {sources && eventsData.map((event) => (
-            <Event
-              showAlert={showAlert}
-              key={event.id}
-              event={event}
-              selectEvent={(id, date) => selectEvent(id, date, isMobile)}
-              deselectEvent={deselectEvent}
-              highlightEvent={(id, date) => highlightEvent(id, date)}
-              unHighlightEvent={unHighlightEvent}
-              removeGroup={removeGroup}
-              eventLayers={eventLayers}
-              toggleVisibility={toggleVisibility}
-              toggleGroupVisibility={toggleGroupVisibility}
-              isSelected={selected.id === event.id}
-              isHighlighted={highlighted.id === event.id}
-              selectedDate={selectedDate}
-              sources={sources}
-              defaultEventLayer={defaultEventLayer}
-              layers={layers}
-            />
-          ))}
-        </ul>
-      </div>
-    ) : !isLoading && (
-      <h3 className="no-events"> No events meet current criteria</h3>
-    )
+    eventsData && eventsData.length
+      ? (
+        <div className="wv-eventslist sidebar-panel">
+          <ul id="wv-eventscontent" className="content map-item-list">
+            {sources && eventsData.map((event) => (
+              <Event
+                showAlert={showAlert}
+                key={event.id}
+                event={event}
+                selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+                deselectEvent={deselectEvent}
+                highlightEvent={(id, date) => highlightEvent(id, date)}
+                unHighlightEvent={unHighlightEvent}
+                removeGroup={removeGroup}
+                eventLayers={eventLayers}
+                toggleVisibility={toggleVisibility}
+                toggleGroupVisibility={toggleGroupVisibility}
+                isSelected={selected.id === event.id}
+                isHighlighted={highlighted.id === event.id}
+                selectedDate={selectedDate}
+                sources={sources}
+                defaultEventLayer={defaultEventLayer}
+                layers={layers}
+              />
+            ))}
+          </ul>
+        </div>
+      )
+      : !isLoading && (
+        <h3 className="no-events"> No events meet current criteria</h3>
+      )
   );
 
   return (
@@ -231,7 +233,7 @@ const mapStateToProps = (state) => {
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Events);
 
 Events.propTypes = {

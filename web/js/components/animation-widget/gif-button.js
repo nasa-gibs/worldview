@@ -75,7 +75,8 @@ function GifButton(props) {
       return;
     }
     const nonDownloadableLayers = hasNonDownloadableLayer
-      ? getNonDownloadableLayers(visibleLayersForProj) : null;
+      ? getNonDownloadableLayers(visibleLayersForProj)
+      : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     await getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
     await getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
@@ -87,7 +88,8 @@ function GifButton(props) {
 
     onCloseGif = () => {
       refreshStateAfterGif(hasCustomPalettes
-        ? paletteStore : undefined, rotation, nonDownloadableLayers);
+        ? paletteStore
+        : undefined, rotation, nonDownloadableLayers);
       toggleGif();
     };
     toggleGif();
@@ -130,7 +132,7 @@ const mapStateToProps = (state) => {
   const activePalettes = palettes[compare.activeString];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
-    activePalettes,
+    activePalettes
   );
   return {
     activePalettes,
@@ -182,14 +184,14 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'sm',
         modalClassName: 'notify',
         bodyComponentProps,
-      }),
+      })
     );
   }),
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(GifButton);
 
 GifButton.propTypes = {

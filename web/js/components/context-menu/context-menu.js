@@ -129,8 +129,8 @@ function RightClickMenu(props) {
         >
           Measure Area
         </MenuItem>
-        {measurementsInProj
-        && (
+        {measurementsInProj &&
+        (
           <MenuItem
             onClick={() => handleMeasurementMenu('clear')}
             attributes={{ id: 'context-menu-clear-measurements' }}
@@ -190,5 +190,5 @@ RightClickMenu.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(RightClickMenu);

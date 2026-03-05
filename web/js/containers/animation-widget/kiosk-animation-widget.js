@@ -33,4 +33,3 @@ KioskAnimationWidget.propTypes = {
 };
 
 export default KioskAnimationWidget;
-

@@ -13,7 +13,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import { Vector as OlVectorSource } from 'ol/source';
-// eslint-disable-next-line n/no-missing-import
+
 import googleTagManager from 'googleTagManager';
 import CustomButton from '../util/button';
 import Crop from '../util/image-crop';
@@ -295,9 +295,9 @@ function ChartingModeOptions(props) {
   }, [isModalOpen, modalId]);
 
   useEffect(() => {
-    if (!chartData.current
-      || Object.keys(chartData.current).length === 0
-      || !isModalOpen || timeSpanSelection !== 'range') return;
+    if (!chartData.current ||
+      Object.keys(chartData.current).length === 0 ||
+      !isModalOpen || timeSpanSelection !== 'range') return;
     if (screenWidth < 768) {
       debouncedModalClose();
       updateModalOpen(false);
@@ -550,7 +550,7 @@ function ChartingModeOptions(props) {
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
       const numDaysRequested = Math.floor(
-        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)
       ) + 1;
       const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
       const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
@@ -567,7 +567,7 @@ function ChartingModeOptions(props) {
           layerInfo,
           timeSpanSelection,
           requestStartDate,
-          requestEndDate,
+          requestEndDate
         );
         const requestURI = getImageStatStatsRequestURL(uriParameters);
         promises.push(getImageStatData(requestURI));
@@ -594,7 +594,8 @@ function ChartingModeOptions(props) {
       const paletteName = layerInfo.palette.id;
       const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
       const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units')
-        ? `${paletteLegend.units}` : '';
+        ? `${paletteLegend.units}`
+        : '';
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -605,7 +606,7 @@ function ChartingModeOptions(props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         const numRangeDays = Math.floor(
-          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000,
+          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000
         );
         const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
         const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
@@ -765,7 +766,6 @@ function ChartingModeOptions(props) {
     }
     setMapViewChecked(!mapViewChecked);
   };
-
 
   const spinnerStyle = {
     width: '12px',
@@ -1000,7 +1000,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      }),
+      })
     );
   },
   openChartingDateModal: (dateObj, timeSpanSelection) => {
@@ -1015,7 +1015,7 @@ const mapDispatchToProps = (dispatch) => ({
           ...dateObj,
           timeSpanSelection,
         },
-      }),
+      })
     );
   },
   onChartDateButtonClick: (buttonClicked) => {
@@ -1040,7 +1040,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           data,
         },
-      }),
+      })
     );
   },
   displayChart: (liveData, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded) => {
@@ -1081,7 +1081,7 @@ const mapDispatchToProps = (dispatch) => ({
           liveData,
           toggleErrorDaysExpanded,
         },
-      }),
+      })
     );
   },
   openChartingErrorModal: (msg) => {
@@ -1095,7 +1095,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           msg,
         },
-      }),
+      })
     );
   },
   onUpdateStartDate(date) {
@@ -1111,7 +1111,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {

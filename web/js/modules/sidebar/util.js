@@ -12,7 +12,7 @@ export default function mapLocationToSidebarState(
   parameters,
   stateFromLocationObj,
   state,
-  config,
+  config
 ) {
   let stateFromLocation = stateFromLocationObj;
   let activeTab;

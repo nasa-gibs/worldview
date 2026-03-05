@@ -60,7 +60,6 @@ function Markers(props) {
     });
   };
 
-
   const flyToMarker = (coordinatesObject) => {
     const { sources } = config;
     const { longitude, latitude } = coordinatesObject;
@@ -86,7 +85,7 @@ function Markers(props) {
     showDialog,
     geocodeResults,
     shouldFlyToCoordinates,
-    coordinatesObject,
+    coordinatesObject
   ) => {
     const results = geocodeResults;
     if (!results) return undefined;
@@ -97,7 +96,7 @@ function Markers(props) {
       results,
       remove,
       isMobileDevice,
-      showDialog,
+      showDialog
     );
 
     if (!marker) {
@@ -155,7 +154,7 @@ function Markers(props) {
           true,
           action.reverseGeocodeResults,
           action.isCoordinatesSearchActive,
-          action.coordinates,
+          action.coordinates
         );
       }
       case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
@@ -203,8 +202,8 @@ const mapDispatchToProps = (dispatch) => ({
 export default React.memo(
   connect(
     mapStateToProps,
-    mapDispatchToProps,
-  )(Markers),
+    mapDispatchToProps
+  )(Markers)
 );
 
 Markers.propTypes = {
@@ -221,4 +220,3 @@ Markers.propTypes = {
   setGeocodeResults: PropTypes.func,
   ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
-

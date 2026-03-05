@@ -14,6 +14,6 @@ export function requestShortLink(location, type, options) {
     location,
     type,
     null, // id
-    options,
+    options
   );
 }

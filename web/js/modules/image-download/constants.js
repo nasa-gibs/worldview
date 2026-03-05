@@ -41,10 +41,10 @@ export const fileTypesPolar = {
 };
 export const maxSize = 8200;
 
-const PALETTE_WARNING = 'One or more layers on the map have been modified (changed palette, '
-  + 'thresholds, etc.). These modifications cannot be used to take a '
-  + 'snapshot. Would you like to temporarily revert to the original '
-  + 'layer(s)?';
+const PALETTE_WARNING = 'One or more layers on the map have been modified (changed palette, ' +
+  'thresholds, etc.). These modifications cannot be used to take a ' +
+  'snapshot. Would you like to temporarily revert to the original ' +
+  'layer(s)?';
 
 const ROTATE_WARNING = 'Image may not be downloaded when rotated. Would you like to temporarily reset rotation?';
 

@@ -84,7 +84,7 @@ function CombineUI(props) {
     uiProperties.supportsPassive = false;
     try {
       const opts = Object.defineProperty({}, 'passive', {
-        // eslint-disable-next-line getter-return
+
         get() {
           uiProperties.supportsPassive = true;
         },

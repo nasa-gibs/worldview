@@ -53,7 +53,7 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  null,
+  null
 )(Notifications);
 
 Notifications.propTypes = {

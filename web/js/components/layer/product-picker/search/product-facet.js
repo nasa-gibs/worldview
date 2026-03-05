@@ -89,5 +89,4 @@ ProductFacet.propTypes = {
   toggleCollapse: PropTypes.func,
 };
 
-
 export default ProductFacet;

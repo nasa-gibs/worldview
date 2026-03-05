@@ -67,7 +67,7 @@ test('gets layers in reverse', () => {
   layers = addLayer('aqua-aod', layers, config.layers);
 
   const layerList = getLayers(getState(layers), { reverse: true }).map(
-    (x) => x.id,
+    (x) => x.id
   );
   expect(layerList).toEqual(['terra-cr', 'aqua-cr', 'terra-aod', 'aqua-aod']);
 });
@@ -79,7 +79,7 @@ test('gets base layers', () => {
   layers = addLayer('aqua-aod', layers, config.layers);
   const layerList = getLayers(
     getState(layers),
-    { group: 'baselayers' },
+    { group: 'baselayers' }
   ).map((x) => x.id);
   expect(layerList).toEqual(['aqua-cr', 'terra-cr']);
 });
@@ -91,7 +91,7 @@ test('gets overlay layers', () => {
   layers = addLayer('aqua-aod', layers, config.layers);
   const layerList = getLayers(
     getState(layers),
-    { group: 'overlays' },
+    { group: 'overlays' }
   ).map((x) => x.id);
   expect(layerList).toEqual(['aqua-aod', 'terra-aod']);
 });
@@ -129,7 +129,7 @@ test('obscured base layer is not renderable', () => {
   layers = addLayer('terra-aod', layers, config.layers);
   layers = addLayer('aqua-aod', layers, config.layers);
   const layerList = getLayers(getState(layers), { renderable: true }).map(
-    (x) => x.id,
+    (x) => x.id
   );
   expect(layerList).toEqual(['aqua-cr', 'aqua-aod', 'terra-aod']);
 });
@@ -141,7 +141,7 @@ test('base layer is not obscured by a hidden layer', () => {
   layers = addLayer('aqua-aod', layers, config.layers);
 
   const layerList = getLayers(getState(layers), { renderable: true }).map(
-    (x) => x.id,
+    (x) => x.id
   );
   expect(layerList).toEqual(['terra-cr', 'aqua-aod', 'terra-aod']);
 });
@@ -153,7 +153,7 @@ test('layer with zero opacity is not renderable', () => {
   layers = addLayer('aqua-aod', layers, config.layers, { opacity: 0 });
 
   const layerList = getLayers(getState(layers), { renderable: true }).map(
-    (x) => x.id,
+    (x) => x.id
   );
   expect(layerList).toEqual(['aqua-cr', 'terra-aod']);
 });
@@ -179,7 +179,7 @@ test('all layers are visible', () => {
   layers = addLayer('aqua-aod', layers, config.layers);
 
   const layerList = getLayers(getState(layers)).map(
-    (x) => x.id,
+    (x) => x.id
   );
   expect(layerList).toEqual(['aqua-cr', 'terra-cr', 'aqua-aod', 'terra-aod']);
 });

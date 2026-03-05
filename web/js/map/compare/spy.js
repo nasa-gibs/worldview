@@ -174,7 +174,7 @@ export default class Spy {
       applyEventsToBaseLayers(
         mapLayers[0],
         this.map,
-        applyReverseLayerListeners,
+        applyReverseLayerListeners
       );
       applyEventsToBaseLayers(mapLayers[1], this.map, applyLayerListeners);
     }

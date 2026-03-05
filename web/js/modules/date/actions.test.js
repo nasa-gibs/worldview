@@ -45,7 +45,7 @@ function addMockLayer(layerId, layerArray) {
     config.layers,
     {},
     getLayers(getState(layerArray), { group: 'all' }).overlays
-      .length,
+      .length
   );
 }
 
@@ -67,7 +67,7 @@ describe('Date timescale changes', () => {
         value: interval,
       };
       expect(changeTimeScale(interval)).toEqual(expectedAction);
-    },
+    }
   );
 
   test(
@@ -78,7 +78,7 @@ describe('Date timescale changes', () => {
         value: mockDate,
       };
       expect(updateAppNow(mockDate)).toEqual(expectedAction);
-    },
+    }
   );
 
   test(
@@ -120,7 +120,7 @@ describe('Date timescale changes', () => {
       store.dispatch(selectDate(mockDate));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    },
+    }
   );
 
   test(
@@ -163,7 +163,7 @@ describe('Date timescale changes', () => {
       store.dispatch(selectDate(mockDate));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    },
+    }
   );
 
   test(
@@ -190,7 +190,7 @@ describe('Date timescale changes', () => {
       store.dispatch(changeCustomInterval(delta, customInterval));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    },
+    }
   );
 
   test(
@@ -216,7 +216,7 @@ describe('Date timescale changes', () => {
       store.dispatch(changeAutoInterval(true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    },
+    }
   );
 
   test(
@@ -244,6 +244,6 @@ describe('Date timescale changes', () => {
       store.dispatch(selectInterval(delta, interval, true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
-    },
+    }
   );
 });

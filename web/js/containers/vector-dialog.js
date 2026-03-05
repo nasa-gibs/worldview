@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -16,7 +15,6 @@ class VectorDialog extends React.Component {
   }
 
   updateIndex(activeIndex) {
-    // eslint-disable-next-line react/destructuring-assignment
     if (activeIndex === this.state.activeIndex) return;
     this.setState({ activeIndex });
   }
@@ -46,7 +44,7 @@ class VectorDialog extends React.Component {
           <NavLink onClick={() => this.updateIndex(index)} title={combinedTitles}>
             {`${titleText} [${value.length}]`}
           </NavLink>
-        </NavItem>,
+        </NavItem>
       );
       i += 1;
     }
@@ -81,17 +79,19 @@ class VectorDialog extends React.Component {
                 {`Site is ${activeMetaArray[0].features.active ? 'online' : 'currently offline'}`}
               </div>
               {activeMetaArray[0].features.active && (
-              <div style={{ marginBottom: '5px' }}>
-                <b>
-                  {`Most recent reading: ${activeMetaArray[0].features.value}`}
-                </b>
-              </div>
+                <div style={{ marginBottom: '5px' }}>
+                  <b>
+                    {`Most recent reading: ${activeMetaArray[0].features.value}`}
+                  </b>
+                </div>
               )}
               {activeMetaArray[0].features.active && (
-              <div style={{ marginBottom: '15px' }}>
-                {`As of ${activeMetaArray[0].features.date.toUTCString().split(' ').slice(1).join(' ')
-                  .replace('GMT', 'UTC')}`}
-              </div>
+                <div style={{ marginBottom: '15px' }}>
+                  {`As of ${activeMetaArray[0].features.date.toUTCString().split(' ')
+                    .slice(1)
+                    .join(' ')
+                    .replace('GMT', 'UTC')}`}
+                </div>
               )}
               <div>
                 <a
@@ -106,7 +106,8 @@ class VectorDialog extends React.Component {
                 </a>
               </div>
             </div>
-          ) : (
+          )
+          : (
             <div>
               <ModalHeader toggle={toggleWithClose} close={closeBtn}>
                 <Nav tabs id="vector-meta-nav" className="vector-meta-nav">
@@ -135,7 +136,7 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  null,
+  null
 )(VectorDialog);
 VectorDialog.propTypes = {
   dialogKey: PropTypes.number,

@@ -247,9 +247,9 @@ class ShareLinkContainer extends Component {
       activeTab,
       isShort,
     } = this.state;
-    const shortLinkValue = isShort
-          && shortLink.response
-          && shortLink.response.link
+    const shortLinkValue = isShort &&
+          shortLink.response &&
+          shortLink.response.link
       ? shortLink.response.link
       : this.getPermalink();
     const value = shortLink.isLoading && isShort
@@ -389,7 +389,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => ({
   requestShortLinkAction: (location, options) => dispatch(
-    requestShortLink(location, 'application/json', null, options),
+    requestShortLink(location, 'application/json', null, options)
   ),
   sendFeedback: (isInitiated, isMobile) => {
     onClickFeedback(isInitiated, isMobile);
@@ -401,7 +401,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {

@@ -1,4 +1,3 @@
-
 import {
   get as lodashGet,
   set as lodashSet,
@@ -85,8 +84,8 @@ function filterSearch (layer, val, terms) {
   const matchItems = [title, subtitle, tags, layerId, conceptIds];
 
   lodashForEach(terms, (term) => {
-    isFilteredOut = matchItems.every((item) => !item.includes(term))
-      && shortNames.every((name) => name.indexOf(term) < 0);
+    isFilteredOut = matchItems.every((item) => !item.includes(term)) &&
+      shortNames.every((name) => name.indexOf(term) < 0);
     if (isFilteredOut) return false;
     return true;
   });
@@ -142,7 +141,7 @@ function updateCoverageFilter (filters, selectedDate) {
     const f = filter;
     if (f.field !== 'coverage') return;
     f.values = f.values.map(
-      (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value),
+      (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value)
     );
   });
 }

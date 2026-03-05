@@ -50,46 +50,48 @@ const MeasureButton = function () {
   const faSize = isMobile ? '2x' : '1x';
   const shouldShowAlert = isActive && showAlert;
   const message = isTouchDevice ? mobileHelpMsg : helpMsg;
-  const mobileMeasureButtonStyle = isMobile ? {
-    bottom: '20px',
-    fontSize: '14.3px',
-    height: '44px',
-    margin: '0 0 0 4px',
-    padding: '5.72px 9.1px',
-  } : null;
+  const mobileMeasureButtonStyle = isMobile
+    ? {
+      bottom: '20px',
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    }
+    : null;
 
   return (
     <>
       {shouldShowAlert && (
-      <AlertUtil
-        id="measurement-alert"
-        isOpen
-        icon="ruler"
-        title="Measure Tool"
-        message={message}
-        onDismiss={dismissAlert}
-      />
+        <AlertUtil
+          id="measurement-alert"
+          isOpen
+          icon="ruler"
+          title="Measure Tool"
+          message={message}
+          onDismiss={dismissAlert}
+        />
       )}
 
       {!isDistractionFreeModeActive && (
-      <Button
-        id={buttonId}
-        className="wv-measure-button wv-toolbar-button"
-        aria-label={labelText}
-        onTouchEnd={onButtonClick}
-        onMouseDown={onButtonClick}
-        disabled={isActive}
-        style={mobileMeasureButtonStyle}
-      >
-        <UncontrolledTooltip
-          id="center-align-tooltip"
-          placement="top"
-          target={buttonId}
+        <Button
+          id={buttonId}
+          className="wv-measure-button wv-toolbar-button"
+          aria-label={labelText}
+          onTouchEnd={onButtonClick}
+          onMouseDown={onButtonClick}
+          disabled={isActive}
+          style={mobileMeasureButtonStyle}
         >
-          {labelText}
-        </UncontrolledTooltip>
-        <FontAwesomeIcon icon="ruler" size={faSize} widthAuto />
-      </Button>
+          <UncontrolledTooltip
+            id="center-align-tooltip"
+            placement="top"
+            target={buttonId}
+          >
+            {labelText}
+          </UncontrolledTooltip>
+          <FontAwesomeIcon icon="ruler" size={faSize} widthAuto />
+        </Button>
       )}
     </>
   );

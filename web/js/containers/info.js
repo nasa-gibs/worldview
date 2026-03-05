@@ -148,12 +148,12 @@ function InfoList (props) {
     }
 
     // limit explore for larger device displays
-    if (window.innerWidth >= 740
-        && window.innerHeight >= 615) {
+    if (window.innerWidth >= 740 &&
+        window.innerHeight >= 615) {
       if (
-        config.features.tour
-          && config.stories
-          && config.storyOrder) {
+        config.features.tour &&
+          config.stories &&
+          config.storyOrder) {
         arr.splice(1, 0, getExploreWorldviewObj());
       }
     }
@@ -211,7 +211,7 @@ const mapDispatchToProps = (dispatch) => ({
             addToLocalStorage(obj);
           }
         },
-      }),
+      })
     );
   },
   startTour: (isTourActive) => {
@@ -232,7 +232,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: GlobalSettings,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      }),
+      })
     );
   },
   aboutClick: () => {
@@ -247,14 +247,14 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           dispatch(toggleAboutModal(false));
         },
-      }),
+      })
     );
   },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(InfoList);
 
 InfoList.propTypes = {

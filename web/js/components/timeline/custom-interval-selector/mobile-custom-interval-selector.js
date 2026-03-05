@@ -77,7 +77,7 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(MobileCustomIntervalSelector);
 
 MobileCustomIntervalSelector.propTypes = {

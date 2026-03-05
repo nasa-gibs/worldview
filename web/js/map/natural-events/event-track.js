@@ -59,10 +59,10 @@ const addPointOverlays = (map, pointOverlayArray) => {
  */
 const updateSelection = function(newDate) {
   const oldSelectedPoint = document.getElementsByClassName(
-    'track-marker-case-selected',
+    'track-marker-case-selected'
   )[0];
   const newSelectedPoint = document.getElementById(
-    `track-marker-case-${newDate}`,
+    `track-marker-case-${newDate}`
   );
   if (oldSelectedPoint) oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
@@ -87,7 +87,7 @@ const getTracksAndPoints = function (
   selectedDate,
   callback,
   showAllTracks,
-  highlightOptions,
+  highlightOptions
 ) {
   const pointsAndArrows = [];
   const trackSegments = [];
@@ -96,7 +96,7 @@ const getTracksAndPoints = function (
     proj,
     selectedDate,
     map,
-    showAllTracks,
+    showAllTracks
   );
   const { isHighlighted } = highlightOptions;
 
@@ -132,7 +132,7 @@ const getTracksAndPoints = function (
       eventObj.id,
       getDefaultEventDate(eventObj),
       callback,
-      highlightOptions,
+      highlightOptions
     ),
     pointsAndArrows,
   };
@@ -251,9 +251,9 @@ function EventTrack () {
         {
           callbackHighlight: highlightEvent,
           callbackUnhighlight: unHighlightEvent,
-          isHighlighted: showAllTracks
-            && (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id),
-        },
+          isHighlighted: showAllTracks &&
+            (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id),
+        }
       );
 
       newTrackDetails = {
@@ -301,9 +301,9 @@ function EventTrack () {
         {
           callbackHighlight: highlightEvent,
           callbackUnhighlight: unHighlightEvent,
-          isHighlighted: showAllTracks
-            && (event.id === selectedEvent.id || event.id === highlightedEvent.id),
-        },
+          isHighlighted: showAllTracks &&
+            (event.id === selectedEvent.id || event.id === highlightedEvent.id),
+        }
       );
 
       newTrackDetails = {
@@ -359,7 +359,7 @@ function EventTrack () {
   const debouncedOnPropertyChange = lodashDebounce(
     onPropertyChange.bind(this),
     100,
-    { leading: true, trailing: true },
+    { leading: true, trailing: true }
   );
   const debouncedUpdateAllTracks = lodashDebounce(updateAllTracks, 50);
 
@@ -380,7 +380,7 @@ function EventTrack () {
         }
       };
     },
-    [],
+    []
   );
 
   const prevSelectedDate = usePrevious(selectedDate);
@@ -393,14 +393,14 @@ function EventTrack () {
 
   useEffect(
     () => {
-      const selectedDateChange = (selectedDate && selectedDate.valueOf())
-        !== (prevSelectedDate && prevSelectedDate?.valueOf());
+      const selectedDateChange = (selectedDate && selectedDate.valueOf()) !==
+        (prevSelectedDate && prevSelectedDate?.valueOf());
       const eventDeselect = (selectedEvent !== prevSelectedEvent?.id) && !selectedEvent?.id;
-      const finishedAnimating = !isAnimatingToEvent
-        && (isAnimatingToEvent !== prevIsAnimatingToEvent);
+      const finishedAnimating = !isAnimatingToEvent &&
+        (isAnimatingToEvent !== prevIsAnimatingToEvent);
       const eventsLoaded = eventsData && eventsData.length;
-      const extentChange = prevExtent
-        && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
+      const extentChange = prevExtent &&
+        (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
       const highlightedEventChange = highlightedEvent?.id !== prevHighlightedEvent?.id;
       const allTracksChange = showAllTracks !== prevShowAllTracks;
 
@@ -411,7 +411,7 @@ function EventTrack () {
           removePointOverlays(
             prevMap,
             trackDetailsRef.current.pointsAndArrows,
-            createOverlayMapping(prevMap),
+            createOverlayMapping(prevMap)
           );
           if (showAllTracksRef.current) {
             removeAllTracks(prevMap);
@@ -426,15 +426,15 @@ function EventTrack () {
       }
 
       // show all tracks when selecting as option
-      if (showAllTracksRef.current && !isPlaying && (prevShowAllTracks !== showAllTracksRef.current
-        || selectedDateChange || finishedAnimating || eventsLoaded
-        || extentChange || highlightedEventChange)) {
+      if (showAllTracksRef.current && !isPlaying && (prevShowAllTracks !== showAllTracksRef.current ||
+        selectedDateChange || finishedAnimating || eventsLoaded ||
+        extentChange || highlightedEventChange)) {
         debouncedUpdateAllTracks();
       }
 
       // show only selected track if show all tracks is not selected
-      if (!showAllTracks && !isPlaying && (!showAllTracksRef.current || allTracksChange)
-        && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+      if (!showAllTracks && !isPlaying && (!showAllTracksRef.current || allTracksChange) &&
+        (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
         debouncedTrackUpdate();
       }
 
@@ -444,11 +444,10 @@ function EventTrack () {
       }
     },
     [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
-      showAllTracksRef.current, highlightedEvent, showAllTracks],
+      showAllTracksRef.current, highlightedEvent, showAllTracks]
   );
 
   return null;
 }
 
 export default EventTrack;
-

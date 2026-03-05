@@ -63,9 +63,9 @@ function BrowseLayers (props) {
     ? GEOGRAPHIC_TAB_KEYS
     : POLAR_TAB_KEYS;
 
-  const isCategoryDisplay = mode === 'category'
-    && selectedProjection === 'geographic'
-    && categoryType !== 'recent';
+  const isCategoryDisplay = mode === 'category' &&
+    selectedProjection === 'geographic' &&
+    categoryType !== 'recent';
 
   /**
    * Update category type in which to show
@@ -210,7 +210,8 @@ function BrowseLayers (props) {
             <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
               <CategoryGrid width={width} />
             </div>
-          ) : renderContent()
+          )
+          : renderContent()
       }
     </>
   );
@@ -284,5 +285,5 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(BrowseLayers);

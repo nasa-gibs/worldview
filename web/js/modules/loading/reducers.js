@@ -1,6 +1,5 @@
 import { LOADING_START, LOADING_STOP } from './constants';
 
-
 export const initialState = {
   msg: '',
   isLoading: false,

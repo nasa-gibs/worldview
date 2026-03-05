@@ -46,8 +46,8 @@ const mapStateToProps = (state) => {
 
 export default React.memo(
   connect(
-    mapStateToProps,
-  )(RemoveLayer),
+    mapStateToProps
+  )(RemoveLayer)
 );
 
 RemoveLayer.propTypes = {

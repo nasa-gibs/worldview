@@ -23,7 +23,7 @@ const requestCheck = async (urls) => {
         }
         parsedUrls.STATUSCODE[statusCode].push({ [linkName]: url })
       })
-      .catch((err) => { // eslint-disable-line n/handle-callback-err
+      .catch((err) => {
         parsedUrls.ERROR.push({ [linkName]: url })
       })
   })

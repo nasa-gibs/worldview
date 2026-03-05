@@ -89,11 +89,11 @@ function EventFilterModalBody (props) {
   const minDate = new Date('2000-01-01');
   const maxDate = util.now();
 
-  const mobileStyle = isMobile ? {
-    fontSize: '14px',
-  } : null;
-
-
+  const mobileStyle = isMobile
+    ? {
+      fontSize: '14px',
+    }
+    : null;
 
   return (
     <div className="events-filter">
@@ -194,7 +194,7 @@ function EventFilterModalBody (props) {
             Cancel
           </Button>
         </>,
-        modalFooterNode,
+        modalFooterNode
       )}
     </div>
   );
@@ -245,8 +245,8 @@ const mapDispatchToProps = (dispatch) => ({
         startDate,
         endDate,
         showAll,
-        showAllTracks,
-      ),
+        showAllTracks
+      )
     );
   },
 });

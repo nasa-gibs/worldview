@@ -93,7 +93,7 @@ function UpdateProjection(props) {
   async function getCompareLayerGroup(
     [compareActiveString, compareDateString],
     state,
-    granuleOptions,
+    granuleOptions
   ) {
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
@@ -146,7 +146,7 @@ function UpdateProjection(props) {
           layerStateRef.current,
           def,
           compare.activeString,
-          granuleOptions,
+          granuleOptions
         );
         if (def.id.includes('TEMPO')) {
           options.tempoCallback = addTEMPODateRanges;
@@ -410,7 +410,7 @@ function UpdateProjection(props) {
     // We don't want to reload every time new ranges are added so
     // also check if there were no ranges before.
     const hasNewDateRanges = activeL2Layers.some(
-      (dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length,
+      (dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length
     ) && prevL2Layers.includes(undefined);
     // Check if new layers have been added
     const hasNewLayers = prevActiveLayers.length !== activeLayers.length;
@@ -469,7 +469,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(UpdateProjection);
 
 UpdateProjection.propTypes = {

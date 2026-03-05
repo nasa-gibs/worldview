@@ -34,7 +34,7 @@ export default class Coordinates extends React.Component {
 
     const coords = util.formatCoordinate(
       [longitude, latitude],
-      format,
+      format
     );
 
     return (
@@ -67,7 +67,3 @@ Coordinates.propTypes = {
   latitude: PropTypes.number,
   longitude: PropTypes.number,
 };
-
-
-
-

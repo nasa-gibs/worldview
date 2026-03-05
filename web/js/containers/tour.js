@@ -180,13 +180,13 @@ class Tour extends React.Component {
       currentStory.steps.length,
       `${storyStep.stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
       config,
-      renderedPalettes,
+      renderedPalettes
     );
     if (currentStory.steps.length > 1) {
       preProcessStepLink(
         `${currentStory.steps[1].stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
-        promiseImageryForTour,
+        promiseImageryForTour
       );
     }
   }
@@ -204,7 +204,7 @@ class Tour extends React.Component {
       .then((res) => (res.ok ? res.text() : errorMessage))
       .then((body) => {
         const isMetadataSnippet = !body.match(
-          /<(head|body|html|style|script)[^>]*>/i,
+          /<(head|body|html|style|script)[^>]*>/i
         );
         const desc = isMetadataSnippet ? body : errorMessage;
         this.setState({
@@ -287,13 +287,13 @@ class Tour extends React.Component {
         currentStory.steps.length,
         `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
-        renderedPalettes,
+        renderedPalettes
       );
       if (currentStep + 2 <= totalSteps) {
         preProcessStepLink(
           `${currentStory.steps[newStep].stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
           config,
-          promiseImageryForTour,
+          promiseImageryForTour
         );
       }
     }
@@ -328,7 +328,7 @@ class Tour extends React.Component {
         currentStory.steps.length,
         `${stepLink}&tr=${currentStoryId}${transitionParam}${kioskParam}&em=${isEmbedModeActive}`,
         config,
-        renderedPalettes,
+        renderedPalettes
       );
     } else {
       this.setState({
@@ -533,16 +533,15 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(clearCustoms());
     }
     if (
-      ((parameters.l && hasCustomTypePalette(parameters.l))
-      || (parameters.l1 && hasCustomTypePalette(parameters.l1)))
-      && !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
+      ((parameters.l && hasCustomTypePalette(parameters.l)) ||
+      (parameters.l1 && hasCustomTypePalette(parameters.l1))) &&
+      !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
     ) {
       layers = layersParse12(parameters.l, config);
       if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
         layers.push(...layersParse12(parameters.l1, config));
       }
       layers = uniqBy(layers, 'id');
-
 
       preloadPalettes(layers, rendered, true).then((obj) => {
         dispatch({
@@ -624,14 +623,14 @@ const mapStateToProps = (state) => {
     promiseImageryForTour: (
       layers,
       dateString,
-      activeString,
+      activeString
     ) => promiseImageryForTourUtil(state, layers, dateString, activeString),
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(Tour);
 
 Tour.propTypes = {

@@ -26,7 +26,7 @@ export function requestEvents() {
       dispatch,
       REQUEST_EVENTS,
       requestUrl,
-      'application/json',
+      'application/json'
     );
   };
 }
@@ -47,7 +47,7 @@ export function requestSources() {
         dispatch,
         REQUEST_SOURCES,
         sourcesURL,
-        'application/json',
+        'application/json'
       );
     } catch (e) {
       console.error(e);

@@ -21,7 +21,6 @@ import {
   hasMeasurementSetting as hasSettingSelector,
 } from '../../../../modules/layers/selectors';
 
-
 /**
  * A single category result row
  * @class CategoryLayerRow
@@ -77,7 +76,7 @@ class CategoryLayerRow extends React.Component {
             key={measurement.id + layer.id}
             layer={layer}
             title={orbitTitle}
-          />,
+          />
         );
       } else {
         LayerSouceList.push(
@@ -86,7 +85,7 @@ class CategoryLayerRow extends React.Component {
             key={measurement.id + layer.id}
             layer={layer}
             title={layer.title}
-          />,
+          />
         );
       }
     });
@@ -180,8 +179,8 @@ class CategoryLayerRow extends React.Component {
         <TabContent id={`${measurement.id}-${sources[validActiveIndex].id}`}>
           <TabPane>
             {this.renderSourceSettings(sources[validActiveIndex])}
-            {isMobile
-              && (
+            {isMobile &&
+              (
                 <MeasurementMetadataDetail
                   source={sources[validActiveIndex]}
                   isMobile={isMobile}
@@ -271,7 +270,7 @@ const mapStateToProps = (state) => {
       current,
       source,
       config,
-      proj.id,
+      proj.id
     ),
   };
 };
@@ -287,5 +286,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CategoryLayerRow);

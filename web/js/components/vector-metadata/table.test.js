@@ -13,7 +13,7 @@ beforeEach(() => {
         legend: [{ Identifier: 'GRAND_ID' }],
         featureTitle: 'Choclococha',
       }]}
-    />,
+    />
   );
 });
 
@@ -38,7 +38,7 @@ test('If there is a valuemap, use valuemap', () => {
         ],
         featureTitle: 'Choclococha',
       }]}
-    />,
+    />
   );
   expect(component.toJSON()).toMatchSnapshot();
 });

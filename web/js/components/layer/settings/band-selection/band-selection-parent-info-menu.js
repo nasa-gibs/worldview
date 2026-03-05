@@ -22,7 +22,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
         bodyComponentProps: {
           layerObj,
         },
-      }),
+      })
     );
   };
 
@@ -34,7 +34,6 @@ export default function BandSelectionParentInfoMenu({ layer }) {
   } = layer.bandCombo;
 
   const isValidBandSelection = () => (r !== 'undefined' && r !== undefined) && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
-
 
   return (
     <div className="customize-bands-parent-info">

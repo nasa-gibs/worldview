@@ -44,7 +44,7 @@ function PixelTestMode () {
       const wmsImage = await fetchWMSImageExperimental(
         layerSelection.id,
         formattedDate,
-        mercatorExtent,
+        mercatorExtent
       );
 
       // Create an image and handle its loading and error events
@@ -54,7 +54,6 @@ function PixelTestMode () {
         // Process the loaded image here
         const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
 
-        // eslint-disable-next-line no-constant-binary-expression
         const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
 
         const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `;

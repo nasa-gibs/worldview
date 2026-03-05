@@ -42,8 +42,8 @@ class SearchLayerList extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { selectedLayer, results } = this.props;
     const { firstLoadAutoSelect } = this.state;
-    const selectedLayerInResults = selectedLayer
-      && (results || []).find((l) => l.id === selectedLayer.id);
+    const selectedLayerInResults = selectedLayer &&
+      (results || []).find((l) => l.id === selectedLayer.id);
 
     // Clear metadata when item no longer in list of results
     if (!selectedLayerInResults && selectedLayer) {
@@ -51,7 +51,6 @@ class SearchLayerList extends React.Component {
     }
     // Select first item in list on initial load
     if (!selectedLayer && results && results.length && !firstLoadAutoSelect) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ firstLoadAutoSelect: true }, () => {
         const { id } = results[0];
         this.showLayerMetadata(id);
@@ -209,8 +208,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default withSearch(
-  ({ results }) => ({ results }),
+  ({ results }) => ({ results })
 )(connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SearchLayerList));

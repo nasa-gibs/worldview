@@ -124,7 +124,7 @@ class NaturalEvents extends React.Component {
     event,
     date,
     isSameEventID,
-    isInitialLoad,
+    isInitialLoad
   ) {
     return isInitialLoad
       ? new Promise((resolve, reject) => { resolve(); })
@@ -265,5 +265,5 @@ NaturalEvents.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(NaturalEvents);

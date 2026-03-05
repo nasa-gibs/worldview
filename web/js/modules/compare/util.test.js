@@ -7,7 +7,7 @@ const PERMALINK_STATE = { ca: '' };
 test('mapLocationToCompareState sets compare as active is ca is defined permalink [compare-permalink]', () => {
   const response = mapLocationToCompareState(
     PERMALINK_STATE,
-    stateFromLocation,
+    stateFromLocation
   );
   expect(stateFromLocation.compare.active).toBeFalsy();
   expect(response.compare.active).toBeTruthy();

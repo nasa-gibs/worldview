@@ -140,5 +140,5 @@ CoordinatesMarker.propTypes = {
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(CoordinatesMarker);

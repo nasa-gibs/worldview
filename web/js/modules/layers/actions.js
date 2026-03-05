@@ -134,7 +134,7 @@ export function addLayer(id) {
       layers.layerConfig,
       {},
       overlays.length || 0,
-      groupOverlays,
+      groupOverlays
     );
     const projections = Object.keys(config.projections);
     updateRecentLayers(layerObj, projections);
@@ -439,7 +439,7 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
       overlays.length || 0,
       groupOverlays,
       bandCombo,
-      selectedPreset,
+      selectedPreset
     );
     const projections = Object.keys(config.projections);
     updateRecentLayers(layerObj, projections);

@@ -18,27 +18,29 @@ export default function FilterChips(props) {
     }));
   });
 
-  return !filters.length ? null : (
-    <div className="bag-o-chips">
-      {filterValues.map(({
-        field, displayValue, value,
-      }) => (
-        <button
-          key={field + value}
-          className="filter-chip"
-          type="button"
-          onClick={() => removeFilter(field, value)}
-        >
-          <span dangerouslySetInnerHTML={{ __html: displayValue }} />
-          <FontAwesomeIcon
-            icon="times"
-            fixedWidth
-            widthAuto
-          />
-        </button>
-      ))}
-    </div>
-  );
+  return !filters.length
+    ? null
+    : (
+      <div className="bag-o-chips">
+        {filterValues.map(({
+          field, displayValue, value,
+        }) => (
+          <button
+            key={field + value}
+            className="filter-chip"
+            type="button"
+            onClick={() => removeFilter(field, value)}
+          >
+            <span dangerouslySetInnerHTML={{ __html: displayValue }} />
+            <FontAwesomeIcon
+              icon="times"
+              fixedWidth
+              widthAuto
+            />
+          </button>
+        ))}
+      </div>
+    );
 }
 
 FilterChips.propTypes = {

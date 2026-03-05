@@ -11,11 +11,11 @@ const MAX_IMAGE_DIMENSION_SIZE = 8200;
 
 const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
   return (
-    requestSize < MAX_GIF_SIZE
-    && imgHeight !== 0
-    && imgWidth !== 0
-    && imgHeight <= MAX_IMAGE_DIMENSION_SIZE
-    && imgWidth <= MAX_IMAGE_DIMENSION_SIZE
+    requestSize < MAX_GIF_SIZE &&
+    imgHeight !== 0 &&
+    imgWidth !== 0 &&
+    imgHeight <= MAX_IMAGE_DIMENSION_SIZE &&
+    imgWidth <= MAX_IMAGE_DIMENSION_SIZE
   );
 };
 

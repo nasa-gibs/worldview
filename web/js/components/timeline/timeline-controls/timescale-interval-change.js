@@ -162,39 +162,43 @@ class TimeScaleIntervalChange extends PureComponent {
           >
             Day
           </span>
-          {hasSubdailyLayers ? (
-            <>
+          {hasSubdailyLayers
+            ? (
+              <>
+                <span
+                  id="interval-hours"
+                  role="menuitem"
+                  tabIndex={-1}
+                  className="interval-btn interval-hours"
+                  onClick={() => this.handleClickInterval('hour')}
+                >
+                  Hour
+                </span>
+                <span
+                  id="interval-minutes"
+                  role="menuitem"
+                  tabIndex={-1}
+                  className="interval-btn interval-minutes"
+                  onClick={() => this.handleClickInterval('minute')}
+                >
+                  Minute
+                </span>
+              </>
+            )
+            : null}
+          {hasTempoProduct
+            ? (
               <span
-                id="interval-hours"
+                id="interval-auto"
                 role="menuitem"
                 tabIndex={-1}
-                className="interval-btn interval-hours"
-                onClick={() => this.handleClickInterval('hour')}
+                className="interval-btn interval-auto"
+                onClick={() => this.handleClickInterval('auto')}
               >
-                Hour
+                Auto
               </span>
-              <span
-                id="interval-minutes"
-                role="menuitem"
-                tabIndex={-1}
-                className="interval-btn interval-minutes"
-                onClick={() => this.handleClickInterval('minute')}
-              >
-                Minute
-              </span>
-            </>
-          ) : null}
-          {hasTempoProduct ? (
-            <span
-              id="interval-auto"
-              role="menuitem"
-              tabIndex={-1}
-              className="interval-btn interval-auto"
-              onClick={() => this.handleClickInterval('auto')}
-            >
-              Auto
-            </span>
-          ) : null}
+            )
+            : null}
           <span
             id="interval-custom"
             role="menuitem"
@@ -297,5 +301,5 @@ TimeScaleIntervalChange.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(TimeScaleIntervalChange);

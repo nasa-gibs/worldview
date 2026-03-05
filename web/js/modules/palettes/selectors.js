@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
@@ -8,7 +7,6 @@ import {
 } from 'lodash';
 import update from 'immutability-helper';
 import { getMinValue } from './util';
-
 
 export function getRenderedPalette(layerId, index, state) {
   const { config, palettes } = state;
@@ -46,11 +44,11 @@ export function getPalette(layerIdStr, indexNum, groupStr, state) {
   index = lodashIsUndefined(index) ? 0 : index;
   const renderedPalette = lodashGet(
     state,
-    `palettes.rendered['${layerId}'].maps[${index}]`,
+    `palettes.rendered['${layerId}'].maps[${index}]`
   );
   const customPalette = lodashGet(
     state,
-    `palettes['${group}']['${layerId}'].maps[${index}]`,
+    `palettes['${group}']['${layerId}'].maps[${index}]`
   );
 
   if (customPalette) {
@@ -322,7 +320,7 @@ function prepare(layerId, palettesObj, state) {
   active.maps = active.maps || [];
   lodashEach(getRenderedPalette(layerId, undefined, state).maps, (
     palette,
-    index,
+    index
   ) => {
     if (!active.maps[index]) {
       newPalettes = update(newPalettes, {
@@ -384,7 +382,7 @@ export function refreshDisabledSelector(
   disabled,
   index,
   palettes,
-  state,
+  state
 ) {
   let newPalettes = prepare(layerId, palettes, state);
   newPalettes = update(newPalettes, {
@@ -406,7 +404,7 @@ export function initDisabledSelector(
   disabledStr,
   index,
   palettes,
-  state,
+  state
 ) {
   const disabled = disabledStr ? disabledStr.split('-') : [];
   for (let i = 0; i < disabled.length; i += 1) { disabled[i] = +disabled[i]; }
@@ -430,7 +428,7 @@ export function setDisabledSelector(
   classIndex,
   index,
   palettes,
-  state,
+  state
 ) {
   let newPalettes = prepare(layerId, palettes, state);
   const legend = getPalette(layerId, index, undefined, state);
@@ -446,7 +444,7 @@ export function setDisabledSelector(
       maps: {
         [index]: {
           $merge: {
-            // eslint-disable-next-line no-restricted-globals
+
             disabled: isNaN(classIndex) ? [] : oldDisabled,
           },
         },
@@ -468,9 +466,9 @@ export function setRange(layerId, props, indexInt, palettes, state) {
   }
   const legend = getPalette(layerId, index, undefined, state);
   if (
-    legend.entries
-    && legend.entries.values
-    && max === legend.entries.values.length - 1
+    legend.entries &&
+    legend.entries.values &&
+    max === legend.entries.values.length - 1
   ) {
     max = undefined;
   }

@@ -95,13 +95,13 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     expect(response.palettes['terra-aod'].maps[0].max).toEqual(undefined);
     expect(response.palettes['terra-aod'].maps[0].squash).toEqual(undefined);
     expect(response.palettes['terra-aod'].lookup).toEqual(
-      config.palettes.lookups['terra-aod']['min-1'],
+      config.palettes.lookups['terra-aod']['min-1']
     );
   });
   test(`test ${setThresholdRangeAndSquash} action with squash and max [palettes-actions-threshold]`, () => {
     const store = mockStore(stateWithLayers);
     store.dispatch(
-      setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active'),
+      setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active')
     );
     const response = store.getActions()[0];
 
@@ -118,7 +118,7 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     expect(response.palettes['terra-aod'].maps[0].max).toEqual(1);
     expect(response.palettes['terra-aod'].maps[0].squash).toEqual(true);
     expect(response.palettes['terra-aod'].lookup).toEqual(
-      config.palettes.lookups['terra-aod']['max-1-squashed'],
+      config.palettes.lookups['terra-aod']['max-1-squashed']
     );
   });
   test(`test ${setCustomPalette} action with red-1 fixture palette [palettes-actions-set-custom]`, () => {
@@ -133,11 +133,11 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     expect(response.layerId).toEqual('terra-aod');
     expect(response.activeString).toEqual('active');
     expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual(
-      expectedLegendColors,
+      expectedLegendColors
     );
     expect(response.palettes['terra-aod'].maps[0].custom).toEqual('red-1');
     expect(response.palettes['terra-aod'].lookup).toEqual(
-      config.palettes.lookups['terra-aod']['red-1'],
+      config.palettes.lookups['terra-aod']['red-1']
     );
   });
   test(`test ${clearCustomPalette} action when no threshold applied [palettes-actions-clear-custom]`, () => {
@@ -241,8 +241,8 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
       expect(response.palettes['terra-aod'].maps[0].max).toEqual(1);
       expect(response.palettes['terra-aod'].maps[0].squash).toEqual(true);
       expect(response.palettes['terra-aod'].lookup).toEqual(
-        config.palettes.lookups['terra-aod']['max-1-squashed'],
+        config.palettes.lookups['terra-aod']['max-1-squashed']
       );
-    },
+    }
   );
 });

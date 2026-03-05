@@ -35,10 +35,10 @@ function Input({
 
       const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs);
 
-      if (containsExtent(viewExtent, crsCorrectedExtent)
-      && isValidExtent(clonedBBoxArray)
-      && !isEmpty(crsCorrectedExtent)
-      && !Number.isNaN(newInputValue)) {
+      if (containsExtent(viewExtent, crsCorrectedExtent) &&
+      isValidExtent(clonedBBoxArray) &&
+      !isEmpty(crsCorrectedExtent) &&
+      !Number.isNaN(newInputValue)) {
         onLatLongChange(clonedBBoxArray);
         setInputInvalid(false);
       } else {
@@ -95,7 +95,7 @@ function LatLongSelect(props) {
   const [showCoordinates, setShowCoordinates] = useState(false);
   const coordText = showCoordinates ? 'Hide Coordinates' : 'Edit Coordinates';
   const [minLon, minLat, maxLon, maxLat] = boundingBoxArray.map(
-    (coord) => coord.toFixed(4).toString(),
+    (coord) => coord.toFixed(4).toString()
   );
 
   return (

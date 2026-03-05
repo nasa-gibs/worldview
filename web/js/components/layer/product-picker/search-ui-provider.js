@@ -9,7 +9,6 @@ import {
 } from '../../../modules/product-picker/actions';
 import ProductPicker from './product-picker';
 
-
 class SearchUiProvider extends React.Component {
   componentDidMount() {
     const { initState } = this.props;
@@ -18,11 +17,13 @@ class SearchUiProvider extends React.Component {
 
   render() {
     const { searchConfig } = this.props;
-    return !searchConfig ? null : (
-      <SearchProvider config={searchConfig}>
-        <ProductPicker />
-      </SearchProvider>
-    );
+    return !searchConfig
+      ? null
+      : (
+        <SearchProvider config={searchConfig}>
+          <ProductPicker />
+        </SearchProvider>
+      );
   }
 }
 
@@ -47,5 +48,5 @@ const mapStateToProps = (state) => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(SearchUiProvider);

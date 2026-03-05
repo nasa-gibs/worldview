@@ -40,7 +40,7 @@ function OpacitySlider ({
 
   const options = useMemo(
     () => getDateTextOptions(dateA, dateB),
-    [dateA, dateB],
+    [dateA, dateB]
   );
   const {
     dateAText, dateBText, caseStyle, labelStyle,

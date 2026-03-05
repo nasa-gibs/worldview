@@ -27,7 +27,7 @@ export async function requestAction(
   url,
   mimeType,
   id,
-  options,
+  options
 ) {
   dispatch(startRequest(actionName, id));
   try {

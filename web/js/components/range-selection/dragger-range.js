@@ -30,8 +30,8 @@ class TimelineDraggerRange extends PureComponent {
     // update state and checkWidth only on startLocation and/or endLocation changes
     const { startLocation, endLocation } = this.props;
     if (
-      prevProps.startLocation !== startLocation
-      || prevProps.endLocation !== endLocation
+      prevProps.startLocation !== startLocation ||
+      prevProps.endLocation !== endLocation
     ) {
       this.updateExtent(this.props);
       this.checkWidth();
@@ -188,8 +188,8 @@ class TimelineDraggerRange extends PureComponent {
     e.preventDefault();
     // compare start locations to check if range has been dragged vs. clicked
     if (
-      startLocation.toFixed(3)
-      !== previousStartLocation.toFixed(3)
+      startLocation.toFixed(3) !==
+      previousStartLocation.toFixed(3)
     ) {
       this.setState((prevState) => ({
         previousStartLocation: prevState.startLocation,

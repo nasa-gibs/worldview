@@ -34,7 +34,9 @@ export function getRecentLayers(layerConfig, proj) {
   const filterUnknownLayers = (layerDef) => layerDef !== undefined;
   const layers = JSON.parse(safeLocalStorage.getItem(RECENT_LAYERS));
   return layers && layers[proj]
-    ? layers[proj].sort(byUse).map(toLayerObj).filter(filterUnknownLayers) : [];
+    ? layers[proj].sort(byUse).map(toLayerObj)
+      .filter(filterUnknownLayers)
+    : [];
 }
 
 export function clearRecentLayers() {
@@ -82,10 +84,10 @@ export function updateRecentLayers(layer, allProjections) {
       if (layers.length === MAX_RECENT_LAYERS) {
         const [lowestCountLayer] = layers.sort((a, b) => a.count - b.count);
         const filteredByCount = layers.filter(
-          ({ count }) => count === lowestCountLayer.count,
+          ({ count }) => count === lowestCountLayer.count
         );
         const [oldestLowest] = filteredByCount.sort(
-          (a, b) => a.dateAdded.valueOf() - b.dateAdded.valueOf(),
+          (a, b) => a.dateAdded.valueOf() - b.dateAdded.valueOf()
         );
         recentLayers[proj] = layers.filter(({ id }) => id !== oldestLowest.id);
       }

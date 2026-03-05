@@ -72,7 +72,8 @@ function TravelModeColorbars() {
   const filteredPalettes = Object.values(palettes).map((layer) => ({
     ...layer,
     maps: layer.maps.filter((mapItem) => !(mapItem.legend && mapItem.legend.type === 'classification')),
-  })).filter((layer) => layer.maps.length > 0);
+  }))
+    .filter((layer) => layer.maps.length > 0);
 
   if (filteredPalettes.length === 0) return null;
 

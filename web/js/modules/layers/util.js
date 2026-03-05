@@ -61,7 +61,7 @@ export function nearestInterval(def, date) {
     date.getMonth(),
     date.getDate(),
     date.getHours(),
-    newMinutes,
+    newMinutes
   );
   return newDate;
 }
@@ -85,9 +85,9 @@ export function prevDateInDateRange(def, date, dateArray) {
   const isMonthPeriod = def.period === 'monthly';
   const isYearPeriod = def.period === 'yearly';
 
-  if (!dateArray
-    || (isMonthPeriod && isFirstDayOfMonth)
-    || (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
+  if (!dateArray ||
+    (isMonthPeriod && isFirstDayOfMonth) ||
+    (isYearPeriod && isFirstDayOfMonth && isFirstDayOfYear)) {
     return date;
   }
 
@@ -151,8 +151,8 @@ const getRevisedMaxEndDate = (minDate, maxEndDate, startDateLimit, endDateLimit)
   const maxEndDateTime = maxEndDate.getTime();
   const startDateLimitTime = startDateLimit.getTime();
   const endDateLimitTime = endDateLimit.getTime();
-  const frontDateWithinRange = startDateLimitTime >= minDateTime
-  && startDateLimitTime <= maxEndDateTime;
+  const frontDateWithinRange = startDateLimitTime >= minDateTime &&
+  startDateLimitTime <= maxEndDateTime;
   const backDateWithinRange = endDateLimitTime <= maxEndDateTime && endDateLimitTime >= minDateTime;
   if (frontDateWithinRange || backDateWithinRange) {
     return endDateLimit;
@@ -471,8 +471,8 @@ const getMonthDateRange = ({
   let minStartMonthDate;
   if (rangeLimitsProvided) {
     // get minStartDate for partial range coverage starting date
-    minStartMonthDate = monthDifference
-      && getMinStartDate(monthDifference, 'monthly', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
+    minStartMonthDate = monthDifference &&
+      getMinStartDate(monthDifference, 'monthly', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
   }
 
   for (let i = 0; i <= (monthDifference + 1); i += 1) {
@@ -540,8 +540,8 @@ const getDayDateRange = ({
   let minStartDayDate;
   if (rangeLimitsProvided) {
     // get minStartDate for partial range coverage starting date
-    minStartDayDate = dayDifference
-    && getMinStartDate(dayDifference, 'daily', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
+    minStartDayDate = dayDifference &&
+    getMinStartDate(dayDifference, 'daily', dateIntervalNum, startDateLimit, minYear, minMonth, minDay);
   }
 
   for (let i = 0; i <= (dayDifference + 1); i += 1) {
@@ -609,7 +609,7 @@ const getSubdailyDateRange = ({
       minMonth,
       minDay,
       minHour,
-      minMinute - dateIntervalNum,
+      minMinute - dateIntervalNum
     );
     minMinuteDateMinusIntervalOffset = util.getTimezoneOffsetDate(minMinuteDateMinusInterval);
 
@@ -619,7 +619,7 @@ const getSubdailyDateRange = ({
     const endDateLimitSetMinutes = new Date(endDateLimit).setMinutes(minMinute);
 
     hourBeforeStartDateLimit = new Date(
-      startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000),
+      startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000)
     );
     hourAfterEndDateLimit = new Date(endDateLimitSetMinutes - endDateLimitOffset + (60 * 60000));
   } else {
@@ -630,8 +630,8 @@ const getSubdailyDateRange = ({
   }
   let minMinuteDate;
   if (rangeLimitsProvided) {
-    const hourBeforeStartDateLimitCompare = hourBeforeStartDateLimit
-    > minMinuteDateMinusIntervalOffset
+    const hourBeforeStartDateLimitCompare = hourBeforeStartDateLimit >
+    minMinuteDateMinusIntervalOffset
       ? hourBeforeStartDateLimit
       : minDate;
     minMinuteDate = hourBeforeStartDateLimit < minDate
@@ -669,7 +669,7 @@ const getSubdailyDateRange = ({
       minMinuteDate.getUTCDate(),
       minMinuteDate.getUTCHours(),
       minMinuteDate.getUTCMinutes() + i,
-      0,
+      0
     );
     if (!rangeLimitsProvided) {
       subdailyTime = util.getTimezoneOffsetDate(subdailyTime);
@@ -720,8 +720,8 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
     inputStartDateTime = inputStartDate.getTime();
     inputEndDateTime = inputEndDate.getTime();
   } else {
-    singleDateRangeAndInterval = dateRanges.length === 1
-    && dateRanges[0].dateInterval === '1';
+    singleDateRangeAndInterval = dateRanges.length === 1 &&
+    dateRanges[0].dateInterval === '1';
   }
 
   // at end of range, used to add "next" date
@@ -779,11 +779,11 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
       }
 
       // revise currentDate to minDate to reduce earlier minDate than needed
-      const minDateWithinRangeLimits = minDateTime > inputStartDateTime
-      && minDateTime < inputEndDateTime;
+      const minDateWithinRangeLimits = minDateTime > inputStartDateTime &&
+      minDateTime < inputEndDateTime;
       const runningMinDateAndLastDateEarlier = runningMinDate && lastDateInDateArray > minDate;
-      if (currentDateLessThanMinDate
-        && (minDateWithinRangeLimits || runningMinDateAndLastDateEarlier)) {
+      if (currentDateLessThanMinDate &&
+        (minDateWithinRangeLimits || runningMinDateAndLastDateEarlier)) {
         currentDate = minDate;
         currentDateTime = currentDate.getTime();
       }
@@ -812,7 +812,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
         minDate,
         maxDate,
         dateIntervalNum,
-        dateArray,
+        dateArray
       );
       dateArray = [...yearArray];
       // Monthly layers
@@ -871,20 +871,22 @@ export function serializeLayers(layers, state, groupName) {
       });
     }
     if (def.bandCombo) {
-      const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<').replaceAll(')', '>').replaceAll(',', ';');
+      const bandComboString = JSON.stringify(def.bandCombo).replaceAll('(', '<')
+        .replaceAll(')', '>')
+        .replaceAll(',', ';');
       item.attributes.push({
         id: 'bandCombo',
         value: bandComboString,
       });
     }
-    if (def.palette
-      && (def.custom || def.min || def.max || def.squash || def.disabled
-        || (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
+    if (def.palette &&
+      (def.custom || def.min || def.max || def.squash || def.disabled ||
+        (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
         palettes,
-        state,
+        state
       );
       item.attributes = paletteAttributeArray.length
         ? item.attributes.concat(paletteAttributeArray)
@@ -954,7 +956,7 @@ const getLayerSpec = (attributes) => {
     }
     if (attr.id === 'opacity') {
       opacity = util.clamp(parseFloat(attr.value), 0, 1);
-      // eslint-disable-next-line no-restricted-globals
+
       if (isNaN(opacity)) opacity = 0; // "opacity=0.0" is opacity in URL, resulting in NaN
     }
     if (attr.id === 'disabled') {
@@ -980,7 +982,6 @@ const getLayerSpec = (attributes) => {
         }
         const maxValue = parseFloat(value);
         if (lodashIsNaN(maxValue)) {
-          // eslint-disable-next-line no-console
           console.warn(`Invalid max value: ${value}`);
         } else {
           maxArray.push(maxValue);
@@ -998,7 +999,6 @@ const getLayerSpec = (attributes) => {
         }
         const minValue = parseFloat(value);
         if (lodashIsNaN(minValue)) {
-          // eslint-disable-next-line no-console
           console.warn(`Invalid min value: ${value}`);
         } else {
           minArray.push(minValue);
@@ -1025,7 +1025,8 @@ const getLayerSpec = (attributes) => {
     }
 
     if (attr.id === 'bandCombo') {
-      const formattedString = attr.value.replaceAll(';', ',').replaceAll('<', '(').replaceAll('>', ')');
+      const formattedString = attr.value.replaceAll(';', ',').replaceAll('<', '(')
+        .replaceAll('>', ')');
       bandCombo = JSON.parse(formattedString);
     }
 
@@ -1066,7 +1067,6 @@ const createLayerArrayFromState = function(layers, config) {
   }
   layers.reverse().forEach((layerDef) => {
     if (!config.layers[layerDef.id]) {
-      // eslint-disable-next-line no-console
       console.warn(`No such layer: ${layerDef.id}`);
       return;
     }
@@ -1074,7 +1074,7 @@ const createLayerArrayFromState = function(layers, config) {
       layerDef.id,
       layerArray,
       config.layers,
-      getLayerSpec(layerDef.attributes),
+      getLayerSpec(layerDef.attributes)
     );
   });
   return layerArray;
@@ -1121,22 +1121,22 @@ export function dateOverlap(period, dateRanges) {
       if (previous.dateInterval > 1 && period === 'daily') {
         previousEnd = new Date(
           previousEnd.setTime(
-            previousEnd.getTime()
-            + (previous.dateInterval * 86400000 - 86400000),
-          ),
+            previousEnd.getTime() +
+            (previous.dateInterval * 86400000 - 86400000)
+          )
         );
       }
       if (period === 'monthly') {
         previousEnd = new Date(
           previousEnd.setMonth(
-            previousEnd.getMonth() + (previous.dateInterval - 1),
-          ),
+            previousEnd.getMonth() + (previous.dateInterval - 1)
+          )
         );
       } else if (period === 'yearly') {
         previousEnd = new Date(
           previousEnd.setFullYear(
-            previousEnd.getFullYear() + (previous.dateInterval - 1),
-          ),
+            previousEnd.getFullYear() + (previous.dateInterval - 1)
+          )
         );
       }
       previousEnd = previousEnd.getTime();
@@ -1161,7 +1161,7 @@ export function dateOverlap(period, dateRanges) {
     {
       overlap: false,
       ranges: [],
-    },
+    }
   );
 
   // return the final results
@@ -1185,7 +1185,6 @@ export function layersParse11(str, config) {
       id = config.redirects.layers[id] || id;
     }
     if (!config.layers[id]) {
-      // eslint-disable-next-line no-console
       console.warn(`No such layer: ${id}`);
       return;
     }
@@ -1260,9 +1259,8 @@ export function layersParse12(stateObj, config) {
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {
-    // eslint-disable-next-line no-console
     console.warn(`Error Parsing layers: ${e}`);
-    // eslint-disable-next-line no-console
+
     console.log('reverting to default layers');
     return resetLayers(config);
   }
@@ -1272,7 +1270,7 @@ export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
   state,
-  config,
+  config
 ) {
   let newStateFromLocation = stateFromLocation;
   const { layers } = stateFromLocation;
@@ -1522,9 +1520,9 @@ export function adjustActiveDateRanges(layers, appNow) {
     const layer = layerObj;
     const { dateRanges } = layer;
     const { ongoing, period } = layer;
-    const failConditions = !ongoing
-      || !dateRanges
-      || period === 'subdaily';
+    const failConditions = !ongoing ||
+      !dateRanges ||
+      period === 'subdaily';
     if (failConditions) {
       return;
     }

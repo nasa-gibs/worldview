@@ -12,7 +12,7 @@ describe('main modalReducer', () => {
     expect(
       modalReducer([], {
         type: constants.TOGGLE,
-      }),
+      })
     ).toEqual(modalToggledOpenObj);
   });
   test(
@@ -34,9 +34,9 @@ describe('main modalReducer', () => {
           headerText: constants.TEST_HEADER,
           bodyText: constants.TEST_BODY,
           key: util.encodeId(`__BASIC_MODAL__${constants.TEST_HEADER}`),
-        }),
+        })
       ).toEqual(basicOpenModalObject);
-    },
+    }
   );
   test(
     `${constants.OPEN_CUSTOM} action type should update various modal props [modal-reducer-open-custom]`,
@@ -54,9 +54,9 @@ describe('main modalReducer', () => {
           type: constants.OPEN_CUSTOM,
           key: constants.TEST_KEY,
           customProps,
-        }),
+        })
       ).toEqual(modalCustomObject);
-    },
+    }
   );
   test(
     `${constants.RENDER_TEMPLATE
@@ -76,8 +76,8 @@ describe('main modalReducer', () => {
           key: util.encodeId(constants.TEST_KEY),
           headerText: constants.TEST_HEADER,
           template,
-        }),
+        })
       ).toEqual(modalCustomObject);
-    },
+    }
   );
 });

@@ -51,9 +51,11 @@ export function onActivate() {
       const deltaChangeAmt = customSelected ? customDelta : delta;
       const tenFrameDelta = 10 * deltaChangeAmt;
       const tenFramesBefore = autoSelected
-        ? autoTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
+        ? autoTenFramesBefore
+        : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
       const tenFramesAfter = autoSelected
-        ? autoTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
+        ? autoTenFramesAfter
+        : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const calculateStartDate = date.appNow < tenFramesAfter
         ? tenFramesBefore
         : activeDate;

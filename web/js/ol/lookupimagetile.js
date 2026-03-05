@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable func-names */
 import OlImageTile from 'ol/ImageTile';
 import OlTileState from 'ol/TileState';
 import { decodePNG, processImage } from './util';
@@ -155,7 +154,7 @@ LookupImageTile.prototype.load = async function () {
               const biggestDiff = Math.max(
                 Math.abs(parseInt(r, 10) - parseInt(pixSplit[0], 10)),
                 Math.abs(parseInt(g, 10) - parseInt(pixSplit[1], 10)),
-                Math.abs(parseInt(b, 10) - parseInt(pixSplit[2], 10)),
+                Math.abs(parseInt(b, 10) - parseInt(pixSplit[2], 10))
               );
               if (smallestDiff > biggestDiff) {
                 smallestDiff = biggestDiff;
@@ -190,7 +189,6 @@ LookupImageTile.prototype.load = async function () {
       } catch (error) {
         that.state = OlTileState.ERROR;
         that.changed();
-        // eslint-disable-next-line no-console
         console.error('Error:', error);
       }
     } else {
@@ -208,7 +206,7 @@ export default function lookupFactory(lookup, sourceOptions) {
       src,
       crossOrigin,
       tileLoadFunction,
-      sourceOptions,
+      sourceOptions
     );
   };
 }

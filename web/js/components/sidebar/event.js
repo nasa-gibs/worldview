@@ -117,16 +117,17 @@ function Event (props) {
             return (
               <li key={`${event.id}-${date}`} className="date">
 
-                {selectedDate === date ? (
-                  <span
-                    className="active"
-                    role="textbox"
-                    tabIndex={0}
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {formatDisplayDate(date)}
-                  </span>
-                )
+                {selectedDate === date
+                  ? (
+                    <span
+                      className="active"
+                      role="textbox"
+                      tabIndex={0}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {formatDisplayDate(date)}
+                    </span>
+                  )
                   : (
                     <a
                       className="'date item-selected"

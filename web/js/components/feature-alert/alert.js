@@ -40,12 +40,12 @@ const mapDispatchToProps = (dispatch) => ({
         clickableBehindModal: true,
         bodyComponent: undefined,
         scrollable: true,
-      }),
+      })
     );
   },
 });
 
 export default connect(
   null,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(FeaturedAlert);

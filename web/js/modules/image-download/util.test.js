@@ -228,18 +228,18 @@ test('Download URL [imagedownload-url]', () => {
     false,
     false,
     locationMarkers,
-    undefined,
+    undefined
   );
-  const expectedURL = 'http://localhost:3002/api/v1/snapshot'
-    + '?REQUEST=GetSnapshot'
-    + '&TIME=2019-06-24T00:00:00Z'
-    + '&BBOX=-14.492457798549111,-39.65420968191964,21.07185581752232,-4.089896065848208'
-    + '&CRS=EPSG:4326'
-    + '&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor'
-    + '&WRAP=day'
-    + '&FORMAT=image/jpeg'
-    + '&WIDTH=300&HEIGHT=300'
-    + '&colormaps='
-    + '&MARKER=2.7117,-19.1609,71.173,-39.0961';
+  const expectedURL = 'http://localhost:3002/api/v1/snapshot' +
+    '?REQUEST=GetSnapshot' +
+    '&TIME=2019-06-24T00:00:00Z' +
+    '&BBOX=-14.492457798549111,-39.65420968191964,21.07185581752232,-4.089896065848208' +
+    '&CRS=EPSG:4326' +
+    '&LAYERS=VIIRS_SNPP_CorrectedReflectance_TrueColor' +
+    '&WRAP=day' +
+    '&FORMAT=image/jpeg' +
+    '&WIDTH=300&HEIGHT=300' +
+    '&colormaps=' +
+    '&MARKER=2.7117,-19.1609,71.173,-39.0961';
   expect(dlURL.includes(expectedURL)).toBe(true);
 });

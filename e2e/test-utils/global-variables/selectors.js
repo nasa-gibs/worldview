@@ -293,4 +293,4 @@ module.exports = (page) => ({
   imageFormat: page.locator('#wv-image-format'),
   imageWorldFile: page.locator('#wv-image-worldfile'),
   imageMaxSize: page.locator('.wv-image-max-size')
-})
+});

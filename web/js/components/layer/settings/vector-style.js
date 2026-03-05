@@ -38,16 +38,17 @@ class VectorStyleSelect extends React.Component {
     const description = styleLayerObject['source-description'] || styleLayerObject.id;
     const isConditionalStyling = styleLayerObject.paint ? isConditional(styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color']) : false;
 
-    return isConditionalStyling ? this.renderLegendMultiItem(
-      styleLayerObject,
-      styleLayerObject.id,
-      description,
-    )
+    return isConditionalStyling
+      ? this.renderLegendMultiItem(
+        styleLayerObject,
+        styleLayerObject.id,
+        description
+      )
       : this.renderSelectorItemSingle(
         styleLayerObject,
         styleLayerObject.id,
         description,
-        activeVectorStyle === styleLayerObject.id,
+        activeVectorStyle === styleLayerObject.id
       );
   }
 
@@ -57,7 +58,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} id | colormap Id
    * @param {String} description | Colormap name
    */
-  // eslint-disable-next-line class-methods-use-this
+
   renderLegendMultiItem(vectorStyle, vectorStyleId, description) {
     const caseDefaultClassName = 'wv-palette-selector-row ';
     const array = Array.from(vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']);
@@ -70,9 +71,9 @@ class VectorStyleSelect extends React.Component {
       temp = array.slice(i, i + chunk);
       if (temp.length === 2) {
         const obj = {};
-        if (temp[0].length === 3
-          && typeof temp[0][2] === 'string'
-          && typeof temp[1] === 'string'
+        if (temp[0].length === 3 &&
+          typeof temp[0][2] === 'string' &&
+          typeof temp[1] === 'string'
         ) {
           [[,, obj.label], obj.color] = temp;
           organizedArray.push(obj);
@@ -160,7 +161,7 @@ class VectorStyleSelect extends React.Component {
         <h2 className="wv-header">Vector Styles</h2>
         <Scrollbar style={{ maxHeight: '200px' }}>
           {
-            // eslint-disable-next-line array-callback-return
+
             uniqueStyleLayers.map((styleLayerObject) => {
               if (styleLayerObject && styleLayerObject) {
                 const item = this.customLegend(styleLayerObject);

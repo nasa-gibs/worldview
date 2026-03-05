@@ -74,10 +74,10 @@ function Crop(props) {
     const { width: cWidth, height: cHeight } = cropBoundaries;
 
     // https://github.com/DominicTobias/react-image-crop/issues/397
-    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
-        && some(
+    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0 &&
+        some(
           pick(cropBoundaries, 'x', 'y', 'width', 'height'),
-          (value, key) => value !== prevCrop.current[key],
+          (value, key) => value !== prevCrop.current[key]
         );
     if (changed) {
       onDragStop(cropBoundaries);
@@ -117,7 +117,7 @@ function Crop(props) {
         <img src={TRANSPARENT_GIF} style={{ width: maxWidth, height: maxHeight }} />
       </ReactCrop>
     </>,
-    document.getElementById('wv-content'),
+    document.getElementById('wv-content')
   );
 }
 export default Crop;

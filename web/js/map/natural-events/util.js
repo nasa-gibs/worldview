@@ -243,7 +243,7 @@ export const getClusterPointEl = function (proj, cluster, map, pointClusterObj) 
   const number = properties.point_count_abbreviated;
   const numberEl = document.createTextNode(number);
   const dateRangeTextEl = document.createTextNode(
-    `${formatDisplayDate(properties.startDate)} to ${formatDisplayDate(properties.endDate)}`,
+    `${formatDisplayDate(properties.startDate)} to ${formatDisplayDate(properties.endDate)}`
   );
   let { coordinates } = cluster.geometry;
   const mapView = map.getView();

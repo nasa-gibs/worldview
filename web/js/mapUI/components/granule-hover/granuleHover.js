@@ -14,7 +14,8 @@ function GranuleHover(props) {
   } = props;
 
   const onGranuleHover = (platform, date, update) => {
-    const proj = ui.selected.getView().getProjection().getCode();
+    const proj = ui.selected.getView().getProjection()
+      .getCode();
     if (!granuleFootprints[proj]) return;
     let geometry;
     if (platform && date) {
@@ -24,7 +25,8 @@ function GranuleHover(props) {
   };
 
   const onGranuleHoverUpdate = (platform, date) => {
-    const proj = ui.selected.getView().getProjection().getCode();
+    const proj = ui.selected.getView().getProjection()
+      .getCode();
     if (!granuleFootprints[proj]) return;
     let geometry;
     if (platform && date) {
@@ -45,7 +47,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(
-  mapStateToProps,
+  mapStateToProps
 )(GranuleHover);
 
 GranuleHover.propTypes = {

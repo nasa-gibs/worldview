@@ -76,7 +76,7 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
     }
 
     const markerAlreadyExists = coordinates.find(
-      ({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude,
+      ({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude
     );
 
     if (markerAlreadyExists) {
@@ -174,7 +174,7 @@ export function getSuggestions(val) {
       request,
       '',
       'location-search-suggest-place',
-      REQUEST_OPTIONS,
+      REQUEST_OPTIONS
     );
   };
 }

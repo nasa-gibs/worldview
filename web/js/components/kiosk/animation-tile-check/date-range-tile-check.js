@@ -24,7 +24,7 @@ import {
 const contentLengthThresholds = {
   'GOES-East_ABI_GeoColor': 160000,
   'GOES-West_ABI_GeoColor': 160000,
-  'AMSRU2_Sea_Ice_Concentration_12km': 10000,
+  AMSRU2_Sea_Ice_Concentration_12km: 10000,
 };
 
 function DateRangeTileCheck(props) {
@@ -39,7 +39,7 @@ function DateRangeTileCheck(props) {
   const dispatch = useDispatch();
   const toggleCheckedAnimationAvailability = (available) => {
     dispatch(
-      toggleCheckedAnimationAvailabilityAction(available),
+      toggleCheckedAnimationAvailabilityAction(available)
     );
   };
 
@@ -107,8 +107,10 @@ function DateRangeTileCheck(props) {
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
     const { origin, extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, null);
-    const sizes = !tileMatrices ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [
-      matrixWidth, matrixHeight]);
+    const sizes = !tileMatrices
+      ? []
+      : tileMatrices.map(({ matrixWidth, matrixHeight }) => [
+        matrixWidth, matrixHeight]);
 
     const tileGridOptions = {
       origin,
@@ -136,7 +138,6 @@ function DateRangeTileCheck(props) {
           });
       });
     };
-
 
     const wmtsSource = new OlSourceWMTS({
       url: sourceURL + urlParameters,

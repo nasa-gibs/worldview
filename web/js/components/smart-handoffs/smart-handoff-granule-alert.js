@@ -37,7 +37,6 @@ function GranuleAlertModalBody() {
         </li>
       </ol>
 
-
     </div>
   );
 }

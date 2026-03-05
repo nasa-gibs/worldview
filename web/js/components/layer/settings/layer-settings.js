@@ -16,7 +16,6 @@ import GranuleCountSlider from './granule-count-slider';
 import safeLocalStorage from '../../../util/local-storage';
 import ImagerySearch from './imagery-search';
 
-
 import {
   palettesTranslate as palettesTranslateUtil,
 } from '../../../modules/palettes/util';
@@ -131,9 +130,9 @@ class LayerSettings extends React.Component {
           </TabPane>
         );
       } else if (
-        legend.type !== 'continuous'
-        && legend.type !== 'discrete'
-        && legend.colors.length > 1
+        legend.type !== 'continuous' &&
+        legend.type !== 'discrete' &&
+        legend.colors.length > 1
       ) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
@@ -143,23 +142,25 @@ class LayerSettings extends React.Component {
       } else {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
-            {legend.type !== 'classification' ? (
-              <PaletteThreshold
-                key={`${layer.id + i}_threshold`}
-                legend={legend}
-                setRange={setThresholdRange}
-                globalTemperatureUnit={globalTemperatureUnit}
-                min={0}
-                max={max}
-                start={start}
-                groupName={groupName}
-                end={end}
-                layerId={layer.id}
-                squashed={!!palette.squash}
-                index={i}
-                palette={palette}
-              />
-            ) : null}
+            {legend.type !== 'classification'
+              ? (
+                <PaletteThreshold
+                  key={`${layer.id + i}_threshold`}
+                  legend={legend}
+                  setRange={setThresholdRange}
+                  globalTemperatureUnit={globalTemperatureUnit}
+                  min={0}
+                  max={max}
+                  start={start}
+                  groupName={groupName}
+                  end={end}
+                  layerId={layer.id}
+                  squashed={!!palette.squash}
+                  index={i}
+                  palette={palette}
+                />
+              )
+              : null}
 
             <Palette
               setCustomPalette={setCustomPalette}
@@ -236,8 +237,8 @@ class LayerSettings extends React.Component {
     }
     return (
       <>
-        {legend.type !== 'classification'
-          && (
+        {legend.type !== 'classification' &&
+          (
             <PaletteThreshold
               key={`${layer.id}0_threshold`}
               legend={legend}
@@ -305,7 +306,8 @@ class LayerSettings extends React.Component {
             />
           )}
         </>
-      ) : null;
+      )
+      : null;
   };
 
   render() {
@@ -383,7 +385,7 @@ function mapStateToProps(state, ownProps) {
       layerId,
       index,
       groupName,
-      state,
+      state
     ),
     getPaletteLegends: (layerId) => getPaletteLegendsSelector(layerId, groupName, state),
     getPalette: (layerId, index) => getPaletteSelector(layerId, index, groupName, state),
@@ -394,22 +396,22 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = (dispatch) => ({
   toggleClassification: (layerId, classIndex, index, groupName) => {
     dispatch(
-      setToggledClassification(layerId, classIndex, index, groupName),
+      setToggledClassification(layerId, classIndex, index, groupName)
     );
   },
   toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
     dispatch(
-      refreshDisabledClassification(layerId, disabledArray, index, groupName),
+      refreshDisabledClassification(layerId, disabledArray, index, groupName)
     );
   },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
-      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName),
+      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
     );
   },
   setFilterRange: (layerId, min, max, index, groupName) => {
     dispatch(
-      setFilterRange(layerId, { min, max }, index, groupName),
+      setFilterRange(layerId, { min, max }, index, groupName)
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
@@ -437,7 +439,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(LayerSettings);
 
 LayerSettings.defaultProps = {

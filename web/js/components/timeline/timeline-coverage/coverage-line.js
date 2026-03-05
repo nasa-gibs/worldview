@@ -25,7 +25,6 @@ class CoverageLine extends PureComponent {
     let dateRangeEnd;
     let toolTipText;
 
-
     switch (lineType) {
       case 'SINGLE':
         dateRangeStart = (startDate && formatDisplayDate(new Date(startDate))) || 'Start';
@@ -75,7 +74,7 @@ class CoverageLine extends PureComponent {
     endDate,
     color,
     layerPeriod,
-    index,
+    index
   ) => {
     const {
       positionTransformX,
@@ -108,15 +107,15 @@ class CoverageLine extends PureComponent {
       : leftOffset;
 
     // determine line radius for line start/end vs. partial large width lines
-    let lineRadius = !isWidthGreaterThanRendered
-      || (leftOffset !== 0 && isWidthGreaterThanRendered)
+    let lineRadius = !isWidthGreaterThanRendered ||
+      (leftOffset !== 0 && isWidthGreaterThanRendered)
       ? '6'
       : '0';
 
     // handle "false transform" line edge to simulate line movement for striped background
-    if (leftOffset === 0
-      && ((isWidthGreaterThanRendered && layerEndBeforeAxisBack)
-      || (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
+    if (leftOffset === 0 &&
+      ((isWidthGreaterThanRendered && layerEndBeforeAxisBack) ||
+      (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
       lineWidth -= positionTransformX;
       rectTransform += positionTransformX;
       lineRadius = '6';
@@ -165,7 +164,7 @@ class CoverageLine extends PureComponent {
           endDate,
           color,
           layerPeriod,
-          index,
+          index
         )}
       </g>
     ));

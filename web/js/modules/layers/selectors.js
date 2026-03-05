@@ -29,7 +29,7 @@ export function addLayer(
   overlayLength = null,
   groupOverlays = null,
   bandComboParam = null,
-  selectedPresetParam = null,
+  selectedPresetParam = null
 ) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
@@ -139,8 +139,8 @@ export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) =
   if (!layers.collections[layer.id]) return undefined;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if ((dateCollection[i].date === dailyDate
-      || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
+    if ((dateCollection[i].date === dailyDate ||
+      dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
       return dateCollection[i];
     }
   }
@@ -244,7 +244,7 @@ export const getActiveLayersMap = createSelector(
     const activeLayerMap = {};
     activeLayers.forEach((layer) => { activeLayerMap[layer.id] = layer; });
     return activeLayerMap;
-  },
+  }
 );
 
 /**
@@ -262,9 +262,9 @@ const getActiveOverlayGroupsEmbed = (state) => {
   const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
   return (overlayGroupsFiltered || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
-          && !!activeLayersMap[id].visible,
-    ).length,
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id] &&
+          !!activeLayersMap[id].visible
+    ).length
   );
 };
 
@@ -283,8 +283,8 @@ export const getActiveOverlayGroups = (state) => {
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id]?.projections?.[proj.id],
-    ).length,
+      (id) => !!activeLayersMap[id]?.projections?.[proj.id]
+    ).length
   );
 };
 
@@ -439,13 +439,13 @@ function forGroup(group, activeLayers, state, spec = {}) {
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
-    // eslint-disable-next-line no-use-before-define
+
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
       activeLayers,
       spec.date,
       null,
-      state,
+      state
     );
     if (notInProj || notRenderable) {
       return;
@@ -513,15 +513,15 @@ export function isRenderable(id, layers, dateString, bLayers, state) {
         return false;
       }
       if (
-        otherDef.visible
-        && otherDef.opacity === 1.0
-        && available(otherDef.id, date, layers, parameters)
+        otherDef.visible &&
+        otherDef.opacity === 1.0 &&
+        available(otherDef.id, date, layers, parameters)
       ) {
         obscured = true;
         return false;
       }
       return undefined;
-    },
+    }
   );
   return !obscured;
 }
@@ -531,7 +531,7 @@ export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
   const layers = getActiveLayers(state, activeString);
   const baseLayers = layers.filter(({ group }) => group === 'baselayers');
   return layers.filter(
-    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {})
   );
 };
 
@@ -594,7 +594,7 @@ export const makeGetDescription = () => createSelector(
       .flatMap(({ sources }) => Object.values(sources))
       .filter(({ settings }) => settings.find((id) => id === layerId));
     return (setting || {}).description;
-  },
+  }
 );
 
 /**
@@ -615,7 +615,7 @@ export function hasSubDaily(layers) {
 
 export const subdailyLayersActive = createSelector(
   [getActiveLayers],
-  (layers) => hasSubDaily(layers),
+  (layers) => hasSubDaily(layers)
 );
 
 /**
@@ -636,7 +636,7 @@ export function getSubDaily(layers) {
 
 export const subdailyLayers = createSelector(
   [getActiveLayers],
-  (layers) => getSubDaily(layers),
+  (layers) => getSubDaily(layers)
 );
 
 /**
@@ -670,7 +670,7 @@ export function getTitles(config, layerId, projId) {
     let tags;
     const forProj = lodashGet(
       config,
-      `layers.${layerId}.projections.${projId}`,
+      `layers.${layerId}.projections.${projId}`
     );
     if (forProj) {
       title = forProj.title;
@@ -693,12 +693,12 @@ export function getTitles(config, layerId, projId) {
 
 export const getAllActiveLayers = createSelector(
   [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, {}),
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, {})
 );
 
 export const getAllActiveOverlaysBaselayers = createSelector(
   [getProjState, getCompareState, getLayerState],
-  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' }),
+  (proj, compare, layers) => getLayers({ proj, compare, layers }, { group: 'all' })
 );
 
 /**
@@ -710,8 +710,8 @@ export const memoizedAvailable = createSelector(
   (
     currentDate,
     activeLayers,
-    parameters,
-  ) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
+    parameters
+  ) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters))
 );
 
 export const findEventLayers = (originalLayers, newLayers) => {
@@ -760,7 +760,7 @@ export function activateLayersForEventCategory(state, category) {
         newLayers,
         layerConfig,
         { visible },
-        overlays.length,
+        overlays.length
       );
     }
   });
@@ -812,7 +812,7 @@ export function replaceSubGroup(
   layerId,
   nextLayerId,
   layers,
-  layerSplit,
+  layerSplit
 ) {
   if (nextLayerId) {
     return moveBefore(layerId, nextLayerId, layers);

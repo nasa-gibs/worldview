@@ -19,10 +19,10 @@ function CustomNavItem(props) {
   return (
     <NavItem
       style={
-          shouldHideInMobile && isMobile
-            ? { display: 'none' }
-            : { display: 'block' }
-        }
+        shouldHideInMobile && isMobile
+          ? { display: 'none' }
+          : { display: 'block' }
+      }
     >
       <NavLink
         disabled={isDisabled}

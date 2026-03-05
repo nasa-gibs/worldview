@@ -73,7 +73,7 @@ class ImageDownloadContainer extends Component {
   getLatLongFromPixelValue(pixelX, pixelY) {
     const { proj, map } = this.props;
     const coordinate = map.ui.selected.getCoordinateFromPixel(
-      [Math.floor(pixelX), Math.floor(pixelY)],
+      [Math.floor(pixelX), Math.floor(pixelY)]
     );
     const { crs } = proj.selected;
     const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
@@ -167,11 +167,11 @@ class ImageDownloadContainer extends Component {
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const mapView = map.ui.selected.getView();
-    const newResolution = resolution
-      || imageUtilCalculateResolution(
+    const newResolution = resolution ||
+      imageUtilCalculateResolution(
         Math.round(mapView.getZoom()),
         isGeoProjection,
-        proj.selected.resolutions,
+        proj.selected.resolutions
       );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
     const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
@@ -194,7 +194,7 @@ class ImageDownloadContainer extends Component {
             date,
             bottomLeftLatLong,
             topRightLatLong,
-            proj,
+            proj
           )}
           url={url}
           viewExtent={viewExtent}
@@ -272,7 +272,7 @@ function mapStateToProps(state) {
       {
         reverse: true,
         renderable: true,
-      },
+      }
     ),
   };
 }
@@ -290,7 +290,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  mapDispatchToProps
 )(ImageDownloadContainer);
 
 ImageDownloadContainer.propTypes = {

@@ -41,69 +41,73 @@ function IntervalSelect(props) {
 
   return (
     <div>
-      {isMobile ? (
-        <div className="mobile-timescale-dropdown">
-          <Dropdown isOpen={dropdownOpen} toggle={toggle}>
-            <DropdownToggle caret>
-              {TIME_SCALE_FROM_NUMBER[interval].toUpperCase()}
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem>
-                <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('year')}>
-                  Year
-                </span>
-              </DropdownItem>
-              <DropdownItem>
-                <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('month')}>
-                  Month
-                </span>
-              </DropdownItem>
-              <DropdownItem>
-                <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('day')}>
-                  Day
-                </span>
-              </DropdownItem>
-              {hasSubdailyLayers ? (
-                <>
-                  <DropdownItem>
-                    <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('hour')}>
-                      Hour
-                    </span>
-                  </DropdownItem>
-                  <DropdownItem>
-                    <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('minute')}>
-                      Minute
-                    </span>
-                  </DropdownItem>
-                </>
-              ) : null}
-            </DropdownMenu>
-          </Dropdown>
-        </div>
-      ) : (
-        <form
-          className="custom-interval-timescale-select-form-container no-drag"
-          onSubmit={handleSubmit}
-        >
-          <select
-            className="custom-interval-timescale-select no-drag"
-            value={zoomLevel}
-            onChange={handleChangeZoomLevel}
+      {isMobile
+        ? (
+          <div className="mobile-timescale-dropdown">
+            <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+              <DropdownToggle caret>
+                {TIME_SCALE_FROM_NUMBER[interval].toUpperCase()}
+              </DropdownToggle>
+              <DropdownMenu>
+                <DropdownItem>
+                  <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('year')}>
+                    Year
+                  </span>
+                </DropdownItem>
+                <DropdownItem>
+                  <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('month')}>
+                    Month
+                  </span>
+                </DropdownItem>
+                <DropdownItem>
+                  <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('day')}>
+                    Day
+                  </span>
+                </DropdownItem>
+                {hasSubdailyLayers
+                  ? (
+                    <>
+                      <DropdownItem>
+                        <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('hour')}>
+                          Hour
+                        </span>
+                      </DropdownItem>
+                      <DropdownItem>
+                        <span role="menuitem" tabIndex={-1} onClick={() => handleChangeZoomLevelMobile('minute')}>
+                          Minute
+                        </span>
+                      </DropdownItem>
+                    </>
+                  )
+                  : null}
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+        )
+        : (
+          <form
+            className="custom-interval-timescale-select-form-container no-drag"
+            onSubmit={handleSubmit}
           >
-            <option className="custom-interval-timescale-select-option no-drag" value="year">year</option>
-            <option className="custom-interval-timescale-select-option no-drag" value="month">month</option>
-            <option className="custom-interval-timescale-select-option no-drag" value="day">day</option>
-            {hasSubdailyLayers
-              ? (
-                <>
-                  <option className="custom-interval-timescale-select-option no-drag" value="hour">hour</option>
-                  <option className="custom-interval-timescale-select-option no-drag" value="minute">minute</option>
-                </>
-              )
-              : null}
-          </select>
-        </form>
-      )}
+            <select
+              className="custom-interval-timescale-select no-drag"
+              value={zoomLevel}
+              onChange={handleChangeZoomLevel}
+            >
+              <option className="custom-interval-timescale-select-option no-drag" value="year">year</option>
+              <option className="custom-interval-timescale-select-option no-drag" value="month">month</option>
+              <option className="custom-interval-timescale-select-option no-drag" value="day">day</option>
+              {hasSubdailyLayers
+                ? (
+                  <>
+                    <option className="custom-interval-timescale-select-option no-drag" value="hour">hour</option>
+                    <option className="custom-interval-timescale-select-option no-drag" value="minute">minute</option>
+                  </>
+                )
+                : null}
+            </select>
+          </form>
+        )}
     </div>
   );
 }

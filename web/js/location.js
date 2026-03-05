@@ -65,64 +65,64 @@ export const mapLocationToState = (state, location) => {
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,
-      state,
+      state
     );
     stateFromLocation = mapLocationToProjState(
       parameters,
       stateFromLocation,
-      state,
+      state
     );
     stateFromLocation = mapLocationToLayerState(
       parameters,
       stateFromLocation,
       state,
-      config,
+      config
     );
     stateFromLocation = mapLocationToLocationSearchState(
       parameters,
       stateFromLocation,
-      state,
+      state
     );
     stateFromLocation = mapLocationToCompareState(
       parameters,
-      stateFromLocation,
+      stateFromLocation
     );
     stateFromLocation = mapLocationToChartingState(
       parameters,
-      stateFromLocation,
+      stateFromLocation
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config,
+      config
     );
     stateFromLocation = mapLocationToAnimationState(
       parameters,
       stateFromLocation,
       state,
-      config,
+      config
     );
     stateFromLocation = mapLocationToSidebarState(
       parameters,
       stateFromLocation,
       state,
-      config,
+      config
     );
     stateFromLocation = mapLocationToTourState(
       parameters,
       stateFromLocation,
       state,
-      config,
+      config
     );
     stateFromLocation = mapLocationToEmbedState(
       parameters,
-      stateFromLocation,
+      stateFromLocation
     );
     stateFromLocation = mapLocationToEventFilterState(
       parameters,
       stateFromLocation,
-      state,
+      state
     );
 
     // one level deep merge of newState with defaultState
@@ -136,10 +136,10 @@ export const mapLocationToState = (state, location) => {
   }
   const startTour = checkTourBuildTimestamp(state.config);
   if (
-    startTour
-      && config.features.tour
-      && config.stories
-      && config.storyOrder
+    startTour &&
+      config.features.tour &&
+      config.stories &&
+      config.storyOrder
   ) {
     return update(state, {
       tour: { active: { $set: true } },
@@ -533,7 +533,8 @@ const getParameters = function(config, parameters) {
           const isChartingRange = get(state, 'charting.timeSpanSelection') === 'range';
           const timeSpanEndDate = get(state, 'charting.timeSpanEndDate');
           return isChartingRange && !!timeSpanEndDate
-            ? serializeDateChartingWrapper(currentItemState, state) : undefined;
+            ? serializeDateChartingWrapper(currentItemState, state)
+            : undefined;
         },
         parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
       },
@@ -652,14 +653,14 @@ export function getParamObject(
   config,
   models,
   legacyState,
-  errors,
+  errors
 ) {
   const mapParamObject = getMapParameterSetup(
     parameters,
     config,
     models,
     legacyState,
-    errors,
+    errors
   );
   return {
     global: {

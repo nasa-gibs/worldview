@@ -48,7 +48,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const throttleDispathCMRErrorDialog = lodashThrottle(
     dispathCMRErrorDialog.bind(this),
     CMR_AJAX_OPTIONS.timeout,
-    { leading: true, trailing: false },
+    { leading: true, trailing: false }
   );
 
   const showLoading = () => {
@@ -191,7 +191,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     availableGranules,
     granuleCount,
     leadingEdgeDate,
-    granuleDateRanges,
+    granuleDateRanges
   ) => {
     const { proj: { selected: { crs } } } = store.getState();
     const visibleGranules = [];
@@ -217,16 +217,18 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       const gaps = identifyGaps(granuleDateRanges); // identify gaps between date ranges
       // get the gap that the currently selected time is within
       const currentlySelectedGap = !isWithinRange
-        ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end) : null;
+        ? gaps.find(([start, end]) => leadingEdgeDate >= start && leadingEdgeDate <= end)
+        : null;
       // check if the current granule is within the currently selected gap
       const granuleIsWithinSelectedGap = currentlySelectedGap
-        ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1] : true;
+        ? dateDate >= currentlySelectedGap[0] && dateDate <= currentlySelectedGap[1]
+        : true;
 
-      if (dateDate <= leadingEdgeDate && isWithinRange
-        && granuleIsWithinRange && isWithinBounds(crs, item)) {
+      if (dateDate <= leadingEdgeDate && isWithinRange &&
+        granuleIsWithinRange && isWithinBounds(crs, item)) {
         visibleGranules.unshift(item);
-      } else if (dateDate <= leadingEdgeDate && !granuleIsWithinRange
-        && isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
+      } else if (dateDate <= leadingEdgeDate && !granuleIsWithinRange &&
+        isWithinBounds(crs, item) && granuleIsWithinSelectedGap) {
         invisibleGranules.unshift(item);
       }
 
@@ -299,13 +301,15 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const { visibleGranules, invisibleGranules } = granuleAttributes;
     const shouldShift = def.shiftadjacentdays ?? true; // defaults to true
     const shiftedVisibleGranules = shouldShift
-      ? datelineShiftGranules(visibleGranules, date, crs) : visibleGranules;
+      ? datelineShiftGranules(visibleGranules, date, crs)
+      : visibleGranules;
     const shiftedInvisibleGranules = shouldShift
-      ? datelineShiftGranules(invisibleGranules, date, crs) : invisibleGranules;
+      ? datelineShiftGranules(invisibleGranules, date, crs)
+      : invisibleGranules;
     const tileLayers = new OlCollection(createGranuleTileLayers(
       shiftedVisibleGranules,
       def,
-      attributes,
+      attributes
     ));
     granuleLayer.setLayers(tileLayers);
     granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);

@@ -76,15 +76,19 @@ function NavCase (props) {
       }
     />
   );
-  const sidebarCollapseMobile = isMobile ? {
-    height: '48px',
-    width: '45px',
-  } : null;
-  const collapseIconMobile = isMobile ? {
-    height: '30px',
-    width: '30px',
-    color: '#fff',
-  } : null;
+  const sidebarCollapseMobile = isMobile
+    ? {
+      height: '48px',
+      width: '45px',
+    }
+    : null;
+  const collapseIconMobile = isMobile
+    ? {
+      height: '30px',
+      width: '30px',
+      color: '#fff',
+    }
+    : null;
   const fontAwesomeStyle = isMobile ? 'times' : 'caret-up';
 
   return (
