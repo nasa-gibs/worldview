@@ -1,45 +1,49 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { defineConfig, globalIgnores } from 'eslint/config'
-import { FlatCompat } from '@eslint/eslintrc'
-import js from '@eslint/js'
-import stylistic from '@stylistic/eslint-plugin'
-import babelParser from '@babel/eslint-parser'
-import globals from 'globals'
-import importPlugin from 'eslint-plugin-import'
-import react from 'eslint-plugin-react'
-import jest from 'eslint-plugin-jest'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
+// import path from 'node:path';
+// import { fileURLToPath } from 'node:url';
+// import { defineConfig, globalIgnores } from 'eslint/config';
+// import { FlatCompat } from '@eslint/eslintrc';
+// import js from '@eslint/js';
+import stylistic from '@stylistic/eslint-plugin';
+import babelParser from '@babel/eslint-parser';
+import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
+import react from 'eslint-plugin-react';
+import jest from 'eslint-plugin-jest';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import neostandard from 'neostandard';
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
 
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
+// const compat = new FlatCompat({
+//   baseDirectory: __dirname,
+//   recommendedConfig: js.configs.recommended,
+//   allConfig: js.configs.all,
+// });
 
-export default defineConfig([
-  globalIgnores([
-    '**/node_modules/**',
-    '**/build/**',
-    '**/dist/**',
-    '**/coverage/**',
-    '**/reports/**',
-    'e2e/reports/**',
-    'web/build/**',
-    'web/dist/**',
-    'web/ext/**',
-    'web/js/lib/**',
-  ]),
+export default [
+  ...neostandard({
+    ignores: [
+      '**/node_modules/**',
+      '**/build/**',
+      '**/dist/**',
+      '**/coverage/**',
+      '**/reports/**',
+      'e2e/reports/**',
+      'web/build/**',
+      'web/dist/**',
+      'web/ext/**',
+      'web/js/lib/**',
+    ],
+    semi: true
+  }),
   {
     files: ['**/*.{js,mjs}'],
     plugins: { import: importPlugin },
-    extends: [
-      js.configs.recommended,
-      ...compat.extends('plugin:n/recommended'),
-    ],
+    // extends: [
+    //   js.configs.recommended,
+    //   ...compat.extends('plugin:n/recommended'),
+    // ],
     rules: {
       'new-cap': ['error', {}],
       camelcase: ['error', { ignoreDestructuring: true, properties: 'never' }],
@@ -64,10 +68,16 @@ export default defineConfig([
       '**/tasks/**/*.js',
       '**/*.spec.js',
     ],
+    plugins: {
+      stylistic
+    },
     languageOptions: {
       sourceType: 'commonjs',
       globals: { ...globals.node },
     },
+    rules: {
+      '@stylistic/semi': 'off',
+    }
   },
   {
     files: ['web/**/*.js'],
@@ -105,8 +115,17 @@ export default defineConfig([
       },
     },
     rules: {
-      camelcase: ['error', { allow: ['^UNSAFE_'], properties: 'never' }],
-      'max-len': ['error', { code: 100, ignoreUrls: true, ignoreStrings: true, ignoreTemplateLiterals: true }],
+      camelcase: ['error', {
+        allow: ['^UNSAFE_'],
+        properties: 'never'
+      }],
+      'max-len': ['error', {
+        code: 100,
+        ignoreUrls: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true
+      }],
       'no-multiple-empty-lines': 'off',
       'no-promise-executor-return': 'error',
       'no-restricted-globals': ['error', 'localStorage', 'sessionStorage'],
@@ -119,7 +138,7 @@ export default defineConfig([
       'n/no-unsupported-features/node-builtins': 'off',
 
       'import/no-extraneous-dependencies': ['error', {
-          devDependencies: ['**/*test.js', '**/*config.js', '**/*conf.js'],
+        devDependencies: ['**/*test.js', '**/*config.js', '**/*conf.js'],
       }],
       'import/extensions': 'off',
       'import/no-cycle': 'warn',
@@ -156,20 +175,21 @@ export default defineConfig([
       'react/self-closing-comp': 'error',
       'react/sort-comp': 'error',
 
-      'stylistic/array-bracket-spacing': 'error',
-      'stylistic/comma-style': 'error',
-      'stylistic/eol-last': 'error',
-      'stylistic/indent': ['error', 2],
-      'stylistic/jsx-quotes': 'error',
-      'stylistic/keyword-spacing': 'error',
-      'stylistic/newline-per-chained-call': 'error',
-      'stylistic/no-multi-spaces': 'error',
-      'stylistic/object-curly-spacing': 'off',
-      'stylistic/semi': 'error',
-      'stylistic/space-before-blocks': 'error',
-      'stylistic/space-infix-ops': 'error',
-      'stylistic/space-in-parens': 'error',
-      'stylistic/no-trailing-spaces': 'error',
+      '@stylistic/array-bracket-spacing': 'error',
+      '@stylistic/comma-style': 'error',
+      '@stylistic/eol-last': 'error',
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/jsx-quotes': 'error',
+      '@stylistic/keyword-spacing': 'error',
+      '@stylistic/newline-per-chained-call': 'error',
+      '@stylistic/no-multi-spaces': 'error',
+      '@stylistic/object-curly-spacing': 'off',
+      '@stylistic/semi': 'error',
+      '@stylistic/space-before-blocks': 'error',
+      '@stylistic/space-before-function-paren': 'off',
+      '@stylistic/space-infix-ops': 'error',
+      '@stylistic/space-in-parens': 'error',
+      '@stylistic/no-trailing-spaces': 'error',
     },
   }
-])
+];
