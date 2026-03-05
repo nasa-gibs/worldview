@@ -1,25 +1,9 @@
-// import path from 'node:path';
-// import { fileURLToPath } from 'node:url';
-// import { defineConfig, globalIgnores } from 'eslint/config';
-// import { FlatCompat } from '@eslint/eslintrc';
-// import js from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
 import babelParser from '@babel/eslint-parser';
 import globals from 'globals';
 import importPlugin from 'eslint-plugin-import';
-import react from 'eslint-plugin-react';
 import jest from 'eslint-plugin-jest';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
-import neostandard from 'neostandard';
-
-// const __filename = fileURLToPath(import.meta.url);
-// const __dirname = path.dirname(__filename);
-
-// const compat = new FlatCompat({
-//   baseDirectory: __dirname,
-//   recommendedConfig: js.configs.recommended,
-//   allConfig: js.configs.all,
-// });
+import neostandard, { plugins } from 'neostandard';
 
 export default [
   ...neostandard({
@@ -39,11 +23,10 @@ export default [
   }),
   {
     files: ['**/*.{js,mjs}'],
-    plugins: { import: importPlugin },
-    // extends: [
-    //   js.configs.recommended,
-    //   ...compat.extends('plugin:n/recommended'),
-    // ],
+    plugins: {
+      import: importPlugin,
+      n: plugins.n,
+    },
     rules: {
       'new-cap': ['error', {}],
       camelcase: ['error', { ignoreDestructuring: true, properties: 'never' }],
@@ -56,7 +39,6 @@ export default [
       'n/no-extraneous-import': 'off',
     },
   },
-
   // CommonJS-only areas (configs/scripts/tests)
   {
     files: [
@@ -69,7 +51,7 @@ export default [
       '**/*.spec.js',
     ],
     plugins: {
-      stylistic
+      stylistic: plugins['@stylistic']
     },
     languageOptions: {
       sourceType: 'commonjs',
@@ -79,14 +61,15 @@ export default [
       '@stylistic/semi': 'off',
     }
   },
+  // Worldview front-end
   {
     files: ['web/**/*.js'],
     plugins: {
       import: importPlugin,
       jest,
       'jsx-a11y': jsxA11y,
-      react,
-      stylistic
+      react: plugins.react,
+      stylistic: plugins['@stylistic']
     },
     languageOptions: {
       sourceType: 'module',
