@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "G_Alt",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {
