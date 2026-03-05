@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Check } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import HoverTooltip from './hover-tooltip';

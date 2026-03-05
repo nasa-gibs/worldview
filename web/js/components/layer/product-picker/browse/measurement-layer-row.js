@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem, UncontrolledTooltip } from 'reactstrap';
 import { connect } from 'react-redux';

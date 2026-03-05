@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Facet } from '@elastic/react-search-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

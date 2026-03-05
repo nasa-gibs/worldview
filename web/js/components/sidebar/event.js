@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

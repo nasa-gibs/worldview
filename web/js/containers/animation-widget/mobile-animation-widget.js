@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';

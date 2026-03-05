@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
 * @desc Wrapper for TileText to determine what time unit to display
 * @param {Object} item

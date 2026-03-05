@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import Checkbox from '../util/checkbox';

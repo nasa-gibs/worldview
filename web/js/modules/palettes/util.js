@@ -407,7 +407,7 @@ export function loadPalettes(permlinkState, stateObject) {
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
-            } catch (error) {
+            } catch {
               console.warn(` Invalid palette: ${value}`);
             }
           });
@@ -424,7 +424,7 @@ export function loadPalettes(permlinkState, stateObject) {
                   state
                 )
               );
-            } catch (error) {
+            } catch {
               console.warn(`Unable to set min: ${value}`);
             }
           });
@@ -441,7 +441,7 @@ export function loadPalettes(permlinkState, stateObject) {
                   state
                 )
               );
-            } catch (error) {
+            } catch {
               console.warn(`Unable to set max index: ${value}`);
             }
           });
@@ -462,7 +462,7 @@ export function loadPalettes(permlinkState, stateObject) {
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
-            } catch (error) {
+            } catch {
               console.warn(` Invalid palette: ${value}`);
             }
           });

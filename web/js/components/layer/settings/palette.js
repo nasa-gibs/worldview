@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import lodashIndexOf from 'lodash/indexOf';
 import { drawPaletteOnCanvas } from '../../../modules/palettes/util';

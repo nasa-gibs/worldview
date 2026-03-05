@@ -1,4 +1,3 @@
-import React from 'react';
 import { each as lodashEach, get } from 'lodash';
 import update from 'immutability-helper';
 import moment from 'moment';
@@ -69,7 +68,7 @@ export function serializeDate(date) {
 export function tryCatchDate(str, initialState) {
   try {
     return util.parseDateUTC(str);
-  } catch (error) {
+  } catch {
     console.warn(`Invalid date: ${str}`);
     return initialState;
   }

@@ -131,7 +131,7 @@ function UpdateCollections () {
       const results = await Promise.allSettled(headerPromises);
       const validCollections = results.filter(({ status, value }) => status === 'fulfilled' && value).map(({ value }) => value);
       updateCollection(validCollections);
-    } catch (error) {
+    } catch {
       // errors will clutter console, turn this on for debugging
       // console.error(error);
     }

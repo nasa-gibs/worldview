@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ListGroup, ListGroupItem, Spinner } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Scrollbar from '../../util/scrollbar';

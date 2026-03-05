@@ -1,5 +1,3 @@
-import React from 'react';
-
 function GranuleAlertModalBody() {
   return (
     <div className="basic-modal">

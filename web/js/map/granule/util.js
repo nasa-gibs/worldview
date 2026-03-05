@@ -188,7 +188,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
       if (nrt) return shortName;
       // remove _NRT from shortName
       return shortName.replace('_NRT', '');
-    } catch (e) {
+    } catch {
       console.error(`Could not get shortName for a collection associated with layer ${def.id}`);
     }
     return undefined;

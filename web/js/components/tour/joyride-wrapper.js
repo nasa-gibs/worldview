@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Joyride, { STATUS, ACTIONS, EVENTS } from 'react-joyride';
 import util from '../../util/util';

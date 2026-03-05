@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ArrowChevronLeft, ArrowChevronRight } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
