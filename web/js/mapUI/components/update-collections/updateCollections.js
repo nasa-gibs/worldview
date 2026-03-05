@@ -30,7 +30,10 @@ function UpdateCollections () {
   const getHeaders = async (def, date, signal, baseUrl) => {
     if (def.layergroup === 'Reference') throw new Error('Reference layers do not require header fetching'); // Don't query static layers
     const { id, period } = def;
-    const { matrixSet } = def.projections[proj.id];
+    const projConfig = def.projections[proj.id];
+    const { matrixSet } = projConfig;
+    // Use projection-specific layer ID if available, otherwise fall back to main layer ID
+    const layerId = projConfig.layer || projConfig.id || id;
     if (period === 'subdaily') selectedDate.setSeconds?.(59); // ensure seconds are set to 59 for subdaily layers
     const isoStringDate = util.toISOStringSeconds(util.roundTimeOneMinute(selectedDate));
 
@@ -38,7 +41,7 @@ function UpdateCollections () {
 
     const timeUrl = baseUrl || `${sourceDomain}?TIME=${isoStringDate}`;
 
-    const sourceUrl = `${timeUrl}&layer=${id}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=${encodeURIComponent(def.format)}&TileMatrix=0&TileCol=0&TileRow=0`;
+    const sourceUrl = `${timeUrl}&layer=${layerId}&style=default&tilematrixset=${matrixSet}&Service=WMTS&Request=GetTile&Version=1.0.0&Format=${encodeURIComponent(def.format)}&TileMatrix=0&TileCol=0&TileRow=0`;
     try {
       const response = await fetch(sourceUrl, { method: 'HEAD', signal }); // HEAD request to only fetch headers (faster than the previous GET request) and pass in abort signal
 
