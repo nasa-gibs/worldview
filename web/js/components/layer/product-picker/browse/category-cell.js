@@ -65,38 +65,40 @@ function CategoryCell(props) {
                         'in measurement list!'
                   );
                 }
-                return index === 6 ? (
-                  <li
-                    className="layer-category-item"
-                    /* eslint react/no-array-index-key: 1 */
-                    key={category.id + index}
-                  >
-                    <button
-                      className="layer-category-name"
-                      type="button"
-                      onClick={() => drawMeasurements(category)}
+                return index === 6
+                  ? (
+                    <li
+                      className="layer-category-item"
+                      /* eslint react/no-array-index-key: 1 */
+                      key={category.id + index}
                     >
-                      ...
-                    </button>
-                  </li>
-                ) : (
-                  <li
-                    className="layer-category-item"
-                    key={category.id + index}
-                    id={
-                      `layer-category-item-${category.id}-${current.id}`
-                    }
-                  >
-                    <button
-                      className="layer-category-name"
-                      type="button"
-                      onClick={() => drawMeasurements(category, current.id, index)}
+                      <button
+                        className="layer-category-name"
+                        type="button"
+                        onClick={() => drawMeasurements(category)}
+                      >
+                        ...
+                      </button>
+                    </li>
+                  )
+                  : (
+                    <li
+                      className="layer-category-item"
+                      key={category.id + index}
+                      id={
+                        `layer-category-item-${category.id}-${current.id}`
+                      }
                     >
-                      {current.title}
-                    </button>
-                    {' '}
-                  </li>
-                );
+                      <button
+                        className="layer-category-name"
+                        type="button"
+                        onClick={() => drawMeasurements(category, current.id, index)}
+                      >
+                        {current.title}
+                      </button>
+                      {' '}
+                    </li>
+                  );
               })}
           </ul>
         </div>

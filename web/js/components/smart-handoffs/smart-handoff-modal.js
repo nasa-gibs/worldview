@@ -72,9 +72,9 @@ function SmartHandoffModal({
 
             <img className="earth-data-gif" src="images/earth-data-search-preview.gif" />
             <p className="earth-data-caption">
-              Granules that are available to download will be listed in the white pull out menu. Each
-              granule listed can be downloaded individually or the entire set contained within the
-              bounding box can be downloaded as a zip file.
+              Granules that are available to download will be listed in the white pull out menu.
+              Each granule listed can be downloaded individually or the entire set contained within
+              the bounding box can be downloaded as a zip file.
             </p>
 
             <p>
@@ -88,12 +88,12 @@ function SmartHandoffModal({
 
             <h1 className="about-heading">Why must I register?</h1>
             <p>
-              As noted on the Earthdata homepage, the Earthdata Login provides a single mechanism for
-              user registration and profile management for all ESDIS system components
+              As noted on the Earthdata homepage, the Earthdata Login provides a single mechanism
+              for user registration and profile management for all ESDIS system components
               (DAACs, Tools, Services). Your Earthdata Login also helps the ESDIS program better
-              understand the usage of ESDIS services to improve user experience through customization
-              of tools and improvement of services. ESDIS data are openly available to all and free
-              of charge except where governed by international agreements.
+              understand the usage of ESDIS services to improve user experience through
+              customization of tools and improvement of services. ESDIS data are openly available
+              to all and free of charge except where governed by international agreements.
             </p>
           </div>
         </div>

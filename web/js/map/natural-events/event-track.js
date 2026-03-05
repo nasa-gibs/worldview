@@ -426,7 +426,8 @@ function EventTrack () {
       }
 
       // show all tracks when selecting as option
-      if (showAllTracksRef.current && !isPlaying && (prevShowAllTracks !== showAllTracksRef.current ||
+      if (showAllTracksRef.current &&
+        !isPlaying && (prevShowAllTracks !== showAllTracksRef.current ||
         selectedDateChange || finishedAnimating || eventsLoaded ||
         extentChange || highlightedEventChange)) {
         debouncedUpdateAllTracks();

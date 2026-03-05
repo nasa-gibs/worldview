@@ -411,6 +411,7 @@ function MapUI(props) {
       { isEICModeActive &&
       (
         <>
+          // eslint-disable-next-line react/jsx-pascal-case
           <EIC />
           <KioskAnimations ui={ui} />
           <TileMeasurement ui={ui} />

@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import React, { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';

@@ -144,14 +144,16 @@ function Events(props) {
         style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
-          {isLoading || hasRequestError ? (
+          {isLoading || hasRequestError
+            ? (
             // notranslate included below to prevent
             // Google Translate extension from crashing the page
-            <div className="events-loading-text notranslate">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
-              {errorOrLoadingText}
-            </div>
-          ) : renderEventList()}
+              <div className="events-loading-text notranslate">
+                {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
+                {errorOrLoadingText}
+              </div>
+            )
+            : renderEventList()}
         </div>
       </Scrollbars>
     </div>

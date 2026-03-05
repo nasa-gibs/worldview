@@ -297,15 +297,16 @@ function ModalContainer(props) {
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? (
-                      <BodyComponent
+                    {BodyComponent
+                      ? (
+                        <BodyComponent
                         // eslint-disable-next-line react/jsx-props-no-spreading
-                        {...bodyComponentProps}
-                        parentId={id}
-                        screenHeight={screenHeight}
-                        closeModal={toggleFunction}
-                      />
-                    )
+                          {...bodyComponentProps}
+                          parentId={id}
+                          screenHeight={screenHeight}
+                          closeModal={toggleFunction}
+                        />
+                      )
                       : renderModalBodyText}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
