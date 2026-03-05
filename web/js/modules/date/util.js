@@ -598,7 +598,8 @@ export function getNextImageryDelta(layers, date, signConstant) {
             const possibleDate = new Date(dateAObj.getTime() + (possibleDelta * 60000));
             // Increase delta by 1 minute if it falls exactly on the starting date/time
             const correctedDelta = startDateObj.getTime() === possibleDate.getTime()
-              ? possibleDelta + 1 : possibleDelta;
+              ? possibleDelta + 1
+              : possibleDelta;
             delta = correctedDelta;
             hasDeltaChanged = true;
             break;
@@ -641,7 +642,8 @@ export function getNextImageryDelta(layers, date, signConstant) {
             const possibleDate = new Date(dateAObj.getTime() - (possibleDelta * 60000));
             // Increase delta by 1 minute if it falls exactly on the ending date/time
             const correctedDelta = endDateObj.getTime() === possibleDate.getTime()
-              ? possibleDelta + 1 : possibleDelta;
+              ? possibleDelta + 1
+              : possibleDelta;
             delta = correctedDelta;
             hasDeltaChanged = true;
             break;
