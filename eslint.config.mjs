@@ -25,7 +25,6 @@ export default [
   {
     files: ['**/*.{js,mjs}'],
     plugins: {
-      import: importPlugin,
       n: plugins.n,
       '@stylistic': plugins['@stylistic']
     },
