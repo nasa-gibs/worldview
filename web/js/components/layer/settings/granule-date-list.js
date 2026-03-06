@@ -80,7 +80,7 @@ class GranuleDateList extends PureComponent {
     }
     const reorderedItems = this.reorderItems(
       result.source.index,
-      result.destination.index
+      result.destination.index,
     );
     updateGranuleLayerOptions(reorderedItems, def, granuleCount);
     this.setState({
@@ -94,7 +94,7 @@ class GranuleDateList extends PureComponent {
     const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
-      sourceIndex - 1
+      sourceIndex - 1,
     );
     updateGranuleLayerOptions(reorderedItems, def, granuleCount);
     this.setState({
@@ -108,7 +108,7 @@ class GranuleDateList extends PureComponent {
     const { updateGranuleLayerOptions, granuleCount, def } = this.props;
     const reorderedItems = this.reorderItems(
       sourceIndex,
-      sourceIndex + 1
+      sourceIndex + 1,
     );
     updateGranuleLayerOptions(reorderedItems, def, granuleCount);
     this.setState({
@@ -122,7 +122,7 @@ class GranuleDateList extends PureComponent {
     const reorderedItems = reorder(
       items,
       sourceIndex,
-      destinationIndex
+      destinationIndex,
     );
     return reorderedItems;
   };
@@ -223,7 +223,7 @@ class GranuleDateList extends PureComponent {
               snapshot.isDragging,
               hoveredItem === date,
               lastMovedItem === date,
-              provided.draggableProps.style
+              provided.draggableProps.style,
             )}
           >
             <div className="granule-date monospace">

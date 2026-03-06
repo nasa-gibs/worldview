@@ -227,7 +227,7 @@ class DateInputColumn extends Component {
       type,
       amt,
       minDate,
-      maxDate
+      maxDate,
     );
     updateDate(newDate, true);
   };

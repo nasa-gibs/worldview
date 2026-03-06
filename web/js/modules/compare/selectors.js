@@ -4,5 +4,5 @@ import { getFormattedMonthAbbrevDates } from './util';
 
 export const getCompareDates = createSelector(
   [getDates],
-  ({ selected, selectedB }) => getFormattedMonthAbbrevDates(selected, selectedB)
+  ({ selected, selectedB }) => getFormattedMonthAbbrevDates(selected, selectedB),
 );

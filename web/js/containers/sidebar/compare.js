@@ -109,5 +109,5 @@ CompareCase.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(CompareCase);

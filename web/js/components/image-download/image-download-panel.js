@@ -62,7 +62,7 @@ function ImageDownloadPanel(props) {
   const [showGranuleWarning, setShowGranuleWarning] = useState(false);
   const activePalettes = useSelector((state) => getActivePalettes(
     state,
-    state.compare.activeString
+    state.compare.activeString,
   ));
 
   useEffect(() => {
@@ -101,7 +101,7 @@ function ImageDownloadPanel(props) {
       currFileType,
       currFileType === 'application/vnd.google-earth.kmz' ? false : currIsWorldfile,
       markerCoordinates,
-      activePalettes
+      activePalettes,
     );
 
     window.open(dlURL, '_blank');

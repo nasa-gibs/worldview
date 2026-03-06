@@ -7,7 +7,7 @@ import { hasVectorLayers } from '../modules/layers/util';
 import {
   DISABLE_VECTOR_ZOOM_ALERT,
   DISABLE_VECTOR_EXCEEDED_ALERT,
-  MODAL_PROPERTIES
+  MODAL_PROPERTIES,
 } from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
 import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
@@ -248,7 +248,7 @@ const mapStateToProps = (state) => {
 };
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(DismissableAlerts);
 
 DismissableAlerts.propTypes = {

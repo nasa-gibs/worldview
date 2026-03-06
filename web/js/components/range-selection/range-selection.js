@@ -130,7 +130,7 @@ class TimelineRangeSelector extends React.Component {
     animLocationDate,
     animDraggerLocation,
     deltaX,
-    { diffZeroValues, diffFactor }
+    { diffZeroValues, diffFactor },
   ) => {
     if (!diffZeroValues) { // month or year
       const {
@@ -208,7 +208,7 @@ class TimelineRangeSelector extends React.Component {
           animationStartLocationDate,
           startLocation,
           deltaXStart,
-          sharedAnimLocationUpdateParams
+          sharedAnimLocationUpdateParams,
         );
       }
       if (deltaXEnd !== 0) { // update new end date
@@ -216,7 +216,7 @@ class TimelineRangeSelector extends React.Component {
           animationEndLocationDate,
           endLocation,
           deltaXEnd,
-          sharedAnimLocationUpdateParams
+          sharedAnimLocationUpdateParams,
         );
       }
     }
@@ -251,7 +251,7 @@ class TimelineRangeSelector extends React.Component {
       animationEndLocationDate,
       newDraggerStartLocation,
       newDraggerEndLocation,
-      isDragging
+      isDragging,
     );
   };
 

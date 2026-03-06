@@ -9,7 +9,7 @@ test('mapLocationToAnimationState updates state to have isPlaying bool true if p
   const PERMALINK_STATE = { ab: true, playanim: true };
   const response = mapLocationToAnimationState(
     PERMALINK_STATE,
-    stateFromLocation
+    stateFromLocation,
   );
   expect(stateFromLocation.animation.isPlaying).toBeFalsy();
   expect(response.animation.isPlaying).toBeTruthy();

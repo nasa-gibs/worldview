@@ -45,7 +45,7 @@ class VectorFilter extends React.Component {
       parseFloat(newStart),
       parseFloat(newEnd),
       index,
-      groupName
+      groupName,
     );
   }
 

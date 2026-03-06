@@ -16,7 +16,7 @@ export function mapLocationToTourState(
   parameters,
   stateFromLocationObj,
   state,
-  config
+  config,
 ) {
   let stateFromLocation = stateFromLocationObj;
   const isEmbedModeActive = parameters.em && parameters.em === 'true';

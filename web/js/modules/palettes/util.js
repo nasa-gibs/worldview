@@ -62,7 +62,7 @@ export function drawPaletteOnCanvas(
   ctx,
   colors,
   width,
-  height
+  height,
 ) {
   ctx.fillStyle = checkerBoardPattern;
   ctx.fillRect(0, 0, width, height);
@@ -86,7 +86,7 @@ export function drawPaletteOnCanvas(
 export function drawSidebarPaletteOnCanvas(
   ctx,
   colors,
-  width
+  width,
 ) {
   const barHeight = 12;
   const colorbarStartY = barHeight - 5;
@@ -108,7 +108,7 @@ export function drawSidebarPaletteOnCanvas(
       2 - thickness,
       colorbarStartY - thickness,
       width - 3 + (thickness * 2),
-      barHeight + (thickness * 2)
+      barHeight + (thickness * 2),
     );
     ctx.stroke();
   }
@@ -125,7 +125,7 @@ export function drawTravelModePaletteOnCanvas(
   ctx,
   colors,
   width,
-  height
+  height,
 ) {
   const colorbarStartY = 0;
   ctx.fillStyle = checkerBoardPattern;
@@ -146,7 +146,7 @@ export function drawTravelModePaletteOnCanvas(
       2 - thickness,
       colorbarStartY - thickness,
       width - 3 + (thickness * 2),
-      height + (thickness * 2)
+      height + (thickness * 2),
     );
     ctx.stroke();
   }
@@ -202,7 +202,7 @@ export function loadRenderedPalette(config, layerId) {
   return util.load.config(
     config.palettes.rendered,
     layer.palette.id,
-    `config/palettes/${layer.palette.id}.json`
+    `config/palettes/${layer.palette.id}.json`,
   );
 }
 
@@ -210,7 +210,7 @@ export function loadCustom(config) {
   return util.load.config(
     config.palettes,
     'custom',
-    'config/palettes-custom.json'
+    'config/palettes-custom.json',
   );
 }
 
@@ -235,7 +235,7 @@ export function parseLegacyPalettes(
   parameters,
   stateFromLocationObj,
   state,
-  config
+  config,
 ) {
   let stateFromLocation = stateFromLocationObj;
   const parts = parameters.palettes.split('~');
@@ -326,32 +326,32 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
         paletteDef,
         paletteDef.custom,
         palObj,
-        count
+        count,
       );
       maxObj = createPaletteAttributeObject(
         paletteDef,
         maxValue,
         maxObj,
-        count
+        count,
       );
       minObj = createPaletteAttributeObject(
         paletteDef,
         minValue,
         minObj,
-        count
+        count,
       );
 
       squashObj = createPaletteAttributeObject(
         paletteDef,
         true,
         squashObj,
-        count
+        count,
       );
       disabledObj = createPaletteAttributeObject(
         paletteDef,
         disabledValue,
         disabledObj,
-        count
+        count,
       );
     }
 
@@ -402,7 +402,7 @@ export function loadPalettes(permlinkState, stateObject) {
                 value,
                 index,
                 stateObj.groupStr,
-                state
+                state,
               );
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
@@ -421,8 +421,8 @@ export function loadPalettes(permlinkState, stateObject) {
                   value,
                   index,
                   stateObj.groupStr,
-                  state
-                )
+                  state,
+                ),
               );
             } catch {
               console.warn(`Unable to set min: ${value}`);
@@ -438,8 +438,8 @@ export function loadPalettes(permlinkState, stateObject) {
                   value,
                   index,
                   stateObj.groupStr,
-                  state
-                )
+                  state,
+                ),
               );
             } catch {
               console.warn(`Unable to set max index: ${value}`);
@@ -457,7 +457,7 @@ export function loadPalettes(permlinkState, stateObject) {
                 value,
                 index,
                 state.palettes[stateObj.groupStr],
-                state
+                state,
               );
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
@@ -479,7 +479,7 @@ export function loadPalettes(permlinkState, stateObject) {
               props,
               i,
               state.palettes[stateObj.groupStr],
-              state
+              state,
             );
             state = update(state, {
               palettes: { [stateObj.groupStr]: { $set: newPalettes } },
@@ -496,7 +496,7 @@ export function mapLocationToPaletteState(
   parameters,
   stateFromLocationObj,
   state,
-  config
+  config,
 ) {
   let stateFromLocation = stateFromLocationObj;
   if (parameters.l1 || parameters.l) {
@@ -505,7 +505,7 @@ export function mapLocationToPaletteState(
       lodashAssign({}, stateFromLocation, {
         palettes: state.palettes,
         config,
-      })
+      }),
     );
   }
   // legacy palettes permalink
@@ -514,7 +514,7 @@ export function mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
   }
   return stateFromLocation;
@@ -555,7 +555,7 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoadedBool)
       if (obj.custom && !customLoaded && !preloadedCustom) {
         const customPromise = util.fetch(
           'config/palettes-custom.json',
-          'application/json'
+          'application/json',
         );
         preloadedCustom = true;
         requestArray.push(customPromise);
@@ -579,7 +579,7 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoadedBool)
 
 export function hasCustomPaletteInActiveProjection(
   activeLayers,
-  activePalettes
+  activePalettes,
 ) {
   for (let i = 0, len = activeLayers.length; i < len; i += 1) {
     if (activePalettes[activeLayers[i].id]) {

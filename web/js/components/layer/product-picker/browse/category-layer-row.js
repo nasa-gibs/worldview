@@ -76,7 +76,7 @@ class CategoryLayerRow extends React.Component {
             key={measurement.id + layer.id}
             layer={layer}
             title={orbitTitle}
-          />
+          />,
         );
       } else {
         LayerSouceList.push(
@@ -85,7 +85,7 @@ class CategoryLayerRow extends React.Component {
             key={measurement.id + layer.id}
             layer={layer}
             title={layer.title}
-          />
+          />,
         );
       }
     });
@@ -270,7 +270,7 @@ const mapStateToProps = (state) => {
       current,
       source,
       config,
-      proj.id
+      proj.id,
     ),
   };
 };
@@ -286,5 +286,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(CategoryLayerRow);

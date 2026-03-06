@@ -153,5 +153,5 @@ library.add(
   faTruck,
   faTwitter,
   faUndo,
-  faVideo
+  faVideo,
 );

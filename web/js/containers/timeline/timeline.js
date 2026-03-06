@@ -92,7 +92,7 @@ const checkLeftArrowDisabled = (
   date,
   delta,
   timeScaleChangeUnit,
-  timelineStartDateLimit
+  timelineStartDateLimit,
 ) => {
   const nextDecMoment = moment.utc(date).subtract(delta, timeScaleChangeUnit);
   const nextDecrementDate = new Date(nextDecMoment.seconds(0).format());
@@ -111,7 +111,7 @@ const checkRightArrowDisabled = (
   delta,
   timeScaleChangeUnit,
   timelineEndDateLimit,
-  autoSelected
+  autoSelected,
 ) => {
   if (autoSelected) return false;
 
@@ -129,7 +129,7 @@ const checkNowButtonDisabled = (
   timelineEndDateLimit,
   hasFutureLayers,
   nowOverride,
-  appNow
+  appNow,
 ) => {
   const dateTimeMoment = new Date(moment.utc(date).seconds(0)
     .format());
@@ -234,12 +234,12 @@ class Timeline extends React.Component {
     this.debounceChangeTimeScaleWheel = lodashDebounce(
       this.throttleChangeTimeScaleWheel,
       this.debounceWheelTime,
-      throttleSettings
+      throttleSettings,
     );
     this.throttleChangeTimeScaleWheelFire = lodashThrottle(
       this.changeTimeScaleScroll,
       200,
-      throttleSettings
+      throttleSettings,
     );
 
     // application relative now time
@@ -479,7 +479,7 @@ class Timeline extends React.Component {
       const isBetweenValidTimeline = getIsBetween(
         displayDateValue,
         timelineStartDateLimit,
-        timelineEndDateLimit
+        timelineEndDateLimit,
       );
       if (isBetweenValidTimeline) {
         const displayDateFormat = getISODateFormatted(displayDateValue);
@@ -631,7 +631,7 @@ class Timeline extends React.Component {
       delta = getNextImageryDelta(
         subDailyLayersList,
         activeString === 'active' ? dateA : dateB,
-        signConstant
+        signConstant,
       );
       timescale = 'minute';
     }
@@ -648,7 +648,7 @@ class Timeline extends React.Component {
         timescale,
         selectedDate,
         minDate,
-        maxDate
+        maxDate,
       ));
     }
   }
@@ -883,7 +883,7 @@ class Timeline extends React.Component {
     draggerSelected,
     draggerPositionArg,
     draggerVisibleArg,
-    otherDraggerVisibleArg
+    otherDraggerVisibleArg,
   ) => {
     const {
       draggerPosition,
@@ -1629,7 +1629,7 @@ function mapStateToProps(state) {
   const nowOverride = !!config.parameters.now;
   const dimensionsAndOffsetValues = getOffsetValues(
     screenWidth,
-    hasSubdailyLayers
+    hasSubdailyLayers,
   );
 
   const timelineStartDateLimit = config.startDate;
@@ -1637,21 +1637,21 @@ function mapStateToProps(state) {
     selectedDate,
     delta,
     unit,
-    timelineStartDateLimit
+    timelineStartDateLimit,
   );
   const rightArrowDisabled = checkRightArrowDisabled(
     selectedDate,
     delta,
     unit,
     timelineEndDateLimit,
-    autoSelected
+    autoSelected,
   );
   const nowButtonDisabled = checkNowButtonDisabled(
     selectedDate,
     timelineEndDateLimit,
     hasFutureLayers,
     nowOverride,
-    appNow
+    appNow,
   );
   const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
 
@@ -1788,7 +1788,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Timeline);
 
 Timeline.propTypes = {

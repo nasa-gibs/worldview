@@ -10,5 +10,5 @@ test(
       payload,
     };
     expect(selectVectorFeatures(payload)).toEqual(expectedAction);
-  }
+  },
 );

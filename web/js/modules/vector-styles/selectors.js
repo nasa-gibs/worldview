@@ -64,7 +64,7 @@ export function getVectorStyle(layerId, indexInt, state) {
   const index = lodashIsUndefined(indexInt) ? 0 : indexInt;
   const renderedVectorStyle = lodashGet(
     state,
-    `vectorStyles.${layerId}.layers.${index}`
+    `vectorStyles.${layerId}.layers.${index}`,
   );
   if (renderedVectorStyle) {
     return renderedVectorStyle;

@@ -61,7 +61,7 @@ export function nearestInterval(def, date) {
     date.getMonth(),
     date.getDate(),
     date.getHours(),
-    newMinutes
+    newMinutes,
   );
   return newDate;
 }
@@ -609,7 +609,7 @@ const getSubdailyDateRange = ({
       minMonth,
       minDay,
       minHour,
-      minMinute - dateIntervalNum
+      minMinute - dateIntervalNum,
     );
     minMinuteDateMinusIntervalOffset = util.getTimezoneOffsetDate(minMinuteDateMinusInterval);
 
@@ -619,7 +619,7 @@ const getSubdailyDateRange = ({
     const endDateLimitSetMinutes = new Date(endDateLimit).setMinutes(minMinute);
 
     hourBeforeStartDateLimit = new Date(
-      startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000)
+      startDateLimitSetMinutes - startDateLimitOffset - (60 * 60000),
     );
     hourAfterEndDateLimit = new Date(endDateLimitSetMinutes - endDateLimitOffset + (60 * 60000));
   } else {
@@ -669,7 +669,7 @@ const getSubdailyDateRange = ({
       minMinuteDate.getUTCDate(),
       minMinuteDate.getUTCHours(),
       minMinuteDate.getUTCMinutes() + i,
-      0
+      0,
     );
     if (!rangeLimitsProvided) {
       subdailyTime = util.getTimezoneOffsetDate(subdailyTime);
@@ -812,7 +812,7 @@ export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNo
         minDate,
         maxDate,
         dateIntervalNum,
-        dateArray
+        dateArray,
       );
       dateArray = [...yearArray];
       // Monthly layers
@@ -886,7 +886,7 @@ export function serializeLayers(layers, state, groupName) {
       const paletteAttributeArray = getPaletteAttributeArray(
         def.id,
         palettes,
-        state
+        state,
       );
       item.attributes = paletteAttributeArray.length
         ? item.attributes.concat(paletteAttributeArray)
@@ -1074,7 +1074,7 @@ const createLayerArrayFromState = function(layers, config) {
       layerDef.id,
       layerArray,
       config.layers,
-      getLayerSpec(layerDef.attributes)
+      getLayerSpec(layerDef.attributes),
     );
   });
   return layerArray;
@@ -1122,21 +1122,21 @@ export function dateOverlap(period, dateRanges) {
         previousEnd = new Date(
           previousEnd.setTime(
             previousEnd.getTime() +
-            (previous.dateInterval * 86400000 - 86400000)
-          )
+            (previous.dateInterval * 86400000 - 86400000),
+          ),
         );
       }
       if (period === 'monthly') {
         previousEnd = new Date(
           previousEnd.setMonth(
-            previousEnd.getMonth() + (previous.dateInterval - 1)
-          )
+            previousEnd.getMonth() + (previous.dateInterval - 1),
+          ),
         );
       } else if (period === 'yearly') {
         previousEnd = new Date(
           previousEnd.setFullYear(
-            previousEnd.getFullYear() + (previous.dateInterval - 1)
-          )
+            previousEnd.getFullYear() + (previous.dateInterval - 1),
+          ),
         );
       }
       previousEnd = previousEnd.getTime();
@@ -1161,7 +1161,7 @@ export function dateOverlap(period, dateRanges) {
     {
       overlap: false,
       ranges: [],
-    }
+    },
   );
 
   // return the final results
@@ -1270,7 +1270,7 @@ export function mapLocationToLayerState(
   parameters,
   stateFromLocation,
   state,
-  config
+  config,
 ) {
   let newStateFromLocation = stateFromLocation;
   const { layers } = stateFromLocation;

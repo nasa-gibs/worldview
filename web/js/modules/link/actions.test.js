@@ -37,7 +37,7 @@ describe('Short Link request action', () => {
         .then(() => {
           expect(store.getActions()).toEqual(expectedActions);
         });
-    }
+    },
   );
   test(`creates ${constants.REQUEST_SHORT_LINK_FAILURE} Action [link-actions-failure]`, () => {
     const loc = 'mock/';
@@ -67,6 +67,6 @@ describe('updatePermalink action', () => {
         queryString: testString,
       };
       expect(actions.updatePermalink(testString)).toEqual(expectedAction);
-    }
+    },
   );
 });

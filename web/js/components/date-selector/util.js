@@ -66,7 +66,7 @@ export const dayValidation = (value, dateParam, validate) => {
     const actualMaxDateForMonth = new Date(
       date.getYear(),
       date.getMonth() + 1,
-      0
+      0,
     ).getDate();
 
     if (value > actualMaxDateForMonth) {

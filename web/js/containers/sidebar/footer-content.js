@@ -214,7 +214,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      })
+      }),
     );
   },
   openChartingDateModal: () => {
@@ -225,7 +225,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      })
+      }),
     );
   },
   addLayers: (isPlaying) => {
@@ -240,7 +240,7 @@ const mapDispatchToProps = (dispatch) => ({
         backdrop: true,
         CompletelyCustomModal: SearchUiProvider,
         wrapClassName: '',
-      })
+      }),
     );
   },
 });
@@ -249,7 +249,7 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
   null,
-  { forwardRef: true }
+  { forwardRef: true },
 )(FooterContent);
 
 FooterContent.propTypes = {

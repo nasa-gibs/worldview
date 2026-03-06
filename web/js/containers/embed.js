@@ -83,7 +83,7 @@ function mapStateToProps(state) {
 
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(Embed);
 
 Embed.propTypes = {

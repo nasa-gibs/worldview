@@ -90,7 +90,7 @@ function PaletteSelect (props) {
       ctx,
       palette,
       canvas.width,
-      canvas.height
+      canvas.height,
     );
     const dataURL = canvas.toDataURL('image/png');
 
@@ -120,14 +120,14 @@ function PaletteSelect (props) {
         legend.colors,
         '__default',
         legend,
-        activePalette === '__default'
+        activePalette === '__default',
       );
     }
     return renderSelectorItemSingle(
       legend,
       '__default',
       'Default',
-      activePalette === '__default'
+      activePalette === '__default',
     );
   };
 
@@ -148,7 +148,7 @@ function PaletteSelect (props) {
         translated,
         id,
         target,
-        activePalette === target.id
+        activePalette === target.id,
       );
     }
     if (source.type === 'classification' && targetType === 'classification') {
@@ -156,7 +156,7 @@ function PaletteSelect (props) {
         target,
         id,
         target.name,
-        activePalette === target.id
+        activePalette === target.id,
       );
     }
     return undefined;

@@ -48,7 +48,7 @@ export default function MapRunningData(compareUi, store) {
         pixel,
         layer.wv.group,
         swipeOffset,
-        compare
+        compare,
       );
       const hasPalette = !lodashIsEmpty(def.palette);
       return !isRenderedFeature || !inCompareRegion ||

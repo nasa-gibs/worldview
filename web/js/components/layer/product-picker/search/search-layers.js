@@ -66,8 +66,8 @@ function mapStateToProps(state) {
   };
 }
 export default withSearch(
-  ({ facets, results }) => ({ facets, results })
+  ({ facets, results }) => ({ facets, results }),
 )(connect(
   mapStateToProps,
-  null
+  null,
 )(SearchLayers));

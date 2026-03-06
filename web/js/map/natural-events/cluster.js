@@ -47,7 +47,7 @@ export const clusterPointToGeoJSON = (
   id,
   coordinates,
   date,
-  { magnitudeUnit, magnitudeValue }
+  { magnitudeUnit, magnitudeValue },
 ) => ({
   type: 'Feature',
   properties: {
@@ -114,16 +114,16 @@ export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
         id,
         coordinates,
         date,
-        geom
+        geom,
       );
       afterSelected = true;
     } else if (!afterSelected) {
       geoJSONPointsBeforeSelected.push(
-        clusterPointToGeoJSON(id, coordinates, date, geom)
+        clusterPointToGeoJSON(id, coordinates, date, geom),
       );
     } else {
       geoJSONPointsAfterSelected.push(
-        clusterPointToGeoJSON(id, coordinates, date, geom)
+        clusterPointToGeoJSON(id, coordinates, date, geom),
       );
     }
   });
@@ -144,17 +144,17 @@ export const getClusters = ({ geometry, id }, proj, selectedDate, map) => {
     firstClusterObj,
     geoJSONPointsBeforeSelected,
     zoom,
-    extent
+    extent,
   );
   const clustersAfterSelected = getClusterPoints(
     secondClusterObj,
     geoJSONPointsAfterSelected,
     zoom,
-    extent
+    extent,
   );
   let clusters = clustersBeforeSelected.concat(
     [selectedPoint],
-    clustersAfterSelected
+    clustersAfterSelected,
   );
   clusters = clusterSort(clusters);
 

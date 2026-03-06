@@ -13,7 +13,7 @@ import { getOverlayGroups } from '../layers/util';
 
 export function mapLocationToEmbedState(
   parameters,
-  stateFromLocationObj
+  stateFromLocationObj,
 ) {
   let stateFromLocation = stateFromLocationObj;
   if (parameters.em === 'true') {

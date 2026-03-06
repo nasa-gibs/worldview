@@ -113,7 +113,7 @@ class GIF extends Component {
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
-      map.ui.selected
+      map.ui.selected,
     );
     const { crs } = proj;
     const geolonlat1 = olProj.transform(lonlats[0], crs, CRS.GEOGRAPHIC);
@@ -121,7 +121,7 @@ class GIF extends Component {
     const resolution = imageUtilCalculateResolution(
       Math.round(map.ui.selected.getView().getZoom()),
       isGeoProjection,
-      proj.resolutions
+      proj.resolutions,
     );
 
     const closeBtn = this.renderCloseBtn();
@@ -231,7 +231,7 @@ class GIF extends Component {
         },
         (obj) => {
           this.onGifComplete(obj, width, height);
-        }
+        },
       );
     };
 
@@ -241,12 +241,12 @@ class GIF extends Component {
       stampWidth,
       dimensions,
       width,
-      height
+      height,
     );
 
     const newImage = svgToPng(
       'brand/images/wv-logo-w-shadow.svg',
-      stampProps.stampHeight
+      stampProps.stampHeight,
     );
 
     build(newImage, stampProps.dateStamp, stampProps.stampHeight);
@@ -455,12 +455,12 @@ function mapStateToProps(state) {
       null,
       autoSelected,
       layers.active.layers,
-      customSelected ? customDelta : 1
+      customSelected ? customDelta : 1,
     ),
     getImageArrayFunc: (options, dimensions) => getImageArray(
       options,
       dimensions,
-      state
+      state,
     ),
   };
 }
@@ -472,7 +472,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(GIF);
 
 GIF.propTypes = {

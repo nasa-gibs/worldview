@@ -193,7 +193,7 @@ class SmartHandoff extends Component {
 
     const lonlats = imageUtilGetCoordsFromPixelValues(
       newBoundaries,
-      map.ui.selected
+      map.ui.selected,
     );
     const { crs } = proj;
 
@@ -698,7 +698,7 @@ const mapDispatchToProps = (dispatch) => ({
           continueToEDS,
         },
         size: 'md',
-      })
+      }),
     );
   },
   showNotAvailableModal: () => {
@@ -708,7 +708,7 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: 'Data Download Availability',
         bodyComponent: SmartHandoffNotAvailableModal,
         size: 'md',
-      })
+      }),
     );
   },
   showGranuleHelpModal: () => {
@@ -721,14 +721,14 @@ const mapDispatchToProps = (dispatch) => ({
         headerText: 'Granule Availability',
         bodyComponent: GranuleAlertModalBody,
         size: 'md',
-      })
+      }),
     );
   },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SmartHandoff);
 
 SmartHandoff.propTypes = {

@@ -154,7 +154,7 @@ LookupImageTile.prototype.load = async function () {
               const biggestDiff = Math.max(
                 Math.abs(parseInt(r, 10) - parseInt(pixSplit[0], 10)),
                 Math.abs(parseInt(g, 10) - parseInt(pixSplit[1], 10)),
-                Math.abs(parseInt(b, 10) - parseInt(pixSplit[2], 10))
+                Math.abs(parseInt(b, 10) - parseInt(pixSplit[2], 10)),
               );
               if (smallestDiff > biggestDiff) {
                 smallestDiff = biggestDiff;
@@ -206,7 +206,7 @@ export default function lookupFactory(lookup, sourceOptions) {
       src,
       crossOrigin,
       tileLoadFunction,
-      sourceOptions
+      sourceOptions,
     );
   };
 }

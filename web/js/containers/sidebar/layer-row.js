@@ -710,7 +710,7 @@ const makeMapStateToProps = () => {
     const isChartable = Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting;
     const mapRes = selectedMap ? selectedMap.getView().getResolution() : null;
     const tracksForLayer = getActiveLayers(state).filter(
-      (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track)
+      (activeLayer) => (layer.orbitTracks || []).some((track) => activeLayer.id === track),
     );
     const activeDate = compare.activeString === 'active' ? date.selected : date.selectedB;
     const dailyDate = formatDailyDate(activeDate);
@@ -790,7 +790,7 @@ const mapDispatchToProps = (dispatch) => ({
           layer,
           zot,
         },
-      })
+      }),
     );
   },
   onInfoClick: (layer, title, measurementDescriptionPath, describeDomainsUrl) => {
@@ -814,7 +814,7 @@ const mapDispatchToProps = (dispatch) => ({
           measurementDescriptionPath,
           describeDomainsUrl,
         },
-      })
+      }),
     );
   },
   requestPalette: (id) => {
@@ -839,7 +839,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   makeMapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LayerRow);
 
 LayerRow.defaultProps = {

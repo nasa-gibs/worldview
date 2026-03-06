@@ -44,7 +44,7 @@ class VectorDialog extends React.Component {
           <NavLink onClick={() => this.updateIndex(index)} title={combinedTitles}>
             {`${titleText} [${value.length}]`}
           </NavLink>
-        </NavItem>
+        </NavItem>,
       );
       i += 1;
     }
@@ -136,7 +136,7 @@ function mapStateToProps(state) {
 }
 export default connect(
   mapStateToProps,
-  null
+  null,
 )(VectorDialog);
 VectorDialog.propTypes = {
   dialogKey: PropTypes.number,

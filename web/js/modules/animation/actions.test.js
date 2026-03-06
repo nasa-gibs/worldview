@@ -28,7 +28,7 @@ describe('Open, play, stop, close and toggle actions', () => {
         type: constants.EXIT_ANIMATION,
       };
       expect(onClose().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
     `play action returns ${constants.PLAY_ANIMATION} action type [animation-action-play]`,
@@ -37,7 +37,7 @@ describe('Open, play, stop, close and toggle actions', () => {
         type: constants.PLAY_ANIMATION,
       };
       expect(play().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
     `stop action returns ${constants.STOP_ANIMATION} action type [animation-action-stop]`,
@@ -46,7 +46,7 @@ describe('Open, play, stop, close and toggle actions', () => {
         type: constants.STOP_ANIMATION,
       };
       expect(stop().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
     `toggleLooping action returns ${constants.TOGGLE_LOOPING} action type [animation-action-loop]`,
@@ -55,7 +55,7 @@ describe('Open, play, stop, close and toggle actions', () => {
         type: constants.TOGGLE_LOOPING,
       };
       expect(toggleLooping().type).toEqual(expectedAction.type);
-    }
+    },
   );
   test(
     `toggleComponentGifActive action returns ${
@@ -66,7 +66,7 @@ describe('Open, play, stop, close and toggle actions', () => {
         type: constants.TOGGLE_GIF,
       };
       expect(toggleComponentGifActive().type).toEqual(expectedAction.type);
-    }
+    },
   );
 });
 describe('Animation Datechange actions', () => {
@@ -84,7 +84,7 @@ describe('Animation Datechange actions', () => {
       const response = changeStartDate(now);
       expect(response.type).toEqual(expectedAction.type);
       expect(response.value).toEqual(now);
-    }
+    },
   );
   test(
     `changeEndDate action returns ${
@@ -94,7 +94,7 @@ describe('Animation Datechange actions', () => {
       const response = changeEndDate(now);
       expect(response.type).toEqual(constants.UPDATE_END_DATE);
       expect(response.value).toEqual(now);
-    }
+    },
   );
   test(
     `changeStartAndEndDate action returns ${
@@ -105,7 +105,7 @@ describe('Animation Datechange actions', () => {
       expect(response.type).toEqual(constants.UPDATE_START_AND_END_DATE);
       expect(response.startDate).toEqual(then);
       expect(response.endDate).toEqual(now);
-    }
+    },
   );
 });
 
@@ -117,7 +117,7 @@ test(
     const response = changeFrameRate(2);
     expect(response.type).toEqual(constants.UPDATE_FRAME_RATE);
     expect(response.value).toEqual(2);
-  }
+  },
 );
 test(
   `onActivate action returns ${
@@ -132,10 +132,10 @@ test(
     expect(response1.type).toEqual(constants.UPDATE_START_AND_END_DATE);
     expect(response1.endDate).toEqual(state.date.selected);
     expect(response1.startDate).toEqual(
-      util.dateAdd(state.date.selected, 'day', -10)
+      util.dateAdd(state.date.selected, 'day', -10),
     );
     expect(response2.type).toEqual(constants.OPEN_ANIMATION);
-  }
+  },
 );
 
 test(
@@ -150,5 +150,5 @@ test(
     const response = store.getActions()[0];
     expect(response.type).toEqual(constants.UPDATE_CROP_BOUNDS);
     expect(response.value).toEqual(mockBounds);
-  }
+  },
 );

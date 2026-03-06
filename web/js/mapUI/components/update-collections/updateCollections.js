@@ -122,7 +122,7 @@ function UpdateCollections () {
     const layersToUpdate = findLayerCollections(
       formattedDailyDate,
       formattedSubdailyDate,
-      forceUpdate
+      forceUpdate,
     );
     const headerPromises = getAllHeaders(layersToUpdate);
 

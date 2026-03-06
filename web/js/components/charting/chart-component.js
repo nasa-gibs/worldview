@@ -643,5 +643,5 @@ CustomTooltip.propTypes = {
 };
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
 )(ChartComponent);

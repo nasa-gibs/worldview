@@ -103,7 +103,7 @@ export default function countTilesForSpecifiedLayers (ui, layersToCheck) {
   // Match only the layers that are in the layersToMeasure array
   const matchingLayers = map.getLayers().getArray()
     .filter(
-      (layer) => layer.wv && layer.wv.id && layersToCheck.includes(layer.wv.id)
+      (layer) => layer.wv && layer.wv.id && layersToCheck.includes(layer.wv.id),
     );
 
   let totalExpectedTileCount = 0;

@@ -163,8 +163,8 @@ export default withSearch(
     filters, searchTerm,
   }) => ({
     filters, searchTerm,
-  })
+  }),
 )(connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ProductPicker));

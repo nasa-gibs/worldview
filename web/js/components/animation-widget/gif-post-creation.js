@@ -43,7 +43,7 @@ export default class GifResults extends Component {
     const dlURL = util.format(
       'nasa-worldview-{1}-to-{2}.gif',
       startDate,
-      endDate
+      endDate,
     );
     const pixelWidth = boundaries.x2 - boundaries.x;
     const pixelHeight = boundaries.y2 - boundaries.y;

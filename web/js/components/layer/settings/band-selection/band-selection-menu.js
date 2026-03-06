@@ -19,7 +19,7 @@ export default function BandSelection({ layerObj: layer }) {
   }));
   const layerIndex = activeLayers.findIndex((activeLayer) => activeLayer.id === layer.id);
   const currentSelectedPreset = useSelector(
-    (state) => state.layers.active.layers[layerIndex].selectedPreset
+    (state) => state.layers.active.layers[layerIndex].selectedPreset,
   );
   const [selectedPreset, setSelectedPreset] = useState(currentSelectedPreset);
   const updateBandCombination = (id, bandCombo) => {

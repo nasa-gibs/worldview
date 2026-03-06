@@ -71,5 +71,5 @@ MapInteractions.propTypes = {
   isNaturalEventsActive: PropTypes.bool,
 };
 export default connect(
-  mapStateToProps
+  mapStateToProps,
 )(MapInteractions);

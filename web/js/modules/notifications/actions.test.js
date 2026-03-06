@@ -61,9 +61,9 @@ describe('Notification post-request actions [notifications-actions-post-request]
         array: ['alerts', 'outages', 'messages'],
       };
       expect(
-        actions.setNotifications(['alerts', 'outages', 'messages'])
+        actions.setNotifications(['alerts', 'outages', 'messages']),
       ).toEqual(expectedAction);
-    }
+    },
   );
   test(
     `notificationsSeen action returns ${
@@ -74,6 +74,6 @@ describe('Notification post-request actions [notifications-actions-post-request]
         type: constants.NOTIFICATIONS_SEEN,
       };
       expect(actions.notificationsSeen()).toEqual(expectedAction);
-    }
+    },
   );
 });

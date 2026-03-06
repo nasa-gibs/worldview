@@ -182,7 +182,7 @@ function MapUI(props) {
       ui.selectedVectors,
       activeLayers,
       type,
-      vectorStylesState
+      vectorStylesState,
     );
     ui.selectedVectors = newSelection;
   };
@@ -492,7 +492,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(MapUI);
 
 MapUI.propTypes = {

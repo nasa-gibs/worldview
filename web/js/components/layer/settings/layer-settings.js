@@ -385,7 +385,7 @@ function mapStateToProps(state, ownProps) {
       layerId,
       index,
       groupName,
-      state
+      state,
     ),
     getPaletteLegends: (layerId) => getPaletteLegendsSelector(layerId, groupName, state),
     getPalette: (layerId, index) => getPaletteSelector(layerId, index, groupName, state),
@@ -396,22 +396,22 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = (dispatch) => ({
   toggleClassification: (layerId, classIndex, index, groupName) => {
     dispatch(
-      setToggledClassification(layerId, classIndex, index, groupName)
+      setToggledClassification(layerId, classIndex, index, groupName),
     );
   },
   toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
     dispatch(
-      refreshDisabledClassification(layerId, disabledArray, index, groupName)
+      refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
   },
   setThresholdRange: (layerId, min, max, squash, index, groupName) => {
     dispatch(
-      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName)
+      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName),
     );
   },
   setFilterRange: (layerId, min, max, index, groupName) => {
     dispatch(
-      setFilterRange(layerId, { min, max }, index, groupName)
+      setFilterRange(layerId, { min, max }, index, groupName),
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
@@ -439,7 +439,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LayerSettings);
 
 LayerSettings.defaultProps = {

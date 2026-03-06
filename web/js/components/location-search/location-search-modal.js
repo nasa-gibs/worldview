@@ -47,7 +47,7 @@ class LocationSearchModal extends Component {
       {
         leading: true,
         trailing: true,
-      }
+      },
     );
   }
 
@@ -432,7 +432,7 @@ const mapStateToProps = (state) => {
     locationSearchMobileModalOpen,
     isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(
       proj,
-      targetCoordinates
+      targetCoordinates,
     ),
     isCoordinateSearchActive,
     isMobile,
@@ -489,5 +489,5 @@ LocationSearchModal.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LocationSearchModal);

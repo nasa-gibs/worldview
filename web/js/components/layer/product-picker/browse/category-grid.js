@@ -38,7 +38,7 @@ function CategoryGrid(props) {
   const orderedCategories = lodashOrderBy(
     categories,
     ['sortOrder', 'title'],
-    ['asc']
+    ['asc'],
   );
   return (
     <MasonryComponent className="category-masonry-case" options={masonryOptions}>
@@ -95,5 +95,5 @@ CategoryGrid.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(CategoryGrid);

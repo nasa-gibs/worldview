@@ -194,7 +194,7 @@ function EventFilterModalBody (props) {
             Cancel
           </Button>
         </>,
-        modalFooterNode
+        modalFooterNode,
       )}
     </div>
   );
@@ -245,8 +245,8 @@ const mapDispatchToProps = (dispatch) => ({
         startDate,
         endDate,
         showAll,
-        showAllTracks
-      )
+        showAllTracks,
+      ),
     );
   },
 });

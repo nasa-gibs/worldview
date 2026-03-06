@@ -63,7 +63,7 @@ test('legacy switch parameter for projection [projection-legacy-switch]', () => 
   const newStateFromLocation = mapLocationToProjState(
     param,
     stateFromLocation,
-    localState
+    localState,
   );
   expect(newStateFromLocation.proj.id).toBe('some-test-projection');
   expect(newStateFromLocation.proj.selected.id).toBe('some-test-projection');

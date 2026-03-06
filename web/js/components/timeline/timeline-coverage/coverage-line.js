@@ -74,7 +74,7 @@ class CoverageLine extends PureComponent {
     endDate,
     color,
     layerPeriod,
-    index
+    index,
   ) => {
     const {
       positionTransformX,
@@ -164,7 +164,7 @@ class CoverageLine extends PureComponent {
           endDate,
           color,
           layerPeriod,
-          index
+          index,
         )}
       </g>
     ));

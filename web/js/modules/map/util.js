@@ -88,7 +88,7 @@ export function getMapParameterSetup(
   config,
   models,
   legacyState,
-  errors
+  errors,
 ) {
   models.map.load(legacyState, errors);
   const leadingExtent = getLeadingExtent(config.pageLoadTime);
@@ -122,7 +122,7 @@ export function getMapParameterSetup(
 
           const actualLeadingExtent = lodashGet(
             currentState,
-            'map.leadingExtent'
+            'map.leadingExtent',
           );
           const extent = mapIsExtentValid(currentItemState)
             ? currentItemState

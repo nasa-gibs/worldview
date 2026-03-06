@@ -82,7 +82,7 @@ export function stateToParams(initialState, currentState, location) {
       const itemState = options.serialize(
         currentItemState,
         options.serializeNeedsGlobalState ? currentState : undefined,
-        options.serializeNeedsPrev ? prev : undefined
+        options.serializeNeedsPrev ? prev : undefined,
       );
       // short circuit if specialized serializer returns specifically undefined
       if (typeof itemState === 'undefined') {

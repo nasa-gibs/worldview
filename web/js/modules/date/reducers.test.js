@@ -19,7 +19,7 @@ const selectedZoom = 2;
 describe('dateReducer', () => {
   test('should return the initial state [date-reducer-initial-state]', () => {
     expect(dateReducer(undefined, {})).toEqual(
-      dateReducerState
+      dateReducerState,
     );
   });
   test(
@@ -31,12 +31,12 @@ describe('dateReducer', () => {
         dateReducer(dateReducerState, {
           type: CHANGE_TIME_SCALE,
           value: selectedZoom,
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         selectedZoom,
       });
-    }
+    },
   );
   test(
     `${CHANGE_CUSTOM_INTERVAL
@@ -48,14 +48,14 @@ describe('dateReducer', () => {
           type: CHANGE_CUSTOM_INTERVAL,
           interval: 4,
           delta: 10,
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         customInterval: 4,
         customDelta: 10,
         customSelected: true,
       });
-    }
+    },
   );
   test(
     `${CHANGE_AUTO_INTERVAL
@@ -68,12 +68,12 @@ describe('dateReducer', () => {
           interval: 3,
           delta: 1,
           autoSelected: true,
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         autoSelected: true,
       });
-    }
+    },
   );
   test(
     `${CHANGE_INTERVAL
@@ -87,7 +87,7 @@ describe('dateReducer', () => {
           delta: 1,
           customSelected: false,
           autoSelected: false,
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
@@ -95,7 +95,7 @@ describe('dateReducer', () => {
         customSelected: false,
         autoSelected: false,
       });
-    }
+    },
   );
   test(
     `${SELECT_DATE} action type and ${mockDate} as value and selected ` +
@@ -106,12 +106,12 @@ describe('dateReducer', () => {
           type: SELECT_DATE,
           value: mockDate,
           activeString: 'selected',
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         selected: mockDate,
       });
-    }
+    },
   );
   test(
     `${SELECT_DATE
@@ -123,12 +123,12 @@ describe('dateReducer', () => {
           type: SELECT_DATE,
           value: mockDate,
           activeString: 'selectedB',
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         selectedB: mockDate,
       });
-    }
+    },
   );
   test(
     `${UPDATE_APP_NOW
@@ -138,11 +138,11 @@ describe('dateReducer', () => {
         dateReducer(dateReducerState, {
           type: UPDATE_APP_NOW,
           value: mockDate,
-        })
+        }),
       ).toEqual({
         ...dateReducerState,
         appNow: mockDate,
       });
-    }
+    },
   );
 });

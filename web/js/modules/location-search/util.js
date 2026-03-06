@@ -56,7 +56,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
     removeMarkerPin();
   };
   root.render(
-    React.createElement(LocationMarker, { ...pinProps, removeMarker })
+    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
   );
   const markerPin = new OlOverlay({
     element: overlayEl,
@@ -82,7 +82,7 @@ export function getCoordinatesMarker(
   results,
   removeMarker,
   isMobile,
-  dialogVisible
+  dialogVisible,
 ) {
   const { crs } = proj.selected;
   const { id, longitude, latitude } = coordinatesObject;
@@ -122,7 +122,7 @@ export function getLocalStorageCollapseState() {
 export function mapLocationToLocationSearchState(
   parameters,
   stateFromLocationObj,
-  state
+  state,
 ) {
   let stateFromLocation = stateFromLocationObj;
   const { s } = parameters;

@@ -38,9 +38,9 @@ export const getFilteredEvents = createSelector(
       .map((event) => {
         const newEvent = { ...event };
         newEvent.categories = event.categories.filter(
-          (c) => activeCategories.some(({ id }) => id === c.id)
+          (c) => activeCategories.some(({ id }) => id === c.id),
         );
         return newEvent;
       });
-  }
+  },
 );

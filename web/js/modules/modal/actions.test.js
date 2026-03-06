@@ -32,9 +32,9 @@ describe('Modal open actions', () => {
         key: util.encodeId(`__BASIC_MODAL__${constants.TEST_HEADER}`),
       };
       expect(
-        openBasicContent(constants.TEST_HEADER, constants.TEST_BODY)
+        openBasicContent(constants.TEST_HEADER, constants.TEST_BODY),
       ).toEqual(expectedAction);
-    }
+    },
   );
 
   test(`onToggle action returns ${constants.TOGGLE}as type [modal-actions-toggle]`, () => {
@@ -62,9 +62,9 @@ describe('Modal open actions', () => {
         customProps: customsParams,
       };
       expect(openCustomContent(customsKey, customsParams)).toEqual(
-        expectedAction
+        expectedAction,
       );
-    }
+    },
   );
 
   test(
@@ -79,9 +79,9 @@ describe('Modal open actions', () => {
         headerText: constants.TEST_HEADER,
       };
       expect(renderTemplate(constants.TEST_HEADER, templateModalKey)).toEqual(
-        expectedAction
+        expectedAction,
       );
-    }
+    },
   );
 });
 describe('Template fetching', () => {

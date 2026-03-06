@@ -151,7 +151,7 @@ class CoverageItemList extends Component {
     rangeDate,
     layerPeriod,
     itemRangeInterval,
-    nextDate
+    nextDate,
   ) => {
     const { appNow } = this.props;
     const { endDate, futureTime } = layer;
@@ -172,7 +172,7 @@ class CoverageItemList extends Component {
       minMonth + monthAdd,
       minDay + dayAdd,
       minHour + hourAdd,
-      minMinute + minuteAdd
+      minMinute + minuteAdd,
     );
 
     let rangeDateEnd = util.getTimezoneOffsetDate(rangeDateEndLocal);
@@ -295,7 +295,7 @@ class CoverageItemList extends Component {
           startDateLimit,
           startDateLimit,
           endDateLimit,
-          appNow
+          appNow,
         );
         this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
       } else {
@@ -425,7 +425,7 @@ class CoverageItemList extends Component {
               >
                 {/* Layer Header DOM El */
                   CoverageItemList.getHeaderDOMEl(
-                    layer, visible, layerItemBackground, inactiveLayers
+                    layer, visible, layerItemBackground, inactiveLayers,
                   )
                 }
                 <div

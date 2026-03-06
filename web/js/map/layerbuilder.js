@@ -435,7 +435,7 @@ export default function mapLayerBuilder(config, cache, store) {
       configMatrixSet,
       matrixSetLimits,
       day,
-      proj.selected
+      proj.selected,
     );
     const sizes = !tileMatrices
       ? []
@@ -1205,7 +1205,7 @@ export default function mapLayerBuilder(config, cache, store) {
         transformRequest(url, type) {
           if (type === 'Source') {
             return new Request(
-              url.replace('/VectorTileServer', '/VectorTileServer/')
+              url.replace('/VectorTileServer', '/VectorTileServer/'),
             );
           }
           return undefined;
@@ -1248,7 +1248,7 @@ export default function mapLayerBuilder(config, cache, store) {
         configMatrixSet,
         matrixSetLimits,
         day,
-        proj.selected
+        proj.selected,
       );
 
       const sourceOptions = {

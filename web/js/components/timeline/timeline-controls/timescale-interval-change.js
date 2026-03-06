@@ -301,5 +301,5 @@ TimeScaleIntervalChange.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(TimeScaleIntervalChange);

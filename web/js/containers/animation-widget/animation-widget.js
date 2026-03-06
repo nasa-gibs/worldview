@@ -99,7 +99,7 @@ function AnimationWidget (props) {
   const halfWidgetWidth = (subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
 
   const [widgetPosition, setWidgetPosition] = useState(
-    { x: screenWidth / 2 - halfWidgetWidth, y: -25 }
+    { x: screenWidth / 2 - halfWidgetWidth, y: -25 },
   );
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
@@ -440,7 +440,7 @@ const mapStateToProps = (state) => {
     frameLimit,
     autoSelected,
     layers.active.layers,
-    useDelta
+    useDelta,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
@@ -450,7 +450,7 @@ const mapStateToProps = (state) => {
       startDate,
       endDate,
       TIME_SCALE_FROM_NUMBER[useInterval],
-      useDelta
+      useDelta,
     );
   } else {
     snappedCurrentDate = currentDate;
@@ -600,5 +600,5 @@ AnimationWidget.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(AnimationWidget);

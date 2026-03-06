@@ -50,14 +50,14 @@ const mapDispatchToProps = (dispatch) => ({
       openCustomContent('ERROR_MODAL', {
         headerText: HEADER_TEXT,
         bodyComponent: BODY_COMPONENT,
-      })
+      }),
     );
   },
 });
 
 export default connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ErrorBoundary);
 ErrorBoundary.propTypes = {
   children: PropTypes.oneOfType([

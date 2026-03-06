@@ -65,64 +65,64 @@ export const mapLocationToState = (state, location) => {
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,
-      state
+      state,
     );
     stateFromLocation = mapLocationToProjState(
       parameters,
       stateFromLocation,
-      state
+      state,
     );
     stateFromLocation = mapLocationToLayerState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToLocationSearchState(
       parameters,
       stateFromLocation,
-      state
+      state,
     );
     stateFromLocation = mapLocationToCompareState(
       parameters,
-      stateFromLocation
+      stateFromLocation,
     );
     stateFromLocation = mapLocationToChartingState(
       parameters,
-      stateFromLocation
+      stateFromLocation,
     );
     stateFromLocation = mapLocationToPaletteState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToAnimationState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToSidebarState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToTourState(
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     stateFromLocation = mapLocationToEmbedState(
       parameters,
-      stateFromLocation
+      stateFromLocation,
     );
     stateFromLocation = mapLocationToEventFilterState(
       parameters,
       stateFromLocation,
-      state
+      state,
     );
 
     // one level deep merge of newState with defaultState
@@ -653,14 +653,14 @@ export function getParamObject(
   config,
   models,
   legacyState,
-  errors
+  errors,
 ) {
   const mapParamObject = getMapParameterSetup(
     parameters,
     config,
     models,
     legacyState,
-    errors
+    errors,
   );
   return {
     global: {

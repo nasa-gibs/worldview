@@ -150,13 +150,13 @@ class CoverageItemContainer extends Component {
                 dateObj,
                 layerPeriod,
                 interval,
-                nextDate
+                nextDate,
               );
               // get range line dimensions
               const multiLineRangeOptions = getMatchingCoverageLineDimensions(
                 layer,
                 dateObj,
-                rangeDateEnd
+                rangeDateEnd,
               ).filter(({ visible: isVisible }) => isVisible);
               // create DOM line element
               const key = `${id}-${multiIndex}`;

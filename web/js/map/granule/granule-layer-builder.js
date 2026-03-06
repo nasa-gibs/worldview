@@ -48,7 +48,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
   const throttleDispathCMRErrorDialog = lodashThrottle(
     dispathCMRErrorDialog.bind(this),
     CMR_AJAX_OPTIONS.timeout,
-    { leading: true, trailing: false }
+    { leading: true, trailing: false },
   );
 
   const showLoading = () => {
@@ -191,7 +191,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     availableGranules,
     granuleCount,
     leadingEdgeDate,
-    granuleDateRanges
+    granuleDateRanges,
   ) => {
     const { proj: { selected: { crs } } } = store.getState();
     const visibleGranules = [];
@@ -309,7 +309,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     const tileLayers = new OlCollection(createGranuleTileLayers(
       shiftedVisibleGranules,
       def,
-      attributes
+      attributes,
     ));
     granuleLayer.setLayers(tileLayers);
     granuleLayer.setExtent(crs === CRS.GEOGRAPHIC ? FULL_MAP_EXTENT : maxExtent);

@@ -47,7 +47,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
 )(GranuleHover);
 
 GranuleHover.propTypes = {

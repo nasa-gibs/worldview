@@ -389,7 +389,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => ({
   requestShortLinkAction: (location, options) => dispatch(
-    requestShortLink(location, 'application/json', null, options)
+    requestShortLink(location, 'application/json', null, options),
   ),
   sendFeedback: (isInitiated, isMobile) => {
     onClickFeedback(isInitiated, isMobile);
@@ -401,7 +401,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ShareLinkContainer);
 
 ShareLinkContainer.propTypes = {

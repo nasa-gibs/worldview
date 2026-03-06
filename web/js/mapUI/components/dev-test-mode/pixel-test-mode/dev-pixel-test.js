@@ -44,7 +44,7 @@ function PixelTestMode () {
       const wmsImage = await fetchWMSImageExperimental(
         layerSelection.id,
         formattedDate,
-        mercatorExtent
+        mercatorExtent,
       );
 
       // Create an image and handle its loading and error events

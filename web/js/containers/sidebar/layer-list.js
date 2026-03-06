@@ -95,7 +95,7 @@ function LayerList(props) {
       layerId,
       nextLayerId,
       Array.from(activeLayers),
-      layerSplit
+      layerSplit,
     );
     reorderLayers(newLayers);
   };
@@ -274,5 +274,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LayerList);

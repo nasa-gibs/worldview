@@ -169,7 +169,7 @@ export default (function(selfObj) {
       hour,
       minute,
       second,
-      millisecond
+      millisecond,
     ));
 
     if (isNaN(date.getTime())) {
@@ -498,7 +498,7 @@ export default (function(selfObj) {
             : response.text()))
           .then(resolve)
           .catch(reject);
-      }
+      },
     );
   };
 

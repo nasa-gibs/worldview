@@ -21,7 +21,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
         bodyComponentProps: {
           layerObj,
         },
-      })
+      }),
     );
   };
 

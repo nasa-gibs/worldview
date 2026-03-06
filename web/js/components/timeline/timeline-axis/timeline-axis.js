@@ -301,7 +301,7 @@ class TimelineAxis extends Component {
     timeScale,
     leftOffsetFixedCoefficient,
     hoverChange,
-    previousTimeScale
+    previousTimeScale,
   ) => {
     const {
       dateA,
@@ -479,7 +479,7 @@ class TimelineAxis extends Component {
       position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2);
     } else if (timeScale === 'month') {
       const pixelsToAddToDraggerNew = Math.abs(
-        frontDate.diff(hoverTimeDate, timeScale, true) * gridWidth
+        frontDate.diff(hoverTimeDate, timeScale, true) * gridWidth,
       );
       const positionModified = pixelsToAddToDraggerNew - pixelsToAdd + 2;
       position = timelineAxisWidth / 2 +
@@ -602,7 +602,7 @@ class TimelineAxis extends Component {
       endDate,
       timeScale,
       timelineStartDateLimit,
-      timelineEndDateLimit
+      timelineEndDateLimit,
     );
     return timeRangeArray;
   };
@@ -682,7 +682,7 @@ class TimelineAxis extends Component {
         draggerTimeState,
         draggerVisible,
         newDraggerPosition,
-        sharedDraggerVisibilityParams
+        sharedDraggerVisibilityParams,
       );
       newDraggerVisible = draggerACheck.isVisible;
       newDraggerPosition = draggerACheck.newDraggerPosition;
@@ -693,7 +693,7 @@ class TimelineAxis extends Component {
         draggerTimeStateB,
         draggerVisibleB,
         newDraggerPositionB,
-        sharedDraggerVisibilityParams
+        sharedDraggerVisibilityParams,
       );
       newDraggerVisibleB = draggerBCheck.isVisible;
       newDraggerPositionB = draggerBCheck.newDraggerPosition;
@@ -1126,7 +1126,7 @@ class TimelineAxis extends Component {
         null,
         true,
         otherDraggerVisible,
-        false
+        false,
       );
     }
   };
@@ -1214,7 +1214,7 @@ class TimelineAxis extends Component {
           deltaX,
           draggerPosition,
           draggerPositionB,
-          overDrag
+          overDrag,
         );
 
         const newDragSentinelCount = dragSentinelCount + deltaX - dragSentinelChangeNumber -
@@ -1280,7 +1280,7 @@ class TimelineAxis extends Component {
           deltaX,
           draggerPosition,
           draggerPositionB,
-          overDrag
+          overDrag,
         );
 
         const newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber +

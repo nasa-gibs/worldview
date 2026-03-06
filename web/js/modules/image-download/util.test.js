@@ -228,7 +228,7 @@ test('Download URL [imagedownload-url]', () => {
     false,
     false,
     locationMarkers,
-    undefined
+    undefined,
   );
   const expectedURL = 'http://localhost:3002/api/v1/snapshot' +
     '?REQUEST=GetSnapshot' +

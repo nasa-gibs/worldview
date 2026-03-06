@@ -58,7 +58,7 @@ function render (configObj, legacyState) {
     config,
     models,
     legacyState,
-    errors
+    errors,
   );
 
   const {
@@ -69,7 +69,7 @@ function render (configObj, legacyState) {
     mapLocationToState,
     history,
     reducers,
-    stateToParams
+    stateToParams,
   );
   const middleware = getMiddleware(DEBUG === 'logger', locationMiddleware);
   const store = configureStore({
@@ -85,7 +85,7 @@ function render (configObj, legacyState) {
     <Provider store={store}>
       <App models={models} store={store} />
       <CombineUI models={models} config={config} store={store} />
-    </Provider>
+    </Provider>,
   );
   // combineUi(models, config, store); // Legacy UI
   util.errorReport(errors);

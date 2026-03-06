@@ -73,7 +73,7 @@ export default function mapCompare(store) {
         map,
         store,
         self.EventTypeObject,
-        compare.value || null
+        compare.value || null,
       ); // e.g. new self.swipe()
     } else {
       mode = compareMode;
@@ -81,7 +81,7 @@ export default function mapCompare(store) {
         map,
         store,
         self.EventTypeObject,
-        compare.value || null
+        compare.value || null,
       ); // e.g. new self.swipe()
     }
     self.value = state.compare.value || 50;

@@ -99,14 +99,14 @@ const mapDispatchToProps = (dispatch) => ({
         backdrop: true,
         CompletelyCustomModal: SearchUiProvider,
         wrapClassName: '',
-      })
+      }),
     );
   },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(AddLayersContent);
 
 AddLayersContent.propTypes = {

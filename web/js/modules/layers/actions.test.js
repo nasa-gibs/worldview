@@ -45,7 +45,7 @@ function addMockLayer(layerId, layerArray, proj) {
     layerArray,
     config.layers,
     {},
-    getLayers(getState(layerArray), { group: 'all' }, layerArray).overlays.length
+    getLayers(getState(layerArray), { group: 'all' }, layerArray).overlays.length,
   );
 }
 

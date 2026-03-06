@@ -25,7 +25,7 @@ const coordinatesObject = { id: 1234, latitude: 72, longitude: 40 };
 describe('locationSearch', () => {
   test('locationSearch should return the initial state [locationstate-reducer-initial-state]', () => {
     expect(locationSearchReducer(undefined, {})).toEqual(
-      locationSearchState
+      locationSearchState,
     );
   });
   test(
@@ -37,12 +37,12 @@ describe('locationSearch', () => {
         locationSearchReducer(locationSearchState, {
           type: TOGGLE_SHOW_LOCATION_SEARCH,
           value: true,
-        })
+        }),
       ).toEqual({
         ...locationSearchState,
         isExpanded: true,
       });
-    }
+    },
   );
   test(
     `${TOGGLE_REVERSE_GEOCODE
@@ -53,12 +53,12 @@ describe('locationSearch', () => {
         locationSearchReducer(locationSearchState, {
           type: TOGGLE_REVERSE_GEOCODE,
           value: true,
-        })
+        }),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: true,
       });
-    }
+    },
   );
   test(
     `${SET_MARKER
@@ -70,14 +70,14 @@ describe('locationSearch', () => {
           type: SET_MARKER,
           coordinates: coordinatesObject,
           reverseGeocodeResults,
-        })
+        }),
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
         coordinates: [coordinatesObject],
         reverseGeocodeResults,
       });
-    }
+    },
   );
   test(
     `${SET_SUGGESTION
@@ -88,12 +88,12 @@ describe('locationSearch', () => {
         locationSearchReducer(locationSearchState, {
           type: SET_SUGGESTION,
           value: suggestion,
-        })
+        }),
       ).toEqual({
         ...locationSearchState,
         suggestedPlace: suggestion,
       });
-    }
+    },
   );
   test(
     `${CLEAR_SUGGESTIONS
@@ -104,12 +104,12 @@ describe('locationSearch', () => {
         locationSearchReducer(locationSearchState, {
           type: CLEAR_SUGGESTIONS,
           value: [],
-        })
+        }),
       ).toEqual({
         ...locationSearchState,
         suggestions: [],
         suggestedPlace: [],
       });
-    }
+    },
   );
 });

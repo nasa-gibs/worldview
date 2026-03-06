@@ -208,8 +208,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 export default withSearch(
-  ({ results }) => ({ results })
+  ({ results }) => ({ results }),
 )(connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SearchLayerList));

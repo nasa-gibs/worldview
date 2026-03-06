@@ -131,7 +131,7 @@ const mapStateToProps = (state) => {
   const activePalettes = palettes[compare.activeString];
   const hasCustomPalettes = hasCustomPaletteInActiveProjection(
     activeLayersForProj,
-    activePalettes
+    activePalettes,
   );
   return {
     activePalettes,
@@ -183,14 +183,14 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'sm',
         modalClassName: 'notify',
         bodyComponentProps,
-      })
+      }),
     );
   }),
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(GifButton);
 
 GifButton.propTypes = {

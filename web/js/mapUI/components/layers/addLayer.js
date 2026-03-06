@@ -116,8 +116,8 @@ const mapDispatchToProps = (dispatch) => ({
 export default React.memo(
   connect(
     mapStateToProps,
-    mapDispatchToProps
-  )(AddLayer)
+    mapDispatchToProps,
+  )(AddLayer),
 );
 
 AddLayer.propTypes = {

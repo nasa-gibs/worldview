@@ -141,7 +141,7 @@ function updateCoverageFilter (filters, selectedDate) {
     const f = filter;
     if (f.field !== 'coverage') return;
     f.values = f.values.map(
-      (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value)
+      (value) => (oldValueMatch(value) ? `Available ${formattedDate}` : value),
     );
   });
 }

@@ -59,10 +59,10 @@ const addPointOverlays = (map, pointOverlayArray) => {
  */
 const updateSelection = function(newDate) {
   const oldSelectedPoint = document.getElementsByClassName(
-    'track-marker-case-selected'
+    'track-marker-case-selected',
   )[0];
   const newSelectedPoint = document.getElementById(
-    `track-marker-case-${newDate}`
+    `track-marker-case-${newDate}`,
   );
   if (oldSelectedPoint) oldSelectedPoint.className = 'track-marker-case';
   newSelectedPoint.className = 'track-marker-case track-marker-case-selected';
@@ -87,7 +87,7 @@ const getTracksAndPoints = function (
   selectedDate,
   callback,
   showAllTracks,
-  highlightOptions
+  highlightOptions,
 ) {
   const pointsAndArrows = [];
   const trackSegments = [];
@@ -96,7 +96,7 @@ const getTracksAndPoints = function (
     proj,
     selectedDate,
     map,
-    showAllTracks
+    showAllTracks,
   );
   const { isHighlighted } = highlightOptions;
 
@@ -132,7 +132,7 @@ const getTracksAndPoints = function (
       eventObj.id,
       getDefaultEventDate(eventObj),
       callback,
-      highlightOptions
+      highlightOptions,
     ),
     pointsAndArrows,
   };
@@ -253,7 +253,7 @@ function EventTrack () {
           callbackUnhighlight: unHighlightEvent,
           isHighlighted: showAllTracks &&
             (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id),
-        }
+        },
       );
 
       newTrackDetails = {
@@ -303,7 +303,7 @@ function EventTrack () {
           callbackUnhighlight: unHighlightEvent,
           isHighlighted: showAllTracks &&
             (event.id === selectedEvent.id || event.id === highlightedEvent.id),
-        }
+        },
       );
 
       newTrackDetails = {
@@ -359,7 +359,7 @@ function EventTrack () {
   const debouncedOnPropertyChange = lodashDebounce(
     onPropertyChange.bind(this),
     100,
-    { leading: true, trailing: true }
+    { leading: true, trailing: true },
   );
   const debouncedUpdateAllTracks = lodashDebounce(updateAllTracks, 50);
 
@@ -380,7 +380,7 @@ function EventTrack () {
         }
       };
     },
-    []
+    [],
   );
 
   const prevSelectedDate = usePrevious(selectedDate);
@@ -411,7 +411,7 @@ function EventTrack () {
           removePointOverlays(
             prevMap,
             trackDetailsRef.current.pointsAndArrows,
-            createOverlayMapping(prevMap)
+            createOverlayMapping(prevMap),
           );
           if (showAllTracksRef.current) {
             removeAllTracks(prevMap);
@@ -445,7 +445,7 @@ function EventTrack () {
       }
     },
     [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
-      showAllTracksRef.current, highlightedEvent, showAllTracks]
+      showAllTracksRef.current, highlightedEvent, showAllTracks],
   );
 
   return null;

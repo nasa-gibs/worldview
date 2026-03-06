@@ -550,7 +550,7 @@ function ChartingModeOptions(props) {
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
       const numDaysRequested = Math.floor(
-        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
       ) + 1;
       const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
       const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
@@ -567,7 +567,7 @@ function ChartingModeOptions(props) {
           layerInfo,
           timeSpanSelection,
           requestStartDate,
-          requestEndDate
+          requestEndDate,
         );
         const requestURI = getImageStatStatsRequestURL(uriParameters);
         promises.push(getImageStatData(requestURI));
@@ -606,7 +606,7 @@ function ChartingModeOptions(props) {
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
         const numRangeDays = Math.floor(
-          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000
+          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000,
         );
         const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
         const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
@@ -1000,7 +1000,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: ChartingInfo,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      })
+      }),
     );
   },
   openChartingDateModal: (dateObj, timeSpanSelection) => {
@@ -1015,7 +1015,7 @@ const mapDispatchToProps = (dispatch) => ({
           ...dateObj,
           timeSpanSelection,
         },
-      })
+      }),
     );
   },
   onChartDateButtonClick: (buttonClicked) => {
@@ -1040,7 +1040,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           data,
         },
-      })
+      }),
     );
   },
   displayChart: (liveData, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded) => {
@@ -1081,7 +1081,7 @@ const mapDispatchToProps = (dispatch) => ({
           liveData,
           toggleErrorDaysExpanded,
         },
-      })
+      }),
     );
   },
   openChartingErrorModal: (msg) => {
@@ -1095,7 +1095,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponentProps: {
           msg,
         },
-      })
+      }),
     );
   },
   onUpdateStartDate(date) {
@@ -1111,7 +1111,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {

@@ -307,8 +307,8 @@ export default withSearch(
     searchTerm,
     setSearchTerm,
     results,
-  })
+  }),
 )(connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ProductPickerHeader));

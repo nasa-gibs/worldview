@@ -35,7 +35,7 @@ export function requestPalette(id) {
       REQUEST_PALETTE,
       location,
       'application/json',
-      paletteID
+      paletteID,
     );
   };
 }
@@ -54,7 +54,7 @@ export function setThresholdRangeAndSquash(layerId, props, index, groupName) {
       props,
       index,
       state.palettes[groupName],
-      state
+      state,
     );
     dispatch({
       type: SET_THRESHOLD_RANGE_AND_SQUASH,
@@ -82,7 +82,7 @@ export function setCustomPalette(layerId, paletteId, index, groupName) {
       paletteId,
       index,
       groupName,
-      state
+      state,
     );
     dispatch({
       type: SET_CUSTOM,
@@ -109,7 +109,7 @@ export function clearCustomPalette(layerId, index, groupName) {
       layerId,
       index,
       palettes[groupName],
-      state
+      state,
     );
 
     dispatch({
@@ -130,7 +130,7 @@ export function setToggledClassification(layerId, classIndex, index, groupName) 
       classIndex,
       index,
       state.palettes[groupName],
-      state
+      state,
     );
     let hasDisabled = false;
 
@@ -218,7 +218,7 @@ export function refreshDisabledClassification(layerId, disabledArray, index, gro
       disabledArray,
       index,
       state.palettes[groupName],
-      state
+      state,
     );
     let hasDisabled = false;
     if (!Object.prototype.hasOwnProperty.call(newActivePalettesObj, layerId)) return;
@@ -250,7 +250,7 @@ export function refreshPalettes(activePalettes) {
             key,
             { squash: colormap.squash, min: colormap.min, max: colormap.max },
             index,
-            groupName
+            groupName,
           ));
         }
         if (colormap.disabled) {

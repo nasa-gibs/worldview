@@ -111,7 +111,7 @@ export function imageUtilEstimateResolution(resolution, isGeoProjection) {
 export function imageUtilCalculateResolution(
   zoom,
   isGeoProjection,
-  resolutions
+  resolutions,
 ) {
   let resolution;
   const nZoomLevels = resolutions.length;
@@ -123,7 +123,7 @@ export function imageUtilCalculateResolution(
   // Estimate the option value used by "wv-image-resolution"
   const resolutionEstimate = imageUtilEstimateResolution(
     curResolution,
-    isGeoProjection
+    isGeoProjection,
   );
 
   // Find the closest match of resolution within the available values
@@ -323,7 +323,7 @@ export function getDownloadUrl(
   fileType,
   isWorldfile,
   markerCoordinates,
-  activePalettes
+  activePalettes,
 ) {
   const { crs } = proj.selected;
   const {
@@ -334,7 +334,7 @@ export function getDownloadUrl(
     fileType,
     imageUtilGetLayers(layerDefs, proj.id, activePalettes),
     imageUtilGetLayerWrap(layerDefs),
-    imageUtilGetLayerOpacities(layerDefs)
+    imageUtilGetLayerOpacities(layerDefs),
   );
 
   const imgFormat = fileType || 'image/jpeg';
@@ -423,12 +423,12 @@ export function getDimensions(projection, bounds, resolution) {
   const imgWidth = Math.round(
     Math.abs(bounds[1][0] - bounds[0][0]) /
     conversionFactor /
-    Number(resolution)
+    Number(resolution),
   );
   const imgHeight = Math.round(
     Math.abs(bounds[1][1] - bounds[0][1]) /
     conversionFactor /
-    Number(resolution)
+    Number(resolution),
   );
   return { width: imgWidth, height: imgHeight };
 }

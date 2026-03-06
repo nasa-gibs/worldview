@@ -210,7 +210,7 @@ const mapDispatchToProps = (dispatch) => ({
             addToLocalStorage(obj);
           }
         },
-      })
+      }),
     );
   },
   startTour: (isTourActive) => {
@@ -231,7 +231,7 @@ const mapDispatchToProps = (dispatch) => ({
         bodyComponent: GlobalSettings,
         wrapClassName: 'clickable-behind-modal',
         modalClassName: 'global-settings-modal toolbar-info-modal toolbar-modal',
-      })
+      }),
     );
   },
   aboutClick: () => {
@@ -246,14 +246,14 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           dispatch(toggleAboutModal(false));
         },
-      })
+      }),
     );
   },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(InfoList);
 
 InfoList.propTypes = {

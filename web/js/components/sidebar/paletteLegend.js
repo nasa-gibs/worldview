@@ -184,13 +184,13 @@ class PaletteLegend extends React.Component {
             ctx,
             colorMap.colors,
             width,
-            height
+            height,
           );
           drawTicksOnCanvas(
             ctx,
             colorMap,
             width,
-            height
+            height,
           );
         }
       }
@@ -217,7 +217,7 @@ class PaletteLegend extends React.Component {
 
     const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(
       units,
-      globalTemperatureUnit
+      globalTemperatureUnit,
     );
     for (let i = 0, len = legend.colors.length; i < len; i += 1) {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
@@ -529,17 +529,17 @@ PaletteLegend.propTypes = {
 const mapDispatchToProps = (dispatch) => ({
   toggleClassification: (layerId, classIndex, index, groupName) => {
     dispatch(
-      setToggledClassification(layerId, classIndex, index, groupName)
+      setToggledClassification(layerId, classIndex, index, groupName),
     );
   },
   toggleAllClassifications: (layerId, disabledArray, index, groupName) => {
     dispatch(
-      refreshDisabledClassification(layerId, disabledArray, index, groupName)
+      refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
   },
 });
 
 export default connect(
   null,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(PaletteLegend);

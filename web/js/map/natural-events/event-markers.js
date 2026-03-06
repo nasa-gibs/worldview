@@ -44,7 +44,7 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
       title,
       id,
       hideTooltip,
-    })
+    }),
   );
   return new OlOverlay({
     element: overlayEl,
@@ -324,5 +324,5 @@ EventMarkers.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(EventMarkers);

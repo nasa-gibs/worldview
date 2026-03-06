@@ -152,7 +152,7 @@ class toolbarContainer extends Component {
             ? paletteStore
             : undefined, rotation, nonDownloadableLayers);
         },
-      }
+      },
     );
   }
 
@@ -215,7 +215,7 @@ class toolbarContainer extends Component {
         style={mobileWvToolbarButtonStyle}
         onClick={() => openModal(
           'TOOLBAR_SHARE',
-          CUSTOM_MODAL_PROPS.TOOLBAR_SHARE
+          CUSTOM_MODAL_PROPS.TOOLBAR_SHARE,
         )}
       >
         {this.renderTooltip(buttonId, labelText)}
@@ -240,7 +240,7 @@ class toolbarContainer extends Component {
       : 'Switch projection';
     const onClick = () => openModal(
       'TOOLBAR_PROJECTION',
-      CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION
+      CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
     );
     const mobileWvToolbarButtonStyle = isMobile
       ? {
@@ -293,7 +293,7 @@ class toolbarContainer extends Component {
     const handleButtonClick = isMobile
       ? () => openModal(
         'TOOLBAR_LOCATION_SEARCH_MOBILE',
-        CUSTOM_MODAL_PROPS.TOOLBAR_LOCATION_SEARCH_MOBILE
+        CUSTOM_MODAL_PROPS.TOOLBAR_LOCATION_SEARCH_MOBILE,
       )
       : () => toggleShowLocationSearch();
 
@@ -505,10 +505,10 @@ const mapStateToProps = (state) => {
     isDistractionFreeModeActive,
     isImageDownloadActive: Boolean(
       lodashGet(state, 'map.ui.selected') &&
-      !isCompareActive && !isChartingActive && !isDataDownloadTabActive
+      !isCompareActive && !isChartingActive && !isDataDownloadTabActive,
     ),
     isProjectionSwitchActive: Boolean(
-      !isAnimatingToEvent && !isChartingActive
+      !isAnimatingToEvent && !isChartingActive,
     ),
     isKioskModeActive,
     isLocationSearchExpanded,
@@ -516,7 +516,7 @@ const mapStateToProps = (state) => {
     isRotated: Boolean(map.rotation !== 0),
     hasCustomPalette: hasCustomPaletteInActiveProjection(
       filteredLayers,
-      activePalettes
+      activePalettes,
     ),
     modalIsOpen,
     notificationType: type,
@@ -552,7 +552,7 @@ const mapDispatchToProps = (dispatch) => ({
   openModal: (key, customParams, actions) => {
     dispatch(openCustomContent(
       key,
-      customParams
+      customParams,
     ));
   },
   openAboutModal: () => {
@@ -564,7 +564,7 @@ const mapDispatchToProps = (dispatch) => ({
         onClose: () => {
           dispatch(toggleAboutModal(false));
         },
-      })
+      }),
     );
   },
   notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
@@ -586,12 +586,12 @@ const mapDispatchToProps = (dispatch) => ({
         size: 'sm',
         modalClassName: 'notify',
         bodyComponentProps,
-      })
+      }),
     );
   }),
   requestNotifications: (location) => {
     const promise = dispatch(
-      requestNotificationsAction(location)
+      requestNotificationsAction(location),
     );
     promise.then((data) => {
       const obj = JSON.parse(data);
@@ -604,7 +604,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(toolbarContainer);
 
 toolbarContainer.propTypes = {

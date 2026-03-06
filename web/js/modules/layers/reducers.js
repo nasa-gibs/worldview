@@ -89,7 +89,7 @@ export function layerReducer(state = initialState, action) {
   };
   const getGroupIndex = () => lodashFindIndex(
     getPrevOverlayGroups(),
-    { groupName: action.groupName }
+    { groupName: action.groupName },
   );
 
   switch (action.type) {

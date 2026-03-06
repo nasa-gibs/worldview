@@ -145,5 +145,5 @@ DateLines.propTypes = {
 
 export default connect(
   mapStateToProps,
-  () => ({})
+  () => ({}),
 )(DateLines);

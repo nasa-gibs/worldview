@@ -4,7 +4,7 @@ import update from 'immutability-helper';
 export function getProjInitialState(config) {
   const selected = lodashGet(
     config,
-    `projections.${config.defaults.projection}`
+    `projections.${config.defaults.projection}`,
   );
   return {
     id: selected ? selected.id : 'geographic',

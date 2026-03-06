@@ -42,13 +42,13 @@ class VectorStyleSelect extends React.Component {
       ? this.renderLegendMultiItem(
         styleLayerObject,
         styleLayerObject.id,
-        description
+        description,
       )
       : this.renderSelectorItemSingle(
         styleLayerObject,
         styleLayerObject.id,
         description,
-        activeVectorStyle === styleLayerObject.id
+        activeVectorStyle === styleLayerObject.id,
       );
   }
 

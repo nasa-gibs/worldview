@@ -23,7 +23,7 @@ export function setFilterRange(layerId, props, index, groupName) {
       props,
       index,
       state.vectorStyles[groupName],
-      state
+      state,
     );
     dispatch({
       type: SET_FILTER_RANGE,
@@ -53,7 +53,7 @@ export function setStyle(layer, vectorStyleId, groupName) {
       vectorStyleId,
       state.vectorStyles.custom,
       null,
-      state
+      state,
     );
     dispatch({
       type: SET_VECTORSTYLE,
@@ -80,7 +80,7 @@ export function clearStyle(layer, vectorStyleId, groupName) {
       vectorStyleId,
       state.vectorStyles.custom,
       null,
-      state
+      state,
     );
     dispatch({
       type: CLEAR_VECTORSTYLE,

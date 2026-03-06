@@ -47,7 +47,7 @@ class PaletteThreshold extends React.Component {
       parseFloat(palette.entries.refs.lastIndexOf(endIndex)),
       isSquashed,
       index,
-      groupName
+      groupName,
     );
     this.setState({ squashed: isSquashed });
   }
@@ -98,7 +98,7 @@ class PaletteThreshold extends React.Component {
       max,
       squashed,
       index,
-      groupName
+      groupName,
     );
   }
 

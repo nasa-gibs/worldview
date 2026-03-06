@@ -15,14 +15,14 @@ const PERMALINK_STATE = { l: LAYER_STRING };
 
 test('hasCustomTypePalette func determines if custom palette is in string [palettes-custom-palette-string-1.1]', () => {
   const bool = hasCustomTypePalette(
-    'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true)'
+    'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true)',
   );
   expect(bool).toBeTruthy();
 });
 
 test('hasCustomTypePalette func determines if custom palette is in string [palettes-custom-palette-string-1.2', () => {
   const bool = hasCustomTypePalette(
-    'some-layer(disabled(;0-2)'
+    'some-layer(disabled(;0-2)',
   );
   expect(bool).toBeTruthy();
 });
@@ -62,7 +62,7 @@ describe('permalink 1.1', () => {
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     const layer = stateFromLocation.layers.active.layers[0];
     expect(layer.id).toBe('terra-aod');
@@ -85,7 +85,7 @@ describe('permalink 1.1', () => {
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
 
     const layer1 = stateFromLocation.layers.active.layers[0];
@@ -113,7 +113,7 @@ describe('permalink 1.1', () => {
       parameters,
       stateFromLocation,
       state,
-      config
+      config,
     );
     const layer = stateFromLocation.layers.active.layers[0];
 

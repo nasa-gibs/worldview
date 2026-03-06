@@ -36,7 +36,7 @@ export default function GranuleCount (props) {
   const getDownloadSize = (entries) => entries.reduce(
     (prev, curr) => (
       curr.granule_size ? prev + parseFloat(curr.granule_size, 10) : 0),
-    0
+    0,
   );
 
   /**

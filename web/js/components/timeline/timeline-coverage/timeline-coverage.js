@@ -442,7 +442,7 @@ class TimelineLayerCoveragePanel extends Component {
                   label="Include Hidden Layers"
                   toggle={() => this.addMatchingCoverageToTimeline(
                     !shouldIncludeHiddenLayers,
-                    activeLayers
+                    activeLayers,
                   )}
                 />
               </header>
@@ -505,7 +505,7 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: ' timeline-layer-coverage-info-modal',
         wrapClassName: 'clickable-behind-modal',
         desktopOnly: true,
-      })
+      }),
     );
   },
 });
@@ -530,5 +530,5 @@ TimelineLayerCoveragePanel.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(TimelineLayerCoveragePanel);

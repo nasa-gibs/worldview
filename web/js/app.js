@@ -124,7 +124,7 @@ class App extends React.Component {
           } - Version ${
             Brand.VERSION
           } - ${
-            Brand.BUILD_TIMESTAMP}`
+            Brand.BUILD_TIMESTAMP}`,
         );
       } else {
         console.warn('Development version');
@@ -245,14 +245,14 @@ const mapDispatchToProps = (dispatch) => ({
             addToLocalStorage(notificationsSeenObj);
           }
         },
-      })
+      }),
     );
   },
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(App);
 
 App.propTypes = {

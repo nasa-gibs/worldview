@@ -19,7 +19,7 @@ function DevTestButton () {
         size: 'lg',
         bodyComponentProps: {
         },
-      })
+      }),
     );
   };
 

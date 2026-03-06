@@ -12,7 +12,7 @@ function processImage(canvas, lookup) {
     0,
     0,
     canvas.width,
-    canvas.height
+    canvas.height,
   );
 
   // Process each pixel to color-swap single color palettes
@@ -177,7 +177,7 @@ const parsePNG = async (buffer) => {
       dataView.getUint8(offset + 4),
       dataView.getUint8(offset + 5),
       dataView.getUint8(offset + 6),
-      dataView.getUint8(offset + 7)
+      dataView.getUint8(offset + 7),
     );
 
     // Extract chunk data
@@ -230,7 +230,7 @@ const parsePNG = async (buffer) => {
   const ihdrView = new DataView(
     ihdrChunk.data.buffer,
     ihdrChunk.data.byteOffset,
-    ihdrChunk.data.byteLength
+    ihdrChunk.data.byteLength,
   );
   const width = ihdrView.getUint32(0, false);
   const height = ihdrView.getUint32(4, false);
@@ -261,7 +261,7 @@ const parsePNG = async (buffer) => {
       palette,
       width,
       height,
-      alphaValues
+      alphaValues,
     );
   }
 

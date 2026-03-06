@@ -112,8 +112,8 @@ export default withSearch(
     facets, filters, removeFilter, results,
   }) => ({
     facets, filters, removeFilter, results,
-  })
+  }),
 )(connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(Facets));

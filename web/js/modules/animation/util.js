@@ -59,7 +59,7 @@ export function getNumberOfSteps(
   maxToCheck,
   autoSelected,
   layers,
-  stateDelta = 1
+  stateDelta = 1,
 ) {
   let delta = stateDelta;
   if (autoSelected) {
@@ -100,7 +100,7 @@ export function getStampProps(
   stampWidthInt,
   dimensions,
   width,
-  height
+  height,
 ) {
   let stampWidth = stampWidthInt;
   const dateStamp = {};
@@ -152,7 +152,7 @@ export function mapLocationToAnimationState(
   parameters,
   stateFromLocationObj,
   state,
-  config
+  config,
 ) {
   let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');

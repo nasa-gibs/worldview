@@ -24,14 +24,14 @@ function TileMeasurement({ ui }) {
   const toggleStaticMap = (isActive) => { dispatch(toggleStaticMapAction(isActive)); };
   const toggleGroupVisibility = (
     ids,
-    visible
+    visible,
   ) => { dispatch(toggleGroupVisiblityAction(ids, visible)); };
 
   const eic = useSelector((state) => state.ui.eic);
   const realTime = useSelector((state) => state.date.appNow);
   const activeLayers = useSelector((state) => getActiveLayers(
     state,
-    state.compare.activeString
+    state.compare.activeString,
   ), shallowEqual);
   const eicLegacy = useSelector((state) => state.ui.eicLegacy);
   const scenario = useSelector((state) => state.ui.scenario);

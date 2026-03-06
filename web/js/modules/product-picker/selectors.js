@@ -33,9 +33,9 @@ export const getLayersForProjection = createSelector(
       });
     return lodashSortBy(
       layersWithFacetProps,
-      (layer) => lodashIndexOf(config.layerOrder, layer.id)
+      (layer) => lodashIndexOf(config.layerOrder, layer.id),
     );
-  }
+  },
 );
 
 export const getSourcesForProjection = createSelector(
@@ -52,10 +52,10 @@ export const getSourcesForProjection = createSelector(
         const isOrbitTrack = layergroup === 'Orbital Track';
         const inProj = !!projections[projection];
         return trackGroup ? inProj : !isOrbitTrack && inProj;
-      })
+      }),
     );
     return sourcesForProj && sourcesForProj.sort((a, b) => a.title.localeCompare(b.title));
-  }
+  },
 );
 
 export const getCategoryConfig = createSelector(
@@ -65,5 +65,5 @@ export const getCategoryConfig = createSelector(
     return categoryType === 'measurements'
       ? categories[firstTab]
       : categories[categoryType];
-  }
+  },
 );

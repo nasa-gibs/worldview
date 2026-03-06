@@ -101,7 +101,7 @@ export class VectorInteractions extends React.Component {
         const isValidPolygon = areCoordinatesAndPolygonExtentValid(
           points,
           mouseCoords,
-          visibleExtent
+          visibleExtent,
         );
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
@@ -217,7 +217,7 @@ export class VectorInteractions extends React.Component {
       activeLayers,
       mapRes,
       proj.id,
-      isMobile
+      isMobile,
     );
 
     if (isMobile) {
@@ -236,7 +236,7 @@ export class VectorInteractions extends React.Component {
           offsetTop,
           screenSize,
           isEmbedModeActive,
-          isAeronet
+          isAeronet,
         );
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
@@ -310,7 +310,7 @@ function mapStateToProps(state) {
       olMap,
       state,
       swipeOffset,
-      modalWidth
+      modalWidth,
     ),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
@@ -354,7 +354,7 @@ const mapDispatchToProps = (dispatch) => ({
     offsetTop,
     screenSize,
     isEmbedModeActive,
-    isAeronet
+    isAeronet,
   ) => {
     const { screenHeight, screenWidth } = screenSize;
     const isMobile = screenSize.isMobileDevice;
@@ -391,7 +391,7 @@ const mapDispatchToProps = (dispatch) => ({
             dispatch(selectVectorFeaturesActionCreator({}));
           }, 1);
         },
-      }
+      },
     ));
   },
 });
@@ -425,5 +425,5 @@ VectorInteractions.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(VectorInteractions);

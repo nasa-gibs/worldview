@@ -39,7 +39,7 @@ function DateRangeTileCheck(props) {
   const dispatch = useDispatch();
   const toggleCheckedAnimationAvailability = (available) => {
     dispatch(
-      toggleCheckedAnimationAvailabilityAction(available)
+      toggleCheckedAnimationAvailabilityAction(available),
     );
   };
 

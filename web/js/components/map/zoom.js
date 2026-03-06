@@ -81,5 +81,5 @@ Zoom.propTypes = {
 };
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
 )(Zoom);

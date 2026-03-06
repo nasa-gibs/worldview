@@ -25,7 +25,7 @@ function getProducts(date, state) {
       reverse: true,
       renderable: true,
       date,
-    }
+    },
   );
   lodashEach(products, (layer) => {
     const layerDate = new Date(date);
@@ -55,7 +55,7 @@ function getProducts(date, state) {
 export default function getImageArray(
   options,
   dimensions,
-  state
+  state,
 ) {
   const {
     animation, proj, map, date, locationSearch, layers,
@@ -96,7 +96,7 @@ export default function getImageArray(
       current,
       false,
       false,
-      markerCoordinates
+      markerCoordinates,
     );
 
     src = util.format(dlURL, strDate);

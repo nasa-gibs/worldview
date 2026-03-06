@@ -35,7 +35,7 @@ beforeEach(() => {
       isMobile={false}
       proj={{ id: 'geographic' }}
       activeLayers={[{ def: { type: 'vector' } }]}
-    />
+    />,
   );
   map = {
     getEventPixel: jest.fn(),

@@ -69,7 +69,7 @@ export function validateLayersConceptIds (layers) {
           const requestUrl = getCollectionsUrl(state)(id);
           const response = await conceptIdRequest(requestUrl);
           validatedConceptIds[id] = !!response.length;
-        }
+        },
       ));
 
       validatedLayers = layers.reduce((prev, curr) => {

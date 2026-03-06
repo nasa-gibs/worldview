@@ -245,7 +245,7 @@ export const getCMRQueryDateUpdateOptions = (
   CMRDateStoreForLayer,
   date,
   startQueryDate,
-  endQueryDate
+  endQueryDate,
 ) => {
   let canExtendRange = false;
   let needRangeUpdate = true;
@@ -370,7 +370,7 @@ export const transformGranulesForProj = (granules, crs) => granules.map((granule
   const transformedPolygon = granule.polygon.map((coords) => transform(
     coords,
     CRS.GEOGRAPHIC,
-    crs
+    crs,
   ));
   return {
     ...granule,

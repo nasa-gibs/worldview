@@ -164,6 +164,7 @@ export default [
       'react/sort-comp': 'error',
 
       '@stylistic/array-bracket-spacing': 'error',
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
       '@stylistic/comma-style': 'error',
       '@stylistic/eol-last': 'error',
       '@stylistic/indent': ['error', 2],

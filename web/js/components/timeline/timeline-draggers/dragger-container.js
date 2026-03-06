@@ -117,13 +117,13 @@ class DraggerContainer extends PureComponent {
     const { gridWidth } = options;
     const frontDateObj = moment.utc(frontDate);
     const pixelsToAddToDraggerNew = Math.abs(
-      frontDateObj.diff(inputTime, timeScale, true) * gridWidth
+      frontDateObj.diff(inputTime, timeScale, true) * gridWidth,
     );
     newDraggerPosition = pixelsToAddToDraggerNew + position - draggerWidth + transformX + 2;
 
     // determine max timelineEndDate position for dragger
     const endDateLimitPositionFromFront = Math.abs(
-      frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth
+      frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth,
     );
     const endDatePosition = endDateLimitPositionFromFront +
     position - draggerWidth + transformX + 2;
@@ -221,7 +221,7 @@ class DraggerContainer extends PureComponent {
       const isBetweenValidTimeline = getIsBetween(
         newDraggerTime,
         timelineStartDateLimit,
-        timelineEndDateLimit
+        timelineEndDateLimit,
       );
       if (isBetweenValidTimeline) {
         newDraggerTime = getISODateFormatted(newDraggerTime);
@@ -231,7 +231,7 @@ class DraggerContainer extends PureComponent {
         if (newDraggerTime > timelineEndDateLimitTime) {
           const frontDateObj = moment.utc(frontDate);
           const endDateLimitPositionFromFront = Math.abs(
-            frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth
+            frontDateObj.diff(timelineEndDateLimit, timeScale, true) * gridWidth,
           );
           const endDatePosition = endDateLimitPositionFromFront +
           position - draggerWidth + transformX + 2;
@@ -242,7 +242,7 @@ class DraggerContainer extends PureComponent {
             endDatePosition,
             null,
             null,
-            true
+            true,
           );
           return true;
         }
@@ -256,7 +256,7 @@ class DraggerContainer extends PureComponent {
         newDraggerPosition,
         null,
         null,
-        true
+        true,
       );
     });
   };

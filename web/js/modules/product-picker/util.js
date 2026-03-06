@@ -84,10 +84,10 @@ export function updateRecentLayers(layer, allProjections) {
       if (layers.length === MAX_RECENT_LAYERS) {
         const [lowestCountLayer] = layers.sort((a, b) => a.count - b.count);
         const filteredByCount = layers.filter(
-          ({ count }) => count === lowestCountLayer.count
+          ({ count }) => count === lowestCountLayer.count,
         );
         const [oldestLowest] = filteredByCount.sort(
-          (a, b) => a.dateAdded.valueOf() - b.dateAdded.valueOf()
+          (a, b) => a.dateAdded.valueOf() - b.dateAdded.valueOf(),
         );
         recentLayers[proj] = layers.filter(({ id }) => id !== oldestLowest.id);
       }

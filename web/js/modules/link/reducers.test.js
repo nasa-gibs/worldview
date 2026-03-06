@@ -10,7 +10,7 @@ describe('shortLink reducer', () => {
     expect(
       shortLink([], {
         type: constants.REQUEST_SHORT_LINK_START,
-      })
+      }),
     ).toEqual({
       isLoading: true,
       error: null,
@@ -23,7 +23,7 @@ describe('shortLink reducer', () => {
       shortLink([], {
         type: constants.REQUEST_SHORT_LINK_SUCCESS,
         response: constants.MOCK_SHORT_LINK_RESPONSE_BODY,
-      })
+      }),
     ).toEqual({
       isLoading: false,
       error: null,
@@ -45,10 +45,10 @@ describe('linkReducer', () => {
         linkReducer([], {
           type: constants.UPDATE_PERMALINK,
           queryString: testString,
-        })
+        }),
       ).toEqual({
         queryString: testString,
       });
-    }
+    },
   );
 });

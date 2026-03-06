@@ -52,7 +52,7 @@ function CategoryCell(props) {
                     'in category',
                     category.title,
                     'unknown measurement',
-                    measurement
+                    measurement,
                   );
                 }
                 if (measurementConfig[measurement] === undefined) {
@@ -62,7 +62,7 @@ function CategoryCell(props) {
                     }' stated in category '${
                       category.title
                     }' does not exist ` +
-                        'in measurement list!'
+                        'in measurement list!',
                   );
                 }
                 return index === 6

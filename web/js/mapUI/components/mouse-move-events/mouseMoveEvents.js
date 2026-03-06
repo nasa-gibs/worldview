@@ -80,7 +80,7 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
 )(MouseMoveEvents);
 
 MouseMoveEvents.propTypes = {

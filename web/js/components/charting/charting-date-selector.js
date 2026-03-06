@@ -101,5 +101,5 @@ ChartingDateSelector.propTypes = {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(ChartingDateSelector);
