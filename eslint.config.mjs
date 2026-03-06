@@ -1,9 +1,9 @@
-import babelParser from '@babel/eslint-parser';
-import globals from 'globals';
-import importPlugin from 'eslint-plugin-import';
-import jest from 'eslint-plugin-jest';
-import jsxA11y from 'eslint-plugin-jsx-a11y';
-import neostandard, { plugins } from 'neostandard';
+import babelParser from '@babel/eslint-parser'
+import globals from 'globals'
+import importPlugin from 'eslint-plugin-import'
+import jest from 'eslint-plugin-jest'
+import jsxA11y from 'eslint-plugin-jsx-a11y'
+import neostandard, { plugins } from 'neostandard'
 
 export default [
   ...neostandard({
@@ -21,15 +21,19 @@ export default [
     ],
     semi: true
   }),
+  // Node.js files
   {
     files: ['**/*.{js,mjs}'],
     plugins: {
       import: importPlugin,
       n: plugins.n,
+      '@stylistic': plugins['@stylistic']
     },
     rules: {
-      'new-cap': ['error', {}],
       camelcase: ['error', { ignoreDestructuring: true, properties: 'never' }],
+      'new-cap': ['error', {}],
+      '@stylistic/no-extra-semi': 'error',
+      '@stylistic/semi': 'off',
 
       'no-async-promise-executor': 'warn',
       'n/no-path-concat': 'warn',
@@ -51,13 +55,14 @@ export default [
       '**/*.spec.js',
     ],
     plugins: {
-      stylistic: plugins['@stylistic']
+      '@stylistic': plugins['@stylistic']
     },
     languageOptions: {
       sourceType: 'commonjs',
       globals: { ...globals.node },
     },
     rules: {
+      '@stylistic/no-extra-semi': 'error',
       '@stylistic/semi': 'off',
     }
   },
@@ -69,7 +74,7 @@ export default [
       jest,
       'jsx-a11y': jsxA11y,
       react: plugins.react,
-      stylistic: plugins['@stylistic']
+      '@stylistic': plugins['@stylistic']
     },
     languageOptions: {
       sourceType: 'module',
@@ -165,6 +170,7 @@ export default [
       '@stylistic/jsx-quotes': 'error',
       '@stylistic/keyword-spacing': 'error',
       '@stylistic/newline-per-chained-call': 'error',
+      '@stylistic/no-extra-semi': 'off',
       '@stylistic/no-multi-spaces': 'error',
       '@stylistic/object-curly-spacing': 'off',
       '@stylistic/semi': 'error',
@@ -175,4 +181,4 @@ export default [
       '@stylistic/no-trailing-spaces': 'error',
     },
   }
-];
+]
