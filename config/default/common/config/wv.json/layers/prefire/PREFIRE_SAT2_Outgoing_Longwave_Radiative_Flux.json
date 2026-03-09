@@ -6,6 +6,8 @@
       "tags": "",
       "dataAvailability": "dd",
       "group": "overlays",
+      "type": "granule",
+      "count": 1,
       "layergroup": "Outgoing Radiation"
     }
   }
