@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Draggable } from 'react-beautiful-dnd';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -48,12 +49,11 @@ import {
 
 const { events } = util;
 const { vectorModalProps, granuleModalProps, zoomModalProps } = MODAL_PROPERTIES;
-const getItemStyle = (isDragging, draggableStyle) => ({
-  // some basic styles to make the items look a bit nicer
-  ...draggableStyle,
-  position: isDragging ? 'absolute' : 'relative',
+const getItemStyle = (isDragging, sortableStyle) => ({
+  ...sortableStyle,
   top: null,
   left: null,
+  zIndex: isDragging ? 1 : undefined,
 });
 
 function LayerRow (props) {
@@ -87,7 +87,6 @@ function LayerRow (props) {
     toggleVisibility,
     isDisabled,
     isVisible,
-    index,
     hasPalette,
     isInProjection,
     tracksForLayer,
@@ -109,6 +108,7 @@ function LayerRow (props) {
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
+  const sortableId = `${encodedLayerId}-${compareState}`;
   const { title } = names;
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
@@ -129,6 +129,23 @@ function LayerRow (props) {
   const [showGranuleAlert, setShowGranuleAlert] = useState(false);
   const [hideZoomAlert, setHideZoomAlert] = useState(false);
   const [hideGranuleAlert, setHideGranuleAlert] = useState(false);
+
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: sortableId,
+    disabled: isEmbedModeActive || isAnimating,
+  });
+
+  const sortableStyle = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const ddvLayerZoomNoticeActive = ddvZoomAlerts.includes(layer.title);
   const ddvLayerLocationNoticeActive = ddvLocationAlerts.includes(layer.title);
@@ -300,6 +317,17 @@ function LayerRow (props) {
     return 'No data on selected date for this layer';
   };
 
+  // Prevent pointer/mouse events on controls from bubbling up and activating drag.
+  // Intentionally does NOT call preventDefault so clicks still fire (esp. on touch).
+  const stopDndActivation = (e) => {
+    if (e?.nativeEvent?.stopImmediatePropagation) {
+      e.nativeEvent.stopImmediatePropagation();
+    }
+    if (e?.stopPropagation) {
+      e.stopPropagation();
+    }
+  };
+
   const stopPropagation = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
@@ -323,7 +351,10 @@ function LayerRow (props) {
 
   const renderDropdownMenu = () => (
     <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
-      <DropdownToggle>
+      <DropdownToggle
+        onPointerDown={stopDndActivation}
+        onMouseDown={stopDndActivation}
+      >
         <FontAwesomeIcon
           className="layer-group-more"
           icon="ellipsis-v"
@@ -367,6 +398,8 @@ function LayerRow (props) {
           id={removeLayerBtnId}
           aria-label={removeLayerBtnTitle}
           className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-close'}
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
           onClick={() => removeLayer()}
         >
           <UncontrolledTooltip id="center-align-tooltip" placement="top" target={removeLayerBtnId}>
@@ -380,6 +413,7 @@ function LayerRow (props) {
         id={layerOptionsBtnId}
         aria-label={layerOptionsBtnTitle}
         className={isMobile ? 'hidden wv-layers-options' : 'button wv-layers-options'}
+        onPointerDown={stopDndActivation}
         onMouseDown={stopPropagation}
         onClick={() => onOptionsClick(layer, title, zot)}
       >
@@ -393,6 +427,7 @@ function LayerRow (props) {
         id={layerInfoBtnId}
         aria-label={layerInfoBtnTitle}
         className={isMobile ? 'hidden wv-layers-info' : 'button wv-layers-info'}
+        onPointerDown={stopDndActivation}
         onMouseDown={stopPropagation}
         onClick={() => onInfoClick(layer, title, measurementDescriptionPath, describeDomainsUrl)}
       >
@@ -418,6 +453,7 @@ function LayerRow (props) {
         id={layerVectorBtnId}
         aria-label={titleStr}
         className={runningDataObj ? `${classNames} running` : classNames}
+        onPointerDown={stopDndActivation}
         onMouseDown={stopPropagation}
         onClick={openVectorAlertModal}
       >
@@ -438,6 +474,7 @@ function LayerRow (props) {
         id={layerChartableBtnId}
         aria-label={titleStr}
         className="layer-chartable-icon"
+        onPointerDown={stopDndActivation}
         onMouseDown={stopPropagation}
       >
         <UncontrolledTooltip id="center-align-tooltip" placement="top" target={layerChartableBtnId}>
@@ -517,6 +554,8 @@ function LayerRow (props) {
           id={`hide${encodedLayerId}`}
           className={getVisibilityToggleClass()}
           aria-label={visibilityTitle}
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
           onClick={() => !isAnimating && !disabled && toggleVisibility(layer.id, !isVisible)}
         >
           {!isAnimating && (
@@ -648,37 +687,30 @@ function LayerRow (props) {
     </>
   );
 
+  if (isInProjection) {
+    return (
+      <li
+        id={`${compareState}-${encodedLayerId}`}
+        className={getLayerItemClasses()}
+        style={getItemStyle(isDragging, { ...sortableStyle })}
+        ref={setNodeRef}
+        onMouseOver={mouseOver}
+        onMouseLeave={mouseLeave}
+        {...attributes}
+        {...listeners}
+      >
+        {renderLayerRow()}
+      </li>
+    );
+  }
+
   return (
-    <Draggable
-      isDragDisabled={isEmbedModeActive || isAnimating}
-      draggableId={`${encodedLayerId}-${compareState}`}
-      index={index}
-      direction="vertical"
-    >
-      {(provided, snapshot) => (isInProjection
-        ? (
-          <li
-            id={`${compareState}-${encodedLayerId}`}
-            className={getLayerItemClasses()}
-            style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-            ref={provided.innerRef}
-            onMouseOver={mouseOver}
-            onMouseLeave={mouseLeave}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            {renderLayerRow()}
-          </li>
-        )
-        : (
-          <li
-            className="layer-list-placeholder"
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          />
-        ))}
-    </Draggable>
+    <li
+      className="layer-list-placeholder"
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+    />
   );
 }
 
@@ -852,7 +884,6 @@ LayerRow.propTypes = {
   hasPalette: PropTypes.bool,
   globalTemperatureUnit: PropTypes.string,
   hover: PropTypes.func,
-  index: PropTypes.number,
   isCustomPalette: PropTypes.bool,
   isDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
