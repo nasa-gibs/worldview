@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { withSearch } from '@elastic/react-search-ui';
@@ -28,11 +27,13 @@ function SearchLayers(props) {
           <div className="layer-list-container search">
             <SearchLayerList />
           </div>
-          {!selectedLayer && smallView ? null : !!results.length && (
-            <div className="layer-detail-container layers-all search">
-              <LayerMetadataDetail layer={selectedLayer} />
-            </div>
-          )}
+          {!selectedLayer && smallView
+            ? null
+            : !!results.length && (
+              <div className="layer-detail-container layers-all search">
+                <LayerMetadataDetail layer={selectedLayer} />
+              </div>
+            )}
         </div>
       )}
     </div>

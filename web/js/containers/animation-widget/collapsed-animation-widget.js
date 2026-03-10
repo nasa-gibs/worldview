@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Draggable from 'react-draggable';
@@ -28,18 +27,18 @@ function CollapsedAnimationWidget (props) {
 
   const cancelSelector = '.no-drag, svg';
   const dontShow = isMobile && playDisabled;
-  const widgetClasses = 'wv-animation-widget-wrapper minimized '
-    + `${hasSubdailyLayers ? 'subdaily ' : ''}`
-    + `${isMobile ? 'mobile ' : ''}`
-    + `${isLandscape ? 'landscape ' : ''}`;
+  const widgetClasses = 'wv-animation-widget-wrapper minimized ' +
+    `${hasSubdailyLayers ? 'subdaily ' : ''}` +
+    `${isMobile ? 'mobile ' : ''}` +
+    `${isLandscape ? 'landscape ' : ''}`;
   const subdailyID = hasSubdailyLayers ? '-subdaily' : '';
 
   const getWidgetIDs = () => {
     if (isDistractionFreeModeActive && screenWidth < 670 && isPortrait) {
       return '-phone-portrait-distraction-free';
-    } if ((isMobilePhone && isPortrait)
-      || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers)
-      || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
+    } if ((isMobilePhone && isPortrait) ||
+      (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) ||
+      (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) {
       return `-phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `-phone-landscape${subdailyID}`;

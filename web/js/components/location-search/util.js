@@ -10,7 +10,7 @@ export function isValidCoordinates(position) {
   try {
     const isValid = new CoordinateParser(position);
     return isValid;
-  } catch (error) {
+  } catch {
     return false;
   }
 }

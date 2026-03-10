@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import lodashRound from 'lodash/round';

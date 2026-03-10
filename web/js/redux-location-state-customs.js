@@ -23,8 +23,8 @@ export function createParamsString(qp) {
     const keyString = key.toString();
     const valueString = qp[key].toString();
     if (
-      isNotDefined(valueString)
-      || (Array.isArray(valueString) && !valueString.length)
+      isNotDefined(valueString) ||
+      (Array.isArray(valueString) && !valueString.length)
     ) {
       return prev;
     }
@@ -62,9 +62,9 @@ export function stateToParams(initialState, currentState, location) {
     } else {
       // if an empty object, make currentItemState undefined
       if (
-        currentItemState
-        && typeof currentItemState === 'object'
-        && !Object.keys(currentItemState).length
+        currentItemState &&
+        typeof currentItemState === 'object' &&
+        !Object.keys(currentItemState).length
       ) {
         currentItemState = undefined;
       }

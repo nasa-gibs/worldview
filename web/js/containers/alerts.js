@@ -1,11 +1,14 @@
-/* eslint-disable no-restricted-syntax */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
 import { openCustomContent } from '../modules/modal/actions';
 import { hasVectorLayers } from '../modules/layers/util';
-import { DISABLE_VECTOR_ZOOM_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT, MODAL_PROPERTIES } from '../modules/alerts/constants';
+import {
+  DISABLE_VECTOR_ZOOM_ALERT,
+  DISABLE_VECTOR_EXCEEDED_ALERT,
+  MODAL_PROPERTIES,
+} from '../modules/alerts/constants';
 import safeLocalStorage from '../util/local-storage';
 import { getActiveLayers, subdailyLayersActive } from '../modules/layers/selectors';
 
@@ -44,8 +47,8 @@ class DismissableAlerts extends React.Component {
   componentDidUpdate(prevProps) {
     const { isDistractionFreeModeActive } = this.props;
     const { distractionFreeModeInitLoad } = this.state;
-    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive
-    && !isDistractionFreeModeActive;
+    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive &&
+    !isDistractionFreeModeActive;
     if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
       this.toggleDistractionFreeModeInitLoad(false);
     }
@@ -98,9 +101,9 @@ class DismissableAlerts extends React.Component {
       hasDismissedDDVLocation,
     } = this.state;
     const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
-    const hasFailCondition = !HAS_LOCAL_STORAGE
-    || isEmbedModeActive
-    || distractionFreeModeInitLoad;
+    const hasFailCondition = !HAS_LOCAL_STORAGE ||
+    isEmbedModeActive ||
+    distractionFreeModeInitLoad;
     if (hasFailCondition) return null;
 
     const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
@@ -111,50 +114,51 @@ class DismissableAlerts extends React.Component {
 
     return isDistractionFreeModeActive
       ? !hasDismissedDistractionFree && (
-      <AlertUtil
-        id="distraction-free-mode-active-alert"
-        isOpen
-        noPortal
-        onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
-        message="You are now in distraction free mode. Click the eye button to exit."
-      />
-      ) : (
+        <AlertUtil
+          id="distraction-free-mode-active-alert"
+          isOpen
+          noPortal
+          onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
+          message="You are now in distraction free mode. Click the eye button to exit."
+        />
+      )
+      : (
         <>
           {showEventsAlert && (
-          <AlertUtil
-            id="event-alert"
-            isOpen
-            noPortal
-            onClick={() => openAlertModal(eventModalProps)}
-            onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
-            message="Events may not be visible at all times."
-          />
+            <AlertUtil
+              id="event-alert"
+              isOpen
+              noPortal
+              onClick={() => openAlertModal(eventModalProps)}
+              onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
+              message="Events may not be visible at all times."
+            />
           )}
           {showCompareAlert && (
-          <AlertUtil
-            isOpen
-            noPortal
-            onClick={() => openAlertModal(compareModalProps)}
-            onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
-            message="You are now in comparison mode."
-          />
+            <AlertUtil
+              isOpen
+              noPortal
+              onClick={() => openAlertModal(compareModalProps)}
+              onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
+              message="You are now in comparison mode."
+            />
           )}
           {isVectorZoomAlertPresent && (
-          <AlertUtil
-            isOpen
-            noPortal
-            onClick={() => openAlertModal(vectorModalProps)}
-            onDismiss={dismissVectorZoomAlert}
-            message="Vector features may not be clickable at all zoom levels."
-          />
+            <AlertUtil
+              isOpen
+              noPortal
+              onClick={() => openAlertModal(vectorModalProps)}
+              onDismiss={dismissVectorZoomAlert}
+              message="Vector features may not be clickable at all zoom levels."
+            />
           )}
           {isVectorExceededAlertPresent && (
-          <AlertUtil
-            isOpen
-            noPortal
-            onDismiss={dismissVectorExceededAlert}
-            message="Too many results at selected point. Zoom in map to see more individual points."
-          />
+            <AlertUtil
+              isOpen
+              noPortal
+              onDismiss={dismissVectorExceededAlert}
+              message="Too many results at selected point. Zoom in map to see more individual points."
+            />
           )}
           {showAnimationAlert && (
             <AlertUtil
@@ -165,8 +169,8 @@ class DismissableAlerts extends React.Component {
               onDismiss={() => {}}
             />
           )}
-          {showDDVZoomAlert
-            && ddvZoomAlerts.map((layer) => (
+          {showDDVZoomAlert &&
+            ddvZoomAlerts.map((layer) => (
               <AlertUtil
                 id="zoom-alert"
                 isOpen
@@ -178,8 +182,8 @@ class DismissableAlerts extends React.Component {
                 onClick={openZoomAlertModal}
               />
             ))}
-          { showDDVLocationAlert
-            && ddvLocationAlerts.map((layer) => (
+          { showDDVLocationAlert &&
+            ddvLocationAlerts.map((layer) => (
               <AlertUtil
                 id="granule-alert"
                 isOpen

@@ -1,4 +1,3 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -25,12 +24,12 @@ function Zoom({
         onMouseMove={(e) => e.stopPropagation()}
       >
         {!zoomInDisabled && (
-        <HoverTooltip
-          isMobile={isMobile}
-          labelText="Zoom in view"
-          placement="left"
-          target=".wv-map-zoom-in"
-        />
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Zoom in view"
+            placement="left"
+            target=".wv-map-zoom-in"
+          />
         )}
         <FontAwesomeIcon icon="plus" widthAuto />
       </button>
@@ -43,12 +42,12 @@ function Zoom({
         onMouseMove={(e) => e.stopPropagation()}
       >
         {!zoomOutDisabled && (
-        <HoverTooltip
-          isMobile={isMobile}
-          labelText="Zoom out view"
-          placement="left"
-          target=".wv-map-zoom-out"
-        />
+          <HoverTooltip
+            isMobile={isMobile}
+            labelText="Zoom out view"
+            placement="left"
+            target=".wv-map-zoom-out"
+          />
         )}
         <FontAwesomeIcon icon="minus" widthAuto />
       </button>

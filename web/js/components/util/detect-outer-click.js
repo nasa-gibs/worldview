@@ -1,5 +1,5 @@
 // Taken from https://stackoverflow.com/a/42234988
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -41,9 +41,9 @@ export default class OutsideAlerter extends Component {
   handleClickOutside(event) {
     const { onClick, disabled } = this.props;
     if (
-      this.wrapperRef
-      && !this.wrapperRef.contains(event.target)
-      && !disabled
+      this.wrapperRef &&
+      !this.wrapperRef.contains(event.target) &&
+      !disabled
     ) {
       onClick();
     }

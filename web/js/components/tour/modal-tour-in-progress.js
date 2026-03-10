@@ -42,12 +42,12 @@ class ModalInProgress extends React.Component {
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>
           <ModalBody>
-            {/* eslint-disable */}
+            { }
             <div
               ref="stepContent"
               dangerouslySetInnerHTML={{ __html: description }}
             />
-            {/* eslint-enable */}
+            { }
           </ModalBody>
           <ModalFooter>
             <Steps

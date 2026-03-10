@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -167,8 +167,8 @@ class ImageDownloadContainer extends Component {
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const mapView = map.ui.selected.getView();
-    const newResolution = resolution
-      || imageUtilCalculateResolution(
+    const newResolution = resolution ||
+      imageUtilCalculateResolution(
         Math.round(mapView.getZoom()),
         isGeoProjection,
         proj.selected.resolutions,

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
 import PropTypes from 'prop-types';
@@ -139,8 +139,8 @@ export default function GranuleCount (props) {
 
         {!isLoading && (
           <span className="fade-in">
-              {currentExtent && granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
-              {granulesExist ? totalGranules : 'NONE'}
+            {currentExtent && granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
+            {granulesExist ? totalGranules : 'NONE'}
           </span>
         )}
 

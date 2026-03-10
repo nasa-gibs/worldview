@@ -1,5 +1,4 @@
-/* eslint-disable react/no-did-update-set-state */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -351,12 +350,12 @@ class SmartHandoff extends Component {
       : zoomedInDatelineAlertMsg;
 
     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
-    <AlertUtil
-      id="data-download-unavailable-dateline-alert"
-      isOpen
-      title="Data Download Unavailable"
-      message={message}
-    />
+      <AlertUtil
+        id="data-download-unavailable-dateline-alert"
+        isOpen
+        title="Data Download Unavailable"
+        message={message}
+      />
     );
   };
 
@@ -414,9 +413,9 @@ class SmartHandoff extends Component {
                   const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
                   const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
                   const labelId = `${inputId}-label`;
-                  const label = STD_NRT_MAP[type]
-                   + (version ? ` - v${version}` : '')
-                   + (quality ? ' (Quality)' : '');
+                  const label = STD_NRT_MAP[type] +
+                   (version ? ` - v${version}` : '') +
+                   (quality ? ' (Quality)' : '');
 
                   return (
                     <div className="collection-choice" key={inputId}>
@@ -571,7 +570,8 @@ class SmartHandoff extends Component {
 
     // Determine if the download button is enabled
     const validSelection = showBoundingBox
-      ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
+      ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert
+      : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (isLoading) {

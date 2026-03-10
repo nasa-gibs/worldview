@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -17,13 +15,14 @@ function LoopButton({ looping, onLoop, isMobile }) {
       aria-label={labelText}
       type="button"
       className={
-            looping
-              ? 'wv-loop-icon-case wv-icon-case no-drag active'
-              : 'wv-loop-icon-case wv-icon-case no-drag'
-          }
+        looping
+          ? 'wv-loop-icon-case wv-icon-case no-drag active'
+          : 'wv-loop-icon-case wv-icon-case no-drag'
+      }
       onClick={onLoop}
     >
-      {isMobile ? null
+      {isMobile
+        ? null
         : (
           <UncontrolledTooltip
             id="center-align-tooltip"

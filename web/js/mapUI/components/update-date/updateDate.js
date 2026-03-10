@@ -123,8 +123,8 @@ function UpdateDate(props) {
       }
       return updateDate(action.outOfStep);
     }
-    if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY
-      || action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
+    if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY ||
+      action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
       const outOfStep = false;
       // if date not changing we do not want to recreate titiler layer
       const skipTitiler = true;

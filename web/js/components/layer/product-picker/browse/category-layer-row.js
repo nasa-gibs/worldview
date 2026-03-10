@@ -21,7 +21,6 @@ import {
   hasMeasurementSetting as hasSettingSelector,
 } from '../../../../modules/layers/selectors';
 
-
 /**
  * A single category result row
  * @class CategoryLayerRow
@@ -180,12 +179,12 @@ class CategoryLayerRow extends React.Component {
         <TabContent id={`${measurement.id}-${sources[validActiveIndex].id}`}>
           <TabPane>
             {this.renderSourceSettings(sources[validActiveIndex])}
-            {isMobile
-              && (
-              <MeasurementMetadataDetail
-                source={sources[validActiveIndex]}
-                isMobile={isMobile}
-              />
+            {isMobile &&
+              (
+                <MeasurementMetadataDetail
+                  source={sources[validActiveIndex]}
+                  isMobile={isMobile}
+                />
               )}
           </TabPane>
         </TabContent>

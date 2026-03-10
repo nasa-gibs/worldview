@@ -36,7 +36,6 @@ const getRunningLabelStyle = (xOffset, textWidth, width) => {
   return { transform: `translateX(${Math.floor(xOffset - halfTextWidth)}px)` };
 };
 
-
 // `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
 
 class PaletteLegend extends React.Component {
@@ -48,6 +47,10 @@ class PaletteLegend extends React.Component {
       width: props.width,
       scrollContainerEl: null,
     };
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.hideValue = this.hideValue.bind(this);
+    this.onHoverColorbar = this.onHoverColorbar.bind(this);
+    this.onMove = this.onMove.bind(this);
   }
 
   componentDidMount() {
@@ -91,8 +94,8 @@ class PaletteLegend extends React.Component {
     const layerChange = !lodashIsEqual(layer, prevProps.layer);
     const paletteLegendsChange = !lodashIsEqual(paletteLegends, prevProps.paletteLegends);
     const widthChange = prevProps.width !== width;
-    const distractionFreeChange = prevProps.isDistractionFreeModeActive
-    && !isDistractionFreeModeActive;
+    const distractionFreeChange = prevProps.isDistractionFreeModeActive &&
+    !isDistractionFreeModeActive;
     if (layerChange || widthChange || distractionFreeChange || paletteLegendsChange) {
       this.updateCanvas();
     }
@@ -170,7 +173,7 @@ class PaletteLegend extends React.Component {
         const ctxStr = `canvas_${index}`;
         if (this[ctxStr]) {
           const newWidth = this[ctxStr].current.getBoundingClientRect().width;
-          // eslint-disable-next-line react/destructuring-assignment
+
           if (newWidth && newWidth !== this.state.width) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
@@ -255,7 +258,7 @@ class PaletteLegend extends React.Component {
     let xOffset;
     let legendObj;
     const toolTipLength = legend.tooltips.length;
-    // eslint-disable-next-line react/destructuring-assignment
+
     if (isRunningData && colorHex && this.state.width > 0) {
       const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
       const acceptableDifference = isContinuousVectorLayer ? 1 : 3;
@@ -263,7 +266,7 @@ class PaletteLegend extends React.Component {
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
-        // eslint-disable-next-line react/destructuring-assignment
+
         xOffset = Math.floor(this.state.width * percent);
         if (isEmbedModeActive) {
           // adjust xOffset per css scale transform
@@ -280,9 +283,11 @@ class PaletteLegend extends React.Component {
     let min = legend.minLabel || legend.tooltips[0];
     let max = legend.maxLabel || legend.tooltips[toolTipLength];
     min = palette.min
-      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])]
+      : min;
     max = palette.max
-      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])]
+      : max;
 
     if (needsConversion) {
       min = `${convertPaletteValue(min, legendTempUnit, globalTemperatureUnit)}`;
@@ -291,12 +296,14 @@ class PaletteLegend extends React.Component {
       min = units ? `${min} ${units}` : min;
       max = units ? `${max} ${units}` : max;
     }
-    const mobileColorbarStyle = isMobile ? {
-      width: '100%',
-      maxWidth: '100%',
-      marginRight: '0',
-      marginLeft: '0',
-    } : null;
+    const mobileColorbarStyle = isMobile
+      ? {
+        width: '100%',
+        maxWidth: '100%',
+        marginRight: '0',
+        marginLeft: '0',
+      }
+      : null;
 
     const translateXOffset = xOffset > 0 ? xOffset + 0.5 : 0;
     return (
@@ -307,9 +314,10 @@ class PaletteLegend extends React.Component {
         id={`${util.encodeId(layer.id)}_${util.encodeId(legend.id)}_${index}`}
         key={`${layer.id}_${legend.id}_${index}`}
       >
-        {isMoreThanOneColorBar ? (
-          <div className="wv-palettes-title">{legend.title}</div>
-        )
+        {isMoreThanOneColorBar
+          ? (
+            <div className="wv-palettes-title">{legend.title}</div>
+          )
           : ''}
         <div className="colorbar-case">
           <canvas
@@ -319,11 +327,11 @@ class PaletteLegend extends React.Component {
             width={width}
             height={24}
             ref={this[`canvas_${index}`]}
-            onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
-            onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
+            onMouseEnter={!isMobile ? this.onMouseEnter : null}
+            onMouseLeave={!isMobile ? this.hideValue : null}
             onMouseMove={
               !isMobile
-                ? this.onHoverColorbar.bind(this, this[`canvas_${index}`])
+                ? (event) => this.onHoverColorbar(this[`canvas_${index}`], event)
                 : null
             }
           />
@@ -418,9 +426,9 @@ class PaletteLegend extends React.Component {
                     id={keyId}
                     className={inActive ? `${palletteClass} disabled-classification` : palletteClass}
                     style={isInvisible ? null : { backgroundColor: util.hexToRGBA(legendColor) }}
-                    onMouseMove={this.onMove.bind(this, legendColor)}
-                    onMouseEnter={this.onMouseEnter.bind(this)}
-                    onMouseLeave={this.hideValue.bind(this)}
+                    onMouseMove={(event) => this.onMove(legendColor, event)}
+                    onMouseEnter={this.onMouseEnter}
+                    onMouseLeave={this.hideValue}
                     dangerouslySetInnerHTML={{ __html: '&nbsp' }}
                   />
 
@@ -457,7 +465,7 @@ class PaletteLegend extends React.Component {
    */
   renderPaletteLegends() {
     const { paletteLegends } = this.props;
-    // eslint-disable-next-line array-callback-return
+
     return paletteLegends.map((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
         this[`canvas_${index}`] = React.createRef();

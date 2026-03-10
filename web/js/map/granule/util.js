@@ -31,17 +31,19 @@ export const datelineShiftGranules = (granules, currentDate, crs) => {
     const sameDays = granules.every(({ date }) => new Date(date).getUTCDate() === currentDayDate);
     return !sameDays;
   })();
-  return !datelineShiftNeeded ? granules : granules.map((granule) => {
-    const { date, polygon } = granule;
-    const sameDay = currentDayDate === new Date(date).getUTCDate();
-    const westSide = polygon.some(([lon]) => lon < 0);
-    const shifted = !sameDay || (sameDay && westSide);
-    return {
-      date,
-      polygon: shifted ? polygon.map(([lon, lat]) => [lon + 360, lat]) : polygon,
-      shifted,
-    };
-  });
+  return !datelineShiftNeeded
+    ? granules
+    : granules.map((granule) => {
+      const { date, polygon } = granule;
+      const sameDay = currentDayDate === new Date(date).getUTCDate();
+      const westSide = polygon.some(([lon]) => lon < 0);
+      const shifted = !sameDay || (sameDay && westSide);
+      return {
+        date,
+        polygon: shifted ? polygon.map(([lon, lat]) => [lon + 360, lat]) : polygon,
+        shifted,
+      };
+    });
 };
 
 /**
@@ -88,8 +90,8 @@ export const getIndexForSortedInsert = (array, date) => {
 export const isWithinDateRange = (date, startDate, end) => {
   const endDate = end || new Date();
   return startDate && endDate
-    ? new Date(date).getTime() <= new Date(endDate).getTime()
-    && new Date(date).getTime() >= new Date(startDate).getTime()
+    ? new Date(date).getTime() <= new Date(endDate).getTime() &&
+    new Date(date).getTime() >= new Date(startDate).getTime()
     : false;
 };
 
@@ -186,7 +188,7 @@ export const getParamsForGranuleRequest = (def, date, crs) => {
       if (nrt) return shortName;
       // remove _NRT from shortName
       return shortName.replace('_NRT', '');
-    } catch (e) {
+    } catch {
       console.error(`Could not get shortName for a collection associated with layer ${def.id}`);
     }
     return undefined;
@@ -278,10 +280,10 @@ export const getCMRQueryDateUpdateOptions = (
   const newStartEqualsCurrentCMREnd = newStartTime === currentEndTime;
   const newEndEqualsCurrentCMRStart = newEndTime === currentStartTime;
 
-  const newEndCanExtendCurrentCMREnd = newStartBeforeCurrentCMRStart
-  && newEndSameOrAfterCurentCMRStart;
-  const newStartCanExtendCurrentCMRStart = newStartAfterCurrentCMRStart
-  && newStartSameOrBeforeCurrentCMREnd;
+  const newEndCanExtendCurrentCMREnd = newStartBeforeCurrentCMRStart &&
+  newEndSameOrAfterCurentCMRStart;
+  const newStartCanExtendCurrentCMRStart = newStartAfterCurrentCMRStart &&
+  newStartSameOrBeforeCurrentCMREnd;
 
   if (newStartSameOrAfterCurrentStart && newEndSameOrBeforeCurrentEnd) {
     needRangeUpdate = false;
@@ -395,9 +397,9 @@ export const areCoordinatesAndPolygonExtentValid = (points, coords, maxExtent) =
   const polygonExtent = polygon.getExtent();
   const isPolygonLargerThanMaxExtent = OlExtent.containsExtent(polygonExtent, maxExtent);
 
-  return areCoordsWithinPolygon
-    && doesPolygonIntersectMaxExtent
-    && !isPolygonLargerThanMaxExtent;
+  return areCoordsWithinPolygon &&
+    doesPolygonIntersectMaxExtent &&
+    !isPolygonLargerThanMaxExtent;
 };
 
 /**

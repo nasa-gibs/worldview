@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-mobile-datepicker';
 import { getDisplayDate, getISODateFormatted } from './date-util';

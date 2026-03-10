@@ -183,8 +183,8 @@ export function lookup(sourcePalette, targetPalette) {
       parseInt(sourceColor.substring(2, 4), 16)
     },${
       parseInt(sourceColor.substring(4, 6), 16)
-    },`
-      + '255';
+    },` +
+      '255';
     const targetColor = targetPalette.colors[index];
     const target = {
       r: parseInt(targetColor.substring(0, 2), 16),
@@ -247,9 +247,9 @@ export function parseLegacyPalettes(
       id: layerId,
     });
     if (
-      index >= 0
-      && lodashGet(stateFromLocation, `layers.active.layers.${index}`)
-      && !lodashGet(stateFromLocation, `layers.active.layers.${index}.custom`)
+      index >= 0 &&
+      lodashGet(stateFromLocation, `layers.active.layers.${index}`) &&
+      !lodashGet(stateFromLocation, `layers.active.layers.${index}.custom`)
     ) {
       stateFromLocation = update(stateFromLocation, {
         layers: {
@@ -310,8 +310,8 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
 
       const paletteDef = palettes[layerId].maps[i];
 
-      const entryLength = lodashSize(lodashGet(paletteDef, 'entries.values'))
-        || lodashSize(lodashGet(paletteDef, 'entries.colors'));
+      const entryLength = lodashSize(lodashGet(paletteDef, 'entries.values')) ||
+        lodashSize(lodashGet(paletteDef, 'entries.colors'));
       const maxValue = paletteDef.max
         ? lodashSplit(paletteDef.entries.values[paletteDef.max || entryLength], ',', 1)
         : undefined;
@@ -407,7 +407,7 @@ export function loadPalettes(permlinkState, stateObject) {
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
-            } catch (error) {
+            } catch {
               console.warn(` Invalid palette: ${value}`);
             }
           });
@@ -424,7 +424,7 @@ export function loadPalettes(permlinkState, stateObject) {
                   state,
                 ),
               );
-            } catch (error) {
+            } catch {
               console.warn(`Unable to set min: ${value}`);
             }
           });
@@ -441,7 +441,7 @@ export function loadPalettes(permlinkState, stateObject) {
                   state,
                 ),
               );
-            } catch (error) {
+            } catch {
               console.warn(`Unable to set max index: ${value}`);
             }
           });
@@ -462,7 +462,7 @@ export function loadPalettes(permlinkState, stateObject) {
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
-            } catch (error) {
+            } catch {
               console.warn(` Invalid palette: ${value}`);
             }
           });
@@ -538,10 +538,10 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoadedBool)
   if (layersArray) {
     layersArray.forEach((obj) => {
       if (
-        obj
-        && obj.palette
-        && !renderedPalettes[obj.palette.id]
-        && !loading[obj.palette.id]
+        obj &&
+        obj.palette &&
+        !renderedPalettes[obj.palette.id] &&
+        !loading[obj.palette.id]
       ) {
         const paletteId = obj.palette.id;
         const location = `config/palettes/${paletteId}.json`;
