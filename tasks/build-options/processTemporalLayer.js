@@ -4,7 +4,11 @@ const xml2js = require('xml2js')
 const projDict = {
   'GIBS:geographic': 'epsg4326',
   'GIBS:arctic': 'epsg3413',
-  'GIBS:antarctic': 'epsg3031'
+  'GIBS:antarctic': 'epsg3031',
+  'GITC:geographic': 'epsg4326',
+  'GITC:arctic': 'epsg3413',
+  'GITC:antarctic': 'epsg3031',
+  'GITC:webmercator': 'epsg3857'
 }
 
 function toList (val) {
