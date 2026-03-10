@@ -336,7 +336,7 @@ export const getCMRQueryDateUpdateOptions = (
 export const transformGranuleData = (entry, date, crs) => {
   const line = new OlGeomLineString([]);
   const maxDistance = crs === CRS.GEOGRAPHIC ? 270 : Number.POSITIVE_INFINITY;
-  const points = entry.polygons[0][0].split(' ');
+  const points = entry.polygons ? entry.polygons[0][0].split(' ') : [];
   const dayNight = entry.day_night_flag;
   const polygonCoords = [];
 
