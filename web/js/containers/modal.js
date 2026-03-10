@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
@@ -76,9 +76,11 @@ function ModalContainer(props) {
       e.stopPropagation();
     }
     const elWidth = autoSetWidth && measuredElement
-      ? measuredElement.getBoundingClientRect().width : size.width;
+      ? measuredElement.getBoundingClientRect().width
+      : size.width;
     const elHeight = autoSetHeight && measuredElement
-      ? measuredElement.getBoundingClientRect().height : size.height;
+      ? measuredElement.getBoundingClientRect().height
+      : size.height;
     setWidth(elWidth);
     setHeight(elHeight);
     setOffsetLeft(size.offsetLeft);
@@ -106,12 +108,12 @@ function ModalContainer(props) {
     const screenWidthChanged = screenWidth !== prevScreenWidth;
     const modalWidthChanged = propsWidth !== prevWidth;
     const modalHeightChanged = propsHeight !== prevHeight;
-    const measuredElementChanged = (autoSetWidth || autoSetHeight)
-      && measuredElement !== prevMeasuredElement;
-    const measuredWidthChanged = autoSetWidth
-      && measuredElement?.getBoundingClientRect().width !== prevMeasuredWidth;
-    const measuredHeightChanged = autoSetHeight
-      && measuredElement?.getBoundingClientRect().height !== prevMeasuredHeight;
+    const measuredElementChanged = (autoSetWidth || autoSetHeight) &&
+      measuredElement !== prevMeasuredElement;
+    const measuredWidthChanged = autoSetWidth &&
+      measuredElement?.getBoundingClientRect().width !== prevMeasuredWidth;
+    const measuredHeightChanged = autoSetHeight &&
+      measuredElement?.getBoundingClientRect().height !== prevMeasuredHeight;
     const measureChange = measuredElementChanged || measuredWidthChanged || measuredHeightChanged;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
     if ((modalWidthChanged || modalHeightChanged || measureChange) && isOpen) {
@@ -152,14 +154,16 @@ function ModalContainer(props) {
 
   function getTemplateBody() {
     const { bodyTemplate } = props;
-    return bodyTemplate.isLoading ? (
-      <span> Loading </span>
-    ) : (
-      <div
-        id="template-content"
-        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-      />
-    );
+    return bodyTemplate.isLoading
+      ? (
+        <span> Loading </span>
+      )
+      : (
+        <div
+          id="template-content"
+          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+        />
+      );
   }
 
   const handleCreateChildren = (children) => {
@@ -171,12 +175,14 @@ function ModalContainer(props) {
       isResizable,
       stayOnscreen,
     } = newProps;
-    const bounds = stayOnscreen ? {
-      left: -(screenWidth / 2 - width / 2),
-      right: screenWidth / 2 - width / 2,
-      top: -style.top,
-      bottom: screenHeight - height - style.top - 5,
-    } : '';
+    const bounds = stayOnscreen
+      ? {
+        left: -(screenWidth / 2 - width / 2),
+        right: screenWidth / 2 - width / 2,
+        top: -style.top,
+        bottom: screenHeight - height - style.top - 5,
+      }
+      : '';
     return (
       <Draggable
         handle={dragHandle}
@@ -230,9 +236,9 @@ function ModalContainer(props) {
     wrapClassName,
   } = newProps;
 
-  const isRestrictedDisplay = (isMobile && desktopOnly)
-    || (!isMobile && mobileOnly)
-    || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
+  const isRestrictedDisplay = (isMobile && desktopOnly) ||
+    (!isMobile && mobileOnly) ||
+    (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
   if (isRestrictedDisplay) {
     return null;
   }
@@ -285,21 +291,22 @@ function ModalContainer(props) {
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                  <ModalHeader toggle={toggleFunction} close={closeBtn}>
-                    {headerComponent ? <headerComponent /> : headerText || ''}
-                  </ModalHeader>
+                    <ModalHeader toggle={toggleFunction} close={closeBtn}>
+                      {headerComponent ? <headerComponent /> : headerText || ''}
+                    </ModalHeader>
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? (
-                      <BodyComponent
+                    {BodyComponent
+                      ? (
+                        <BodyComponent
                         // eslint-disable-next-line react/jsx-props-no-spreading
-                        {...bodyComponentProps}
-                        parentId={id}
-                        screenHeight={screenHeight}
-                        closeModal={toggleFunction}
-                      />
-                    )
+                          {...bodyComponentProps}
+                          parentId={id}
+                          screenHeight={screenHeight}
+                          closeModal={toggleFunction}
+                        />
+                      )
                       : renderModalBodyText}
                   </ModalBody>
                   {footer && (<ModalFooter />)}

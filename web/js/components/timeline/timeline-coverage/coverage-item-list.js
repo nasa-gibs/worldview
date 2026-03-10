@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -103,7 +103,6 @@ class CoverageItemList extends Component {
     );
   }
 
-
   /**
   * @desc get formatted time period name
   * @param {String} period
@@ -115,7 +114,6 @@ class CoverageItemList extends Component {
     if (period === 'yearly') return 'year';
     return 'minute';
   }
-
 
   constructor(props) {
     super(props);
@@ -365,92 +363,95 @@ class CoverageItemList extends Component {
         }
 
         {/* Build individual layer coverage components */
-        activeLayers.map((layer, index) => {
-          const {
-            dateRanges,
-            id,
-            period,
-            startDate,
-            visible,
-          } = layer;
-          if (!dateRanges && !startDate) {
-            return null;
-          }
-          // check for multiple date ranges
-          let multipleCoverageRanges = false;
-          const isValidLayer = !ignoredLayer[id] && dateRanges;
-          if (isValidLayer) {
-            multipleCoverageRanges = dateRanges.length > 1;
-          }
-          let layerPeriod = CoverageItemList.getFormattedTimePeriod(period);
+          activeLayers.map((layer, index) => {
+            const {
+              dateRanges,
+              id,
+              period,
+              startDate,
+              visible,
+            } = layer;
+            if (!dateRanges && !startDate) {
+              return null;
+            }
+            // check for multiple date ranges
+            let multipleCoverageRanges = false;
+            const isValidLayer = !ignoredLayer[id] && dateRanges;
+            if (isValidLayer) {
+              multipleCoverageRanges = dateRanges.length > 1;
+            }
+            let layerPeriod = CoverageItemList.getFormattedTimePeriod(period);
 
-          // get layer scale number to determine relation to current axis zoom level
-          const timeScaleNumber = TIME_SCALE_TO_NUMBER[timeScale];
-          const layerScaleNumber = TIME_SCALE_TO_NUMBER[layerPeriod];
-          const isLayerGreaterIncrementThanZoom = layerScaleNumber < timeScaleNumber;
-          const isLayerEqualIncrementThanZoom = layerScaleNumber === timeScaleNumber;
+            // get layer scale number to determine relation to current axis zoom level
+            const timeScaleNumber = TIME_SCALE_TO_NUMBER[timeScale];
+            const layerScaleNumber = TIME_SCALE_TO_NUMBER[layerPeriod];
+            const isLayerGreaterIncrementThanZoom = layerScaleNumber < timeScaleNumber;
+            const isLayerEqualIncrementThanZoom = layerScaleNumber === timeScaleNumber;
 
-          // concat (ex: day to days) for moment manipulation below
-          layerPeriod += 's';
+            // concat (ex: day to days) for moment manipulation below
+            layerPeriod += 's';
 
-          // conditional styling for line/background colors
-          const {
-            layerItemBackground,
-            layerItemOutline,
-          } = this.getLayerItemStyles(visible, id);
+            // conditional styling for line/background colors
+            const {
+              layerItemBackground,
+              layerItemOutline,
+            } = this.getLayerItemStyles(visible, id);
 
-          // get date range
-          const dateRangeIntervalZeroIndex = dateRanges
-            ? Number(dateRanges[0].dateInterval)
-            : 1;
+            // get date range
+            const dateRangeIntervalZeroIndex = dateRanges
+              ? Number(dateRanges[0].dateInterval)
+              : 1;
 
-          // conditional check to determine how layer coverage line will be built in child component
-          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom
-          && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
-          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom
-          && dateRangeIntervalZeroIndex > 1;
-          // determine date range building vs using startDate to endDate single coverage
-          const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage
-            || isLayerEqualZoomWithMultipleCoverage));
-          const encodedId = util.encodeId(id);
-          const key = `layer-coverage-item-${encodedId}-${index}`;
+            // conditional check to determine how layer coverage line
+            // will be built in child component
+            const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom &&
+          (multipleCoverageRanges || dateRangeIntervalZeroIndex);
+            const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom &&
+          dateRangeIntervalZeroIndex > 1;
+            // determine date range building vs using startDate to endDate single coverage
+            const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage ||
+            isLayerEqualZoomWithMultipleCoverage));
+            const encodedId = util.encodeId(id);
+            const key = `layer-coverage-item-${encodedId}-${index}`;
 
-          return (
-            <div
-              key={key}
-              className="layer-coverage-layer-list-item"
-              style={{
-                background: layerItemBackground,
-                outline: layerItemOutline,
-              }}
-            >
-              {/* Layer Header DOM El */
-                CoverageItemList.getHeaderDOMEl(layer, visible, layerItemBackground, inactiveLayers)
-              }
+            return (
               <div
-                className="layer-coverage-line-container"
+                key={key}
+                className="layer-coverage-layer-list-item"
                 style={{
-                  maxWidth: `${axisWidth}px`,
+                  background: layerItemBackground,
+                  outline: layerItemOutline,
                 }}
               >
-                <CoverageItemContainer
-                  frontDate={frontDate}
-                  backDate={backDate}
-                  getLayerItemStyles={this.getLayerItemStyles}
-                  getMaxEndDate={this.getMaxEndDate}
-                  getDatesInDateRange={this.getDatesInDateRange}
-                  axisWidth={axisWidth}
-                  positionTransformX={positionTransformX}
-                  layer={layer}
-                  layerPeriod={layerPeriod}
-                  getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
-                  getRangeDateEndWithAddedInterval={this.getRangeDateEndWithAddedInterval}
-                  needDateRangeBuilt={needDateRangeBuilt}
-                />
+                {/* Layer Header DOM El */
+                  CoverageItemList.getHeaderDOMEl(
+                    layer, visible, layerItemBackground, inactiveLayers,
+                  )
+                }
+                <div
+                  className="layer-coverage-line-container"
+                  style={{
+                    maxWidth: `${axisWidth}px`,
+                  }}
+                >
+                  <CoverageItemContainer
+                    frontDate={frontDate}
+                    backDate={backDate}
+                    getLayerItemStyles={this.getLayerItemStyles}
+                    getMaxEndDate={this.getMaxEndDate}
+                    getDatesInDateRange={this.getDatesInDateRange}
+                    axisWidth={axisWidth}
+                    positionTransformX={positionTransformX}
+                    layer={layer}
+                    layerPeriod={layerPeriod}
+                    getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
+                    getRangeDateEndWithAddedInterval={this.getRangeDateEndWithAddedInterval}
+                    needDateRangeBuilt={needDateRangeBuilt}
+                  />
+                </div>
               </div>
-            </div>
-          );
-        })
+            );
+          })
         }
       </div>
     );

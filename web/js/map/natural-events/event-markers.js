@@ -108,10 +108,10 @@ class EventMarkers extends React.Component {
       proj, eventsDataIsLoading, isAnimatingToEvent, selectedEvent,
     } = this.props;
     const projChange = proj !== prevProps.proj;
-    const finishedLoading = !eventsDataIsLoading
-      && eventsDataIsLoading !== prevProps.eventsDataIsLoading;
-    const animationFinished = !isAnimatingToEvent
-      && isAnimatingToEvent !== prevProps.isAnimatingToEvent;
+    const finishedLoading = !eventsDataIsLoading &&
+      eventsDataIsLoading !== prevProps.eventsDataIsLoading;
+    const animationFinished = !isAnimatingToEvent &&
+      isAnimatingToEvent !== prevProps.isAnimatingToEvent;
     const selectedEventChanged = selectedEvent && selectedEvent !== prevProps.selectedEvent;
 
     if (finishedLoading || projChange || animationFinished || selectedEventChanged) {

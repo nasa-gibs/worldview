@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Joyride, { STATUS, ACTIONS, EVENTS } from 'react-joyride';
 import util from '../../util/util';
@@ -133,9 +133,9 @@ export default function JoyrideWrapper ({
   function updateTargetsOnResize() {
     const { status, action } = joyrideProps || {};
     if (
-      status === STATUS.FINISHED
-      || action === ACTIONS.RESET
-      || !(steps && steps.length)
+      status === STATUS.FINISHED ||
+      action === ACTIONS.RESET ||
+      !(steps && steps.length)
     ) {
       return;
     }
@@ -218,22 +218,24 @@ export default function JoyrideWrapper ({
     }
   });
 
-  return !projMatches || isInitializing ? null : (
-    <Joyride
-      run={run}
-      stepIndex={stepIndex}
-      key={elementPositionKey}
-      steps={steps || []}
-      continuous={checkContinuous()}
-      callback={joyrideStateCallback}
-      spotlightClicks={spotlightClicks}
-      disableOverlayClose={disableOverlayClose}
-      hideCloseButton={hideCloseButton}
-      styles={styles}
-      disableScrolling
-      disableScrollParentFix
-    />
-  );
+  return !projMatches || isInitializing
+    ? null
+    : (
+      <Joyride
+        run={run}
+        stepIndex={stepIndex}
+        key={elementPositionKey}
+        steps={steps || []}
+        continuous={checkContinuous()}
+        callback={joyrideStateCallback}
+        spotlightClicks={spotlightClicks}
+        disableOverlayClose={disableOverlayClose}
+        hideCloseButton={hideCloseButton}
+        styles={styles}
+        disableScrolling
+        disableScrollParentFix
+      />
+    );
 }
 
 JoyrideWrapper.propTypes = {

@@ -39,12 +39,11 @@ const productPickerState = {
   recentLayers: [],
 };
 
-
 export function getInitialState({ categories, categoryGroupOrder }) {
   if (Object.keys(categories).length !== categoryGroupOrder.length) {
     throw new Error(
-      'Number of category groups did not match defined category group order. '
-      + '\nCheck categoryGroupOrder.json',
+      'Number of category groups did not match defined category group order. ' +
+      '\nCheck categoryGroupOrder.json',
     );
   }
 

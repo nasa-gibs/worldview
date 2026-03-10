@@ -60,7 +60,6 @@ function Markers(props) {
     });
   };
 
-
   const flyToMarker = (coordinatesObject) => {
     const { sources } = config;
     const { longitude, latitude } = coordinatesObject;
@@ -221,4 +220,3 @@ Markers.propTypes = {
   setGeocodeResults: PropTypes.func,
   ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
-

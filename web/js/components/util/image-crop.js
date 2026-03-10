@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
 import { createPortal } from 'react-dom';
@@ -74,8 +74,8 @@ function Crop(props) {
     const { width: cWidth, height: cHeight } = cropBoundaries;
 
     // https://github.com/DominicTobias/react-image-crop/issues/397
-    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
-        && some(
+    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0 &&
+        some(
           pick(cropBoundaries, 'x', 'y', 'width', 'height'),
           (value, key) => value !== prevCrop.current[key],
         );

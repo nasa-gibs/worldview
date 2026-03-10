@@ -139,8 +139,8 @@ export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) =
   if (!layers.collections[layer.id]) return undefined;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if ((dateCollection[i].date === dailyDate
-      || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
+    if ((dateCollection[i].date === dailyDate ||
+      dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
       return dateCollection[i];
     }
   }
@@ -262,8 +262,8 @@ const getActiveOverlayGroupsEmbed = (state) => {
   const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
   return (overlayGroupsFiltered || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
-          && !!activeLayersMap[id].visible,
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id] &&
+          !!activeLayersMap[id].visible,
     ).length,
   );
 };
@@ -439,7 +439,7 @@ function forGroup(group, activeLayers, state, spec = {}) {
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
-    // eslint-disable-next-line no-use-before-define
+
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
       activeLayers,
@@ -513,9 +513,9 @@ export function isRenderable(id, layers, dateString, bLayers, state) {
         return false;
       }
       if (
-        otherDef.visible
-        && otherDef.opacity === 1.0
-        && available(otherDef.id, date, layers, parameters)
+        otherDef.visible &&
+        otherDef.opacity === 1.0 &&
+        available(otherDef.id, date, layers, parameters)
       ) {
         obscured = true;
         return false;

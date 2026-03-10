@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -70,8 +70,8 @@ function Switch(props) {
         >
           {label}
         </span>
-        {tooltip
-          && (
+        {tooltip &&
+          (
             <>
               <FontAwesomeIcon icon="info-circle" id={`${id}-switch-tooltip`} tabIndex="-1" widthAuto />
               <Tooltip

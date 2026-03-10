@@ -251,8 +251,8 @@ function EventTrack () {
         {
           callbackHighlight: highlightEvent,
           callbackUnhighlight: unHighlightEvent,
-          isHighlighted: showAllTracks
-            && (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id),
+          isHighlighted: showAllTracks &&
+            (singleEvent.id === selectedEvent.id || singleEvent.id === highlightedEvent.id),
         },
       );
 
@@ -301,8 +301,8 @@ function EventTrack () {
         {
           callbackHighlight: highlightEvent,
           callbackUnhighlight: unHighlightEvent,
-          isHighlighted: showAllTracks
-            && (event.id === selectedEvent.id || event.id === highlightedEvent.id),
+          isHighlighted: showAllTracks &&
+            (event.id === selectedEvent.id || event.id === highlightedEvent.id),
         },
       );
 
@@ -393,14 +393,14 @@ function EventTrack () {
 
   useEffect(
     () => {
-      const selectedDateChange = (selectedDate && selectedDate.valueOf())
-        !== (prevSelectedDate && prevSelectedDate?.valueOf());
+      const selectedDateChange = (selectedDate && selectedDate.valueOf()) !==
+        (prevSelectedDate && prevSelectedDate?.valueOf());
       const eventDeselect = (selectedEvent !== prevSelectedEvent?.id) && !selectedEvent?.id;
-      const finishedAnimating = !isAnimatingToEvent
-        && (isAnimatingToEvent !== prevIsAnimatingToEvent);
+      const finishedAnimating = !isAnimatingToEvent &&
+        (isAnimatingToEvent !== prevIsAnimatingToEvent);
       const eventsLoaded = eventsData && eventsData.length;
-      const extentChange = prevExtent
-        && (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
+      const extentChange = prevExtent &&
+        (extent[0] !== prevExtent[0] || extent[1] !== prevExtent[1]);
       const highlightedEventChange = highlightedEvent?.id !== prevHighlightedEvent?.id;
       const allTracksChange = showAllTracks !== prevShowAllTracks;
 
@@ -426,15 +426,16 @@ function EventTrack () {
       }
 
       // show all tracks when selecting as option
-      if (showAllTracksRef.current && !isPlaying && (prevShowAllTracks !== showAllTracksRef.current
-        || selectedDateChange || finishedAnimating || eventsLoaded
-        || extentChange || highlightedEventChange)) {
+      if (showAllTracksRef.current &&
+        !isPlaying && (prevShowAllTracks !== showAllTracksRef.current ||
+        selectedDateChange || finishedAnimating || eventsLoaded ||
+        extentChange || highlightedEventChange)) {
         debouncedUpdateAllTracks();
       }
 
       // show only selected track if show all tracks is not selected
-      if (!showAllTracks && !isPlaying && (!showAllTracksRef.current || allTracksChange)
-        && (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
+      if (!showAllTracks && !isPlaying && (!showAllTracksRef.current || allTracksChange) &&
+        (selectedDateChange || finishedAnimating || eventsLoaded || extentChange)) {
         debouncedTrackUpdate();
       }
 
@@ -451,4 +452,3 @@ function EventTrack () {
 }
 
 export default EventTrack;
-

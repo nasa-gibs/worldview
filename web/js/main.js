@@ -3,7 +3,6 @@
 import 'elm-pep';
 import 'regenerator-runtime/runtime';
 // polyfills
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -135,8 +134,8 @@ window.onload = () => {
       // Determine which layers need to be preloaded
       let layers = [];
       if (
-        (parameters.l && hasCustomTypePalette(parameters.l))
-        || (parameters.l1 && hasCustomTypePalette(parameters.l1))
+        (parameters.l && hasCustomTypePalette(parameters.l)) ||
+        (parameters.l1 && hasCustomTypePalette(parameters.l1))
       ) {
         if (parameters.l && hasCustomTypePalette(parameters.l)) {
           layers.push(...layersParse12(parameters.l, config));
@@ -187,7 +186,8 @@ window.onload = () => {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
       }
-    }).catch((error) => console.error(error));
+    })
+    .catch((error) => console.error(error));
 };
 
 export default history;

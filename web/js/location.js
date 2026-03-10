@@ -136,10 +136,10 @@ export const mapLocationToState = (state, location) => {
   }
   const startTour = checkTourBuildTimestamp(state.config);
   if (
-    startTour
-      && config.features.tour
-      && config.stories
-      && config.storyOrder
+    startTour &&
+      config.features.tour &&
+      config.stories &&
+      config.storyOrder
   ) {
     return update(state, {
       tour: { active: { $set: true } },
@@ -533,7 +533,8 @@ const getParameters = function(config, parameters) {
           const isChartingRange = get(state, 'charting.timeSpanSelection') === 'range';
           const timeSpanEndDate = get(state, 'charting.timeSpanEndDate');
           return isChartingRange && !!timeSpanEndDate
-            ? serializeDateChartingWrapper(currentItemState, state) : undefined;
+            ? serializeDateChartingWrapper(currentItemState, state)
+            : undefined;
         },
         parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
       },

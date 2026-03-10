@@ -74,7 +74,6 @@ export function mapIsExtentValid(extentBound) {
     extent = extent.toArray();
   }
   lodashEach(extent, (value) => {
-    // eslint-disable-next-line no-restricted-globals
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -138,10 +137,10 @@ export function getMapParameterSetup(
       initialState: 0,
       options: {
         serializeNeedsGlobalState: true,
-        // eslint-disable-next-line no-restricted-globals
+
         parse: (state) => (isNaN(state) ? state * (Math.PI / 180.0) : 0),
-        serialize: (currentItemState, currentState) => (currentItemState
-            && currentState.proj.selected.id !== 'geographic'
+        serialize: (currentItemState, currentState) => (currentItemState &&
+            currentState.proj.selected.id !== 'geographic'
           ? (currentItemState * (180.0 / Math.PI)).toPrecision(6)
           : undefined),
       },
@@ -193,7 +192,8 @@ function promiseTileLayer(layer, map) {
       }
     };
 
-    if (!preloadMap.getLayers().getArray().includes(layer)) {
+    if (!preloadMap.getLayers().getArray()
+      .includes(layer)) {
       i += 1;
       preloadMap.addLayer(layer);
       layer.setVisible(true);

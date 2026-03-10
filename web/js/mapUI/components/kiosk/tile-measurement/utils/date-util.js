@@ -3,7 +3,8 @@
 export function formatDailyDate (date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+  const day = date.getDate().toString()
+    .padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 }
@@ -31,9 +32,12 @@ function getDailyDates (selectedDate) {
 export function formatSubdailyDate (date) {
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hour = date.getHours().toString().padStart(2, '0');
-  const minute = date.getMinutes().toString().padStart(2, '0');
+  const day = date.getDate().toString()
+    .padStart(2, '0');
+  const hour = date.getHours().toString()
+    .padStart(2, '0');
+  const minute = date.getMinutes().toString()
+    .padStart(2, '0');
 
   return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 }
@@ -80,7 +84,8 @@ export function formatReduxDailyDate(selectedDate) {
   const date = new Date(utcDateString);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
+  const day = date.getDate().toString()
+    .padStart(2, '0');
 
   return `${year}-${month}-${day}`;
 }
@@ -91,9 +96,12 @@ export function formatReduxSubdailyDate(selectedDate) {
   const date = new Date(utcDateString);
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hour = date.getHours().toString().padStart(2, '0');
-  const minute = date.getMinutes().toString().padStart(2, '0');
+  const day = date.getDate().toString()
+    .padStart(2, '0');
+  const hour = date.getHours().toString()
+    .padStart(2, '0');
+  const minute = date.getMinutes().toString()
+    .padStart(2, '0');
 
   return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
 }

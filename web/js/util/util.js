@@ -171,7 +171,7 @@ export default (function(selfObj) {
       second,
       millisecond,
     ));
-    // eslint-disable-next-line no-restricted-globals
+
     if (isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
@@ -416,7 +416,6 @@ export default (function(selfObj) {
     return val;
   };
 
-
   /**
    * Gets the current time minus minutesOffset for geostationary layers.
    * Use this instead of the Date methods to allow debugging alternate "now" times.
@@ -452,7 +451,8 @@ export default (function(selfObj) {
    * @param {object*} messages Messages to display to the end user.
    */
   self.warn = console && console.warn && console.warn.bind
-    ? console.warn.bind(console) : function() { };
+    ? console.warn.bind(console)
+    : function() { };
 
   self.hexToRGB = function(str) {
     return `rgb(${
@@ -485,7 +485,7 @@ export default (function(selfObj) {
     const g2 = parseInt(hex2.substring(2, 4), 16);
     const b2 = parseInt(hex2.substring(4, 6), 16);
     // calculate differences in 3D Space
-    // eslint-disable-next-line no-restricted-properties
+
     return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
   };
 
@@ -503,7 +503,6 @@ export default (function(selfObj) {
   };
 
   self.errorReport = function(errors) {
-    // eslint-disable-next-line no-unused-vars
     lodashEach(errors, (error) => {
       const cause = error.cause ? `: ${error.cause}` : '';
       self.warn(error.message + cause);
@@ -578,7 +577,8 @@ export default (function(selfObj) {
   // became confusing as element attributes would need one escape character
   // but the selector would need two (\. vs \\.)
   self.encodeId = function(str) {
-    return str.replace(/[.:,]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
+    return str.replace(/[.:,]/g, (match) => `__${match.charCodeAt(0).toString(16)
+      .toUpperCase()}__`);
   };
 
   // Converts an encoded identifier back to its original value.
@@ -668,7 +668,8 @@ export default (function(selfObj) {
     const remainder = longitude % 360;
     const remainderGT180 = !isNegative && remainder > 180 ? remainder - 360 : remainder;
     return isNegative && remainder < -180
-      ? remainder + 360 : remainderGT180;
+      ? remainder + 360
+      : remainderGT180;
   };
 
   // Allows simple printf functionality with strings
@@ -803,7 +804,7 @@ export default (function(selfObj) {
    * @param {*} scripts
    * @param {*} fn
    */
-  // eslint-disable-next-line default-param-last
+
   self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {

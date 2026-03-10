@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -120,15 +120,15 @@ class SearchBox extends Component {
           className={buttonId}
         >
           {tooltipVisibilityCondition && (
-          <UncontrolledTooltip
-            id="center-align-tooltip"
-            trigger="hover"
-            target={buttonId}
-            boundariesElement="window"
-            placement="bottom"
-          >
-            {labelText}
-          </UncontrolledTooltip>
+            <UncontrolledTooltip
+              id="center-align-tooltip"
+              trigger="hover"
+              target={buttonId}
+              boundariesElement="window"
+              placement="bottom"
+            >
+              {labelText}
+            </UncontrolledTooltip>
           )}
           <FontAwesomeIcon icon="search-location" size="1x" widthAuto />
         </Button>
@@ -169,15 +169,15 @@ class SearchBox extends Component {
           style={positionStyle}
         >
           {tooltipVisibilityCondition && (
-          <UncontrolledTooltip
-            id="center-align-tooltip"
-            trigger="hover"
-            target={buttonId}
-            boundariesElement="window"
-            placement="bottom"
-          >
-            {labelText}
-          </UncontrolledTooltip>
+            <UncontrolledTooltip
+              id="center-align-tooltip"
+              trigger="hover"
+              target={buttonId}
+              boundariesElement="window"
+              placement="bottom"
+            >
+              {labelText}
+            </UncontrolledTooltip>
           )}
           <FontAwesomeIcon icon="times" size="1x" widthAuto />
         </Button>
@@ -218,11 +218,13 @@ class SearchBox extends Component {
       ? 'Enter place name or coordinates'
       : 'Search for places or enter coordinates';
 
-    const mobileStyle = isMobile ? {
-      width: '100%', display: 'flex',
-    } : {
-      display: 'flex', width: '85%', background: 'inherit', border: 'none',
-    };
+    const mobileStyle = isMobile
+      ? {
+        width: '100%', display: 'flex',
+      }
+      : {
+        display: 'flex', width: '85%', background: 'inherit', border: 'none',
+      };
     return (
       <div
         role="searchbox"

@@ -1,5 +1,5 @@
-
-import React, { useEffect, useRef } from 'react';
+/* eslint-disable new-cap */
+import { useEffect, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';

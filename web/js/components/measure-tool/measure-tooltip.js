@@ -1,5 +1,3 @@
-/* eslint-disable react/no-danger */
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   LineString as OlLineString,
@@ -14,7 +12,6 @@ import {
   getGeographicLibArea,
 } from './util';
 import { CRS } from '../../modules/map/constants';
-
 
 const metersPerKilometer = 1000;
 const ftPerMile = 5280;
@@ -116,16 +113,19 @@ export default function MeasureTooltip(props) {
     // Distance & Area measurement coordinates are stored differently,
     // so identify based on geometry type
     const yCoord = geometry instanceof OlGeomPolygon
-      ? coordinates[coordinates.length - 4] : coordinates[coordinates.length - 2];
+      ? coordinates[coordinates.length - 4]
+      : coordinates[coordinates.length - 2];
     const xCoord = geometry instanceof OlGeomPolygon
-      ? coordinates[coordinates.length - 3] : coordinates[coordinates.length - 1];
+      ? coordinates[coordinates.length - 3]
+      : coordinates[coordinates.length - 1];
     const tCoord = transform([xCoord, yCoord], crs, CRS.GEOGRAPHIC);
     return areCoordinatesWithinExtent(proj, tCoord);
   };
 
   const tooltipValue = getMeasurementValue();
   const coordinatesAreValid = crs === CRS.GEOGRAPHIC
-    ? checkGeographicCoordValidity(tooltipValue) : checkPolarCoordValidity();
+    ? checkGeographicCoordValidity(tooltipValue)
+    : checkPolarCoordValidity();
 
   if (coordinatesAreValid) {
     return (

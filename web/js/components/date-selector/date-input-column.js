@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from '../util/arrow';
 import { rollDate } from '../../modules/date/util';
@@ -190,7 +190,6 @@ class DateInputColumn extends Component {
       case 'month':
         newDate = monthValidation(inputValue, date, validateDate);
         // transform month number to string (e.g., 3 -> 'MAR')
-        // eslint-disable-next-line no-restricted-globals
         if (newDate !== null && !isNaN(inputValue)) {
           inputValue = MONTH_STRING_ARRAY[inputValue - 1];
         }
@@ -254,7 +253,6 @@ class DateInputColumn extends Component {
       ? value
       : inputValue;
 
-    // eslint-disable-next-line no-restricted-globals
     if (type === 'month' && !isNaN(newValue)) {
       newValue = MONTH_STRING_ARRAY[newValue - 1];
     } else if (newValue.length === 1) {

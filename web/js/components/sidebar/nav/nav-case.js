@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -76,15 +75,19 @@ function NavCase (props) {
       }
     />
   );
-  const sidebarCollapseMobile = isMobile ? {
-    height: '48px',
-    width: '45px',
-  } : null;
-  const collapseIconMobile = isMobile ? {
-    height: '30px',
-    width: '30px',
-    color: '#fff',
-  } : null;
+  const sidebarCollapseMobile = isMobile
+    ? {
+      height: '48px',
+      width: '45px',
+    }
+    : null;
+  const collapseIconMobile = isMobile
+    ? {
+      height: '30px',
+      width: '30px',
+      color: '#fff',
+    }
+    : null;
   const fontAwesomeStyle = isMobile ? 'times' : 'caret-up';
 
   return (

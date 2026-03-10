@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -87,7 +87,7 @@ class TimelineLayerCoveragePanel extends Component {
     }
 
     const updatedActiveLayers = this.getActiveLayers(activeLayers);
-    // eslint-disable-next-line react/destructuring-assignment
+
     const layersChange = !lodashIsEqual(updatedActiveLayers, this.state.activeLayers);
     const projectionChange = prevProps.projection !== projection;
     const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
@@ -269,7 +269,7 @@ class TimelineLayerCoveragePanel extends Component {
   * @param {Array} layers
   * @returns {void}
   */
-  // eslint-disable-next-line react/destructuring-assignment
+
   addMatchingCoverageToTimeline = async (isChecked, layers) => {
     const { setMatchingTimelineCoverage } = this.props;
     const dateRange = this.getNewMatchingDatesRange(layers);
@@ -424,41 +424,41 @@ class TimelineLayerCoveragePanel extends Component {
           style={panelContainerStyle}
         >
           {/* Timeline Layer Coverage Panel */}
-          {isTimelineLayerCoveragePanelOpen
-          && (
-          <div
-            className="timeline-layer-coverage"
-            style={layerCoverageStyle}
-          >
-            <header className="timeline-layer-coverage-header">
-              <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
-              {this.renderInfoButton()}
-              <Switch
-                active={shouldIncludeHiddenLayers}
-                border
-                color="00457b"
-                id="toggle-layer-coverage-include-hidden"
-                containerClassAddition="toggle-layer-coverage-include-hidden"
-                label="Include Hidden Layers"
-                toggle={() => this.addMatchingCoverageToTimeline(
-                  !shouldIncludeHiddenLayers,
-                  activeLayers,
-                )}
-              />
-            </header>
-            <Scrollbars style={scrollbarStyle}>
-              <CoverageItemList
-                activeLayers={activeLayers}
-                appNow={appNow}
-                axisWidth={axisWidth}
-                backDate={backDate}
-                frontDate={frontDate}
-                getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
-                timeScale={timeScale}
-                positionTransformX={positionTransformX}
-              />
-            </Scrollbars>
-          </div>
+          {isTimelineLayerCoveragePanelOpen &&
+          (
+            <div
+              className="timeline-layer-coverage"
+              style={layerCoverageStyle}
+            >
+              <header className="timeline-layer-coverage-header">
+                <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
+                {this.renderInfoButton()}
+                <Switch
+                  active={shouldIncludeHiddenLayers}
+                  border
+                  color="00457b"
+                  id="toggle-layer-coverage-include-hidden"
+                  containerClassAddition="toggle-layer-coverage-include-hidden"
+                  label="Include Hidden Layers"
+                  toggle={() => this.addMatchingCoverageToTimeline(
+                    !shouldIncludeHiddenLayers,
+                    activeLayers,
+                  )}
+                />
+              </header>
+              <Scrollbars style={scrollbarStyle}>
+                <CoverageItemList
+                  activeLayers={activeLayers}
+                  appNow={appNow}
+                  axisWidth={axisWidth}
+                  backDate={backDate}
+                  frontDate={frontDate}
+                  getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
+                  timeScale={timeScale}
+                  positionTransformX={positionTransformX}
+                />
+              </Scrollbars>
+            </div>
           )}
         </div>
       </>

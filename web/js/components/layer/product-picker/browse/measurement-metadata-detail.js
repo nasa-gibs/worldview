@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,7 +38,7 @@ function MeasurementMetadataDetail (props) {
       } catch (e) {
         if (!controller.signal.aborted) {
           setLoading(false);
-          // eslint-disable-next-line no-console
+
           console.error(e);
         }
       }

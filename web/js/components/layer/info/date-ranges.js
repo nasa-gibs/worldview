@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ListGroup, ListGroupItem, Spinner } from 'reactstrap';
 import PropTypes from 'prop-types';
 import Scrollbar from '../../util/scrollbar';
@@ -23,7 +23,8 @@ export default function DateRanges ({ layer, describeDomainsUrl }) {
         worker.terminate(); // terminate the worker
         // fallback to layer.dateRanges if no DescribeDomains data
         const data = event.data.length
-          ? event.data : formatDateRanges(layer.dateRanges);
+          ? event.data
+          : formatDateRanges(layer.dateRanges);
         return setDateRanges(data);
       }
       // DOMParser is not available in workers so we parse the xml on the main thread before sending

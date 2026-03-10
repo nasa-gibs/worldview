@@ -289,7 +289,8 @@ export function getTruncatedGranuleDates(layerDefs) {
     const numToAdd = GRANULE_LIMIT - numGranules;
     const truncatedDates = def.granuleDates.slice(0, numToAdd);
     numGranules += truncatedDates.length;
-    const processedDates = truncatedDates.map((date) => date.split(':').filter((d) => d !== '00Z').join(':'));
+    const processedDates = truncatedDates.map((date) => date.split(':').filter((d) => d !== '00Z')
+      .join(':'));
     return {
       truncated,
       value: `${granuleDatesString}${processedDates.join(',')},`,
@@ -420,14 +421,14 @@ export function imageSizeValid(imgHeight, imgWidth, maxSize) {
 export function getDimensions(projection, bounds, resolution) {
   const conversionFactor = imageUtilGetConversionFactor(projection);
   const imgWidth = Math.round(
-    Math.abs(bounds[1][0] - bounds[0][0])
-    / conversionFactor
-    / Number(resolution),
+    Math.abs(bounds[1][0] - bounds[0][0]) /
+    conversionFactor /
+    Number(resolution),
   );
   const imgHeight = Math.round(
-    Math.abs(bounds[1][1] - bounds[0][1])
-    / conversionFactor
-    / Number(resolution),
+    Math.abs(bounds[1][1] - bounds[0][1]) /
+    conversionFactor /
+    Number(resolution),
   );
   return { width: imgWidth, height: imgHeight };
 }

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 function SimpleStatistics(props) {
@@ -13,7 +12,8 @@ function SimpleStatistics(props) {
   const dateStr = `Date: ${date}`;
 
   function formatToThreeDigits(str) {
-    if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
+    if (parseFloat(str).toFixed(3)
+      .split('.')[0].length > 4) {
       return Number(parseFloat(str).toFixed(3)).toPrecision(3);
     }
     return parseFloat(str).toFixed(3);
@@ -86,4 +86,3 @@ SimpleStatistics.propTypes = {
 };
 
 export default SimpleStatistics;
-

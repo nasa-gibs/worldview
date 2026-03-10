@@ -171,7 +171,8 @@ export function serializeCoordinatesWrapper(coordinates, state) {
     .map((coordinate) => serializeCoordinates(coordinate))
     .filter((coordinate) => coordinate);
   const coordinatesURL = Array.isArray(coordinates)
-    ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
+    ? serializeCoordinatesArray(coordinates)
+    : serializeCoordinates(coordinates);
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
@@ -190,5 +191,5 @@ export function setLocalStorageCollapseState(storageValue) {
  * @param {Object} config
  * @return {Boolean} is Location Search feature enabled
  */
-export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch
-  && features.locationSearch.url);
+export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch &&
+  features.locationSearch.url);

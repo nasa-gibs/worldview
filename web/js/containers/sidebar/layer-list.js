@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Droppable, DragDropContext } from 'react-beautiful-dnd';
@@ -70,7 +70,6 @@ function LayerList(props) {
     if (showDropdownMenu) return;
     setDropdownBtnVisible(false);
   };
-
 
   /**
    * Update Layer order after drag
@@ -191,9 +190,11 @@ function LayerList(props) {
               {layers.sort((layerA, layerB) => {
                 const shouldHideLayerB = layerB.shouldHide ? -1 : 1;
                 const shouldHideLayers = layerB.shouldHide === layerA.shouldHide
-                  ? 0 : shouldHideLayerB;
+                  ? 0
+                  : shouldHideLayerB;
                 return isChartingActive
-                  ? shouldHideLayers : 0;
+                  ? shouldHideLayers
+                  : 0;
               }).map(renderLayer)}
               {provided.placeholder}
             </ul>

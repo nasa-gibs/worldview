@@ -1,4 +1,3 @@
-import React from 'react';
 import TravelModeTitle from './travelModeTitle';
 import TravelModeColorbars from './travelModeColorbars';
 
