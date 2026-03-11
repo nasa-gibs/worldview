@@ -206,7 +206,6 @@
     "reactstrap": "^9.2.3",
     "recharts": "^3.7.0",
     "redux": "^5.0.1",
-    "redux-location-state": "^2.8.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^3.1.0",
     "regenerator-runtime": "^0.14.1",
@@ -224,9 +223,6 @@
     "semver": "^7.5.4",
     "@gilbarbara/hooks": {
       "react": "^19.2.4"
-    },
-    "redux-location-state": {
-      "redux": "^5.0.1"
     }
   },
   "browserslist": [
