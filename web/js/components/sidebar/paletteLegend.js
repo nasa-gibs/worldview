@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import lodashIsNumber from 'lodash/isNumber';
 import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
-import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
+import VisibilitySensor from '../util/visibility-sensor';
 import { connect } from 'react-redux';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import {

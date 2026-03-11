@@ -23,10 +23,10 @@ function ModalComplete(props) {
       <>
         <p>Read more about this story at the links below:</p>
         <ul>
-          {readMoreLinks.map((linkId) => (
-            <li key={linkId}>
-              <a href={linkId.link} target="_blank" rel="noopener noreferrer">
-                {linkId.title}
+          {readMoreLinks.map((linkObj) => (
+            <li key={`${linkObj.link || 'link'}-${linkObj.title || 'title'}`}>
+              <a href={linkObj.link} target="_blank" rel="noopener noreferrer">
+                {linkObj.title}
               </a>
             </li>
           ))}

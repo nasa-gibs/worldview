@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SwipeToDelete from 'react-swipe-to-delete-component';
+import SwipeToDelete from '../../../util/swipe-to-delete';
 import SearchLayerRow from './search-layer-row';
 import {
   selectLayer as selectLayerAction,
