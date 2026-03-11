@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
@@ -57,6 +57,7 @@ function ModalContainer(props) {
   const [offsetTop, setOffsetTop] = useState(propsOffsetTop);
   const [offsetRight, setOffsetRight] = useState(propsOffsetRight);
   const [measuredElement, setMeasuredElement] = useState();
+  const draggableNodeRef = useRef(null);
   const prevScreenHeight = usePrevious(screenHeight);
   const prevScreenWidth = usePrevious(screenWidth);
   const prevWidth = usePrevious(width);
@@ -185,6 +186,7 @@ function ModalContainer(props) {
       : '';
     return (
       <Draggable
+        nodeRef={draggableNodeRef}
         handle={dragHandle}
         disabled={!isDraggable}
         bounds={bounds}
@@ -264,6 +266,7 @@ function ModalContainer(props) {
           isOpen={isOpen}
           toggle={toggleFunction}
           backdrop={backdrop}
+          innerRef={draggableNodeRef}
           id={lowerCaseId}
           size={size}
           className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}

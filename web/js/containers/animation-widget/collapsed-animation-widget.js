@@ -1,9 +1,11 @@
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Draggable from 'react-draggable';
 import PlayButton from '../../components/animation-widget/play-button';
 
 function CollapsedAnimationWidget (props) {
+  const nodeRef = useRef(null);
   const {
     breakpoints,
     collapsedWidgetPosition,
@@ -54,6 +56,7 @@ function CollapsedAnimationWidget (props) {
 
   return !dontShow && (
     <Draggable
+      nodeRef={nodeRef}
       bounds="body"
       cancel={cancelSelector}
       onStart={handleDragStart}
@@ -62,6 +65,7 @@ function CollapsedAnimationWidget (props) {
       disabled={isMobile}
     >
       <div
+        ref={nodeRef}
         className={widgetClasses}
         id={`collapsed-animate-widget${widgetIDs}`}
       >

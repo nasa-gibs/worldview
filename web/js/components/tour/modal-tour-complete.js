@@ -11,7 +11,7 @@ function ModalComplete(props) {
   const { readMoreLinks } = currentStory;
   const closeBtn = (
     <button className="tour-close-btn" onClick={endTour} type="button">
-      <Close class="add-plus" size="14px" />
+      <Close className="add-plus" size="14px" />
     </button>
   );
   let list;
