@@ -143,6 +143,8 @@ function LayerRow (props) {
     disabled: isEmbedModeActive || isAnimating || isChartingActive,
   });
 
+  const isDragDisabled = isEmbedModeActive || isAnimating || isChartingActive;
+
   const sortableStyle = {
     transform: CSS.Transform.toString(transform),
     transition,
@@ -618,15 +620,20 @@ function LayerRow (props) {
       <Zot zot={activeZot || zot} layer={layer.id} isMobile={isMobile} />
 
       <div className={isVectorLayer ? 'layer-main wv-vector-layer' : 'layer-main'}>
-        <div className="layer-info" style={{ minHeight: layer.shouldHide ? '22px' : vectorLayerMinHeight }}>
+        <div
+          className="layer-info"
+          style={{
+            minHeight: layer.shouldHide ? '22px' : vectorLayerMinHeight,
+            cursor: isDragDisabled ? undefined : (isDragging ? 'grabbing' : 'grab'),
+          }}
+          ref={setActivatorNodeRef}
+          {...attributes}
+          {...listeners}
+        >
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
-          <h4 title={names.title}>
-            <span ref={setActivatorNodeRef} {...attributes} {...listeners}>
-              {names.title}
-            </span>
-          </h4>
+          <h4 title={names.title}>{names.title}</h4>
           {!layer.shouldHide && (
             <div className="instrument-collection">
               <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
