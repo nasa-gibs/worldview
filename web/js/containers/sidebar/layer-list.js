@@ -2,13 +2,15 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import { get as lodashGet } from 'lodash';
 import LayerRow from './layer-row';
+import util from '../../util/util';
 import {
   replaceSubGroup,
   getZotsForActiveLayers,
@@ -21,13 +23,6 @@ import {
   removeGroup as removeGroupAction,
   toggleGroupVisibility as toggleGroupVisibilityAction,
 } from '../../modules/layers/actions';
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-  return result;
-};
 
 function LayerList(props) {
   const {
@@ -58,6 +53,20 @@ function LayerList(props) {
   const [showDropdownBtn, setDropdownBtnVisible] = useState(false);
   const [showDropdownMenu, setDropdownMenuVisible] = useState(false);
 
+  const orderedLayers = [...layers]
+    .sort((layerA, layerB) => {
+      const shouldHideLayerB = layerB.shouldHide ? -1 : 1;
+      const shouldHideLayers = layerB.shouldHide === layerA.shouldHide
+        ? 0
+        : shouldHideLayerB;
+      return isChartingActive
+        ? shouldHideLayers
+        : 0;
+    });
+
+  const sortableLayerIds = orderedLayers
+    .map((layer) => `${util.encodeId(layer.id)}-${compareState}`);
+
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
       setDropdownBtnVisible(false);
@@ -71,23 +80,36 @@ function LayerList(props) {
     setDropdownBtnVisible(false);
   };
 
+  // Prevent pointer/mouse events on controls from bubbling up and activating group drag.
+  const stopDndActivation = (e) => {
+    if (e?.nativeEvent?.stopImmediatePropagation) {
+      e.nativeEvent.stopImmediatePropagation();
+    }
+    if (e?.stopPropagation) {
+      e.stopPropagation();
+    }
+  };
+
   /**
    * Update Layer order after drag
    * @param {Object} result | Result of layer drag
    */
-  const onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
-    if (!destination || source.index === destination.index) {
-      return;
-    }
+  const onDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const sourceIndex = sortableLayerIds.indexOf(active.id);
+    const destinationIndex = sortableLayerIds.indexOf(over.id);
+    if (sourceIndex < 0 || destinationIndex < 0 || sourceIndex === destinationIndex) return;
+
     const regex = new RegExp(`-${compareState}$`);
-    const layerId = draggableId.replace(regex, '');
-    const newLayerArray = reorder(layers, source.index, destination.index);
+    const layerId = `${active.id}`.replace(regex, '');
+    const newLayerArray = arrayMove(orderedLayers, sourceIndex, destinationIndex);
 
     // In the new ordering, find the layer right after the layer that just
     // moved. Leave null if moved to the end of the list.
     let nextLayerId = null;
-    const nextIndex = destination.index + 1;
+    const nextIndex = destinationIndex + 1;
     if (nextIndex < newLayerArray.length) {
       nextLayerId = newLayerArray[nextIndex].id;
     }
@@ -121,21 +143,39 @@ function LayerList(props) {
 
   const renderDropdownMenu = () => (!isAnimating && !isChartingActive) && (
     <Dropdown className="layer-group-more-options" isOpen={showDropdownMenu} toggle={toggleDropdownMenuVisible}>
-      <DropdownToggle>
+      <DropdownToggle
+        onPointerDown={stopDndActivation}
+        onMouseDown={stopDndActivation}
+      >
         <FontAwesomeIcon
           className="layer-group-more"
           icon="ellipsis-v"
           widthAuto
         />
       </DropdownToggle>
-      <DropdownMenu>
-        <DropdownItem id="show-all" onClick={() => toggleVisibility(groupLayerIds, true)}>
+      <DropdownMenu onPointerDown={stopDndActivation} onMouseDown={stopDndActivation}>
+        <DropdownItem
+          id="show-all"
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
+          onClick={() => toggleVisibility(groupLayerIds, true)}
+        >
           Show All Layers
         </DropdownItem>
-        <DropdownItem id="hide-all" onClick={() => toggleVisibility(groupLayerIds, false)}>
+        <DropdownItem
+          id="hide-all"
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
+          onClick={() => toggleVisibility(groupLayerIds, false)}
+        >
           Hide All Layers
         </DropdownItem>
-        <DropdownItem id="remove-group" onClick={() => removeGroup(groupLayerIds)}>
+        <DropdownItem
+          id="remove-group"
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
+          onClick={() => removeGroup(groupLayerIds)}
+        >
           Remove Group
         </DropdownItem>
       </DropdownMenu>
@@ -160,6 +200,8 @@ function LayerList(props) {
             className="layer-group-collapse"
             icon={!collapsed ? 'caret-down' : 'caret-left'}
             onClick={() => toggleCollapse(groupId, !collapsed)}
+            onPointerDown={stopDndActivation}
+            onMouseDown={stopDndActivation}
             widthAuto
           />
         )}
@@ -175,32 +217,19 @@ function LayerList(props) {
 
       {renderHeader()}
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable
-          droppableId={`${compareState}-${groupId}`}
-          type={`layerGroup${groupId}`}
-          direction="vertical"
+      <DndContext
+        collisionDetection={closestCenter}
+        onDragEnd={onDragEnd}
+      >
+        <SortableContext
+          items={sortableLayerIds}
+          strategy={verticalListSortingStrategy}
         >
-          {(provided, snapshot) => (
-            <ul
-              className={collapsed ? 'category hidden' : 'category'}
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-              {layers.sort((layerA, layerB) => {
-                const shouldHideLayerB = layerB.shouldHide ? -1 : 1;
-                const shouldHideLayers = layerB.shouldHide === layerA.shouldHide
-                  ? 0
-                  : shouldHideLayerB;
-                return isChartingActive
-                  ? shouldHideLayers
-                  : 0;
-              }).map(renderLayer)}
-              {provided.placeholder}
-            </ul>
-          )}
-        </Droppable>
-      </DragDropContext>
+          <ul className={collapsed ? 'category hidden' : 'category'}>
+            {orderedLayers.map(renderLayer)}
+          </ul>
+        </SortableContext>
+      </DndContext>
     </div>
   );
 }

@@ -24,6 +24,7 @@ module.exports = defineConfig({
     launchOptions: {
       slowMo: 200
     },
+    serviceWorkers: 'block',
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
