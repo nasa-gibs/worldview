@@ -8,8 +8,8 @@ const {
 } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 const startParams = [
   'imageDownload='
 ]

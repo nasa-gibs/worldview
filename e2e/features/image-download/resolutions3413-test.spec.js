@@ -10,9 +10,10 @@ const {
 } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 const startParams = [
   'p=arctic',
   'v=-4194304,-3145728,4194304,3145728',

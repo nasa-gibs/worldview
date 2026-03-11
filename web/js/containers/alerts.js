@@ -172,7 +172,8 @@ class DismissableAlerts extends React.Component {
           {showDDVZoomAlert &&
             ddvZoomAlerts.map((layer) => (
               <AlertUtil
-                id="zoom-alert"
+                key={`ddv-zoom-${layer}`}
+                id={`zoom-alert-${`${layer}`.replace(/[^a-z0-9_-]/gi, '-')}`}
                 isOpen
                 noPortal
                 title="Zoom in to see imagery for this layer"
@@ -185,7 +186,8 @@ class DismissableAlerts extends React.Component {
           { showDDVLocationAlert &&
             ddvLocationAlerts.map((layer) => (
               <AlertUtil
-                id="granule-alert"
+                key={`ddv-location-${layer}`}
+                id={`granule-alert-${`${layer}`.replace(/[^a-z0-9_-]/gi, '-')}`}
                 isOpen
                 noPortal
                 title="Try moving the map or select a different date in the layer's settings."

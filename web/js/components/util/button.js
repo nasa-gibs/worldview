@@ -6,7 +6,12 @@ import PropTypes from 'prop-types';
  */
 export default function Button(props) {
   const {
-    id, onClick, style, valid, className, text,
+    id = '',
+    onClick,
+    style = null,
+    valid = true,
+    className = 'gray',
+    text,
   } = props;
   return (
     <button

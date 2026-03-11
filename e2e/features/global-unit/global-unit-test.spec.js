@@ -4,6 +4,7 @@ const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 const SSTQueryString = 'http://localhost:3000/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden),VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor&lg=false&t=2020-09-28-T20%3A40%3A53Z'
 
+/** @type {import('@playwright/test').Page} */
 let page
 let globalSettingsModal
 let settingContainer

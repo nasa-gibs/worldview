@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import lodashIsNumber from 'lodash/isNumber';
 import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
-import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
+import VisibilitySensor from '../util/visibility-sensor';
 import { connect } from 'react-redux';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import {
@@ -72,23 +72,25 @@ class PaletteLegend extends React.Component {
     }));
   }
 
-  UNSAFE_componentWillReceiveProps(props) {
-    const { colorHex, isRunningData } = this.state;
-    if (props.colorHex !== colorHex || props.isRunningData !== isRunningData) {
-      this.setState({
-        isRunningData: props.isRunningData,
-        colorHex: props.colorHex,
-      });
-    }
-  }
-
   componentDidUpdate(prevProps) {
     const {
       isDistractionFreeModeActive,
       layer,
       width,
       paletteLegends,
+      colorHex,
+      isRunningData,
     } = this.props;
+
+    // Keep state in sync with prop changes, without clobbering hover-driven state.
+    if (prevProps.colorHex !== colorHex || prevProps.isRunningData !== isRunningData) {
+      this.setState({
+        colorHex,
+        isRunningData,
+      });
+      return;
+    }
+
     // Updates when layer options/settings changed, if ZOT changes the width of the palette,
     // or distraction free mode exit
     const layerChange = !lodashIsEqual(layer, prevProps.layer);

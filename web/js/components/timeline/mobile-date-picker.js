@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import DatePicker from 'react-mobile-datepicker';
+import DatePicker from '../../util/react-mobile-datepicker';
 import { getDisplayDate, getISODateFormatted } from './date-util';
 import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 
-// https://www.npmjs.com/package/react-mobile-datepicker
+// Local datepicker utility adapted from react-mobile-datepicker
 // configs for date order, caption, and date step
 const defaultDateConfig = {
   year: {
@@ -78,6 +79,7 @@ function MobileDatePicker(props) {
   const [minDate, setMinDate] = useState(convertToUTCDateObject(startDateLimit));
   const [maxDate, setMaxDate] = useState(convertToUTCDateObject(endDateLimit));
   const [isOpen, setIsOpen] = useState(false);
+  const portalElRef = useRef(null);
 
   const setInitDates = () => {
     setTime(convertToUTCDateObject(date));
@@ -89,8 +91,28 @@ function MobileDatePicker(props) {
     setInitDates();
   }, [endDateLimit, date]);
 
+  const ensurePortalContainer = () => {
+    if (portalElRef.current || typeof document === 'undefined') return;
+    const el = document.createElement('div');
+    el.classList.add('Modal-Portal');
+    document.body.appendChild(el);
+    portalElRef.current = el;
+  };
+
+  const removePortalContainer = () => {
+    const el = portalElRef.current;
+    if (!el) return;
+    if (el.parentNode) el.parentNode.removeChild(el);
+    portalElRef.current = null;
+  };
+
+  useEffect(() => () => {
+    removePortalContainer();
+  }, []);
+
   const handleClickDateButton = () => {
     if (!isEmbedModeActive) {
+      ensurePortalContainer();
       setIsOpen(true);
     }
   };
@@ -98,6 +120,7 @@ function MobileDatePicker(props) {
   const handleCancel = () => {
     setTime(convertToUTCDateObject(date));
     setIsOpen(false);
+    removePortalContainer();
   };
 
   const handleChange = (newDate) => {
@@ -108,9 +131,15 @@ function MobileDatePicker(props) {
     setIsOpen(false);
     setTime(newTime);
 
+    removePortalContainer();
+
     // convert date back to local time
     const newDate = convertToLocalDateObject(newTime);
     onDateChange(getISODateFormatted(newDate));
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) handleCancel();
   };
 
   const getHeaderTime = (newTime, isSubdaily) => (
@@ -134,21 +163,32 @@ function MobileDatePicker(props) {
             <span>{displayDate}</span>
           </div>
         </button>
-        <DatePicker
-          dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
-          showCaption
-          theme="android-dark"
-          customHeader={headerTime}
-          confirmText="OK"
-          cancelText="CANCEL"
-          min={minDate}
-          max={maxDate}
-          value={time}
-          isOpen={isOpen}
-          onCancel={handleCancel}
-          onChange={handleChange}
-          onSelect={handleSelect}
-        />
+        {isOpen && portalElRef.current &&
+          createPortal(
+            (
+              <div className="datepicker-modal" onClick={handleBackdropClick}>
+                <DatePicker
+                  isPopup={false}
+                  dateConfig={hasSubdailyLayers ? subDailyDateConfig : defaultDateConfig}
+                  showHeader
+                  showFooter
+                  showCaption
+                  theme="android-dark"
+                  customHeader={headerTime}
+                  confirmText="OK"
+                  cancelText="CANCEL"
+                  min={minDate}
+                  max={maxDate}
+                  value={time}
+                  isOpen={isOpen}
+                  onCancel={handleCancel}
+                  onChange={handleChange}
+                  onSelect={handleSelect}
+                />
+              </div>
+            ),
+            portalElRef.current,
+          )}
       </>
     )
   );

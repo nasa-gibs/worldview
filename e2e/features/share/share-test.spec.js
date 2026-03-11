@@ -4,7 +4,9 @@ const { skipTour } = require('../../test-utils/global-variables/querystrings')
 const { getAttribute } = require('../../test-utils/hooks/basicHooks')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
 let context
 

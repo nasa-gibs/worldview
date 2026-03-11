@@ -61,7 +61,7 @@ export const mapLocationToState = (state, location) => {
   const { config } = state;
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
-    let stateFromLocation = location.query;
+    let stateFromLocation = location.query || {};
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,

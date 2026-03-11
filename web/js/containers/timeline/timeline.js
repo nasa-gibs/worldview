@@ -322,7 +322,12 @@ class Timeline extends React.Component {
 
     // handle location update triggered from animation start/end date change from animation widget
     if (isAnimationWidgetOpen) {
-      if (prevStartLocationDate && prevEndLocationDate) {
+      if (
+        prevStartLocationDate &&
+        prevEndLocationDate &&
+        animStartLocationDate &&
+        animEndLocationDate
+      ) {
         const animStartDateChanged = prevStartLocationDate.getTime() !==
         animStartLocationDate.getTime();
         const animEndDateChanged = prevEndLocationDate.getTime() !== animEndLocationDate.getTime();

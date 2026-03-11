@@ -1,8 +1,24 @@
+import { act } from 'react';
 import renderer from 'react-test-renderer';
 import util from '../../util/util';
 import { VectorInteractions } from './ol-vector-interactions';
 import { registerProjections } from '../../fixtures';
 import { MAP_MOUSE_MOVE, MAP_SINGLE_CLICK } from '../../util/constants';
+
+let consoleErrorSpy;
+let originalConsoleError;
+
+beforeAll(() => {
+  originalConsoleError = console.error;
+  consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation((...args) => {
+    if (typeof args[0] === 'string' && args[0].includes('react-test-renderer is deprecated')) return;
+    originalConsoleError.call(console, ...args);
+  });
+});
+
+afterAll(() => {
+  if (consoleErrorSpy) consoleErrorSpy.mockRestore();
+});
 
 const { events } = util;
 let component;
@@ -19,24 +35,26 @@ beforeEach(() => {
   getDialogObject = () => ({
     metaArray: [0], selected: [1], offsetLeft: 100, offsetTop: 100,
   });
-  component = renderer.create(
-    <VectorInteractions
-      mouseEvents={events}
-      isShowingClick={false}
-      changeCursor={changeCursor}
-      getDialogObject={getDialogObject}
-      openVectorDialog={openVectorDialog}
-      selectVectorFeatures={selectVectorFeatures}
-      lastSelected={{}}
-      measureIsActive={false}
-      onCloseModal={jest.fn()}
-      modalState={{ id: [], isOpen: false }}
-      isDistractionFreeModeActive={false}
-      isMobile={false}
-      proj={{ id: 'geographic' }}
-      activeLayers={[{ def: { type: 'vector' } }]}
-    />,
-  );
+  act(() => {
+    component = renderer.create(
+      <VectorInteractions
+        mouseEvents={events}
+        isShowingClick={false}
+        changeCursor={changeCursor}
+        getDialogObject={getDialogObject}
+        openVectorDialog={openVectorDialog}
+        selectVectorFeatures={selectVectorFeatures}
+        lastSelected={{}}
+        measureIsActive={false}
+        onCloseModal={jest.fn()}
+        modalState={{ id: [], isOpen: false }}
+        isDistractionFreeModeActive={false}
+        isMobile={false}
+        proj={{ id: 'geographic' }}
+        activeLayers={[{ def: { type: 'vector' } }]}
+      />,
+    );
+  });
   map = {
     getEventPixel: jest.fn(),
     getCoordinateFromPixel: () => [0, 0],
@@ -59,7 +77,9 @@ test('if there is a feature at pixel dispatch changeCursor action', () => {
   doAsync(() => expect(changeCursor.mock.calls.length).toBe(1));
 });
 test('if there is a feature at pixel on click get dialog', () => {
-  events.trigger(MAP_SINGLE_CLICK, { pixel: [0, 0] }, map, 'EPSG:4326');
+  act(() => {
+    events.trigger(MAP_SINGLE_CLICK, { pixel: [0, 0] }, map, 'EPSG:4326');
+  });
   expect(changeCursor.mock.calls.length).toBe(0);
   expect(selectVectorFeatures.mock.calls.length).toBe(1);
   expect(openVectorDialog.mock.calls.length).toBe(1);
