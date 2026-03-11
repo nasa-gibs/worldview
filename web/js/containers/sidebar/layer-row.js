@@ -134,12 +134,13 @@ function LayerRow (props) {
     attributes,
     listeners,
     setNodeRef,
+    setActivatorNodeRef,
     transform,
     transition,
     isDragging,
   } = useSortable({
     id: sortableId,
-    disabled: isEmbedModeActive || isAnimating,
+    disabled: isEmbedModeActive || isAnimating || isChartingActive,
   });
 
   const sortableStyle = {
@@ -575,7 +576,8 @@ function LayerRow (props) {
           ? (
             <>
               <div />
-              <a
+              <button
+                type="button"
                 role="radio"
                 tabIndex={0}
                 aria-checked={layer.id === activeChartingLayer}
@@ -606,7 +608,7 @@ function LayerRow (props) {
                       widthAuto
                     />
                   )}
-              </a>
+              </button>
             </>
           )
           : (
@@ -620,7 +622,11 @@ function LayerRow (props) {
           <div className="layer-buttons">
             {showButtons && renderControls()}
           </div>
-          <h4 title={names.title}>{names.title}</h4>
+          <h4 title={names.title}>
+            <span ref={setActivatorNodeRef} {...attributes} {...listeners}>
+              {names.title}
+            </span>
+          </h4>
           {!layer.shouldHide && (
             <div className="instrument-collection">
               <p dangerouslySetInnerHTML={{ __html: names.subtitle }} />
@@ -696,8 +702,6 @@ function LayerRow (props) {
         ref={setNodeRef}
         onMouseOver={mouseOver}
         onMouseLeave={mouseLeave}
-        {...attributes}
-        {...listeners}
       >
         {renderLayerRow()}
       </li>
