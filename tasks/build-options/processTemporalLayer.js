@@ -59,6 +59,7 @@ async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic',
       const dateRangeEnd = []
       const rangeInterval = []
       for (const range of ranges) {
+        if (!range._text || !range._text.length) continue
         const [start, end, interval] = range._text.split('/')
         if (
           wvLayer.period === 'daily' ||
