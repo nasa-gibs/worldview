@@ -7,7 +7,6 @@ import {
   arrayMove,
   useSortable,
 } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import PropTypes from 'prop-types';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import LayerList from './layer-list';
@@ -52,7 +51,7 @@ function SortableOverlayGroup(props) {
   });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
     transition,
     opacity: isDragging ? 0.8 : undefined,
   };
