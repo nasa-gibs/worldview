@@ -1,8 +1,34 @@
 // Local replacement for the unmaintained `redux-location-state` package.
 
-import { cloneDeep } from 'lodash';
-
 const LOCATION_POP_ACTION = 'REDUX-LOCATION-POP-ACTION';
+
+function omitOverlayGroups(value) {
+  if (!value || typeof value !== 'object') return value;
+  if (!Object.prototype.hasOwnProperty.call(value, 'overlayGroups')) return value;
+  return Object.entries(value).reduce((acc, [key, entryValue]) => {
+    if (key !== 'overlayGroups') acc[key] = entryValue;
+    return acc;
+  }, {});
+}
+
+function isPlainObject(value) {
+  if (!value || typeof value !== 'object') return false;
+  return Object.prototype.toString.call(value) === '[object Object]';
+}
+
+function mergeDeep(baseValue, patchValue) {
+  if (typeof patchValue === 'undefined') return baseValue;
+  if (Array.isArray(patchValue)) return patchValue;
+  if (isPlainObject(baseValue) && isPlainObject(patchValue)) {
+    const merged = { ...baseValue };
+    Object.keys(patchValue).forEach((key) => {
+      merged[key] = mergeDeep(baseValue[key], patchValue[key]);
+    });
+    return merged;
+  }
+  // Dates, class instances, functions, etc: replace.
+  return patchValue;
+}
 
 function safeDecode(value) {
   if (typeof value !== 'string') return value;
@@ -88,23 +114,7 @@ function parseQuery(paramSetup, location) {
 
   const params = parseSearch(location?.search);
 
-  // Seed with defaults so downstream mappers (which use immutability-helper)
-  // can safely update nested paths even when a param is omitted from the URL.
   const stateFromLocation = {};
-  Object.keys(pathConfig).forEach((paramName) => {
-    const definition = pathConfig[paramName];
-    if (!definition) return;
-    const { stateKey, initialState, options = {} } = definition;
-    if (!stateKey) return;
-
-    // Always apply initialState if it is provided; this matches permalink behavior
-    // where omitted params imply defaults.
-    if (typeof initialState !== 'undefined' || options.setAsEmptyItem) {
-      setAtPath(stateFromLocation, stateKey, cloneDeep(initialState));
-    }
-  });
-
-  // Apply URL-provided overrides on top of seeded defaults.
   Object.keys(params).forEach((paramName) => {
     const definition = pathConfig[paramName];
     if (!definition) return;
@@ -194,9 +204,41 @@ export function createReduxLocationActions(
     const reduced = reducers(state, action);
     if (action?.type !== LOCATION_POP_ACTION || !action?.payload) return reduced;
 
+    const patchFromLocation = parseQuery(paramSetup, action.payload);
+    // Seed slices that `mapLocationToState` and its helpers assume exist.
+    // Avoid seeding slices that may contain non-plain objects (e.g. OL map instances).
+    const activeLayers = reduced?.layers?.active;
+    const activeBLayers = reduced?.layers?.activeB;
+    const activeWithoutOverlayGroups = omitOverlayGroups(activeLayers);
+    const activeBWithoutOverlayGroups = omitOverlayGroups(activeBLayers);
+    const baseQuery = {
+      date: reduced?.date,
+      proj: reduced?.proj,
+      // Do not seed `overlayGroups` here. `mapLocationToLayerState` computes them from
+      // the active layers list; seeding an existing (truthy) value can cause it to
+      // incorrectly clear groups when the URL has any query params.
+      layers: reduced?.layers
+        ? {
+          active: activeWithoutOverlayGroups,
+          activeB: activeBWithoutOverlayGroups,
+        }
+        : reduced?.layers,
+      locationSearch: reduced?.locationSearch,
+      compare: reduced?.compare,
+      charting: reduced?.charting,
+      palettes: reduced?.palettes,
+      animation: reduced?.animation,
+      sidebar: reduced?.sidebar,
+      tour: reduced?.tour,
+      embed: reduced?.embed,
+      events: reduced?.events,
+      ui: reduced?.ui,
+      smartHandoffs: reduced?.smartHandoffs,
+    };
+
     const location = {
       ...action.payload,
-      query: parseQuery(paramSetup, action.payload),
+      query: mergeDeep(baseQuery, patchFromLocation),
     };
 
     return mapLocationToState(reduced, location);
@@ -212,7 +254,11 @@ export function listenForHistoryChange(store, history) {
   // Initialize location state on startup
   store.dispatch({ type: LOCATION_POP_ACTION, payload: history.location });
 
-  return history.listen(({ location }) => {
+  return history.listen(({ location, action }) => {
+    // Only treat real browser back/forward navigations as POP.
+    // push/replace are used by the app to sync redux state -> URL and
+    // should not trigger a URL->state remap.
+    if (action !== 'POP') return;
     store.dispatch({ type: LOCATION_POP_ACTION, payload: location });
   });
 }
