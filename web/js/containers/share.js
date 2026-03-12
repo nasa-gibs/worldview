@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import copy from 'copy-to-clipboard';
@@ -247,9 +247,9 @@ class ShareLinkContainer extends Component {
       activeTab,
       isShort,
     } = this.state;
-    const shortLinkValue = isShort
-          && shortLink.response
-          && shortLink.response.link
+    const shortLinkValue = isShort &&
+          shortLink.response &&
+          shortLink.response.link
       ? shortLink.response.link
       : this.getPermalink();
     const value = shortLink.isLoading && isShort

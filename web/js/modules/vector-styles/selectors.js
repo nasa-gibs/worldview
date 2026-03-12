@@ -18,7 +18,6 @@ import {
 } from '../palettes/selectors';
 import util from '../../util/util';
 
-
 /**
  * Get OpenLayers layers from state that were created from WV vector
  * layer definitions. NOTE: This currently also will include the associate WMS

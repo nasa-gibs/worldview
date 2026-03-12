@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
 import PropTypes from 'prop-types';
@@ -131,17 +131,19 @@ function LayersContainer (props) {
     <div id="layers-scroll-container" style={scrollContainerStyles}>
       <div className="layer-container sidebar-panel">
 
-        {groupOverlays ? renderOverlayGroups() : !shouldHideForEmbedNoOverlays && (
-        <LayerList
-          title="Overlays"
-          groupId="overlays"
-          compareState={compareState}
-          collapsed={overlaysCollapsed}
-          toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
-          layers={overlays}
-          layerSplit={overlays.length}
-        />
-        )}
+        {groupOverlays
+          ? renderOverlayGroups()
+          : !shouldHideForEmbedNoOverlays && (
+            <LayerList
+              title="Overlays"
+              groupId="overlays"
+              compareState={compareState}
+              collapsed={overlaysCollapsed}
+              toggleCollapse={() => toggleOverlaysCollapsed(!overlaysCollapsed)}
+              layers={overlays}
+              layerSplit={overlays.length}
+            />
+          )}
 
         {!shouldHideForEmbedNoBaseLayers && (
           <div className="layer-group-baselayers">

@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import {
   assign as lodashAssign,
   find as lodashFind,
@@ -62,18 +61,20 @@ export function selectedCircleStyle(style, size = 2) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
   const radius = styleImage.getRadius() * size;
-  return fill ? new Style({
-    image: new Circle({
-      radius,
-      stroke: new Stroke({
-        color: 'white',
-        width: 2,
+  return fill
+    ? new Style({
+      image: new Circle({
+        radius,
+        stroke: new Stroke({
+          color: 'white',
+          width: 2,
+        }),
+        fill: new Fill({
+          color: fill.getColor().replace(/[^,]+(?=\))/, '0.5'),
+        }),
       }),
-      fill: new Fill({
-        color: fill.getColor().replace(/[^,]+(?=\))/, '0.5'),
-      }),
-    }),
-  }) : style;
+    })
+    : style;
 }
 
 export function selectedPolygonStyle(style) {
@@ -122,9 +123,9 @@ export function getConditionalColors(color) {
   for (let i = 0, j = array.length; i < j; i += chunk) {
     temp = array.slice(i, i + chunk);
     if (temp.length === 2) {
-      if (temp[0].length === 3
-        && typeof temp[0][2] === 'string'
-        && typeof temp[1] === 'string'
+      if (temp[0].length === 3 &&
+        typeof temp[0][2] === 'string' &&
+        typeof temp[1] === 'string'
       ) {
         labels.push(temp[0][2]);
         colors.push(temp[1]);
@@ -238,8 +239,8 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
 
     const type = feature.getGeometry().getType();
-    if (lodashIncludes(def.clickDisabledFeatures, type)
-      || !isFromActiveCompareRegion(pixels, layer.wv.group, swipeOffset, compareState)) {
+    if (lodashIncludes(def.clickDisabledFeatures, type) ||
+      !isFromActiveCompareRegion(pixels, layer.wv.group, swipeOffset, compareState)) {
       return true;
     }
     if (def.vectorData && def.vectorData.id && def.title) {

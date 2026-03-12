@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
@@ -17,8 +16,8 @@ function ModalComplete(props) {
   );
   let list;
   if (
-    readMoreLinks
-      && (Array.isArray(readMoreLinks) && readMoreLinks.length)
+    readMoreLinks &&
+      (Array.isArray(readMoreLinks) && readMoreLinks.length)
   ) {
     list = (
       <>

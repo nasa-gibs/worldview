@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -103,35 +102,37 @@ function Events(props) {
     </div>
   );
   const renderEventList = () => (
-    eventsData && eventsData.length ? (
-      <div className="wv-eventslist sidebar-panel">
-        <ul id="wv-eventscontent" className="content map-item-list">
-          {sources && eventsData.map((event) => (
-            <Event
-              showAlert={showAlert}
-              key={event.id}
-              event={event}
-              selectEvent={(id, date) => selectEvent(id, date, isMobile)}
-              deselectEvent={deselectEvent}
-              highlightEvent={(id, date) => highlightEvent(id, date)}
-              unHighlightEvent={unHighlightEvent}
-              removeGroup={removeGroup}
-              eventLayers={eventLayers}
-              toggleVisibility={toggleVisibility}
-              toggleGroupVisibility={toggleGroupVisibility}
-              isSelected={selected.id === event.id}
-              isHighlighted={highlighted.id === event.id}
-              selectedDate={selectedDate}
-              sources={sources}
-              defaultEventLayer={defaultEventLayer}
-              layers={layers}
-            />
-          ))}
-        </ul>
-      </div>
-    ) : !isLoading && (
-      <h3 className="no-events"> No events meet current criteria</h3>
-    )
+    eventsData && eventsData.length
+      ? (
+        <div className="wv-eventslist sidebar-panel">
+          <ul id="wv-eventscontent" className="content map-item-list">
+            {sources && eventsData.map((event) => (
+              <Event
+                showAlert={showAlert}
+                key={event.id}
+                event={event}
+                selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+                deselectEvent={deselectEvent}
+                highlightEvent={(id, date) => highlightEvent(id, date)}
+                unHighlightEvent={unHighlightEvent}
+                removeGroup={removeGroup}
+                eventLayers={eventLayers}
+                toggleVisibility={toggleVisibility}
+                toggleGroupVisibility={toggleGroupVisibility}
+                isSelected={selected.id === event.id}
+                isHighlighted={highlighted.id === event.id}
+                selectedDate={selectedDate}
+                sources={sources}
+                defaultEventLayer={defaultEventLayer}
+                layers={layers}
+              />
+            ))}
+          </ul>
+        </div>
+      )
+      : !isLoading && (
+        <h3 className="no-events"> No events meet current criteria</h3>
+      )
   );
 
   return (
@@ -142,14 +143,16 @@ function Events(props) {
         style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
-          {isLoading || hasRequestError ? (
+          {isLoading || hasRequestError
+            ? (
             // notranslate included below to prevent
             // Google Translate extension from crashing the page
-            <div className="events-loading-text notranslate">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
-              {errorOrLoadingText}
-            </div>
-          ) : renderEventList()}
+              <div className="events-loading-text notranslate">
+                {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
+                {errorOrLoadingText}
+              </div>
+            )
+            : renderEventList()}
         </div>
       </Scrollbars>
     </div>

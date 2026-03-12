@@ -154,7 +154,7 @@ const localStorageEnabled = () => {
       enabled = window.localStorage.getItem(uid) === uid
       window.localStorage.removeItem(uid)
     }
-  } catch (error) {
+  } catch {
     enabled = false
   }
   return !!enabled

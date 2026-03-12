@@ -1,4 +1,3 @@
-import React from 'react';
 import renderer from 'react-test-renderer';
 import util from '../../util/util';
 import { VectorInteractions } from './ol-vector-interactions';

@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-syntax */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import copy from 'copy-to-clipboard';
@@ -105,8 +104,8 @@ class CoordinatesDialog extends Component {
           className={`close-tooltip ${closeButtonClassName}`}
           onTouchEnd={this.removeMarker}
         >
-          {tooltipVisibilityCondition
-          && (
+          {tooltipVisibilityCondition &&
+          (
             <UncontrolledTooltip
               id="center-align-tooltip"
               trigger="hover"
@@ -124,8 +123,8 @@ class CoordinatesDialog extends Component {
           className={`minimize-tooltip ${minimizeButtonClassName}`}
           onTouchEnd={this.minimizeDialog}
         >
-          {tooltipVisibilityCondition
-          && (
+          {tooltipVisibilityCondition &&
+          (
             <UncontrolledTooltip
               id="center-align-tooltip"
               trigger="hover"
@@ -149,9 +148,9 @@ class CoordinatesDialog extends Component {
 
     const buttonId = 'copy-coordinates-to-clipboard-button';
     const labelText = 'Copy coordinates to clipboard';
-    const tooltipVisibilityCondition = !isMobile
-      && !isCopyToClipboardTooltipVisible
-      && showTooltips;
+    const tooltipVisibilityCondition = !isMobile &&
+      !isCopyToClipboardTooltipVisible &&
+      showTooltips;
 
     return (
       <button

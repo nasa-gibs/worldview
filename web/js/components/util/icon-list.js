@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

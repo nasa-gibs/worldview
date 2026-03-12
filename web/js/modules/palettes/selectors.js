@@ -1,4 +1,3 @@
-/* eslint-disable no-bitwise */
 import {
   get as lodashGet,
   isUndefined as lodashIsUndefined,
@@ -8,7 +7,6 @@ import {
 } from 'lodash';
 import update from 'immutability-helper';
 import { getMinValue } from './util';
-
 
 export function getRenderedPalette(layerId, index, state) {
   const { config, palettes } = state;
@@ -446,7 +444,7 @@ export function setDisabledSelector(
       maps: {
         [index]: {
           $merge: {
-            // eslint-disable-next-line no-restricted-globals
+
             disabled: isNaN(classIndex) ? [] : oldDisabled,
           },
         },
@@ -468,9 +466,9 @@ export function setRange(layerId, props, indexInt, palettes, state) {
   }
   const legend = getPalette(layerId, index, undefined, state);
   if (
-    legend.entries
-    && legend.entries.values
-    && max === legend.entries.values.length - 1
+    legend.entries &&
+    legend.entries.values &&
+    max === legend.entries.values.length - 1
   ) {
     max = undefined;
   }

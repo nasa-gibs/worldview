@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LocationSearchModal from './location-search-modal';
@@ -84,10 +84,10 @@ const mapStateToProps = (state) => {
   const isMobile = screenSize.isMobileDevice;
   const snapshotModalOpen = modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   // Collapse when image download, GIF, measure tool, or distraction free mode is active
-  const shouldCollapseFromOtherUI = snapshotModalOpen
-  || measure.isActive
-  || gifActive
-  || isDistractionFreeModeActive;
+  const shouldCollapseFromOtherUI = snapshotModalOpen ||
+  measure.isActive ||
+  gifActive ||
+  isDistractionFreeModeActive;
 
   return {
     isExpanded,

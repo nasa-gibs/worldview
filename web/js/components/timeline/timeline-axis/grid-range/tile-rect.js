@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /**
@@ -12,10 +12,12 @@ const tileRectTimeScaleOptions = {
       lineLengthY: (item) => {
         const timeScaleUnit = item.dateObject.minutes;
         const timeScaleUnitMod = timeScaleUnit % 5 === 0 ? 20 : 10;
-        const lineLengthY = timeScaleUnit === 0
-          || timeScaleUnit === 15
-          || timeScaleUnit === 30
-          || timeScaleUnit === 45 ? 62 : timeScaleUnitMod;
+        const lineLengthY = timeScaleUnit === 0 ||
+          timeScaleUnit === 15 ||
+          timeScaleUnit === 30 ||
+          timeScaleUnit === 45
+          ? 62
+          : timeScaleUnitMod;
         return lineLengthY;
       },
     };
@@ -24,10 +26,13 @@ const tileRectTimeScaleOptions = {
     return {
       lineLengthY: (item) => {
         const timeScaleUnit = item.dateObject.hours;
-        const nonZeroTimeScaleUnit = timeScaleUnit === 6
-            || timeScaleUnit === 12
-            || timeScaleUnit === 18 ? 22 : 10;
-        const lineLengthY = timeScaleUnit === 0 ? 62
+        const nonZeroTimeScaleUnit = timeScaleUnit === 6 ||
+            timeScaleUnit === 12 ||
+            timeScaleUnit === 18
+          ? 22
+          : 10;
+        const lineLengthY = timeScaleUnit === 0
+          ? 62
           : nonZeroTimeScaleUnit;
         return lineLengthY;
       },

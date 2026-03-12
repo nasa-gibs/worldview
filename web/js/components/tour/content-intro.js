@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ArrowLineRightCircleFill } from '@edsc/earthdata-react-icons/horizon-design-system/earthdata/ui';
 

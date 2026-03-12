@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React from 'react';
+
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import assign from 'object-assign';
@@ -51,7 +51,7 @@ export default class ContextMenu extends AbstractMenu {
         });
     }
 
-    getSubMenuType() { // eslint-disable-line class-methods-use-this
+    getSubMenuType() {
         return SubMenu;
     }
 

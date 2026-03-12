@@ -88,8 +88,8 @@ export class VectorInteractions extends React.Component {
     let toggledGranuleFootprint;
 
     // only allow hover footprints on selected side of A/B comparison
-    if (compareActive
-      && !isFromActiveCompareRegion(pixels, activeString, swipeOffset, compareState)) {
+    if (compareActive &&
+      !isFromActiveCompareRegion(pixels, activeString, swipeOffset, compareState)) {
       return;
     }
 
@@ -131,15 +131,17 @@ export class VectorInteractions extends React.Component {
         if (def?.layergroup === 'Reference') isReferenceLayer = true;
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
-        const featureOutsideExtent = layerExtent
-        && !olExtent.containsCoordinate(layerExtent, pixelCoords);
-        if (lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType())
-          || featureOutsideExtent) return;
+        const featureOutsideExtent = layerExtent &&
+        !olExtent.containsCoordinate(layerExtent, pixelCoords);
+        if (lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) ||
+          featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
-        const isRenderedFeature = isWrapped ? lon > -250
-        || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature
-          && isFromActiveCompareRegion(pixel, layer.wv.group, swipeOffset, compareState)) {
+        const isRenderedFeature = isWrapped
+          ? lon > -250 ||
+        lon < 250 || lat > -90 || lat < 90
+          : true;
+        if (isRenderedFeature &&
+          isFromActiveCompareRegion(pixel, layer.wv.group, swipeOffset, compareState)) {
           isActiveLayer = true;
         }
       });
@@ -198,7 +200,8 @@ export class VectorInteractions extends React.Component {
     const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
     const aeronetMobileSize = isAeronet ? 250 : 445;
     clickObj = getDialogObject(pixels, map, isMobile
-      ? screenSize.screenWidth : aeronetMobileSize);
+      ? screenSize.screenWidth
+      : aeronetMobileSize);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
@@ -244,8 +247,8 @@ export class VectorInteractions extends React.Component {
     } else if (hasNonClickableVectorLayerType) {
       activateVectorZoomAlert();
     }
-    if (Object.entries(selected).length
-    || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
+    if (Object.entries(selected).length ||
+    (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       if (isMobile && hasNonClickableVectorLayerType) return;
       selectVectorFeatures(selected);
     } else if (isVectorModalOpen && !Object.entries(selected).length) {

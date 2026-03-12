@@ -162,8 +162,8 @@ export function mapLocationToAnimationState(
       animation: { isPlaying: { $set: true } },
     });
   } else if (
-    parameters.ab !== 'on'
-    && (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+    parameters.ab !== 'on' &&
+    (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
   ) {
     // wipe anim start & end dates on tour change
 

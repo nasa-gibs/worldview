@@ -133,8 +133,8 @@ const getBestZoom = function(distance, start, end, view) {
     zoom,
     pixels: distance / view.getResolutionForZoom(zoom),
   }));
-  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels)
-  - Math.abs(idealLength - b.pixels))[0];
+  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels) -
+  Math.abs(idealLength - b.pixels))[0];
   return Math.max(2, Math.min(bestFit.zoom, start - 1, end - 1));
 };
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';
@@ -13,6 +13,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import { Vector as OlVectorSource } from 'ol/source';
+
 import googleTagManager from 'googleTagManager';
 import CustomButton from '../util/button';
 import Crop from '../util/image-crop';
@@ -294,7 +295,9 @@ function ChartingModeOptions(props) {
   }, [isModalOpen, modalId]);
 
   useEffect(() => {
-    if (!chartData.current || Object.keys(chartData.current).length === 0 || !isModalOpen || timeSpanSelection !== 'range') return;
+    if (!chartData.current ||
+      Object.keys(chartData.current).length === 0 ||
+      !isModalOpen || timeSpanSelection !== 'range') return;
     if (screenWidth < 768) {
       debouncedModalClose();
       updateModalOpen(false);
@@ -404,7 +407,7 @@ function ChartingModeOptions(props) {
         ok: true,
         body: parsedData,
       };
-    } catch (error) {
+    } catch {
       return {
         ok: false,
         error: SERVER_ERROR_MESSAGE,
@@ -444,7 +447,8 @@ function ChartingModeOptions(props) {
     return trimmed
       .replace(/^\[|\]$/g, '')
       .split(',')
-      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
+      .map((s) => String(s).trim()
+        .replace(/^['"]|['"]$/g, ''))
       .filter(Boolean);
   }
 
@@ -589,7 +593,9 @@ function ChartingModeOptions(props) {
       // unit determination: renderedPalettes
       const paletteName = layerInfo.palette.id;
       const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
-      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `${paletteLegend.units}` : '';
+      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units')
+        ? `${paletteLegend.units}`
+        : '';
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -760,7 +766,6 @@ function ChartingModeOptions(props) {
     }
     setMapViewChecked(!mapViewChecked);
   };
-
 
   const spinnerStyle = {
     width: '12px',

@@ -87,8 +87,8 @@ function KioskAnimations({ ui }) {
   };
 
   useEffect(() => {
-    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete
-      || isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
+    if (!ui.selected || !isKioskModeActive || !eicMeasurementComplete ||
+      isAnimationPlaying || !eicAnimationMode || eicMeasurementAborted) return;
     checkAnimationSettings();
   }, [map, eicMeasurementComplete]);
 

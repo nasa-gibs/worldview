@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';
@@ -47,11 +46,11 @@ function MobileAnimationWidget (props) {
   const startingDate = getISODateFormatted(startDate);
 
   const getMobileIDs = () => {
-    if ((isMobilePhone && isLandscape)
-      || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
+    if ((isMobilePhone && isLandscape) ||
+      (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
       return 'mobile-phone-landscape';
-    } if ((isMobilePhone && isPortrait)
-      || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
+    } if ((isMobilePhone && isPortrait) ||
+      (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
       return 'mobile-phone-portrait';
     } if (isMobileTablet || screenWidth <= breakpoints.small) {
       return 'tablet';
