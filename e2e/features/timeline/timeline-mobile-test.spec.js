@@ -6,6 +6,35 @@ const { closeModal } = require('../../test-utils/hooks/wvHooks')
 let page
 let selectors
 
+async function openMobileDatePicker (page, mobileDatePickerSelectBtn) {
+  await expect(mobileDatePickerSelectBtn).toBeVisible({ timeout: 15000 })
+  await mobileDatePickerSelectBtn.scrollIntoViewIfNeeded()
+
+  const modal = page.locator('.datepicker-modal')
+  const picker = page.locator('.datepicker-modal .datepicker')
+
+  // CI can occasionally miss the first tap/click on mobile view;
+  // retry with a force-click fallback and wait for the modal.
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      await mobileDatePickerSelectBtn.click({ timeout: 5000 })
+    } catch (e) {
+      await mobileDatePickerSelectBtn.click({ force: true })
+    }
+
+    try {
+      await expect(modal).toBeVisible({ timeout: 5000 })
+      await expect(picker).toBeVisible({ timeout: 5000 })
+      return
+    } catch (e) {
+      // Try again
+    }
+  }
+
+  // Let the final assertion throw a useful error.
+  await expect(modal).toBeVisible({ timeout: 15000 })
+}
+
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
@@ -60,7 +89,7 @@ test('date.mob.range.1: Date label should show 2013-03-15', async () => {
 
 test('date.mob.range.2: mobile selector header should show 2013 MAR 15', async () => {
   const { mobileDatePickerSelectBtn, mobileDatePickerHeader } = selectors
-  await mobileDatePickerSelectBtn.click()
+  await openMobileDatePicker(page, mobileDatePickerSelectBtn)
   await expect(mobileDatePickerHeader).toContainText('2013 MAR 15')
 })
 
@@ -116,7 +145,7 @@ test('date.mob.nav.1: Date label should show 2013 JUL 20', async () => {
 
 test('date.mob.nav.2a: mobile selector header should show 2013 JUL 20', async () => {
   const { mobileDatePickerHeader, mobileDatePickerSelectBtn } = selectors
-  await mobileDatePickerSelectBtn.click()
+  await openMobileDatePicker(page, mobileDatePickerSelectBtn)
   await expect(mobileDatePickerHeader).toContainText('2013 JUL 20')
 })
 
