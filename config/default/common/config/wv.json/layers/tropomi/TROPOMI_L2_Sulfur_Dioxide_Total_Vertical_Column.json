@@ -6,7 +6,7 @@
       "tags": "sulphur so2",
       "group": "overlays",
       "layergroup": "Sulfur Dioxide",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": false
     }
   }
 }
