@@ -4,9 +4,10 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { subdailyLayerIntervalTimescale, knownDate } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
@@ -171,10 +172,12 @@ test('Date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the
   const queryString = 'http://localhost:3000/?t=2013-02-28'
   await page.goto(queryString)
   await closeModal(page)
+  await dayUp.scrollIntoViewIfNeeded()
   await dayUp.click()
   await expect(dateSelectorDayInput).toHaveValue('01')
   await expect(dateSelectorMonthInput).toHaveValue('FEB')
   await expect(dateSelectorYearInput).toHaveValue('2013')
+  await dayDown.scrollIntoViewIfNeeded()
   await dayDown.click()
   await expect(dateSelectorDayInput).toHaveValue('28')
   await expect(dateSelectorMonthInput).toHaveValue('FEB')

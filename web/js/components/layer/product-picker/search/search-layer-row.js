@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, UncontrolledTooltip } from 'reactstrap';
-import { Check } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
@@ -140,7 +139,12 @@ class SearchLayerRow extends React.Component {
             onChange={this.toggleEnabled}
           />
           {isEnabled && (
-            <Check class="check" size="15px" />
+            <FontAwesomeIcon
+              icon="check-circle"
+              className="check"
+              style={{ fontSize: '15px' }}
+              widthAuto
+            />
           )}
         </div>
         {(chartableLayer || layerNotices) && (

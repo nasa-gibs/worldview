@@ -62,7 +62,7 @@
     "lint:scss": "npx stylelint ./web/scss/**/*.scss",
     "lint:js": "npx eslint .",
     "preinstall": "node tasks/util/checkNodeVersion.js",
-    "postinstall": "patch-package && husky",
+    "postinstall": "husky",
     "start": "node ./tasks/util/start.js",
     "t-debug": "npx playwright test --debug",
     "test": "run-script-os",
@@ -127,11 +127,10 @@
     "node-fetch": "^2.6.9",
     "node-ssh": "^13.2.1",
     "npm-run-all": "^4.1.5",
-    "patch-package": "^8.0.0",
     "postcss": "^8.5.8",
     "postcss-loader": "^8.2.1",
     "react-refresh": "^0.18.0",
-    "react-test-renderer": "^18.3.1",
+    "react-test-renderer": "^19.2.4",
     "redux-mock-store": "^1.5.5",
     "run-script-os": "^1.1.6",
     "sass": "^1.98.0",
@@ -193,22 +192,18 @@
     "p-queue": "^9.1.0",
     "proj4": "^2.20.3",
     "prop-types": "^15.8.1",
-    "react": "^18.3.1",
+    "react": "^19.2.4",
     "react-device-detect": "^2.2.3",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.2.4",
     "react-draggable": "^4.5.0",
     "react-image-crop": "^11.0.10",
     "react-infinite-scroller": "^1.2.6",
-    "react-joyride": "^2.9.3",
-    "react-mobile-datepicker": "^4.0.2",
+    "react-joyride": "^3.0.0-7",
     "react-redux": "^9.2.0",
     "react-resizable": "^3.1.3",
-    "react-swipe-to-delete-component": "1.0.5",
-    "react-visibility-sensor": "^5.1.1",
     "reactstrap": "^9.2.3",
     "recharts": "^3.8.0",
     "redux": "^5.0.1",
-    "redux-location-state": "^2.8.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^3.1.0",
     "regenerator-runtime": "^0.14.1",
@@ -224,8 +219,8 @@
   },
   "overrides": {
     "semver": "^7.5.4",
-    "redux-location-state": {
-      "redux": "^5.0.1"
+    "@gilbarbara/hooks": {
+      "react": "^19.2.4"
     }
   },
   "browserslist": [

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import moment from 'moment';
@@ -59,6 +59,8 @@ class TimelineAxis extends Component {
 
   constructor(props) {
     super(props);
+
+    this.nodeRef = createRef();
     this.state = {
       init: true,
       draggerWidth: 49,
@@ -1637,6 +1639,7 @@ class TimelineAxis extends Component {
                 <Draggable
                   axis="x"
                   handle=".axis-grid-container"
+                  nodeRef={this.nodeRef}
                   position={{ x: position, y: 0 }}
                   onDrag={this.handleDrag}
                   onStart={this.handleStartDrag}
@@ -1645,7 +1648,7 @@ class TimelineAxis extends Component {
                     left: leftBound, top: 0, bottom: 0, right: rightBound,
                   }}
                 >
-                  <g clipPath="url(#timelineBoundary)">
+                  <g ref={this.nodeRef} clipPath="url(#timelineBoundary)">
                     <GridRange
                       showHover={showHover}
                       timeScale={timeScale}

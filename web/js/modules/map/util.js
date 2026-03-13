@@ -168,6 +168,12 @@ function promiseTileLayer(layer, map) {
   return new Promise((resolve) => {
     if (!preloadMap) {
       const mapContainerEl = document.getElementById('wv-map');
+      if (!mapContainerEl) {
+        // If the main map container isn't mounted yet, skip the preload-map
+        // optimization rather than throwing during layer creation.
+        resolve();
+        return;
+      }
       const mapEl = document.createElement('div');
       const id = 'wv-map-preload';
 

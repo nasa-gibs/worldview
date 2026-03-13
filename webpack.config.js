@@ -48,15 +48,9 @@ const babelLoaderExcludes = [
   /core-js/
 ]
 // Include any modules that need to be transpiled by babel-loader
-const transpileDependencies = [
-  'react-visibility-sensor'
-]
 if (devMode) {
-  // Don't transpile any dependencies in /node_modules except those found
-  // in transpileDependencies array
-  babelLoaderExcludes.push(
-    new RegExp(`node_modules(?!(/|\\\\)(${transpileDependencies.join('|')})).*`)
-  )
+  // Don't transpile dependencies in /node_modules by default.
+  babelLoaderExcludes.push(/node_modules/)
 }
 
 module.exports = {

@@ -37,7 +37,7 @@ export default function Checkbox (props) {
           tabIndex="0"
         />
         {checked && (
-          <Check class="check" size="15px" />
+          <Check className="check" size="15px" />
         )}
         {children}
         <label htmlFor={id}>

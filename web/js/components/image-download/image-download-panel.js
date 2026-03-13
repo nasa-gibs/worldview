@@ -31,9 +31,9 @@ const RESOLUTION_KEY = {
 
 function ImageDownloadPanel(props) {
   const {
-    fileType,
-    isWorldfile,
-    resolution,
+    fileType = 'image/jpeg',
+    isWorldfile = false,
+    resolution = '1',
     getLayers,
     url,
     lonlats,
@@ -41,16 +41,16 @@ function ImageDownloadPanel(props) {
     date,
     markerCoordinates,
     onPanelChange,
-    fileTypeOptions,
+    fileTypeOptions = true,
     fileTypes,
-    secondLabel,
-    worldFileOptions,
+    secondLabel = 'Format',
+    worldFileOptions = true,
     datelineMessage,
     map,
     viewExtent,
     resolutions,
-    maxImageSize,
-    firstLabel,
+    maxImageSize = '8200px x 8200px',
+    firstLabel = 'Resolution (per pixel)',
     geoLatLong,
     onLatLongChange,
   } = props;
@@ -252,17 +252,6 @@ function ImageDownloadPanel(props) {
     </>
   );
 }
-
-ImageDownloadPanel.defaultProps = {
-  fileType: 'image/jpeg',
-  fileTypeOptions: true,
-  firstLabel: 'Resolution (per pixel)',
-  isWorldfile: false,
-  maxImageSize: '8200px x 8200px',
-  resolution: '1',
-  secondLabel: 'Format',
-  worldFileOptions: true,
-};
 
 ImageDownloadPanel.propTypes = {
   datelineMessage: PropTypes.string,

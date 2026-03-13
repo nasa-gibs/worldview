@@ -3,20 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, ButtonGroup } from 'reactstrap';
 
 class CompareModeOptions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selected: props.selected,
-    };
-  }
-
-  UNSAFE_componentWillReceiveProps(newProp) {
-    const { selected } = this.state;
-    if (selected !== newProp.selected) {
-      this.setState({ selected: newProp.selected });
-    }
-  }
-
   render() {
     const {
       isActive, isMobile, selected, onclick,
