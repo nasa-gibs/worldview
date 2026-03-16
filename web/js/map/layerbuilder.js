@@ -590,49 +590,38 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVectorAeronet = (def, options, day, state, attributes) => {
-    const { proj, animation } = state;
+    const { proj } = state;
     let date;
-    let gridExtent;
-    let layerExtent;
     const selectedProj = proj.selected;
     const source = config.sources[def.source];
-    const animationIsPlaying = animation.isPlaying;
     const isSubdaily = def.period === 'subdaily';
-    gridExtent = selectedProj.maxExtent;
-    layerExtent = gridExtent;
+    const gridExtent = selectedProj.maxExtent;
+    const layerExtent = gridExtent;
 
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
 
-    if (day) {
-      if (day === 1) {
-        layerExtent = LEFT_WING_EXTENT;
-        gridExtent = [110, -90, 180, 90];
-      } else {
-        gridExtent = [-180, -90, -110, 90];
-        layerExtent = RIGHT_WING_EXTENT;
-      }
-    }
-
-    date = getSelectedDate(state);
+    date = options.date || getSelectedDate(state);
 
     if (isSubdaily && !date) {
       date = getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
-    const breakPointLayerDef = def.breakPointLayer;
-    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
 
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
       loader: async () => {
+        const allDataKey = `AERONET:${date.getUTCFullYear()}`;
+
         // Get data from all locations of the current year (both active and inactive)
         const getAllData = async () => {
-          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
+          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getUTCFullYear()}_lev15.txt`;
           const res = await fetch(url);
           const data = await res.text();
+          const cacheOptions = getCacheOptions(def.period, date);
+          // Cache the data per-year to prevent re-request on every date change
+          cache.setItem(allDataKey, data, cacheOptions);
           return data;
         };
 
@@ -647,7 +636,7 @@ export default function mapLayerBuilder(config, cache, store) {
           return data;
         };
 
-        const allData = await getAllData();
+        const allData = cache.getItem(allDataKey) || await getAllData();
         const activeData = await getActiveData();
 
         const featuresObj = [];
@@ -801,27 +790,8 @@ export default function mapLayerBuilder(config, cache, store) {
       id: def.id,
     };
 
-    layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
-
-    if (breakPointLayerDef && !animationIsPlaying) {
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      const layerGroup = new OlLayerGroup({
-        layers: [layer, wmsLayer],
-      });
-      wmsLayer.wv = attributes;
-      return layerGroup;
-    }
-
-    if (breakPointResolution && animationIsPlaying) {
-      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      wmsLayer.wv = attributes;
-      return wmsLayer;
-    }
 
     return layer;
   };
