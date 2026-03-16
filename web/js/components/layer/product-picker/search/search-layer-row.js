@@ -139,12 +139,24 @@ class SearchLayerRow extends React.Component {
             onChange={this.toggleEnabled}
           />
           {isEnabled && (
-            <FontAwesomeIcon
-              icon="check-circle"
+            <svg
+              stroke="currentColor"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="0"
+              width="15px"
+              height="15px"
+              viewBox="0 0 20 20"
+              role="img"
               className="check"
-              style={{ fontSize: '15px' }}
-              widthAuto
-            />
+            >
+              <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M17.707 5.707 8 15.414 2.293 9.707l1.414-1.414L8 12.586l8.293-8.293z"
+                clipRule="evenodd"
+              />
+            </svg>
           )}
         </div>
         {(chartableLayer || layerNotices) && (
