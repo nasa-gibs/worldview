@@ -4,9 +4,11 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive, spyAndBIsActive } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-let selectors
 
+/** @type {ReturnType<typeof createSelectors>} */
+let selectors
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
@@ -46,12 +48,14 @@ test('Image download is disabled when compare mode active', async () => {
 test('Data download is disabled when compare mode active', async () => {
   const { dataDownloadTabButton } = selectors
   const disableMessage = 'You must exit comparison mode to download data'
+  await page.goto(swipeAndAIsActive)
+  await closeModal(page)
   await expect(dataDownloadTabButton).toHaveClass(/disabled/)
   await expect(dataDownloadTabButton).toHaveAttribute('aria-label', disableMessage)
   const downloadTab = page.locator('#download-sidebar-tab')
   await downloadTab.hover()
-  const tooltipSelector = page.locator('.tooltip-inner')
-  await expect(tooltipSelector).toContainText(disableMessage)
+  const tooltipSelector = page.getByRole('tooltip', { name: disableMessage })
+  await expect(tooltipSelector).toBeVisible()
   // Clicking does not switch tabs
   await dataDownloadTabButton.click()
   const smartHandoffPanel = page.locator('#smart-handoff-side-panel')

@@ -3,9 +3,10 @@ const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { localStorageEnabled } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 const url = 'http://localhost:3000/?t=2020-07-04'
 
 test.describe.configure({ mode: 'serial' })

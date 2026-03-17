@@ -2,8 +2,8 @@
 const { test, expect } = require('@playwright/test')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 const withinMapURLParams = 'http://localhost:3000/?v=-67.80916012733559,-56.052180562072095,-30.50743102883792,-30.873513420586164&t=2021-08-08-T0'
 const crossesPrevDayURLParams = 'http://localhost:3000/?v=161.16767164758798,-54.46571918482002,198.46940074608565,-29.287052043334096&t=2021-08-08-T0'
 const crossesNextDayURLParams = 'http://localhost:3000/?v=-198.76946733086245,-59.504883811673906,-161.46773823236478,-34.326216670187975&t=2021-08-08-T0'

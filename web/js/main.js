@@ -9,7 +9,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import {
   createReduxLocationActions,
   listenForHistoryChange,
-} from 'redux-location-state';
+} from './redux-location-state';
 import { createBrowserHistory } from 'history';
 import { uniqBy, get as lodashGet } from 'lodash';
 import getMiddleware from './combine-middleware';

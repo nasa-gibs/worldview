@@ -51,12 +51,17 @@
     background: transparent;
     border: 0;
     font-family: variables.$wv-monospace-font;
+    font-size: 15px;
     vertical-align: middle;
     box-sizing: border-box;
     padding: 0;
     height: inherit;
     text-align: center;
     width: 100%;
+  }
+
+  button {
+    font-size: 15px;
   }
 
   .input-wrapper:hover {

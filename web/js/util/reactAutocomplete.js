@@ -1,7 +1,6 @@
 /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { findDOMNode } from 'react-dom';
 import scrollIntoView from 'dom-scroll-into-view';
 
 const IMPERATIVE_API = [
@@ -196,6 +195,15 @@ class Autocomplete extends React.Component {
       isOpen: false,
       highlightedIndex: null,
     };
+
+    // Internal refs/state used by the legacy implementation.
+    // React 19 no longer supports `componentWillMount`/`componentWillReceiveProps`.
+    this.refs = {};
+    this._ignoreBlur = false;
+    this._ignoreFocus = false;
+    this._scrollOffset = null;
+    this._scrollTimer = null;
+
     this._debugStates = [];
     this.ensureHighlightedIndex = this.ensureHighlightedIndex.bind(this);
     this.exposeAPI = this.exposeAPI.bind(this);
@@ -207,27 +215,9 @@ class Autocomplete extends React.Component {
     this.maybeAutoCompleteText = this.maybeAutoCompleteText.bind(this);
   };
 
-  componentWillMount() {
-    // this.refs is frozen, so we need to assign a new object to it
-    this.refs = {};
-    this._ignoreBlur = false;
-    this._ignoreFocus = false;
-    this._scrollOffset = null;
-    this._scrollTimer = null;
-  }
-
   componentWillUnmount() {
     clearTimeout(this._scrollTimer);
     this._scrollTimer = null;
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.state.highlightedIndex !== null) {
-      this.setState(this.ensureHighlightedIndex)
-    }
-    if (nextProps.autoHighlight && (this.props.value !== nextProps.value || this.state.highlightedIndex === null)) {
-      this.setState(this.maybeAutoCompleteText)
-    }
   }
 
   componentDidMount() {
@@ -244,6 +234,33 @@ class Autocomplete extends React.Component {
     if (prevState.isOpen !== this.state.isOpen) {
       this.props.onMenuVisibilityChange(this.state.isOpen);
     }
+
+    const filteredItemsAffectingPropsChanged = (
+      prevProps.items !== this.props.items
+      || prevProps.shouldItemRender !== this.props.shouldItemRender
+      || prevProps.sortItems !== this.props.sortItems
+      || prevProps.value !== this.props.value
+    );
+
+    if (filteredItemsAffectingPropsChanged && this.state.highlightedIndex !== null) {
+      const ensured = this.ensureHighlightedIndex(this.state, this.props);
+      if (ensured && ensured.highlightedIndex !== this.state.highlightedIndex) {
+        this.setState(ensured);
+        return;
+      }
+    }
+
+    const autoHighlightShouldRecompute = (
+      this.props.autoHighlight
+      && (prevProps.value !== this.props.value || this.state.highlightedIndex === null)
+    );
+
+    if (autoHighlightShouldRecompute && (prevProps.value !== this.props.value || prevProps.autoHighlight !== this.props.autoHighlight)) {
+      const suggested = this.maybeAutoCompleteText(this.state, this.props);
+      if (suggested && suggested.highlightedIndex !== this.state.highlightedIndex) {
+        this.setState(suggested);
+      }
+    }
   }
 
   exposeAPI(el) {
@@ -255,11 +272,8 @@ class Autocomplete extends React.Component {
     if (this.isOpen() && this.state.highlightedIndex !== null) {
       const itemNode = this.refs[`item-${this.state.highlightedIndex}`];
       const menuNode = this.refs.menu;
-      scrollIntoView(
-        findDOMNode(itemNode),
-        findDOMNode(menuNode),
-        { onlyScrollIfNeeded: true }
-      )
+      if (!itemNode || !menuNode) return;
+      scrollIntoView(itemNode, menuNode, { onlyScrollIfNeeded: true })
     }
   }
 

@@ -810,6 +810,95 @@ button:focus {
   position: static;
 }
 
+.datepicker-modal .datepicker {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 1;
+  text-align: center;
+  user-select: none;
+  box-sizing: content-box;
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+}
+
+.datepicker-modal .datepicker-header {
+  padding: 0 0.5em;
+  min-height: 2em;
+  line-height: 2em;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.datepicker-modal .datepicker-caption {
+  display: flex;
+  padding: 0.5em 0.25em;
+}
+
+.datepicker-modal .datepicker-caption-item {
+  flex: 1;
+  margin: 0 0.25em;
+  height: 40px;
+  line-height: 40px;
+  font-size: 1.2em;
+}
+
+.datepicker-modal .datepicker-content {
+  display: flex;
+  padding: 0.5em 0.25em;
+}
+
+.datepicker-modal .datepicker-col-1 {
+  flex: 1;
+  margin: 0 0.25em;
+}
+
+.datepicker-modal .datepicker-viewport {
+  display: block;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.datepicker-modal .datepicker-wheel {
+  position: absolute;
+  height: 40px;
+  top: 50%;
+  margin-top: -20px;
+  width: 100%;
+}
+
+.datepicker-modal .datepicker-scroll {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.datepicker-modal .datepicker-scroll > li {
+  height: 40px;
+  line-height: 40px;
+  font-size: 1.375em;
+  cursor: pointer;
+}
+
+.datepicker-modal .datepicker-navbar {
+  padding: 0 0.5em 0.5em;
+  overflow: hidden;
+}
+
+.datepicker-modal .datepicker-navbar-btn {
+  font-size: 18px;
+  font-weight: 700;
+  height: 55px;
+  line-height: 55px;
+  float: right;
+  padding: 0 1em;
+  cursor: pointer;
+}
+
 .mobile-date-picker-select-btn {
   user-select: none;
   position: absolute;
@@ -833,21 +922,11 @@ button:focus {
 
 .datepicker-modal {
   & div,
-  li {
+  & li {
     font-family: variables.$wv-monospace-font;
   }
 
-  & .datepicker-header,
-  .datepicker-navbar-btn {
-    font-weight: 700;
-    font-size: 18px;
-  }
-
-  .datepicker-navbar-btn {
-    height: 55px;
-  }
-
-  .datepicker .datepicker-navbar-btn:hover {
+  & .datepicker .datepicker-navbar-btn:hover {
     background: #ccc;
     color: #333;
   }

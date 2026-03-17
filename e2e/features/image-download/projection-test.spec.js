@@ -9,8 +9,8 @@ const {
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 const { switchProjections } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
   't=2018-06-01',

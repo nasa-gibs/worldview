@@ -24,16 +24,19 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
  * @returns
  */
 const sortEvents = function(events) {
+  if (!Array.isArray(events) || events.length === 0) return [];
+
   return events
     .map((e) => {
-      e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
+      const geometry = Array.isArray(e.geometry) ? e.geometry : [];
+      e.geometry = lodashOrderBy(geometry, 'date', 'desc');
       // Discard duplicate geometry dates
       e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
       return e;
     })
     .sort((eventA, eventB) => {
-      const dateA = new Date(eventA.geometry[0].date).valueOf();
-      const dateB = new Date(eventB.geometry[0].date).valueOf();
+      const dateA = new Date(eventA?.geometry?.[0]?.date || 0).valueOf();
+      const dateB = new Date(eventB?.geometry?.[0]?.date || 0).valueOf();
       return dateB - dateA;
     });
 };
@@ -171,10 +174,12 @@ export function eventsRequestReducer(actionName, state, action) {
       const key = actionName === REQUEST_EVENTS
         ? 'events'
         : 'sources';
+
+      const payload = action?.response?.[key];
       return eventRequestResponse({
         response: actionName === REQUEST_EVENTS
-          ? sortEvents(action.response[key])
-          : action.response[key],
+          ? sortEvents(payload)
+          : (payload || null),
         isLoading: false,
       });
     }

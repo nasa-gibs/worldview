@@ -157,16 +157,21 @@ export function mapLocationToAnimationState(
   let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
   const endDate = lodashGet(stateFromLocation, 'animation.endDate');
-  if (parameters.playanim && parameters.ab) {
-    stateFromLocation = update(stateFromLocation, {
-      animation: { isPlaying: { $set: true } },
-    });
-  } else if (
-    parameters.ab !== 'on' &&
+  const isActiveFromParams = parameters.ab === 'on' || parameters.ab === true;
+  const isPlayingFromParams = !!parameters.playanim && isActiveFromParams;
+
+  stateFromLocation = update(stateFromLocation, {
+    animation: {
+      isActive: { $set: isActiveFromParams },
+      isPlaying: { $set: isPlayingFromParams },
+    },
+  });
+
+  if (
+    !isActiveFromParams &&
     (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
   ) {
     // wipe anim start & end dates on tour change
-
     stateFromLocation = update(stateFromLocation, {
       animation: { endDate: { $set: undefined } },
     });
