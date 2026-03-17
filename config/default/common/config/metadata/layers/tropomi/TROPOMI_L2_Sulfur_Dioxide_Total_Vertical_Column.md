@@ -4,4 +4,4 @@ The retrieval algorithm for Sentinel-5P TROPOMI SO2 from ultraviolet spectral me
 
 The Sulfur Dioxide (L2, Total Vertical Column) layer is a science parameter of the Sentinel-5P TROPOMI Sulphur Dioxide SO2 1-Orbit L2 5.5km x 3.5km (S5P_L2__SO2____HiR) product. It is available from the TROPOspheric Monitoring Instrument (TROPOMI) instrument aboard the European Space Agency's (ESA) Sentinel-5P satellite. The sensor resolution is ~5.5km at nadir (5.5 x 3.5 km<sup>2</sup>), the imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: S5P_L2__SO2____HiR [doi:10.5270/S5P-74eidii](https://doi.org/10.5270/S5P-74eidii); [S5P_L2__SO2____HiR  description at GES DISC](https://disc.gsfc.nasa.gov/datasets/S5P_L2__SO2____HiR_2/summary)
+References: S5P_L2__NO2____HiR_NRT [https://disc.gsfc.nasa.gov/datasets/S5P_L2__NO2____HiR_NRT_2/summary]; S5P_L2__SO2____HiR [doi:10.5270/S5P-74eidii](https://doi.org/10.5270/S5P-74eidii); [S5P_L2__SO2____HiR  description at GES DISC](https://disc.gsfc.nasa.gov/datasets/S5P_L2__SO2____HiR_2/summary)
