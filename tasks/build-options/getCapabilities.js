@@ -128,14 +128,10 @@ async function processVectorData (layer) {
     console.warn(`Processing vector data for ${ident}:`)
   }
   if (layer['ows:Metadata']) {
-    console.warn("layer['ows:Metadata']")
-    console.warn(layer['ows:Metadata'])
-    Object.values(layer['ows:Metadata']).forEach((item) => {
-      console.warn('item')
-      console.warn(item)
-      console.warn(item._attributes)
-
-
+    const metadataItems = Array.isArray(layer['ows:Metadata'])
+      ? layer['ows:Metadata']
+      : [layer['ows:Metadata']];
+    Object.values(metadataItems).forEach((item) => {
       const schemaVersion = item._attributes['xlink:role']
       if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
         if (argv.mode === 'verbose') console.trace(`  Processing Metadata: ${item._attributes['xlink:href']}`)
@@ -152,11 +148,14 @@ async function processLayer (layer) {
   const ident = layer['ows:Identifier']._text
   if (argv.mode === 'verbose') console.trace(`Processing layer ${ident}...`)
   if (layer['ows:Metadata']) {
-    console.warn('ows:Metadata structure:', JSON.stringify(layer['ows:Metadata'], null, 2))
+    const metadataItems = Array.isArray(layer['ows:Metadata'])
+      ? layer['ows:Metadata']
+      : [layer['ows:Metadata']];
+    console.warn('ows:Metadata structure:', JSON.stringify(metadataItems, null, 2))
     if (config.skipPalettes) {
       console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
     } else {
-      Object.values(layer['ows:Metadata']).forEach((item) => {
+      Object.values(metadataItems).forEach((item) => {
         console.warn('Metadata item:', JSON.stringify(item, null, 2))
         if (argv.mode === 'verbose') console.trace(`  Processing pallette: ${item._attributes['xlink:href']}`)
         const schemaVersion = item._attributes['xlink:role']
@@ -188,13 +187,6 @@ async function processGetCapabilities (outputFile) {
     const layers = gc.Capabilities.Contents.Layer
 
     Object.values(layers).forEach((layer) => {
-
-      // Simulate single metadata entry
-      // console.warn(`==========================`)
-      // if (layer['ows:Metadata'] && Array.isArray(layer['ows:Metadata'])) {
-      //   layer['ows:Metadata'] = [layer['ows:Metadata'][0]]
-      // }
-
       processLayer(layer)
       processVectorData(layer)
     })
