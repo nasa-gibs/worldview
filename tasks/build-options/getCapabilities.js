@@ -151,12 +151,10 @@ async function processLayer (layer) {
     const metadataItems = Array.isArray(layer['ows:Metadata'])
       ? layer['ows:Metadata']
       : [layer['ows:Metadata']];
-    console.warn('ows:Metadata structure:', JSON.stringify(metadataItems, null, 2))
     if (config.skipPalettes) {
       console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
     } else {
       Object.values(metadataItems).forEach((item) => {
-        console.warn('Metadata item:', JSON.stringify(item, null, 2))
         if (argv.mode === 'verbose') console.trace(`  Processing pallette: ${item._attributes['xlink:href']}`)
         const schemaVersion = item._attributes['xlink:role']
         if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {
