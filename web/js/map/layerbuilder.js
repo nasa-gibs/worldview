@@ -1221,8 +1221,11 @@ export default function mapLayerBuilder(config, cache, store) {
         proj.selected,
       );
 
+      const baseUrl = `${configSource.url}/${layerName}`;
+      const isMaxarSource = source === 'MAXAR:wmts';
+
       const sourceOptions = {
-        url: `${configSource.url}/${layerName}/{z}/{x}/{y}`,
+        url: `${baseUrl}/{z}/{x}/{y}`,
         layer: layerName,
         crossOrigin: 'anonymous',
         format,
@@ -1230,6 +1233,90 @@ export default function mapLayerBuilder(config, cache, store) {
         projection: 'EPSG:3857',
         maxZoom: 21,
       };
+
+      // Only apply overzoom fallback for MAXAR source
+      // NOAA's server redirects to clear.png for missing tiles; we fall back to parent tiles
+      if (isMaxarSource) {
+        sourceOptions.tileLoadFunction = (tile) => {
+          const image = tile.getImage();
+          const [z, x, y] = tile.tileCoord;
+
+          const tryLoadTile = (currentZ, currentX, currentY, origZ, origX, origY) => {
+            const url = `${baseUrl}/${currentZ}/${currentX}/${currentY}`;
+
+            fetch(url)
+              .then((response) => {
+                // Check if redirected to clear.png (missing tile)
+                if (response.url.includes('clear.png')) {
+                  if (currentZ > 0) {
+                    tryLoadTile(
+                      currentZ - 1,
+                      Math.floor(currentX / 2),
+                      Math.floor(currentY / 2),
+                      origZ,
+                      origX,
+                      origY,
+                    );
+                  }
+                  return null;
+                }
+                return response.blob();
+              })
+              .then((blob) => {
+                if (!blob) return;
+
+                const blobUrl = URL.createObjectURL(blob);
+
+                // If we're at the original zoom, use tile directly
+                if (currentZ === origZ) {
+                  image.src = blobUrl;
+                  image.onload = () => URL.revokeObjectURL(blobUrl);
+                  return;
+                }
+
+                // Need to crop and scale parent tile
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                  const zoomDiff = origZ - currentZ;
+                  const scale = 2 ** zoomDiff;
+                  const tileSize = 256;
+                  const cropSize = tileSize / scale;
+
+                  const offsetX = (origX % scale) * cropSize;
+                  const offsetY = (origY % scale) * cropSize;
+
+                  const canvas = document.createElement('canvas');
+                  canvas.width = tileSize;
+                  canvas.height = tileSize;
+                  const ctx = canvas.getContext('2d');
+                  ctx.imageSmoothingEnabled = true;
+                  ctx.drawImage(
+                    tempImg,
+                    offsetX, offsetY, cropSize, cropSize,
+                    0, 0, tileSize, tileSize,
+                  );
+                  image.src = canvas.toDataURL();
+                  URL.revokeObjectURL(blobUrl);
+                };
+                tempImg.src = blobUrl;
+              })
+              .catch(() => {
+                if (currentZ > 0) {
+                  tryLoadTile(
+                    currentZ - 1,
+                    Math.floor(currentX / 2),
+                    Math.floor(currentY / 2),
+                    origZ,
+                    origX,
+                    origY,
+                  );
+                }
+              });
+          };
+
+          tryLoadTile(z, x, y, z, x, y);
+        };
+      }
       const tileSource = new OlSourceXYZ(sourceOptions);
 
       return new OlLayerTile({
