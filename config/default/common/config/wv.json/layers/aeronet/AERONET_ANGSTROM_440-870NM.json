@@ -33,18 +33,6 @@
         "immutable": true,
         "styleProperty": "MAIN_USE",
         "unclassified": "Not Classified"
-      },
-      "breakPointLayer": {
-        "id": "AERONET_ANGSTROM_440-870NM",
-        "type": "wms",
-        "format": "image/png",
-        "breakPointType": "max",
-        "projections": {
-          "geographic": {
-            "source": "AERONET",
-            "resolutionBreakPoint": 0.03515625
-          }
-        }
       }
     }
   }

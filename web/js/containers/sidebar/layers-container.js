@@ -1,7 +1,12 @@
-/* eslint-disable react/jsx-props-no-spreading */
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { Draggable, Droppable, DragDropContext } from 'react-beautiful-dnd';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+  useSortable,
+} from '@dnd-kit/sortable';
 import PropTypes from 'prop-types';
 import { isMobileOnly, isTablet } from 'react-device-detect';
 import LayerList from './layer-list';
@@ -19,6 +24,63 @@ import util from '../../util/util';
 import SearchUiProvider from '../../components/layer/product-picker/search-ui-provider';
 import { openCustomContent } from '../../modules/modal/actions';
 import { stop as stopAnimationAction } from '../../modules/animation/actions';
+
+function SortableOverlayGroup(props) {
+  const {
+    group,
+    compareState,
+    activeLayersMap,
+    overlaysLength,
+    toggleCollapse,
+    isEmbedModeActive,
+    isAnimating,
+  } = props;
+
+  const { groupName, layers, collapsed } = group;
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: groupName,
+    disabled: isEmbedModeActive || isAnimating,
+  });
+
+  const style = {
+    transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
+    transition,
+    opacity: isDragging ? 0.8 : undefined,
+  };
+
+  if (!layers) return null;
+  const layersForGroup = layers.map((id) => activeLayersMap[id]);
+  return (
+    <li
+      id={`${compareState}-${util.cleanId(groupName)}`}
+      ref={setNodeRef}
+      style={style}
+    >
+      <LayerList
+        title={groupName}
+        groupId={groupName}
+        collapsed={collapsed}
+        toggleCollapse={toggleCollapse}
+        compareState={compareState}
+        layerSplit={overlaysLength}
+        layers={layersForGroup}
+        dragHandleProps={{
+          ...attributes,
+          ...listeners,
+          ref: setActivatorNodeRef,
+        }}
+      />
+    </li>
+  );
+}
 
 function LayersContainer (props) {
   const {
@@ -43,14 +105,15 @@ function LayersContainer (props) {
    * Update layer group order after drag/drop
    * @param {*} result
    */
-  const onDragEnd = (result) => {
-    const { destination, source } = result;
-    if (!destination || source.index === destination.index) {
-      return;
-    }
-    const newGroups = Array.from(overlayGroups);
-    const [removed] = newGroups.splice(source.index, 1);
-    newGroups.splice(destination.index, 0, removed);
+  const onDragEnd = (event) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const sourceIndex = overlayGroups.findIndex(({ groupName }) => groupName === active.id);
+    const destinationIndex = overlayGroups.findIndex(({ groupName }) => groupName === over.id);
+    if (sourceIndex < 0 || destinationIndex < 0 || sourceIndex === destinationIndex) return;
+
+    const newGroups = arrayMove(overlayGroups, sourceIndex, destinationIndex);
     const newLayers = newGroups
       .flatMap(({ layers }) => layers)
       .map((id) => activeLayersMap[id])
@@ -58,56 +121,31 @@ function LayersContainer (props) {
     reorderOverlayGroups(newLayers, newGroups);
   };
 
-  const renderLayerList = (group, idx) => {
-    const { groupName, layers, collapsed } = group;
-    const layersForGroup = layers.map((id) => activeLayersMap[id]);
-    return layers && (
-      <Draggable
-        key={groupName}
-        draggableId={groupName}
-        index={idx}
-        isDragDisabled={isEmbedModeActive || isAnimating}
-      >
-        {(provided) => (
-          <li
-            id={`${compareState}-${util.cleanId(groupName)}`}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-          >
-            <LayerList
-              title={groupName}
-              groupId={groupName}
-              collapsed={collapsed}
-              toggleCollapse={toggleCollapse}
-              compareState={compareState}
-              layerSplit={overlays.length}
-              layers={layersForGroup}
-              dragHandleProps={provided.dragHandleProps}
-            />
-          </li>
-        )}
-      </Draggable>
-    );
-  };
-
   const renderOverlayGroups = () => (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable
-        droppableId="layerGroup"
-        type="overlayGroups"
-        direction="vertical"
+    <DndContext
+      collisionDetection={closestCenter}
+      onDragEnd={onDragEnd}
+    >
+      <SortableContext
+        items={overlayGroups.map(({ groupName }) => groupName)}
+        strategy={verticalListSortingStrategy}
       >
-        {(provided, snapshot) => (
-          <ul
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {overlayGroups.map(renderLayerList)}
-            {provided.placeholder}
-          </ul>
-        )}
-      </Droppable>
-    </DragDropContext>
+        <ul>
+          {overlayGroups.map((group, idx) => (
+            <SortableOverlayGroup
+              key={group.groupName}
+              group={group}
+              compareState={compareState}
+              activeLayersMap={activeLayersMap}
+              overlaysLength={overlays.length}
+              toggleCollapse={toggleCollapse}
+              isEmbedModeActive={isEmbedModeActive}
+              isAnimating={isAnimating}
+            />
+          ))}
+        </ul>
+      </SortableContext>
+    </DndContext>
   );
 
   let minHeight = '100px';
@@ -226,6 +264,16 @@ export default connect(
   mapDispatchToProps,
 )(LayersContainer);
 
+SortableOverlayGroup.propTypes = {
+  group: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  compareState: PropTypes.string,
+  activeLayersMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  overlaysLength: PropTypes.number,
+  toggleCollapse: PropTypes.func,
+  isEmbedModeActive: PropTypes.bool,
+  isAnimating: PropTypes.bool,
+};
+
 LayersContainer.propTypes = {
   activeLayersMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   baselayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
@@ -234,15 +282,9 @@ LayersContainer.propTypes = {
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isAnimating: PropTypes.bool,
-  isCompareActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
-  isMobile: PropTypes.bool,
   overlayGroups: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   overlays: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   reorderOverlayGroups: PropTypes.func,
   toggleCollapse: PropTypes.func,
-  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
-  isPlaying: PropTypes.bool,
-  screenWidth: PropTypes.number,
-  addLayers: PropTypes.func,
 };

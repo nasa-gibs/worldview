@@ -6,7 +6,7 @@
       "tags": "no2 nitrogen dioxide",
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
-      "wrapadjacentdays": true
+      "wrapadjacentdays": false
     }
   }
 }

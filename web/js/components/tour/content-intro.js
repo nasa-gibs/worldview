@@ -14,7 +14,7 @@ function TourIntro(props) {
         {' '}
         <a href="#" title="Start using @NAME@" onClick={props.toggleModalStart} className="start-link">
           Start using @NAME@
-          <ArrowLineRightCircleFill class="intro-arrow" size="16px" />
+          <ArrowLineRightCircleFill className="intro-arrow" size="16px" />
         </a>
       </p>
     </div>

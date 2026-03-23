@@ -40,7 +40,7 @@ function AddLayersContent (props) {
           className="layers-add red"
           text={(
             <>
-              <Plus class="add-plus" size="10px" />
+              <Plus className="add-plus" size="10px" />
               Add Layers
             </>
           )}

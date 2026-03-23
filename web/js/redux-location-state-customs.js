@@ -1,13 +1,41 @@
 import { each as lodashEach } from 'lodash';
-import {
-  get,
-  createObjectFromConfig,
-  isEqual,
-} from 'redux-location-state/lib/helpers';
-import { typeHandles } from 'redux-location-state/lib/typeHandles';
+import { get as lodashGet, isEqual as lodashIsEqual } from 'lodash';
 import { ENCODING_EXCEPTIONS } from './modules/link/constants';
 
 export const LOCATION_POP_ACTION = 'REDUX-LOCATION-POP-ACTION';
+
+function createObjectFromConfig(config, location) {
+  // Worldview only uses a `global` config; keep the signature for compatibility.
+  if (config && typeof config === 'object') {
+    if (config.global && typeof config.global === 'object') return config.global;
+  }
+  return null;
+}
+
+const typeHandles = {
+  bool: {
+    serialize: (value) => (value ? 'true' : 'false'),
+  },
+  number: {
+    serialize: (value) => (typeof value === 'number' ? value.toString() : `${Number(value)}`),
+  },
+  date: {
+    serialize: (value) => (value && typeof value.toISOString === 'function' ? value.toISOString() : undefined),
+  },
+  array: {
+    serialize: (value) => (Array.isArray(value) ? value.join(',') : undefined),
+  },
+  object: {
+    serialize: (value) => {
+      if (!value || typeof value !== 'object') return undefined;
+      try {
+        return JSON.stringify(value);
+      } catch {
+        return undefined;
+      }
+    },
+  },
+};
 function isNotDefined(value) {
   return typeof value === 'undefined' || value === null;
 }
@@ -49,7 +77,7 @@ export function stateToParams(initialState, currentState, location) {
       initialState: initialValue,
       type,
     } = pathConfig[curr];
-    let currentItemState = get(currentState, stateKey);
+    let currentItemState = lodashGet(currentState, stateKey);
     let isDefault = false;
     // check if the date is the same as the one in initial value
     if (type === 'date') {
@@ -70,7 +98,7 @@ export function stateToParams(initialState, currentState, location) {
       }
       // check if the item is default
       isDefault = typeof currentItemState === 'object'
-        ? isEqual(initialValue, currentItemState)
+        ? lodashIsEqual(initialValue, currentItemState)
         : currentItemState === initialValue;
     }
     // if it is default or doesn't exist don't make a query parameter

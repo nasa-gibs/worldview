@@ -248,14 +248,21 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       if (!selected[layerId]) selected[layerId] = [];
       const features = feature.getProperties();
       const vectorDataId = def.vectorData.id;
-      const data = config.vectorData[vectorDataId];
-      const properties = data.mvt_properties;
-      const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
-      const titleObj = lodashFind(properties, 'IsLabel');
-      const titleKey = titleObj.Identifier;
+      const data = lodashGet(config, ['vectorData', vectorDataId]);
+      const properties = Array.isArray(data?.mvt_properties) ? data.mvt_properties : [];
 
-      const uniqueIdentifier = features[uniqueIdentifierKey];
-      const title = titleKey ? features[titleKey] : 'Unknown title';
+      const identifyProp = lodashFind(properties, { Function: 'Identify' }) || lodashFind(properties, { function: 'Identify' });
+      const uniqueIdentifierKey = identifyProp?.Identifier;
+
+      const titleObj = lodashFind(properties, 'IsLabel');
+      const titleKey = titleObj?.Identifier;
+
+      const featureId = feature.getId();
+      const uniqueIdentifierRaw = uniqueIdentifierKey ? features?.[uniqueIdentifierKey] : featureId;
+      const uniqueIdentifier = uniqueIdentifierRaw == null ? `${layerId}:${metaArray.length}` : String(uniqueIdentifierRaw);
+
+      const titleRaw = titleKey ? features?.[titleKey] : null;
+      const title = titleRaw == null ? (def.title || 'Unknown title') : String(titleRaw);
       if (selected[layerId].includes(uniqueIdentifier)) return true;
       if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
       const obj = {

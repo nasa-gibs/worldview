@@ -52,7 +52,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
   const overlayEl = document.createElement('div');
   const root = createRoot(overlayEl);
   const removeMarker = () => {
-    root.unmount(overlayEl);
+    root.unmount();
     removeMarkerPin();
   };
   root.render(

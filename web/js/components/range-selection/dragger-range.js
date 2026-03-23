@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import { timeScaleOptions } from '../../modules/date/constants';
@@ -11,6 +11,7 @@ import { timeScaleOptions } from '../../modules/date/constants';
 class TimelineDraggerRange extends PureComponent {
   constructor(props) {
     super(props);
+    this.nodeRef = createRef();
     const { startLocation } = props;
     this.state = {
       width: 0,
@@ -216,12 +217,14 @@ class TimelineDraggerRange extends PureComponent {
       <Draggable
         handle=".dragger-range"
         axis="x"
+        nodeRef={this.nodeRef}
         position={null}
         defaultPosition={{ x: 0, y: 11 }}
         onStop={onStop}
         onDrag={this.handleDrag}
       >
         <rect
+          ref={this.nodeRef}
           x={this.handleStartPositionRestriction()}
           fill={color}
           width={width}

@@ -3,7 +3,10 @@ const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { assertCategories, switchProjections, closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
 
 const url = 'http://localhost:3000/?t=2013-05-15'
@@ -130,17 +133,18 @@ test('Closing and reopening layer picker restores state.', async () => {
 test('Changing app date is reflected in coverage facets', async () => {
   const {
     layersModalCloseButton,
-    yearDown,
-    monthDown,
-    dayDown,
+    dateSelectorYearInput,
+    dateSelectorMonthInput,
+    dateSelectorDayInput,
     addLayers,
     availableFilterTextEl,
     availableFilterCheckboxInput
   } = selectors
   await layersModalCloseButton.click()
-  await yearDown.click()
-  await monthDown.click()
-  await dayDown.click()
+  await dateSelectorYearInput.fill('2012')
+  await dateSelectorMonthInput.fill('APR')
+  await dateSelectorDayInput.fill('14')
+  await page.keyboard.press('Enter')
   await addLayers.click()
   await expect(availableFilterTextEl).toContainText('Available 2012 APR 14')
   await expect(availableFilterCheckboxInput).toBeChecked()

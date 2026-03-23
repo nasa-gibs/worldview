@@ -4,9 +4,10 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { fixedAppNow, wildfiresWithDates, backwardsCompatibleEventUrl, extentsUrl } = require('../../test-utils/global-variables/querystrings')
 const { switchProjections, clickAndWait, closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {

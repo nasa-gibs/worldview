@@ -110,7 +110,7 @@ class DateChangeArrows extends PureComponent {
             placement="top"
             target="left-arrow-group"
           />
-          <ArrowChevronLeft class="arrow" size="30px" />
+          <ArrowChevronLeft className="arrow" size="30px" />
         </button>
 
         {/* RIGHT ARROW */}
@@ -130,7 +130,7 @@ class DateChangeArrows extends PureComponent {
             placement="top"
             target="right-arrow-group"
           />
-          <ArrowChevronRight class="arrow" size="30px" />
+          <ArrowChevronRight className="arrow" size="30px" />
         </button>
 
         {/* NOW BUTTON */}

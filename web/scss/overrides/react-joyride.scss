@@ -1,6 +1,26 @@
 .react-joyride__beacon span:first-of-type {
   box-shadow: 0 0 24px 24px rgba(0, 0, 0, 0.3);
 }
+
+// React Joyride sometimes animates/toggles overlay opacity between steps.
+// Pin the overlay rendering to avoid a visible flash.
+.react-joyride__overlay {
+  animation: none !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+.react-joyride__overlay-fallback {
+  background: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  // Match Joyride's `styles.options.zIndex`.
+  z-index: 2000;
+}
+
 .react-joyride__tooltip div {
   line-height: 16px;
   max-width: 360px;

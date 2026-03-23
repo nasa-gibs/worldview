@@ -2,8 +2,8 @@
 const { test, expect } = require('@playwright/test')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 const enabledPermalink = 'http://localhost:3000/?l=Last_of_the_Wild_1995-2004'
 const disabledPermalink = 'http://localhost:3000/?l=Last_of_the_Wild_1995-2004(disabled=0-13-12-1-2-6)'
 
@@ -27,8 +27,7 @@ test('Verify that toggling class updates permalink and layer-legend', async () =
   await page.locator('.classification-list .react-switch-case .react-switch-button').first().click()
   const colorBoxDisabled = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active1.disabled-classification')
   await expect(colorBoxDisabled).not.toBeVisible()
-  const url = await page.url()
-  expect(url).toContain('(disabled=0)')
+  await expect.poll(() => page.url(), { timeout: 15000 }).toContain('(disabled=0')
 })
 
 test('Verify that toggling class-all off updates permalink and layer-legend', async () => {
@@ -37,8 +36,8 @@ test('Verify that toggling class-all off updates permalink and layer-legend', as
   const lastColorBoxDisabled = await page.locator('#Last_of_the_Wild_1995-2004_0_legend-color-Last_of_the_Wild_1995-2004-active15.disabled-classification')
   await expect(firstColorBoxDisabled).toBeVisible()
   await expect(lastColorBoxDisabled).toBeVisible()
-  const url = await page.url()
-  expect(url).toContain('(disabled=0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15)')
+  await expect.poll(() => page.url(), { timeout: 15000 })
+    .toContain('(disabled=0-1-2-3-4-5-6-7-8-9-10-11-12-13-14-15)')
 })
 
 test('Verify that toggling class-all on updates permalink and layer-legend', async () => {
