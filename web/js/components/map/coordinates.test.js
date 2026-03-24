@@ -1,6 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
-import renderer from 'react-test-renderer';
+import { act } from 'react';
 import Coordinates from './coordinates';
 
 let container;
@@ -13,7 +12,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  root.unmount(container);
+  act(() => {
+    root.unmount();
+  });
   container.remove();
   container = null;
 });
@@ -39,16 +40,21 @@ describe('formats', () => {
 
 test('change format from latlon-dd to latlon-dm', () => {
   const callback = jest.fn();
-  const component = renderer.create(
-    <Coordinates
-      format="latlon-dd"
-      latitude={0}
-      longitude={0}
-      crs="EPSG:4326"
-      onFormatChange={callback}
-    />);
-  const instance = component.getInstance();
+  act(() => {
+    root.render(
+      <Coordinates
+        format="latlon-dd"
+        latitude={0}
+        longitude={0}
+        crs="EPSG:4326"
+        onFormatChange={callback}
+      />,
+    );
+  });
 
-  instance.changeFormat();
+  const button = container.querySelector('#coords-panel');
+  act(() => {
+    button.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+  });
   expect(callback).toHaveBeenCalledWith('latlon-dm');
 });

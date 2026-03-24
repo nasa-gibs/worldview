@@ -12,7 +12,27 @@ test('mapLocationToAnimationState updates state to have isPlaying bool true if p
     stateFromLocation,
   );
   expect(stateFromLocation.animation.isPlaying).toBeFalsy();
+  expect(response.animation.isActive).toBeTruthy();
   expect(response.animation.isPlaying).toBeTruthy();
+});
+
+test('mapLocationToAnimationState closes animation if ab is not present [animation-location-state]', () => {
+  const stateFromLocation = {
+    animation: {
+      ...defaultState,
+      isActive: true,
+      isPlaying: true,
+      startDate: new Date('2020-01-01T00:00:00Z'),
+      endDate: new Date('2020-01-02T00:00:00Z'),
+    },
+  };
+  const PERMALINK_STATE = {};
+  const response = mapLocationToAnimationState(
+    PERMALINK_STATE,
+    stateFromLocation,
+  );
+  expect(response.animation.isActive).toBeFalsy();
+  expect(response.animation.isPlaying).toBeFalsy();
 });
 
 test('snapToIntervalDelta snaps at the year interval [animation-year-interval]', () => {

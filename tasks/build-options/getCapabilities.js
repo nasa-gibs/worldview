@@ -128,7 +128,10 @@ async function processVectorData (layer) {
     console.warn(`Processing vector data for ${ident}:`)
   }
   if (layer['ows:Metadata']) {
-    Object.values(layer['ows:Metadata']).forEach((item) => {
+    const metadataItems = Array.isArray(layer['ows:Metadata'])
+      ? layer['ows:Metadata']
+      : [layer['ows:Metadata']];
+    Object.values(metadataItems).forEach((item) => {
       const schemaVersion = item._attributes['xlink:role']
       if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/layer/1.0') {
         if (argv.mode === 'verbose') console.trace(`  Processing Metadata: ${item._attributes['xlink:href']}`)
@@ -145,10 +148,13 @@ async function processLayer (layer) {
   const ident = layer['ows:Identifier']._text
   if (argv.mode === 'verbose') console.trace(`Processing layer ${ident}...`)
   if (layer['ows:Metadata']) {
+    const metadataItems = Array.isArray(layer['ows:Metadata'])
+      ? layer['ows:Metadata']
+      : [layer['ows:Metadata']];
     if (config.skipPalettes) {
       console.warn(`${prog}: WARN: Skipping palette for ${ident} \n`)
     } else {
-      Object.values(layer['ows:Metadata']).forEach((item) => {
+      Object.values(metadataItems).forEach((item) => {
         if (argv.mode === 'verbose') console.trace(`  Processing pallette: ${item._attributes['xlink:href']}`)
         const schemaVersion = item._attributes['xlink:role']
         if (schemaVersion === 'http://earthdata.nasa.gov/gibs/metadata-type/colormap/1.3') {

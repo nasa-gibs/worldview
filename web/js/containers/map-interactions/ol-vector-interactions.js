@@ -379,7 +379,6 @@ const mapDispatchToProps = (dispatch) => ({
         mobileFullScreen: true,
         dragHandle: '.modal-header',
         dialogKey,
-        key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: modalWidth,
         height: modalHeight,

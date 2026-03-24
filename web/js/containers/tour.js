@@ -39,6 +39,7 @@ import {
 } from '../modules/tour/actions';
 import { resetProductPickerState as resetProductPickerStateAction } from '../modules/product-picker/actions';
 import { changeTab as changeTabAction } from '../modules/sidebar/actions';
+import { toggleOverlayGroups as toggleOverlayGroupsAction } from '../modules/layers/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
@@ -101,9 +102,15 @@ class Tour extends React.Component {
     this.hideTour = this.hideTour.bind(this);
     this.selectTour = this.selectTour.bind(this);
     this.resetTour = this.resetTour.bind(this);
+
+    this.groupOverlaysBeforeTour = null;
   }
 
   componentDidMount() {
+    if (this.props.isActive && this.groupOverlaysBeforeTour === null) {
+      this.groupOverlaysBeforeTour = safeLocalStorage.getItem(safeLocalStorage.keys.GROUP_OVERLAYS) !== 'disabled';
+    }
+
     const {
       currentStory, currentStoryIndex, currentStoryId, modalStart, modalInProgress, modalComplete,
     } = this.state;
@@ -114,6 +121,37 @@ class Tour extends React.Component {
 
     if (!modalStart && !modalInProgress && !modalComplete) {
       this.setState({ modalStart: true });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isActive } = this.props;
+
+    if (!prevProps.isActive && isActive) {
+      // Snapshot the user's preference at tour start so we can restore it later.
+      // Use local storage so deep-linked tours (with `lg=true`) still restore correctly.
+      this.groupOverlaysBeforeTour = safeLocalStorage.getItem(safeLocalStorage.keys.GROUP_OVERLAYS) !== 'disabled';
+    }
+
+    if (prevProps.isActive && !isActive) {
+      this.restoreGroupOverlaysPreference();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.isActive) {
+      this.restoreGroupOverlaysPreference();
+    }
+  }
+
+  restoreGroupOverlaysPreference() {
+    const { groupOverlays, toggleOverlayGroups } = this.props;
+    const previousPreference = this.groupOverlaysBeforeTour;
+    this.groupOverlaysBeforeTour = null;
+
+    if (previousPreference === null || previousPreference === undefined) return;
+    if (previousPreference !== groupOverlays) {
+      toggleOverlayGroups();
     }
   }
 
@@ -596,6 +634,9 @@ const mapDispatchToProps = (dispatch) => ({
   changeTab: (str) => {
     dispatch(changeTabAction(str));
   },
+  toggleOverlayGroups: () => {
+    dispatch(toggleOverlayGroupsAction());
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -620,6 +661,7 @@ const mapStateToProps = (state) => {
     screenHeight,
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
+    groupOverlays: state.layers?.[compare.activeString]?.groupOverlays,
     promiseImageryForTour: (
       layers,
       dateString,
@@ -653,4 +695,6 @@ Tour.propTypes = {
   resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
   startTour: PropTypes.func,
+  groupOverlays: PropTypes.bool,
+  toggleOverlayGroups: PropTypes.func,
 };
