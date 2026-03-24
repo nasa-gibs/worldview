@@ -1,0 +1,33 @@
+{
+  "layers": {
+    "TRACER-AQ_G-V_Flight_Track": {
+      "id": "TRACER-AQ_G-V_Flight_Track",
+      "title": "JSC G-V Flight Track (Per Flight)",
+      "subtitle": "TRACER-AQ/JSC G-V",
+      "description": "tracer/TRACER-AQ_G-V_Flight_Track",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector tracer",
+      "ongoing": false,
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "layergroup": "Suborbital Flight Tracks",
+      "vectorStyle": {
+        "id": "TRACER-AQ_G-V_Flight_Track",
+        "geographic": {
+          "id": "TRACER-AQ_G-V_Flight_Track"
+        }
+      },
+      "palette": {
+        "id": "TRACER-AQ_G-V_Flight_Track",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "Altitude",
+        "order": "descending"
+      }
+    }
+  }
+}
