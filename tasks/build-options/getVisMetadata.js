@@ -65,7 +65,7 @@ if (fs.existsSync(layerOrderFile)) {
 const outputFile = argv.layerMetadata
 
 const metadataConfig = features.features.vismetadata
-const url = metadataConfig.url
+const { url, cmrVisualizationsUrl } = metadataConfig
 const daacMap = metadataConfig.daacMap || {}
 
 // These are alias or otherwise layers that don't exist in GIBS
@@ -120,23 +120,38 @@ const skipLayers = [
 // NOTE: Only using these properties at this time
 const useKeys = [
   'conceptIds',
+  'ConceptIds',
   'dataCenter',
+  'DataCenter',
   'daynight',
+  'DayNight',
   'orbitTracks',
+  'OrbitTracks',
   'orbitDirection',
+  'OrbitDirection',
   'ongoing',
+  'Ongoing',
   'layerPeriod',
+  'LayerPeriod',
   'title',
-  'subtitle'
+  'Title',
+  'subtitle',
+  'Subtitle'
 ]
 
-async function main (url) {
+const layerCounts = {
+  cmr: [],
+  metadata: [],
+  missing: []
+}
+
+async function main (url, cmrVisualizationsUrl) {
   layerOrder = layerOrder.layerOrder
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
   const promises = layerOrder.map((layerId) => {
-    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
+    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url, cmrVisualizationsUrl)
     return Promise.reject(new Error(`Skipped layer: ${layerId}`))
   })
   const results = await Promise.allSettled(promises)
@@ -156,6 +171,10 @@ async function main (url) {
     {}
   )
 
+  console.warn(JSON.stringify(layerCounts.metadata).split(',').join('\n') + '\n')
+  console.warn('# of layers that have umm-vis:', layerCounts.cmr.length)
+  console.warn('# of layers relying on backup layer-metadata:', layerCounts.metadata.length)
+  console.warn('# of layers fully failing:', layerCounts.missing.length, layerCounts.missing)
   fs.writeFileSync(outputFile, JSON.stringify({ layers }))
   console.warn(`${prog}: Combined all ${Object.keys(layerMetadata).length} layer-metadata files into ${path.parse(outputFile).base}`)
 }
@@ -180,6 +199,29 @@ function getDAAC (metadata) {
   return metadata
 }
 
+function getDAACUMMVIS (data) {
+  if (!Array.isArray(data.ConceptIds) || !data.ConceptIds.length) {
+    return data
+  }
+  const output = { ...data, ...data.Specification.ProductIdentification, ...data.Specification.ProductMetadata }
+  for (const collection of data.ConceptIds) {
+    const origDataCenter = collection.DataCenter
+    const dataCenter = daacMap[origDataCenter]
+    if (!dataCenter) {
+      continue
+    }
+    delete collection.DataCenter
+    if (!output.DataCenter) {
+      output.DataCenter = [dataCenter]
+    } else if (!output.DataCenter.includes(dataCenter)) {
+      output.DataCenter.push(dataCenter)
+    }
+  }
+  output['Title'] = output['WorldviewTitle']
+  output['Subtitle'] = output['WorldviewSubtitle']
+  return output
+}
+
 let headers = {}
 
 if (cacheMode === 'no-store') {
@@ -191,40 +233,60 @@ if (cacheMode === 'no-store') {
   headers = Object.assign(headers, noCacheHeaders)
 }
 
-async function getMetadata (layerId, baseUrl, count) {
-  if (count) console.warn(`retry #${count} for ${layerId}`)
+async function getMetadata (layerId, baseUrl, ummVisUrl, count) {
+  if (count - 1) console.warn(`retry #${count - 1} for ${layerId}`)
   try {
+    let requestUrl = `${ummVisUrl}?keyword=${layerId}`
+    if (count) {
+      requestUrl = `${baseUrl}${layerId}.json`
+    }
     const response = await axios({
       method: 'get',
-      url: `${baseUrl}${layerId}.json`,
+      url: requestUrl,
       responseType: 'json',
       timeout: 10000,
       headers
     })
-    const metadata = response.data
-    const daac = getDAAC(metadata)
+    const responseData = response.data
+    if (!count && !responseData.hits) return getMetadata(layerId, baseUrl, ummVisUrl, 1)
+    const daac = count ? getDAAC(responseData) : getDAACUMMVIS(responseData.items[0].umm)
     let metadataKeys = Object.keys(daac)
     metadataKeys = metadataKeys.filter(x => !useKeys.includes(x))
     for (const key of metadataKeys) {
       delete daac[key]
     }
+    // Convert keys to camelCase
+    for (const key in daac) {
+      const firstUppercaseCharacter = key.match(/^[A-Z]/g)?.[0]
+      if (firstUppercaseCharacter) {
+        const newKey = key.replace(firstUppercaseCharacter, firstUppercaseCharacter.toLowerCase())
+        daac[newKey] = daac[key]
+        delete daac[key]
+      }
+    }
+    if (count) {
+      layerCounts.metadata.push(layerId)
+    } else {
+      layerCounts.cmr.push(layerId)
+    }
     return [layerId, daac]
   } catch (error) {
-    return await handleException(error, layerId, url, count)
+    return await handleException(error, layerId, baseUrl, ummVisUrl, count)
   }
 }
 
-async function handleException (error, layerId, url, count) {
+async function handleException (error, layerId, url, ummVisUrl, count) {
   if (!count) count = 0
   count++
-  if (count <= 5) {
-    return getMetadata(layerId, url, count)
+  if (count < 5) {
+    return getMetadata(layerId, url, ummVisUrl, count)
   } else {
+    layerCounts.missing.push(layerId)
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
     return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${error}`))
   }
 }
 
-main(url).catch((err) => {
+main(url, cmrVisualizationsUrl).catch((err) => {
   console.error(err.stack)
 })
