@@ -11,6 +11,7 @@
       "ongoing": false,
       "disableCharting": true,
       "disableSnapshot": true,
+      "dataAvailability": "dd",
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
         "id": "TRACER-AQ_G-V_Flight_Track",
