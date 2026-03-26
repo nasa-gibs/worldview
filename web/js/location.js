@@ -200,6 +200,13 @@ const getParameters = function(config, parameters) {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
           let interval = currentItemState;
+          const isCustomSelected = get(state, 'date.customSelected');
+          const customDelta = get(state, 'date.customDelta');
+          const customInterval = get(state, 'date.customInterval');
+          // check if custom interval is equivalent to a normal interval to fall-back if available
+          if (isCustomSelected && customDelta === 1 && customInterval) {
+            interval = customInterval;
+          }
           // check if subdaily timescale zoom to determine if reset is needed
           if (interval > 3) {
             if (!subdailyLayersActive(state)) {
@@ -219,7 +226,7 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           const customDelta = get(state, 'date.customDelta');
           const customInterval = get(state, 'date.customInterval');
-          if (customDelta === 1 && customInterval === 3) {
+          if (customDelta === 1 && customInterval) {
             return undefined;
           }
           return currentItemState;
