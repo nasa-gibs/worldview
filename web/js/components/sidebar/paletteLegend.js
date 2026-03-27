@@ -49,7 +49,7 @@ class PaletteLegend extends React.Component {
     };
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.hideValue = this.hideValue.bind(this);
-    this.onHoverColorbar = this.onHoverColorbar.bind(this);
+    // this.onHoverColorbar = this.onHoverColorbar.bind(this);
     this.onMove = this.onMove.bind(this);
   }
 
@@ -442,7 +442,7 @@ class PaletteLegend extends React.Component {
                     </div>
                   )}
 
-                  {isVisible && (
+                  {!isInvisible && (
                     <Tooltip
                       id="center-align-tooltip"
                       placement={singleKey ? 'right' : 'bottom'}
