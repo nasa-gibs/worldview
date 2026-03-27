@@ -402,7 +402,7 @@ class PaletteLegend extends React.Component {
         containment={scrollContainerEl}
         partialVisibility
       >
-        {({ isVisible }) => (
+        {() => (
           <div className={legendClass} key={`${legend.id}_${legendIndex}`}>
             {legend.colors.map((color, keyIndex) => {
               const isActiveKey = activeKeyObj?.index === keyIndex;
