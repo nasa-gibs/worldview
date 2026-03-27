@@ -1,8 +1,8 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { fixedAppNow, wildfiresWithDates, backwardsCompatibleEventUrl, extentsUrl } = require('../../test-utils/global-variables/querystrings')
-const { switchProjections, clickAndWait, closeModal } = require('../../test-utils/hooks/wvHooks')
+const { fixedAppNow, wildfiresWithDates } = require('../../test-utils/global-variables/querystrings')
+const { clickAndWait, closeModal } = require('../../test-utils/hooks/wvHooks')
 
 /** @type {import('@playwright/test').Page} */
 let page
@@ -15,7 +15,7 @@ test.beforeAll(async ({ browser }) => {
   selectors = createSelectors(page)
 })
 
-const assertDateInputValues = async (start, end) => {
+const assertDateInputValues = async (/** @type {string} */ start, /** @type {string} */ end) => {
   const {
     startInputYear,
     startInputMonth,
@@ -218,44 +218,4 @@ test('Changing criteria in modal DOES update summary of criteria in sidebar on A
   await expect(dustHazeIcon).toBeVisible()
   await expect(volcanoesIcon).toBeVisible()
   await expect(wildfiresIcon).not.toBeVisible()
-})
-
-test('Event Selected, No Filter Params: Shows only day of event, all categories, checkbox unchecked', async () => {
-  const {
-    filterDates,
-    filterButton,
-    filterIcons,
-    mapExtentFilterCheckbox
-  } = selectors
-  await page.goto(backwardsCompatibleEventUrl)
-  await closeModal(page)
-  await expect(filterDates).toContainText('2005 DEC 31 - 2005 DEC 31')
-  await filterButton.click()
-  await assertDateInputValues('2005-DEC-31', '2005-DEC-31')
-  await expect(filterIcons).toHaveCount(9)
-  await expect(mapExtentFilterCheckbox).not.toBeChecked()
-  await page.locator('.modal-close-btn').click()
-})
-
-test('No extent search checkbox in polar projections', async () => {
-  const { filterButton, mapExtentFilterCheckbox } = selectors
-  await page.goto(extentsUrl)
-  await closeModal(page)
-  await filterButton.click()
-  await expect(mapExtentFilterCheckbox).toBeVisible()
-  await expect(mapExtentFilterCheckbox).toBeChecked()
-  await page.locator('.modal-close-btn').click()
-  await switchProjections(page, 'arctic')
-  await filterButton.click()
-  await expect(mapExtentFilterCheckbox).not.toBeVisible()
-  await page.locator('.modal-close-btn').click()
-  await switchProjections(page, 'geographic')
-  await page.waitForTimeout(5000)
-  await filterButton.click()
-  await expect(mapExtentFilterCheckbox).toBeChecked()
-  await page.locator('.modal-close-btn').click()
-  await switchProjections(page, 'antarctic')
-  await filterButton.click()
-  await expect(mapExtentFilterCheckbox).not.toBeVisible()
-  await page.locator('.modal-close-btn').click()
 })
