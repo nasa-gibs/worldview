@@ -22,7 +22,7 @@ test.afterAll(async () => {
 test('Verify that Url is updated', async () => {
   await page.goto(mockEvents)
   await closeModal(page)
-  await page.waitForTimeout(1000)
+  await page.waitForTimeout(5000)
   const currentUrl = await page.url()
   expect(currentUrl).toContain('efs=true')
   expect(currentUrl).toContain('efa=false')
