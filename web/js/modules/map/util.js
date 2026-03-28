@@ -29,12 +29,13 @@ import { tryCatchDate } from '../date/util';
  * @returns {object} Extent Array
  */
 export function getLeadingExtent(loadtime) {
-  let curHour = loadtime.getUTCHours();
+  // ( - 7 ) to adjust for NOAA-20 default imagery timing
+  let curHour = loadtime.getUTCHours() - 7;
 
   // For earlier hours when data is still being filled in, force a far eastern perspective
-  if (curHour < 3) {
+  if (curHour < 0) {
     curHour = 23;
-  } else if (curHour < 9) {
+  } else if (curHour < 5) {
     curHour = 0;
   }
 
