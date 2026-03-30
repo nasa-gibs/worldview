@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import Joyride, {
+import {
+  Joyride,
   STATUS,
   ACTIONS,
   EVENTS,
@@ -29,24 +30,25 @@ export default function JoyrideWrapper ({
   const stepProj = projParam.length ? projParam[0].substr(2) : 'geographic';
   const projMatches = stepProj === proj;
   const styles = {
-    options: {
-      arrowColor: '#eee',
-      backgroundColor: '#eee',
-      beaconSize: 50,
-      overlayColor: 'rgba(0, 0, 0, 0.5)',
-      primaryColor: '#d54e21',
-      spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
-      lineHeight: '16px',
-      textColor: '#333',
-      width: undefined,
-      // Keep Joyride above Bootstrap modals so the tour modal stays dimmed during tooltip steps.
-      zIndex: 2000,
+    buttonClose: {
+      height: 14,
+      padding: 15,
+      width: 14,
+    },
+    buttonPrimary: {
+      color: 'rgb(255, 255, 255)',
     },
     overlay: {
       transition: 'none',
     },
-    spotlight: {
-      transition: 'none',
+    tooltip: {
+      padding: 15,
+    },
+    tooltipContent: {
+      padding: '20px 10px',
+    },
+    tooltipFooter: {
+      marginTop: 15,
     },
   };
 
@@ -292,17 +294,28 @@ export default function JoyrideWrapper ({
           stepIndex={stepIndex}
           steps={steps || []}
           continuous={checkContinuous()}
-          callback={joyrideStateCallback}
-          spotlightClicks={spotlightClicks}
-          disableOverlay={!overlayStarted}
-          disableOverlayClose={disableOverlayClose}
-          hideCloseButton={hideCloseButton}
+          onEvent={joyrideStateCallback}
           styles={styles}
-          floaterProps={{
+          floatingOptions={{
             disableAnimation: true,
           }}
-          disableScrolling
-          disableScrollParentFix
+          options={{
+            blockTargetInteraction: !spotlightClicks,
+            hideOverlay: !overlayStarted,
+            overlayClickAction: disableOverlayClose ? false : 'close',
+            arrowColor: '#eee',
+            backgroundColor: '#eee',
+            beaconSize: 50,
+            overlayColor: 'rgba(0, 0, 0, 0.5)',
+            primaryColor: '#d54e21',
+            spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
+            lineHeight: '16px',
+            textColor: '#333',
+            width: undefined,
+            zIndex: 2000,
+            skipScroll: true,
+            buttons: ['back', 'close', 'primary'],
+          }}
         />
       </>
     );

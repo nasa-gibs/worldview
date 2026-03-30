@@ -80,6 +80,10 @@ function ImageDownloadPanel(props) {
     setShowGranuleWarning(isTruncated);
   }, []);
 
+  useEffect(() => {
+    setResolution(resolution);
+  }, [resolution]);
+
   const onDownload = (width, height) => {
     const time = new Date(date.getTime());
 
