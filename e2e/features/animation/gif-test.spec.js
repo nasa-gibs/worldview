@@ -31,6 +31,7 @@ test('Clicking the animation widget button opens the widget', async () => {
   await createGifIcon.click()
   await expect(arcticRotationResetButton).toHaveText('-18')
   await rotationDialogOkButton.click()
+  await page.waitForTimeout(1000)
   await expect(arcticRotationResetButton).toHaveText('0')
 })
 
