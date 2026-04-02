@@ -624,9 +624,7 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) 
 
   const cancellableTileLoadFunction = async (tile, src) => {
     try {
-      // if (tile.getState() !== olTileState.LOADED) {
       tile.setState(olTileState.LOADING);
-      // }
       const response = await fetch(src, { signal: abortSignal });
       const blob = await response.blob();
       const imageUrl = URL.createObjectURL(blob);
@@ -634,6 +632,7 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) 
       URL.revokeObjectURL(imageUrl);
       tile.setState(olTileState.LOADED);
     } catch (error) {
+      if (error.name === 'AbortError') return;
       tile.setState(olTileState.ERROR);
       onerror();
     }
@@ -1091,7 +1090,11 @@ export function getPixelFromPercentage(maxDimension, percent) {
  *
  * @return {Bool}
  */
-export function hasNonDownloadableVisibleLayer(visibleLayers) {
+export function hasNonDownloadableVisibleLayer(visibleLayers, isFromSnapshot) {
+  // Only needed during transition period where image snapshot is frontend and
+  // gif creation is backend. Should be removed when both are frontend,
+  // and the actual layer objects updated to remove disableSnapshot as needed
+  if (isFromSnapshot) return false;
   return visibleLayers.some(({ disableSnapshot = false }) => disableSnapshot);
 }
 /**
@@ -1130,7 +1133,11 @@ export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
  *
  * @return {Array}
  */
-export function getNonDownloadableLayers(visibleLayers) {
+export function getNonDownloadableLayers(visibleLayers, isFromSnapshot) {
+  // Only needed during transition period where image snapshot is frontend and
+  // gif creation is backend. Should be removed when both are frontend,
+  // and the actual layer objects updated to remove disableSnapshot as needed
+  if (isFromSnapshot) return visibleLayers;
   return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
 }
 /**

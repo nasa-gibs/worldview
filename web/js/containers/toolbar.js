@@ -133,7 +133,7 @@ class toolbarContainer extends Component {
       hasNonDownloadableLayer,
       visibleLayersForProj,
     } = this.props;
-    const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj) : null;
+    const nonDownloadableLayers = hasNonDownloadableLayer ? getNonDownloadableLayers(visibleLayersForProj, true) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustomsSnapshot, 'Notice');
@@ -475,7 +475,7 @@ const mapStateToProps = (state) => {
     activePalettes,
     config: state.config,
     faSize,
-    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
+    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj, true),
     isAboutOpen: modalAbout.isOpen,
     isCompareActive,
     isChartingActive,
@@ -545,7 +545,7 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
-    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj);
+    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj, true);
     const bodyComponentProps = {
       bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers),
       cancel: () => {
