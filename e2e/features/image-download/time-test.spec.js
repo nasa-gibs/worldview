@@ -1,3 +1,4 @@
+// @ts-check
 const { test, expect } = require('@playwright/test')
 const {
   openImageDownloadPanel,
@@ -9,6 +10,7 @@ const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 
 /** @type {import('@playwright/test').Page} */
 let page
+/** @type {Promise<import("playwright-core").Download>} */
 let downloadPromise
 
 const startParams = [

@@ -1,3 +1,4 @@
+// @ts-check
 const { test, expect } = require('@playwright/test')
 const UPNG = require('upng-js')
 /** @type {import('@playwright/test').Page} */

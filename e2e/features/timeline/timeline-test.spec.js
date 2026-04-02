@@ -1,3 +1,4 @@
+// @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const {
@@ -49,7 +50,6 @@ test.fixme('Interval defaults to 1 DAY', async () => {
   const currentInteval = await page.locator('#current-interval')
   await expect(currentInteval).toContainText('1 day')
 })
-
 
 test.fixme('Change to month zoom level and axis changes', async () => {
   await page.locator('.zoom-level-change button.date-arrows.date-arrow-up').click()
