@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { formatDisplayDate } from '../../../modules/date/util';
 
@@ -20,12 +20,11 @@ class CoverageLine extends PureComponent {
   *   @param {String} dateRangeEnd
   *   @param {String} toolTipText
   */
-  getFormattedDisplayDates = (lineType, startDate, endDate, layerPeriod) => {
+  static getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod) {
     let dateRangeStart;
     let dateRangeEnd;
     let toolTipText;
 
-    // eslint-disable-next-line default-case
     switch (lineType) {
       case 'SINGLE':
         dateRangeStart = (startDate && formatDisplayDate(new Date(startDate))) || 'Start';
@@ -35,9 +34,7 @@ class CoverageLine extends PureComponent {
       case 'MULTI':
         // handle minutes range display text (ex: '14:50 to 15:00')
         if (layerPeriod === 'minutes') {
-          // eslint-disable-next-line prefer-destructuring
           dateRangeStart = startDate.split('T')[1];
-          // eslint-disable-next-line prefer-destructuring
           dateRangeEnd = endDate.split('T')[1];
           toolTipText = `${dateRangeStart.split(':', 2).join(':')} to ${dateRangeEnd.split(':', 2).join(':')}`;
           dateRangeStart = dateRangeStart.replace(/[.:]/g, '_');
@@ -55,7 +52,7 @@ class CoverageLine extends PureComponent {
       dateRangeEnd,
       toolTipText,
     };
-  };
+  }
 
   /**
   * @desc get line DOM element from full/partial (interval) date range with tooltip
@@ -69,7 +66,16 @@ class CoverageLine extends PureComponent {
   * @param {Number/String} index
   * @returns {DOM Element} line
   */
-  createMatchingCoverageLineDOMEl = (id, options, lineType, startDate, endDate, color, layerPeriod, index) => {
+  createMatchingCoverageLineDOMEl = (
+    id,
+    options,
+    lineType,
+    startDate,
+    endDate,
+    color,
+    layerPeriod,
+    index,
+  ) => {
     const {
       positionTransformX,
     } = this.props;
@@ -87,7 +93,7 @@ class CoverageLine extends PureComponent {
       dateRangeStart,
       dateRangeEnd,
       toolTipText,
-    } = this.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
+    } = CoverageLine.getFormattedDisplayDates(lineType, startDate, endDate, layerPeriod);
     const dateRangeStartEnd = `${id}-${dateRangeStart}-${dateRangeEnd}`;
 
     // candy stripe color
@@ -101,15 +107,15 @@ class CoverageLine extends PureComponent {
       : leftOffset;
 
     // determine line radius for line start/end vs. partial large width lines
-    let lineRadius = !isWidthGreaterThanRendered
-      || (leftOffset !== 0 && isWidthGreaterThanRendered)
+    let lineRadius = !isWidthGreaterThanRendered ||
+      (leftOffset !== 0 && isWidthGreaterThanRendered)
       ? '6'
       : '0';
 
     // handle "false transform" line edge to simulate line movement for striped background
-    if (leftOffset === 0
-      && ((isWidthGreaterThanRendered && layerEndBeforeAxisBack)
-      || (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
+    if (leftOffset === 0 &&
+      ((isWidthGreaterThanRendered && layerEndBeforeAxisBack) ||
+      (!isWidthGreaterThanRendered && layerStartBeforeAxisFront))) {
       lineWidth -= positionTransformX;
       rectTransform += positionTransformX;
       lineRadius = '6';
@@ -172,7 +178,7 @@ CoverageLine.propTypes = {
   index: PropTypes.string,
   layerPeriod: PropTypes.string,
   lineType: PropTypes.string,
-  options: PropTypes.array,
+  options: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   positionTransformX: PropTypes.number,
   startDate: PropTypes.string,
 };

@@ -7,9 +7,10 @@ const {
 } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
@@ -60,8 +61,8 @@ test.fixme('Change to month zoom level and axis changes', async () => {
 })
 
 test.fixme('Change to year zoom level and axis changes', async () => {
-  await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
-  await page.locator('.zoom-level-change div.date-arrows.date-arrow-up').click()
+  await page.locator('.zoom-level-change button.date-arrows.date-arrow-up').click()
+  await page.locator('.zoom-level-change button.date-arrows.date-arrow-up').click()
   const axisGridDay = await page.locator('.axis-grid-text-day').first()
   const axisGridYear = await page.locator('.axis-grid-text-year').first()
   const currentZoom = await page.locator('#current-zoom')

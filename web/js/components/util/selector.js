@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
@@ -34,7 +33,7 @@ export default function Selector (props) {
 Selector.propTypes = {
   id: PropTypes.string,
   onChange: PropTypes.func,
-  optionArray: PropTypes.object,
+  optionArray: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   optionName: PropTypes.string,
   value: PropTypes.number || PropTypes.string,
 };

@@ -150,6 +150,8 @@
       color: #fff;
       background: variables.$wv-transparent-black;
       text-decoration: none;
+      border: none;
+      text-align: left;
     }
 
     & .layer-category-name:hover {
@@ -170,6 +172,9 @@
       overflow: hidden;
       box-sizing: border-box;
       text-decoration: none;
+      border: none;
+      text-align: left;
+      background-color: inherit;
     }
 
     & .layer-category-name:hover {
@@ -182,7 +187,7 @@
   & .measure-row-contents {
     display: flex;
     flex-wrap: wrap;
-    margin: 5px -1px 0 0;
+    margin: 5px 0 0;
 
     & .source-metadata {
       padding: 5px;
@@ -223,6 +228,10 @@
   position: relative;
   cursor: pointer;
   min-height: 44px;
+  background-color: inherit;
+  text-align: left;
+  width: 100%;
+  border: none;
 
   & .arrow-icon {
     color: #d54e21;
@@ -334,6 +343,11 @@
   height: 22px;
   background: #333;
   border-top: 2px solid #d54e21;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  width: 100%;
+  padding: 0;
   box-shadow: 0 -2px 16px rgb(0 0 0 / 35%);
 }
 

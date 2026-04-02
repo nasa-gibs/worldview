@@ -47,6 +47,7 @@ class Pick extends React.Component {
         </text>
       );
     }
+    return false;
   }
 
   render() {

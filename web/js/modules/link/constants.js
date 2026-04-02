@@ -21,15 +21,15 @@ export const MOCK_SHORT_LINK_RESPONSE = {
 
 export const ENCODING_EXCEPTIONS = [
   {
-    match: new RegExp('%2C', 'g'),
+    match: /%2C/g,
     replace: ',',
   },
   {
-    match: new RegExp('%3B', 'g'),
+    match: /%3B/g,
     replace: ';',
   },
   {
-    match: new RegExp('%3D', 'g'),
+    match: /%3D/g,
     replace: '=',
   },
 ];

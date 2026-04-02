@@ -209,8 +209,9 @@ export function compareDailyDates(lastDateToCheck, selectedDate) {
 }
 
 /**
- * Compares two dates and returns true if ONLY the hour value in selectedDate is greater than 3 hours ahead of lastDateToCheck
- * Used as a safeguard to prevent automatically stepping back farther than 3 hours for subdaily tiles in kiosk mode
+ * Compares two dates and returns true if ONLY the hour value in selectedDate is greater than 3
+ * hours ahead of lastDateToCheck. Used as a safeguard to prevent automatically stepping back
+ * farther than 3 hours for subdaily tiles in kiosk mode
  * @param {string} lastDateToCheck
  * @param {string} selectedDate
  * @returns {boolean}

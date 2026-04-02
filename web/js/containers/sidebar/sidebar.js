@@ -115,16 +115,18 @@ class Sidebar extends React.Component {
     } = this.props;
     const footerHeight = lodashGet(this, 'footerElement.clientHeight') || 20;
     const addLayersHeight = lodashGet(this, 'addLayersElement.clientHeight') || 30;
-    const tabHeight = isMobile ? isCompareMode ? 80 : 40 : 32;
+    const compareModeHeight = isCompareMode ? 80 : 40;
+    const tabHeight = isMobile ? compareModeHeight : 32;
     const groupCheckboxHeight = 35;
     let newHeight;
     if (!isMobile) {
       const iconHeight = 53;
       const topOffset = 10;
       const basePadding = 130;
-      newHeight = screenHeight
-        - (iconHeight + topOffset + tabHeight + groupCheckboxHeight + basePadding + footerHeight + addLayersHeight)
-        - 10;
+      newHeight = screenHeight -
+        (iconHeight + topOffset + tabHeight + groupCheckboxHeight +
+          basePadding + footerHeight + addLayersHeight) -
+        10;
     } else {
       newHeight = screenHeight - (tabHeight + groupCheckboxHeight + footerHeight + addLayersHeight);
     }
@@ -156,7 +158,7 @@ class Sidebar extends React.Component {
     });
     const storageValue = isNowCollapsed ? 'collapsed' : 'expanded';
     safeLocalStorage.setItem(SIDEBAR_COLLAPSED, storageValue);
-    collapseExpandToggle();
+    return collapseExpandToggle();
   }
 
   getProductsToRender(activeTab, isCompareMode, isChartMode) {
@@ -188,6 +190,7 @@ class Sidebar extends React.Component {
         />
       );
     }
+    return undefined;
   }
 
   handleWorldviewLogoClick(e, permalink) {
@@ -197,13 +200,13 @@ class Sidebar extends React.Component {
     let msg;
     if (isEmbedModeActive) {
       msg = 'Do you want to open full featured @NAME@ in a new tab with current content loaded?';
-      // eslint-disable-next-line no-alert
+
       if (window.confirm(msg)) {
         window.open(permalink, '_blank');
       }
     } else {
       msg = 'Do you want to reset @NAME@ to its defaults? You will lose your current state.';
-      // eslint-disable-next-line no-alert
+
       if (window.confirm(msg)) {
         googleTagManager.pushEvent({
           event: 'logo_page_reset',
@@ -229,18 +232,19 @@ class Sidebar extends React.Component {
     const mobileImgURL = 'brand/images/wv-logo-mobile.svg?v=@BUILD_NONCE@';
     const wvName = !isMobile ? 'Worldview' : '';
 
-    const sidebarStyle = isMobile ? {
-      background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
-      display: 'block',
-      height: '42px',
-      width: '56px',
-      padding: '5px',
-      top: '10px',
-      left: '10px',
-      borderRadius: '5px',
-      border: '1px solid #333',
-      position: 'absolute',
-    }
+    const sidebarStyle = isMobile
+      ? {
+        background: `url(${mobileImgURL}) no-repeat center rgb(40 40 40 / 85%)`,
+        display: 'block',
+        height: '42px',
+        width: '56px',
+        padding: '5px',
+        top: '10px',
+        left: '10px',
+        borderRadius: '5px',
+        border: '1px solid #333',
+        position: 'absolute',
+      }
       : {
         background: `url(${mobileImgURL}) no-repeat 15px center/52px rgb(40 40 40 / 85%)`,
         display: 'block',
@@ -266,26 +270,28 @@ class Sidebar extends React.Component {
       };
 
     return (
-      isKioskModeActive ? (
-        <span
-          id="wv-logo"
-          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-          style={sidebarStyle}
-        >
-          {wvName}
-        </span>
-      ) : (
-        <a
-          href={embedWVLogoLink}
-          title={WVLogoTitle}
-          id="wv-logo"
-          className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
-          style={sidebarStyle}
-          onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
-        >
-          {wvName}
-        </a>
-      )
+      isKioskModeActive
+        ? (
+          <span
+            id="wv-logo"
+            className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+            style={sidebarStyle}
+          >
+            {wvName}
+          </span>
+        )
+        : (
+          <a
+            href={embedWVLogoLink}
+            title={WVLogoTitle}
+            id="wv-logo"
+            className={isDistractionFreeModeActive ? 'wv-logo-distraction-free-mode' : ''}
+            style={sidebarStyle}
+            onClick={(e) => this.handleWorldviewLogoClick(e, permalink)}
+          >
+            {wvName}
+          </a>
+        )
     );
   }
 
@@ -324,52 +330,61 @@ class Sidebar extends React.Component {
     const { naturalEvents } = config.features;
     const { smartHandoffs } = config.features;
 
+    const embedModeHeight = isEmbedModeActive
+      ? '95vh'
+      : `${screenHeight}px`;
     const maxHeight = isCollapsed
       ? '0'
-      : isEmbedModeActive
-        ? '95vh'
-        : `${screenHeight}px`;
+      : embedModeHeight;
     const displayStyle = isDistractionFreeModeActive ? 'none' : 'block';
 
-    const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile ? {
-      position: 'static',
-    } : null;
+    const mobileWVSidebarStyle = !isDistractionFreeModeActive && isMobile
+      ? {
+        position: 'static',
+      }
+      : null;
 
-    const productsHolderStyle = isDistractionFreeModeActive && !isMobile ? {
-      display: 'none',
-    } : !isDistractionFreeModeActive && isMobile && !isEmbedModeActive ? {
-      cssFloat: 'left',
-      left: '0',
-      minWidth: '238px',
-      width: '100%',
-      height: '100%',
-      position: 'absolute !important',
-      overflow: 'hidden',
-      background: 'rgb(38 43 49)',
-      top: '0',
-      zIndex: 1000,
-      maxHeight: `${maxHeight}`,
-      display: `{${displayStyle}} !important`,
-    } : {
-      maxHeight: `${maxHeight}`,
-    };
+    const mobileProductHolderStyle = !isDistractionFreeModeActive && isMobile && !isEmbedModeActive
+      ? {
+        cssFloat: 'left',
+        left: '0',
+        minWidth: '238px',
+        width: '100%',
+        height: '100%',
+        position: 'absolute !important',
+        overflow: 'hidden',
+        background: 'rgb(38 43 49)',
+        top: '0',
+        zIndex: 1000,
+        maxHeight: `${maxHeight}`,
+        display: `{${displayStyle}} !important`,
+      }
+      : {
+        maxHeight: `${maxHeight}`,
+      };
+    const productsHolderStyle = isDistractionFreeModeActive && !isMobile
+      ? {
+        display: 'none',
+      }
+      : mobileProductHolderStyle;
 
     return (
       <ErrorBoundary>
         <section id="wv-sidebar" style={mobileWVSidebarStyle}>
           {!displayStaticMap && this.renderSidebarLogo()}
           {!isDistractionFreeModeActive && isCollapsed && (
-          <CollapsedButton
-            isMobile={isMobile}
-            isEmbed={isEmbedModeActive}
-            onclick={this.toggleSidebar}
-            numberOfLayers={numberOfLayers}
-          />
+            <CollapsedButton
+              isMobile={isMobile}
+              isEmbed={isEmbedModeActive}
+              onclick={this.toggleSidebar}
+              numberOfLayers={numberOfLayers}
+            />
           )}
           <div
             id="products-holder"
             className="products-holder-case"
             style={productsHolderStyle}
+            // eslint-disable-next-line react/no-unused-class-component-methods
             ref={(el) => { this.sidebarElement = el; }}
           >
             <NavCase
@@ -387,6 +402,7 @@ class Sidebar extends React.Component {
               <TabPane tabId="layers">
                 {this.getProductsToRender(activeTab, isCompareMode, isChartMode)}
                 <AddLayersContent
+                  // eslint-disable-next-line react/no-unused-class-component-methods
                   ref={(el) => { this.addLayersElement = el; }}
                   isActive={activeTab === 'layers'}
                   compareState={activeString}
@@ -414,6 +430,7 @@ class Sidebar extends React.Component {
               {
                 !isKioskModeActive && (
                   <FooterContent
+                    // eslint-disable-next-line react/no-unused-class-component-methods
                     ref={(el) => { this.footerElement = el; }}
                     tabTypes={tabTypes}
                     activeTab={activeTab}
@@ -450,10 +467,10 @@ const mapStateToProps = (state) => {
   } = state;
 
   const chartingModeAccessible = layers.active.layers.filter((layer) => Object.prototype.hasOwnProperty.call(layer, 'palette') && state.palettes.rendered[layer.palette.id] && state.palettes.rendered[layer.palette.id].maps[0].type === 'continuous' && layer.layerPeriod === 'Daily' && !layer.disableCharting).length > 0;
-  const isLoadingEvents = requestedEvents.isLoading
-    || requestedEventSources.isLoading;
-  const hasEventRequestError = !!(requestedEvents.error
-    || requestedEventSources.error);
+  const isLoadingEvents = requestedEvents.isLoading ||
+    requestedEventSources.isLoading;
+  const hasEventRequestError = !!(requestedEvents.error ||
+    requestedEventSources.error);
 
   const eventsData = getFilteredEvents(state);
   const eventsSources = lodashGet(requestedEventSources, 'response');
@@ -534,16 +551,16 @@ export default connect(
   mapDispatchToProps,
 )(Sidebar);
 
-
 Sidebar.propTypes = {
   activeString: PropTypes.string,
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
   chartingModeAccessible: PropTypes.bool,
   collapseExpandToggle: PropTypes.func,
-  config: PropTypes.object,
-  eventsData: PropTypes.array,
-  eventsSources: PropTypes.array,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  displayStaticMap: PropTypes.bool,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  eventsSources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hasEventRequestError: PropTypes.bool,
   isCollapsed: PropTypes.bool,
   isCompareMode: PropTypes.bool,
@@ -551,6 +568,7 @@ Sidebar.propTypes = {
   isDataDisabled: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
+  isKioskModeActive: PropTypes.bool,
   isLoadingEvents: PropTypes.bool,
   isMobile: PropTypes.bool,
   loadedCustomPalettes: PropTypes.func,
@@ -558,9 +576,9 @@ Sidebar.propTypes = {
   numberOfLayers: PropTypes.number,
   onTabClick: PropTypes.func,
   screenHeight: PropTypes.number,
-  selectedMap: PropTypes.object,
-  tabTypes: PropTypes.object,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  tabTypes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestEvents: PropTypes.func,
   requestSources: PropTypes.func,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

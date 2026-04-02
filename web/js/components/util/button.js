@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 /*
@@ -7,7 +6,12 @@ import PropTypes from 'prop-types';
  */
 export default function Button(props) {
   const {
-    id, onClick, style, valid, className, text,
+    id = '',
+    onClick,
+    style = null,
+    valid = true,
+    className = 'gray',
+    text,
   } = props;
   return (
     <button
@@ -18,10 +22,10 @@ export default function Button(props) {
       id={id}
       disabled={!valid}
       className={
-          valid
-            ? `wv-button ${className}`
-            : `wv-disabled wv-button ${className}`
-        }
+        valid
+          ? `wv-button ${className}`
+          : `wv-disabled wv-button ${className}`
+      }
     >
       <span className="button-text">{text}</span>
     </button>
@@ -38,7 +42,7 @@ Button.propTypes = {
   className: PropTypes.string,
   id: PropTypes.string,
   onClick: PropTypes.func,
-  style: PropTypes.object,
-  text: PropTypes.string,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   valid: PropTypes.bool,
 };

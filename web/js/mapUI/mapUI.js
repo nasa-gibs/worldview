@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable react/jsx-pascal-case */
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-/* eslint-disable no-multi-assign */
-/* eslint-disable no-shadow */
-/* eslint-disable no-param-reassign */
-/* eslint-disable no-nested-ternary */
+
 import { each as lodashEach, find as lodashFind } from 'lodash';
 import AddLayer from './components/layers/addLayer';
 import RemoveLayer from './components/layers/removeLayer';
@@ -151,18 +149,19 @@ function MapUI(props) {
           duration: 500,
           rotation: 0,
         });
-        return;
+        return undefined;
       }
       case REFRESH_ROTATE: {
         ui.selected.getView().animate({
           rotation: action.rotation,
           duration: 500,
         });
-        return;
+        return undefined;
       }
       case vectorStyleConstants.SET_SELECTED_VECTORS:
         return setVectorActions(action);
       case dateConstants.CHANGE_CUSTOM_INTERVAL:
+      case dateConstants.CHANGE_AUTO_INTERVAL:
       case dateConstants.CHANGE_INTERVAL:
         return setPreloadAction(action);
       case dateConstants.ARROW_DOWN:
@@ -171,6 +170,7 @@ function MapUI(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   const updateVectorSelections = () => {
@@ -298,7 +298,7 @@ function MapUI(props) {
     };
   };
 
-  async function preloadNextTiles(date, compareString) {
+  const preloadNextTiles = async (date, compareString) => {
     const map = { ui };
     const state = {
       proj, embed, layers, palettes, vectorStyles, compare, map, ui,
@@ -320,14 +320,14 @@ function MapUI(props) {
     if (!date && !arrowDown) {
       preloadNextTiles(subsequentDate, useActiveString);
     }
-  }
+  };
 
-  function preloadForCompareMode() {
+  const preloadForCompareMode = () => {
     preloadNextTiles(selectedDate, 'active');
     if (compare.active) {
       preloadNextTiles(selectedDateB, 'activeB');
     }
-  }
+  };
 
   // Initial hook that initiates the map after it has been created in CreateMap.js
   useEffect(() => {
@@ -408,14 +408,14 @@ function MapUI(props) {
       <MouseMoveEvents ui={ui} compareMapUi={compareMapUi} />
       <BufferQuickAnimate action={quickAnimateAction} />
       <UpdateCollections />
-      { isEICModeActive
-      && (
-      <>
-        <EIC />
-        <KioskAnimations ui={ui} />
-        <TileMeasurement ui={ui} />
-        { (isTravelModeActive && !isStaticMapActive) && <TravelMode /> }
-      </>
+      { isEICModeActive &&
+      (
+        <>
+          <EIC />
+          <KioskAnimations ui={ui} />
+          <TileMeasurement ui={ui} />
+          { (isTravelModeActive && !isStaticMapActive) && <TravelMode /> }
+        </>
       )}
       {devTestMode && <DevTestButton />}
 
@@ -495,32 +495,34 @@ export default connect(
 )(MapUI);
 
 MapUI.propTypes = {
-  activeLayers: PropTypes.array,
-  activeLayersState: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  activeLayersState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
   arrowDown: PropTypes.string,
   clearPreload: PropTypes.func,
-  compare: PropTypes.object,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
-  embed: PropTypes.object,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  embed: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isEICModeActive: PropTypes.bool,
+  isStaticMapActive: PropTypes.bool,
+  isTravelModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
-  layerQueue: PropTypes.object,
-  layers: PropTypes.object,
-  lastPreloadDate: PropTypes.object,
-  models: PropTypes.object,
-  palettes: PropTypes.object,
+  layerQueue: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  layers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  lastPreloadDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  models: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  palettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloaded: PropTypes.bool,
-  proj: PropTypes.object,
-  renderableLayersState: PropTypes.object,
-  selectedDate: PropTypes.object,
-  selectedDateB: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  renderableLayersState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedDateB: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setPreload: PropTypes.func,
   setUI: PropTypes.func,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateMapExtent: PropTypes.func,
-  vectorStyles: PropTypes.object,
-  vectorStylesState: PropTypes.object,
+  vectorStyles: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  vectorStylesState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

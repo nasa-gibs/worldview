@@ -47,7 +47,8 @@ export function setFilterRange(layerId, props, index, groupName) {
 export function setStyle(layer, vectorStyleId, groupName) {
   return (dispatch, getState) => {
     const state = getState();
-    const newActiveVectorStylesObj = setStyleFunction( // should probably place this inside map.ui as it is a rendering
+    // should probably place this inside map.ui as it is a rendering
+    const newActiveVectorStylesObj = setStyleFunction(
       layer,
       vectorStyleId,
       state.vectorStyles.custom,

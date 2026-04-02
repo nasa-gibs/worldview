@@ -7,7 +7,6 @@ import whatInput from 'what-input';
 // Utils
 import util from './util/util';
 import { STARTUP } from './util/constants';
-// eslint-disable-next-line import/no-named-as-default
 import MapInteractions from './containers/map-interactions/map-interactions';
 // Toolbar
 import Toolbar from './containers/toolbar';
@@ -52,17 +51,22 @@ require('@elastic/react-search-ui-views/lib/styles/styles.css');
 const { events } = util;
 
 class App extends React.Component {
+  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+  static setVhCSSProperty() {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  }
+
   constructor(props) {
     super(props);
     this.onload();
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.setVhCSSProperty = this.setVhCSSProperty.bind(this);
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('resize', this.setVhCSSProperty);
-    window.addEventListener('orientationchange', this.setVhCSSProperty);
+    window.addEventListener('resize', App.setVhCSSProperty);
+    window.addEventListener('orientationchange', App.setVhCSSProperty);
   }
 
   componentDidUpdate(prevProps) {
@@ -71,7 +75,8 @@ class App extends React.Component {
       kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled, hideNotificationsPopup,
     } = this.props;
     if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0 && !kioskModeEnabled && !e2eModeEnabled && !hideNotificationsPopup) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled &&
+        !e2eModeEnabled && !hideNotificationsPopup) {
         this.openNotification(notifications, numberOutagesUnseen);
       }
     }
@@ -79,16 +84,9 @@ class App extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('resize', this.setVhCSSProperty);
-    window.removeEventListener('orientationchange', this.setVhCSSProperty);
+    window.removeEventListener('resize', App.setVhCSSProperty);
+    window.removeEventListener('orientationchange', App.setVhCSSProperty);
   }
-
-
-  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-  setVhCSSProperty = () => {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  };
 
   handleKeyPress(event) {
     const { keyPressAction } = this.props;
@@ -108,12 +106,12 @@ class App extends React.Component {
   };
 
   onload() {
-    const self = this;
-    const state = self.props.parameters;
-    const { config } = self.props;
+    const { props, getScreenInfo } = this;
+    const { config, parameters } = props;
+    const state = parameters;
     config.parameters = state;
 
-    const main = function() {
+    const main = () => {
       // Load any additional scripts as needed
       if (config.scripts) {
         util.loadScripts(config.scripts);
@@ -132,14 +130,14 @@ class App extends React.Component {
         console.warn('Development version');
       }
       window.addEventListener('resize', () => {
-        self.getScreenInfo();
+        getScreenInfo();
       });
       window.addEventListener('orientationchange', () => {
-        self.getScreenInfo();
+        getScreenInfo();
       });
-      self.getScreenInfo();
+      getScreenInfo();
       events.trigger(STARTUP);
-      self.setVhCSSProperty();
+      App.setVhCSSProperty();
     };
     util.wrap(main)();
   }
@@ -165,7 +163,10 @@ class App extends React.Component {
         <MapInteractions />
         <AlertDropdown isTourActive={isTourActive} />
         <div>
-          {isTourActive && (numberOutagesUnseen === 0 || hideNotificationsPopup) && (!isMobile || isEmbedModeActive) ? <Tour /> : null}
+          {isTourActive && (numberOutagesUnseen === 0 ||
+            hideNotificationsPopup) && (!isMobile || isEmbedModeActive)
+            ? <Tour />
+            : null}
         </div>
         <Sidebar />
         <div id="layer-modal" className="layer-modal" />
@@ -265,11 +266,12 @@ App.propTypes = {
   locationKey: PropTypes.string,
   modalId: PropTypes.string,
   notificationClick: PropTypes.func,
-  notifications: PropTypes.object,
+  notifications: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOutagesUnseen: PropTypes.number,
-  parameters: PropTypes.object,
+  parameters: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setScreenInfoAction: PropTypes.func,
   hideNotificationsPopup: PropTypes.bool,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 App.defaultProps = {

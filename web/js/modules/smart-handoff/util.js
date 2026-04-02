@@ -1,4 +1,3 @@
-
 import { get } from 'lodash';
 import moment from 'moment';
 import { parseTemplate } from 'url-template';
@@ -44,7 +43,7 @@ function getHandoffParams (queryInput, options) {
   Object.entries(options).forEach(([key, value]) => {
     if (value === undefined) {
       console.error(`${key} is undefined.`);
-    } else if (value === {}) {
+    } else if (value && Object.keys(value).length === 0) {
       console.error(`${key} is an empty object.`);
     }
   });
@@ -78,6 +77,7 @@ function getHandoffParams (queryInput, options) {
         [ValueName]: conceptId,
       };
     }
+    return undefined;
   };
 
   return queryInput.reduce((params, input) => ({

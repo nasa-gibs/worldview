@@ -45,7 +45,7 @@ class ModalStart extends React.Component {
     const { checked } = this.state;
     const closeBtn = (
       <button className="tour-close-btn" onClick={endTour} type="button">
-        <Close class="add-plus" size="14px" />
+        <Close className="add-plus" size="14px" />
       </button>
     );
     return (
@@ -103,8 +103,8 @@ ModalStart.propTypes = {
   modalStart: PropTypes.bool.isRequired,
   selectTour: PropTypes.func.isRequired,
   showTour: PropTypes.func.isRequired,
-  stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
+  stories: PropTypes.oneOfType([PropTypes.object]),
+  storyOrder: PropTypes.oneOfType([PropTypes.array]),
   toggleModalStart: PropTypes.func.isRequired,
   className: PropTypes.string,
   height: PropTypes.number,

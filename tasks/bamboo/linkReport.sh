@@ -6,7 +6,7 @@
 set -e -x
 
 # Install node.js
-NODE_VERSION=v22.18.0
+NODE_VERSION=v24.11.1
 curl -O https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz
 tar xf node-${NODE_VERSION}-linux-x64.tar.gz &&
 export PATH=$(pwd)/node-${NODE_VERSION}-linux-x64/bin:${PATH}

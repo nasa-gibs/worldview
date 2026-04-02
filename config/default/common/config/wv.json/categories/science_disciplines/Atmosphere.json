@@ -50,6 +50,7 @@
                     "Temperature",
                     "TOA Albedo",
                     "TOA Flux",
+                    "Volcanic Ash",
                     "Water Vapor",
                     "Wind Speed"
                 ]

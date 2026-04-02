@@ -47,15 +47,13 @@ async function main () {
 
   const files = [...fs.readdirSync(inputDir), ...fs.readdirSync(wvStylesDir)]
 
-  for (const file of files) {
-    try {
-      fileCount += 1
-      await copyFileAsync(file)
-    } catch (error) {
-      errorCount += 1
-      console.error(`${prog}: ERROR: [${file}] ${error}\n.`)
-    }
-  }
+  const results = await Promise.allSettled(files.map((file) => copyFileAsync(file)))
+  const { fulfilled = [], rejected = [] } = Object.groupBy(results, (item) => item.status)
+
+  rejected.forEach(({ reason }) => console.error(`${prog}: ERROR: ${reason}\n`))
+
+  fileCount += fulfilled.length
+  errorCount += rejected.length
 
   console.error(`${prog}: ${errorCount} error(s), ${fileCount} file(s)`)
 

@@ -18,7 +18,6 @@ import {
 } from '../palettes/selectors';
 import util from '../../util/util';
 
-
 /**
  * Get OpenLayers layers from state that were created from WV vector
  * layer definitions. NOTE: This currently also will include the associate WMS
@@ -56,14 +55,13 @@ export function getAllVectorStyles(layerId, index, state) {
 /**
  * Gets a single colormap (entries / legend combo)
  *
- * @param str {string} The ID of the layer
- * @param number {Number} The index of the colormap for this layer, default 0
+ * @param layerId {string} The ID of the layer
+ * @param index {Number} The index of the colormap for this layer, default 0
  * object.
  * @return {object} object including the entries and legend
  */
-export function getVectorStyle(layerId, index, groupStr, state) {
-  groupStr = groupStr || state.compare.activeString;
-  index = lodashIsUndefined(index) ? 0 : index;
+export function getVectorStyle(layerId, indexInt, state) {
+  const index = lodashIsUndefined(indexInt) ? 0 : indexInt;
   const renderedVectorStyle = lodashGet(
     state,
     `vectorStyles.${layerId}.layers.${index}`,
@@ -74,21 +72,23 @@ export function getVectorStyle(layerId, index, groupStr, state) {
   return getAllVectorStyles(layerId, index, state);
 }
 
-export function findIndex(layerId, type, value, index, groupStr, state) {
+export function findIndex(layerId, type, value, indexInt, state) {
+  let index = indexInt;
   index = index || 0;
-  const { values } = getVectorStyle(layerId, index, groupStr, state).entries;
+  const { values } = getVectorStyle(layerId, index, state).entries;
   let result;
-  lodashEach(values, (check, index) => {
+  lodashEach(values, (check, indexArg) => {
     const min = getMinValue(check);
     const max = getMaxValue(check);
     if (type === 'min' && value === min) {
-      result = index;
+      result = indexArg;
       return false;
     }
     if (type === 'max' && value === max) {
-      result = index;
+      result = indexArg;
       return false;
     }
+    return true;
   });
   return result;
 }
@@ -156,7 +156,8 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
  * @param {Object} layer | OL layer object
  * @param {Object} options | Layer options object
  * @param {Object} state | The entire state of the application
- * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
+ * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with
+ * vector feature
  */
 export function setStyleFunction(opts) {
   let { layer } = opts;
@@ -170,7 +171,7 @@ export function setStyleFunction(opts) {
     styleSelection = false,
   } = opts;
   const map = lodashGet(state, 'map.ui.selected');
-  if (!map) return;
+  if (!map) return undefined;
   const { proj } = state;
   const { selected } = state.vectorStyles;
   const { resolutions } = proj.selected;
@@ -203,7 +204,7 @@ export function setStyleFunction(opts) {
   }
 
   if (!layer || layer.isWMS || glStyle === undefined) {
-    return;
+    return undefined;
   }
 
   // This is required to bust the openlayers functionCache
@@ -222,11 +223,12 @@ export function setStyleFunction(opts) {
   // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
     const extentStartX = layer.getExtent()[0];
+    const fallbackExtent = extentStartX === -250
+      ? [110, -90, 180, 90]
+      : null;
     const acceptableExtent = extentStartX === 180
       ? [-180, -90, -110, 90]
-      : extentStartX === -250
-        ? [110, -90, 180, 90]
-        : null;
+      : fallbackExtent;
 
     layer.setStyle((feature, resolution) => {
       const data = state.config.vectorData[def.vectorData.id];
@@ -240,25 +242,29 @@ export function setStyleFunction(opts) {
         }
         return styleFunction(feature, resolution);
       }
+      return undefined;
     });
   }
 
   return vectorStyleId;
 }
 
-export function isActive(layerId, group, state) {
+export function isActive(layerId, groupObj, state) {
+  let group = groupObj;
   group = group || state.compare.activeString;
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
+  return undefined;
 }
 
-export function getKey(layerId, groupStr, state) {
+export function getKey(layerId, group, state) {
+  let groupStr = group;
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
     return '';
   }
-  const def = getVectorStyle(layerId, undefined, groupStr, state);
+  const def = getVectorStyle(layerId, undefined, state);
   const keys = [];
   if (def.custom) {
     keys.push(`style=${def.custom}`);
@@ -272,7 +278,8 @@ export function getKey(layerId, groupStr, state) {
   return keys.join(',');
 }
 
-export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, state) {
+  let layer = layerObj;
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');
@@ -295,6 +302,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       if ((minute && minute[1] % 5 === 0) || feature.getGeometry().getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
+      return undefined;
     });
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });

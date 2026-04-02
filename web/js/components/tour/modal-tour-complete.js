@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
@@ -12,23 +11,22 @@ function ModalComplete(props) {
   const { readMoreLinks } = currentStory;
   const closeBtn = (
     <button className="tour-close-btn" onClick={endTour} type="button">
-      <Close class="add-plus" size="14px" />
+      <Close className="add-plus" size="14px" />
     </button>
   );
   let list;
   if (
-    readMoreLinks
-      && (Array.isArray(readMoreLinks) && readMoreLinks.length)
+    readMoreLinks &&
+      (Array.isArray(readMoreLinks) && readMoreLinks.length)
   ) {
     list = (
       <>
         <p>Read more about this story at the links below:</p>
         <ul>
-          {readMoreLinks.map((linkId, i) => (
-            /* eslint react/no-array-index-key: 1 */
-            <li key={i} index={i}>
-              <a href={linkId.link} target="_blank" rel="noopener noreferrer">
-                {linkId.title}
+          {readMoreLinks.map((linkObj) => (
+            <li key={`${linkObj.link || 'link'}-${linkObj.title || 'title'}`}>
+              <a href={linkObj.link} target="_blank" rel="noopener noreferrer">
+                {linkObj.title}
               </a>
             </li>
           ))}
@@ -80,7 +78,7 @@ function ModalComplete(props) {
 }
 
 ModalComplete.propTypes = {
-  currentStory: PropTypes.object.isRequired,
+  currentStory: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   endTour: PropTypes.func.isRequired,
   modalComplete: PropTypes.bool.isRequired,
   resetTour: PropTypes.func.isRequired,

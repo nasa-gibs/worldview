@@ -3,9 +3,19 @@
         "Reference Map": {
             "id": "reference-map",
             "title": "Reference Map",
-            "subtitle": "OpenStreetMap.org, WDPA",
+            "subtitle": "Esri, OpenStreetMap.org, WDPA",
             "multichoice": true,
             "sources": {
+                "Esri": {
+                    "id": "esri",
+                    "title": "Esri",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "World_Imagery",
+                        "Reference_Labels_15m"
+                    ]
+                },
                 "OpenStreetMap.org": {
                     "id": "openstreetmap",
                     "title": "OpenStreetMap.org",
@@ -13,7 +23,6 @@
                     "image": "",
                     "settings": [
                         "Reference_Features_15m",
-                        "Reference_Labels_15m",
                         "Coastlines_15m",
                         "Land_Mask",
                         "Land_Water_Map"

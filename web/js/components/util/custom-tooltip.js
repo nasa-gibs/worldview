@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 function CustomTooltip (props) {
@@ -96,6 +96,7 @@ function CustomTooltip (props) {
 }
 
 CustomTooltip.propTypes = {
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   id: PropTypes.string,
   text: PropTypes.string,
   hideTooltip: PropTypes.bool,

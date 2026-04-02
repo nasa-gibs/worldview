@@ -20,13 +20,14 @@ function UpdateOpacity(props) {
     updateLayerVisibilities,
   } = props;
 
-  const updateGranuleLayerOpacity = (def, activeString, opacity, compare) => {
+  const updateGranuleLayerOpacity = (def, activeStringArg, opacity, compareArg) => {
     const { id } = def;
     const layers = ui.selected.getLayers().getArray();
     lodashEach(Object.keys(layers), (index) => {
       const layer = layers[index];
+      // eslint-disable-next-line no-underscore-dangle
       if (layer.className_ === 'ol-layer') {
-        if (compare && isCompareActive) {
+        if (compareArg && isCompareActive) {
           const layerGroup = layer.getLayers().getArray();
           lodashEach(Object.keys(layerGroup), (groupIndex) => {
             const compareLayerGroup = layerGroup[groupIndex];
@@ -36,14 +37,14 @@ function UpdateOpacity(props) {
               // inner first granule group tile layer
               const firstTileLayer = tileLayer[0];
               if (firstTileLayer.wv.id === id) {
-                if (firstTileLayer.wv.group === activeString) {
+                if (firstTileLayer.wv.group === activeStringArg) {
                   compareLayerGroup.setOpacity(opacity);
                 }
               }
             }
           });
         } else if (layer.wv.id === id) {
-          if (layer.wv.group === activeString) {
+          if (layer.wv.group === activeStringArg) {
             layer.setOpacity(opacity);
           }
         }
@@ -53,21 +54,30 @@ function UpdateOpacity(props) {
 
   /**
    * Sets new opacity to layer
-   * @param {object} def - layer Specs
-   * @param {number} value - number value
+   * @param {object} actionObj - layer Specs
    * @returns {void}
    */
-  const updateOpacity = (action) => {
-    const { id, opacity } = action;
+  const updateOpacity = (actionObj) => {
+    const { id, opacity } = actionObj;
     const def = lodashFind(activeLayers, { id });
+    if (!def) {
+      updateLayerVisibilities();
+      return;
+    }
     if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
       const layerGroup = findLayer(def, activeString);
+      if (!layerGroup || typeof layerGroup.setOpacity !== 'function') {
+        updateLayerVisibilities();
+        return;
+      }
       layerGroup.setOpacity(opacity);
-      layerGroup.getLayersArray().forEach((l) => {
-        l.setOpacity(opacity);
-      });
+      if (typeof layerGroup.getLayersArray === 'function') {
+        layerGroup.getLayersArray().forEach((l) => {
+          l.setOpacity(opacity);
+        });
+      }
     }
     updateLayerVisibilities();
   };
@@ -100,12 +110,12 @@ export default connect(
 )(UpdateOpacity);
 
 UpdateOpacity.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compare: PropTypes.object,
-  findLayers: PropTypes.func,
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  findLayer: PropTypes.func,
   isCompareActive: PropTypes.bool,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
 };

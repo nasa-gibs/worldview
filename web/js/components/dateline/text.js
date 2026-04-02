@@ -129,12 +129,12 @@ class LineText extends React.Component {
 
 LineText.propTypes = {
   active: PropTypes.bool,
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   x: PropTypes.number,
   isCompareActive: PropTypes.bool,
   isLeft: PropTypes.bool,
-  map: PropTypes.object,
-  textCoords: PropTypes.array,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  textCoords: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default LineText;

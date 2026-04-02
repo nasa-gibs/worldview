@@ -4,7 +4,10 @@
       "id": "PREFIRE_SAT2_Outgoing_Longwave_Radiative_Flux",
       "description": "prefire/PREFIRE_SAT2_Outgoing_Longwave_Radiative_Flux",
       "tags": "",
+      "dataAvailability": "dd",
       "group": "overlays",
+      "type": "granule",
+      "count": 1,
       "layergroup": "Outgoing Radiation"
     }
   }

@@ -26,7 +26,7 @@ export function animateCoordinates(map, proj, coordinates, zoom, isKioskModeActi
   if (proj !== 'geographic') {
     [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
-  fly(map, proj, [x, y], zoom, isKioskModeActive);
+  fly(map, proj, [x, y], isKioskModeActive, zoom);
 }
 
 /**
@@ -52,7 +52,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
   const overlayEl = document.createElement('div');
   const root = createRoot(overlayEl);
   const removeMarker = () => {
-    root.unmount(overlayEl);
+    root.unmount();
     removeMarkerPin();
   };
   root.render(
@@ -76,7 +76,14 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
  */
-export function getCoordinatesMarker(proj, coordinatesObject, results, removeMarker, isMobile, dialogVisible) {
+export function getCoordinatesMarker(
+  proj,
+  coordinatesObject,
+  results,
+  removeMarker,
+  isMobile,
+  dialogVisible,
+) {
   const { crs } = proj.selected;
   const { id, longitude, latitude } = coordinatesObject;
   const coordinates = [longitude, latitude];
@@ -114,9 +121,10 @@ export function getLocalStorageCollapseState() {
  */
 export function mapLocationToLocationSearchState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const { s } = parameters;
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
@@ -153,19 +161,22 @@ export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
   const serializeCoordinates = ({ longitude, latitude }) => {
     const coordinateValues = [longitude, latitude];
-    if (!map.ui.selected) return;
+    if (!map.ui.selected) return undefined;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
-    if (!coordinatesWithinExtent) return;
+    if (!coordinatesWithinExtent) return undefined;
     return coordinateValues;
   };
 
   const serializeCoordinatesArray = (coordinatesArray) => coordinatesArray
     .map((coordinate) => serializeCoordinates(coordinate))
     .filter((coordinate) => coordinate);
-  const coordinatesURL = Array.isArray(coordinates) ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
+  const coordinatesURL = Array.isArray(coordinates)
+    ? serializeCoordinatesArray(coordinates)
+    : serializeCoordinates(coordinates);
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
+  return undefined;
 }
 
 /**
@@ -180,4 +191,5 @@ export function setLocalStorageCollapseState(storageValue) {
  * @param {Object} config
  * @return {Boolean} is Location Search feature enabled
  */
-export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch && features.locationSearch.url);
+export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch &&
+  features.locationSearch.url);

@@ -8,6 +8,7 @@ const {
 const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 const { switchProjections } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
 let downloadPromise
 

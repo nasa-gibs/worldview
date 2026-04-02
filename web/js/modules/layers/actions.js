@@ -34,6 +34,7 @@ import {
   UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -55,7 +56,10 @@ export function activateLayersForEventCategory(category) {
     const overlayGroups = getOverlayGroups(newLayers);
 
     const newEventLayers = findEventLayers(originalLayers, newLayers);
-    overlayGroups.forEach((group) => { group.collapsed = true; });
+    overlayGroups.forEach((groupObj) => {
+      const group = groupObj;
+      group.collapsed = true;
+    });
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
@@ -118,7 +122,7 @@ export function addLayer(id) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      layers, compare, proj, config,
+      layers, compare, config,
     } = state;
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
@@ -126,11 +130,10 @@ export function addLayer(id) {
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
+      {},
       overlays.length || 0,
-      proj.id,
       groupOverlays,
     );
     const projections = Object.keys(config.projections);
@@ -179,7 +182,7 @@ export function removeLayer(id) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
     const def = activeLayers[index];
-    dispatch({
+    return dispatch({
       type: REMOVE_LAYER,
       activeString,
       layersToRemove: [def],
@@ -225,7 +228,8 @@ export function toggleGroupVisibility(ids, visible) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeLayers = getActiveLayersSelector(getState());
-    activeLayers.forEach((layer) => {
+    activeLayers.forEach((layerObj) => {
+      const layer = layerObj;
       if (ids.includes(layer.id)) {
         layer.visible = visible;
       }
@@ -258,7 +262,7 @@ export function setOpacity(id, opacity) {
     if (index === -1) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
-    dispatch({
+    return dispatch({
       type: UPDATE_OPACITY,
       id,
       opacity: Number(opacity),
@@ -421,7 +425,7 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
   return (dispatch, getState) => {
     const state = getState();
     const {
-      layers, compare, proj, config,
+      layers, compare, config,
     } = state;
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
@@ -429,11 +433,10 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
+      {},
       overlays.length || 0,
-      proj.id,
       groupOverlays,
       bandCombo,
       selectedPreset,
@@ -447,6 +450,19 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
       activeString: compare.activeString,
       layers: newLayers,
       layerIndex,
+    });
+  };
+}
+
+export function addTEMPODateRanges(layer, tempoDateRanges, activeString) {
+  return (dispatch) => {
+    const { id } = layer;
+
+    dispatch({
+      type: ADD_TEMPO_DATE_RANGES,
+      activeString,
+      id,
+      tempoDateRanges,
     });
   };
 }

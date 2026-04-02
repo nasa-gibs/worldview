@@ -246,7 +246,12 @@ export function refreshPalettes(activePalettes) {
           dispatch(setCustomPalette(key, colormap.custom, index, groupName));
         }
         if (colormap.max || colormap.min || colormap.squash) {
-          dispatch(setThresholdRangeAndSquash(key, { squash: colormap.squash, min: colormap.min, max: colormap.max }, index, groupName));
+          dispatch(setThresholdRangeAndSquash(
+            key,
+            { squash: colormap.squash, min: colormap.min, max: colormap.max },
+            index,
+            groupName,
+          ));
         }
         if (colormap.disabled) {
           dispatch(refreshDisabledClassification(key, colormap.disabled, index, groupName));

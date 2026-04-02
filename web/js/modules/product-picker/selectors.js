@@ -19,7 +19,8 @@ export const getLayersForProjection = createSelector(
     const layersWithFacetProps = buildLayerFacetProps(config, selectedDate)
       // Only use the layers for the active projection
       .filter((layer) => layer.projections && layer.projections[projection])
-      .map((layer) => {
+      .map((layerObj) => {
+        const layer = layerObj;
         // If there is metadata for the current projection, use that
         const projectionMeta = layer.projections[projection];
         if (projectionMeta.title) layer.title = projectionMeta.title;
@@ -30,7 +31,10 @@ export const getLayersForProjection = createSelector(
         }
         return layer;
       });
-    return lodashSortBy(layersWithFacetProps, (layer) => lodashIndexOf(config.layerOrder, layer.id));
+    return lodashSortBy(
+      layersWithFacetProps,
+      (layer) => lodashIndexOf(config.layerOrder, layer.id),
+    );
   },
 );
 
@@ -43,7 +47,7 @@ export const getSourcesForProjection = createSelector(
     const trackGroup = currentMeasurement && currentMeasurement.id === 'orbital-track';
     const sourcesForProj = sources && sources.filter(
       (source) => source.settings.some((layerId) => {
-        if (!config.layers[layerId] || !config.layers[layerId].projections) return;
+        if (!config.layers[layerId] || !config.layers[layerId].projections) return undefined;
         const { projections, layergroup } = config.layers[layerId];
         const isOrbitTrack = layergroup === 'Orbital Track';
         const inProj = !!projections[projection];

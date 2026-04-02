@@ -5,11 +5,13 @@ import {
   updateAppNow,
   selectDate,
   changeCustomInterval,
+  changeAutoInterval,
   selectInterval,
 } from './actions';
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -39,9 +41,9 @@ function getState(layers) {
 function addMockLayer(layerId, layerArray) {
   return addLayer(
     layerId,
-    {},
     layerArray,
     config.layers,
+    {},
     getLayers(getState(layerArray), { group: 'all' }).overlays
       .length,
   );
@@ -92,7 +94,7 @@ describe('Date timescale changes', () => {
         lastArrowDirection: 'left',
         outOfStep: true,
       };
-      let layers = addLayer('terra-cr', {}, [], config.layers, 0);
+      let layers = addLayer('terra-cr', [], config.layers, {}, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {
@@ -135,7 +137,7 @@ describe('Date timescale changes', () => {
         lastArrowDirection: 'right',
         outOfStep: false,
       };
-      let layers = addLayer('terra-cr', {}, [], config.layers, 0);
+      let layers = addLayer('terra-cr', [], config.layers, {}, 0);
       layers = addMockLayer('aqua-cr', layers);
       const store = mockStore({
         date: {
@@ -186,6 +188,32 @@ describe('Date timescale changes', () => {
         delta,
       };
       store.dispatch(changeCustomInterval(delta, customInterval));
+      expect(store.getActions()[0]).toEqual(expectedFirst);
+      expect(store.getActions()[1]).toEqual(expectedSecond);
+    },
+  );
+
+  test(
+    `changeAutoInterval action returns ${CHANGE_AUTO_INTERVAL} as type and true as autoSelected [date-action-auto-interval]`,
+    () => {
+      const store = mockStore({
+        date: {},
+        compare: {
+          isCompareA: false,
+          activeString: 'activeB',
+        },
+        proj: {
+          id: 'geographic',
+        },
+      });
+      const expectedFirst = {
+        type: CLEAR_PRELOAD,
+      };
+      const expectedSecond = {
+        type: CHANGE_AUTO_INTERVAL,
+        autoSelected: true,
+      };
+      store.dispatch(changeAutoInterval(true));
       expect(store.getActions()[0]).toEqual(expectedFirst);
       expect(store.getActions()[1]).toEqual(expectedSecond);
     },

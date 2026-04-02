@@ -1,6 +1,6 @@
-
 import {
-  datelineShiftGranules, getCMRQueryDates, transformGranuleData, areCoordinatesAndPolygonExtentValid,
+  datelineShiftGranules, getCMRQueryDates,
+  transformGranuleData, areCoordinatesAndPolygonExtentValid,
 } from './util';
 import { CRS } from '../../modules/map/constants';
 import util from '../../util/util';
@@ -122,4 +122,3 @@ describe('areCoordinatesAndPolygonExtentValid', () => {
     expect(isValid).toEqual(false);
   });
 });
-

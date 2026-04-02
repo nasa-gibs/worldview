@@ -23,6 +23,7 @@ import {
   UPDATE_DDV_LAYER,
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -79,7 +80,6 @@ export function getInitialState(config) {
   return updatedState;
 }
 
-
 export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
   const getPrevOverlayGroups = () => state[compareState].overlayGroups;
@@ -120,16 +120,21 @@ export function layerReducer(state = initialState, action) {
       });
 
     case ADD_LAYERS_FOR_EVENT:
-    case REORDER_OVERLAY_GROUPS:
+    case REORDER_OVERLAY_GROUPS: {
+      const handleDefinedEventLayers = action?.eventLayers?.length
+        ? { $set: action.eventLayers }
+        : { $push: [] };
       return update(state, {
         [compareState]: {
           layers: { $set: action.layers },
           overlayGroups: { $set: action.overlayGroups },
           prevLayers: { $set: [] },
         },
-        eventLayers: action.eventLayers === undefined ? { $push: [] } : action.eventLayers.length ? { $set: action.eventLayers } : { $push: [] },
+        eventLayers: action.eventLayers === undefined
+          ? { $push: [] }
+          : handleDefinedEventLayers,
       });
-
+    }
     case TOGGLE_OVERLAY_GROUPS:
       return update(state, {
         [compareState]: {
@@ -403,8 +408,9 @@ export function layerReducer(state = initialState, action) {
       });
     }
 
-    // This is required because to update band combinations we need to actually remove and re-add these layers
-    // This case sets the ddv layer back to its original index before being removed and added again
+    // This is required because to update band combinations we need to actually remove
+    // and re-add these layers. This case sets the ddv layer back to its original index before being
+    // removed and added again
     case UPDATE_DDV_LAYER: {
       const { layerIndex, id, layers } = action;
       const indexToMove = layers.findIndex((activeLayer) => activeLayer.id === id);
@@ -418,6 +424,23 @@ export function layerReducer(state = initialState, action) {
             overlayGroups: getOverlayGroups(layers, getPrevOverlayGroups()),
             prevLayers: [],
             layerIndex: action.layerIndex,
+          },
+        },
+      });
+    }
+
+    case ADD_TEMPO_DATE_RANGES: {
+      const {
+        tempoDateRanges,
+      } = action;
+      const layerIndex = getLayerIndex();
+
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [layerIndex]: {
+              tempoDateRanges: { $set: tempoDateRanges },
+            },
           },
         },
       });

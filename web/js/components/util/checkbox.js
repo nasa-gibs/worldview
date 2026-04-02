@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { Check } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import HoverTooltip from './hover-tooltip';
@@ -9,14 +8,17 @@ import HoverTooltip from './hover-tooltip';
  */
 export default function Checkbox (props) {
   const {
-    onCheck, checked, isRound, color, tooltipPlacement, classNames, id, name, title, label, children, disabled,
+    onCheck,
+    checked,
+    isRound, color, tooltipPlacement, classNames, id, name, title, label, children, disabled,
   } = props;
 
   const roundClassName = isRound ? 'wv-checkbox-round ' : '';
   const defaultClassName = 'wv-checkbox ';
   const checkedClassName = checked ? 'checked ' : '';
   const disabledClassName = disabled ? ' disabled' : '';
-  const caseClassName = defaultClassName + roundClassName + checkedClassName + color + disabledClassName;
+  const caseClassName = defaultClassName +
+  roundClassName + checkedClassName + color + disabledClassName;
   const showDisabledToolTip = disabled && id && title;
   return (
     <>
@@ -35,7 +37,7 @@ export default function Checkbox (props) {
           tabIndex="0"
         />
         {checked && (
-          <Check class="check" size="15px" />
+          <Check className="check" size="15px" />
         )}
         {children}
         <label htmlFor={id}>

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React from 'react';
 import { connect } from 'react-redux';
 import { openCustomContent } from '../../modules/modal/actions';
@@ -11,11 +10,6 @@ class FeaturedAlert extends React.Component {
     this.state = {
       showAlert: !alertHasBeenShown,
     };
-  }
-
-  dismissAlert() {
-    // safeLocalStorage.setItem('<alert-name-goes-here>', true);
-    this.setState({ showAlert: false });
   }
 
   render() {

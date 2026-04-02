@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -14,7 +14,7 @@ import {
 } from '../modules/image-download/util';
 import util from '../util/util';
 import {
-  getLayers,
+  getLayers as getLayersSelector,
   subdailyLayersActive,
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
@@ -25,7 +25,7 @@ import {
   fileTypesPolar,
 } from '../modules/image-download/constants';
 import {
-  onPanelChange,
+  onPanelChange as onPanelChangeAction,
   updateBoundaries,
 } from '../modules/image-download/actions';
 import { getNormalizedCoordinate } from '../components/location-search/util';
@@ -72,7 +72,9 @@ class ImageDownloadContainer extends Component {
    */
   getLatLongFromPixelValue(pixelX, pixelY) {
     const { proj, map } = this.props;
-    const coordinate = map.ui.selected.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
+    const coordinate = map.ui.selected.getCoordinateFromPixel(
+      [Math.floor(pixelX), Math.floor(pixelY)],
+    );
     const { crs } = proj.selected;
     const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
@@ -166,8 +168,8 @@ class ImageDownloadContainer extends Component {
     const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const mapView = map.ui.selected.getView();
     const center = mapView.getCenter();
-    const newResolution = resolution
-      || imageUtilCalculateResolution(
+    const newResolution = resolution ||
+      imageUtilCalculateResolution(
         Math.round(mapView.getZoom()),
         proj,
         center,
@@ -190,7 +192,12 @@ class ImageDownloadContainer extends Component {
           hasSubdailyLayers={hasSubdailyLayers}
           markerCoordinates={markerCoordinates}
           date={date}
-          datelineMessage={getAlertMessageIfCrossesDateline(date, bottomLeftLatLong, topRightLatLong, proj)}
+          datelineMessage={getAlertMessageIfCrossesDateline(
+            date,
+            bottomLeftLatLong,
+            topRightLatLong,
+            proj,
+          )}
           url={url}
           viewExtent={viewExtent}
           getLayers={getLayers}
@@ -248,10 +255,6 @@ function mapStateToProps(state) {
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
   }
-  if ('imageDownload' in config.parameters) {
-    url = config.parameters.imageDownload;
-    util.warn(`Redirecting image download to: ${url}`);
-  }
 
   return {
     proj,
@@ -266,7 +269,7 @@ function mapStateToProps(state) {
     hasSubdailyLayers,
     markerCoordinates,
     date: getSelectedDate(state),
-    getLayers: () => getLayers(
+    getLayers: () => getLayersSelector(
       state,
       {
         reverse: true,
@@ -280,7 +283,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onToggle());
   },
   onPanelChange: (type, value) => {
-    dispatch(onPanelChange(type, value));
+    dispatch(onPanelChangeAction(type, value));
   },
   onBoundaryChange: (obj) => {
     dispatch(updateBoundaries(obj));
@@ -295,18 +298,18 @@ export default connect(
 ImageDownloadContainer.propTypes = {
   closeModal: PropTypes.func.isRequired,
   fileType: PropTypes.string.isRequired,
-  map: PropTypes.object.isRequired,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onBoundaryChange: PropTypes.func.isRequired,
   onPanelChange: PropTypes.func.isRequired,
-  proj: PropTypes.object.isRequired,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   url: PropTypes.string.isRequired,
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getLayers: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
   isWorldfile: PropTypes.bool,
-  markerCoordinates: PropTypes.array,
+  markerCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   resolution: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  boundaries: PropTypes.object,
+  boundaries: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

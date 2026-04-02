@@ -51,8 +51,9 @@ export function toggleStaticMap(isActive) {
   };
 }
 
-// When kiosk mode is active && (eic === 'sa' || eic === 'da') this action is dispatched once we step the date back to full imagery.
-// This signals that the animation availability to ready to be checked.
+// When kiosk mode is active && (eic === 'sa' || eic === 'da') this action is dispatched once we
+// step the date back to full imagery. This signals that the animation availability to ready to be
+// checked.
 export function toggleReadyForKioskAnimation(toggleAnimation) {
   return {
     type: READY_FOR_KIOSK_ANIMATION,
@@ -60,9 +61,9 @@ export function toggleReadyForKioskAnimation(toggleAnimation) {
   };
 }
 
-// When kiosk mode is active && (eic === 'sa' || eic === 'da') this action is dispatched once the animation has been triggered.
-// Once availability is measured and passes the threshold metric this action will dispatch.
-// This signals that the animation is ready to be played.
+// When kiosk mode is active && (eic === 'sa' || eic === 'da') this action is dispatched once the
+// animation has been triggered. Once availability is measured and passes the threshold metric this
+// action will dispatch. This signals that the animation is ready to be played.
 export function toggleCheckedAnimationAvailability(toggleCheck) {
   return {
     type: CHECK_ANIMATION_AVAILABILITY,
@@ -77,7 +78,8 @@ export function setEICMeasurementComplete() {
   };
 }
 
-// This action is dispatched when the EIC measurement process is aborted in TileMeasurement component
+// This action is dispatched when the EIC measurement process is aborted in TileMeasurement
+// component
 export function setEICMeasurementAborted() {
   return {
     type: SET_EIC_MEASUREMENT_ABORTED,
@@ -92,7 +94,8 @@ export function setTravelMode(travelMode) {
   };
 }
 
-// Determines whether EIC mode should query backend (new EIC) or query data from the frontend (legacy)
+// Determines whether EIC mode should query backend (new EIC) or query data from
+// the frontend (legacy)
 export function setEICLegacy(isLegacy) {
   return {
     type: SET_EIC_LEGACY,

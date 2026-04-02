@@ -1,4 +1,3 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lodashRound from 'lodash/round';
@@ -59,27 +58,27 @@ const setRectClipMask = function(context, coordinates) {
   context.clip();
 };
 
-const dragLine = function(listenerObj, lineCaseEl, map) {
+const dragLine = function(listenerObjArg, lineCase, map) {
+  const lineCaseEl = lineCase;
   function move(evt) {
     if (!dragging) {
       dragging = true;
       events.trigger(COMPARE_MOVE_START);
     }
     const windowWidth = window.innerWidth;
-    if (listenerObj.type === 'default') evt.preventDefault();
+    if (listenerObjArg.type === 'default') evt.preventDefault();
     evt.stopPropagation();
 
-    if (listenerObj.type === 'touch') {
+    if (listenerObjArg.type === 'touch') {
       swipeOffset = evt.touches[0].pageX;
     } else {
       swipeOffset = evt.clientX;
     }
     // Prevent swiper from being swiped off screen
+    const swipeOffsetValue = swipeOffset < SWIPE_PADDING ? SWIPE_PADDING : swipeOffset;
     swipeOffset = swipeOffset > windowWidth - SWIPE_PADDING
       ? windowWidth - SWIPE_PADDING
-      : swipeOffset < SWIPE_PADDING
-        ? SWIPE_PADDING
-        : swipeOffset;
+      : swipeOffsetValue;
     percentSwipe = swipeOffset / windowWidth;
     lineCaseEl.style.transform = `translateX( ${swipeOffset}px)`;
     map.render();
@@ -186,6 +185,7 @@ const addLineOverlay = function(map, dateA, dateB) {
   return lineCaseEl;
 };
 
+const getSwipeOffset = function() { return swipeOffset; };
 export default class Swipe {
   constructor(
     olMap,
@@ -195,6 +195,7 @@ export default class Swipe {
   ) {
     listenerObj = eventListenerStringObj;
     this.map = olMap;
+    this.getSwipeOffset = getSwipeOffset;
     percentSwipe = valueOverride / 100;
     this.create(store);
     window.addEventListener('resize', () => {
@@ -227,8 +228,6 @@ export default class Swipe {
     layersSideA = [];
     layersSideB = [];
   };
-
-  getSwipeOffset = () => swipeOffset;
 
   update(store) {
     const state = store.getState();

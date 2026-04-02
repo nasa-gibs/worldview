@@ -133,18 +133,20 @@ const getBestZoom = function(distance, start, end, view) {
     zoom,
     pixels: distance / view.getResolutionForZoom(zoom),
   }));
-  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels) - Math.abs(idealLength - b.pixels))[0];
+  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels) -
+  Math.abs(idealLength - b.pixels))[0];
   return Math.max(2, Math.min(bestFit.zoom, start - 1, end - 1));
 };
 
 /**
    * Moves the map with a "flying" animation
    *
-   * @param  {Array} endPoint  Ending coordinates
+   * @param  {Array} endPointArray  Ending coordinates
    * @param  {integer} endZoom Ending Zoom Level
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
-export function fly (map, proj, endPoint, endZoom = 5, rotation = 0, isKioskModeActive) {
+export function fly (map, proj, endPointArray, isKioskModeActive, endZoom = 5, rotation = 0) {
+  let endPoint = endPointArray;
   const view = map.getView();
   const polarProjectionCheck = proj.selected.id !== 'geographic'; // boolean if current projection is polar
   view.cancelAnimations();
@@ -155,10 +157,15 @@ export function fly (map, proj, endPoint, endZoom = 5, rotation = 0, isKioskMode
   const hasEndInView = olExtent.containsCoordinate(extent, endPoint);
   const line = new OlGeomLineString([startPoint, endPoint]);
   const distance = line.getLength(); // In map units, which is usually degrees
-  const distanceDuration = polarProjectionCheck ? distance / 50000 : distance; // limit large polar projection distances from coordinate transforms
+  // limit large polar projection distances from coordinate transforms
+  const distanceDuration = polarProjectionCheck ? distance / 50000 : distance;
   let duration = isKioskModeActive
-    ? Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000)) // Minimum 5 seconds, approx 12 seconds to go 360 degrees
-    : Math.min(6000, Math.floor(distanceDuration * (15 * (startZoom + endZoom)) + (100 * (startZoom + endZoom)) + 1000)); // approx 6 seconds to go 360 degrees
+    // Minimum 5 seconds, approx 12 seconds to go 360 degrees
+    ? Math.max(5000, 2 * Math.floor(distanceDuration * 20 + 1000))
+    // approx 6 seconds to go 360 degrees
+    : Math.min(6000, Math.floor(
+      distanceDuration * (15 * (startZoom + endZoom)) + (100 * (startZoom + endZoom)) + 1000,
+    ));
 
   const animationPromise = function(...args) {
     return new Promise((resolve, reject) => {

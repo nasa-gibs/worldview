@@ -10,7 +10,7 @@ export function isValidCoordinates(position) {
   try {
     const isValid = new CoordinateParser(position);
     return isValid;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -26,7 +26,8 @@ export function getNormalizedCoordinate([lon, lat]) {
   }
   const isNegative = lon < 0;
   const remainder = lon % 360;
-  const longitude = isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+  const positiveRemainder = !isNegative && remainder > 180 ? remainder - 360 : remainder;
+  const longitude = isNegative && remainder < -180 ? remainder + 360 : positiveRemainder;
   return [longitude, lat];
 }
 

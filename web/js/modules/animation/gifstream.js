@@ -15,7 +15,7 @@ function componentizedPaletteToArray(paletteRGB) {
     r = paletteRGB[i];
     g = paletteRGB[i + 1];
     b = paletteRGB[i + 2];
-    paletteArray.push((r << 16) | (g << 8) | b); // eslint-disable-line no-bitwise
+    paletteArray.push((r << 16) | (g << 8) | b);
   }
   return paletteArray;
 }
@@ -69,20 +69,25 @@ export default class GifStream {
       waterMarkXCoordinate,
       waterMarkYCoordinate,
     } = options;
+    const textAlignRightGifWidth = textAlign === 'right'
+      ? gifWidth
+      : gifWidth / 2;
+    const textAlignGifWidth = textAlign === 'left'
+      ? 1
+      : textAlignRightGifWidth;
     const textXCoordinate = options.textXCoordinate
       ? options.textXCoordinate
-      : textAlign === 'left'
-        ? 1
-        : textAlign === 'right'
-          ? gifWidth
-          : gifWidth / 2;
+      : textAlignGifWidth;
+
+    const textBaselineCenterGifHeight = textBaseline === 'center'
+      ? gifHeight / 2
+      : gifHeight;
+    const textBaselineGifHeight = textBaseline === 'top'
+      ? 1
+      : textBaselineCenterGifHeight;
     const textYCoordinate = options.textYCoordinate
       ? options.textYCoordinate
-      : textBaseline === 'top'
-        ? 1
-        : textBaseline === 'center'
-          ? gifHeight / 2
-          : gifHeight;
+      : textBaselineGifHeight;
     const font = `${fontWeight} ${fontSize} ${fontFamily}`;
     const textToUse = frameText && options.showFrameText ? frameText : text;
 
@@ -168,9 +173,9 @@ export default class GifStream {
       const reader = gifStream.getReader();
       const chunks = [];
       let processedImages = 1;
-      const finished = (chunks) => {
+      const finished = (chunksArg) => {
         const callbackObj = {
-          blob: new Blob(chunks, { type: 'image/gif' }),
+          blob: new Blob(chunksArg, { type: 'image/gif' }),
           error: '',
         };
         callback(callbackObj);
@@ -234,10 +239,11 @@ export default class GifStream {
   /**
    * Generate GIF-creating Stream
    * @param  {Array} frames Array of GIF image objects
-   * @param  {Object} ctx    2d Canvas Cntext
+   * @param  {Object} context    2d Canvas Context
    * @return {Object}        Returns GifWriter Stream
    */
-  getStream(frames, ctx) {
+  getStream(frames, context) {
+    let ctx = context;
     const { options } = this;
     const width = options.gifWidth;
     const height = options.gifHeight;
@@ -285,7 +291,8 @@ export default class GifStream {
       },
     });
     return new GifWriter(rs, width, height, {
-      loop: options.loop || 0, // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
+      // From GIF: 0 = loop forever, null = not looping, n > 0 = loop n times and stop
+      loop: options.loop || 0,
     });
   }
 }

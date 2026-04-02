@@ -4,7 +4,10 @@ import { connect } from 'react-redux';
 import { reverseGeocode } from '../../../modules/location-search/util-api';
 import { getNormalizedCoordinate } from '../../../components/location-search/util';
 import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } from '../../../modules/location-search/util';
-import { setGeocodeResults, removeMarker } from '../../../modules/location-search/actions';
+import {
+  setGeocodeResults as setGeocodeResultsAction,
+  removeMarker as removeMarkerAction,
+} from '../../../modules/location-search/actions';
 import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
 function Markers(props) {
@@ -57,7 +60,6 @@ function Markers(props) {
     });
   };
 
-
   const flyToMarker = (coordinatesObject) => {
     const { sources } = config;
     const { longitude, latitude } = coordinatesObject;
@@ -79,9 +81,14 @@ function Markers(props) {
    * @param {Object} coordinatesObject - set of coordinates for marker
    * @returns {void}
    */
-  const addMarkerAndUpdateStore = (showDialog, geocodeResults, shouldFlyToCoordinates, coordinatesObject) => {
+  const addMarkerAndUpdateStore = (
+    showDialog,
+    geocodeResults,
+    shouldFlyToCoordinates,
+    coordinatesObject,
+  ) => {
     const results = geocodeResults;
-    if (!results) return;
+    if (!results) return undefined;
     const remove = () => removeMarker(coordinatesObject);
     const marker = getCoordinatesMarker(
       proj,
@@ -104,7 +111,7 @@ function Markers(props) {
       flyToMarker(coordinatesObject);
     }
 
-    setGeocodeResults(geocodeResults);
+    return setGeocodeResults(geocodeResults);
   };
 
   /**
@@ -130,8 +137,9 @@ function Markers(props) {
   };
 
   useEffect(() => {
+    if (!ui.selected || !ui.selected.proj) return;
     handleActiveMapMarker();
-  }, [ui]);
+  }, [ui, ui.selected?.proj]);
 
   useEffect(() => {
     switch (action.type) {
@@ -142,7 +150,12 @@ function Markers(props) {
         if (action.flyToExistingMarker) {
           return flyToMarker(action.coordinates);
         }
-        return addMarkerAndUpdateStore(true, action.reverseGeocodeResults, action.isCoordinatesSearchActive, action.coordinates);
+        return addMarkerAndUpdateStore(
+          true,
+          action.reverseGeocodeResults,
+          action.isCoordinatesSearchActive,
+          action.coordinates,
+        );
       }
       case 'LOCATION_SEARCH/TOGGLE_DIALOG_VISIBLE': {
         return addMarkerAndUpdateStore(false);
@@ -150,6 +163,7 @@ function Markers(props) {
       default:
         break;
     }
+    return undefined;
   }, [action]);
 
   return null;
@@ -178,10 +192,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setGeocodeResults: (value) => {
-    dispatch(setGeocodeResults(value));
+    dispatch(setGeocodeResultsAction(value));
   },
   removeMarker: (value) => {
-    dispatch(removeMarker(value));
+    dispatch(removeMarkerAction(value));
   },
 });
 
@@ -193,15 +207,16 @@ export default React.memo(
 );
 
 Markers.propTypes = {
-  action: PropTypes.object,
-  config: PropTypes.object,
-  coordinates: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
   isMobileDevice: PropTypes.bool,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
+  selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedMapMarkers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   setGeocodeResults: PropTypes.func,
-  state: PropTypes.object,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
-

@@ -28,7 +28,7 @@ class TimelineRangeSelector extends React.Component {
 
   componentDidUpdate() {
     const { startLocation, endLocation } = this.props;
-    // eslint-disable-next-line react/destructuring-assignment
+
     if (startLocation !== this.state.startLocation || endLocation !== this.state.endLocation) {
       this.updateLocation();
     }
@@ -126,7 +126,12 @@ class TimelineRangeSelector extends React.Component {
   };
 
   // update animation dragger helper function
-  getAnimationLocateDateUpdate = (animLocationDate, animDraggerLocation, deltaX, { diffZeroValues, diffFactor }) => {
+  getAnimationLocateDateUpdate = (
+    animLocationDate,
+    animDraggerLocation,
+    deltaX,
+    { diffZeroValues, diffFactor },
+  ) => {
     if (!diffZeroValues) { // month or year
       const {
         timeScale,
@@ -138,7 +143,8 @@ class TimelineRangeSelector extends React.Component {
       const options = timeScaleOptions[timeScale].timeAxis;
       const { gridWidth } = options;
 
-      const startDraggerPositionRelativeToFrontDate = animDraggerLocation - position - transformX + deltaX;
+      const startDraggerPositionRelativeToFrontDate = animDraggerLocation -
+      position - transformX + deltaX;
       const gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
       const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
       const draggerDateAddedValue = draggerDateAdded.valueOf();
@@ -187,7 +193,8 @@ class TimelineRangeSelector extends React.Component {
       const diffZeroValues = options.scaleMs;
       // get startDate for diff calculation
       let diffFactor;
-      if (diffZeroValues) { // month or year diffFactor is not static, so require calculation based on front date
+      if (diffZeroValues) {
+        // month or year diffFactor is not static, so require calculation based on front date
         diffFactor = diffZeroValues / options.gridWidth; // else known diffFactor used
       }
 
@@ -219,29 +226,31 @@ class TimelineRangeSelector extends React.Component {
     const startDate = new Date(animationStartLocationDate);
     const endDate = new Date(animationEndLocationDate);
 
+    let newDraggerEndLocation = draggerEndLocation;
+    let newDraggerStartLocation = draggerStartLocation;
     // prevent draggers to be dragger BEFORE start date limit
     if (endDate < startDateLimit) {
-      draggerEndLocation = endLocation;
+      newDraggerEndLocation = endLocation;
       animationEndLocationDate = startDateLimit;
     }
     if (startDate < startDateLimit) {
-      draggerStartLocation = startLocation;
+      newDraggerStartLocation = startLocation;
       animationStartLocationDate = startDateLimit;
     }
     // prevent draggers to be dragger AFTER end date limit
     if (endDate > endDateLimit) {
-      draggerEndLocation = endLocation;
+      newDraggerEndLocation = endLocation;
       animationEndLocationDate = endDateLimit;
     }
     if (startDate > endDateLimit) {
-      draggerStartLocation = startLocation;
+      newDraggerStartLocation = startLocation;
       animationStartLocationDate = endDateLimit;
     }
     updateAnimationDateAndLocation(
       animationStartLocationDate,
       animationEndLocationDate,
-      draggerStartLocation,
-      draggerEndLocation,
+      newDraggerStartLocation,
+      newDraggerEndLocation,
       isDragging,
     );
   };
@@ -346,17 +355,17 @@ TimelineRangeSelector.propTypes = {
   axisWidth: PropTypes.number,
   endColor: PropTypes.string,
   endLocation: PropTypes.number,
-  endLocationDate: PropTypes.object,
+  endLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   endTriangleColor: PropTypes.string,
   frontDate: PropTypes.string,
-  max: PropTypes.object,
+  max: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   pinWidth: PropTypes.number,
   position: PropTypes.number,
   rangeColor: PropTypes.string,
   rangeOpacity: PropTypes.number,
   startColor: PropTypes.string,
   startLocation: PropTypes.number,
-  startLocationDate: PropTypes.object,
+  startLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   startTriangleColor: PropTypes.string,
   timelineEndDateLimit: PropTypes.string,
   timelineStartDateLimit: PropTypes.string,

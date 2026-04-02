@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faToggleOff, faToggleOn } from '@fortawesome/free-solid-svg-icons';
 import copy from 'copy-to-clipboard';
 import { transform } from 'ol/proj';
-import { ContextMenu, MenuItem } from '../../util/context-menu';
+import { ContextMenu, MenuItem } from '../../util/context-menu/index';
 
 import util from '../../util/util';
 import CopyClipboardTooltip from '../location-search/copy-tooltip';
@@ -23,7 +23,8 @@ function RightClickMenu(props) {
   const [toolTipToggleTime, setToolTipToggleTime] = useState(0);
   const [formattedCoordinates, setFormattedCoordinates] = useState();
   const {
-    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive, allMeasurements, measurementIsActive, isMobile,
+    map, proj, unitOfMeasure, onToggleUnits, isCoordinateSearchActive,
+    allMeasurements, measurementIsActive, isMobile,
   } = props;
   const { crs } = proj.selected;
   const measurementsInProj = !!(Object.keys(allMeasurements[crs]) || []).length;
@@ -60,11 +61,11 @@ function RightClickMenu(props) {
       return onToggleUnits(oppositeUnit);
     }
     setShow(false);
-    events.trigger(`measure:${action}`);
+    return events.trigger(`measure:${action}`);
   }
 
-  function addPlaceMarkerHandler(coords, olMap, crs) {
-    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crs);
+  function addPlaceMarkerHandler(coords, olMap, crsValue) {
+    events.trigger(CONTEXT_MENU_LOCATION, coords, olMap, crsValue);
     setShow(false);
   }
 
@@ -78,7 +79,7 @@ function RightClickMenu(props) {
   };
 
   useEffect(() => {
-    if (isCoordinateSearchActive) return;
+    if (isCoordinateSearchActive) return undefined;
     events.on(MAP_SINGLE_CLICK, handleClick);
     events.on(MAP_CONTEXT_MENU, handleContextEvent);
     return () => {
@@ -128,15 +129,15 @@ function RightClickMenu(props) {
         >
           Measure Area
         </MenuItem>
-        {measurementsInProj
-        && (
-        <MenuItem
-          onClick={() => handleMeasurementMenu('clear')}
-          attributes={{ id: 'context-menu-clear-measurements' }}
-          className={mobileStyle}
-        >
-          Remove Measurements
-        </MenuItem>
+        {measurementsInProj &&
+        (
+          <MenuItem
+            onClick={() => handleMeasurementMenu('clear')}
+            attributes={{ id: 'context-menu-clear-measurements' }}
+            className={mobileStyle}
+          >
+            Remove Measurements
+          </MenuItem>
         )}
         <MenuItem
           onClick={() => handleMeasurementMenu('units')}
@@ -177,12 +178,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 RightClickMenu.propTypes = {
-  map: PropTypes.object,
-  proj: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   unitOfMeasure: PropTypes.string,
   onToggleUnits: PropTypes.func,
   isCoordinateSearchActive: PropTypes.bool,
-  allMeasurements: PropTypes.object,
+  allMeasurements: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   measurementIsActive: PropTypes.bool,
   isMobile: PropTypes.bool,
 };

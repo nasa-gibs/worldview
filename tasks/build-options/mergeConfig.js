@@ -41,20 +41,22 @@ async function main () {
 // inputDir refers to build\options-build\config\wv.json\*.*
 async function mergeFiles (inputDir) {
   const files = fs.readdirSync(inputDir)
-  for (const file of files) {
+  const promises = files.map((file) => {
     try {
       if (file.endsWith('.json')) {
         fileCount += 1
         const data = JSON.parse(fs.readFileSync(path.join(inputDir, file), 'utf-8'))
-        await dictMerge(conf, data)
+        return dictMerge(conf, data)
       } else if (fs.existsSync(path.join(inputDir, file)) && fs.lstatSync(path.join(inputDir, file)).isDirectory()) {
         const subDir = path.join(inputDir, file)
-        await mergeFiles(subDir)
+        return mergeFiles(subDir)
       }
+      return Promise.resolve()
     } catch (error) {
       throw new Error(`ERROR: ${path.join(inputDir, file)}: ${error.message}`)
     }
-  }
+  })
+  return Promise.allSettled(promises)
 }
 
 main().catch((err) => {

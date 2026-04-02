@@ -1,8 +1,8 @@
 const { test, expect } = require('@playwright/test')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {

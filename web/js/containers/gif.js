@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
   Progress, Modal, ModalBody, ModalHeader, Spinner,
@@ -179,7 +179,7 @@ class GIF extends Component {
 
   createGIF(width, height) {
     const {
-      getImageArray, startDate, endDate, url,
+      getImageArrayFunc, startDate, endDate, url,
     } = this.props;
     const { boundaries, showDates } = this.state;
     const dimensions = {
@@ -198,7 +198,7 @@ class GIF extends Component {
         boundaries,
         showDates,
       };
-      const imageArray = getImageArray(options, { width, height });
+      const imageArray = getImageArrayFunc(options, { width, height });
       if (!imageArray) return; // won't be true if there are too many frames
 
       gifStream.createGIF(
@@ -408,18 +408,21 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    screenSize, proj, animation, map, date, config,
+    screenSize, proj, animation, map, date, config, layers,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
   } = animation;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    customSelected, interval, customInterval, customDelta,
+    customSelected, autoSelected, interval, customInterval, customDelta,
   } = date;
-  const increment = customSelected
+  const customIncrement = customSelected
     ? `${customDelta} ${TIME_SCALE_FROM_NUMBER[customInterval]}`
     : `1 ${TIME_SCALE_FROM_NUMBER[interval]}`;
+  const increment = autoSelected
+    ? 'Auto Interval'
+    : customIncrement;
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
@@ -449,9 +452,12 @@ function mapStateToProps(state) {
       customSelected
         ? TIME_SCALE_FROM_NUMBER[customInterval]
         : TIME_SCALE_FROM_NUMBER[interval],
+      null,
+      autoSelected,
+      layers.active.layers,
       customSelected ? customDelta : 1,
     ),
-    getImageArray: (options, dimensions) => getImageArray(
+    getImageArrayFunc: (options, dimensions) => getImageArray(
       options,
       dimensions,
       state,
@@ -470,18 +476,18 @@ export default connect(
 )(GIF);
 
 GIF.propTypes = {
-  boundaries: PropTypes.object,
-  startDate: PropTypes.object,
-  endDate: PropTypes.object,
+  boundaries: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   startDateStr: PropTypes.string,
   endDateStr: PropTypes.string,
-  getImageArray: PropTypes.func,
+  getImageArrayFunc: PropTypes.func,
   increment: PropTypes.string,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onBoundaryChange: PropTypes.func,
   onClose: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   speed: PropTypes.number,

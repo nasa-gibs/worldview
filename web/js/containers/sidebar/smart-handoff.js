@@ -1,5 +1,4 @@
-/* eslint-disable react/no-did-update-set-state */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -48,6 +47,24 @@ const STD_NRT_MAP = {
  * layer data and granule files that are available for download.
  */
 class SmartHandoff extends Component {
+  static renderLoadingSpinner() {
+    const containerStyle = {
+      padding: '30px 107px',
+    };
+
+    const spinnerStyle = {
+      height: '5rem',
+      width: '5rem',
+      margin: '40px auto',
+    };
+
+    return (
+      <div style={containerStyle}>
+        <Spinner style={spinnerStyle} color="light" />
+      </div>
+    );
+  }
+
   constructor(props) {
     super(props);
 
@@ -149,10 +166,11 @@ class SmartHandoff extends Component {
   }
 
   /**
-   * Fires when the image cropper is moved around on the map; updates the SW and NE lat/lon coordinates.
+   * Fires when the image cropper is moved around on the map;
+   * updates the SW and NE lat/lon coordinates.
    * @param {*} boundaries - the focal point to which layer data should be contained within
-   * @param {boolean} setExtent - should the subsequent setState call set the extent, which will trigger
-   *                              the granule count async requests
+   * @param {boolean} setExtent - should the subsequent setState call set the extent,
+   * which will trigger the granule count async requests
    */
   onBoundaryChange(boundaries, setExtent) {
     const { proj, map, selectedCollection } = this.props;
@@ -324,19 +342,20 @@ class SmartHandoff extends Component {
       showZoomedIntoDatelineAlert,
     } = this.state;
 
+    const zoomedInDatelineAlertMsg = showZoomedIntoDatelineAlert
+      ? 'The map is zoomed into an area with no available data.'
+      : '';
     const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
       ? 'The selection is outside the available map area.'
-      : showZoomedIntoDatelineAlert
-        ? 'The map is zoomed into an area with no available data.'
-        : '';
+      : zoomedInDatelineAlertMsg;
 
     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
-    <AlertUtil
-      id="data-download-unavailable-dateline-alert"
-      isOpen
-      title="Data Download Unavailable"
-      message={message}
-    />
+      <AlertUtil
+        id="data-download-unavailable-dateline-alert"
+        isOpen
+        title="Data Download Unavailable"
+        message={message}
+      />
     );
   };
 
@@ -386,35 +405,36 @@ class SmartHandoff extends Component {
               <div className="layer-title">{layer.title}</div>
               <div className="layer-subtitle">{layer.subtitle}</div>
 
-              {layer.conceptIds.filter(({ value }) => validatedConceptIds[value]).map((collection) => {
-                const {
-                  type, value, version, quality,
-                } = collection;
-                const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
-                const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
-                const labelId = `${inputId}-label`;
-                const label = STD_NRT_MAP[type]
-                   + (version ? ` - v${version}` : '')
-                   + (quality ? ' (Quality)' : '');
+              {layer.conceptIds.filter(({ value }) => validatedConceptIds[value])
+                .map((collection) => {
+                  const {
+                    type, value, version, quality,
+                  } = collection;
+                  const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
+                  const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
+                  const labelId = `${inputId}-label`;
+                  const label = STD_NRT_MAP[type] +
+                   (version ? ` - v${version}` : '') +
+                   (quality ? ' (Quality)' : '');
 
-                return (
-                  <div className="collection-choice" key={inputId}>
-                    <input
-                      id={inputId}
-                      type="radio"
-                      name="smart-handoff-layer-radio"
-                      checked={isSelected}
-                      onChange={() => selectCollection(collection.value, layer.id)}
-                    />
-                    <label id={labelId} htmlFor={inputId}>
-                      {label}
-                      <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" widthAuto />
-                    </label>
+                  return (
+                    <div className="collection-choice" key={inputId}>
+                      <input
+                        id={inputId}
+                        type="radio"
+                        name="smart-handoff-layer-radio"
+                        checked={isSelected}
+                        onChange={() => selectCollection(collection.value, layer.id)}
+                      />
+                      <label id={labelId} htmlFor={inputId}>
+                        {label}
+                        <FontAwesomeIcon id={`${util.encodeId(value)}-tooltip`} icon="info-circle" widthAuto />
+                      </label>
 
-                    {this.renderCollectionTooltip(collection, labelId)}
-                  </div>
-                );
-              })}
+                      {this.renderCollectionTooltip(collection, labelId)}
+                    </div>
+                  );
+                })}
 
             </div>
           );
@@ -504,7 +524,10 @@ class SmartHandoff extends Component {
       <div className="smart-handoff-side-panel error">
         {requestFailed
           ? (
-            <h1>Data records from the Common Metadata Repository (CMR) could not be reached. Data downloads are not possible at this time.</h1>
+            <h1>
+              Data records from the Common Metadata Repository (CMR) could not be reached. Data
+              downloads are not possible at this time.
+            </h1>
           )
           : (
             <>
@@ -513,30 +536,12 @@ class SmartHandoff extends Component {
               </h1>
               <hr />
               <h2>
-                <a className="help-link" onClick={showNotAvailableModal}>
+                <a role="link" tabIndex={0} className="help-link" onClick={showNotAvailableModal}>
                   Why are my layers not available?
                 </a>
               </h2>
             </>
           )}
-      </div>
-    );
-  };
-
-  renderLoadingSpinner = () => {
-    const containerStyle = {
-      padding: '30px 107px',
-    };
-
-    const spinnerStyle = {
-      height: '5rem',
-      width: '5rem',
-      margin: '40px auto',
-    };
-
-    return (
-      <div style={containerStyle}>
-        <Spinner style={spinnerStyle} color="light" />
       </div>
     );
   };
@@ -564,11 +569,13 @@ class SmartHandoff extends Component {
     } = this.state;
 
     // Determine if the download button is enabled
-    const validSelection = showBoundingBox ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
+    const validSelection = showBoundingBox
+      ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert
+      : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (isLoading) {
-      return this.renderLoadingSpinner();
+      return SmartHandoff.renderLoadingSpinner();
     }
 
     if (!validatedLayers.length) {
@@ -585,9 +592,9 @@ class SmartHandoff extends Component {
             application.
           </div>
           <h2>
-            <a className="help-link" onClick={showNotAvailableModal}>
+            <button type="button" className="help-link" onClick={showNotAvailableModal}>
               Why are some layers not available?
-            </a>
+            </button>
           </h2>
           <hr />
           {this.renderLayerChoices()}
@@ -623,7 +630,8 @@ const mapStateToProps = (state) => {
     screenSize, map, proj, smartHandoffs,
   } = state;
   const {
-    conceptId, layerId, availableTools, validatedConceptIds, validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
+    conceptId, layerId, availableTools, validatedConceptIds,
+    validatedLayers, isLoadingTools, isValidatingCollections, requestFailed,
   } = smartHandoffs;
   const { screenWidth, screenHeight } = screenSize;
 
@@ -632,7 +640,8 @@ const mapStateToProps = (state) => {
   const selectedDateFormatted = moment.utc(selectedDate).format('YYYY-MM-DD'); // 2020-01-01
   const availableLayers = getValidLayersForHandoffs(state);
   const selectedLayer = availableLayers.find(({ id }) => id === layerId);
-  const selectedCollection = selectedLayer && (selectedLayer.conceptIds || []).find(({ value }) => value === conceptId);
+  const selectedCollection = selectedLayer && (selectedLayer.conceptIds || [])
+    .find(({ value }) => value === conceptId);
   const isLoading = isLoadingTools || isValidatingCollections;
   const isGranuleLayer = selectedLayer && selectedLayer.type === 'granule';
   const { startDate, endDate } = selectedLayer
@@ -723,30 +732,30 @@ export default connect(
 )(SmartHandoff);
 
 SmartHandoff.propTypes = {
-  availableLayers: PropTypes.array,
-  availableTools: PropTypes.array,
+  availableLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  availableTools: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   displayDate: PropTypes.string,
   isLoading: PropTypes.bool,
   isGranuleLayer: PropTypes.bool,
   endDate: PropTypes.string,
   getConceptUrl: PropTypes.func,
   getGranulesUrl: PropTypes.func,
-  granuleLayers: PropTypes.object,
-  map: PropTypes.object.isRequired,
-  proj: PropTypes.object,
+  granuleLayers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fetchAvailableTools: PropTypes.func,
   requestFailed: PropTypes.bool,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
   selectCollection: PropTypes.func,
   selectedDate: PropTypes.string,
-  selectedLayer: PropTypes.object,
-  selectedCollection: PropTypes.object,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  selectedCollection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showWarningModal: PropTypes.func,
   showGranuleHelpModal: PropTypes.func,
   showNotAvailableModal: PropTypes.func,
   startDate: PropTypes.string,
-  validatedLayers: PropTypes.array,
-  validatedConceptIds: PropTypes.object,
+  validatedLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  validatedConceptIds: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   validateLayersConceptIds: PropTypes.func,
 };

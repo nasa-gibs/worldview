@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';
@@ -13,6 +13,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import { Vector as OlVectorSource } from 'ol/source';
+
 import googleTagManager from 'googleTagManager';
 import CustomButton from '../util/button';
 import Crop from '../util/image-crop';
@@ -25,7 +26,7 @@ import {
   changeChartingStartDate,
   changeChartingEndDate,
 } from '../../modules/charting/actions';
-import { openCustomContent } from '../../modules/modal/actions';
+import { openCustomContent, onClose } from '../../modules/modal/actions';
 import { CRS } from '../../modules/map/constants';
 import ChartingInfo from '../charting/charting-info';
 import ChartingError from '../charting/charting-error';
@@ -34,12 +35,14 @@ import ChartingDateSelector from '../charting/charting-date-selector';
 import ChartComponent from '../charting/chart-component';
 import LatLongSelect from '../image-download/lat-long-inputs';
 import Checkbox from '../util/checkbox';
+import WaitOverlay from '../util/wait';
 
 const AOIFeatureObj = {};
 const vectorLayers = {};
 const sources = {};
 let init = false;
 const STEP_NUM = 31;
+const MAX_DAYS = 100;
 const SERVER_ERROR_MESSAGE = 'An error has occurred while requesting the charting data. Please try again in a few minutes.';
 const NO_DATA_ERROR_MESSAGE = 'No data was found for this request. Please check the layer, date(s) & location.';
 
@@ -53,6 +56,7 @@ function ChartingModeOptions(props) {
     crs,
     displayChart,
     displaySimpleStats,
+    closeModal,
     isChartingActive,
     isMobile,
     onChartDateButtonClick,
@@ -87,6 +91,9 @@ function ChartingModeOptions(props) {
   if (!olMap) return null;
 
   const isMounted = useRef(false);
+  const chartData = useRef({});
+  const isErrordaysExpanded = useRef(false);
+  const cancelChartRef = useRef(false);
   const [isPostRender, setIsPostRender] = useState(false);
   const [doRenderChart, setDoRenderChart] = useState(false);
   const [mapViewChecked, setMapViewChecked] = useState(false);
@@ -102,6 +109,7 @@ function ChartingModeOptions(props) {
   } = boundaries;
 
   const debouncedUpdateAOICoordinates = lodashDebounce(updateAOICoordinates, 50);
+  const debouncedModalClose = lodashDebounce(closeModal, 0);
 
   /**
    * Processes the start & end times & aligns them with the timeline if values are undefined
@@ -124,19 +132,19 @@ function ChartingModeOptions(props) {
   function getLatLongFromPixelValue(pixelX, pixelY) {
     const coordinate = olMap.getCoordinateFromPixel([Math.floor(pixelX), Math.floor(pixelY)]);
     if (!coordinate) return [0, 0];
-    const [x, y] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
+    const [olProjX, olProjY] = olProj.transform(coordinate, crs, CRS.GEOGRAPHIC);
 
-    return [Number(x.toFixed(4)), Number(y.toFixed(4))];
+    return [Number(olProjX.toFixed(4)), Number(olProjY.toFixed(4))];
   }
 
   const [bottomLeftLatLong, setBottomLeftLatLong] = useState(getLatLongFromPixelValue(x, y2));
   const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(x2, y));
 
   function formatDateString(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getUTCFullYear();
-    const month = date.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
-    const day = `0${date.getUTCDate()}`.slice(-2);
+    const dateString = new Date(dateObj);
+    const year = dateString.getUTCFullYear();
+    const month = dateString.toLocaleString('default', { month: 'short', timeZone: 'UTC' });
+    const day = `0${dateString.getUTCDate()}`.slice(-2);
     return `${year} ${month} ${day}`;
   }
 
@@ -147,6 +155,45 @@ function ChartingModeOptions(props) {
     }
     return null;
   }
+
+  function toggleErrorDaysExpanded(val) {
+    isErrordaysExpanded.current = val;
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }
+
+  /**
+  * Update latitude longitude values on
+  * crop change
+  * @param {Object} boundaryObj
+  *
+  * @returns {null}
+  */
+  const onBoundaryUpdate = (boundaryObj) => {
+    const {
+      x: xBoundary,
+      y: yBoundary,
+      width,
+      height,
+    } = boundaryObj;
+    const newBoundaries = {
+      x: xBoundary,
+      y: yBoundary,
+      x2: xBoundary + width,
+      y2: yBoundary + height,
+    };
+    setBoundaries(newBoundaries);
+    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
+    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
+    setBottomLeftLatLong(bottomLeft);
+    setTopRightLatLong(topRight);
+    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
+    setMapViewChecked(false);
+    if (maxExtent) {
+      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
+      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
+      setIsWithinWings(inLeftWing || inRightWing);
+    }
+  };
 
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
   const primaryDate = formatDateString(initialStartDate);
@@ -186,6 +233,17 @@ function ChartingModeOptions(props) {
   }, [projections]);
 
   useEffect(() => {
+    if (!isMounted.current) return;
+    const boundariesObj = {
+      x,
+      y,
+      width: x2 - x,
+      height: y2 - y,
+    };
+    onBoundaryUpdate(boundariesObj);
+  }, [screenWidth, screenHeight]);
+
+  useEffect(() => {
     isMounted.current = true;
     onUpdateStartDate(initialStartDate);
     onUpdateEndDate(initialEndDate);
@@ -216,10 +274,10 @@ function ChartingModeOptions(props) {
   }, [fromButton]);
 
   function formatDateForImageStat(dateObj) {
-    const date = new Date(dateObj);
-    const year = date.getUTCFullYear();
-    const month = `0${date.getUTCMonth() + 1}`.slice(-2);
-    const day = `0${date.getUTCDate()}`.slice(-2);
+    const dateString = new Date(dateObj);
+    const year = dateString.getUTCFullYear();
+    const month = `0${dateString.getUTCMonth() + 1}`.slice(-2);
+    const day = `0${dateString.getUTCDate()}`.slice(-2);
     return `${year}-${month}-${day}`;
   }
 
@@ -236,8 +294,26 @@ function ChartingModeOptions(props) {
     }
   }, [isModalOpen, modalId]);
 
+  useEffect(() => {
+    if (!chartData.current ||
+      Object.keys(chartData.current).length === 0 ||
+      !isModalOpen || timeSpanSelection !== 'range') return;
+    if (screenWidth < 768) {
+      debouncedModalClose();
+      updateModalOpen(false);
+    }
+    displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
+  }, [screenWidth]);
+
+  function onCancelChart() {
+    updateModalOpen(false);
+    updateChartRequestStatus(false);
+    cancelChartRef.current = true;
+  }
+
   /**
-   * Provides a default AOI of the entire map if unspecified, and modifies the Openlayers coordinates for use with imageStat API
+   * Provides a default AOI of the entire map if unspecified,
+   * and modifies the Openlayers coordinates for use with imageStat API
    * @param {Object} aoi (Area Of Interest)
    */
   function convertOLcoordsForImageStat(aoi) {
@@ -251,19 +327,23 @@ function ChartingModeOptions(props) {
   /**
    * Returns the ImageStat request parameters based on the provided layer
    * @param {Object} layerInfo
-   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series' for time series charting
+   * @param {String} timeSpanSelection | 'Date' for single date, 'Range' for date range, 'series'
+   * for time series charting
    */
-  function getImageStatRequestParameters(layerInfo, timeSpan) {
-    const startDateForImageStat = formatDateForImageStat(initialStartDate);
-    const endDateForImageStat = formatDateForImageStat(initialEndDate);
+  function getImageStatRequestParameters(layerInfo, timeSpan, startDate, endDate) {
+    const startDateForImageStat = formatDateForImageStat(startDate);
+    const endDateForImageStat = formatDateForImageStat(endDate);
     const AOIForImageStat = convertOLcoordsForImageStat(aoiCoordinates);
     return {
       timestamp: startDateForImageStat, // start date
       endTimestamp: endDateForImageStat, // end date
       type: timeSpan === 'range' ? 'series' : 'date',
-      steps: STEP_NUM, // the number of days selected within a given range/series. Use '1' for just the start and end date, '2' for start date, end date and middle date, etc.
-      layer: layerInfo.id, // Layer to be pulled from gibs api. e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
-      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer. e.g. 'GHRSST_Sea_Surface_Temperature.xml'
+      steps: STEP_NUM, // the number of days selected within a given range/series. Use '1' for just
+      // the start and end date, '2' for start date, end date and middle date, etc.
+      layer: layerInfo.id, // Layer to be pulled from gibs api.
+      // e.g. 'GHRSST_L4_MUR_Sea_Surface_Temperature'
+      colormap: `${layerInfo.palette.id}.xml`, // Colormap to use to decipher layer.
+      // e.g. 'GHRSST_Sea_Surface_Temperature.xml'
       areaOfInterestCoords: AOIForImageStat, // Bounding box of latitude and longitude.
       bins: 10, // Number of bins to used in returned histogram. e.g. 10
       scale: 1, // unused
@@ -301,6 +381,7 @@ function ChartingModeOptions(props) {
     try {
       const response = await fetch(simpleStatsURI, requestOptions);
       const data = await response.text();
+
       // This is the response when the imageStat server fails
       if (!data || data === 'null') {
         return {
@@ -326,7 +407,7 @@ function ChartingModeOptions(props) {
         ok: true,
         body: parsedData,
       };
-    } catch (error) {
+    } catch {
       return {
         ok: false,
         error: SERVER_ERROR_MESSAGE,
@@ -342,12 +423,47 @@ function ChartingModeOptions(props) {
     return parseFloat(parseFloat(str).toFixed(3));
   }
 
+  // Normalize error days input robustly (supports array, CSV, and "['...','...']" forms)
+  function normalizeErrorDays(errors) {
+    const raw = errors?.error_days;
+    if (Array.isArray(raw)) return raw.map((s) => String(s));
+    if (raw == null) return [];
+    if (typeof raw !== 'string') return [String(raw)];
+
+    const trimmed = raw.trim();
+
+    // Try JSON parse if looks like an array; tolerate single quotes
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const jsonish = trimmed.replace(/'/g, '"');
+        const arr = JSON.parse(jsonish);
+        if (Array.isArray(arr)) return arr.map((s) => String(s));
+      } catch {
+        // fall through to manual split
+      }
+    }
+
+    // Fallback: strip brackets, split on comma, strip surrounding quotes
+    return trimmed
+      .replace(/^\[|\]$/g, '')
+      .split(',')
+      .map((s) => String(s).trim()
+        .replace(/^['"]|['"]$/g, ''))
+      .filter(Boolean);
+  }
+
   /**
    * Process the ImageStat (GIBS) data for use in the Recharts library
-   * @param {Object} data | This contains the name (dates) & min, max, stddev, etc. for each step requested
+   * @param {Object} data | This contains the name (dates)
+   * & min, max, stddev, etc. for each step requested
    */
   function formatGIBSDataForRecharts(data) {
     const xAxisNames = getKeysFromObj(data.min);
+    // Add error days to data
+    if (data.errors?.error_count > 0) {
+      xAxisNames.push(...data.errors.error_days);
+      xAxisNames.sort();
+    }
     const rechartsData = [];
     for (let i = 0; i < xAxisNames.length; i += 1) {
       const name = xAxisNames[i];
@@ -364,9 +480,60 @@ function ChartingModeOptions(props) {
     return rechartsData;
   }
 
+  function combineData(input) {
+    const inputArr = input;
+    if (!inputArr || inputArr.length === 0) return inputArr;
+    if (inputArr.length === 1) {
+      if (inputArr[0].body && Object.prototype.hasOwnProperty.call(inputArr[0].body, 'errors')) {
+        inputArr[0].body.errors.error_days = normalizeErrorDays(inputArr[0].body.errors);
+      }
+      return inputArr[0];
+    }
+    const output = {
+      ok: true,
+      body: {
+        errors: {
+          error_count: 0,
+          error_days: [],
+        },
+        hist: [],
+        max: {},
+        mean: {},
+        median: {},
+        min: {},
+        stderr: 0,
+        stdev: {},
+      },
+    };
+    if (inputArr.every((dataset) => !dataset.ok)) {
+      output.ok = false;
+      output.error = inputArr[0].error;
+      return output;
+    }
+    inputArr?.forEach((dataset) => {
+      if (dataset.ok && !!dataset.body) {
+        Object.keys(dataset.body).forEach((key) => {
+          if (key === 'errors') {
+            const errorDays = normalizeErrorDays(dataset.body.errors.error_days);
+            output.body.errors.error_count += dataset.body.errors.error_count;
+            output.body.errors.error_days.push(...errorDays);
+          } else if (key === 'hist') {
+            output.body.hist.push(...dataset.body.hist);
+          } else if (key === 'stderr') {
+            output.body.stderr += parseFloat(dataset.body.stderr);
+          } else {
+            output.body[key] = { ...output.body[key], ...dataset.body[key] };
+          }
+        });
+      }
+    });
+    return output;
+  }
+
   async function onRequestChartClick() {
     if (chartRequestInProgress) return;
     updateChartRequestStatus(true);
+    cancelChartRef.current = false;
     const layerInfo = getActiveChartingLayer();
     if (layerInfo == null) {
       updateChartRequestStatus(false);
@@ -382,9 +549,35 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const uriParameters = getImageStatRequestParameters(layerInfo, timeSpanSelection);
-      const requestURI = getImageStatStatsRequestURL(uriParameters);
-      const data = await getImageStatData(requestURI);
+      const numDaysRequested = Math.floor(
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
+      ) + 1;
+      const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
+      const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
+      const promises = [];
+      for (let i = 0; i < requestsNeeded; i += 1) {
+        const requestStartDate = new Date(initialStartDate.getTime());
+        requestStartDate.setDate(requestStartDate.getDate() + (i * requestsSize));
+        let requestEndDate = new Date(requestStartDate.getTime());
+        requestEndDate.setDate(requestEndDate.getDate() + requestsSize - 1);
+        if (requestEndDate > initialEndDate) {
+          requestEndDate = new Date(initialEndDate.getTime());
+        }
+        const uriParameters = getImageStatRequestParameters(
+          layerInfo,
+          timeSpanSelection,
+          requestStartDate,
+          requestEndDate,
+        );
+        const requestURI = getImageStatStatsRequestURL(uriParameters);
+        promises.push(getImageStatData(requestURI));
+      }
+      const dataArr = await Promise.all(promises);
+      const data = combineData(dataArr);
+
+      if (cancelChartRef.current) {
+        return;
+      }
 
       if (!isMounted.current) {
         updateChartRequestStatus(false);
@@ -400,22 +593,27 @@ function ChartingModeOptions(props) {
       // unit determination: renderedPalettes
       const paletteName = layerInfo.palette.id;
       const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
-      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `${paletteLegend.units}` : '';
+      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units')
+        ? `${paletteLegend.units}`
+        : '';
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
         unit: unitOfMeasure,
         ...data.body,
-        ...uriParameters,
       };
 
       if (timeSpanSelection === 'range') {
         const rechartsData = formatGIBSDataForRecharts(dataToRender);
-        const numRangeDays = Math.floor((Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000);
+        const numRangeDays = Math.floor(
+          (Date.parse(initialEndDate) - Date.parse(initialStartDate)) / 86400000,
+        );
         const startDateFormatted = `${initialStartDate.getFullYear()}-${`0${initialStartDate.getMonth() + 1}`.slice(-2)}-${`0${initialStartDate.getDate()}`.slice(-2)}`;
         const endDateFormatted = `${initialEndDate.getFullYear()}-${`0${initialEndDate.getMonth() + 1}`.slice(-2)}-${`0${initialEndDate.getDate()}`.slice(-2)}`;
-        const numPoints = STEP_NUM - (data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0);
-        displayChart({
+        const numPoints = STEP_NUM - (
+          data?.body?.errors?.error_count > 0 ? data.body.errors.error_count : 0
+        );
+        chartData.current = {
           title: dataToRender.title,
           subtitle: dataToRender.subtitle,
           unit: dataToRender.unit,
@@ -426,13 +624,22 @@ function ChartingModeOptions(props) {
           startDateFormatted,
           endDateFormatted,
           numRangeDays,
-          isTruncated: numRangeDays > STEP_NUM,
+          isTruncated: false,
           numPoints,
           coordinates: [...bottomLeftLatLong, ...topRightLatLong],
-        });
+          layerId: layerInfo.id,
+        };
+        displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
-        displaySimpleStats(dataToRender);
+        chartData.current = {
+          title: dataToRender.title,
+          subtitle: dataToRender.subtitle,
+          unit: dataToRender.unit,
+          statData: { ...data.body },
+          date: primaryDate,
+        };
+        displaySimpleStats(chartData.current);
         updateChartRequestStatus(false);
       }
     } else {
@@ -458,7 +665,7 @@ function ChartingModeOptions(props) {
     }
   }, [isChartOpen, renderedPalettes]);
 
-  function onDateIconClick() {
+  const onDateIconClick = () => {
     const layerInfo = getActiveChartingLayer();
     const layerStartDate = layerInfo.startDate ? new Date(layerInfo.startDate) : date.selected;
     const layerEndDate = layerInfo.endDate ? new Date(layerInfo.endDate) : date.appNow;
@@ -468,7 +675,7 @@ function ChartingModeOptions(props) {
     };
     document.body.style.setProperty('--charting-date-modal-offset', `${sidebarHeight - 50}px`);
     openChartingDateModal(dateModalInput, timeSpanSelection);
-  }
+  };
 
   useEffect(() => {
     const isOpen = modalId === 'CHARTING-DATE-MODAL' && isModalOpen;
@@ -522,38 +729,7 @@ function ChartingModeOptions(props) {
     }
   });
 
-  /**
-  * Update latitude longitude values on
-  * crop change
-  * @param {Object} boundaries
-  *
-  * @returns {null}
-  */
-  function onBoundaryUpdate(boundaries) {
-    const {
-      x, y, width, height,
-    } = boundaries;
-    const newBoundaries = {
-      x,
-      y,
-      x2: x + width,
-      y2: y + height,
-    };
-    setBoundaries(newBoundaries);
-    const bottomLeft = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
-    const topRight = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
-    setBottomLeftLatLong(bottomLeft);
-    setTopRightLatLong(topRight);
-    debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
-    setMapViewChecked(false);
-    if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
-  }
-
-  function onLatLongChange(coordsArray) {
+  const onLatLongChange = (coordsArray) => {
     const bottomLeft = [coordsArray[0], coordsArray[1]];
     const topRight = [coordsArray[2], coordsArray[3]];
     const bottomLeftPixel = olMap.getPixelFromCoordinate(bottomLeft);
@@ -574,23 +750,22 @@ function ChartingModeOptions(props) {
       const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
       setIsWithinWings(inLeftWing || inRightWing);
     }
-  }
+  };
 
-  function toggleMapView() {
+  const toggleMapView = () => {
     if (!mapViewChecked) {
       onLatLongChange(viewExtent);
     } else {
-      const boundaries = {
+      const boundariesObj = {
         x: screenWidth / 2 - 100,
         y: screenHeight / 2 - 100,
         width: 200,
         height: 200,
       };
-      onBoundaryUpdate(boundaries);
+      onBoundaryUpdate(boundariesObj);
     }
     setMapViewChecked(!mapViewChecked);
-  }
-
+  };
 
   const spinnerStyle = {
     width: '12px',
@@ -706,6 +881,12 @@ function ChartingModeOptions(props) {
           text={requestBtnText}
         />
       </div>
+      {chartRequestInProgress && (
+        <WaitOverlay
+          statusText="Creating chart..."
+          onCancel={() => onCancelChart()}
+        />
+      )}
       {aoiActive && isPostRender && (
         <Crop
           x={x}
@@ -721,11 +902,13 @@ function ChartingModeOptions(props) {
             left: x,
             top: y2 + 5,
             width: x2 - x,
+            zIndex: 2,
           }}
           topRightStyle={{
             left: x,
             top: y - 20,
             width: x2 - x,
+            zIndex: 2,
           }}
           coordinates={{
             bottomLeft: util.formatCoordinate(bottomLeftLatLong),
@@ -747,7 +930,12 @@ const mapStateToProps = (state) => {
   const { crs, maxExtent } = proj.selected;
   const { screenWidth, screenHeight } = screenSize;
   const {
-    activeLayer, aoiActive, aoiCoordinates, aoiSelected, chartRequestInProgress, timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
+    activeLayer,
+    aoiActive,
+    aoiCoordinates,
+    aoiSelected,
+    chartRequestInProgress,
+    timeSpanSelection, timeSpanStartDate, timeSpanEndDate, fromButton, isChartOpen,
   } = charting;
   const {
     isOpen, id,
@@ -846,7 +1034,7 @@ const mapDispatchToProps = (dispatch) => ({
         offsetLeft: 'calc(50% - 150px)',
         offsetTop: 50,
         width: 300,
-        height: 360,
+        height: 340,
         stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
@@ -855,7 +1043,11 @@ const mapDispatchToProps = (dispatch) => ({
       }),
     );
   },
-  displayChart: (liveData) => {
+  displayChart: (liveData, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded) => {
+    const isWideModal = screenWidth >= 1150;
+    const width = isWideModal ? 1150 : 650;
+    const height = isWideModal ? 475 + (isErrordaysExpanded.current ? 35 : 0) : 855;
+    const offsetTop = isWideModal ? 50 : 25;
     dispatch(
       openCustomContent('CHARTING-CHART', {
         headerText: (
@@ -878,14 +1070,16 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: 'chart-dialog',
         isDraggable: true,
         dragHandle: '.modal-header',
-        offsetLeft: 'calc(50% - 575px)',
-        offsetTop: 50,
-        width: 1150,
-        height: 420,
+        offsetLeft: `calc(50% - ${width / 2}px)`,
+        offsetTop,
+        width,
+        height,
         stayOnscreen: true,
+        autoSetHeight: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {
           liveData,
+          toggleErrorDaysExpanded,
         },
       }),
     );
@@ -910,6 +1104,9 @@ const mapDispatchToProps = (dispatch) => ({
   onUpdateEndDate(date) {
     dispatch(changeChartingEndDate(date));
   },
+  closeModal() {
+    dispatch(onClose());
+  },
 });
 
 export default connect(
@@ -918,13 +1115,12 @@ export default connect(
 )(ChartingModeOptions);
 
 ChartingModeOptions.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeLayer: PropTypes.string,
   isChartingActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  aoiSelected: PropTypes.bool,
   chartRequestInProgress: PropTypes.bool,
-  aoiCoordinates: PropTypes.array,
+  aoiCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   timeSpanSelection: PropTypes.string,
   timeSpanStartDate: PropTypes.instanceOf(Date),
   timeSpanEndDate: PropTypes.instanceOf(Date),
@@ -937,11 +1133,11 @@ ChartingModeOptions.propTypes = {
   displaySimpleStats: PropTypes.func,
   displayChart: PropTypes.func,
   openChartingErrorModal: PropTypes.func,
-  olMap: PropTypes.object,
+  closeModal: PropTypes.func,
+  olMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   crs: PropTypes.string,
-  proj: PropTypes.object,
-  renderedPalettes: PropTypes.object,
-  projections: PropTypes.array,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  projections: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   aoiActive: PropTypes.bool,
   timelineStartDate: PropTypes.instanceOf(Date),
   timelineEndDate: PropTypes.instanceOf(Date),
@@ -950,7 +1146,11 @@ ChartingModeOptions.propTypes = {
   isModalOpen: PropTypes.bool,
   modalId: PropTypes.string,
   sidebarHeight: PropTypes.number,
-  viewExtent: PropTypes.array,
-  maxExtent: PropTypes.array,
-  date: PropTypes.object,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  maxExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  screenHeight: PropTypes.number,
+  screenWidth: PropTypes.number,
+  onUpdateStartDate: PropTypes.func,
+  onUpdateEndDate: PropTypes.func,
 };

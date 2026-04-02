@@ -2,6 +2,7 @@ const { test, expect } = require('@playwright/test')
 const { openImageDownloadPanel, clickDownload, closeModal } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
 let downloadPromise
 

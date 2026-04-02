@@ -33,6 +33,10 @@ export const GRANULE_LIMIT = 30;
  */
 export function getLatestIntervalTime(layerDefs, dateTime) {
   const subDailyDefs = layerDefs.filter((def) => def.period === 'subdaily') || [];
+  const tempoDefs = subDailyDefs.filter((def) => def.id.includes('TEMPO')) || [];
+  if (tempoDefs.length > 0) {
+    return dateTime;
+  }
   const defsSortedByInterval = subDailyDefs.sort((defA, defB) => {
     const intervalA = Number(lodashGet(defA, 'dateRanges[0].dateInterval'));
     const intervalB = Number(lodashGet(defB, 'dateRanges[0].dateInterval'));
@@ -314,7 +318,8 @@ export function getTruncatedGranuleDates(layerDefs) {
     const numToAdd = GRANULE_LIMIT - numGranules;
     const truncatedDates = def.granuleDates.slice(0, numToAdd);
     numGranules += truncatedDates.length;
-    const processedDates = truncatedDates.map((date) => date.split(':').filter((d) => d !== '00Z').join(':'));
+    const processedDates = truncatedDates.map((date) => date.split(':').filter((d) => d !== '00Z')
+      .join(':'));
     return {
       truncated,
       value: `${granuleDatesString}${processedDates.join(',')},`,
@@ -367,7 +372,18 @@ export async function estimateMaxImageSize() {
  * @param {Boolean} isWorldfile
  * @param {Array} markerCoordinates
  */
-export function getDownloadUrl(url, proj, layerDefs, bbox, dimensions, dateTime, fileType, isWorldfile, markerCoordinates, activePalettes) {
+export function getDownloadUrl(
+  url,
+  proj,
+  layerDefs,
+  bbox,
+  dimensions,
+  dateTime,
+  fileType,
+  isWorldfile,
+  markerCoordinates,
+  activePalettes,
+) {
   const { crs } = proj.selected;
   const {
     layersArray,

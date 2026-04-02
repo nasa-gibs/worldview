@@ -3,8 +3,21 @@
         "Geostationary": {
             "id": "geostationary",
             "title":    "Geostationary",
-            "subtitle": "GOES-East, GOES-West, Himawari-8",
+            "subtitle": "Geostationary Ring, GOES-East, GOES-West, Himawari-9",
             "sources": {
+              "Geostationary Ring": {
+                    "id": "geostationary-ring",
+                    "title": "Geostationary Ring (MSG/SEVIRI, Himawari/AHI, GOES/ABI)",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                     	"EUMETSAT_RING_Airmass_RGB",
+                      "EUMETSAT_RING_Ash_RGB",
+                      "EUMETSAT_RING_Dust_RGB",
+                      "EUMETSAT_RING_Natural_Color_RGB",
+                      "EUMETSAT_RING_IR108"
+                    ]
+                  },
                 "GOES-East": {
                     "id": "goes-east",
                     "title": "GOES-East",
@@ -29,9 +42,9 @@
                       "GOES-West_ABI_Air_Mass"
                     ]
                   },
-                "Himawari-8": {
-                    "id": "himawari-8",
-                    "title": "Himawari-8",
+                "Himawari-9": {
+                    "id": "himawari-9",
+                    "title": "Himawari-9",
                     "description": "",
                     "image": "",
                     "settings": [

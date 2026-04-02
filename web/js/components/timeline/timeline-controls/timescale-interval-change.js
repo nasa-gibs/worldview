@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -89,6 +89,7 @@ class TimeScaleIntervalChange extends PureComponent {
       customInterval, customDelta, selectInterval, toggleCustomModal, modalType,
     } = this.props;
     const customSelected = timeScale === 'custom';
+    const autoSelected = timeScale === 'auto';
     let delta;
     let newTimeScale = timeScale;
 
@@ -100,11 +101,14 @@ class TimeScaleIntervalChange extends PureComponent {
     if (customSelected && customInterval && customDelta) {
       newTimeScale = customInterval;
       delta = customDelta;
+    } else if (autoSelected) {
+      newTimeScale = 5;
+      delta = 1;
     } else {
       newTimeScale = Number(TIME_SCALE_TO_NUMBER[newTimeScale]);
       delta = 1;
     }
-    selectInterval(delta, newTimeScale, customSelected);
+    selectInterval(delta, newTimeScale, customSelected, autoSelected);
   };
 
   // set custom text for custom interval
@@ -124,7 +128,7 @@ class TimeScaleIntervalChange extends PureComponent {
 
   renderTooltip = () => {
     const { toolTipHovered, customIntervalText } = this.state;
-    const { hasSubdailyLayers } = this.props;
+    const { hasSubdailyLayers, hasTempoProduct } = this.props;
     return (
       <div
         className="wv-tooltip"
@@ -133,6 +137,8 @@ class TimeScaleIntervalChange extends PureComponent {
         <div id="timeline-interval" className="timeline-interval">
           <span
             id="interval-years"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-years"
             onClick={() => this.handleClickInterval('year')}
           >
@@ -140,6 +146,8 @@ class TimeScaleIntervalChange extends PureComponent {
           </span>
           <span
             id="interval-months"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-months"
             onClick={() => this.handleClickInterval('month')}
           >
@@ -147,31 +155,54 @@ class TimeScaleIntervalChange extends PureComponent {
           </span>
           <span
             id="interval-days"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-days"
             onClick={() => this.handleClickInterval('day')}
           >
             Day
           </span>
-          {hasSubdailyLayers ? (
-            <>
+          {hasSubdailyLayers
+            ? (
+              <>
+                <span
+                  id="interval-hours"
+                  role="menuitem"
+                  tabIndex={-1}
+                  className="interval-btn interval-hours"
+                  onClick={() => this.handleClickInterval('hour')}
+                >
+                  Hour
+                </span>
+                <span
+                  id="interval-minutes"
+                  role="menuitem"
+                  tabIndex={-1}
+                  className="interval-btn interval-minutes"
+                  onClick={() => this.handleClickInterval('minute')}
+                >
+                  Minute
+                </span>
+              </>
+            )
+            : null}
+          {hasTempoProduct
+            ? (
               <span
-                id="interval-hours"
-                className="interval-btn interval-hours"
-                onClick={() => this.handleClickInterval('hour')}
+                id="interval-auto"
+                role="menuitem"
+                tabIndex={-1}
+                className="interval-btn interval-auto"
+                onClick={() => this.handleClickInterval('auto')}
               >
-                Hour
+                Auto
               </span>
-              <span
-                id="interval-minutes"
-                className="interval-btn interval-minutes"
-                onClick={() => this.handleClickInterval('minute')}
-              >
-                Minute
-              </span>
-            </>
-          ) : null}
+            )
+            : null}
           <span
             id="interval-custom"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-custom custom-interval-text"
             style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
             onClick={() => this.handleClickInterval('custom')}
@@ -180,6 +211,8 @@ class TimeScaleIntervalChange extends PureComponent {
           </span>
           <span
             id="interval-custom-static"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-custom custom-interval-text"
             onClick={() => this.handleClickInterval('custom', true)}
           >
@@ -196,13 +229,17 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.state;
     const {
       customSelected,
+      autoSelected,
       interval,
       isDisabled,
     } = this.props;
 
     const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
+    const spanInnerText = autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`;
     return (
       <div
+        role="menu"
+        tabIndex={0}
         id="timeline-interval-btn-container"
         className="interval-btn-container noselect no-drag"
         onMouseEnter={() => this.setTooltipState(true)}
@@ -214,7 +251,7 @@ class TimeScaleIntervalChange extends PureComponent {
           id="current-interval"
           className={className}
         >
-          {customSelected ? customIntervalText : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
+          {customSelected ? customIntervalText : spanInnerText}
         </span>
 
         {!isDisabled ? this.renderTooltip() : null}
@@ -228,21 +265,22 @@ const mapDispatchToProps = (dispatch) => ({
   toggleCustomModal: (isOpen, modalType) => {
     dispatch(toggleCustomModalAction(isOpen, modalType));
   },
-  selectInterval: (delta, timeScale, customSelected) => {
-    dispatch(selectIntervalAction(delta, timeScale, customSelected));
+  selectInterval: (delta, timeScale, customSelected, autoSelected) => {
+    dispatch(selectIntervalAction(delta, timeScale, customSelected, autoSelected));
   },
 });
 
 const mapStateToProps = (state) => {
   const { date } = state;
   const {
-    interval, customInterval, customDelta, customSelected,
+    interval, customInterval, customDelta, customSelected, autoSelected,
   } = date;
   return {
     interval,
     customInterval,
     customDelta,
     customSelected,
+    autoSelected,
   };
 };
 
@@ -250,7 +288,9 @@ TimeScaleIntervalChange.propTypes = {
   customDelta: PropTypes.number,
   customInterval: PropTypes.number,
   customSelected: PropTypes.bool,
+  autoSelected: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   interval: PropTypes.number,
   isDisabled: PropTypes.bool,
   selectInterval: PropTypes.func,

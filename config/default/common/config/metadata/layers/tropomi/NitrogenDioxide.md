@@ -1,0 +1,2 @@
+### About Nitrogen Dioxide
+Nitrogen dioxide is an important chemical species in both, the stratosphere where it plays a key role in ozone chemistry, and in the troposphere where it is a precursor to ozone production. In the troposphere, it is produced in various combustion processes and in lightning and is an indicator of poor air quality and urban smog.

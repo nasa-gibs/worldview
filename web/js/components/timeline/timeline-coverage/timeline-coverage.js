@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -26,6 +26,12 @@ import CoverageItemList from './coverage-item-list';
  */
 
 class TimelineLayerCoveragePanel extends Component {
+  static stopPropagation(e) {
+    e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -40,7 +46,8 @@ class TimelineLayerCoveragePanel extends Component {
 
     const layers = this.getActiveLayers(activeLayers);
     this.setActiveLayers(layers);
-    // prevent bubbling to parent which the wheel event is blocked for timeline zoom in/out wheel event
+    // prevent bubbling to parent which the wheel event
+    // is blocked for timeline zoom in/out wheel event
     document.querySelector('.timeline-layer-coverage-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
     // init populate of activeLayers
     this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
@@ -80,7 +87,7 @@ class TimelineLayerCoveragePanel extends Component {
     }
 
     const updatedActiveLayers = this.getActiveLayers(activeLayers);
-    // eslint-disable-next-line react/destructuring-assignment
+
     const layersChange = !lodashIsEqual(updatedActiveLayers, this.state.activeLayers);
     const projectionChange = prevProps.projection !== projection;
     const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
@@ -262,7 +269,7 @@ class TimelineLayerCoveragePanel extends Component {
   * @param {Array} layers
   * @returns {void}
   */
-  // eslint-disable-next-line react/destructuring-assignment
+
   addMatchingCoverageToTimeline = async (isChecked, layers) => {
     const { setMatchingTimelineCoverage } = this.props;
     const dateRange = this.getNewMatchingDatesRange(layers);
@@ -293,12 +300,7 @@ class TimelineLayerCoveragePanel extends Component {
         return granuleDateRanges.map(([start, end]) => ({ startDate: start, endDate: end }));
       });
     }
-  };
-
-  stopPropagation = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
+    return undefined;
   };
 
   /**
@@ -311,15 +313,16 @@ class TimelineLayerCoveragePanel extends Component {
     const layerInfoBtnTitle = 'Timeline Layer Coverage Information';
 
     return (
-      <a
+      <button
+        type="button"
         id={layerInfoBtnId}
         aria-label={layerInfoBtnTitle}
         className={layerInfoBtnId}
-        onMouseDown={this.stopPropagation}
+        onMouseDown={TimelineLayerCoveragePanel.stopPropagation}
         onClick={() => onInfoClick()}
       >
         <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" widthAuto />
-      </a>
+      </button>
     );
   };
 
@@ -404,7 +407,8 @@ class TimelineLayerCoveragePanel extends Component {
     return (
       <>
         {/* Timeline Layer Coverage Panel open/close handle */}
-        <div
+        <button
+          type="button"
           id="timeline-layer-coverage-panel-handle"
           aria-label={panelToggleLabelText}
           onClick={this.togglePanelOpenClose}
@@ -414,44 +418,47 @@ class TimelineLayerCoveragePanel extends Component {
             {panelToggleLabelText}
           </UncontrolledTooltip>
           <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />
-        </div>
+        </button>
         <div
           className={`timeline-layer-coverage-container ${isPanelOpenClassName}`}
           style={panelContainerStyle}
         >
           {/* Timeline Layer Coverage Panel */}
-          {isTimelineLayerCoveragePanelOpen
-          && (
-          <div
-            className="timeline-layer-coverage"
-            style={layerCoverageStyle}
-          >
-            <header className="timeline-layer-coverage-header">
-              <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
-              {this.renderInfoButton()}
-              <Switch
-                active={shouldIncludeHiddenLayers}
-                border
-                color="00457b"
-                id="toggle-layer-coverage-include-hidden"
-                containerClassAddition="toggle-layer-coverage-include-hidden"
-                label="Include Hidden Layers"
-                toggle={() => this.addMatchingCoverageToTimeline(!shouldIncludeHiddenLayers, activeLayers)}
-              />
-            </header>
-            <Scrollbars style={scrollbarStyle}>
-              <CoverageItemList
-                activeLayers={activeLayers}
-                appNow={appNow}
-                axisWidth={axisWidth}
-                backDate={backDate}
-                frontDate={frontDate}
-                getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
-                timeScale={timeScale}
-                positionTransformX={positionTransformX}
-              />
-            </Scrollbars>
-          </div>
+          {isTimelineLayerCoveragePanelOpen &&
+          (
+            <div
+              className="timeline-layer-coverage"
+              style={layerCoverageStyle}
+            >
+              <header className="timeline-layer-coverage-header">
+                <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
+                {this.renderInfoButton()}
+                <Switch
+                  active={shouldIncludeHiddenLayers}
+                  border
+                  color="00457b"
+                  id="toggle-layer-coverage-include-hidden"
+                  containerClassAddition="toggle-layer-coverage-include-hidden"
+                  label="Include Hidden Layers"
+                  toggle={() => this.addMatchingCoverageToTimeline(
+                    !shouldIncludeHiddenLayers,
+                    activeLayers,
+                  )}
+                />
+              </header>
+              <Scrollbars style={scrollbarStyle}>
+                <CoverageItemList
+                  activeLayers={activeLayers}
+                  appNow={appNow}
+                  axisWidth={axisWidth}
+                  backDate={backDate}
+                  frontDate={frontDate}
+                  getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
+                  timeScale={timeScale}
+                  positionTransformX={positionTransformX}
+                />
+              </Scrollbars>
+            </div>
           )}
         </div>
       </>
@@ -504,8 +511,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 TimelineLayerCoveragePanel.propTypes = {
-  activeLayers: PropTypes.array,
-  appNow: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

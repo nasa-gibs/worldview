@@ -20,6 +20,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'config directory'
   })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'cm',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Validates and corrects the configuration files.')
 
 const { argv } = options
@@ -29,6 +35,7 @@ if (!argv.optionsFile && !argv.configDir) {
 
 const optionsFile = argv.optionsFile
 const configDir = argv.configDir
+const cacheMode = argv.cacheMode
 
 let errorCount = 0
 let warningCount = 0
@@ -110,7 +117,7 @@ async function main () {
     }
     if ('temporal' in layer) {
       warn(`[${layerId}] GC Layer temporal values overwritten by Options`)
-      layer = await processTemporalLayer(layer, layer.temporal)
+      layer = await processTemporalLayer(layer, layer.temporal, undefined, cacheMode)
     }
     if (layer.futureTime) {
       if ('endDate' in layer) delete layer.endDate

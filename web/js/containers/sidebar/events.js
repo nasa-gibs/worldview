@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -64,12 +63,12 @@ function Events(props) {
 
   const startDate = formatDisplayDate(selectedStartDate);
   const endDate = formatDisplayDate(selectedEndDate);
-
+  const requestErrorMessage = hasRequestError
+    ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
+    : '';
   const errorOrLoadingText = isLoading
     ? 'Loading ...'
-    : hasRequestError
-      ? 'There has been an ERROR retrieving events from the EONET events API. Please try again later.'
-      : '';
+    : requestErrorMessage;
 
   const renderFilterControls = () => (
     <div className="filter-controls">
@@ -103,35 +102,37 @@ function Events(props) {
     </div>
   );
   const renderEventList = () => (
-    eventsData && eventsData.length ? (
-      <div className="wv-eventslist sidebar-panel">
-        <ul id="wv-eventscontent" className="content map-item-list">
-          {sources && eventsData.map((event) => (
-            <Event
-              showAlert={showAlert}
-              key={event.id}
-              event={event}
-              selectEvent={(id, date) => selectEvent(id, date, isMobile)}
-              deselectEvent={deselectEvent}
-              highlightEvent={(id, date) => highlightEvent(id, date)}
-              unHighlightEvent={unHighlightEvent}
-              removeGroup={removeGroup}
-              eventLayers={eventLayers}
-              toggleVisibility={toggleVisibility}
-              toggleGroupVisibility={toggleGroupVisibility}
-              isSelected={selected.id === event.id}
-              isHighlighted={highlighted.id === event.id}
-              selectedDate={selectedDate}
-              sources={sources}
-              defaultEventLayer={defaultEventLayer}
-              layers={layers}
-            />
-          ))}
-        </ul>
-      </div>
-    ) : !isLoading && (
-      <h3 className="no-events"> No events meet current criteria</h3>
-    )
+    eventsData && eventsData.length
+      ? (
+        <div className="wv-eventslist sidebar-panel">
+          <ul id="wv-eventscontent" className="content map-item-list">
+            {sources && eventsData.map((event) => (
+              <Event
+                showAlert={showAlert}
+                key={event.id}
+                event={event}
+                selectEvent={(id, date) => selectEvent(id, date, isMobile)}
+                deselectEvent={deselectEvent}
+                highlightEvent={(id, date) => highlightEvent(id, date)}
+                unHighlightEvent={unHighlightEvent}
+                removeGroup={removeGroup}
+                eventLayers={eventLayers}
+                toggleVisibility={toggleVisibility}
+                toggleGroupVisibility={toggleGroupVisibility}
+                isSelected={selected.id === event.id}
+                isHighlighted={highlighted.id === event.id}
+                selectedDate={selectedDate}
+                sources={sources}
+                defaultEventLayer={defaultEventLayer}
+                layers={layers}
+              />
+            ))}
+          </ul>
+        </div>
+      )
+      : !isLoading && (
+        <h3 className="no-events"> No events meet current criteria</h3>
+      )
   );
 
   return (
@@ -142,13 +143,16 @@ function Events(props) {
         style={{ maxHeight: `${scrollbarMaxHeight}` }}
       >
         <div id="wv-events">
-          {isLoading || hasRequestError ? (
-            // notranslate included below to prevent Google Translate extension from crashing the page
-            <div className="events-loading-text notranslate">
-              {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
-              {errorOrLoadingText}
-            </div>
-          ) : renderEventList()}
+          {isLoading || hasRequestError
+            ? (
+            // notranslate included below to prevent
+            // Google Translate extension from crashing the page
+              <div className="events-loading-text notranslate">
+                {hasRequestError && (<FontAwesomeIcon icon="exclamation-triangle" fixedWidth widthAuto />)}
+                {errorOrLoadingText}
+              </div>
+            )
+            : renderEventList()}
         </div>
       </Scrollbars>
     </div>
@@ -236,27 +240,27 @@ export default connect(
 Events.propTypes = {
   defaultEventLayer: PropTypes.string,
   deselectEvent: PropTypes.func,
-  eventsData: PropTypes.array,
-  eventLayers: PropTypes.array,
+  eventsData: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  eventLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   hasRequestError: PropTypes.bool,
   height: PropTypes.number,
-  highlighted: PropTypes.object,
+  highlighted: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   highlightEvent: PropTypes.func,
   isLoading: PropTypes.bool,
   isMobile: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
-  layers: PropTypes.array,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   openFilterModal: PropTypes.func,
   removeGroup: PropTypes.func,
-  selected: PropTypes.object,
+  selected: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDate: PropTypes.string,
   selectedStartDate: PropTypes.string,
   selectedEndDate: PropTypes.string,
-  selectedCategories: PropTypes.array,
+  selectedCategories: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   selectEvent: PropTypes.func,
   showAlert: PropTypes.bool,
   showDates: PropTypes.bool,
-  sources: PropTypes.array,
+  sources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleGroupVisibility: PropTypes.func,
   toggleVisibility: PropTypes.func,
   unHighlightEvent: PropTypes.func,

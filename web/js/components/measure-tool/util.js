@@ -1,3 +1,4 @@
+/* eslint-disable new-cap */
 import {
   MultiLineString as OlGeomMultiLineString,
   Polygon as OlGeomPolygon,
@@ -52,7 +53,9 @@ function checkForXFlip(geom, projection) {
 export function transformLineStringArc(geom, projection) {
   const coords = [];
   const distance = 50000; // meters between segments
-  const transformedGeom = checkForXFlip(geom, projection).clone().transform(projection, CRS.GEOGRAPHIC);
+  const transformedGeom = checkForXFlip(geom, projection)
+    .clone()
+    .transform(projection, CRS.GEOGRAPHIC);
   transformedGeom.forEachSegment((segStart, segEnd) => {
     const line = geod.InverseLine(segStart[1], segStart[0], segEnd[1], segEnd[0]);
     const n = Math.ceil(line.s13 / distance);

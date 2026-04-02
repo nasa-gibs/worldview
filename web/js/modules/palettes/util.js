@@ -104,7 +104,12 @@ export function drawSidebarPaletteOnCanvas(
       ctx.fillStyle = util.hexToRGBA(color);
       ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, barHeight);
     });
-    ctx.rect(2 - thickness, colorbarStartY - thickness, width - 3 + (thickness * 2), barHeight + (thickness * 2));
+    ctx.rect(
+      2 - thickness,
+      colorbarStartY - thickness,
+      width - 3 + (thickness * 2),
+      barHeight + (thickness * 2),
+    );
     ctx.stroke();
   }
 }
@@ -137,7 +142,12 @@ export function drawTravelModePaletteOnCanvas(
       ctx.fillStyle = util.hexToRGBA(color);
       ctx.fillRect(Math.floor((binWidth * i) + 1), colorbarStartY, drawWidth, height);
     });
-    ctx.rect(2 - thickness, colorbarStartY - thickness, width - 3 + (thickness * 2), height + (thickness * 2));
+    ctx.rect(
+      2 - thickness,
+      colorbarStartY - thickness,
+      width - 3 + (thickness * 2),
+      height + (thickness * 2),
+    );
     ctx.stroke();
   }
 }
@@ -166,15 +176,15 @@ export function drawTicksOnCanvas(ctx, legend, width) {
 }
 
 export function lookup(sourcePalette, targetPalette) {
-  const lookup = {};
+  const lookupObj = {};
   lodashEach(sourcePalette.colors, (sourceColor, index) => {
     const source = `${parseInt(sourceColor.substring(0, 2), 16)
     },${
       parseInt(sourceColor.substring(2, 4), 16)
     },${
       parseInt(sourceColor.substring(4, 6), 16)
-    },`
-      + '255';
+    },` +
+      '255';
     const targetColor = targetPalette.colors[index];
     const target = {
       r: parseInt(targetColor.substring(0, 2), 16),
@@ -182,9 +192,9 @@ export function lookup(sourcePalette, targetPalette) {
       b: parseInt(targetColor.substring(4, 6), 16),
       a: 255,
     };
-    lookup[source] = target;
+    lookupObj[source] = target;
   });
-  return lookup;
+  return lookupObj;
 }
 
 export function loadRenderedPalette(config, layerId) {
@@ -223,10 +233,11 @@ export function getMaxValue(v) {
  */
 export function parseLegacyPalettes(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const parts = parameters.palettes.split('~');
   parts.forEach((part) => {
     const items = part.split(',');
@@ -236,9 +247,9 @@ export function parseLegacyPalettes(
       id: layerId,
     });
     if (
-      index >= 0
-      && lodashGet(stateFromLocation, `layers.active.layers.${index}`)
-      && !lodashGet(stateFromLocation, `layers.active.layers.${index}.custom`)
+      index >= 0 &&
+      lodashGet(stateFromLocation, `layers.active.layers.${index}`) &&
+      !lodashGet(stateFromLocation, `layers.active.layers.${index}.custom`)
     ) {
       stateFromLocation = update(stateFromLocation, {
         layers: {
@@ -254,7 +265,8 @@ export function parseLegacyPalettes(
   return stateFromLocation;
 }
 
-const createPaletteAttributeObject = function(def, value, attrObj, count) {
+const createPaletteAttributeObject = function(def, valueArray, attrObj, count) {
+  let value = valueArray;
   const { key } = attrObj;
   const attrArray = attrObj.array;
   let hasAtLeastOnePair = attrObj.isActive;
@@ -298,8 +310,8 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
 
       const paletteDef = palettes[layerId].maps[i];
 
-      const entryLength = lodashSize(lodashGet(paletteDef, 'entries.values'))
-        || lodashSize(lodashGet(paletteDef, 'entries.colors'));
+      const entryLength = lodashSize(lodashGet(paletteDef, 'entries.values')) ||
+        lodashSize(lodashGet(paletteDef, 'entries.colors'));
       const maxValue = paletteDef.max
         ? lodashSplit(paletteDef.entries.values[paletteDef.max || entryLength], ',', 1)
         : undefined;
@@ -365,7 +377,8 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
  * @param {Object} permlinkState | parameters parsed from permalink
  * @param {Object} state
  */
-export function loadPalettes(permlinkState, state) {
+export function loadPalettes(permlinkState, stateObject) {
+  let state = stateObject;
   let stateArray = [{ stateStr: 'l', groupStr: 'active' }];
   if (permlinkState.l1) {
     stateArray = [
@@ -394,7 +407,7 @@ export function loadPalettes(permlinkState, state) {
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
-            } catch (error) {
+            } catch {
               console.warn(` Invalid palette: ${value}`);
             }
           });
@@ -411,7 +424,7 @@ export function loadPalettes(permlinkState, state) {
                   state,
                 ),
               );
-            } catch (error) {
+            } catch {
               console.warn(`Unable to set min: ${value}`);
             }
           });
@@ -428,7 +441,7 @@ export function loadPalettes(permlinkState, state) {
                   state,
                 ),
               );
-            } catch (error) {
+            } catch {
               console.warn(`Unable to set max index: ${value}`);
             }
           });
@@ -449,7 +462,7 @@ export function loadPalettes(permlinkState, state) {
               state = update(state, {
                 palettes: { [stateObj.groupStr]: { $set: newPalettes } },
               });
-            } catch (error) {
+            } catch {
               console.warn(` Invalid palette: ${value}`);
             }
           });
@@ -481,10 +494,11 @@ export function loadPalettes(permlinkState, state) {
 
 export function mapLocationToPaletteState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   if (parameters.l1 || parameters.l) {
     stateFromLocation = loadPalettes(
       parameters,
@@ -513,7 +527,8 @@ export function mapLocationToPaletteState(
  * @param {Boolean} customLoaded
  * @returns {Promise}
  */
-export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
+export function preloadPalettes(layersArray, renderedPalettes, customLoadedBool) {
+  let customLoaded = customLoadedBool;
   const rendered = renderedPalettes || {};
   customLoaded = customLoaded || false;
   let preloadedCustom = false;
@@ -523,10 +538,10 @@ export function preloadPalettes(layersArray, renderedPalettes, customLoaded) {
   if (layersArray) {
     layersArray.forEach((obj) => {
       if (
-        obj
-        && obj.palette
-        && !renderedPalettes[obj.palette.id]
-        && !loading[obj.palette.id]
+        obj &&
+        obj.palette &&
+        !renderedPalettes[obj.palette.id] &&
+        !loading[obj.palette.id]
       ) {
         const paletteId = obj.palette.id;
         const location = `config/palettes/${paletteId}.json`;

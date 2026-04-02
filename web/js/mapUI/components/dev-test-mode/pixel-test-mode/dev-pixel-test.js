@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -41,7 +41,11 @@ function PixelTestMode () {
     let mercatorExtent;
     if (visualMapExtentSetting) mercatorExtent = transformExtent(currentExtent, 'EPSG:4326', 'EPSG:3857');
     try {
-      const wmsImage = await fetchWMSImageExperimental(layerSelection.id, formattedDate, mercatorExtent);
+      const wmsImage = await fetchWMSImageExperimental(
+        layerSelection.id,
+        formattedDate,
+        mercatorExtent,
+      );
 
       // Create an image and handle its loading and error events
       const img = new Image();
@@ -49,7 +53,7 @@ function PixelTestMode () {
       img.onload = async () => {
         // Process the loaded image here
         const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
-        // eslint-disable-next-line no-unsafe-optional-chaining
+
         const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
 
         const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${formattedDate}... `;

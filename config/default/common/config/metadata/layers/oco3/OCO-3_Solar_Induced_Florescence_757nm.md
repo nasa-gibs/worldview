@@ -1,3 +1,3 @@
 The OCO-3 Solar Induced Chlorophyll Fluorescence 757 nm layer displays the fluorescence emission from land surfaces derived from in-filling of solar Fraunhofer lines in the 757 nm region of the measured spectrum.
 
-References: OCO3_L2_Lite_SIF [doi:10.5067/NOD1DPPBCXSO](https://doi.org/10.5067/NOD1DPPBCXSO)
+References: OCO3_L2_Lite_SIF [doi:10.5067/HC776J71KV41](https://doi.org/10.5067/HC776J71KV41)

@@ -2,9 +2,10 @@ const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { assertDefaultLayers, assertCategories, closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 const url = 'http://localhost:3000/?t=2013-05-15'
 
 test.describe.configure({ mode: 'serial' })
@@ -59,7 +60,7 @@ test('Clicking a measurement shows choices, indicates unavailability', async () 
   // const maiacAvailableCoverage = page.locator('#MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth-checkbox + svg#availability-info')
   await expect(modisAvailableCoverage).toBeVisible()
   // await expect(maiacAvailableCoverage).toBeVisible()
-  await expect(sourceTabs).toHaveCount(12)
+  await expect(sourceTabs).toHaveCount(13)
 })
 
 test('Available grid source layer measuremet does not have unavaiable coverage class', async () => {
@@ -141,7 +142,7 @@ test('Searching for layers', async () => {
     aodCheckbox
   } = selectors
   await layersSearchField.fill('aerosol optical depth')
-  await expect(layersSearchRow).toHaveCount(21)
+  await expect(layersSearchRow).toHaveCount(24)
   await expect(aodCheckbox).toBeVisible()
 })
 

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getDaysInYear, getDisplayDate } from '../../date-util';
 
@@ -151,12 +151,13 @@ class DateTooltip extends Component {
 
     const tooltipStyle = this.getTooltipStyle(showDraggerTooltip, showHoverTooltip);
 
+    const doyValue = dayOfYear < 100
+      ? `0${dayOfYear}`
+      : dayOfYear;
     // add leading zero(s) for single digits
     dayOfYear = dayOfYear < 10
       ? `00${dayOfYear}`
-      : dayOfYear < 100
-        ? `0${dayOfYear}`
-        : dayOfYear;
+      : doyValue;
 
     const tooltipClass = `date-tooltip ${shouldDisplayDraggerTooltip ? 'date-tooltip-fade' : ''}`;
     return (
@@ -181,13 +182,13 @@ class DateTooltip extends Component {
 }
 
 DateTooltip.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   hasSubdailyLayers: PropTypes.bool,
   hoverTime: PropTypes.string,
   isTimelineLayerCoveragePanelOpen: PropTypes.bool,
   leftOffset: PropTypes.number,
-  selectedDate: PropTypes.object,
+  selectedDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDraggerPosition: PropTypes.number,
   shouldIncludeHiddenLayers: PropTypes.bool,
   showDraggerTime: PropTypes.bool,

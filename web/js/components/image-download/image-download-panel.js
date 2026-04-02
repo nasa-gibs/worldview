@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import googleTagManager from 'googleTagManager';
 import {
   imageSizeValid,
@@ -34,23 +35,24 @@ const RESOLUTION_KEY = {
 
 function ImageDownloadPanel(props) {
   const {
-    fileType,
-    isWorldfile,
-    resolution,
+    fileType = 'image/jpeg',
+    isWorldfile = false,
+    resolution = '1',
     getLayers,
     lonlats,
     projection,
     date,
     onPanelChange,
-    fileTypeOptions,
+    fileTypeOptions = true,
     fileTypes,
-    secondLabel,
-    worldFileOptions,
+    secondLabel = 'Format',
+    worldFileOptions = true,
     datelineMessage,
     map,
     viewExtent,
     resolutions,
-    firstLabel,
+    maxImageSize = '8200px x 8200px',
+    firstLabel = 'Resolution (per pixel)',
     geoLatLong,
     onLatLongChange,
     boundaries,
@@ -81,8 +83,14 @@ function ImageDownloadPanel(props) {
       setMaxWidth(width);
     };
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [layer.wv.id, layer.wv.granuleDates]));
-    const layerDefs = layerList.map((def) => ({ ...def, granuleDates: granuleDatesMap.get(def.id) }));
+    const granuleDatesMap = new Map(map.getLayers().getArray()
+      .map((layer) => [
+        layer.wv.id,
+        layer.wv.granuleDates,
+      ]));
+    const layerDefs = layerList.map((def) => ({
+      ...def, granuleDates: granuleDatesMap.get(def.id),
+    }));
     const isTruncated = getTruncatedGranuleDates(layerDefs, date).truncated;
     const resizeObserver = new ResizeObserver(resizeHandler);
     resizeObserver.observe(divElem);
@@ -96,6 +104,14 @@ function ImageDownloadPanel(props) {
       onCancelSnapshot();
     };
   }, []);
+
+  useEffect(() => {
+    setResolution(resolution);
+  }, [resolution]);
+
+  useEffect(() => {
+    setResolution(resolution);
+  }, [resolution]);
 
   const onDownload = async () => {
     const layerList = getLayers();
@@ -170,7 +186,7 @@ function ImageDownloadPanel(props) {
     onPanelChange(type, valueIn);
   };
 
-  const _renderFileTypeSelect = () => {
+  const renderFileTypeSelect = () => {
     if (fileTypeOptions) {
       return (
         <div className="wv-image-header">
@@ -185,31 +201,35 @@ function ImageDownloadPanel(props) {
         </div>
       );
     }
+    return false;
   };
 
-  const _renderWorldfileSelect = () => {
+  const renderWorldfileSelect = () => {
     if (worldFileOptions) {
       const value = currIsWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {currFileType === 'application/vnd.google-earth.kmz' ? (
-            <select disabled>
-              <option value={0}>No</option>
-            </select>
-          ) : (
-            <select
-              id="wv-image-worldfile"
-              value={value}
-              onChange={(e) => handleChange('worldfile', e.target.value)}
-            >
-              <option value="0">No</option>
-              <option value="1">Yes</option>
-            </select>
-          )}
+          {currFileType === 'application/vnd.google-earth.kmz'
+            ? (
+              <select disabled>
+                <option value={0}>No</option>
+              </select>
+            )
+            : (
+              <select
+                id="wv-image-worldfile"
+                value={value}
+                onChange={(e) => handleChange('worldfile', e.target.value)}
+              >
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            )}
           Worldfile (.zip)
         </div>
       );
     }
+    return false;
   };
 
   const crossesDatelineAlert = () => datelineMessage && (
@@ -225,8 +245,8 @@ function ImageDownloadPanel(props) {
   const dimensions = getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
-  const filetypeSelect = _renderFileTypeSelect();
-  const worldfileSelect = _renderWorldfileSelect();
+  const filetypeSelect = renderFileTypeSelect();
+  const worldfileSelect = renderWorldfileSelect();
   const layerList = getLayers();
 
   return (
@@ -265,7 +285,13 @@ function ImageDownloadPanel(props) {
           map={map}
         />
         {showGranuleWarning && (
-          <p>Warning: A snapshot will capture a max. of {GRANULE_LIMIT} granules, additional granules are omitted.</p> // eslint-disable-line react/jsx-one-expression-per-line
+          <p>
+            Warning: A snapshot will capture a max. of
+            {GRANULE_LIMIT}
+            {' '}
+            granules, additional
+            granules are omitted.
+          </p>
         )}
         <ResTable
           width={width}
@@ -321,23 +347,23 @@ ImageDownloadPanel.propTypes = {
   datelineMessage: PropTypes.string,
   fileType: PropTypes.string,
   fileTypeOptions: PropTypes.bool,
-  fileTypes: PropTypes.object,
+  fileTypes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   firstLabel: PropTypes.string,
   getLayers: PropTypes.func,
   isWorldfile: PropTypes.bool,
-  lonlats: PropTypes.array,
-  map: PropTypes.object,
-  markerCoordinates: PropTypes.array,
+  lonlats: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  markerCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onPanelChange: PropTypes.func,
-  projection: PropTypes.object,
-  date: PropTypes.object,
+  projection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resolution: PropTypes.number,
-  resolutions: PropTypes.object,
+  resolutions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   secondLabel: PropTypes.string,
   url: PropTypes.string,
-  viewExtent: PropTypes.array,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   worldFileOptions: PropTypes.bool,
-  geoLatLong: PropTypes.array,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onLatLongChange: PropTypes.func,
   boundaries: PropTypes.array,
   openSnapshotErrorModal: PropTypes.func,

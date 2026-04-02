@@ -68,8 +68,8 @@ describe('Palette terra-aod fetching with requestPalette action [palettes-action
 });
 describe('Test lookup actions [palettes-actions-lookup]', () => {
   const mockStore = configureMockStore(middlewares);
-  let layers = addLayer('terra-aod', {}, [], config.layers, 0);
-  layers = addLayer('aqua-cr', {}, layers, config.layers, 1);
+  let layers = addLayer('terra-aod', [], config.layers, {}, 0);
+  layers = addLayer('aqua-cr', layers, config.layers, {}, 1);
   const stateWithLayers = update(state, {
     layers: { active: { $set: layers } },
   });

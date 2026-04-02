@@ -57,7 +57,8 @@ class CoverageItemContainer extends Component {
   getDateRangeToDisplay = (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
 
-    const multiDateToDisplay = dateRanges.reduce((multiCoverageDates, range, innerIndex) => {
+    const multiDateToDisplay = dateRanges.reduce((dates, range, innerIndex) => {
+      const multiCoverageDates = { ...dates };
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
       const rangeInterval = Number(dateInterval);
@@ -126,7 +127,8 @@ class CoverageItemContainer extends Component {
     } = getLayerItemStyles(visible, id);
 
     // get line container dimensions
-    const containerLineDimensions = getMatchingCoverageLineDimensions(layer).filter(({ visible }) => visible);
+    const containerLineDimensions = getMatchingCoverageLineDimensions(layer)
+      .filter(({ visible: isVisible }) => isVisible);
     return (
       <div
         className="layer-coverage-line"
@@ -143,9 +145,19 @@ class CoverageItemContainer extends Component {
               const { date, interval } = itemRange;
               const dateObj = new Date(date);
               const nextDate = array[multiIndex + 1];
-              const rangeDateEnd = getRangeDateEndWithAddedInterval(layer, dateObj, layerPeriod, interval, nextDate);
+              const rangeDateEnd = getRangeDateEndWithAddedInterval(
+                layer,
+                dateObj,
+                layerPeriod,
+                interval,
+                nextDate,
+              );
               // get range line dimensions
-              const multiLineRangeOptions = getMatchingCoverageLineDimensions(layer, dateObj, rangeDateEnd).filter(({ visible }) => visible);
+              const multiLineRangeOptions = getMatchingCoverageLineDimensions(
+                layer,
+                dateObj,
+                rangeDateEnd,
+              ).filter(({ visible: isVisible }) => isVisible);
               // create DOM line element
               const key = `${id}-${multiIndex}`;
               return (
@@ -195,7 +207,7 @@ CoverageItemContainer.propTypes = {
   getMaxEndDate: PropTypes.func,
   getRangeDateEndWithAddedInterval: PropTypes.func,
   needDateRangeBuilt: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layerPeriod: PropTypes.string,
   positionTransformX: PropTypes.number,
 };

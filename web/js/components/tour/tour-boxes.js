@@ -1,5 +1,3 @@
-
-import React from 'react';
 import PropTypes from 'prop-types';
 import TourBox from './tour-box';
 
@@ -34,8 +32,8 @@ function TourBoxes(props) {
 
 TourBoxes.propTypes = {
   selectTour: PropTypes.func.isRequired,
-  stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
+  stories: PropTypes.oneOfType([PropTypes.object]),
+  storyOrder: PropTypes.oneOfType([PropTypes.array]),
 };
 
 export default TourBoxes;

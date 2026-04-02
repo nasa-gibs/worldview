@@ -7,13 +7,13 @@
       "description": "arcsix/ARCSIX_SPEC-Learjet_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector Arctic Greenland Thule Pituffik THAAO",
+      "tags": "vector Arctic Greenland Thule Pituffik THAAO suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
       "disableSnapshot": true,
       "disableCustomPalettes": true,
-      "layergroup": "Ozone",
+      "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
         "id": "ARCSIX_SPEC-Learjet_Flight_Track",
         "geographic": {
@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "alt",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "ARCSIX_SPEC-Learjet_Flight_Track",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

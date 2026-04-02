@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 import {
   Dropdown,
   DropdownToggle,
@@ -42,3 +43,11 @@ export default function BandsDropdown(props) {
     </Dropdown>
   );
 }
+
+BandsDropdown.propTypes = {
+  channel: PropTypes.string,
+  bandSelection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  setBandSelection: PropTypes.func,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  setSelectedPreset: PropTypes.func,
+};

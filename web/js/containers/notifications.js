@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import NotificationBlock from '../components/notifications/notification-block';
@@ -57,6 +56,7 @@ export default connect(
 )(Notifications);
 
 Notifications.propTypes = {
-  object: PropTypes.object,
+  object: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOutagesUnseen: PropTypes.number,
+  kioskModeEnabled: PropTypes.bool,
 };

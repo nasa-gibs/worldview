@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashOrderBy from 'lodash/orderBy';
@@ -31,7 +30,10 @@ function CategoryGrid(props) {
     gutter: 10,
   };
   categories.forEach((item) => {
-    item.sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
+    const itemPlacementInteger = item.placement === 'last' ? 3 : 2;
+    let { sortOrder } = item;
+    sortOrder = item.placement === 'first' ? 1 : itemPlacementInteger;
+    return sortOrder;
   });
   const orderedCategories = lodashOrderBy(
     categories,
@@ -84,12 +86,11 @@ function mapStateToProps(state) {
 }
 
 CategoryGrid.propTypes = {
-  categories: PropTypes.array,
+  categories: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
   showMeasurements: PropTypes.func,
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
-  width: PropTypes.number,
+  measurementConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 export default connect(

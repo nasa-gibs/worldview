@@ -1,6 +1,7 @@
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -23,6 +24,7 @@ export const dateReducerState = {
   interval: 3,
   delta: 1,
   customSelected: false,
+  autoSelected: false,
   customDelta: undefined,
   customInterval: undefined,
   timelineCustomModalOpen: false,
@@ -58,6 +60,15 @@ export function dateReducer(state = dateReducerState, action) {
         customInterval: interval,
         customDelta: delta,
         customSelected: !(!interval && !delta),
+        autoSelected: false,
+      };
+    }
+    case CHANGE_AUTO_INTERVAL: {
+      const { autoSelected } = action;
+      return {
+        ...state,
+        autoSelected,
+        customSelected: false,
       };
     }
     case CHANGE_INTERVAL:
@@ -66,6 +77,7 @@ export function dateReducer(state = dateReducerState, action) {
         interval: action.interval,
         delta: action.delta,
         customSelected: action.customSelected,
+        autoSelected: action.autoSelected,
       };
     case SELECT_DATE:
       return {

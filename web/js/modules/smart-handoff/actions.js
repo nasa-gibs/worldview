@@ -6,7 +6,6 @@ import {
 } from './constants';
 import { getCollectionsUrl, getConceptUrl } from './selectors';
 
-// eslint-disable-next-line import/prefer-default-export
 export function selectCollection(conceptId, layerId) {
   return {
     type: SELECT_COLLECTION,
@@ -74,7 +73,8 @@ export function validateLayersConceptIds (layers) {
       ));
 
       validatedLayers = layers.reduce((prev, curr) => {
-        const validIdsArray = (curr.conceptIds || []).filter(({ value }) => validatedConceptIds[value]);
+        const validIdsArray = (curr.conceptIds || [])
+          .filter(({ value }) => validatedConceptIds[value]);
         if (validIdsArray.length) prev.push(curr);
         return prev;
       }, []);
@@ -91,4 +91,3 @@ export function validateLayersConceptIds (layers) {
     }
   };
 }
-

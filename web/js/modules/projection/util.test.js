@@ -35,7 +35,7 @@ test('Default proj should be geographic [projection-default-geographic]', () => 
   expect(initialState.id).toBe(response.id);
 });
 test('mapLocationToProjState: Update proj:id key onload [projection-update-id]', () => {
-  const state = {
+  const stateMock = {
     config,
     proj: {
       selected: {},
@@ -44,7 +44,7 @@ test('mapLocationToProjState: Update proj:id key onload [projection-update-id]',
   const stateFromLocation = {
     proj,
   };
-  const newState = mapLocationToProjState({}, stateFromLocation, state);
+  const newState = mapLocationToProjState({}, stateFromLocation, stateMock);
   expect(newState.proj.id).toBe('some-test-projection');
 });
 

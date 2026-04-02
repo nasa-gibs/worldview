@@ -48,7 +48,8 @@ export function locationSearchReducer(state = locationSearchState, action) {
     case REMOVE_MARKER:
       return {
         ...state,
-        coordinates: state.coordinates.filter((coordinate) => action.coordinates.id !== coordinate.id),
+        coordinates: state.coordinates
+          .filter((coordinate) => action.coordinates.id !== coordinate.id),
       };
     case SET_SUGGESTION:
       return {

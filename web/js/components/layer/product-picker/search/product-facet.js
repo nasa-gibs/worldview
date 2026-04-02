@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Facet } from '@elastic/react-search-ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -83,11 +83,10 @@ function ProductFacet(props) {
 }
 
 ProductFacet.propTypes = {
-  config: PropTypes.object,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   collapsed: PropTypes.bool,
-  data: PropTypes.array,
+  data: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleCollapse: PropTypes.func,
 };
-
 
 export default ProductFacet;

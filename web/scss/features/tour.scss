@@ -651,6 +651,9 @@
     height: 40px;
     width: 40px;
     margin: auto;
+    padding: 0;
+    border: none;
+    background: none;
   }
 
   .step-counter {
@@ -672,6 +675,9 @@
     height: 40px;
     width: 40px;
     margin: auto;
+    padding: 0;
+    border: none;
+    background: none;
   }
 
   .step-previous:not([href]):not([tabindex]):hover,

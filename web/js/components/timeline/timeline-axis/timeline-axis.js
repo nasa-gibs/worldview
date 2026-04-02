@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import moment from 'moment';
@@ -21,8 +21,46 @@ import {
 } from '../date-util';
 
 class TimelineAxis extends Component {
+  /**
+  * @desc get DOM coverage line
+  * @param {Object} lineCoverageOptions
+  * @param {Number} transformX
+  * @returns {Object} DOM SVG object
+  */
+  static createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) {
+    return lineCoverageOptions.map(({
+      leftOffset,
+      visible, width,
+    }, i) => (
+      <g
+        key={`matchingCoverageLine-${crypto.randomUUID()}`}
+        className="axis-matching-layer-coverage-line"
+        transform={`translate(${-transformX})`}
+        clipPath="url(#matchingCoverage)"
+      >
+        <rect
+          style={{
+            left: leftOffset,
+            visibility: visible ? 'visible' : 'hidden',
+            margin: '0 0 6px 0',
+          }}
+          rx={0}
+          ry={0}
+          width={width}
+          height={10}
+          transform={`translate(${transformX + leftOffset})`}
+          fill="rgba(0, 119, 212, 0.5)"
+          stroke="rgba(0, 69, 123, 0.8)"
+          strokeWidth={3}
+        />
+      </g>
+    ));
+  }
+
   constructor(props) {
     super(props);
+
+    this.nodeRef = createRef();
     this.state = {
       init: true,
       draggerWidth: 49,
@@ -82,22 +120,22 @@ class TimelineAxis extends Component {
       activeLayers,
     } = this.props;
 
-    const checkForPropsUpdates = nextProps.axisWidth === axisWidth
-      && nextProps.position === position
-      && nextProps.isAnimatingToEvent === isAnimatingToEvent
-      && nextProps.dateA === dateA
-      && nextProps.dateB === dateB
-      && nextProps.draggerSelected === draggerSelected
-      && nextProps.timeScale === timeScale
-      && nextProps.isCompareModeActive === isCompareModeActive
-      && nextProps.hasFutureLayers === hasFutureLayers
-      && nextProps.hasSubdailyLayers === hasSubdailyLayers
-      && nextProps.timelineEndDateLimit === timelineEndDateLimit
-      && nextProps.transformX === transformX
-      && nextProps.frontDate === frontDate
-      && nextProps.backDate === backDate
-      && nextProps.activeLayers.length === activeLayers.length
-      && lodashIsEqual(nextProps.matchingTimelineCoverage, matchingTimelineCoverage);
+    const checkForPropsUpdates = nextProps.axisWidth === axisWidth &&
+      nextProps.position === position &&
+      nextProps.isAnimatingToEvent === isAnimatingToEvent &&
+      nextProps.dateA === dateA &&
+      nextProps.dateB === dateB &&
+      nextProps.draggerSelected === draggerSelected &&
+      nextProps.timeScale === timeScale &&
+      nextProps.isCompareModeActive === isCompareModeActive &&
+      nextProps.hasFutureLayers === hasFutureLayers &&
+      nextProps.hasSubdailyLayers === hasSubdailyLayers &&
+      nextProps.timelineEndDateLimit === timelineEndDateLimit &&
+      nextProps.transformX === transformX &&
+      nextProps.frontDate === frontDate &&
+      nextProps.backDate === backDate &&
+      nextProps.activeLayers.length === activeLayers.length &&
+      lodashIsEqual(nextProps.matchingTimelineCoverage, matchingTimelineCoverage);
 
     const {
       dragSentinelChangeNumber,
@@ -111,15 +149,15 @@ class TimelineAxis extends Component {
       wheelZoom,
     } = this.state;
 
-    const checkForStateUpdates = dragSentinelChangeNumber === nextState.dragSentinelChangeNumber
-        && dragSentinelCount === nextState.dragSentinelCount
-        && gridNumber === nextState.gridNumber
-        && gridWidth === nextState.gridWidth
-        && leftBound === nextState.leftBound
-        && midPoint === nextState.midPoint
-        && numberOfVisibleTiles === nextState.numberOfVisibleTiles
-        && rightBound === nextState.rightBound
-        && wheelZoom === nextState.wheelZoom;
+    const checkForStateUpdates = dragSentinelChangeNumber === nextState.dragSentinelChangeNumber &&
+        dragSentinelCount === nextState.dragSentinelCount &&
+        gridNumber === nextState.gridNumber &&
+        gridWidth === nextState.gridWidth &&
+        leftBound === nextState.leftBound &&
+        midPoint === nextState.midPoint &&
+        numberOfVisibleTiles === nextState.numberOfVisibleTiles &&
+        rightBound === nextState.rightBound &&
+        wheelZoom === nextState.wheelZoom;
     if (checkForPropsUpdates && checkForStateUpdates) {
       return false;
     }
@@ -150,14 +188,21 @@ class TimelineAxis extends Component {
       backDate,
     } = this.props;
 
-    if (activeLayers.length !== prevProps.activeLayers.length || frontDate !== prevProps.frontDate || backDate !== prevProps.backDate) {
+    if (activeLayers.length !== prevProps.activeLayers.length ||
+      frontDate !== prevProps.frontDate || backDate !== prevProps.backDate) {
       const backDateTime = new Date(backDate).getTime();
       const startDateTime = new Date(frontDate).getTime();
       const draggerTimeStateDate = new Date(draggerTimeState);
       const draggerTimeStateTime = draggerTimeStateDate.getTime();
       // Make sure that the dragger is within the new time range
-      const maxBackDate = draggerTimeStateTime > backDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() + 1), draggerTimeStateDate.toISOString()) : backDate;
-      const minFrontDate = draggerTimeStateTime < startDateTime ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() - 1), draggerTimeStateDate.toISOString()) : frontDate;
+      const maxBackDate = draggerTimeStateTime > backDateTime
+        ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() + 1),
+        draggerTimeStateDate.toISOString())
+        : backDate;
+      const minFrontDate = draggerTimeStateTime < startDateTime
+        ? (draggerTimeStateDate.setDate(draggerTimeStateDate.getDate() - 1),
+        draggerTimeStateDate.toISOString())
+        : frontDate;
       activeLayers.forEach((layer) => this.addTimeRanges(layer, proj, [minFrontDate, maxBackDate]));
     }
 
@@ -173,7 +218,7 @@ class TimelineAxis extends Component {
         leftOffset = 0.8;
       }
       // add updateTimeScale flag to indicate showHover should not fire immediately
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({
         updatedTimeScale: true,
       });
@@ -194,11 +239,13 @@ class TimelineAxis extends Component {
     const hasFutureLayersUpdated = prevProps.hasFutureLayers !== hasFutureLayers;
     const isTimelineInteracting = isDraggerDragging || isTimelineDragging;
     const didTimelineEndDateLimitUpdate = timelineEndDateLimit !== prevProps.timelineEndDateLimit;
-    if (didTimelineEndDateLimitUpdate && (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
+    const draggerGreaterDate = new Date(draggerDate) > new Date(timelineEndDateLimit)
+      ? timelineEndDateLimit
+      : draggerDate;
+    if (didTimelineEndDateLimitUpdate &&
+      (!isAnimationPlaying || hasFutureLayersUpdated) && !isTimelineInteracting) {
       const updatedDraggerDate = hasFutureLayersUpdated
-        ? new Date(draggerDate) > new Date(timelineEndDateLimit)
-          ? timelineEndDateLimit
-          : draggerDate
+        ? draggerGreaterDate
         : draggerDate;
       onDateChange(new Date(updatedDraggerDate));
       this.updateScale(updatedDraggerDate, timeScale, 0.5);
@@ -242,7 +289,8 @@ class TimelineAxis extends Component {
   }
 
   /**
-  * @desc main function to update axis scale, time range, grids tiles/text, dragger A/B positions, animation start/end draggers
+  * @desc main function to update axis scale, time range, grids tiles/text,
+  * dragger A/B positions, animation start/end draggers
   * @param {String} inputDate
   * @param {String} updatedTimeScale
   * @param {Number} leftOffsetFixedCoefficient
@@ -250,7 +298,13 @@ class TimelineAxis extends Component {
   * @param {String} previousTimeScale - limited use for hover timeScale change
   * @returns {void}
   */
-  updateScale = (inputDate, timeScale, leftOffsetFixedCoefficient, hoverChange, previousTimeScale) => {
+  updateScale = (
+    inputDate,
+    timeScale,
+    leftOffsetFixedCoefficient,
+    hoverChange,
+    previousTimeScale,
+  ) => {
     const {
       dateA,
       dateB,
@@ -271,11 +325,12 @@ class TimelineAxis extends Component {
     const options = timeScaleOptions[timeScale].timeAxis;
     const { gridWidth } = options;
     const timelineAxisWidth = axisWidth;
+    const nonZeroLeftOffset = leftOffset === 0
+      ? timelineAxisWidth * 0.8
+      : leftOffset;
     const hoverLeftOffset = leftOffsetFixedCoefficient
       ? timelineAxisWidth * leftOffsetFixedCoefficient
-      : leftOffset === 0
-        ? timelineAxisWidth * 0.8
-        : leftOffset;
+      : nonZeroLeftOffset;
 
     // visible tiles based on timeline axis width (screen/browser size dependent)
     const numberOfVisibleTiles = Number((timelineAxisWidth / gridWidth).toFixed(8));
@@ -288,14 +343,16 @@ class TimelineAxis extends Component {
       const startLimitYear = new Date(timelineStartDateLimit).getUTCFullYear();
       gridNumber = endLimitYear - startLimitYear;
     } else if (timeScale === 'month') {
-      const endLimitMonthAdded = moment.utc(timelineEndDateLimit).startOf('month').add(1, 'month');
+      const endLimitMonthAdded = moment.utc(timelineEndDateLimit).startOf('month')
+        .add(1, 'month');
       const monthTotal = moment.utc(endLimitMonthAdded).diff(timelineStartDateLimit, 'months');
       gridNumber = monthTotal;
     }
 
-    // this is the middle on the axis based on number of tiles determined from width of axis and grid width
-    // this is used to determine position and also to "reset" position after an axis drag has stopped
-    // eslint-disable-next-line no-mixed-operators
+    // this is the middle on the axis based on number of tiles determined from width of axis and
+    // grid width this is used to determine position and also to "reset" position after an axis
+    // drag has stopped
+
     const midPoint = numberOfVisibleTiles / 2 * gridWidth - gridWidth * gridNumber / 2;
 
     // horizontal scroll will disable this, so use frontDate in that case
@@ -326,20 +383,22 @@ class TimelineAxis extends Component {
     // conditionally determine dragger times
     let draggerTime;
     let draggerTimeB;
+    const setDraggerDateACompareMode = isCompareModeActive
+      ? dateA
+      : inputDate || draggerTimeState;
+    const setDraggerDateBCompareMode = isCompareModeActive
+      ? dateB
+      : inputDate || draggerTimeStateB;
     if (draggerSelected === 'selected') {
       draggerTime = hoverChange
         ? draggerTimeState
-        : isCompareModeActive
-          ? dateA
-          : inputDate || draggerTimeState;
+        : setDraggerDateACompareMode;
       draggerTimeB = isCompareModeActive ? dateB : draggerTimeStateB;
     } else {
       draggerTime = isCompareModeActive ? dateA : draggerTimeState;
       draggerTimeB = hoverChange
         ? draggerTimeStateB
-        : isCompareModeActive
-          ? dateB
-          : inputDate || draggerTimeStateB;
+        : setDraggerDateBCompareMode;
     }
 
     // value of hover time, hover time time unit zeroed, hover time next unit time unit zeroed
@@ -369,9 +428,12 @@ class TimelineAxis extends Component {
 
       if (greaterToLesserTimescale) {
         // determine how far hoverTime date is from end to compensate for bounds correction
-        const hoverTimeToEndDateLimit = moment.utc(timelineEndDateLimit).diff(hoverTimeDate, timeScale);
+        const hoverTimeToEndDateLimit = moment
+          .utc(timelineEndDateLimit)
+          .diff(hoverTimeDate, timeScale);
         if (hoverTimeToEndDateLimit < offSetHalved) {
-          gridsToSubtract = gridsToSubtract + (offSetHalved - hoverTimeToEndDateLimit) - offSetGrids;
+          gridsToSubtract = gridsToSubtract +
+          (offSetHalved - hoverTimeToEndDateLimit) - offSetGrids;
           gridsToAdd = gridsToAdd - (offSetHalved - hoverTimeToEndDateLimit) + offSetGrids;
         }
       }
@@ -407,8 +469,10 @@ class TimelineAxis extends Component {
     let animationStartDraggerLocation = 0;
     let animationEndDraggerLocation = 0;
     if (animStartLocationDate) {
-      animationStartDraggerLocation = moment.utc(animStartLocationDate).diff(frontDate, timeScale, true) * gridWidth;
-      animationEndDraggerLocation = moment.utc(animEndLocationDate).diff(frontDate, timeScale, true) * gridWidth;
+      animationStartDraggerLocation = moment.utc(animStartLocationDate)
+        .diff(frontDate, timeScale, true) * gridWidth;
+      animationEndDraggerLocation = moment.utc(animEndLocationDate)
+        .diff(frontDate, timeScale, true) * gridWidth;
     }
 
     // get axis position
@@ -416,12 +480,16 @@ class TimelineAxis extends Component {
     if (timeScale === 'year') {
       position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2);
     } else if (timeScale === 'month') {
-      const pixelsToAddToDraggerNew = Math.abs(frontDate.diff(hoverTimeDate, timeScale, true) * gridWidth);
+      const pixelsToAddToDraggerNew = Math.abs(
+        frontDate.diff(hoverTimeDate, timeScale, true) * gridWidth,
+      );
       const positionModified = pixelsToAddToDraggerNew - pixelsToAdd + 2;
-      position = timelineAxisWidth / 2 + (hoverLeftOffset - timelineAxisWidth / 2) - positionModified;
+      position = timelineAxisWidth / 2 +
+      (hoverLeftOffset - timelineAxisWidth / 2) - positionModified;
     } else {
       // - (offSetGridsDiff * gridWidth) to compensate off center zooming repositioning
-      position = midPoint - (timelineAxisWidth / 2 - hoverLeftOffset).toFixed(10) - offSetGridsDiff * gridWidth;
+      position = midPoint - (timelineAxisWidth / 2 -
+      hoverLeftOffset).toFixed(10) - offSetGridsDiff * gridWidth;
       if (gridNumber % 2 !== 0) { // handle odd number gridNumber grid offset
         position += gridWidth / 2;
       }
@@ -438,7 +506,8 @@ class TimelineAxis extends Component {
       rightBound = timelineAxisWidth * 0.25 + pixelsToAdd + 2;
     }
 
-    // handle position being set beyond bounds due to edge dates not precisely scaling to other timescales
+    // handle position being set beyond bounds due to edge
+    // dates not precisely scaling to other timescales
     let boundsDiff = 0;
     if (rightBound < position) {
       const rightBoundDiff = position - rightBound;
@@ -515,7 +584,8 @@ class TimelineAxis extends Component {
         const endLimitYear = new Date(timelineEndDateLimit).getUTCFullYear() + 1;
         endDate = dayZeroed.clone().year(endLimitYear);
       } else if (timeScale === 'month') {
-        endDate = moment.utc(timelineEndDateLimit).startOf('month').add(1, 'month');
+        endDate = moment.utc(timelineEndDateLimit).startOf('month')
+          .add(1, 'month');
       }
     } else {
       if (timeScale === 'day') {
@@ -644,7 +714,8 @@ class TimelineAxis extends Component {
 
   /**
   * @desc helper function used in updateTimeRangeFromDrag
-  * @desc check dragger visibility and calculate newDraggerPosition if dragger initially false and now visible
+  * @desc check dragger visibility and calculate newDraggerPosition
+  * if dragger initially false and now visible
   * @param {String} draggerTime
   * @param {Boolean} draggerVisible
   * @param {Number} newDraggerPosition
@@ -667,7 +738,8 @@ class TimelineAxis extends Component {
     if (isBetween) {
       if (draggerVisible === false) {
         const frontDateObj = moment.utc(frontDate);
-        updatedDraggerPosition = Math.abs(frontDateObj.diff(draggerTime, timeScale, true) * gridWidth) + position + transform - 50;
+        updatedDraggerPosition = Math.abs(frontDateObj
+          .diff(draggerTime, timeScale, true) * gridWidth) + position + transform - 50;
       }
       return {
         newDraggerPosition: updatedDraggerPosition,
@@ -679,7 +751,6 @@ class TimelineAxis extends Component {
       isVisible: false,
     };
   };
-
 
   /**
    * @desc check if dragger within axis range or need scale update
@@ -758,8 +829,8 @@ class TimelineAxis extends Component {
     // check dragger is within axis position range
     const leftEdgeOfVisibleAxis = -26;
     const rightEdgeOfVisibleAxis = axisWidth - 80;
-    const isDraggerPositionWithinAxis = selectedDraggerPosition <= rightEdgeOfVisibleAxis
-      && selectedDraggerPosition >= leftEdgeOfVisibleAxis;
+    const isDraggerPositionWithinAxis = selectedDraggerPosition <= rightEdgeOfVisibleAxis &&
+      selectedDraggerPosition >= leftEdgeOfVisibleAxis;
     let newDraggerWithinRangeCheck = isDraggerPositionWithinAxis && isDateWithinRange;
     if (new Date(backDate) > appNow && selectedDraggerTimeState === getISODateFormatted(appNow)) {
       newDraggerWithinRangeCheck = false;
@@ -963,10 +1034,12 @@ class TimelineAxis extends Component {
       let otherDraggerVisible;
       if (draggerSelected === 'selected') {
         // check Dragger B visibility and then update Dragger A
-        otherDraggerVisible = isCompareModeActive && getIsBetween(draggerTimeStateB, frontDate, backDate);
+        otherDraggerVisible = isCompareModeActive &&
+        getIsBetween(draggerTimeStateB, frontDate, backDate);
       } else {
         // check Dragger A visibility and then update Dragger B
-        otherDraggerVisible = isCompareModeActive && getIsBetween(draggerTimeState, frontDate, backDate);
+        otherDraggerVisible = isCompareModeActive &&
+        getIsBetween(draggerTimeState, frontDate, backDate);
       }
       updateDraggerDatePosition(hoverTime, draggerSelected, null, true, otherDraggerVisible, false);
     }
@@ -1017,12 +1090,14 @@ class TimelineAxis extends Component {
       // determine approximate new dragger date and coefficient based on grid width
       const gridWidthCoefficient = positionRelativeToFront / gridWidth;
       const gridWidthCoefficientRemainder = gridWidthCoefficient - Math.floor(gridWidthCoefficient);
-      const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoefficient), timeScale);
+      const draggerDateAdded = moment.utc(frontDate)
+        .add(Math.floor(gridWidthCoefficient), timeScale);
 
       // get ms time value
       const draggerDateAddedValue = new Date(draggerDateAdded).getTime();
       let newDraggerTime;
-      if (!diffZeroValues) { // unknown scaleMs due to varying number of days per month and year (leap years)
+      // unknown scaleMs due to varying number of days per month and year (leap years)
+      if (!diffZeroValues) {
         let daysCount;
         if (timeScale === 'year') {
           daysCount = draggerDateAdded.isLeapYear() ? 366 : 365;
@@ -1040,12 +1115,21 @@ class TimelineAxis extends Component {
       let otherDraggerVisible;
       if (draggerSelected === 'selected') {
         // check Dragger B visibility and then update Dragger A
-        otherDraggerVisible = isCompareModeActive && getIsBetween(draggerTimeStateB, frontDate, backDate);
+        otherDraggerVisible = isCompareModeActive &&
+        getIsBetween(draggerTimeStateB, frontDate, backDate);
       } else {
         // check Dragger A visibility and then update Dragger B
-        otherDraggerVisible = isCompareModeActive && getIsBetween(draggerTimeState, frontDate, backDate);
+        otherDraggerVisible = isCompareModeActive &&
+        getIsBetween(draggerTimeState, frontDate, backDate);
       }
-      updateDraggerDatePosition(newDraggerTime, draggerSelected, null, true, otherDraggerVisible, false);
+      updateDraggerDatePosition(
+        newDraggerTime,
+        draggerSelected,
+        null,
+        true,
+        otherDraggerVisible,
+        false,
+      );
     }
   };
 
@@ -1064,7 +1148,8 @@ class TimelineAxis extends Component {
   };
 
   /**
-  * @desc drag axis - will update date range if dragged into past/future past dragSentinelChangeNumber
+  * @desc drag axis - will update date range if dragged
+  * into past/future past dragSentinelChangeNumber
   * @param {Event} mouse event
   * @param {Object} draggable delta object
   * @returns {void}
@@ -1134,7 +1219,8 @@ class TimelineAxis extends Component {
           overDrag,
         );
 
-        const newDragSentinelCount = dragSentinelCount + deltaX - dragSentinelChangeNumber - overDragGrids * gridWidth;
+        const newDragSentinelCount = dragSentinelCount + deltaX - dragSentinelChangeNumber -
+        overDragGrids * gridWidth;
         const frontDate = newCurrentTimeRange[0].rawDate;
         const backDate = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
         const updatePositioningArguments = {
@@ -1156,7 +1242,8 @@ class TimelineAxis extends Component {
         });
         updatePositioning(updatePositioningArguments);
       } else {
-        // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
+        // reset dragSentinelCount on direction change to
+        // remaining distance to dragSentinelChangeNumber
         const newDragSentinelCount = dragSentinelCount < 0
           ? dragSentinelChangeNumber + dragSentinelCount + deltaX
           : dragSentinelCount + deltaX;
@@ -1198,7 +1285,8 @@ class TimelineAxis extends Component {
           overDrag,
         );
 
-        const newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber + overDragGrids * gridWidth;
+        const newDragSentinelCount = dragSentinelCount + deltaX + dragSentinelChangeNumber +
+        overDragGrids * gridWidth;
         const frontDate = newCurrentTimeRange[0].rawDate;
         const backDate = newCurrentTimeRange[newCurrentTimeRange.length - 1].rawDate;
         const updatePositioningArguments = {
@@ -1220,7 +1308,8 @@ class TimelineAxis extends Component {
         });
         updatePositioning(updatePositioningArguments);
       } else {
-        // reset dragSentinelCount on direction change to remaining distance to dragSentinelChangeNumber
+        // reset dragSentinelCount on direction change to
+        // remaining distance to dragSentinelChangeNumber
         const newDragSentinelCount = dragSentinelCount > 0
           ? -dragSentinelChangeNumber + dragSentinelCount + deltaX
           : dragSentinelCount + deltaX;
@@ -1301,7 +1390,8 @@ class TimelineAxis extends Component {
       const diffZeroValues = options.scaleMs;
       const newHoverTimeValue = new Date(frontDate).getTime();
       if (!diffZeroValues) {
-        // calculate based on frontDate due to varying number of days per month and per year (leap years)
+        // calculate based on frontDate due to varying number of
+        // days per month and per year (leap years)
         const hoverLinePositionRelativeToFrontDate = leftOffset - midPoint - newTransformX;
         const gridWidthCoefficient = hoverLinePositionRelativeToFrontDate / gridWidth;
         const hoverTimeAdded = moment.utc(frontDate).add(gridWidthCoefficient, timeScale);
@@ -1311,7 +1401,8 @@ class TimelineAxis extends Component {
         } else if (timeScale === 'month') {
           daysCount = hoverTimeAdded.daysInMonth();
         }
-        const gridWidthCoefficientRemainder = gridWidthCoefficient - Math.floor(gridWidthCoefficient);
+        const gridWidthCoefficientRemainder = gridWidthCoefficient -
+        Math.floor(gridWidthCoefficient);
         const remainderMilliseconds = daysCount * 86400000 * gridWidthCoefficientRemainder;
         hoverTimeDate = getISODateFormatted(hoverTimeAdded.add(remainderMilliseconds));
       } else {
@@ -1328,12 +1419,12 @@ class TimelineAxis extends Component {
     const timelineStartDateLimitDateObj = new Date(timelineStartDateLimit);
     const timelineEndDateLimitDateObj = new Date(timelineEndDateLimit);
     const hoverTimeDateObj = new Date(hoverTimeDate);
-
+    const constrainHoverTimeDateObj = hoverTimeDateObj < timelineStartDateLimitDateObj
+      ? timelineStartDateLimit
+      : hoverTimeDate;
     hoverTimeDate = hoverTimeDateObj > timelineEndDateLimitDateObj
       ? timelineEndDateLimit
-      : hoverTimeDateObj < timelineStartDateLimitDateObj
-        ? timelineStartDateLimit
-        : hoverTimeDate;
+      : constrainHoverTimeDateObj;
 
     // parent update positioning and hover time
     updatePositioningOnAxisStopDrag(updatePositioningArguments, hoverTimeDate);
@@ -1342,6 +1433,7 @@ class TimelineAxis extends Component {
   addTimeRanges = (def, proj, dateRange) => {
     const {
       addGranuleDateRanges,
+      describeDomainsUrl,
     } = this.props;
     const {
       cmrAvailability,
@@ -1366,12 +1458,13 @@ class TimelineAxis extends Component {
           worker.terminate(); // terminate the worker
           return addGranuleDateRanges(def, event.data); // dispatch the action
         }
-        // DOMParser is not available in workers so we parse the xml on the main thread before sending it back to the worker
+        // DOMParser is not available in workers so we parse the xml
+        // on the main thread before sending it back to the worker
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(event.data, 'text/xml');
         const domains = xmlDoc.querySelector('Domain')?.textContent;
         if (!domains) worker.terminate();
-        worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
+        return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000] });
       };
       worker.onerror = () => worker.terminate();
       let startDate = new Date(def.startDate);
@@ -1384,6 +1477,7 @@ class TimelineAxis extends Component {
         endDate,
         id,
         proj: proj.crs,
+        baseUrl: describeDomainsUrl,
       };
       worker.postMessage({ operation: 'requestDescribeDomains', args: [params] });
     }
@@ -1449,37 +1543,6 @@ class TimelineAxis extends Component {
     });
   };
 
-  /**
-  * @desc get DOM coverage line
-  * @param {Object} lineCoverageOptions
-  * @param {Number} transformX
-  * @returns {Object} DOM SVG object
-  */
-  createMatchingCoverageLineDOMEl = (lineCoverageOptions, transformX) => lineCoverageOptions.map(({ leftOffset, visible, width }, i) => (
-    <g
-      key={`matchingCoverageLine-${crypto.randomUUID()}`}
-      className="axis-matching-layer-coverage-line"
-      transform={`translate(${-transformX})`}
-      clipPath="url(#matchingCoverage)"
-    >
-      <rect
-        style={{
-          left: leftOffset,
-          visibility: visible ? 'visible' : 'hidden',
-          margin: '0 0 6px 0',
-        }}
-        rx={0}
-        ry={0}
-        width={width}
-        height={10}
-        transform={`translate(${transformX + leftOffset})`}
-        fill="rgba(0, 119, 212, 0.5)"
-        stroke="rgba(0, 69, 123, 0.8)"
-        strokeWidth={3}
-      />
-    </g>
-  ));
-
   render() {
     const {
       axisWidth,
@@ -1507,6 +1570,8 @@ class TimelineAxis extends Component {
 
     return (
       <div
+        role="toolbar"
+        tabIndex={0}
         className="timeline-axis-container"
         style={{ width: axisWidthStr }}
         onMouseDown={this.handleMouseDown}
@@ -1517,8 +1582,8 @@ class TimelineAxis extends Component {
         onTouchStart={this.handleMouseDown}
         onTouchEnd={this.setLineTimeTouch}
       >
-        {currentTimeRange
-            && (
+        {currentTimeRange &&
+            (
               <svg
                 className="timeline-axis-svg"
                 id="timeline-footer-svg"
@@ -1569,11 +1634,12 @@ class TimelineAxis extends Component {
                     <line stroke="#797979" strokeWidth="30px" y1="12" />
                   </pattern>
                 </defs>
-                {shouldDisplayMatchingCoverageLine
-                  && this.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
+                {shouldDisplayMatchingCoverageLine &&
+                  TimelineAxis.createMatchingCoverageLineDOMEl(lineCoverageOptions, transformX) }
                 <Draggable
                   axis="x"
                   handle=".axis-grid-container"
+                  nodeRef={this.nodeRef}
                   position={{ x: position, y: 0 }}
                   onDrag={this.handleDrag}
                   onStart={this.handleStartDrag}
@@ -1582,7 +1648,7 @@ class TimelineAxis extends Component {
                     left: leftBound, top: 0, bottom: 0, right: rightBound,
                   }}
                 >
-                  <g clipPath="url(#timelineBoundary)">
+                  <g ref={this.nodeRef} clipPath="url(#timelineBoundary)">
                     <GridRange
                       showHover={showHover}
                       timeScale={timeScale}
@@ -1600,13 +1666,13 @@ class TimelineAxis extends Component {
 }
 
 TimelineAxis.propTypes = {
-  activeLayers: PropTypes.array,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   addGranuleDateRanges: PropTypes.func,
   animationEndLocation: PropTypes.number,
   animationStartLocation: PropTypes.number,
-  animEndLocationDate: PropTypes.object,
-  animStartLocationDate: PropTypes.object,
-  appNow: PropTypes.object,
+  animEndLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  animStartLocationDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   dateA: PropTypes.string,
@@ -1631,10 +1697,11 @@ TimelineAxis.propTypes = {
   isTimelineDragging: PropTypes.bool,
   isTourActive: PropTypes.bool,
   leftOffset: PropTypes.number,
-  matchingTimelineCoverage: PropTypes.array,
+  matchingTimelineCoverage: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onDateChange: PropTypes.func,
   parentOffset: PropTypes.number,
   position: PropTypes.number,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showHover: PropTypes.func,
   showHoverOff: PropTypes.func,
   showHoverOn: PropTypes.func,
@@ -1647,6 +1714,7 @@ TimelineAxis.propTypes = {
   updatePositioningOnAxisStopDrag: PropTypes.func,
   updatePositioningOnSimpleDrag: PropTypes.func,
   updateTimelineMoveAndDrag: PropTypes.func,
+  describeDomainsUrl: PropTypes.string,
 };
 
 export default TimelineAxis;

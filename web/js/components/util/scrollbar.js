@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SimpleBarReact from 'simplebar-react';
 import { debounce } from 'lodash';
@@ -55,5 +55,5 @@ export default function Scrollbars(props) {
 Scrollbars.propTypes = {
   children: PropTypes.node,
   className: PropTypes.string,
-  style: PropTypes.object,
+  style: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

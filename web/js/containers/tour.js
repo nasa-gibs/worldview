@@ -39,10 +39,11 @@ import {
 } from '../modules/tour/actions';
 import { resetProductPickerState as resetProductPickerStateAction } from '../modules/product-picker/actions';
 import { changeTab as changeTabAction } from '../modules/sidebar/actions';
+import { toggleOverlayGroups as toggleOverlayGroupsAction } from '../modules/layers/actions';
 import ErrorBoundary from './error-boundary';
 import history from '../main';
 import util from '../util/util';
-import { promiseImageryForTour } from '../modules/map/util';
+import { promiseImageryForTour as promiseImageryForTourUtil } from '../modules/map/util';
 
 const { HIDE_TOUR } = safeLocalStorage.keys;
 
@@ -64,6 +65,10 @@ const prepareLayersList = function(layersString, config) {
 };
 
 class Tour extends React.Component {
+  static getKioskParam(isKioskModeActive) {
+    return isKioskModeActive ? '&kiosk=true' : '';
+  }
+
   constructor(props) {
     super(props);
     const { storyOrder, stories, currentStoryId } = props;
@@ -97,9 +102,15 @@ class Tour extends React.Component {
     this.hideTour = this.hideTour.bind(this);
     this.selectTour = this.selectTour.bind(this);
     this.resetTour = this.resetTour.bind(this);
+
+    this.groupOverlaysBeforeTour = null;
   }
 
   componentDidMount() {
+    if (this.props.isActive && this.groupOverlaysBeforeTour === null) {
+      this.groupOverlaysBeforeTour = safeLocalStorage.getItem(safeLocalStorage.keys.GROUP_OVERLAYS) !== 'disabled';
+    }
+
     const {
       currentStory, currentStoryIndex, currentStoryId, modalStart, modalInProgress, modalComplete,
     } = this.state;
@@ -110,6 +121,37 @@ class Tour extends React.Component {
 
     if (!modalStart && !modalInProgress && !modalComplete) {
       this.setState({ modalStart: true });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { isActive } = this.props;
+
+    if (!prevProps.isActive && isActive) {
+      // Snapshot the user's preference at tour start so we can restore it later.
+      // Use local storage so deep-linked tours (with `lg=true`) still restore correctly.
+      this.groupOverlaysBeforeTour = safeLocalStorage.getItem(safeLocalStorage.keys.GROUP_OVERLAYS) !== 'disabled';
+    }
+
+    if (prevProps.isActive && !isActive) {
+      this.restoreGroupOverlaysPreference();
+    }
+  }
+
+  componentWillUnmount() {
+    if (this.props.isActive) {
+      this.restoreGroupOverlaysPreference();
+    }
+  }
+
+  restoreGroupOverlaysPreference() {
+    const { groupOverlays, toggleOverlayGroups } = this.props;
+    const previousPreference = this.groupOverlaysBeforeTour;
+    this.groupOverlaysBeforeTour = null;
+
+    if (previousPreference === null || previousPreference === undefined) return;
+    if (previousPreference !== groupOverlays) {
+      toggleOverlayGroups();
     }
   }
 
@@ -150,10 +192,11 @@ class Tour extends React.Component {
 
   selectTour(e, currentStory, currentStoryIndex, currentStoryId) {
     const {
-      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
+      config, renderedPalettes, selectTour, processStepLink, isKioskModeActive,
+      isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
     if (e) e.preventDefault();
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
     this.setState({
       currentStep: 1,
       currentStoryIndex,
@@ -262,9 +305,10 @@ class Tour extends React.Component {
       currentStoryId,
     } = this.state;
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
+      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab,
+      changeTab, isEmbedModeActive, preProcessStepLink, promiseImageryForTour,
     } = this.props;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
 
     if (activeTab === 'events') changeTab('layers');
 
@@ -297,18 +341,15 @@ class Tour extends React.Component {
     }
   }
 
-  getKioskParam(isKioskModeActive) {
-    return isKioskModeActive ? '&kiosk=true' : '';
-  }
-
   decreaseStep(e) {
     const {
-      config, renderedPalettes, processStepLink, isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
+      config, renderedPalettes, processStepLink,
+      isKioskModeActive, activeTab, changeTab, isEmbedModeActive,
     } = this.props;
     const {
       currentStep, currentStory, currentStoryId,
     } = this.state;
-    const kioskParam = this.getKioskParam(isKioskModeActive);
+    const kioskParam = Tour.getKioskParam(isKioskModeActive);
 
     if (activeTab === 'events') changeTab('layers');
 
@@ -480,6 +521,10 @@ class Tour extends React.Component {
       return null;
     }
 
+    const renderModalInProgress = modalInProgress
+      ? this.renderTourInProgress()
+      : this.renderTourComplete();
+
     return (
       <ErrorBoundary>
         <div>
@@ -495,9 +540,7 @@ class Tour extends React.Component {
           )}
           {modalStart
             ? this.renderTourStart()
-            : modalInProgress
-              ? this.renderTourInProgress()
-              : this.renderTourComplete()}
+            : renderModalInProgress}
         </div>
       </ErrorBoundary>
     );
@@ -505,8 +548,8 @@ class Tour extends React.Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  processStepLink: (currentStoryId, currentStep, totalSteps, search, config, rendered) => {
-    search = search.split('/?').pop();
+  processStepLink: (currentStoryId, currentStep, totalSteps, s, config, rendered) => {
+    const search = s.split('/?').pop();
     const location = update(history.location, {
       search: { $set: search },
     });
@@ -528,16 +571,15 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch(clearCustoms());
     }
     if (
-      ((parameters.l && hasCustomTypePalette(parameters.l))
-      || (parameters.l1 && hasCustomTypePalette(parameters.l1)))
-      && !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
+      ((parameters.l && hasCustomTypePalette(parameters.l)) ||
+      (parameters.l1 && hasCustomTypePalette(parameters.l1))) &&
+      !Object.keys(rendered).includes('OPERA_Dynamic_Surface_Water_Extent')
     ) {
       layers = layersParse12(parameters.l, config);
       if (parameters.l1 && hasCustomTypePalette(parameters.l1)) {
         layers.push(...layersParse12(parameters.l1, config));
       }
       layers = uniqBy(layers, 'id');
-
 
       preloadPalettes(layers, rendered, true).then((obj) => {
         dispatch({
@@ -550,8 +592,8 @@ const mapDispatchToProps = (dispatch) => ({
       dispatch({ type: LOCATION_POP_ACTION, payload: location });
     }
   },
-  preProcessStepLink: async (search, config, promiseImageryForTour) => {
-    search = search.split('/?').pop();
+  preProcessStepLink: async (s, config, promiseImageryForTour) => {
+    const search = s.split('/?').pop();
     const parameters = util.fromQueryString(search);
     let layersA = [];
     let layersB = [];
@@ -592,6 +634,9 @@ const mapDispatchToProps = (dispatch) => ({
   changeTab: (str) => {
     dispatch(changeTabAction(str));
   },
+  toggleOverlayGroups: () => {
+    dispatch(toggleOverlayGroupsAction());
+  },
 });
 
 const mapStateToProps = (state) => {
@@ -616,7 +661,12 @@ const mapStateToProps = (state) => {
     screenHeight,
     renderedPalettes: palettes.rendered,
     activeTab: sidebar.activeTab,
-    promiseImageryForTour: (layers, dateString, activeString) => promiseImageryForTour(state, layers, dateString, activeString),
+    groupOverlays: state.layers?.[compare.activeString]?.groupOverlays,
+    promiseImageryForTour: (
+      layers,
+      dateString,
+      activeString,
+    ) => promiseImageryForTourUtil(state, layers, dateString, activeString),
   };
 };
 
@@ -628,20 +678,23 @@ export default connect(
 Tour.propTypes = {
   activeTab: PropTypes.string,
   changeTab: PropTypes.func,
-  config: PropTypes.object.isRequired,
-  map: PropTypes.object,
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectTour: PropTypes.func.isRequired,
-  stories: PropTypes.object.isRequired,
-  storyOrder: PropTypes.array.isRequired,
+  stories: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  storyOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   currentStoryId: PropTypes.string,
   endTour: PropTypes.func,
   isActive: PropTypes.bool,
+  isEmbedModeActive: PropTypes.bool,
   isKioskModeActive: PropTypes.bool,
   processStepLink: PropTypes.func,
+  promiseImageryForTour: PropTypes.func,
   preProcessStepLink: PropTypes.func,
-  renderedPalettes: PropTypes.object,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resetProductPicker: PropTypes.func,
   screenHeight: PropTypes.number,
-  screenWidth: PropTypes.number,
   startTour: PropTypes.func,
+  groupOverlays: PropTypes.bool,
+  toggleOverlayGroups: PropTypes.func,
 };

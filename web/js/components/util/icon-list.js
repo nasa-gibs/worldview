@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ListGroup, ListGroupItem, Badge } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,7 +54,7 @@ IconList.defaultProps = {
 IconList.propTypes = {
   active: PropTypes.string,
   disabled: PropTypes.bool,
-  list: PropTypes.array,
+  list: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   listClass: PropTypes.string,
   onClick: PropTypes.func,
   size: PropTypes.string,

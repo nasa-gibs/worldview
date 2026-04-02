@@ -27,6 +27,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'features file'
   })
+  .option('cacheMode', {
+    demandOption: false,
+    alias: 'c',
+    type: 'string',
+    description: 'Cache mode for fetching data'
+  })
   .epilog('Fetch preview images from WV Snapshots for any layers which they are missing.')
 
 const { argv } = options
@@ -37,6 +43,7 @@ if (!argv.wvJsonFile && !argv.overridesFile && !argv.featuresFile) {
 const wvJsonFile = argv.wvJsonFile
 const overridesFile = argv.overridesFile
 const featuresFile = argv.featuresFile
+const cacheMode = argv.cacheMode
 
 let overrideDatesDict = {}
 const badSnapshots = []
@@ -101,9 +108,12 @@ async function main () {
     throw new Error(`${prog}: Layer preview fetching disabled. Exiting.`)
   }
 
-  for (const layer of Object.values(layers)) {
-    await getSnapshots(layer)
-  }
+  const layerValues = Object.values(layers)
+
+  console.warn(`${prog}: Fetching snapshots for up to ${layerValues.length} layers...`)
+  const promises = layerValues.map((layer) => getSnapshots(layer))
+
+  await Promise.allSettled(promises)
 
   if (badSnapshots.length > 0) {
     console.warn(`\n${prog}: WARNING: ${badSnapshots.length} snapshots returned no content. See below for details: `)
@@ -191,29 +201,32 @@ async function getBestDate (projection, period, dateRanges) {
   return endDate
 }
 
-async function getTimeParam (projection, layerId, layer, params) {
+async function getTimeParam (projection, layerId, layer) {
   // Only include TIME param for temporal layers
+  const out = {}
   const dateRanges = layer.dateRanges
   const startDate = layer.startDate
   const period = layer.period
 
   if (dateRanges) {
-    params.TIME = await getBestDate(projection, period, dateRanges)
+    out.TIME = await getBestDate(projection, period, dateRanges)
   } else if (startDate) {
-    params.TIME = startDate
+    out.TIME = startDate
   }
 
   // Use any configured override dates
   if (overrideDatesDict[layerId]) {
-    params.TIME = overrideDatesDict[layerId]
+    out.TIME = overrideDatesDict[layerId]
   }
+
+  return out
 }
 
 async function getSnapshots (layer) {
   for (const projection of Object.keys(layer.projections)) {
     const projDict = layer.projections[projection]
     const referenceLayer = referenceLayers[projection]
-    const params = { ...paramDict.base, ...paramDict[projection] }
+    let params = { ...paramDict.base, ...paramDict[projection] }
 
     // Sometimes a layer id is provided per projection (e.g. Land Mask layers)
     // We need to use this layer id to request the layer from WVS/GIBS
@@ -234,7 +247,8 @@ async function getSnapshots (layer) {
       .catch(() => false)
     if (fileExists) continue
 
-    await getTimeParam(projection, wvLayerId, layer, params)
+    const timeParam = await getTimeParam(projection, wvLayerId, layer)
+    params = Object.assign(params, timeParam)
 
     if (gibsLayerId !== referenceLayer && !standaloneLayers.includes(gibsLayerId)) {
       params.LAYERS = `${referenceLayer},${gibsLayerId}`
@@ -243,12 +257,24 @@ async function getSnapshots (layer) {
       params.LAYERS = gibsLayerId
     }
 
+    let headers = {}
+
+    if (cacheMode === 'no-store') {
+      const noCacheHeaders = {
+        'Cache-Control': 'no-cache no-store',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+      headers = Object.assign(headers, noCacheHeaders)
+    }
+
     try {
       const imageReq = await axios({
         method: 'get',
         url: snapshotsUrl,
         params,
-        responseType: 'stream'
+        responseType: 'stream',
+        headers
       })
       let statusText
       if (imageReq.status === 200) {

@@ -24,10 +24,6 @@ export default class AlertUtil extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.mounted = true;
-  }
-
   componentWillUnmount() {
     if (this.timeout) {
       clearTimeout(this.timeout);
@@ -61,6 +57,7 @@ export default class AlertUtil extends React.Component {
         isOpen={isOpen}
       >
         <div
+          role="alertdialog"
           className="alert-content"
           title={title}
           onClick={onClick}
@@ -82,13 +79,14 @@ export default class AlertUtil extends React.Component {
           </div>
         </div>
         {onDismiss && (
-          <div
+          <button
+            type="button"
             id={`${id}-close`}
             className="close-alert"
             onClick={() => this.closeAlert()}
           >
             <FontAwesomeIcon icon="times" className="exit" size="1x" widthAuto />
-          </div>
+          </button>
         )}
       </Alert>
     );

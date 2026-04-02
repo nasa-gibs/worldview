@@ -7,7 +7,7 @@
       "description": "ajax/AJAX_Alpha_Jet_Ozone",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector alpha jet ozone california nevada",
+      "tags": "vector alpha jet ozone california nevada suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
@@ -27,8 +27,20 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "G_Alt",
+        "property": "Altitude",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "AJAX_Alpha_Jet_Ozone",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

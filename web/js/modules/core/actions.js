@@ -39,6 +39,6 @@ export async function requestAction(
     return data;
   } catch (error) {
     dispatch(fetchFailure(actionName, error, id));
-    console.error(error);
+    return console.error(error);
   }
 }

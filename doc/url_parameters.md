@@ -45,6 +45,7 @@
 | `em` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, embed mode will be activated. Embed mode is disabled by default. |
 | `tr` | string | *`tour_id`* | The id of the tour story to load. Stories will load from step 1. |
 | `abt` | string | *`on`* | Indicates whether the about modal is open or not. Allows for permalinks that have the about page open |
+| `rt` | string | *`duration`* | The relative time duration (from the current date) to set the selected Date & Time to (within permalinks). Expects the duration in ISO 8601 Duration format (`PnYnMnDTnHnMnS` or `PnW`) |
 
 \* *1 = yearly, 2 = monthly, 3 = daily, 4 = hourly, and 5 = minutely. The subdaily zoom levels (4 & 5) will only be available when subdaily layers are active.*
 

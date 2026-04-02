@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import { useState } from 'react';
 
 import {
   Dropdown,
@@ -32,3 +33,9 @@ function TileImageTestModeDropdown({ activeLayers, layerSelection, setLayerSelec
 }
 
 export default TileImageTestModeDropdown;
+
+TileImageTestModeDropdown.propTypes = {
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  layerSelection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  setLayerSelection: PropTypes.func,
+};

@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
 import util from '../../util/util';
 import ErrorBoundary from '../error-boundary';
 import PlayQueue from '../../components/animation-widget/play-queue';
-import { promiseImageryForTime } from '../../modules/map/util';
+import { promiseImageryForTime as promiseImageryForTimeUtil } from '../../modules/map/util';
 import {
-  selectDate,
+  selectDate as selectDateAction,
   selectInterval,
   toggleCustomModal,
 } from '../../modules/date/actions';
@@ -27,7 +27,7 @@ import {
 import { getSelectedDate } from '../../modules/date/selectors';
 import {
   play,
-  onClose,
+  onClose as onCloseAction,
   stop,
   toggleLooping,
   changeFrameRate,
@@ -90,13 +90,17 @@ function AnimationWidget (props) {
     startDate,
     subDailyMode,
     map,
+    autoSelected,
+    layers,
   } = props;
 
   const widgetWidth = 334;
   const subdailyWidgetWidth = 460;
   const halfWidgetWidth = (subDailyMode ? subdailyWidgetWidth : widgetWidth) / 2;
 
-  const [widgetPosition, setWidgetPosition] = useState({ x: screenWidth / 2 - halfWidgetWidth, y: -25 });
+  const [widgetPosition, setWidgetPosition] = useState(
+    { x: screenWidth / 2 - halfWidgetWidth, y: -25 },
+  );
   const [collapsedWidgetPosition, setCollapsedWidgetPosition] = useState({ x: 0, y: 0 });
   const [userHasMovedWidget, setUserHasMovedWidget] = useState(false);
   const [speed, setSpeed] = useState(speedRedux);
@@ -138,7 +142,8 @@ function AnimationWidget (props) {
     }
   });
 
-  // Prevent drag when interacting with child elements (e.g. buttons) Only allow drag when targeting "background" elements
+  // Prevent drag when interacting with child elements (e.g. buttons)
+  // Only allow drag when targeting "background" elements
   const handleDragStart = (e, data) => {
     const draggableTargets = [
       'wv-animation-widget',
@@ -193,10 +198,14 @@ function AnimationWidget (props) {
       // for subdaily, zero start and end dates to UTC HH:MM:00:00
       const startMinutes = startDateZeroed.getMinutes();
       const endMinutes = endDateZeroed.getMinutes();
-      startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      if (!autoSelected) {
+        startDateZeroed.setUTCMinutes(Math.floor(startMinutes / 10) * 10);
+      }
       startDateZeroed.setUTCSeconds(0);
       startDateZeroed.setUTCMilliseconds(0);
-      endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      if (!autoSelected) {
+        endDateZeroed.setUTCMinutes(Math.floor(endMinutes / 10) * 10);
+      }
       endDateZeroed.setUTCSeconds(0);
       endDateZeroed.setUTCMilliseconds(0);
     } else {
@@ -212,135 +221,150 @@ function AnimationWidget (props) {
 
   const onPushPlayFunc = () => {
     const {
-      startDate,
-      endDate,
+      startDate: startDateZeroed,
+      endDate: endDateZeroed,
     } = zeroDates();
-    onUpdateStartAndEndDate(startDate, endDate);
+    onUpdateStartAndEndDate(startDateZeroed, endDateZeroed);
     onPushPlay();
   };
 
-  return isActive ? (
+  const renderPlayQueue = isPlaying
+    ? (
+      <PlayQueue
+        isMobile={isMobile}
+        isLoopActive={looping}
+        isPlaying={isPlaying}
+        numberOfFrames={numberOfFrames}
+        snappedCurrentDate={snappedCurrentDate}
+        currentDate={currentDate}
+        startDate={startDate}
+        endDate={endDate}
+        interval={interval}
+        isKioskModeActive={isKioskModeActive}
+        delta={delta}
+        speed={speed}
+        selectDate={selectDate}
+        togglePlaying={onPushPause}
+        promiseImageryForTime={promiseImageryForTime}
+        onClose={onPushPause}
+        map={map}
+        autoSelected={autoSelected}
+        layers={layers}
+      />
+    )
+    : null;
+
+  const renderAnimationTileCheck = checkAnimationAvailability
+    ? (
+      <AnimationTileCheck
+        startDate={startDate}
+        endDate={endDate}
+        interval={interval}
+        delta={delta}
+        isPlaying={isPlaying}
+      />
+    )
+    : renderPlayQueue;
+
+  const renderDesktopAnimationWidget = (
+    <DesktopAnimationWidget
+      animationCustomModalOpen={animationCustomModalOpen}
+      autoplay={autoplay}
+      customModalType={customModalType}
+      isDistractionFreeModeActive={isDistractionFreeModeActive}
+      endDate={endDate}
+      handleDragStart={handleDragStart}
+      hasSubdailyLayers={hasSubdailyLayers}
+      interval={interval}
+      isKioskModeActive={isKioskModeActive}
+      isPlaying={isPlaying}
+      looping={looping}
+      maxDate={maxDate}
+      minDate={minDate}
+      numberOfFrames={numberOfFrames}
+      onClose={onClose}
+      onDateChange={onDateChange}
+      onExpandedDrag={onExpandedDrag}
+      onLoop={onLoop}
+      onPushPause={onPushPause}
+      onPushPlay={onPushPlayFunc}
+      onSlide={onSlide}
+      playDisabled={playDisabled}
+      toggleCollapse={toggleCollapse}
+      setSpeed={setSpeed}
+      sliderLabel={sliderLabel}
+      speed={speed}
+      startDate={startDate}
+      subDailyMode={subDailyMode}
+      widgetPosition={widgetPosition}
+      zeroDates={zeroDates}
+    />
+  );
+  const renderMobileOrDesktopWidget = isMobile
+    ? (
+      <MobileAnimationWidget
+        breakpoints={breakpoints}
+        endDate={endDate}
+        hasSubdailyLayers={hasSubdailyLayers}
+        isEmbedModeActive={isEmbedModeActive}
+        isLandscape={isLandscape}
+        isMobile={isMobile}
+        isMobilePhone={isMobilePhone}
+        isMobileTablet={isMobileTablet}
+        isPlaying={isPlaying}
+        isPortrait={isPortrait}
+        looping={looping}
+        maxDate={maxDate}
+        minDate={minDate}
+        onLoop={onLoop}
+        onSlide={onSlide}
+        onUpdateEndDate={onUpdateEndDate}
+        onUpdateStartDate={onUpdateStartDate}
+        playDisabled={playDisabled}
+        selectDate={selectDate}
+        screenHeight={screenHeight}
+        screenWidth={screenWidth}
+        setSpeed={setSpeed}
+        sliderLabel={sliderLabel}
+        speed={speed}
+        startDate={startDate}
+        subDailyMode={subDailyMode}
+        toggleCollapse={toggleCollapse}
+      />
+    )
+    : renderDesktopAnimationWidget;
+  const renderCollapsedAnimationWidget = isCollapsed
+    ? (
+      <CollapsedAnimationWidget
+        isDistractionFreeModeActive={isDistractionFreeModeActive}
+        hasSubdailyLayers={hasSubdailyLayers}
+        isMobile={isMobile}
+        isPlaying={isPlaying}
+        onClose={onClose}
+        onPushPause={onPushPause}
+        playDisabled={playDisabled}
+        isPortrait={isPortrait}
+        isLandscape={isLandscape}
+        isMobilePhone={isMobilePhone}
+        isMobileTablet={isMobileTablet}
+        screenWidth={screenWidth}
+        breakpoints={breakpoints}
+        collapsedWidgetPosition={collapsedWidgetPosition}
+        handleDragStart={handleDragStart}
+        onCollapsedDrag={onCollapsedDrag}
+        onPushPlay={onPushPlayFunc}
+        toggleCollapse={toggleCollapse}
+      />
+    )
+    : renderMobileOrDesktopWidget;
+
+  const renderWidget = () => (
     <ErrorBoundary>
-      {
-        checkAnimationAvailability ? (
-          <AnimationTileCheck
-            startDate={startDate}
-            endDate={endDate}
-            interval={interval}
-            delta={delta}
-            isPlaying={isPlaying}
-          />
-        ) : isPlaying ? (
-          <PlayQueue
-            isMobile={isMobile}
-            isLoopActive={looping}
-            isPlaying={isPlaying}
-            numberOfFrames={numberOfFrames}
-            snappedCurrentDate={snappedCurrentDate}
-            currentDate={currentDate}
-            startDate={startDate}
-            endDate={endDate}
-            interval={interval}
-            isKioskModeActive={isKioskModeActive}
-            delta={delta}
-            speed={speed}
-            selectDate={selectDate}
-            togglePlaying={onPushPause}
-            promiseImageryForTime={promiseImageryForTime}
-            onClose={onPushPause}
-            map={map}
-          />
-        ) : null
-      }
-      {isCollapsed ? (
-        <CollapsedAnimationWidget
-          isDistractionFreeModeActive={isDistractionFreeModeActive}
-          hasSubdailyLayers={hasSubdailyLayers}
-          isMobile={isMobile}
-          isPlaying={isPlaying}
-          onClose={onClose}
-          onPushPause={onPushPause}
-          playDisabled={playDisabled}
-          isPortrait={isPortrait}
-          isLandscape={isLandscape}
-          isMobilePhone={isMobilePhone}
-          isMobileTablet={isMobileTablet}
-          screenWidth={screenWidth}
-          breakpoints={breakpoints}
-          collapsedWidgetPosition={collapsedWidgetPosition}
-          handleDragStart={handleDragStart}
-          onCollapsedDrag={onCollapsedDrag}
-          onPushPlay={onPushPlayFunc}
-          toggleCollapse={toggleCollapse}
-        />
-      ) : isMobile ? (
-        <MobileAnimationWidget
-          breakpoints={breakpoints}
-          endDate={endDate}
-          hasSubdailyLayers={hasSubdailyLayers}
-          isEmbedModeActive={isEmbedModeActive}
-          isLandscape={isLandscape}
-          isMobile={isMobile}
-          isMobilePhone={isMobilePhone}
-          isMobileTablet={isMobileTablet}
-          isPlaying={isPlaying}
-          isPortrait={isPortrait}
-          looping={looping}
-          maxDate={maxDate}
-          minDate={minDate}
-          onLoop={onLoop}
-          onSlide={onSlide}
-          onUpdateEndDate={onUpdateEndDate}
-          onUpdateStartDate={onUpdateStartDate}
-          playDisabled={playDisabled}
-          selectDate={selectDate}
-          screenHeight={screenHeight}
-          screenWidth={screenWidth}
-          setSpeed={setSpeed}
-          sliderLabel={sliderLabel}
-          speed={speed}
-          startDate={startDate}
-          subDailyMode={subDailyMode}
-          toggleCollapse={toggleCollapse}
-        />
-      ) : isKioskModeActive
-        ? null
-        : (
-          <DesktopAnimationWidget
-            animationCustomModalOpen={animationCustomModalOpen}
-            autoplay={autoplay}
-            customModalType={customModalType}
-            isDistractionFreeModeActive={isDistractionFreeModeActive}
-            endDate={endDate}
-            handleDragStart={handleDragStart}
-            hasSubdailyLayers={hasSubdailyLayers}
-            interval={interval}
-            isKioskModeActive={isKioskModeActive}
-            isPlaying={isPlaying}
-            looping={looping}
-            maxDate={maxDate}
-            minDate={minDate}
-            numberOfFrames={numberOfFrames}
-            onClose={onClose}
-            onDateChange={onDateChange}
-            onExpandedDrag={onExpandedDrag}
-            onLoop={onLoop}
-            onPushPause={onPushPause}
-            onPushPlay={onPushPlayFunc}
-            onSlide={onSlide}
-            playDisabled={playDisabled}
-            toggleCollapse={toggleCollapse}
-            setSpeed={setSpeed}
-            sliderLabel={sliderLabel}
-            speed={speed}
-            startDate={startDate}
-            subDailyMode={subDailyMode}
-            widgetPosition={widgetPosition}
-            zeroDates={zeroDates}
-          />
-        )}
+      {renderAnimationTileCheck}
+      {renderCollapsedAnimationWidget}
     </ErrorBoundary>
-  ) : null;
+  );
+  return isActive ? renderWidget() : null;
 }
 
 const mapStateToProps = (state) => {
@@ -356,12 +380,14 @@ const mapStateToProps = (state) => {
     screenSize,
     ui,
     proj,
+    layers,
   } = state;
   const {
     startDate, endDate, speed, loop, isPlaying, isActive, isCollapsed, autoplay,
   } = animation;
   const {
     customSelected,
+    autoSelected,
     delta,
     customDelta,
     appNow,
@@ -390,11 +416,11 @@ const mapStateToProps = (state) => {
   } = ui;
   const checkAnimationAvailability = (eic === 'sa' || eic === 'da') && !animationAvailabilityChecked && isKioskModeActive && isPlaying;
   const { isEmbedModeActive } = embed;
-  const animationIsActive = isActive
-    && lodashGet(map, 'ui.selected.frameState_')
-    && sidebar.activeTab !== 'download' // No Animation when data download is active
-    && !compare.active
-    && !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'); // No Animation when Image download is open
+  const animationIsActive = isActive &&
+    lodashGet(map, 'ui.selected.frameState_') &&
+    sidebar.activeTab !== 'download' && // No Animation when data download is active
+    !compare.active &&
+    !(modal.isOpen && modal.id === 'TOOLBAR_SNAPSHOT'); // No Animation when Image download is open
 
   if (!hasSubdailyLayers) {
     interval = interval > 3 ? 3 : interval;
@@ -411,8 +437,10 @@ const mapStateToProps = (state) => {
     startDate,
     endDate,
     TIME_SCALE_FROM_NUMBER[useInterval],
-    useDelta,
     frameLimit,
+    autoSelected,
+    layers.active.layers,
+    useDelta,
   );
   const currentDate = getSelectedDate(state);
   let snappedCurrentDate;
@@ -470,18 +498,22 @@ const mapStateToProps = (state) => {
     looping: loop,
     map,
     proj,
-    promiseImageryForTime: (date) => promiseImageryForTime(state, date),
+    promiseImageryForTime: (dateArg) => promiseImageryForTimeUtil(state, dateArg),
     isEmbedModeActive,
-    playDisabled: !screenSize.isMobileDevice ? numberOfFrames >= maxFrames || numberOfFrames === 1 : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    playDisabled: !screenSize.isMobileDevice
+      ? numberOfFrames >= maxFrames || numberOfFrames === 1
+      : numberOfFrames >= mobileMaxFrames || numberOfFrames === 1,
+    autoSelected,
+    layers: layers.active.layers,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   selectDate: (val) => {
-    dispatch(selectDate(val));
+    dispatch(selectDateAction(val));
   },
   onClose: () => {
-    dispatch(onClose());
+    dispatch(onCloseAction());
   },
   onPushPlay: () => {
     dispatch(play());
@@ -516,15 +548,15 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 AnimationWidget.propTypes = {
-  appNow: PropTypes.object,
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   animationCustomModalOpen: PropTypes.bool,
   autoplay: PropTypes.bool,
-  breakpoints: PropTypes.object,
+  breakpoints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   checkAnimationAvailability: PropTypes.bool,
-  snappedCurrentDate: PropTypes.object,
-  currentDate: PropTypes.object,
+  snappedCurrentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   delta: PropTypes.number,
-  endDate: PropTypes.object,
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
   interval: PropTypes.string,
@@ -540,8 +572,9 @@ AnimationWidget.propTypes = {
   isPortrait: PropTypes.bool,
   isLandscape: PropTypes.bool,
   looping: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onToggleAnimationCollapse: PropTypes.func,
   onClose: PropTypes.func,
@@ -559,8 +592,10 @@ AnimationWidget.propTypes = {
   selectDate: PropTypes.func,
   sliderLabel: PropTypes.string,
   speedRedux: PropTypes.number,
-  startDate: PropTypes.object,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
+  autoSelected: PropTypes.bool,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 export default connect(

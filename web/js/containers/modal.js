@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
@@ -6,13 +6,16 @@ import { toLower as lodashToLower } from 'lodash';
 import {
   Modal, ModalBody, ModalHeader, ModalFooter,
 } from 'reactstrap';
-import Draggable from 'react-draggable';
 import { Resizable } from 'react-resizable';
-import { onToggle } from '../modules/modal/actions';
+import { onToggle as onToggleAction } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
 import DetectOuterClick from '../components/util/detect-outer-click';
+import usePrevious from '../util/customHooks';
 
-const InteractionWrap = ({ condition, wrapper, children }) => (condition ? wrapper(children) : children);
+const InteractionWrap = ({
+  condition,
+  wrapper, children,
+}) => (condition ? wrapper(children) : children);
 const toggleWithClose = (onToggle, onClose, isOpen) => {
   if (onClose && isOpen) {
     return () => {
@@ -23,44 +26,173 @@ const toggleWithClose = (onToggle, onClose, isOpen) => {
   return onToggle;
 };
 
-class ModalContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      width: props.customProps.width,
-      height: props.customProps.height,
-      offsetLeft: props.customProps.offsetLeft,
-      offsetTop: props.customProps.offsetTop,
-      offsetRight: props.customProps.offsetRight,
-    };
-    this.onResize = this.onResize.bind(this);
-  }
+function ModalContainer(props) {
+  const {
+    isCustom,
+    id,
+    isOpen,
+    customProps,
+    isMobile,
+    screenHeight,
+    screenWidth,
+    isEmbedModeActive,
+    isTemplateModal,
+  } = props;
 
-  componentDidUpdate(prevProps) {
-    const {
-      isCustom,
-      id,
-      isOpen,
-      customProps,
-      isMobile,
-      screenHeight,
-      screenWidth,
-    } = this.props;
-    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
+  const {
+    width: propsWidth,
+    height: propsHeight,
+    offsetLeft: propsOffsetLeft,
+    offsetTop: propsOffsetTop,
+    offsetRight: propsOffsetRight,
+    mobileFullScreen,
+    autoSetWidth,
+    autoSetHeight,
+  } = customProps;
+
+  const [width, setWidth] = useState(propsWidth);
+  const [height, setHeight] = useState(propsHeight);
+  const [offsetLeft, setOffsetLeft] = useState(propsOffsetLeft);
+  const [offsetTop, setOffsetTop] = useState(propsOffsetTop);
+  const [offsetRight, setOffsetRight] = useState(propsOffsetRight);
+  const [measuredElement, setMeasuredElement] = useState();
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({
+    x: 0,
+    y: 0,
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    stayOnscreen: false,
+  });
+  const prevScreenHeight = usePrevious(screenHeight);
+  const prevScreenWidth = usePrevious(screenWidth);
+  const prevWidth = usePrevious(width);
+  const prevHeight = usePrevious(height);
+  const prevMeasuredElement = usePrevious(measuredElement);
+  const prevMeasuredWidth = usePrevious(measuredElement?.getBoundingClientRect().width);
+  const prevMeasuredHeight = usePrevious(measuredElement?.getBoundingClientRect().height);
+
+  const handleElement = useCallback((node) => {
+    if (node !== null) {
+      setMeasuredElement(node);
+    }
+  }, []);
+
+  const beginDrag = useCallback((e, { dragHandle, stayOnscreen }) => {
+    if (!e || e.button !== 0) return;
+    if (!dragHandle) return;
+    if (!e.target?.closest?.(dragHandle)) return;
+    if (e.target?.closest?.('button, a, input, select, textarea')) return;
+
+    const rect = measuredElement?.getBoundingClientRect?.();
+    const startLeft = typeof offsetLeft === 'number' ? offsetLeft : (rect?.left || 0);
+    const startTop = typeof offsetTop === 'number' ? offsetTop : (rect?.top || 0);
+    const elWidth = width || rect?.width || 0;
+    const elHeight = height || rect?.height || 0;
+
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      left: startLeft,
+      top: startTop,
+      width: elWidth,
+      height: elHeight,
+      stayOnscreen: !!stayOnscreen,
+    };
+
+    setIsDragging(true);
+  }, [measuredElement, offsetLeft, offsetTop, width, height]);
+
+  useEffect(() => {
+    if (!isDragging) return undefined;
+
+    const onMove = (e) => {
+      const start = dragStartRef.current;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+
+      let nextLeft = start.left + dx;
+      let nextTop = start.top + dy;
+
+      if (start.stayOnscreen && start.width && start.height) {
+        const maxLeft = Math.max(0, screenWidth - start.width);
+        const maxTop = Math.max(0, screenHeight - start.height);
+        nextLeft = Math.min(Math.max(0, nextLeft), maxLeft);
+        nextTop = Math.min(Math.max(0, nextTop), maxTop);
+      }
+
+      setOffsetLeft(nextLeft);
+      setOffsetTop(nextTop);
+    };
+
+    const onUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [isDragging, screenWidth, screenHeight]);
+
+  const onParamChange = (e, { size }) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    const elWidth = autoSetWidth && measuredElement
+      ? measuredElement.getBoundingClientRect().width
+      : size.width;
+    const elHeight = autoSetHeight && measuredElement
+      ? measuredElement.getBoundingClientRect().height
+      : size.height;
+    setWidth(elWidth);
+    setHeight(elHeight);
+    setOffsetLeft(size.offsetLeft);
+    setOffsetTop(size.offsetTop);
+    setOffsetRight(size.offsetRight);
+  };
+
+  const onResize = (e, { size }) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    setWidth(size.width);
+    setHeight(size.height);
+  };
+
+  useEffect(() => {
+    const newProps = isCustom && id ? update(props, { $merge: customProps }) : props;
     const {
       onToggle,
       onClose,
       desktopOnly,
     } = newProps;
 
-    const screenHeightChanged = screenHeight !== prevProps.screenHeight;
-    const screenWidthChanged = screenWidth !== prevProps.screenWidth;
+    const screenHeightChanged = screenHeight !== prevScreenHeight;
+    const screenWidthChanged = screenWidth !== prevScreenWidth;
+    const modalWidthChanged = propsWidth !== prevWidth;
+    const modalHeightChanged = propsHeight !== prevHeight;
+    const measuredElementChanged = (autoSetWidth || autoSetHeight) &&
+      measuredElement !== prevMeasuredElement;
+    const measuredWidthChanged = autoSetWidth &&
+      measuredElement?.getBoundingClientRect().width !== prevMeasuredWidth;
+    const measuredHeightChanged = autoSetHeight &&
+      measuredElement?.getBoundingClientRect().height !== prevMeasuredHeight;
+    const measureChange = measuredElementChanged || measuredWidthChanged || measuredHeightChanged;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+    if ((modalWidthChanged || modalHeightChanged || measureChange) && isOpen) {
+      onParamChange(null, { size: customProps });
+    }
     if (isMobile && isOpen) {
       if (desktopOnly) {
         toggleFunction();
       }
-      if (customProps.mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
+      if (mobileFullScreen && (screenHeightChanged || screenWidthChanged)) {
         const isPortrait = screenHeight > screenWidth;
 
         // Values below match the request made in ol-vector-interactions
@@ -69,19 +201,12 @@ class ModalContainer extends Component {
           height: isPortrait ? screenHeight - 106 : 300,
         };
 
-        this.onResize(null, { size: sizeObj });
+        onResize(null, { size: sizeObj });
       }
     }
-  }
+  });
 
-  getStyle() {
-    const {
-      isMobile, customProps,
-    } = this.props;
-    const {
-      offsetLeft, offsetRight, offsetTop, width, height,
-    } = this.state;
-    const { mobileFullScreen } = customProps;
+  function getStyle() {
     const mobileTopOffset = 106;
     const top = isMobile && mobileFullScreen ? mobileTopOffset : offsetTop;
     const margin = isMobile ? 0 : '0.5rem auto';
@@ -96,138 +221,129 @@ class ModalContainer extends Component {
     };
   }
 
-  onResize(e, { size }) {
-    if (e) {
-      e.stopPropagation();
-    }
-    this.setState({
-      width: size.width, height: size.height,
-    });
+  function getTemplateBody() {
+    const { bodyTemplate } = props;
+    return bodyTemplate.isLoading
+      ? (
+        <span> Loading </span>
+      )
+      : (
+        <div
+          id="template-content"
+          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+        />
+      );
   }
 
-  getTemplateBody() {
-    const { bodyTemplate } = this.props;
-    return bodyTemplate.isLoading ? (
-      <span> Loading </span>
-    ) : (
-      <div
-        id="template-content"
-        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-      />
-    );
-  }
-
-  render() {
+  const handleCreateChildren = (children) => {
+    const newProps = isCustom && id ? update(props, { $merge: customProps }) : props;
     const {
-      customProps,
-      id,
-      isCustom,
-      isEmbedModeActive,
-      isMobile,
-      isOpen,
-      isTemplateModal,
-      screenHeight,
-      screenWidth,
-    } = this.props;
-    const { width, height } = this.state;
-    const newProps = isCustom && id ? update(this.props, { $merge: customProps }) : this.props;
-    const {
-      autoFocus,
-      backdrop,
-      bodyComponent,
-      bodyComponentProps,
-      bodyHeader,
-      bodyText,
-      footer,
-      clickableBehindModal,
-      CompletelyCustomModal,
-      desktopOnly,
-      dragHandle,
-      headerComponent,
-      headerText,
-      isDraggable,
       isResizable,
-      mobileOnly,
-      modalClassName,
-      onClose,
-      onToggle,
-      size,
-      timeout,
-      type,
-      wrapClassName,
-      stayOnscreen,
     } = newProps;
-
-    const isRestrictedDisplay = (isMobile && desktopOnly)
-      || (!isMobile && mobileOnly)
-      || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
-    if (isRestrictedDisplay) {
-      return null;
-    }
-    const style = this.getStyle();
-    const lowerCaseId = lodashToLower(id);
-    const BodyComponent = bodyComponent || '';
-    const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
-    const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
-    const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
-    const closeBtn = (
-      <button className="modal-close-btn" onClick={toggleFunction} type="button">
-        &times;
-      </button>
-    );
-    const bounds = stayOnscreen ? {
-      left: -(screenWidth / 2 - width / 2), right: screenWidth / 2 - width / 2, top: -style.top, bottom: screenHeight - height - style.top - 5,
-    } : '';
-    return (
-      <ErrorBoundary>
-        <InteractionWrap
-          condition={isDraggable || isResizable}
-          wrapper={(children) => (
-            <Draggable
-              handle={dragHandle}
-              disabled={!isDraggable}
-              bounds={bounds}
-            >
-              {isResizable
-                ? (
-                  <Resizable
-                    className="resize-box"
-                    resizeHandles={['se']}
-                    width={width || newProps.width}
-                    height={height || newProps.height}
-                    minConstraints={[250, 250]}
-                    maxConstraints={[495, screenHeight]}
-                    handleSize={[8, 8]}
-                    onResize={this.onResize}
-                    draggableOpts={{ disabled: !isResizable }}
-                  >
-                    {children}
-                  </Resizable>
-                )
-                : children}
-            </Draggable>
-          )}
+    const maybeResizableChildren = isResizable
+      ? (
+        <Resizable
+          className="resize-box"
+          resizeHandles={['se']}
+          width={width || newProps.width}
+          height={height || newProps.height}
+          minConstraints={[250, 250]}
+          maxConstraints={[495, screenHeight]}
+          handleSize={[8, 8]}
+          onResize={onResize}
+          draggableOpts={{ disabled: !isResizable }}
         >
-          <Modal
-            isOpen={isOpen}
-            toggle={toggleFunction}
-            backdrop={backdrop}
-            id={lowerCaseId}
-            size={size}
-            className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
-            autoFocus={autoFocus || false}
-            style={style}
-            wrapClassName={`${modalWrapClass} ${lowerCaseId}`}
-            modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
-            fade={!isDraggable}
-          >
+          {children}
+        </Resizable>
+      )
+      : children;
+
+    // Manual dragging is handled via mouse events on the modal content wrapper.
+    return maybeResizableChildren;
+  };
+
+  const newProps = isCustom && id ? update(props, { $merge: customProps }) : props;
+  const {
+    autoFocus,
+    backdrop,
+    bodyComponent,
+    bodyComponentProps,
+    bodyHeader,
+    bodyText,
+    dragHandle,
+    stayOnscreen,
+    footer,
+    clickableBehindModal,
+    CompletelyCustomModal,
+    desktopOnly,
+    headerComponent,
+    headerText,
+    isDraggable,
+    isResizable,
+    mobileOnly,
+    modalClassName,
+    onClose,
+    onToggle,
+    size,
+    timeout,
+    type,
+    wrapClassName,
+  } = newProps;
+
+  const customPropsWithoutKey = { ...(customProps || {}) };
+  delete customPropsWithoutKey.key;
+
+  const handleModalMouseDown = useCallback((e) => {
+    if (!isDraggable) return;
+    beginDrag(e, { dragHandle, stayOnscreen });
+  }, [beginDrag, dragHandle, isDraggable, stayOnscreen]);
+
+  const isRestrictedDisplay = (isMobile && desktopOnly) ||
+    (!isMobile && mobileOnly) ||
+    (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
+  if (isRestrictedDisplay) {
+    return null;
+  }
+  const style = getStyle();
+  const lowerCaseId = lodashToLower(id);
+  const BodyComponent = bodyComponent || '';
+  const allowOuterClick = !isOpen || type === 'selection' || clickableBehindModal;
+  const modalWrapClass = clickableBehindModal ? `clickable-behind-modal ${wrapClassName}` : wrapClassName;
+  const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
+  const closeBtn = (
+    <button className="modal-close-btn" onClick={toggleFunction} type="button">
+      &times;
+    </button>
+  );
+  const renderModalBodyText = isTemplateModal ? getTemplateBody() : (<p>{bodyText}</p>) || '';
+  return (
+    <ErrorBoundary>
+      <InteractionWrap
+        condition={isDraggable || isResizable}
+        wrapper={handleCreateChildren}
+      >
+        <Modal
+          isOpen={isOpen}
+          toggle={toggleFunction}
+          backdrop={backdrop}
+          id={lowerCaseId}
+          size={size}
+          className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
+          autoFocus={autoFocus || false}
+          style={style}
+          wrapClassName={`${modalWrapClass} ${lowerCaseId}`}
+          modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
+          fade={!isDraggable}
+        >
+          <div ref={handleElement} onMouseDown={handleModalMouseDown} style={{ height: '100%' }}>
             {CompletelyCustomModal
               ? (
                 <CompletelyCustomModal
-                  key={`custom_${lowerCaseId}`}
+                  key={customProps?.dialogKey ? `custom_${lowerCaseId}_${customProps.dialogKey}` : `custom_${lowerCaseId}`}
                   modalHeight={height || newProps.height}
                   modalWidth={width || newProps.width}
-                  {...customProps}
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...customPropsWithoutKey}
                   toggleWithClose={toggleFunction}
                 />
               )
@@ -243,24 +359,26 @@ class ModalContainer extends Component {
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? (
-                      <BodyComponent
-                        {...bodyComponentProps}
-                        parentId={id}
-                        screenHeight={screenHeight}
-                        closeModal={toggleFunction}
-                      />
-                    )
-                      : isTemplateModal ? this.getTemplateBody() : (<p>{bodyText}</p>) || ''}
+                    {BodyComponent
+                      ? (
+                        <BodyComponent
+                        // eslint-disable-next-line react/jsx-props-no-spreading
+                          {...bodyComponentProps}
+                          parentId={id}
+                          screenHeight={screenHeight}
+                          closeModal={toggleFunction}
+                        />
+                      )
+                      : renderModalBodyText}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
                 </DetectOuterClick>
               )}
-          </Modal>
-        </InteractionWrap>
-      </ErrorBoundary>
-    );
-  }
+          </div>
+        </Modal>
+      </InteractionWrap>
+    </ErrorBoundary>
+  );
 }
 
 function mapStateToProps(state) {
@@ -303,7 +421,7 @@ function mapStateToProps(state) {
 }
 const mapDispatchToProps = (dispatch) => ({
   onToggle: () => {
-    dispatch(onToggle());
+    dispatch(onToggleAction());
   },
 });
 
@@ -317,17 +435,14 @@ ModalContainer.defaultProps = {
 };
 
 ModalContainer.propTypes = {
-  bodyTemplate: PropTypes.object,
-  customProps: PropTypes.object,
+  bodyTemplate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  customProps: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   id: PropTypes.string,
   isCustom: PropTypes.bool,
-  isDraggable: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isOpen: PropTypes.bool,
   isTemplateModal: PropTypes.bool,
-  orientation: PropTypes.string,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
-  stayOnscreen: PropTypes.bool,
 };

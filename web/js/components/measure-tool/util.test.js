@@ -26,7 +26,8 @@ test('two different triangles of the same size return the same measurement', () 
 });
 
 /**
- * Should be able to handle area calculation made crossing the anti-meridian in geographic projection
+ * Should be able to handle area calculation made
+ * crossing the anti-meridian in geographic projection
  * where coordinates DO extend beyond +/- 180, +/- 90 due to map repeating
  */
 test('area measurement that includes coordinates outisde of "normal" extents return correct result', () => {
@@ -88,8 +89,8 @@ test('lines which are the same numbers of degrees apart, at different poles, and
 /**
  * Check for equality across ant-meridian to left and right of standard extents (-180, -90, 180, 90)
  */
-test('lines which cross the anti-meridian outside of "normal" extents'
-     + ' are the same length as equal distances within extents', () => {
+test('lines which cross the anti-meridian outside of "normal" extents' +
+     ' are the same length as equal distances within extents', () => {
   const line1 = [[-50, 0], [0, 0]]; // normal
   const line2 = [[-230, 0], [-180, 0]]; // outside left
   const line3 = [[180, 0], [230, 0]]; // outside right

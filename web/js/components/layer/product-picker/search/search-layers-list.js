@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
 import InfiniteScroll from 'react-infinite-scroller';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SwipeToDelete from 'react-swipe-to-delete-component';
+import SwipeToDelete from '../../../util/swipe-to-delete';
 import SearchLayerRow from './search-layer-row';
 import {
   selectLayer as selectLayerAction,
@@ -42,8 +42,8 @@ class SearchLayerList extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { selectedLayer, results } = this.props;
     const { firstLoadAutoSelect } = this.state;
-    const selectedLayerInResults = selectedLayer
-      && (results || []).find((l) => l.id === selectedLayer.id);
+    const selectedLayerInResults = selectedLayer &&
+      (results || []).find((l) => l.id === selectedLayer.id);
 
     // Clear metadata when item no longer in list of results
     if (!selectedLayerInResults && selectedLayer) {
@@ -51,7 +51,6 @@ class SearchLayerList extends React.Component {
     }
     // Select first item in list on initial load
     if (!selectedLayer && results && results.length && !firstLoadAutoSelect) {
-      // eslint-disable-next-line react/no-did-update-set-state
       this.setState({ firstLoadAutoSelect: true }, () => {
         const { id } = results[0];
         this.showLayerMetadata(id);
@@ -183,9 +182,9 @@ class SearchLayerList extends React.Component {
 SearchLayerList.propTypes = {
   clearSingleRecentLayer: PropTypes.func,
   isMobile: PropTypes.bool,
-  results: PropTypes.array,
+  results: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   recentLayerMode: PropTypes.bool,
-  selectedLayer: PropTypes.object,
+  selectedLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectLayer: PropTypes.func,
 };
 

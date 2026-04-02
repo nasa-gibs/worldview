@@ -12,7 +12,7 @@ export const layersToMeasure = [
   'Himawari_AHI_Band3_Red_Visible_1km',
   'AMSRU2_Sea_Ice_Concentration_12km',
   'OMI_Nitrogen_Dioxide_Tropo_Column',
-  'VIIRS_SNPP_AOT_Dark_Target_Land_Ocean',
+  'VIIRS_SNPP_AOD_Dark_Target_Land_Ocean',
   'VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate',
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night',
   'AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day',
@@ -23,13 +23,14 @@ export const layersToMeasure = [
   'VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance',
   'VIIRS_NOAA20_DayNightBand_AtSensor_M15',
   'VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate',
-  'VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean',
+  'VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean',
   'VIIRS_NOAA21_CorrectedReflectance_TrueColor',
   'VIIRS_SNPP_NDVI_8Day',
 ];
 
 // Object that contains the black pixel % threshold for each layer
-// Threshold values represent the amount of black pixels as a percentage that CAN be present in an image
+// Threshold values represent the amount of black pixels
+// as a percentage that CAN be present in an image
 export const layerPixelData = {
   MODIS_Terra_CorrectedReflectance_TrueColor: { threshold: 0.70 },
   VIIRS_SNPP_DayNightBand_At_Sensor_Radiance: { threshold: 0.70 },
@@ -43,7 +44,7 @@ export const layerPixelData = {
   Himawari_AHI_Band3_Red_Visible_1km: { threshold: 0.76 },
   AMSRU2_Sea_Ice_Concentration_12km: { threshold: 0.85 },
   OMI_Nitrogen_Dioxide_Tropo_Column: { threshold: 0.50 },
-  VIIRS_SNPP_AOT_Dark_Target_Land_Ocean: { threshold: 0.95 },
+  VIIRS_SNPP_AOD_Dark_Target_Land_Ocean: { threshold: 0.95 },
   VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate: { threshold: 0.95 },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night: { threshold: 0.20 },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { threshold: 0.20 },
@@ -54,13 +55,14 @@ export const layerPixelData = {
   VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance: { threshold: 0.45 },
   VIIRS_NOAA20_DayNightBand_AtSensor_M15: { threshold: 0.10 },
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { threshold: 0.90 },
-  VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { threshold: 0.90 },
+  VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean: { threshold: 0.90 },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
   VIIRS_SNPP_NDVI_8Day: { threshold: 0.90 },
 };
 
 // Back-up dates for each layer in case no date is found that satisfies the full imagery threshold
-// TO DO: These layers will eventually need to be prioritized if a scenario has layers from multiple best dates
+// TO DO: These layers will eventually need to be prioritized if a scenario has layers from multiple
+// best dates
 export const bestDates = {
   'GOES-East_ABI_GeoColor': { date: '2023-10-30T23:50:00.000Z' },
   'GOES-West_ABI_GeoColor': { date: '2023-10-30T23:50:00.000Z' },
@@ -73,7 +75,7 @@ export const bestDates = {
   MODIS_Aqua_Land_Surface_Temp_Day: { date: '2023-10-30' },
   MODIS_Aqua_CorrectedReflectance_TrueColor: { date: '2023-10-29' },
   OMI_Nitrogen_Dioxide_Tropo_Column: { date: '2023-10-27' },
-  VIIRS_SNPP_AOT_Dark_Target_Land_Ocean: { date: '2023-10-29' },
+  VIIRS_SNPP_AOD_Dark_Target_Land_Ocean: { date: '2023-10-29' },
   VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate: { date: '2023-10-30' },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night: { date: '2023-10-17' },
   AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day: { date: '2023-10-17' },
@@ -84,7 +86,7 @@ export const bestDates = {
   VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance: { date: '2024-10-01' },
   VIIRS_NOAA20_DayNightBand_AtSensor_M15: { date: '2024-10-01' },
   VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate: { date: '2024-10-01' },
-  VIIRS_NOAA20_AOT_Dark_Target_Land_Ocean: { date: '2024-10-01' },
+  VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean: { date: '2024-10-01' },
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { date: '2024-10-01' },
   VIIRS_SNPP_NDVI_8Day: { date: '2025-08-24' },
 };

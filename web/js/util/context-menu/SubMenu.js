@@ -12,7 +12,7 @@ import listener from './globalEventListener';
 export default class SubMenu extends AbstractMenu {
     static propTypes = {
         children: PropTypes.node.isRequired,
-        attributes: PropTypes.object,
+        attributes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
         title: PropTypes.node.isRequired,
         className: PropTypes.string,
         disabled: PropTypes.bool,
@@ -52,7 +52,7 @@ export default class SubMenu extends AbstractMenu {
         this.listenId = listener.register(() => {}, this.hideSubMenu);
     }
 
-    getSubMenuType() { // eslint-disable-line class-methods-use-this
+    getSubMenuType() {  
         return SubMenu;
     }
 

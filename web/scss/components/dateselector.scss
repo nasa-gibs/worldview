@@ -51,12 +51,17 @@
     background: transparent;
     border: 0;
     font-family: variables.$wv-monospace-font;
+    font-size: 15px;
     vertical-align: middle;
     box-sizing: border-box;
     padding: 0;
     height: inherit;
     text-align: center;
     width: 100%;
+  }
+
+  button {
+    font-size: 15px;
   }
 
   .input-wrapper:hover {
@@ -97,6 +102,9 @@
   width: 40px;
   vertical-align: middle;
   position: relative;
+  background: none;
+  padding: none;
+  border: none;
 }
 
 .wv-date-selector-widget .button-action-group svg path {
@@ -113,6 +121,10 @@
 .date-arrows {
   display: block;
   height: 10px;
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
 }
 
 .zoom-level-change-arrows .date-arrows {

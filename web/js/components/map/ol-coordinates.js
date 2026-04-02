@@ -9,7 +9,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
-import { changeCoordinateFormat } from '../../modules/settings/actions';
+import { changeCoordinateFormat as changeCoordinateFormatAction } from '../../modules/settings/actions';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 import { CRS } from '../../modules/map/constants';
 
@@ -67,8 +67,8 @@ class OlCoordinates extends React.Component {
       return;
     }
     let pcoord = transform(coord, crs, CRS.GEOGRAPHIC);
-    // eslint-disable-next-line prefer-const
-    let [lon, lat] = pcoord;
+
+    const [lon, lat] = pcoord;
     if (Math.abs(lat) > 90) {
       this.clearCoord();
       return;
@@ -130,9 +130,10 @@ class OlCoordinates extends React.Component {
       hasMouse, format, latitude, longitude, crs, width,
     } = this.state;
     const { show, isMobile } = this.props;
-    const coordContainerStyle = isMobile ? {
-      display: 'none',
-    }
+    const coordContainerStyle = isMobile
+      ? {
+        display: 'none',
+      }
       : {
         width,
       };
@@ -172,7 +173,7 @@ function mapStateToProps (state) {
 
 const mapDispatchToProps = (dispatch) => ({
   changeCoordinateFormat: (value) => {
-    dispatch(changeCoordinateFormat(value));
+    dispatch(changeCoordinateFormatAction(value));
   },
 });
 

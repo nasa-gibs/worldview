@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -63,9 +63,9 @@ function BrowseLayers (props) {
     ? GEOGRAPHIC_TAB_KEYS
     : POLAR_TAB_KEYS;
 
-  const isCategoryDisplay = mode === 'category'
-    && selectedProjection === 'geographic'
-    && categoryType !== 'recent';
+  const isCategoryDisplay = mode === 'category' &&
+    selectedProjection === 'geographic' &&
+    categoryType !== 'recent';
 
   /**
    * Update category type in which to show
@@ -95,9 +95,9 @@ function BrowseLayers (props) {
             </div>
           </div>
           { !isMobile && (
-          <div className="layer-detail-container layers-all browse">
-            <MeasurementMetadataDetail />
-          </div>
+            <div className="layer-detail-container layers-all browse">
+              <MeasurementMetadataDetail />
+            </div>
           )}
         </div>
       );
@@ -205,25 +205,26 @@ function BrowseLayers (props) {
     <>
       { isMobile ? renderMobileDropdown() : renderDesktopTabs() }
       {
-      isCategoryDisplay
-        ? (
-          <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
-            <CategoryGrid width={width} />
-          </div>
-        ) : renderContent()
+        isCategoryDisplay
+          ? (
+            <div className={isMobile ? 'product-outer-list-case scrollable-layer-container' : ''}>
+              <CategoryGrid width={width} />
+            </div>
+          )
+          : renderContent()
       }
     </>
   );
 }
 
 BrowseLayers.propTypes = {
-  categoryTabNames: PropTypes.array,
+  categoryTabNames: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
   clearRecentLayers: PropTypes.func,
   isMobile: PropTypes.bool,
   selectedCategoryName: PropTypes.string,
   mode: PropTypes.string,
-  recentLayers: PropTypes.array,
+  recentLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   selectCategoryType: PropTypes.func,
   selectedProjection: PropTypes.string,
   toggleMeasurementsTab: PropTypes.func,

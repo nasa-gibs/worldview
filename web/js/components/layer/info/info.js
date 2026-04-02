@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
 import { coverageDateFormatter } from '../../../modules/date/util';
 
-export default function LayerInfo ({ layer, measurementDescriptionPath }) {
+export default function LayerInfo ({ layer, measurementDescriptionPath, describeDomainsUrl }) {
   const {
     dateRanges,
     endDate,
@@ -31,7 +31,6 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
         setFn(metadataHtml || 'No description was found for this layer.');
       } catch (e) {
         if (!controller.signal.aborted) {
-          // eslint-disable-next-line no-console
           console.error(e);
         }
       }
@@ -69,27 +68,31 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
             )}
           </span>
           <span id={`${id}-endDate`} className="layer-date-end">
-            {isRange ? (
-              <>
-                -
-                <FormattedEndDate />
-              </>
-            ) : startDate && ' - Present'}
+            {isRange
+              ? (
+                <>
+                  -
+                  <FormattedEndDate />
+                </>
+              )
+              : startDate && ' - Present'}
           </span>
-          {needDateRanges && <DateRanges layer={layer} />}
+          {needDateRanges && <DateRanges layer={layer} describeDomainsUrl={describeDomainsUrl} />}
         </div>
       )}
-      {layerMetadata ? (
-        <div
-          id="layer-metadata"
-          className="layer-metadata"
-          dangerouslySetInnerHTML={{ __html: layerMetadata }}
-        />
-      ) : (
-        <div id="layer-metadata" className="layer-metadata">
-          <p>Loading Layer Description...</p>
-        </div>
-      )}
+      {layerMetadata
+        ? (
+          <div
+            id="layer-metadata"
+            className="layer-metadata"
+            dangerouslySetInnerHTML={{ __html: layerMetadata }}
+          />
+        )
+        : (
+          <div id="layer-metadata" className="layer-metadata">
+            <p>Loading Layer Description...</p>
+          </div>
+        )}
 
       {measurementMetadata && (
         <div
@@ -102,6 +105,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath }) {
 }
 
 LayerInfo.propTypes = {
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   measurementDescriptionPath: PropTypes.string,
+  describeDomainsUrl: PropTypes.string,
 };

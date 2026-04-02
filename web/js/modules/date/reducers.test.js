@@ -5,6 +5,7 @@ import {
 import {
   CHANGE_TIME_SCALE,
   CHANGE_CUSTOM_INTERVAL,
+  CHANGE_AUTO_INTERVAL,
   CHANGE_INTERVAL,
   SELECT_DATE,
   UPDATE_APP_NOW,
@@ -23,8 +24,8 @@ describe('dateReducer', () => {
   });
   test(
     `${CHANGE_TIME_SCALE
-    }action type and ${selectedZoom} as selectedZoom `
-      + 'should return new state [date-reducer-time-scale]',
+    }action type and ${selectedZoom} as selectedZoom ` +
+      'should return new state [date-reducer-time-scale]',
     () => {
       expect(
         dateReducer(dateReducerState, {
@@ -39,8 +40,8 @@ describe('dateReducer', () => {
   );
   test(
     `${CHANGE_CUSTOM_INTERVAL
-    }action type and 4 as customInterval and 10 as customDelta `
-      + 'should return new state [date-reducer-custom-interval]',
+    }action type and 4 as customInterval and 10 as customDelta ` +
+      'should return new state [date-reducer-custom-interval]',
     () => {
       expect(
         dateReducer(dateReducerState, {
@@ -57,9 +58,27 @@ describe('dateReducer', () => {
     },
   );
   test(
+    `${CHANGE_AUTO_INTERVAL
+    }action type and true as autoSelected ` +
+      'should return new state [date-reducer-auto-interval]',
+    () => {
+      expect(
+        dateReducer(dateReducerState, {
+          type: CHANGE_AUTO_INTERVAL,
+          interval: 3,
+          delta: 1,
+          autoSelected: true,
+        }),
+      ).toEqual({
+        ...dateReducerState,
+        autoSelected: true,
+      });
+    },
+  );
+  test(
     `${CHANGE_INTERVAL
-    }action type and 1 as delta and 2 as interval `
-      + 'should return new state [date-reducer-interval]',
+    }action type and 1 as delta and 2 as interval ` +
+      'should return new state [date-reducer-interval]',
     () => {
       expect(
         dateReducer(dateReducerState, {
@@ -67,18 +86,20 @@ describe('dateReducer', () => {
           interval: 2,
           delta: 1,
           customSelected: false,
+          autoSelected: false,
         }),
       ).toEqual({
         ...dateReducerState,
         interval: 2,
         delta: 1,
         customSelected: false,
+        autoSelected: false,
       });
     },
   );
   test(
-    `${SELECT_DATE} action type and ${mockDate} as value and selected `
-      + 'as activeString should return new state [date-reducer-selected]',
+    `${SELECT_DATE} action type and ${mockDate} as value and selected ` +
+      'as activeString should return new state [date-reducer-selected]',
     () => {
       expect(
         dateReducer(dateReducerState, {
@@ -94,8 +115,8 @@ describe('dateReducer', () => {
   );
   test(
     `${SELECT_DATE
-    }action type and ${mockDate} as value and selectedB `
-      + 'as activeString should return new state [date-reducer-selectedB]',
+    }action type and ${mockDate} as value and selectedB ` +
+      'as activeString should return new state [date-reducer-selectedB]',
     () => {
       expect(
         dateReducer(dateReducerState, {

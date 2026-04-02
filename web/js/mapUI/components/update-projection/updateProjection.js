@@ -6,8 +6,8 @@ import {
   get as lodashGet,
 } from 'lodash';
 import {
-  fitToLeadingExtent,
-  updateMapUI,
+  fitToLeadingExtent as fitToLeadingExtentAction,
+  updateMapUI as updateMapUIAction,
 } from '../../../modules/map/actions';
 import { getLeadingExtent } from '../../../modules/map/util';
 import {
@@ -24,8 +24,9 @@ import * as vectorStyleConstants from '../../../modules/vector-styles/constants'
 import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
-import { requestPalette } from '../../../modules/palettes/actions';
+import { requestPalette as requestPaletteAction } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
+import { addTEMPODateRanges as addTEMPODateRangesAction } from '../../../modules/layers/actions';
 
 function UpdateProjection(props) {
   const {
@@ -52,6 +53,7 @@ function UpdateProjection(props) {
     ui,
     renderedPalettes,
     requestPalette,
+    addTEMPODateRanges,
   } = props;
 
   const layerStateRef = useRef(layerState);
@@ -84,10 +86,15 @@ function UpdateProjection(props) {
  *
  * @param {string} compareActiveString
  * @param {string} compareDateString
- * @param {object} state object representing the layers, compare, & proj properties from global state
+ * @param {object} state object representing the layers,
+ * compare, & proj properties from global state
  * @param {object} granuleOptions object representing selected granule layer options
  */
-  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
+  async function getCompareLayerGroup(
+    [compareActiveString, compareDateString],
+    state,
+    granuleOptions,
+  ) {
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
     const layers = getLayers(state, { reverse: true }, compareSideLayers)
@@ -100,6 +107,9 @@ function UpdateProjection(props) {
         // Check if the layer contains a palette & load if necessary
         if (def.palette) {
           requestPalette(def.id);
+        }
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
         }
         return createLayer(def, options);
       });
@@ -132,7 +142,15 @@ function UpdateProjection(props) {
       clearLayers(saveCache);
       const defs = getLayers(layerStateRef.current, { reverse: true });
       const layerPromises = defs.map((def) => {
-        const options = getGranuleOptions(layerStateRef.current, def, compare.activeString, granuleOptions);
+        const options = getGranuleOptions(
+          layerStateRef.current,
+          def,
+          compare.activeString,
+          granuleOptions,
+        );
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
+        }
         return createLayer(def, options);
       });
       const layerResults = await Promise.allSettled(layerPromises);
@@ -144,7 +162,8 @@ function UpdateProjection(props) {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
       clearLayers(saveCache);
-      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerStateRef.current, granuleOptions));
+      const stateArrayGroups = stateArray
+        .map(async (arr) => getCompareLayerGroup(arr, layerStateRef.current, granuleOptions));
       const compareLayerGroups = await Promise.all(stateArrayGroups);
       mapUI?.setLayers(compareLayerGroups);
       compareMapUi.create(mapUI, compare.mode);
@@ -168,12 +187,12 @@ function UpdateProjection(props) {
  * @method hideMap
  * @static
  *
- * @param {object} map - Openlayers Map obj
+ * @param {object} mapObj - Openlayers Map obj
  *
  * @returns {void}
  */
-  function hideMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function hideMap(mapObj) {
+    const el = document.getElementById(`${mapObj.getTarget()}`);
     if (el) el.style.display = 'none';
   }
 
@@ -187,8 +206,8 @@ function UpdateProjection(props) {
  *
  * @returns {void}
  */
-  function showMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function showMap(mapObj) {
+    const el = document.getElementById(`${mapObj.getTarget()}`);
     if (el) el.style.display = 'block';
   }
 
@@ -218,10 +237,10 @@ function UpdateProjection(props) {
       hideMap(ui.selected);
     }
     ui.selected = ui.proj[proj.id];
-    const map = ui.selected;
+    const mapObj = ui.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const currentRotation = isProjectionRotatable ? mapObj.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
     const rotation = start ? rotationStart : currentRotation;
 
@@ -232,9 +251,9 @@ function UpdateProjection(props) {
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
     // using the previous value.
-    showMap(map);
+    showMap(mapObj);
 
-    map.updateSize();
+    mapObj.updateSize();
 
     if (ui.selected.previousCenter) {
       ui.selected.setCenter(ui.selected.previousCenter);
@@ -249,19 +268,19 @@ function UpdateProjection(props) {
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const view = map.getView();
-          const extent = view.calculateExtent(map.getSize());
-          fitToLeadingExtent(extent);
+          const view = mapObj.getView();
+          const calculatedExtent = view.calculateExtent(mapObj.getSize());
+          fitToLeadingExtent(calculatedExtent);
         };
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const view = map.getView();
+          const view = mapObj.getView();
           view.setRotation(rotationStart);
         };
       }
       if (extent) {
-        map.getView().fit(extent, {
+        mapObj.getView().fit(extent, {
           constrainResolution: false,
           callback,
         });
@@ -290,7 +309,7 @@ function UpdateProjection(props) {
     const zoom = ui.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
+    return fly(ui.selected, proj, coordinates, isKioskModeActive, zoom, rotation);
   };
 
   const actionSwitch = () => {
@@ -307,7 +326,7 @@ function UpdateProjection(props) {
           if (newState.v && !newState.e && extent) {
             flyToNewExtent(extent, rotate);
           }
-        }, 200); return;
+        }, 200); return undefined;
       }
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -327,14 +346,14 @@ function UpdateProjection(props) {
         if (compareMode === 'spy') {
           return reloadLayers();
         }
-        return;
+        return undefined;
       case layerConstants.REORDER_LAYERS:
       case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         reloadLayers();
         preloadForCompareMode();
-        return;
+        return undefined;
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
         return reloadLayers();
       case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
@@ -351,6 +370,7 @@ function UpdateProjection(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -386,10 +406,16 @@ function UpdateProjection(props) {
     if (!ui.selected) return;
     const prevL2Layers = selectL2Layers(prevActiveLayers);
     const activeL2Layers = selectL2Layers(activeLayers);
-    // Check if new date ranges have been added to L2 layers. We don't want to reload every time new ranges are added so also check if there were no ranges before.
-    const hasNewDateRanges = activeL2Layers.some((dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length) && prevL2Layers.includes(undefined);
-    const hasNewLayers = prevActiveLayers.length !== activeLayers.length; // Check if new layers have been added
-    const hasNewDate = selectedDate !== dateCompareState.date.selected; // Check if the date has changed
+    // Check if new date ranges have been added to L2 layers.
+    // We don't want to reload every time new ranges are added so
+    // also check if there were no ranges before.
+    const hasNewDateRanges = activeL2Layers.some(
+      (dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length,
+    ) && prevL2Layers.includes(undefined);
+    // Check if new layers have been added
+    const hasNewLayers = prevActiveLayers.length !== activeLayers.length;
+    // Check if the date has changed
+    const hasNewDate = selectedDate !== dateCompareState.date.selected;
     const needsReload = hasNewDateRanges || hasNewLayers || hasNewDate;
     setSelectedDate(dateCompareState.date.selected);
     if (needsReload) {
@@ -422,19 +448,22 @@ const mapStateToProps = (state) => {
     proj,
     map,
     renderedPalettes,
-    requestPalette,
+    requestPaletteAction,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   fitToLeadingExtent: (extent) => {
-    dispatch(fitToLeadingExtent(extent));
+    dispatch(fitToLeadingExtentAction(extent));
   },
   updateMapUI: (ui, rotation) => {
-    dispatch(updateMapUI(ui, rotation));
+    dispatch(updateMapUIAction(ui, rotation));
   },
   requestPalette: (id) => {
-    dispatch(requestPalette(id));
+    dispatch(requestPaletteAction(id));
+  },
+  addTEMPODateRanges: (layer, dateRanges, activeString) => {
+    dispatch(addTEMPODateRangesAction(layer, dateRanges, activeString));
   },
 });
 
@@ -444,26 +473,28 @@ export default connect(
 )(UpdateProjection);
 
 UpdateProjection.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
-  compare: PropTypes.object,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  compareMode: PropTypes.string,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layerState: PropTypes.object,
-  map: PropTypes.object,
-  models: PropTypes.object,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  models: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadForCompareMode: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   projectionTrigger: PropTypes.number,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
-  updateMapUi: PropTypes.func,
-  renderedPalettes: PropTypes.object,
+  updateMapUI: PropTypes.func,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
+  addTEMPODateRanges: PropTypes.func,
 };

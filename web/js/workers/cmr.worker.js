@@ -24,19 +24,22 @@ function mergeSortedGranuleDateRanges(granules) {
     const endTime = makeTime(end) + 60000;
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
-    if ((startTime >= lastRangeStartTime && startTime <= lastRangeEndTime) && (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) { // within current range, ignore
+    // within current range, ignore
+    if ((startTime >= lastRangeStartTime &&
+      startTime <= lastRangeEndTime) &&
+      (endTime >= lastRangeStartTime && endTime <= lastRangeEndTime)) {
       return acc;
     }
     if (startTime > lastRangeEndTime) { // discontinuous, add new range
       return [...acc, [start, end]];
     }
-    if (startTime <= lastRangeEndTime && endTime > lastRangeEndTime) { // intersects current range, merge
+    if (startTime <= lastRangeEndTime &&
+      endTime > lastRangeEndTime) { // intersects current range, merge
       return acc.with(-1, [acc.at(-1)[0], end]);
     }
     return acc;
   }, []);
 }
-
 
 /**
  * @method requestGranules
@@ -56,7 +59,6 @@ async function requestGranules(params) {
   let hits = Infinity;
   let searchAfter = false;
   const url = `https://cmr.earthdata.nasa.gov/search/granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
-  /* eslint-disable no-await-in-loop */
   do { // run the query at least once
     const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'Worldview' } : { 'Client-Id': 'Worldview' };
     const res = await fetch(url, { headers });
@@ -100,12 +102,15 @@ async function getLayerGranuleRanges(layer) {
     nonNRTGranules = await requestGranules(nonNRTParams);
   }
   const granules = [...nonNRTGranules, ...nrtGranules];
-  const granuleDateRanges = granules.map(({ time_start: timeStart, time_end: timeEnd }) => [timeStart, timeEnd]);
-  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges); // merge overlapping granule ranges to simplify rendering
+  const granuleDateRanges = granules.map(({
+    time_start: timeStart,
+    time_end: timeEnd,
+  }) => [timeStart, timeEnd]);
+  // merge overlapping granule ranges to simplify rendering
+  const mergedGranuleDateRanges = mergeSortedGranuleDateRanges(granuleDateRanges);
 
   return mergedGranuleDateRanges;
 }
-
 
 const functions = {
   getLayerGranuleRanges,

@@ -11,11 +11,11 @@
                     "description": "",
                     "image": "",
                     "settings": [
-		                "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_12KM",
-		                "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_14KM",
-	                    "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_16KM",
-	                  	"OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_18KM",
-	                  	"OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_20KM",
+		                "OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_12KM",
+		                "OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_14KM",
+	                    "OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_16KM",
+	                  	"OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_18KM",
+	                  	"OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_20KM",
                         "OMPS_SNPP_LimbProfiler_AerosolHeight"
                     ]
                 },
@@ -25,11 +25,11 @@
                     "description": "",
                     "image": "",
                     "settings": [
-		                "OMPS_NOAA21_LimbProfiler_Aerosol_ExinctionCoefficient_12KM",
-		                "OMPS_NOAA21_LimbProfiler_Aerosol_ExinctionCoefficient_14KM",
-	                    "OMPS_NOAA21_LimbProfiler_Aerosol_ExinctionCoefficient_16KM",
-	                  	"OMPS_NOAA21_LimbProfiler_Aerosol_ExinctionCoefficient_18KM",
-	                  	"OMPS_NOAA21_LimbProfiler_Aerosol_ExinctionCoefficient_20KM",
+		                "OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_12KM",
+		                "OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_14KM",
+	                    "OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_16KM",
+	                  	"OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_18KM",
+	                  	"OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_20KM",
                         "OMPS_NOAA21_LimbProfiler_AerosolHeight"
                     ]
                 }

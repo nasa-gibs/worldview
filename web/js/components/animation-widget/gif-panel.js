@@ -11,11 +11,11 @@ const MAX_IMAGE_DIMENSION_SIZE = 8200;
 
 const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
   return (
-    requestSize < MAX_GIF_SIZE
-    && imgHeight !== 0
-    && imgWidth !== 0
-    && imgHeight <= MAX_IMAGE_DIMENSION_SIZE
-    && imgWidth <= MAX_IMAGE_DIMENSION_SIZE
+    requestSize < MAX_GIF_SIZE &&
+    imgHeight !== 0 &&
+    imgWidth !== 0 &&
+    imgHeight <= MAX_IMAGE_DIMENSION_SIZE &&
+    imgWidth <= MAX_IMAGE_DIMENSION_SIZE
   );
 };
 
@@ -118,14 +118,14 @@ GifPanel.propTypes = {
   endDate: PropTypes.string,
   firstLabel: PropTypes.string,
   increment: PropTypes.string,
-  lonlats: PropTypes.array,
+  lonlats: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onCheck: PropTypes.func,
   onClick: PropTypes.func,
   onDownloadClick: PropTypes.func,
   projId: PropTypes.string,
   resolution: PropTypes.string,
-  resolutions: PropTypes.object,
+  resolutions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showDates: PropTypes.bool,
   speed: PropTypes.number,
   startDate: PropTypes.string,

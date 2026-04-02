@@ -10,23 +10,21 @@ import Opacity from './opacity';
 import Palette from './palette';
 import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
-import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
 import safeLocalStorage from '../../../util/local-storage';
 import ImagerySearch from './imagery-search';
 
-
 import {
-  palettesTranslate,
+  palettesTranslate as palettesTranslateUtil,
 } from '../../../modules/palettes/util';
 import {
-  getDefaultLegend,
-  getCustomPalette,
-  getPaletteLegends,
-  getPalette,
-  getPaletteLegend,
+  getDefaultLegend as getDefaultLegendSelector,
+  getCustomPalette as getCustomPaletteSelector,
+  getPaletteLegends as getPaletteLegendsSelector,
+  getPalette as getPaletteSelector,
+  getPaletteLegend as getPaletteLegendSelector,
   isPaletteAllowed,
 } from '../../../modules/palettes/selectors';
 import {
@@ -35,8 +33,8 @@ import {
 } from '../../../modules/layers/selectors';
 import {
   setThresholdRangeAndSquash,
-  setCustomPalette,
-  clearCustomPalette,
+  setCustomPalette as setCustomPaletteAction,
+  clearCustomPalette as clearCustomPaletteAction,
   setToggledClassification,
   refreshDisabledClassification,
 } from '../../../modules/palettes/actions';
@@ -50,9 +48,9 @@ import {
   getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
 import {
-  updateGranuleLayerOptions,
-  resetGranuleLayerDates,
-  setOpacity,
+  updateGranuleLayerOptions as updateGranuleLayerOptionsAction,
+  resetGranuleLayerDates as resetGranuleLayerDatesAction,
+  setOpacity as setOpacityAction,
 } from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
 
@@ -125,14 +123,16 @@ class LayerSettings extends React.Component {
               palette={palette}
               toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)}
               legend={legend}
-              toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, i, groupName); }}
+              toggleAll={(disabledArray) => {
+                toggleAllClassifications(layer.id, disabledArray, i, groupName);
+              }}
             />
           </TabPane>
         );
       } else if (
-        legend.type !== 'continuous'
-        && legend.type !== 'discrete'
-        && legend.colors.length > 1
+        legend.type !== 'continuous' &&
+        legend.type !== 'discrete' &&
+        legend.colors.length > 1
       ) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
@@ -142,23 +142,25 @@ class LayerSettings extends React.Component {
       } else {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
-            {legend.type !== 'classification' ? (
-              <PaletteThreshold
-                key={`${layer.id + i}_threshold`}
-                legend={legend}
-                setRange={setThresholdRange}
-                globalTemperatureUnit={globalTemperatureUnit}
-                min={0}
-                max={max}
-                start={start}
-                groupName={groupName}
-                end={end}
-                layerId={layer.id}
-                squashed={!!palette.squash}
-                index={i}
-                palette={palette}
-              />
-            ) : null}
+            {legend.type !== 'classification'
+              ? (
+                <PaletteThreshold
+                  key={`${layer.id + i}_threshold`}
+                  legend={legend}
+                  setRange={setThresholdRange}
+                  globalTemperatureUnit={globalTemperatureUnit}
+                  min={0}
+                  max={max}
+                  start={start}
+                  groupName={groupName}
+                  end={end}
+                  layerId={layer.id}
+                  squashed={!!palette.squash}
+                  index={i}
+                  palette={palette}
+                />
+              )
+              : null}
 
             <Palette
               setCustomPalette={setCustomPalette}
@@ -227,14 +229,16 @@ class LayerSettings extends React.Component {
           palette={palette}
           toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)}
           legend={legend}
-          toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, 0, groupName); }}
+          toggleAll={(disabledArray) => {
+            toggleAllClassifications(layer.id, disabledArray, 0, groupName);
+          }}
         />
       );
     }
     return (
       <>
-        {legend.type !== 'classification'
-          && (
+        {legend.type !== 'classification' &&
+          (
             <PaletteThreshold
               key={`${layer.id}0_threshold`}
               legend={legend}
@@ -265,34 +269,6 @@ class LayerSettings extends React.Component {
           paletteOrder={paletteOrder}
         />
       </>
-    );
-  }
-
-  /**
-   * Render Opacity, threshold, and custom palette options
-   */
-  renderVectorStyles() {
-    const {
-      setStyle,
-      clearStyle,
-      groupName,
-      layer,
-      vectorStyles,
-    } = this.props;
-    let customStyle;
-    if (layer.custom && layer.custom[0]) {
-      [customStyle] = layer.custom;
-    }
-    return (
-      <VectorStyle
-        setStyle={setStyle}
-        clearStyle={clearStyle}
-        activeVectorStyle={customStyle || layer.id}
-        layer={layer}
-        index={0}
-        groupName={groupName}
-        vectorStyles={vectorStyles}
-      />
     );
   }
 
@@ -330,7 +306,8 @@ class LayerSettings extends React.Component {
             />
           )}
         </>
-      ) : null;
+      )
+      : null;
   };
 
   render() {
@@ -401,12 +378,17 @@ function mapStateToProps(state, ownProps) {
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
-    palettesTranslate,
-    getDefaultLegend: (layerId, index) => getDefaultLegend(layerId, index, state),
-    getCustomPalette: (id) => getCustomPalette(id, custom),
-    getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
-    getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
-    getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
+    palettesTranslate: palettesTranslateUtil,
+    getDefaultLegend: (layerId, index) => getDefaultLegendSelector(layerId, index, state),
+    getCustomPalette: (id) => getCustomPaletteSelector(id, custom),
+    getPaletteLegend: (layerId, index) => getPaletteLegendSelector(
+      layerId,
+      index,
+      groupName,
+      state,
+    ),
+    getPaletteLegends: (layerId) => getPaletteLegendsSelector(layerId, groupName, state),
+    getPalette: (layerId, index) => getPaletteSelector(layerId, index, groupName, state),
     getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
     vectorStyles: config.vectorStyles,
   };
@@ -433,10 +415,10 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
-    dispatch(setCustomPalette(layerId, paletteId, index, groupName));
+    dispatch(setCustomPaletteAction(layerId, paletteId, index, groupName));
   },
   clearCustomPalette: (layerId, index, groupName) => {
-    dispatch(clearCustomPalette(layerId, index, groupName));
+    dispatch(clearCustomPaletteAction(layerId, index, groupName));
   },
   setStyle: (layer, vectorStyleId, groupName) => {
     dispatch(setStyle(layer, vectorStyleId, groupName));
@@ -445,13 +427,13 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(clearStyle(layer, vectorStyleId, groupName));
   },
   setOpacity: (id, opacity) => {
-    dispatch(setOpacity(id, opacity));
+    dispatch(setOpacityAction(id, opacity));
   },
   updateGranuleLayerOptions: (dates, def, count) => {
-    dispatch(updateGranuleLayerOptions(dates, def, count));
+    dispatch(updateGranuleLayerOptionsAction(dates, def, count));
   },
   resetGranuleLayerDates: (id) => {
-    dispatch(resetGranuleLayerDates(id));
+    dispatch(resetGranuleLayerDatesAction(id));
   },
 });
 
@@ -466,30 +448,26 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   clearCustomPalette: PropTypes.func,
-  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
-  granuleOptions: PropTypes.object,
+  granuleOptions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
-  layer: PropTypes.object,
-  onCustomizeBandClick: PropTypes.func,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   palettedAllowed: PropTypes.bool,
-  paletteOrder: PropTypes.array,
+  paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,
   resetGranuleLayerDates: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
-  setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
-  vectorStyles: PropTypes.object,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

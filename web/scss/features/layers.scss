@@ -294,6 +294,10 @@
 
   .layers-all-header {
     padding: 0 0 0 25px;
+    width: 100%;
+    background: inherit;
+    text-align: left;
+    border: none;
 
     &.notice {
       padding: 0 70px 0 25px;

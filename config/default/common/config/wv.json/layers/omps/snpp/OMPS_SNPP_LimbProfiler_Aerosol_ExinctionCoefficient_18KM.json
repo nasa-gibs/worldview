@@ -1,8 +1,8 @@
 {
   "layers": {
-    "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_18KM": {
-      "id": "OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_18KM",
-      "description": "omps/snpp/OMPS_SNPP_LimbProfiler_Aerosol_ExinctionCoefficient_18KM",
+    "OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_18KM": {
+      "id": "OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_18KM",
+      "description": "omps/snpp/OMPS_SNPP_LimbProfiler_Aerosol_ExtinctionCoefficient_18KM",
       "tags": "AOD",
       "group": "overlays",
       "wrapadjacentdays": true,

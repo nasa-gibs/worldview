@@ -1,12 +1,11 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import util from '../../util/util';
 import OlCoordinates from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 
-jest.mock('react-redux', () => ({ connect: () => (OlCoordinates) => OlCoordinates }));
+jest.mock('react-redux', () => ({ connect: () => (OlCoordinatesMock) => OlCoordinatesMock }));
 
 const { events } = util;
 let container;
@@ -30,7 +29,9 @@ beforeEach(() => {
 
 afterEach(() => {
   util.setCoordinateFormat('latlon-dd');
-  root.unmount(container);
+  act(() => {
+    root.unmount();
+  });
   container.remove();
   container = null;
 });
