@@ -1,3 +1,4 @@
+/* eslint no-underscore-dangle: 0 */
 import html2canvas from 'html2canvas';
 import {
   get as lodashGet,
@@ -151,7 +152,11 @@ export function imageUtilCalculateResolution(
     ? resolutions[nZoomLevels - 1]
     : resolutions[currentZoom];
 
-  const currResolutionInMeters = convertResolutionToMetersPerPixel(curResolution, projection, center);
+  const currResolutionInMeters = convertResolutionToMetersPerPixel(
+    curResolution,
+    projection,
+    center,
+  );
 
   const getResolutions = (config) => config.values.map((res) => res.value);
 
@@ -339,7 +344,11 @@ export function getTruncatedGranuleDates(layerDefs) {
  * @returns {Number} - Scale factor to apply to map
  */
 function calculateScaleFactor(targetMetersPerPixel, projection, mapResolution, center) {
-  const currentResolutionInMeters = convertResolutionToMetersPerPixel(mapResolution, projection, center);
+  const currentResolutionInMeters = convertResolutionToMetersPerPixel(
+    mapResolution,
+    projection,
+    center,
+  );
 
   // Calculate scale factor needed to achieve target resolution
   return evaluate(`${currentResolutionInMeters} / ${targetMetersPerPixel}`);
@@ -450,10 +459,16 @@ export function convertPngToKml(pngBlob, options) {
   return new Promise((resolve, reject) => {
     try {
       // Validate input
-      if (!(pngBlob instanceof Blob)) return reject(new Error('Input must be a Blob'));
+      if (!(pngBlob instanceof Blob)) {
+        reject(new Error('Input must be a Blob'));
+        return;
+      }
 
       // KML requires coordinates in EPSG:4326 (WGS84)
-      if (options.crs !== 'EPSG:4326') return reject(new Error('KML requires WGS84 coordinates'));
+      if (options.crs !== 'EPSG:4326') {
+        reject(new Error('KML requires WGS84 coordinates'));
+        return;
+      }
 
       const reader = new FileReader();
 
@@ -531,8 +546,10 @@ export async function georeference (inputBlob, options) {
     captureHeight,
     captureWidth,
   } = options;
-  if (outputFormat === 'tiff' || outputFormat === 'geotiff') outputFormat = 'tif'; // Normalize tiff to tif for consistency
-  if (outputFormat === 'jpeg') outputFormat = 'jpg'; // Normalize jpg to jpeg for consistency
+  // Normalize tiff to tif for consistency
+  if (outputFormat === 'tiff' || outputFormat === 'geotiff') outputFormat = 'tif';
+  // Normalize jpg to jpeg for consistency
+  if (outputFormat === 'jpeg') outputFormat = 'jpg';
   if (outputFormat === 'kml') {
     const blob = await convertPngToKml(inputBlob, options);
 
@@ -569,7 +586,8 @@ export async function georeference (inputBlob, options) {
     translateOpts.push('-co', `TFW=${worldfile}`); // Create ESRI tfw file
   }
 
-  // For JPEG output, ensure RGB color space by selecting only RGB bands and setting color interpretation
+  // For JPEG output, ensure RGB color space by selecting
+  // only RGB bands and setting color interpretation
   if (driver === 'JPEG') {
     const jpegOpts = [
       '-co', 'QUALITY=75', // Maximum quality
@@ -615,12 +633,14 @@ export async function georeference (inputBlob, options) {
  */
 function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) {
   const originalSource = layer.getSource();
-  if (typeof originalSource?.getTileGrid !== 'function') return () => null; // No tile grid to update
+  // No tile grid to update
+  if (typeof originalSource?.getTileGrid !== 'function') return () => null;
   const SourceConstructor = originalSource.constructor;
   const originalTileGrid = originalSource.getTileGrid();
   const TileGridConstructor = originalTileGrid.constructor;
   const resolutions = originalTileGrid.getResolutions();
-  if (typeof originalTileGrid.getMatrixIds !== 'function') return () => null; // No matrix IDs to update
+  // No matrix IDs to update
+  if (typeof originalTileGrid.getMatrixIds !== 'function') return () => null;
   const matrixIds = originalTileGrid.getMatrixIds?.();
   const maxResolutions = resolutions.slice(0, tileMatrixID + 1);
   const maxMatrixIds = matrixIds ? matrixIds.slice(0, tileMatrixID + 1) : undefined;
@@ -636,7 +656,8 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) 
     maxZoom: tileMatrixID,
   });
 
-  const originalTileLoadFunction = originalSource.getTileLoadFunction?.() || originalSource.tileLoadFunction_;
+  const originalTileLoadFunction = originalSource.getTileLoadFunction?.() ||
+    originalSource.tileLoadFunction_;
 
   const cancellableTileLoadFunction = async (tile, src) => {
     try {
@@ -790,7 +811,8 @@ function getExtentFromPixelBbox(pixelBbox, map) {
 async function fitViewToExtent(map, extent) {
   return new Promise((resolve) => {
     const view = map.getView();
-    // the callback option in view.fit is called before the view is actually fitted in safari, so we need to wait for the render complete event
+    // the callback option in view.fit is called before the view is actually fitted in safari,
+    // so we need to wait for the render complete event
     map.once('rendercomplete', () => resolve());
     view.fit(extent, { callback: () => map.render() });
   });
@@ -823,7 +845,7 @@ function ignoreElementsFunc(element) {
  * @param {Object} options.map - OpenLayers map instance
  * @param {Boolean} options.worldfile - Whether to include a worldfile
  * @param {Boolean} options.useHighResTileGrids - Whether to use high resolution tile grids
- * @param {AbortSignal} options.abortSignal - Optional AbortController signal to cancel the operation
+ * @param {AbortSignal} options.abortSignal - Optional AbortController signal to cancel operation
  * @returns {Promise<void>} - Promise that resolves when snapshot is complete
  * @throws {DOMException} - Throws AbortError if the operation is cancelled
  */
@@ -856,7 +878,8 @@ export async function snapshot(options) {
   const config = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
   const tileMatrixID = config.values.find((res) => res.value === metersPerPixel)?.tileMatrixID;
 
-  // Create a restore function for the map state. This also manages the use of high-res tilegrids for the layers.
+  // Create a restore function for the map state.
+  // This also manages the use of high-res tilegrids for the layers.
   const restoreMap = createMapRestore(map, extent, abortSignal, tileMatrixID, onerror);
   const view = map.getView();
 
@@ -889,7 +912,10 @@ export async function snapshot(options) {
   const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${devicePixelRatio}`);
   const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${devicePixelRatio}`);
 
-  if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}. Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
+  if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) {
+    throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}.
+      Current size: ${Math.floor(scaledMapWidthWithDPR)}x${Math.floor(scaledMapHeightWithDPR)}.`);
+  }
 
   const scaledResolution = evaluate(`${viewResolution} / ${scaleFactor}`);
   const mapElement = map.getTargetElement();
@@ -901,7 +927,10 @@ export async function snapshot(options) {
   view.setResolution(scaledResolution);
 
   await waitForRenderComplete(map);
-  await new Promise((r) => setTimeout(r, 250)); // Allows time for tracks to re-adjust position/size
+  // Allows time for tracks to re-adjust position/size
+  await new Promise((resolve) => {
+    setTimeout(resolve, 250);
+  });
 
   const topLeft = olExtent.getTopLeft(extent);
   const bottomLeft = olExtent.getBottomLeft(extent);
@@ -945,7 +974,7 @@ export async function snapshot(options) {
     logging: false,
     imageTimeout: 0,
     removeContainer: true,
-    ignoreElements: ignoreElementsFunc, // this is super finicky, maybe prep the mapElement by hiding elements using css,
+    ignoreElements: ignoreElementsFunc,
   });
 
   const sourceX = evaluate(`${aoiPixelXOffset} * ${dpr}`);
@@ -983,7 +1012,9 @@ export async function snapshot(options) {
     quality: 1, // Maximum quality
   });
 
-  const crs = map.getView().getProjection().getCode();
+  const crs = map.getView()
+    .getProjection()
+    .getCode();
 
   const georeferencedOutput = await georeference(pngBlob, {
     extent,
@@ -1008,7 +1039,11 @@ export async function snapshot(options) {
       mimeType: format !== 'kmz' ? 'application/zip' : 'application/vnd.google-earth.kmz',
     });
 
-    return initiateDownload(zipBlob, `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`, abortSignal);
+    return initiateDownload(
+      zipBlob,
+      `${filename}.${format !== 'kmz' ? 'zip' : 'kmz'}`,
+      abortSignal,
+    );
   }
 
   const { blob } = georeferencedOutput[0];
@@ -1141,7 +1176,8 @@ export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
   const multiLayers = layerStr.indexOf(',') > -1;
   const layerPluralStr = multiLayers ? 'layers' : 'layer';
   const thisTheseStr = multiLayers ? 'these' : 'this';
-  return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot. Would you like to temporarily hide ${thisTheseStr} layer?`;
+  return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot.
+    Would you like to temporarily hide ${thisTheseStr} layer?`;
 }
 /**
  * Get array of layers that will be removed if notification is accepted
@@ -1174,10 +1210,14 @@ export function getAlertMessageIfCrossesDateline(date, geolonlat1, geolonlat2, p
     const zeroedDate = util.clearTimeUTC(date);
     const nextDay = formatDisplayDate(util.dateAdd(zeroedDate, 'day', 1));
     const prevDay = formatDisplayDate(util.dateAdd(zeroedDate, 'day', -1));
-    const buildString = (lineStr, dateStr) => `The selected snapshot area crosses ${lineStr} and uses imagery from the ${dateStr}.`;
+    const buildString = (lineStr, dateStr) =>
+      `The selected snapshot area crosses ${lineStr} and uses imagery from the ${dateStr}.`;
     if (crossesNextDay && crossesPrevDay) {
       // snapshot extends over both map wings
-      alertMessage = buildString('both datelines', `previous day ${prevDay} and next day ${nextDay}`);
+      alertMessage = buildString(
+        'both datelines',
+        `previous day ${prevDay} and next day ${nextDay}`,
+      );
     } else if (crossesNextDay) {
       // min longitude less than maxExtent min longitude (-180 geographic)
       alertMessage = buildString('the dateline', `next day ${nextDay}`);

@@ -25,8 +25,8 @@ export default function EventIcon (props) {
 
   return (
     <div>
-      {withPin
-        && (
+      {withPin &&
+        (
           <img
             id={`${id + category}-pin`}
             className={`event-icon-pin event-icon-${category}-pin`}

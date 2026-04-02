@@ -87,14 +87,14 @@ export function imageUtilGetCoordsFromPixelValues(pixels, map) {
 export function getDimensions(projection, bounds, resolution) {
   const conversionFactor = imageUtilGetConversionFactor(projection);
   const imgWidth = Math.round(
-    Math.abs(bounds[1][0] - bounds[0][0])
-    / conversionFactor
-    / Number(resolution),
+    Math.abs(bounds[1][0] - bounds[0][0]) /
+    conversionFactor /
+    Number(resolution),
   );
   const imgHeight = Math.round(
-    Math.abs(bounds[1][1] - bounds[0][1])
-    / conversionFactor
-    / Number(resolution),
+    Math.abs(bounds[1][1] - bounds[0][1]) /
+    conversionFactor /
+    Number(resolution),
   );
   return { width: imgWidth, height: imgHeight };
 }

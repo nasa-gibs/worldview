@@ -64,4 +64,3 @@ export const DRIVER_DICT = {
   jpeg: 'JPEG',
   png: 'PNG',
 };
-

@@ -51,8 +51,7 @@ function ImageDownloadPanel(props) {
     map,
     viewExtent,
     resolutions,
-    maxImageSize = '8200px x 8200px',
-    firstLabel = 'Resolution (per pixel)',
+    firstLabel,
     geoLatLong,
     onLatLongChange,
     boundaries,
@@ -164,7 +163,9 @@ function ImageDownloadPanel(props) {
     } finally {
       // Add a delay to show the 'Download complete!' message before clearing UI
       if (snapshotStatus === 'Download complete!') {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => {
+          setTimeout(resolve, 2000);
+        });
       }
       clearTimeout(timeout);
       setIsSnapshotInProgress(false);
@@ -353,14 +354,12 @@ ImageDownloadPanel.propTypes = {
   isWorldfile: PropTypes.bool,
   lonlats: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
-  markerCoordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   onPanelChange: PropTypes.func,
   projection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   resolution: PropTypes.number,
   resolutions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   secondLabel: PropTypes.string,
-  url: PropTypes.string,
   viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   worldFileOptions: PropTypes.bool,
   geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),

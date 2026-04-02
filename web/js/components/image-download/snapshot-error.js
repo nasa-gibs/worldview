@@ -1,5 +1,3 @@
-import React from 'react';
-
 function SnapshotError() {
   const msg = 'An error occurred while creating this snapshot. Please try again.';
   return (

@@ -802,25 +802,6 @@ export default function mapLayerBuilder(config, cache, store) {
     layer.wv = attributes;
     layer.isVector = true;
 
-    if (breakPointLayerDef && !animationIsPlaying) {
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      const layerGroup = new OlLayerGroup({
-        className: `wv-layer-group-${def.id}`,
-        layers: [layer, wmsLayer],
-      });
-      wmsLayer.wv = attributes;
-      return layerGroup;
-    }
-
-    if (breakPointResolution && animationIsPlaying) {
-      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      wmsLayer.wv = attributes;
-      return wmsLayer;
-    }
-
     return layer;
   };
 
