@@ -5,7 +5,6 @@ const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 /** @type {import('@playwright/test').Page} */
 let page
 let downloadPromise
-
 const startParams = [
   'v=-1,-1,1,1',
   't=2018-06-01'

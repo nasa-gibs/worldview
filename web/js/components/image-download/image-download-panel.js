@@ -108,10 +108,6 @@ function ImageDownloadPanel(props) {
     setResolution(resolution);
   }, [resolution]);
 
-  useEffect(() => {
-    setResolution(resolution);
-  }, [resolution]);
-
   const onDownload = async () => {
     const layerList = getLayers();
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
