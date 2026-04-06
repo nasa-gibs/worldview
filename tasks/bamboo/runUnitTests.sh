@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# This script installs NODE, checks out & builds Worldview, & then runs the linkcheck test
+# This script runs monthly as specified in Bamboo
+# The resulting report is emailed to recipients specified in Bamboo
+set -e -x
+
+# Install node.js
+NODE_VERSION=v24.11.1
+curl -O https://nodejs.org/dist/${NODE_VERSION}/node-${NODE_VERSION}-linux-x64.tar.gz
+tar xf node-${NODE_VERSION}-linux-x64.tar.gz &&
+export PATH=$(pwd)/node-${NODE_VERSION}-linux-x64/bin:${PATH}
+
+# Bamboo automatically sets NODE_ENV to production. Override this so that
+# devDependencies are installed.
+npm ci
+npm run build
+npm run test:unit:coverage
