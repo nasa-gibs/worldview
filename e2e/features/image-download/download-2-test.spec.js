@@ -14,11 +14,6 @@ let page
 /** @type {Promise<import("playwright-core").Download>} */
 let downloadPromise
 
-const startParams = [
-  'l=MODIS_Terra_CorrectedReflectance_TrueColor',
-  'v=-1,-1,1,1',
-  't=2018-06-01'
-]
 const downloadDir = 'test-downloads'
 
 test.beforeAll(() => {
@@ -42,51 +37,95 @@ test.afterAll(() => {
   }
 })
 
-test('download button downloads an image', async () => {
+test('download KMZ format with larger area', async () => {
   test.setTimeout(200_500)
-  const url = await joinUrl(startParams, null)
+  const largeAreaParams = [
+    'l=MODIS_Terra_CorrectedReflectance_TrueColor',
+    'v=-10,-10,10,10', // Larger viewport
+    't=2018-06-01'
+  ]
+
+  const url = await joinUrl(largeAreaParams, null)
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
 
-  // Start download and verify progress indicator appears
+  // Change format to KMZ
+  const formatSelect = page.locator('#wv-image-format')
+  await formatSelect.selectOption('application/vnd.google-earth.kmz')
+
+  // Set resolution to 1km for larger area
+  const resolutionSelect = page.locator('#wv-image-resolution')
+  await resolutionSelect.selectOption('1000')
+
   await clickDownload(page)
   await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.jpeg')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.kmz')
 
   const filePath = path.join(downloadDir, suggestedFilename)
-
-  // Save the downloaded file
   await download.saveAs(filePath)
 
-  // Assert that the file exists
   expect(fs.existsSync(filePath)).toBeTruthy()
-
-  // Check file size is greater than 0
   const fileStats = fs.statSync(filePath)
   expect(fileStats.size).toBeGreaterThan(0)
 
-  // Clean up the downloaded file (optional)
   fs.unlinkSync(filePath)
 })
 
-test('download PNG format with different resolution', async () => {
+test('download with different date and layers', async () => {
   test.setTimeout(200_500)
-  const url = await joinUrl(startParams, null)
+  const multiLayerParams = [
+    'l=MODIS_Terra_CorrectedReflectance_TrueColor,MODIS_Aqua_CorrectedReflectance_TrueColor',
+    'v=-5,-5,5,5',
+    't=2020-01-15'
+  ]
+
+  const url = await joinUrl(multiLayerParams, null)
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
 
-  // Change format to PNG
+  await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
+
+  const download = await downloadPromise
+  const suggestedFilename = download.suggestedFilename()
+  await expect(suggestedFilename).toMatch('snapshot-2020-01-15T00_00_00.000Z.jpeg')
+
+  const filePath = path.join(downloadDir, suggestedFilename)
+  await download.saveAs(filePath)
+
+  expect(fs.existsSync(filePath)).toBeTruthy()
+  const fileStats = fs.statSync(filePath)
+  expect(fileStats.size).toBeGreaterThan(0)
+
+  fs.unlinkSync(filePath)
+})
+
+test('download Arctic projection with PNG format', async () => {
+  test.setTimeout(200_500)
+  const arcticParams = [
+    'p=arctic',
+    'l=MODIS_Terra_CorrectedReflectance_TrueColor',
+    'v=-1000000,-1000000,1000000,1000000',
+    't=2018-06-01'
+  ]
+
+  const url = await joinUrl(arcticParams, null)
+  await page.goto(url)
+  await closeModal(page)
+  await openImageDownloadPanel(page)
+
+  // Change format to PNG (KMZ not available in polar projections)
   const formatSelect = page.locator('#wv-image-format')
   await formatSelect.selectOption('image/png')
 
-  // Change resolution to 250m
+  // Set appropriate resolution for Arctic
   const resolutionSelect = page.locator('#wv-image-resolution')
-  await resolutionSelect.selectOption('250')
+  await resolutionSelect.selectOption('1000')
 
   await clickDownload(page)
   await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
@@ -105,27 +144,29 @@ test('download PNG format with different resolution', async () => {
   fs.unlinkSync(filePath)
 })
 
-test('download GeoTIFF with worldfile enabled', async () => {
+test('download with high resolution (60m)', async () => {
   test.setTimeout(200_500)
-  const url = await joinUrl(startParams, null)
+  const highResParams = [
+    'l=MODIS_Terra_CorrectedReflectance_TrueColor',
+    'v=-0.5,-0.5,0.5,0.5', // Small area for high resolution
+    't=2018-06-01'
+  ]
+
+  const url = await joinUrl(highResParams, null)
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
 
-  // Change format to GeoTIFF
-  const formatSelect = page.locator('#wv-image-format')
-  await formatSelect.selectOption('image/tiff')
-
-  // Enable worldfile
-  const worldfileCheckbox = page.locator('#wv-image-worldfile')
-  await worldfileCheckbox.selectOption('1')
+  // Set high resolution
+  const resolutionSelect = page.locator('#wv-image-resolution')
+  await resolutionSelect.selectOption('60')
 
   await clickDownload(page)
   await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.jpeg')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -137,9 +178,16 @@ test('download GeoTIFF with worldfile enabled', async () => {
   fs.unlinkSync(filePath)
 })
 
-test('download GeoTIFF with entire globe selected', async () => {
+test('download with Antarctic projection and GeoTIFF', async () => {
   test.setTimeout(200_500)
-  const url = await joinUrl(startParams, null)
+  const antarcticParams = [
+    'p=antarctic',
+    'l=MODIS_Terra_CorrectedReflectance_TrueColor',
+    'v=-1000000,-1000000,1000000,1000000',
+    't=2018-06-01'
+  ]
+
+  const url = await joinUrl(antarcticParams, null)
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
@@ -148,12 +196,9 @@ test('download GeoTIFF with entire globe selected', async () => {
   const formatSelect = page.locator('#wv-image-format')
   await formatSelect.selectOption('image/tiff')
 
+  // Set resolution to 500m
   const resolutionSelect = page.locator('#wv-image-resolution')
-  await resolutionSelect.selectOption('5000')
-
-  // Select entire globe
-  const globeCheckbox = page.locator('#image-global-cb')
-  await globeCheckbox.click()
+  await resolutionSelect.selectOption('500')
 
   await clickDownload(page)
   await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
