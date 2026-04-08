@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 // eslint-disable-next-line no-unused-vars
@@ -6,6 +6,7 @@ import whatInput from 'what-input';
 
 // Utils
 import util from './util/util';
+import usePrevious from './util/customHooks';
 import { STARTUP } from './util/constants';
 import MapInteractions from './containers/map-interactions/map-interactions';
 // Toolbar
@@ -50,68 +51,39 @@ require('@elastic/react-search-ui-views/lib/styles/styles.css');
 
 const { events } = util;
 
-class App extends React.Component {
-  // https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-  static setVhCSSProperty() {
-    const vh = window.innerHeight * 0.01;
-    document.documentElement.style.setProperty('--vh', `${vh}px`);
-  }
+// https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+const setVhCSSProperty = () => {
+  const vh = window.innerHeight * 0.01;
+  document.documentElement.style.setProperty('--vh', `${vh}px`);
+};
 
-  constructor(props) {
-    super(props);
-    this.onload();
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
+function App(props) {
+  const {
+    isAnimationWidgetActive,
+    isEmbedModeActive,
+    isMobile,
+    isTourActive,
+    kioskModeEnabled,
+    e2eModeEnabled,
+    numberOutagesUnseen,
+    locationKey,
+    modalId,
+    notifications,
+    parameters,
+    config,
+    hideNotificationsPopup,
+    keyPressAction,
+    setScreenInfoAction,
+    notificationClick,
+  } = props;
 
-  componentDidMount() {
-    document.addEventListener('keydown', this.handleKeyPress);
-    window.addEventListener('resize', App.setVhCSSProperty);
-    window.addEventListener('orientationchange', App.setVhCSSProperty);
-  }
+  const prevNumberOutagesUnseen = usePrevious(numberOutagesUnseen);
 
-  componentDidUpdate(prevProps) {
-    // Check if the numberUnseen prop has changed
-    const {
-      kioskModeEnabled, notifications, numberOutagesUnseen, e2eModeEnabled, hideNotificationsPopup,
-    } = this.props;
-    if (numberOutagesUnseen !== prevProps.numberOutagesUnseen) {
-      if (numberOutagesUnseen > 0 && !kioskModeEnabled &&
-        !e2eModeEnabled && !hideNotificationsPopup) {
-        this.openNotification(notifications, numberOutagesUnseen);
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.handleKeyPress);
-    window.removeEventListener('resize', App.setVhCSSProperty);
-    window.removeEventListener('orientationchange', App.setVhCSSProperty);
-  }
-
-  handleKeyPress(event) {
-    const { keyPressAction } = this.props;
-    const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
-    const isInput = event.srcElement.nodeName === 'INPUT';
-    keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey, isInput);
-  }
-
-  getScreenInfo = () => {
-    const { setScreenInfoAction } = this.props;
-    setScreenInfoAction();
-  };
-
-  openNotification = (obj, numberOutagesUnseen) => {
-    const { notificationClick } = this.props;
-    notificationClick(obj, numberOutagesUnseen);
-  };
-
-  onload() {
-    const { props, getScreenInfo } = this;
-    const { config, parameters } = props;
-    const state = parameters;
-    config.parameters = state;
-
+  // One-time startup (replaces constructor -> onload())
+  useEffect(() => {
     const main = () => {
+      config.parameters = parameters;
+
       // Load any additional scripts as needed
       if (config.scripts) {
         util.loadScripts(config.scripts);
@@ -130,62 +102,76 @@ class App extends React.Component {
         console.warn('Development version');
       }
       window.addEventListener('resize', () => {
-        getScreenInfo();
+        setScreenInfoAction();
       });
       window.addEventListener('orientationchange', () => {
-        getScreenInfo();
+        setScreenInfoAction();
       });
-      getScreenInfo();
+      setScreenInfoAction();
       events.trigger(STARTUP);
-      App.setVhCSSProperty();
+      setVhCSSProperty();
     };
     util.wrap(main)();
-  }
+  }, []);
 
-  render() {
-    const {
-      isAnimationWidgetActive,
-      isEmbedModeActive,
-      isMobile,
-      isTourActive,
-      numberOutagesUnseen,
-      locationKey,
-      modalId,
-      parameters,
-      hideNotificationsPopup,
-    } = this.props;
-    const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
-    return (
-      <div className={appClass} id="wv-content" data-role="content">
-        {!isMobile && !isEmbedModeActive && <LocationSearch />}
-        <LoadingSpinner />
-        <Toolbar />
-        <MapInteractions />
-        <AlertDropdown isTourActive={isTourActive} />
-        <div>
-          {isTourActive && (numberOutagesUnseen === 0 ||
-            hideNotificationsPopup) && (!isMobile || isEmbedModeActive)
-            ? <Tour />
-            : null}
-        </div>
-        <Sidebar />
-        <div id="layer-modal" className="layer-modal" />
-        <div id="layer-settings-modal" />
-        <div id="eventsHolder" />
-        <div id="imagedownload" />
-        <Timeline />
-        <div>
-          {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
-        </div>
-        <MeasureButton />
-        <Embed />
-        <Modal key={modalId} />
-        <ErrorBoundary>
-          <Debug parameters={parameters} />
-        </ErrorBoundary>
+  // componentDidMount listeners + cleanup
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      const ctrlOrCmdKey = event.ctrlKey || event.metaKey;
+      const isInput = event.srcElement.nodeName === 'INPUT';
+      keyPressAction(event.keyCode, event.shiftKey, ctrlOrCmdKey, isInput);
+    };
+    document.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('resize', setVhCSSProperty);
+    window.addEventListener('orientationchange', setVhCSSProperty);
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('resize', setVhCSSProperty);
+      window.removeEventListener('orientationchange', setVhCSSProperty);
+    };
+  }, [keyPressAction]);
+
+  // componentDidUpdate: open notification modal when numberOutagesUnseen changes
+  useEffect(() => {
+    if (numberOutagesUnseen !== prevNumberOutagesUnseen) {
+      if (numberOutagesUnseen > 0 && !kioskModeEnabled &&
+        !e2eModeEnabled && !hideNotificationsPopup) {
+        notificationClick(notifications, numberOutagesUnseen);
+      }
+    }
+  }, [numberOutagesUnseen]);
+
+  const appClass = `wv-content ${isEmbedModeActive ? 'embed-mode' : ''}`;
+  return (
+    <div className={appClass} id="wv-content" data-role="content">
+      {!isMobile && !isEmbedModeActive && <LocationSearch />}
+      <LoadingSpinner />
+      <Toolbar />
+      <MapInteractions />
+      <AlertDropdown isTourActive={isTourActive} />
+      <div>
+        {isTourActive && (numberOutagesUnseen === 0 ||
+          hideNotificationsPopup) && (!isMobile || isEmbedModeActive)
+          ? <Tour />
+          : null}
       </div>
-    );
-  }
+      <Sidebar />
+      <div id="layer-modal" className="layer-modal" />
+      <div id="layer-settings-modal" />
+      <div id="eventsHolder" />
+      <div id="imagedownload" />
+      <Timeline />
+      <div>
+        {isAnimationWidgetActive ? <AnimationWidget key={locationKey || '2'} /> : null}
+      </div>
+      <MeasureButton />
+      <Embed />
+      <Modal key={modalId} />
+      <ErrorBoundary>
+        <Debug parameters={parameters} />
+      </ErrorBoundary>
+    </div>
+  );
 }
 
 function mapStateToProps(state) {
