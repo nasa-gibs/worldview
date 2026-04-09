@@ -1,0 +1,3 @@
+test('renderSplitTitle component test', () => {
+
+});
