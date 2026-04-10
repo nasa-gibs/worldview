@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-// eslint-disable-next-line no-unused-vars
-import whatInput from 'what-input';
 
 // Utils
 import util from './util/util';
