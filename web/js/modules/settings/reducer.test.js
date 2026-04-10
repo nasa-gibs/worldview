@@ -1,0 +1,3 @@
+test('reducer module test', () => {
+
+});
