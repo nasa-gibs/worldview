@@ -1,0 +1,3 @@
+test('scrollbar component test', () => {
+
+});

@@ -1,0 +1,3 @@
+test('updateOpacity mapUI test', () => {
+
+});

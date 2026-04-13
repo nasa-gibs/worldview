@@ -1,0 +1,3 @@
+test('tooltips component test', () => {
+
+});

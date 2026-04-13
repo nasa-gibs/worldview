@@ -1,0 +1,3 @@
+test('alert component test', () => {
+
+});

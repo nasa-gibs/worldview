@@ -1,0 +1,3 @@
+test('selectors module test', () => {
+
+});
