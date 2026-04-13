@@ -1,0 +1,3 @@
+test('canvg util test', () => {
+
+});

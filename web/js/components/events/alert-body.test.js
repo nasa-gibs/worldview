@@ -1,0 +1,3 @@
+test('alert-body test', () => {
+
+});

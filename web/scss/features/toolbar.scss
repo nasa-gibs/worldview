@@ -9,11 +9,11 @@
 }
 
 .wv-toolbar-button,
-[data-whatintent="mouse"] .wv-toolbar-button:focus {
+.wv-toolbar-button:focus:not(:focus-visible) {
   @include variables.wv-map-button;
 }
 
-[data-whatintent="keyboard"] .wv-toolbar-button:focus {
+.wv-toolbar-button:focus-visible {
   background-color: #eee;
   color: #1a1a1a;
 }
@@ -165,7 +165,7 @@
 
 @media (min-width: variables.$tablet-min-width) {
   .wv-toolbar-button,
-  [data-whatintent="mouse"] .wv-toolbar-button:focus {
+  .wv-toolbar-button:focus:not(:focus-visible) {
     font-size: 20px;
     height: 38px;
     margin: 0 0 0 5px;
