@@ -1,0 +1,3 @@
+test('swipe map test', () => {
+
+});

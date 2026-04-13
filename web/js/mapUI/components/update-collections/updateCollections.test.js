@@ -1,0 +1,3 @@
+test('updatecollections mapUI test', () => {
+
+});

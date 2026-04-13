@@ -1,0 +1,3 @@
+test('bufferQuickAnimate mapUI test', () => {
+
+});

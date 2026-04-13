@@ -1,0 +1,3 @@
+test('combine-middleware test', () => {
+
+});

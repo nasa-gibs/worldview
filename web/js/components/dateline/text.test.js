@@ -1,0 +1,3 @@
+test('text component test', () => {
+
+});
