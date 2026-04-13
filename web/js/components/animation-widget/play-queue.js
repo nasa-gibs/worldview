@@ -84,6 +84,7 @@ function PlayQueue(props) {
   const [isAnimating, setIsAnimating] = useState(false);
   const [loadedItems, setLoadedItems] = useState(0);
   const bufferObjectRef = useRef({});
+  const isLoopActiveRef = useRef(isLoopActive);
 
   function nextDate(date) {
     if (autoSelected) {
@@ -124,7 +125,7 @@ function PlayQueue(props) {
     let i = 1;
     while (i < queueLength) {
       if (nextDate(currentDateObj) > endDate) {
-        if (!isLoopActive) {
+        if (!isLoopActiveRef.current) {
           return toString(currentDateObj);
         }
         currentDateObj = startDate;
@@ -326,10 +327,14 @@ function PlayQueue(props) {
     };
   }, []);
 
+  useEffect(() => {
+    isLoopActiveRef.current = isLoopActive;
+  }, [isLoopActive]);
+
   function checkShouldLoop() {
     const loopDelay = speed === 0.5 ? 2000 : 1500;
 
-    if (isLoopActive) {
+    if (isLoopActiveRef.current) {
       playingDate = toString(startDate);
       setTimeout(() => {
         if (!mounted) return;
