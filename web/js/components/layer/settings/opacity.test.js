@@ -1,0 +1,3 @@
+test('opacity component test', () => {
+
+});

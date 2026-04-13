@@ -1,0 +1,3 @@
+test('zoom component test', () => {
+
+});

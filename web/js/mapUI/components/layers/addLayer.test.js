@@ -1,0 +1,3 @@
+test('addLayer mapUI test', () => {
+
+});

@@ -1,0 +1,3 @@
+test('MenuItem module test', () => {
+
+});

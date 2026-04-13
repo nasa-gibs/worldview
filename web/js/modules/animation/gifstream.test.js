@@ -1,0 +1,3 @@
+test('gifstream module test', () => {
+
+});

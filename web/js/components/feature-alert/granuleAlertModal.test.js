@@ -1,0 +1,3 @@
+test('granuleAlertModal component test', () => {
+
+});
