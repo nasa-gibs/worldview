@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import googleTagManager from 'googleTagManager';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   imageSizeValid,
   estimateMaxImageSize,
@@ -19,6 +19,8 @@ import LatLongSelect from './lat-long-inputs';
 import GlobalSelectCheckbox from './global-select';
 import WaitOverlay from './wait';
 import SnapshotError from './snapshot-error';
+import onClickFeedback from '../../modules/feedback/util';
+import initFeedback from '../../modules/feedback/actions';
 
 const RESOLUTION_KEY = {
   0.075: '7.5cm',
@@ -56,6 +58,9 @@ function ImageDownloadPanel(props) {
     onLatLongChange,
     boundaries,
     openSnapshotErrorModal,
+    feedbackIsInitiated,
+    isMobile,
+    sendFeedback,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -238,6 +243,13 @@ function ImageDownloadPanel(props) {
     />
   );
 
+  const handleKeyDown = (e, feedbackIsInitiatedArg, isMobileArg) => {
+    if (e.key === 'Enter') {
+      return sendFeedback(feedbackIsInitiatedArg, isMobileArg);
+    }
+    return null;
+  };
+
   const { crs } = projection.selected;
   const dimensions = getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
@@ -306,10 +318,45 @@ function ImageDownloadPanel(props) {
           onClick={onDownload}
           isSnapshotInProgress={isSnapshotInProgress}
         />
+        <hr />
+        <p className="wv-snapshot-warning">
+          <span className="wv-snapshot-warning-icon">
+            <FontAwesomeIcon
+              icon="exclamation-triangle"
+              className="wv-alert-icon"
+              size="1x"
+              widthAuto
+            />
+          </span>
+          This snapshot feature has been upgraded to capture anything on the map,
+          including customized color palettes. If you notice any issues, please
+          {' '}
+          <span
+            className="snapshot-feedback"
+            role="link"
+            tabIndex={0}
+            onKeyDown={(e, feedbackIsInitiatedArg, isMobileArg) =>
+              handleKeyDown(e, feedbackIsInitiatedArg, isMobileArg)}
+            onClick={() => sendFeedback(feedbackIsInitiated, isMobile)}
+          >
+            contact us
+          </span>
+          .
+        </p>
       </div>
     </>
   );
 }
+
+const mapStateToProps = (state) => {
+  const {
+    feedback, screenSize,
+  } = state;
+  return {
+    feedbackIsInitiated: feedback.isInitiated,
+    isMobile: screenSize.isMobileDevice,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => ({
   openSnapshotErrorModal: () => {
@@ -322,6 +369,12 @@ const mapDispatchToProps = (dispatch) => ({
         modalClassName: 'snapshot-error',
       }),
     );
+  },
+  sendFeedback: (isInitiated, isMobile) => {
+    onClickFeedback(isInitiated, isMobile);
+    if (!isInitiated) {
+      dispatch(initFeedback());
+    }
   },
 });
 
@@ -336,7 +389,7 @@ ImageDownloadPanel.defaultProps = {
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(ImageDownloadPanel);
 
@@ -362,4 +415,7 @@ ImageDownloadPanel.propTypes = {
   onLatLongChange: PropTypes.func,
   boundaries: PropTypes.array,
   openSnapshotErrorModal: PropTypes.func,
+  feedbackIsInitiated: PropTypes.bool,
+  isMobile: PropTypes.bool,
+  sendFeedback: PropTypes.func,
 };

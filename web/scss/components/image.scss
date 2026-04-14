@@ -152,3 +152,21 @@
   left: 37.5%;
   top: 160px;
 }
+
+.wv-snapshot-warning {
+  margin: 4px;
+}
+
+.wv-snapshot-warning-icon {
+  font-size: 1.2em;
+  margin-right: 5px;
+}
+
+.snapshot-feedback {
+  color: #7bf !important;
+  cursor: pointer;
+}
+
+.snapshot-feedback:hover {
+  text-decoration: underline !important;
+}
