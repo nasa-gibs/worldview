@@ -112,7 +112,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
-        worker.terminate(); // terminate the worker
+        worker.terminate();
         const newRanges = event.data.map(([startDate, endDate, dateInterval]) => ({
           startDate, endDate, dateInterval,
         }));
@@ -129,7 +129,10 @@ export default function mapLayerBuilder(config, cache, store) {
       }
       return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000, true] });
     };
-    worker.onerror = () => worker.terminate();
+    worker.onerror = () => {
+      worker.terminate();
+      callback(def, oldRanges, group);
+    };
     let startDate = new Date(def.startDate);
     const endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString();
     // If there are any existing dateRanges, find any after the latest one
@@ -453,6 +456,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // force currently selected time to be 59 seconds.
     // This is to compensate for the inability to select seconds in the timeline
+    layerDate = new Date(layerDate.getTime());
     layerDate.setSeconds(59);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
@@ -1370,6 +1374,8 @@ export default function mapLayerBuilder(config, cache, store) {
         group: options.group,
         nextDate,
         previousDate,
+        ...(options.cmrRebuildAttempts != null &&
+          { cmrRebuildAttempts: options.cmrRebuildAttempts }),
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);

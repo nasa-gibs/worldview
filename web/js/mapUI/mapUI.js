@@ -138,6 +138,7 @@ function MapUI(props) {
       case dateConstants.SELECT_DATE:
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
+      case layerConstants.ADD_GRANULE_DATE_RANGES:
         return setDateAction(action);
       case layerConstants.UPDATE_OPACITY:
         return setOpacityAction(action);
@@ -187,10 +188,17 @@ function MapUI(props) {
     ui.selectedVectors = newSelection;
   };
 
-  events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
-  window.addEventListener('orientationchange', () => {
-    setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
-  });
+  useEffect(() => {
+    const handleOrientation = () => {
+      setTimeout(() => { setProjectionTrigger((prev) => prev + 1); }, 200);
+    };
+    events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+    window.addEventListener('orientationchange', handleOrientation);
+    return () => {
+      events.off(REDUX_ACTION_DISPATCHED, subscribeToStore);
+      window.removeEventListener('orientationchange', handleOrientation);
+    };
+  }, []);
 
   const updateExtent = () => {
     const map = ui.selected;
@@ -203,11 +211,14 @@ function MapUI(props) {
   };
 
   const updateLayerVisibilities = () => {
+    // Guard against early calls before map is ready
+    if (!ui.selected) return;
+
     const layerGroup = ui.selected.getLayers();
 
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
-      const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
+      const dateGroup = layer.get('date') || (group === 'active' ? 'selected' : 'selectedB');
       const date = getSelectedDate(dateCompareState, dateGroup);
       const layers = getActiveLayers(activeLayersState, parentCompareGroup || group);
       const renderable = isRenderableLayer(id, layers, date, null, renderableLayersState);

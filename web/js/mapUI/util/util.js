@@ -238,3 +238,83 @@ export function formatSelectedDate(date) {
   const formattedDate = `${year}-${month}-${day}`;
   return formattedDate;
 }
+
+let loadOperationId = 0;
+
+/**
+ * Load layers asynchronously, inserting each into the map as it resolves.
+ * Maintains correct z-order via slot positioning. Superseded operations
+ * (from rapid reloads) skip insertion so they don't corrupt the map.
+ *
+ * @param {Object} options
+ * @param {Array} options.defs - Layer definitions in desired z-order (bottom to top)
+ * @param {Function} options.createLayer - Creates an OL layer from a definition
+ * @param {Object} options.mapUI - OpenLayers map instance
+ * @param {Function} options.updateLayerVisibilities - Updates layer visibility state
+ * @param {Function} options.getLayerOptions - Returns options for a layer definition
+ * @returns {Promise<{layers: Array, results: Array}>}
+ */
+export async function loadLayersWithSlots({
+  defs,
+  createLayer,
+  mapUI,
+  updateLayerVisibilities,
+  getLayerOptions,
+}) {
+  if (!defs?.length) {
+    updateLayerVisibilities?.();
+    return { layers: [], results: [] };
+  }
+
+  loadOperationId += 1;
+  const currentOpId = loadOperationId;
+
+  const layerSlots = new Array(defs.length).fill(null);
+
+  // Insert at the correct z-position based on how many lower layers are already present.
+  const insertLayerAtCorrectPosition = (layer, defIndex) => {
+    if (!mapUI) return;
+
+    const layerCollection = mapUI.getLayers();
+    const existingLayers = layerCollection.getArray();
+
+    const insertIndex = existingLayers.filter((existingLayer) => {
+      const existingId = existingLayer.wv?.id;
+      const existingDefIndex = defs.findIndex((d) => d.id === existingId);
+      return existingDefIndex >= 0 && existingDefIndex < defIndex;
+    }).length;
+
+    layerCollection.insertAt(insertIndex, layer);
+    updateLayerVisibilities?.();
+  };
+
+  const layerPromises = defs.map(async (def, index) => {
+    try {
+      const options = getLayerOptions?.(def) || {};
+      const layer = await createLayer(def, options);
+
+      if (layer) {
+        layerSlots[index] = layer;
+
+        // Skip if a newer operation has superseded this one.
+        if (currentOpId !== loadOperationId) {
+          return { status: 'fulfilled', value: layer, def, skipped: true };
+        }
+
+        insertLayerAtCorrectPosition(layer, index);
+      }
+
+      return { status: 'fulfilled', value: layer, def };
+    } catch (error) {
+      console.warn(`Layer creation failed for ${def.id}:`, error);
+      return { status: 'rejected', reason: error, def };
+    }
+  });
+
+  await Promise.allSettled(layerPromises);
+  if (currentOpId === loadOperationId) {
+    updateLayerVisibilities?.();
+  }
+  const completedLayers = layerSlots.filter((layer) => layer !== null);
+  return { layers: completedLayers, results: [] };
+}
