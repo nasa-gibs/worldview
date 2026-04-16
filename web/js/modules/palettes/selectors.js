@@ -194,7 +194,13 @@ const updateLookup = function(layerId, palettesObj, state) {
     lodashEach(source, (color, indexArg) => {
       let targetColor;
       if (indexArg < min || indexArg > max || disabled.includes(indexArg)) {
-        targetColor = '00000000';
+        if (!palette.noclip) {
+          targetColor = '00000000';
+        } else if (indexArg < min) {
+          [targetColor] = target;
+        } else if (indexArg > max) {
+          targetColor = target[target.length - 1];
+        }
       } else {
         let sourcePercent; let
           targetIndex;
@@ -376,6 +382,9 @@ export function getKey(layerId, groupStr, state) {
   if (def.squash) {
     keys.push('squash');
   }
+  if (def.noclip) {
+    keys.push('noclip');
+  }
   return keys.join(',');
 }
 
@@ -460,7 +469,7 @@ export function setRange(layerId, props, indexInt, palettes, state) {
   let index = indexInt;
   let { min } = props;
   let { max } = props;
-  const { squash } = props;
+  const { squash, noclip } = props;
   let newPalettes = prepare(layerId, palettes, state);
   index = lodashIsUndefined(index) ? 0 : index;
   if (min === 0) {
@@ -484,6 +493,7 @@ export function setRange(layerId, props, indexInt, palettes, state) {
             max,
             min,
             squash,
+            noclip,
           },
         },
       },

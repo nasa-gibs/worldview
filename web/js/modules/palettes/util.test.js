@@ -9,13 +9,13 @@ import fixtures from '../../fixtures';
 
 const state = fixtures.getState();
 const config = fixtures.config();
-const LAYER_STRING = 'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true),mask';
+const LAYER_STRING = 'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true,noclip=true),mask';
 const layerArrayFromPermalinkString = layersParse12(LAYER_STRING, config);
 const PERMALINK_STATE = { l: LAYER_STRING };
 
 test('hasCustomTypePalette func determines if custom palette is in string [palettes-custom-palette-string-1.1]', () => {
   const bool = hasCustomTypePalette(
-    'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true)',
+    'terra-aod(hidden,opacity=0.54,palette=red-1,min=1,max=2,squash=true,noclip=true)',
   );
   expect(bool).toBeTruthy();
 });
@@ -42,6 +42,7 @@ test('loadPalettes func updates state with correct palette attributes [palettes-
   expect(colorMap.min).toEqual(1);
   expect(colorMap.custom).toEqual('red-1');
   expect(colorMap.squash).toEqual(true);
+  expect(colorMap.noclip).toEqual(true);
 });
 
 describe('permalink 1.1', () => {

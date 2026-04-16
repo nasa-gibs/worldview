@@ -2,7 +2,7 @@ import update from 'immutability-helper';
 import { getInitialPaletteState, paletteReducer } from './reducers';
 import fixtures from '../../fixtures';
 import {
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
   CLEAR_CUSTOM,
   SET_CUSTOM,
   REQUEST_PALETTE_START,
@@ -13,10 +13,10 @@ import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
 
 const config = fixtures.config();
 
-test('SET_THRESHOLD_RANGE_AND_SQUASH action updates active palette Object [palettes-reducer-threshold]', () => {
+test('SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP action updates active palette Object [palettes-reducer-threshold]', () => {
   const initialPaletteState = getInitialPaletteState(config);
   const response = paletteReducer(initialPaletteState, {
-    type: SET_THRESHOLD_RANGE_AND_SQUASH,
+    type: SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
     layerId: 'terra-aod',
     groupName: 'active',
     palettes: { 'terra-aod': config.palettes.rendered['terra-aod'] },

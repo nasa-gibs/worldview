@@ -28,7 +28,7 @@ import {
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
   SET_DISABLED_CLASSIFICATION,
 } from '../palettes/constants';
 import {
@@ -188,7 +188,7 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case SET_THRESHOLD_RANGE_AND_SQUASH:
+    case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_DISABLED_CLASSIFICATION: {
       const layerIndex = getLayerIndex();
       if (layerIndex < 0) return state;

@@ -124,7 +124,7 @@ function MapUI(props) {
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
-      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
+      case paletteConstants.SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
