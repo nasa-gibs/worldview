@@ -26,6 +26,7 @@ function UpdateDate(props) {
     dateCompareState,
     getGranuleOptions,
     granuleState,
+    isAnimationPlaying,
     isCompareActive,
     layerState,
     preloadNextTiles,
@@ -60,7 +61,7 @@ function UpdateDate(props) {
   }
 
   async function updateCompareLayer(
-    def, index, mapLayerCollection, isStale, groupOverride, extraOptions,
+    def, index, mapLayerCollection, isStale, groupOverride, extraOptions, seq,
   ) {
     const { createLayer } = ui;
     const group = groupOverride || activeString;
@@ -71,7 +72,10 @@ function UpdateDate(props) {
       ...extraOptions,
     };
     const updatedLayer = await createLayer(def, options);
-    if (isStale()) return;
+    // During animation, allow late-arriving frames to render so granule
+    // layers visually catch up instead of freezing. For manual date changes,
+    // discard stale results to prevent flicker.
+    if (isStale() && !isAnimationPlaying) return;
     // Re-read current group after await since reloadLayers may have restructured it.
     let targetCollection = mapLayerCollection;
     let targetIndex = index;
@@ -89,6 +93,12 @@ function UpdateDate(props) {
         targetCollection = freshCollection;
         targetIndex = freshIndex;
       }
+    }
+    // During animation, prevent out-of-order frames from overwriting newer ones.
+    if (isAnimationPlaying) {
+      const existing = targetCollection.getArray()[targetIndex];
+      if (existing?.wv?.appliedSeq > seq) return;
+      updatedLayer.wv = { ...updatedLayer.wv, appliedSeq: seq };
     }
     targetCollection.setAt(targetIndex, updatedLayer);
     compareMapUi.update(group);
@@ -191,7 +201,10 @@ function UpdateDate(props) {
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
       if (isCompareActive && layers.length && (temporalLayer || type === 'granule')) {
-        await updateCompareLayer(def, index, mapLayerCollection, isStale);
+        await updateCompareLayer(
+          def, index, mapLayerCollection, isStale,
+          undefined, undefined, mySeq,
+        );
       } else if (temporalLayer) {
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
@@ -199,9 +212,14 @@ function UpdateDate(props) {
             ? { granuleCount: getGranuleCount(granuleState, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
           const updatedLayer = await createLayer(def, layerOptions);
-          if (isStale()) return;
+          if (isStale() && !isAnimationPlaying) return;
           const freshIndex = findLayerIndex(def);
           if (freshIndex === undefined || freshIndex === -1) return;
+          if (isAnimationPlaying) {
+            const existing = mapLayerCollection.getArray()[freshIndex];
+            if (existing?.wv?.appliedSeq > mySeq) return;
+            updatedLayer.wv = { ...updatedLayer.wv, appliedSeq: mySeq };
+          }
           mapLayerCollection.setAt(freshIndex, updatedLayer);
         }
       }
@@ -268,11 +286,12 @@ function UpdateDate(props) {
 
 const mapStateToProps = (state) => {
   const {
-    compare, date, layers, proj, vectorStyles, config, map,
+    animation, compare, date, layers, proj, vectorStyles, config, map,
   } = state;
   const dateCompareState = { date, compare };
   const { activeString } = compare;
   const activeLayers = getActiveLayers(state);
+  const isAnimationPlaying = animation.isPlaying;
   const isCompareActive = compare.active;
   const granuleState = { compare, layers };
   const layerState = { compare, map };
@@ -287,6 +306,7 @@ const mapStateToProps = (state) => {
     allActiveLayersState,
     dateCompareState,
     granuleState,
+    isAnimationPlaying,
     isCompareActive,
     layerState,
     vectorStyleState,
@@ -306,6 +326,7 @@ UpdateDate.propTypes = {
   dateCompareState: PropTypes.object,
   getGranuleOptions: PropTypes.func,
   granuleState: PropTypes.object,
+  isAnimationPlaying: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   layerState: PropTypes.object,
   preloadNextTiles: PropTypes.func,
