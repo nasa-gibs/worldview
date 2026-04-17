@@ -193,13 +193,16 @@ const updateLookup = function(layerId, palettesObj, state) {
     const disabled = palette.disabled || [];
     lodashEach(source, (color, indexArg) => {
       let targetColor;
+      let targetTooltip;
       if (indexArg < min || indexArg > max || disabled.includes(indexArg)) {
         if (!palette.noclip) {
           targetColor = '00000000';
         } else if (indexArg < min) {
-          [targetColor] = target;
+          targetColor = target[min - 1];
+          targetTooltip = `< ${min}`;
         } else if (indexArg > max) {
-          targetColor = target[target.length - 1];
+          targetColor = target[max + 1];
+          targetTooltip = `> ${max}`;
         }
       } else {
         let sourcePercent; let
@@ -225,6 +228,9 @@ const updateLookup = function(layerId, palettesObj, state) {
       if (~refIndex && !appliedLegends.includes(colormapRef)) {
         appliedLegends.push(colormapRef);
         legend.colors[refIndex] = targetColor;
+        if (targetTooltip) {
+          legend.tooltips[refIndex] = targetTooltip;
+        }
       }
       const lookupSource = `${lodashParseInt(color.substring(0, 2), 16)
       },${
