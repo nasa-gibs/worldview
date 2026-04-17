@@ -80,4 +80,32 @@ describe('getMiddleware', () => {
     expect(middleware[1]).toBe(locationMiddleware);
     expect(middleware[2]).toBe('loggerMiddleware');
   });
+import { thunk } from 'redux-thunk'; // For ASYNC actions
+import { compact } from 'lodash';
+import { createLogger } from 'redux-logger';
+import getMiddleware from './combine-middleware';
+
+jest.mock('redux-thunk', () => ({
+  thunk: jest.fn(),
+}));
+
+jest.mock('lodash', () => ({
+  compact: jest.fn((arr) => arr),
+}));
+
+jest.mock('redux-logger', () => ({
+  createLogger: jest.fn(),
+}));
+
+test('combine-middleware - debugger enabled', () => {
+  const loggerMiddleware = createLogger();
+  const result = getMiddleware(true, {});
+  console.log(result);
+  expect(compact).toHaveBeenCalledWith([thunk, {}, loggerMiddleware]);
+});
+
+test('combine-middleware - debugger disabled', () => {
+  const result = getMiddleware(false, {});
+  console.log(result);
+  expect(compact).toHaveBeenCalledWith([thunk, {}]);
 });
