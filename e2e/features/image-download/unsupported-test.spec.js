@@ -4,7 +4,9 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { closeImageDownloadPanel, closeModal } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl } = require('../../test-utils/hooks/basicHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
 let notify
 let cancelNotify

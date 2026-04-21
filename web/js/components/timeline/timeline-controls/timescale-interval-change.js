@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -137,6 +137,8 @@ class TimeScaleIntervalChange extends PureComponent {
         <div id="timeline-interval" className="timeline-interval">
           <span
             id="interval-years"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-years"
             onClick={() => this.handleClickInterval('year')}
           >
@@ -144,6 +146,8 @@ class TimeScaleIntervalChange extends PureComponent {
           </span>
           <span
             id="interval-months"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-months"
             onClick={() => this.handleClickInterval('month')}
           >
@@ -151,40 +155,54 @@ class TimeScaleIntervalChange extends PureComponent {
           </span>
           <span
             id="interval-days"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-days"
             onClick={() => this.handleClickInterval('day')}
           >
             Day
           </span>
-          {hasSubdailyLayers ? (
-            <>
+          {hasSubdailyLayers
+            ? (
+              <>
+                <span
+                  id="interval-hours"
+                  role="menuitem"
+                  tabIndex={-1}
+                  className="interval-btn interval-hours"
+                  onClick={() => this.handleClickInterval('hour')}
+                >
+                  Hour
+                </span>
+                <span
+                  id="interval-minutes"
+                  role="menuitem"
+                  tabIndex={-1}
+                  className="interval-btn interval-minutes"
+                  onClick={() => this.handleClickInterval('minute')}
+                >
+                  Minute
+                </span>
+              </>
+            )
+            : null}
+          {hasTempoProduct
+            ? (
               <span
-                id="interval-hours"
-                className="interval-btn interval-hours"
-                onClick={() => this.handleClickInterval('hour')}
+                id="interval-auto"
+                role="menuitem"
+                tabIndex={-1}
+                className="interval-btn interval-auto"
+                onClick={() => this.handleClickInterval('auto')}
               >
-                Hour
+                Auto
               </span>
-              <span
-                id="interval-minutes"
-                className="interval-btn interval-minutes"
-                onClick={() => this.handleClickInterval('minute')}
-              >
-                Minute
-              </span>
-            </>
-          ) : null}
-          {hasTempoProduct ? (
-            <span
-              id="interval-auto"
-              className="interval-btn interval-auto"
-              onClick={() => this.handleClickInterval('auto')}
-            >
-              Auto
-            </span>
-          ) : null}
+            )
+            : null}
           <span
             id="interval-custom"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-custom custom-interval-text"
             style={{ display: customIntervalText === 'Custom' ? 'none' : 'block' }}
             onClick={() => this.handleClickInterval('custom')}
@@ -193,6 +211,8 @@ class TimeScaleIntervalChange extends PureComponent {
           </span>
           <span
             id="interval-custom-static"
+            role="menuitem"
+            tabIndex={-1}
             className="interval-btn interval-custom custom-interval-text"
             onClick={() => this.handleClickInterval('custom', true)}
           >
@@ -215,8 +235,11 @@ class TimeScaleIntervalChange extends PureComponent {
     } = this.props;
 
     const className = `no-drag interval-btn interval-btn-active${customSelected ? ' custom-interval-text' : ''} ${isDisabled ? ' disabled' : ''}`;
+    const spanInnerText = autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`;
     return (
       <div
+        role="menu"
+        tabIndex={0}
         id="timeline-interval-btn-container"
         className="interval-btn-container noselect no-drag"
         onMouseEnter={() => this.setTooltipState(true)}
@@ -228,7 +251,7 @@ class TimeScaleIntervalChange extends PureComponent {
           id="current-interval"
           className={className}
         >
-          {customSelected ? customIntervalText : autoSelected ? 'AUTO' : `${1} ${TIME_SCALE_FROM_NUMBER[interval]}`}
+          {customSelected ? customIntervalText : spanInnerText}
         </span>
 
         {!isDisabled ? this.renderTooltip() : null}

@@ -28,7 +28,7 @@ class TimelineRangeSelector extends React.Component {
 
   componentDidUpdate() {
     const { startLocation, endLocation } = this.props;
-    // eslint-disable-next-line react/destructuring-assignment
+
     if (startLocation !== this.state.startLocation || endLocation !== this.state.endLocation) {
       this.updateLocation();
     }
@@ -143,8 +143,8 @@ class TimelineRangeSelector extends React.Component {
       const options = timeScaleOptions[timeScale].timeAxis;
       const { gridWidth } = options;
 
-      const startDraggerPositionRelativeToFrontDate = animDraggerLocation
-      - position - transformX + deltaX;
+      const startDraggerPositionRelativeToFrontDate = animDraggerLocation -
+      position - transformX + deltaX;
       const gridWidthCoef = startDraggerPositionRelativeToFrontDate / gridWidth;
       const draggerDateAdded = moment.utc(frontDate).add(Math.floor(gridWidthCoef), timeScale);
       const draggerDateAddedValue = draggerDateAdded.valueOf();

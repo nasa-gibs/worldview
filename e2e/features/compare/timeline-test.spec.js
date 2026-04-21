@@ -4,9 +4,10 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive } = require('../../test-utils/global-variables/querystrings')
 const { timelineDrag, dateSelectorMonthDay, closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {

@@ -2,9 +2,10 @@
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 const kioskQueryStringGeo = 'http://localhost:3000/?v=-250.17116762774398,-114.67919463709383,250.62557403459047,109.37518092954436&df=true&kiosk=true&l=Coastlines_15m,OrbitTracks_Terra_Descending,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true'
 const kioskQueryStringArctic = 'http://localhost:3000/?v=-9215416.788865805,-4212995.281243633,9489665.699466601,4155580.686192584&p=arctic&df=true&kiosk=true&eic=da&l=Land_Mask,AMSRU2_Sea_Ice_Concentration_12km(palette=blue_6)&lg=true'
 const kioskQueryStringAntarctic = 'http://localhost:3000/?v=-9215416.788865805,-4212995.281243633,9489665.699466601,4155580.686192584&p=antarctic&df=true&kiosk=true&eic=da&l=Land_Mask,AMSRU2_Sea_Ice_Concentration_12km(palette=blue_6)&lg=true'

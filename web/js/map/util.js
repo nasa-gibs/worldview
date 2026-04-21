@@ -133,8 +133,8 @@ const getBestZoom = function(distance, start, end, view) {
     zoom,
     pixels: distance / view.getResolutionForZoom(zoom),
   }));
-  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels)
-  - Math.abs(idealLength - b.pixels))[0];
+  const bestFit = lines.sort((a, b) => Math.abs(idealLength - a.pixels) -
+  Math.abs(idealLength - b.pixels))[0];
   return Math.max(2, Math.min(bestFit.zoom, start - 1, end - 1));
 };
 
@@ -145,7 +145,7 @@ const getBestZoom = function(distance, start, end, view) {
    * @param  {integer} endZoom Ending Zoom Level
    * @return {Promise}         Promise that is fulfilled when animation completes
    */
-export function fly (map, proj, endPointArray, endZoom = 5, rotation = 0, isKioskModeActive) {
+export function fly (map, proj, endPointArray, isKioskModeActive, endZoom = 5, rotation = 0) {
   let endPoint = endPointArray;
   const view = map.getView();
   const polarProjectionCheck = proj.selected.id !== 'geographic'; // boolean if current projection is polar

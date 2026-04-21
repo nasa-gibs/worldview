@@ -56,7 +56,6 @@ function lastAction(state = null, action) {
   return action;
 }
 
-
 /**
  * Get initial module states based on config
  * and parameters

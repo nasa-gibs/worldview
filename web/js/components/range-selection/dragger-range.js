@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent, createRef } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import { timeScaleOptions } from '../../modules/date/constants';
@@ -11,6 +11,7 @@ import { timeScaleOptions } from '../../modules/date/constants';
 class TimelineDraggerRange extends PureComponent {
   constructor(props) {
     super(props);
+    this.nodeRef = createRef();
     const { startLocation } = props;
     this.state = {
       width: 0,
@@ -30,8 +31,8 @@ class TimelineDraggerRange extends PureComponent {
     // update state and checkWidth only on startLocation and/or endLocation changes
     const { startLocation, endLocation } = this.props;
     if (
-      prevProps.startLocation !== startLocation
-      || prevProps.endLocation !== endLocation
+      prevProps.startLocation !== startLocation ||
+      prevProps.endLocation !== endLocation
     ) {
       this.updateExtent(this.props);
       this.checkWidth();
@@ -116,7 +117,8 @@ class TimelineDraggerRange extends PureComponent {
 
     // +/- {number} - change in x - set to 0 to 'stop' dragger movement
     // - min/max of -55/55 to prevent overdrag
-    let deltaX = d.deltaX < -55 ? -55 : d.deltaX > 55 ? 55 : d.deltaX;
+    const deltaXMax = d.deltaX > 55 ? 55 : d.deltaX;
+    let deltaX = d.deltaX < -55 ? -55 : deltaXMax;
     // +/- {number} - start position
     const deltaStart = d.x;
 
@@ -187,8 +189,8 @@ class TimelineDraggerRange extends PureComponent {
     e.preventDefault();
     // compare start locations to check if range has been dragged vs. clicked
     if (
-      startLocation.toFixed(3)
-      !== previousStartLocation.toFixed(3)
+      startLocation.toFixed(3) !==
+      previousStartLocation.toFixed(3)
     ) {
       this.setState((prevState) => ({
         previousStartLocation: prevState.startLocation,
@@ -215,12 +217,14 @@ class TimelineDraggerRange extends PureComponent {
       <Draggable
         handle=".dragger-range"
         axis="x"
+        nodeRef={this.nodeRef}
         position={null}
         defaultPosition={{ x: 0, y: 11 }}
         onStop={onStop}
         onDrag={this.handleDrag}
       >
         <rect
+          ref={this.nodeRef}
           x={this.handleStartPositionRestriction()}
           fill={color}
           width={width}

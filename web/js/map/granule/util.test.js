@@ -1,4 +1,3 @@
-
 import {
   datelineShiftGranules, getCMRQueryDates,
   transformGranuleData, areCoordinatesAndPolygonExtentValid,
@@ -123,4 +122,3 @@ describe('areCoordinatesAndPolygonExtentValid', () => {
     expect(isValid).toEqual(false);
   });
 });
-

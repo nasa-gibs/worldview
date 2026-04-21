@@ -20,8 +20,10 @@ async function requestDescribeDomains(params) {
     baseUrl,
   } = params;
 
-  const start = `${new Date(startDate).toISOString().split('.')[0]}Z`;
-  const end = `${new Date(endDate).toISOString().split('.')[0]}Z`;
+  const start = `${new Date(startDate).toISOString()
+    .split('.')[0]}Z`;
+  const end = `${new Date(endDate).toISOString()
+    .split('.')[0]}Z`;
 
   const describeDomainsUrl = `${baseUrl}/wmts/${projDict[proj]}/best/1.0.0/${id}/default/250m/all/${start}--${end}.xml`;
   const describeDomainsResponse = await fetch(describeDomainsUrl);
@@ -121,10 +123,10 @@ function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
     const lastRangeEndTime = makeTime(acc.at(-1)[1]);
     const lastRangeStartTime = makeTime(acc.at(-1)[0]);
 
-    if ((bufferedStartTime >= lastRangeStartTime
-      && bufferedStartTime <= lastRangeEndTime)
-      && (bufferedEndTime >= lastRangeStartTime
-        && bufferedEndTime <= lastRangeEndTime)) { // within current range, ignore
+    if ((bufferedStartTime >= lastRangeStartTime &&
+      bufferedStartTime <= lastRangeEndTime) &&
+      (bufferedEndTime >= lastRangeStartTime &&
+        bufferedEndTime <= lastRangeEndTime)) { // within current range, ignore
       return acc;
     }
 
@@ -135,8 +137,8 @@ function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
     }
 
     // intersects current range, merge
-    if (bufferedStartTime <= lastRangeEndTime
-      && bufferedEndTime > lastRangeEndTime && !keepDateIntervals) {
+    if (bufferedStartTime <= lastRangeEndTime &&
+      bufferedEndTime > lastRangeEndTime && !keepDateIntervals) {
       return acc.with(-1, [acc.at(-1)[0], makeDateString(endTime)]);
     }
 
@@ -145,7 +147,6 @@ function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
 
   return mergedDateRanges;
 }
-
 
 const functions = {
   requestDescribeDomains,

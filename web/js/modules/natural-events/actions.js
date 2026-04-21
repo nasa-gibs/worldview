@@ -39,7 +39,6 @@ export function requestSources() {
     let sourcesURL = `${baseUrl}/sources`;
 
     if (mockSources) {
-      // eslint-disable-next-line no-console
       console.warn(`Using mock sources data: ${mockSources}`);
       sourcesURL = `mock/sources_data.json-${mockSources}`;
     }

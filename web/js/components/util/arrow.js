@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { ArrowFilledUp } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 
@@ -12,13 +11,15 @@ function Arrow({
   const arrowClassName = `${direction}arrow`;
 
   return (
-    <div
+    <button
+      type="button"
       onClick={onClick}
+      aria-label={direction === 'up' ? `Increment ${type}` : `Decrement ${type}`}
       className={isKioskModeActive ? 'd-none' : containerClassName}
       data-interval={type}
     >
       <ArrowFilledUp className={arrowClassName} size={arrowSize} />
-    </div>
+    </button>
   );
 }
 

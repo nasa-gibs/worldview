@@ -1,0 +1,3 @@
+test('palette component test', () => {
+
+});

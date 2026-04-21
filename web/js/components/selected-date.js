@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+
 import { connect } from 'react-redux';
 import { getSelectedDate } from '../modules/date/selectors';
 import { formatDisplayDate } from '../modules/date/util';

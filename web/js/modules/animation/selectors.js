@@ -106,7 +106,8 @@ export default function getImageArray(
       delay: 1000 / animation.speed,
     });
     current = util.dateAdd(current, increment, autoSelected
-      ? getNextImageryDelta(layers.active.layers, current, 1) : useDelta);
+      ? getNextImageryDelta(layers.active.layers, current, 1)
+      : useDelta);
     if (j > 40) {
       // too many frames
       return false;

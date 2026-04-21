@@ -65,10 +65,10 @@ class ProductPicker extends React.Component {
       modalElement.classList.remove('browse-search-width');
       modalElement.classList.add('category-width');
     } else if (
-      mode === 'search'
-        || mode === 'measurements'
-        || categoryType === 'recent'
-        || categoryType === 'featured'
+      mode === 'search' ||
+        mode === 'measurements' ||
+        categoryType === 'recent' ||
+        categoryType === 'featured'
     ) {
       modalElement.classList.remove('category-width');
       modalElement.classList.add('browse-search-width');

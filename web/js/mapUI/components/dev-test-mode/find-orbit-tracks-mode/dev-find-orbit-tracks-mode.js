@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIntersection, getArea, isEmpty } from 'ol/extent';
 import {
@@ -94,7 +94,7 @@ function FindOrbitTracksMode () {
         img.onload = async () => {
           // Process the loaded image here
           const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
-          // eslint-disable-next-line no-unsafe-optional-chaining
+
           const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
           const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${date}... `;
           const thresholdMessage = currentThreshold ? `The current threshold for ${layerSelection.id} is ${currentThreshold}%` : `There is no current threshold for ${layerSelection.id} ...`;
@@ -126,7 +126,6 @@ function FindOrbitTracksMode () {
     const dateRange = getOrbitalDateRange();
     for (let i = 0; i < dateRange.length; i += 1) {
       const date = dateRange[i];
-      // eslint-disable-next-line no-await-in-loop
       const imageryRequest = await makeMeasurementRequest(date);
       if (imageryRequest === 100 || !imageryRequest) {
         console.log('No imagery found for ', date);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { containsExtent, isEmpty } from 'ol/extent';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import * as olProj from 'ol/proj';
@@ -35,10 +35,10 @@ function Input({
 
       const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs);
 
-      if (containsExtent(viewExtent, crsCorrectedExtent)
-      && isValidExtent(clonedBBoxArray)
-      && !isEmpty(crsCorrectedExtent)
-      && !Number.isNaN(newInputValue)) {
+      if (containsExtent(viewExtent, crsCorrectedExtent) &&
+      isValidExtent(clonedBBoxArray) &&
+      !isEmpty(crsCorrectedExtent) &&
+      !Number.isNaN(newInputValue)) {
         onLatLongChange(clonedBBoxArray);
         setInputInvalid(false);
       } else {
@@ -100,7 +100,12 @@ function LatLongSelect(props) {
 
   return (
     <div className="wv-image-input-case">
-      <div className="wv-image-input-title" onClick={() => { setShowCoordinates(!showCoordinates); }}>
+      <button
+        className="wv-image-input-title"
+        type="button"
+        aria-pressed={showCoordinates}
+        onClick={() => { setShowCoordinates(!showCoordinates); }}
+      >
         <span>{coordText}</span>
         <span
           title="Hide coordinates"
@@ -108,7 +113,7 @@ function LatLongSelect(props) {
         >
           <FontAwesomeIcon icon="caret-right" size="lg" rotation={showCoordinates ? 90 : 0} widthAuto />
         </span>
-      </div>
+      </button>
       {showCoordinates && (
         <>
           <div className="row">

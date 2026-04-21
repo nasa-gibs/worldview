@@ -66,13 +66,13 @@ class LayerMetadataDetail extends React.Component {
         <div className="layers-all-header">
           <RenderSplitLayerTitle layer={layer} />
         </div>
-        {showPreviewImage
-          && (
-          <div className="text-center">
-            <a href={previewUrl} rel="noopener noreferrer" target="_blank">
-              <img className="img-fluid layer-preview" src={previewUrl} />
-            </a>
-          </div>
+        {showPreviewImage &&
+          (
+            <div className="text-center">
+              <a href={previewUrl} rel="noopener noreferrer" target="_blank">
+                <img className="img-fluid layer-preview" src={previewUrl} />
+              </a>
+            </div>
           )}
         <div className="text-center">
           <Button className={btnClass} onClick={this.toggleLayer}>

@@ -11,17 +11,17 @@ import TileText from './tile-text';
 const tileTextConditionOptions = {
   minute: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.minutes;
-    return timeScaleUnit === 0
-      || timeScaleUnit === 15
-      || timeScaleUnit === 30
-      || timeScaleUnit === 45;
+    return timeScaleUnit === 0 ||
+      timeScaleUnit === 15 ||
+      timeScaleUnit === 30 ||
+      timeScaleUnit === 45;
   },
   hour: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.hours;
-    return timeScaleUnit === 0
-    || timeScaleUnit === 6
-    || timeScaleUnit === 12
-    || timeScaleUnit === 18;
+    return timeScaleUnit === 0 ||
+    timeScaleUnit === 6 ||
+    timeScaleUnit === 12 ||
+    timeScaleUnit === 18;
   },
   day: (itemDateObject) => {
     const timeScaleUnit = itemDateObject.date;

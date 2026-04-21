@@ -3,8 +3,8 @@ const { test, expect } = require('@playwright/test')
 const { skipTour, referenceLayersOnly } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {

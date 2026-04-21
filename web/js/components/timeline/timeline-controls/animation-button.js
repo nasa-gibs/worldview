@@ -25,9 +25,9 @@ function AnimationButton(props) {
   const labelText = label || 'Set up animation';
 
   const getButtonClassName = () => {
-    if (((isMobilePhone && isPortrait)
-    || (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers)
-    || (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) && isEmbedModeActive) {
+    if (((isMobilePhone && isPortrait) ||
+    (!isMobileTablet && screenWidth < 670 && hasSubdailyLayers) ||
+    (!isMobileTablet && screenWidth < 575 && !hasSubdailyLayers)) && isEmbedModeActive) {
       return 'phone-portrait-embed';
     } if ((isMobilePhone && isPortrait) || (
       !isMobileTablet && screenWidth < 670 && hasSubdailyLayers
@@ -35,8 +35,8 @@ function AnimationButton(props) {
       return `phone-portrait${subdailyID}`;
     } if (isMobilePhone && isLandscape) {
       return `phone-landscape${subdailyID}`;
-    } if (((isMobileTablet && isPortrait) || !isMobile || (!isMobilePhone
-      && screenWidth < breakpoints.small)) && isEmbedModeActive) {
+    } if (((isMobileTablet && isPortrait) || !isMobile || (!isMobilePhone &&
+      screenWidth < breakpoints.small)) && isEmbedModeActive) {
       return `tablet-portrait${subdailyID}-embed`;
     } if ((isMobileTablet && isPortrait) || (!isMobilePhone && screenWidth < breakpoints.small)) {
       return `tablet-portrait${subdailyID}`;
@@ -47,15 +47,26 @@ function AnimationButton(props) {
   };
 
   const buttonClass = getButtonClassName();
-
+  let animationButtonClassName;
+  if (isKioskModeActive) {
+    animationButtonClassName = 'd-none';
+  } else if (disabled) {
+    animationButtonClassName = 'wv-disabled-button button-action-group animate-button';
+  } else if (!isMobile && !isEmbedModeActive) {
+    animationButtonClassName = 'button-action-group animate-button';
+  } else {
+    animationButtonClassName = `button-action-group mobile-animate-button animate-button-${buttonClass}`;
+  }
   return (
-    <div
+    <button
+      type="button"
       onClick={clickAnimationButton}
-      className={isKioskModeActive ? 'd-none' : disabled ? 'wv-disabled-button button-action-group animate-button' : !isMobile && !isEmbedModeActive ? 'button-action-group animate-button' : `button-action-group mobile-animate-button animate-button-${buttonClass}`}
+      className={animationButtonClassName}
       aria-label={labelText}
     >
       <div id={buttonId}>
-        {isMobile ? null
+        {isMobile
+          ? null
           : (
             <UncontrolledTooltip
               id="center-align-tooltip"
@@ -67,7 +78,7 @@ function AnimationButton(props) {
           )}
         <FontAwesomeIcon icon="video" className="wv-animate" size="2x" widthAuto />
       </div>
-    </div>
+    </button>
   );
 }
 

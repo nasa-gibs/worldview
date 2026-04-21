@@ -8,9 +8,9 @@ export default class VectorMetaTable extends React.Component {
   shouldComponentUpdate(nextProps) {
     const { id, title } = this.props;
     if (
-      id
-      && title && nextProps.id && nextProps.title
-      && id === nextProps.id && title === nextProps.title) {
+      id &&
+      title && nextProps.id && nextProps.title &&
+      id === nextProps.id && title === nextProps.title) {
       return false;
     }
     return true;
@@ -40,19 +40,26 @@ export default class VectorMetaTable extends React.Component {
                     } = properties;
 
                     const isIntegerToStyle = Function !== 'Identify' && (DataType === 'int');
+                    const metaFeaturesIdentifierValue = metaFeatures[Identifier]
+                      ? metaFeatures[Identifier]
+                      : null;
+                    const metaFeaturesResult = isIntegerToStyle
+                      ? metaFeatures[Identifier].toLocaleString('en')
+                      : metaFeaturesIdentifierValue;
                     const value = ValueMap
                       ? ValueMap[metaFeatures[Identifier]]
-                      : isIntegerToStyle ? metaFeatures[Identifier].toLocaleString('en')
-                        : metaFeatures[Identifier] ? metaFeatures[Identifier] : null;
+                      : metaFeaturesResult;
                     const id = util.cleanId(String(`${title}-${metaIndex + index}`));
 
                     if (!value) return undefined;
                     return (
                       <tr key={`vector-row-${id}`}>
                         <td>
-                          {Description ? (
-                            <VectorMetaTooltip id={id} index={index} description={Description} />
-                          ) : undefined}
+                          {Description
+                            ? (
+                              <VectorMetaTooltip id={id} index={index} description={Description} />
+                            )
+                            : undefined}
                           <div className="vector-feature-name-cell">{Title || Identifier}</div>
                         </td>
                         <td>

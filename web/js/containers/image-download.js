@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -167,8 +167,8 @@ class ImageDownloadContainer extends Component {
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
     const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
     const mapView = map.ui.selected.getView();
-    const newResolution = resolution
-      || imageUtilCalculateResolution(
+    const newResolution = resolution ||
+      imageUtilCalculateResolution(
         Math.round(mapView.getZoom()),
         isGeoProjection,
         proj.selected.resolutions,
@@ -252,10 +252,6 @@ function mapStateToProps(state) {
   let url = DEFAULT_URL;
   if (config.features.imageDownload && config.features.imageDownload.url) {
     url = config.features.imageDownload.url;
-  }
-  if ('imageDownload' in config.parameters) {
-    url = config.parameters.imageDownload;
-    util.warn(`Redirecting image download to: ${url}`);
   }
 
   return {
