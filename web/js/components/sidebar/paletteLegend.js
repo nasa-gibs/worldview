@@ -208,12 +208,14 @@ class PaletteLegend extends React.Component {
    * @param {string} hex - The hex color to match against the legend.
    * @param {number} acceptableDifference - The maximum allowed difference between colors.
    *                                        Lower values require closer color matches.
+   * @param {Object} palette - The color palette of the legend
    *
    * @returns {Object|null} The matched legend object or null if no match is found.
    *
    */
-  getLegendObject(legend, hex, acceptableDifference) {
+  getLegendObject(legend, hex, acceptableDifference, palette) {
     const { globalTemperatureUnit } = this.props;
+    const { min, max, noclip, squash } = palette;
     const units = legend.units || '';
 
     const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(
@@ -229,6 +231,16 @@ class PaletteLegend extends React.Component {
           label = convertPaletteValue(tooltipRange, legendTempUnit, globalTemperatureUnit);
         } else {
           label = units ? `${tooltipRange} ${units}` : tooltipRange;
+        }
+        // If noclip is active, generate labels for indexes out of the min/max range
+        if (noclip) {
+          // If palette is squashed, labels outside range are now <= and >= instead
+          const squashEquals = squash ? '=' : '';
+          if (i < min || (squash && i === min)) {
+            label = `<${squashEquals} ${legend.tooltips[min]}`;
+          } else if (i > max || (squash && i === max)) {
+            label = `>${squashEquals} ${legend.tooltips[max]}`;
+          }
         }
         return {
           label,
@@ -262,8 +274,9 @@ class PaletteLegend extends React.Component {
 
     if (isRunningData && colorHex && this.state.width > 0) {
       const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
-      const acceptableDifference = isContinuousVectorLayer ? 1 : 3;
-      legendObj = this.getLegendObject(legend, colorHex, acceptableDifference); // {label,len,index}
+      const acceptableDifference = isContinuousVectorLayer ? 1 : 2;
+      // {label,len,index}
+      legendObj = this.getLegendObject(legend, colorHex, acceptableDifference, palette);
       if (legendObj) {
         percent = this.getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
@@ -385,16 +398,17 @@ class PaletteLegend extends React.Component {
     const {
       layer, parentLayer, compareState, getPalette, palettes,
     } = this.props;
-    const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
-    const legendClass = activeKeyObj
-      ? 'wv-running wv-palettes-legend wv-palettes-classes'
-      : 'wv-palettes-legend wv-palettes-classes';
     const singleKey = legend.colors.length === 1;
     const legendTooltip = legend.tooltips && legend.tooltips.length ? legend.tooltips[0] : '';
     const trackLabel = layer.track && legendTooltip
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
+    const activeKeyObj = isRunningData && colorHex &&
+      this.getLegendObject(legend, colorHex, 5, palette);
+    const legendClass = activeKeyObj
+      ? 'wv-running wv-palettes-legend wv-palettes-classes'
+      : 'wv-palettes-legend wv-palettes-classes';
     return (
       <VisibilitySensor
         key={`${legend.id}-${legendIndex}vis-sensor`}

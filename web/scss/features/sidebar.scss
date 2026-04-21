@@ -1141,6 +1141,10 @@ p.recharts-tooltip-label {
 .layer-settings-modal {
   width: 300px;
 
+  .wv-checkbox::before {
+    margin-right: 8px;
+  }
+
   @media (max-width: variables.$mobile-max-width) {
     width: 100%;
   }
@@ -1240,8 +1244,7 @@ p.recharts-tooltip-label {
   }
 
   .wv-palette-squash {
-    float: right;
-    margin-top: -26px;
+    display: inline-block;
 
     .wv-checkbox.gray span {
       color: #eee;
@@ -1249,7 +1252,8 @@ p.recharts-tooltip-label {
   }
 
   .wv-palette-clip {
-    float: right;
+    display: inline-block;
+    margin-left: 20px;
 
     .wv-checkbox.gray span {
       color: #eee;
@@ -1257,7 +1261,7 @@ p.recharts-tooltip-label {
   }
 
   .wv-layer-options-threshold {
-    margin-top: 35px;
+    margin-top: 10px;
   }
 
   /** inline-block extra spacing */
