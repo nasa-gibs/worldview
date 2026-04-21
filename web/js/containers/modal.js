@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import update from 'immutability-helper';
@@ -6,7 +6,6 @@ import { toLower as lodashToLower } from 'lodash';
 import {
   Modal, ModalBody, ModalHeader, ModalFooter,
 } from 'reactstrap';
-import Draggable from 'react-draggable';
 import { Resizable } from 'react-resizable';
 import { onToggle as onToggleAction } from '../modules/modal/actions';
 import ErrorBoundary from './error-boundary';
@@ -57,6 +56,16 @@ function ModalContainer(props) {
   const [offsetTop, setOffsetTop] = useState(propsOffsetTop);
   const [offsetRight, setOffsetRight] = useState(propsOffsetRight);
   const [measuredElement, setMeasuredElement] = useState();
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({
+    x: 0,
+    y: 0,
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0,
+    stayOnscreen: false,
+  });
   const prevScreenHeight = usePrevious(screenHeight);
   const prevScreenWidth = usePrevious(screenWidth);
   const prevWidth = usePrevious(width);
@@ -71,14 +80,76 @@ function ModalContainer(props) {
     }
   }, []);
 
+  const beginDrag = useCallback((e, { dragHandle, stayOnscreen }) => {
+    if (!e || e.button !== 0) return;
+    if (!dragHandle) return;
+    if (!e.target?.closest?.(dragHandle)) return;
+    if (e.target?.closest?.('button, a, input, select, textarea')) return;
+
+    const rect = measuredElement?.getBoundingClientRect?.();
+    const startLeft = typeof offsetLeft === 'number' ? offsetLeft : (rect?.left || 0);
+    const startTop = typeof offsetTop === 'number' ? offsetTop : (rect?.top || 0);
+    const elWidth = width || rect?.width || 0;
+    const elHeight = height || rect?.height || 0;
+
+    dragStartRef.current = {
+      x: e.clientX,
+      y: e.clientY,
+      left: startLeft,
+      top: startTop,
+      width: elWidth,
+      height: elHeight,
+      stayOnscreen: !!stayOnscreen,
+    };
+
+    setIsDragging(true);
+  }, [measuredElement, offsetLeft, offsetTop, width, height]);
+
+  useEffect(() => {
+    if (!isDragging) return undefined;
+
+    const onMove = (e) => {
+      const start = dragStartRef.current;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+
+      let nextLeft = start.left + dx;
+      let nextTop = start.top + dy;
+
+      if (start.stayOnscreen && start.width && start.height) {
+        const maxLeft = Math.max(0, screenWidth - start.width);
+        const maxTop = Math.max(0, screenHeight - start.height);
+        nextLeft = Math.min(Math.max(0, nextLeft), maxLeft);
+        nextTop = Math.min(Math.max(0, nextTop), maxTop);
+      }
+
+      setOffsetLeft(nextLeft);
+      setOffsetTop(nextTop);
+    };
+
+    const onUp = () => {
+      setIsDragging(false);
+    };
+
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+    };
+  }, [isDragging, screenWidth, screenHeight]);
+
   const onParamChange = (e, { size }) => {
     if (e) {
       e.stopPropagation();
     }
     const elWidth = autoSetWidth && measuredElement
-      ? measuredElement.getBoundingClientRect().width : size.width;
+      ? measuredElement.getBoundingClientRect().width
+      : size.width;
     const elHeight = autoSetHeight && measuredElement
-      ? measuredElement.getBoundingClientRect().height : size.height;
+      ? measuredElement.getBoundingClientRect().height
+      : size.height;
     setWidth(elWidth);
     setHeight(elHeight);
     setOffsetLeft(size.offsetLeft);
@@ -106,12 +177,12 @@ function ModalContainer(props) {
     const screenWidthChanged = screenWidth !== prevScreenWidth;
     const modalWidthChanged = propsWidth !== prevWidth;
     const modalHeightChanged = propsHeight !== prevHeight;
-    const measuredElementChanged = (autoSetWidth || autoSetHeight)
-      && measuredElement !== prevMeasuredElement;
-    const measuredWidthChanged = autoSetWidth
-      && measuredElement?.getBoundingClientRect().width !== prevMeasuredWidth;
-    const measuredHeightChanged = autoSetHeight
-      && measuredElement?.getBoundingClientRect().height !== prevMeasuredHeight;
+    const measuredElementChanged = (autoSetWidth || autoSetHeight) &&
+      measuredElement !== prevMeasuredElement;
+    const measuredWidthChanged = autoSetWidth &&
+      measuredElement?.getBoundingClientRect().width !== prevMeasuredWidth;
+    const measuredHeightChanged = autoSetHeight &&
+      measuredElement?.getBoundingClientRect().height !== prevMeasuredHeight;
     const measureChange = measuredElementChanged || measuredWidthChanged || measuredHeightChanged;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
     if ((modalWidthChanged || modalHeightChanged || measureChange) && isOpen) {
@@ -152,56 +223,43 @@ function ModalContainer(props) {
 
   function getTemplateBody() {
     const { bodyTemplate } = props;
-    return bodyTemplate.isLoading ? (
-      <span> Loading </span>
-    ) : (
-      <div
-        id="template-content"
-        dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
-      />
-    );
+    return bodyTemplate.isLoading
+      ? (
+        <span> Loading </span>
+      )
+      : (
+        <div
+          id="template-content"
+          dangerouslySetInnerHTML={{ __html: bodyTemplate.response }}
+        />
+      );
   }
 
   const handleCreateChildren = (children) => {
-    const style = getStyle();
     const newProps = isCustom && id ? update(props, { $merge: customProps }) : props;
     const {
-      dragHandle,
-      isDraggable,
       isResizable,
-      stayOnscreen,
     } = newProps;
-    const bounds = stayOnscreen ? {
-      left: -(screenWidth / 2 - width / 2),
-      right: screenWidth / 2 - width / 2,
-      top: -style.top,
-      bottom: screenHeight - height - style.top - 5,
-    } : '';
-    return (
-      <Draggable
-        handle={dragHandle}
-        disabled={!isDraggable}
-        bounds={bounds}
-      >
-        {isResizable
-          ? (
-            <Resizable
-              className="resize-box"
-              resizeHandles={['se']}
-              width={width || newProps.width}
-              height={height || newProps.height}
-              minConstraints={[250, 250]}
-              maxConstraints={[495, screenHeight]}
-              handleSize={[8, 8]}
-              onResize={onResize}
-              draggableOpts={{ disabled: !isResizable }}
-            >
-              {children}
-            </Resizable>
-          )
-          : children}
-      </Draggable>
-    );
+    const maybeResizableChildren = isResizable
+      ? (
+        <Resizable
+          className="resize-box"
+          resizeHandles={['se']}
+          width={width || newProps.width}
+          height={height || newProps.height}
+          minConstraints={[250, 250]}
+          maxConstraints={[495, screenHeight]}
+          handleSize={[8, 8]}
+          onResize={onResize}
+          draggableOpts={{ disabled: !isResizable }}
+        >
+          {children}
+        </Resizable>
+      )
+      : children;
+
+    // Manual dragging is handled via mouse events on the modal content wrapper.
+    return maybeResizableChildren;
   };
 
   const newProps = isCustom && id ? update(props, { $merge: customProps }) : props;
@@ -212,6 +270,8 @@ function ModalContainer(props) {
     bodyComponentProps,
     bodyHeader,
     bodyText,
+    dragHandle,
+    stayOnscreen,
     footer,
     clickableBehindModal,
     CompletelyCustomModal,
@@ -230,9 +290,17 @@ function ModalContainer(props) {
     wrapClassName,
   } = newProps;
 
-  const isRestrictedDisplay = (isMobile && desktopOnly)
-    || (!isMobile && mobileOnly)
-    || (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
+  const customPropsWithoutKey = { ...(customProps || {}) };
+  delete customPropsWithoutKey.key;
+
+  const handleModalMouseDown = useCallback((e) => {
+    if (!isDraggable) return;
+    beginDrag(e, { dragHandle, stayOnscreen });
+  }, [beginDrag, dragHandle, isDraggable, stayOnscreen]);
+
+  const isRestrictedDisplay = (isMobile && desktopOnly) ||
+    (!isMobile && mobileOnly) ||
+    (isEmbedModeActive && size === 'lg' && !id.includes('LAYER_INFO_MODAL'));
   if (isRestrictedDisplay) {
     return null;
   }
@@ -247,7 +315,7 @@ function ModalContainer(props) {
       &times;
     </button>
   );
-
+  const renderModalBodyText = isTemplateModal ? getTemplateBody() : (<p>{bodyText}</p>) || '';
   return (
     <ErrorBoundary>
       <InteractionWrap
@@ -267,15 +335,15 @@ function ModalContainer(props) {
           modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
           fade={!isDraggable}
         >
-          <div ref={handleElement}>
+          <div ref={handleElement} onMouseDown={handleModalMouseDown} style={{ height: '100%' }}>
             {CompletelyCustomModal
               ? (
                 <CompletelyCustomModal
-                  key={`custom_${lowerCaseId}`}
+                  key={customProps?.dialogKey ? `custom_${lowerCaseId}_${customProps.dialogKey}` : `custom_${lowerCaseId}`}
                   modalHeight={height || newProps.height}
                   modalWidth={width || newProps.width}
                   // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...customProps}
+                  {...customPropsWithoutKey}
                   toggleWithClose={toggleFunction}
                 />
               )
@@ -285,22 +353,23 @@ function ModalContainer(props) {
                   disabled={allowOuterClick}
                 >
                   {(headerComponent || headerText) && (
-                  <ModalHeader toggle={toggleFunction} close={closeBtn}>
-                    {headerComponent ? <headerComponent /> : headerText || ''}
-                  </ModalHeader>
+                    <ModalHeader toggle={toggleFunction} close={closeBtn}>
+                      {headerComponent ? <headerComponent /> : headerText || ''}
+                    </ModalHeader>
                   )}
                   <ModalBody>
                     {bodyHeader && <h3>{bodyHeader}</h3>}
-                    {BodyComponent ? (
-                      <BodyComponent
+                    {BodyComponent
+                      ? (
+                        <BodyComponent
                         // eslint-disable-next-line react/jsx-props-no-spreading
-                        {...bodyComponentProps}
-                        parentId={id}
-                        screenHeight={screenHeight}
-                        closeModal={toggleFunction}
-                      />
-                    )
-                      : isTemplateModal ? getTemplateBody() : (<p>{bodyText}</p>) || ''}
+                          {...bodyComponentProps}
+                          parentId={id}
+                          screenHeight={screenHeight}
+                          closeModal={toggleFunction}
+                        />
+                      )
+                      : renderModalBodyText}
                   </ModalBody>
                   {footer && (<ModalFooter />)}
                 </DetectOuterClick>

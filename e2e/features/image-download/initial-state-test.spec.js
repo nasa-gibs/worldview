@@ -9,9 +9,10 @@ const {
   closeModal
 } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 const expectedResolutions = '30m60m125m250m500m1km5km10km'
 const expectedFormats = 'JPEGPNGGeoTIFFKMZ'
 const expectedWorldFile = 'NoYes'

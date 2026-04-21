@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import lodashIndexOf from 'lodash/indexOf';
 import { drawPaletteOnCanvas } from '../../../modules/palettes/util';
@@ -141,8 +141,8 @@ function PaletteSelect (props) {
     const target = getCustomPalette(id);
     const targetType = target.colors.length === 1 ? 'classification' : 'continuous';
 
-    if ((source.type === 'continuous' && targetType === 'continuous')
-       || (source.type === 'discrete' && targetType === 'continuous')) {
+    if ((source.type === 'continuous' && targetType === 'continuous') ||
+       (source.type === 'discrete' && targetType === 'continuous')) {
       const translated = palettesTranslate(source.colors, target.colors);
       return renderSelectorItemScale(
         translated,
@@ -173,7 +173,7 @@ function PaletteSelect (props) {
       <Scrollbar style={{ maxHeight: '200px' }}>
         {renderDefault()}
         {
-          // eslint-disable-next-line array-callback-return
+
           paletteOrder.map((id) => {
             if (lodashIndexOf(recommended, id) < 0) {
               const item = customLegend(id);

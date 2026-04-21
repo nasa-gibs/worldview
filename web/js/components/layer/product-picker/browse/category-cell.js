@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 function CategoryCell(props) {
@@ -33,13 +32,14 @@ function CategoryCell(props) {
       <div className="category-background-cover" style={categoryBgImage}>
         <div className="category-background-cover">
           <h3>
-            <a
+            <button
               className="layer-category-name"
               alt={category.title}
+              type="button"
               onClick={() => drawMeasurements(category)}
             >
               {category.title}
-            </a>
+            </button>
           </h3>
           <ul>
             {category.measurements
@@ -61,40 +61,44 @@ function CategoryCell(props) {
                       measurement
                     }' stated in category '${
                       category.title
-                    }' does not exist `
-                        + 'in measurement list!',
+                    }' does not exist ` +
+                        'in measurement list!',
                   );
                 }
-                return index === 6 ? (
-                  <li
-                    className="layer-category-item"
+                return index === 6
+                  ? (
+                    <li
+                      className="layer-category-item"
                       /* eslint react/no-array-index-key: 1 */
-                    key={category.id + index}
-                  >
-                    <a
-                      className="layer-category-name"
-                      onClick={() => drawMeasurements(category)}
+                      key={category.id + index}
                     >
-                      ...
-                    </a>
-                  </li>
-                ) : (
-                  <li
-                    className="layer-category-item"
-                    key={category.id + index}
-                    id={
+                      <button
+                        className="layer-category-name"
+                        type="button"
+                        onClick={() => drawMeasurements(category)}
+                      >
+                        ...
+                      </button>
+                    </li>
+                  )
+                  : (
+                    <li
+                      className="layer-category-item"
+                      key={category.id + index}
+                      id={
                         `layer-category-item-${category.id}-${current.id}`
                       }
-                  >
-                    <a
-                      className="layer-category-name"
-                      onClick={() => drawMeasurements(category, current.id, index)}
                     >
-                      {current.title}
-                    </a>
-                    {' '}
-                  </li>
-                );
+                      <button
+                        className="layer-category-name"
+                        type="button"
+                        onClick={() => drawMeasurements(category, current.id, index)}
+                      >
+                        {current.title}
+                      </button>
+                      {' '}
+                    </li>
+                  );
               })}
           </ul>
         </div>

@@ -1,0 +1,3 @@
+test('travelModeTitle mapUI test', () => {
+
+});

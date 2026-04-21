@@ -20,6 +20,7 @@ const clickDownload = async (page) => {
 
 const closeImageDownloadPanel = async (page) => {
   await page.locator('.modal-close-btn').click()
+  await page.waitForTimeout(250)
 }
 
 const zoomIn = async (page) => {
@@ -134,6 +135,7 @@ const createDistanceMeasurement = async (page, start, finish) => {
   await page.locator('#wv-measure-button').click()
   await page.locator('#measure-distance-button').click()
   await page.mouse.click(start[0], start[1])
+  await page.waitForTimeout(250)
   await page.mouse.dblclick(finish[0], finish[1])
 }
 
@@ -154,7 +156,7 @@ const localStorageEnabled = () => {
       enabled = window.localStorage.getItem(uid) === uid
       window.localStorage.removeItem(uid)
     }
-  } catch (error) {
+  } catch {
     enabled = false
   }
   return !!enabled

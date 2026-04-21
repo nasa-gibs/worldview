@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';
@@ -47,11 +46,11 @@ function MobileAnimationWidget (props) {
   const startingDate = getISODateFormatted(startDate);
 
   const getMobileIDs = () => {
-    if ((isMobilePhone && isLandscape)
-      || (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
+    if ((isMobilePhone && isLandscape) ||
+      (!isMobilePhone && !isMobileTablet && screenHeight < 800)) {
       return 'mobile-phone-landscape';
-    } if ((isMobilePhone && isPortrait)
-      || (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
+    } if ((isMobilePhone && isPortrait) ||
+      (!isMobilePhone && !isMobileTablet && screenWidth < 550)) {
       return 'mobile-phone-portrait';
     } if (isMobileTablet || screenWidth <= breakpoints.small) {
       return 'tablet';
@@ -87,13 +86,14 @@ function MobileAnimationWidget (props) {
   return (
     <div className="wv-animation-widget-wrapper-mobile" id={`mobile-animation-widget-${mobileID}`}>
       <div className="mobile-animation-header" style={{ justifyContent: isEmbedModeActive ? 'flex-start' : 'flex-end' }}>
-        <span
+        <button
+          type="button"
           aria-label="Close"
           onClick={toggleCollapse}
           id="mobile-animation-close"
         >
           <FontAwesomeIcon icon="times" className="collapse-icon" style={collapseIconMobile} widthAuto />
-        </span>
+        </button>
       </div>
       <div className="mobile-animation-warning-message-container">
         <span id={playDisabled ? 'mobile-animation-warning-message' : ''}>Too many animation frames. Reduce time range or increase increment size.</span>

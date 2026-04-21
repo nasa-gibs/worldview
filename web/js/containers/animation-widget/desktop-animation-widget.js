@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ import TimeScaleIntervalChange from '../../components/timeline/timeline-controls
 import CustomIntervalSelector from '../../components/timeline/custom-interval-selector/custom-interval-selector';
 
 function DesktopAnimationWidget(props) {
+  const nodeRef = useRef(null);
   const {
     animationCustomModalOpen,
     autoplay,
@@ -53,6 +54,7 @@ function DesktopAnimationWidget(props) {
 
   return (
     <Draggable
+      nodeRef={nodeRef}
       bounds="body"
       cancel={cancelSelector}
       handle=".wv-animation-widget-header"
@@ -60,7 +62,7 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className={`wv-animation-widget-wrapper ${hideWidget}`}>
+      <div ref={nodeRef} className={`wv-animation-widget-wrapper ${hideWidget}`}>
         <div
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}

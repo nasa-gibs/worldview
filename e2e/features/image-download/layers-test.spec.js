@@ -3,8 +3,8 @@ const { test, expect } = require('@playwright/test')
 const { openImageDownloadPanel, clickDownload, closeModal } = require('../../test-utils/hooks/wvHooks')
 const { joinUrl, getAttribute } = require('../../test-utils/hooks/basicHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-
 const startParams = [
   'v=-180,-90,180,90',
   't=2018-06-01',

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
 import { createPortal } from 'react-dom';
@@ -6,6 +6,9 @@ import { pick, some } from 'lodash';
 
 // https://stackoverflow.com/a/13139830
 const TRANSPARENT_GIF = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+
+const DEFAULT_MAX_HEIGHT = typeof window === 'undefined' ? 0 : window.innerWidth;
+const DEFAULT_MAX_WIDTH = typeof window === 'undefined' ? 0 : window.innerHeight;
 
 function RenderCoordinates(props) {
   const { coordinates, topRightStyle, bottomLeftStyle } = props;
@@ -32,25 +35,23 @@ function RenderCoordinates(props) {
   );
 }
 
-function Crop(props) {
-  const {
-    onClose,
-    onChange,
-    onDragStop,
-    maxWidth,
-    maxHeight,
-    showCoordinates,
-    keepSelection,
-    zIndex,
-    coordinates,
-    topRightStyle,
-    bottomLeftStyle,
-    x,
-    y,
-    width,
-    height,
-  } = props;
-
+function Crop({
+  onClose = () => {},
+  onChange,
+  onDragStop = () => {},
+  maxWidth = DEFAULT_MAX_WIDTH,
+  maxHeight = DEFAULT_MAX_HEIGHT,
+  showCoordinates = false,
+  keepSelection = false,
+  zIndex = 3,
+  coordinates,
+  topRightStyle,
+  bottomLeftStyle,
+  x = 20,
+  y = 10,
+  width = 30,
+  height = 10,
+}) {
   const [crop, setCrop] = useState({
     x,
     y,
@@ -74,8 +75,8 @@ function Crop(props) {
     const { width: cWidth, height: cHeight } = cropBoundaries;
 
     // https://github.com/DominicTobias/react-image-crop/issues/397
-    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0
-        && some(
+    const changed = cWidth && cWidth > 0 && cHeight && cHeight > 0 &&
+        some(
           pick(cropBoundaries, 'x', 'y', 'width', 'height'),
           (value, key) => value !== prevCrop.current[key],
         );
@@ -121,18 +122,6 @@ function Crop(props) {
   );
 }
 export default Crop;
-
-Crop.defaultProps = {
-  height: 10,
-  maxHeight: window.innerWidth,
-  maxWidth: window.innerHeight,
-  onDragStop: () => {},
-  keepSelection: false,
-  width: 30,
-  x: 20,
-  y: 10,
-  zIndex: 3,
-};
 
 RenderCoordinates.propTypes = {
   coordinates: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),

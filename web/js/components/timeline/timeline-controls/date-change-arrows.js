@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ArrowChevronLeft, ArrowChevronRight } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
@@ -94,13 +94,15 @@ class DateChangeArrows extends PureComponent {
         )}
 
         {/* LEFT ARROW */}
-        <div
+        <button
+          type="button"
           className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
           id="left-arrow-group"
           onMouseDown={leftArrowDown}
           onMouseUp={leftArrowUp}
           onMouseLeave={leftArrowUp}
           aria-disabled={leftArrowDisabled}
+          aria-label="Decrement date"
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -108,17 +110,19 @@ class DateChangeArrows extends PureComponent {
             placement="top"
             target="left-arrow-group"
           />
-          <ArrowChevronLeft class="arrow" size="30px" />
-        </div>
+          <ArrowChevronLeft className="arrow" size="30px" />
+        </button>
 
         {/* RIGHT ARROW */}
-        <div
+        <button
+          type="button"
           className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
           id="right-arrow-group"
           onMouseDown={rightArrowDown}
           onMouseUp={rightArrowUp}
           onMouseLeave={rightArrowUp}
           aria-disabled={rightArrowDisabled}
+          aria-label="Increment date"
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -126,15 +130,18 @@ class DateChangeArrows extends PureComponent {
             placement="top"
             target="right-arrow-group"
           />
-          <ArrowChevronRight class="arrow" size="30px" />
-        </div>
+          <ArrowChevronRight className="arrow" size="30px" />
+        </button>
 
         {/* NOW BUTTON */}
-        <div
+        <button
+          type="button"
           className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
           id="now-button-group"
           onClick={handleSelectNowButton}
           aria-disabled={nowButtonDisabled}
+          aria-label="Latest available date"
+
         >
           <HoverTooltip
             isMobile={isMobile}
@@ -148,7 +155,7 @@ class DateChangeArrows extends PureComponent {
               className="arrow"
             />
           </svg>
-        </div>
+        </button>
       </div>
     );
   }

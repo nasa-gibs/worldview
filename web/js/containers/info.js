@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import googleTagManager from 'googleTagManager';
@@ -41,14 +40,15 @@ function InfoList (props) {
 
   function getNotificationListItem() {
     const { numberUnseen, type, object } = notifications;
+    const iconName = () => {
+      if (type === 'message') return 'gift';
+      if (type === 'outage') return 'exclamation-circle';
+      return ['fas', 'bolt'];
+    };
     return {
       text: 'Notifications',
       iconClass: 'ui-icon',
-      iconName: type === 'message'
-        ? 'gift'
-        : type === 'outage'
-          ? 'exclamation-circle'
-          : ['fas', 'bolt'],
+      iconName: iconName(),
       id: 'notifications_info_item',
       badge: type ? numberUnseen : 0,
       className: type ? `${type}-notification` : '',
@@ -147,12 +147,12 @@ function InfoList (props) {
     }
 
     // limit explore for larger device displays
-    if (window.innerWidth >= 740
-        && window.innerHeight >= 615) {
+    if (window.innerWidth >= 740 &&
+        window.innerHeight >= 615) {
       if (
-        config.features.tour
-          && config.stories
-          && config.storyOrder) {
+        config.features.tour &&
+          config.stories &&
+          config.storyOrder) {
         arr.splice(1, 0, getExploreWorldviewObj());
       }
     }

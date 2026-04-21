@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { capitalize as lodashCapitalize } from 'lodash';
 import FileSaver from 'file-saver';
@@ -115,11 +115,12 @@ export default class GifResults extends Component {
                   e.stopPropagation();
                   e.preventDefault();
                   FileSaver.saveAs(blob, dlURL);
+                  const upperSizeRage = size >= 5 && size <= 25
+                    ? '5MB-25MB'
+                    : '>25MB';
                   const sizeRange = size < 5
                     ? '<5MB'
-                    : size >= 5 && size <= 25
-                      ? '5MB-25MB'
-                      : '>25MB';
+                    : upperSizeRage;
 
                   googleTagManager.pushEvent({
                     event: 'GIF_download',

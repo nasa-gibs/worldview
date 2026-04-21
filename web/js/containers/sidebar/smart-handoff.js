@@ -1,5 +1,4 @@
-/* eslint-disable react/no-did-update-set-state */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -343,19 +342,20 @@ class SmartHandoff extends Component {
       showZoomedIntoDatelineAlert,
     } = this.state;
 
+    const zoomedInDatelineAlertMsg = showZoomedIntoDatelineAlert
+      ? 'The map is zoomed into an area with no available data.'
+      : '';
     const message = showBoundingBox && selectionOutsideExtents && !showZoomedIntoDatelineAlert
       ? 'The selection is outside the available map area.'
-      : showZoomedIntoDatelineAlert
-        ? 'The map is zoomed into an area with no available data.'
-        : '';
+      : zoomedInDatelineAlertMsg;
 
     return (selectionOutsideExtents || showZoomedIntoDatelineAlert) && message && (
-    <AlertUtil
-      id="data-download-unavailable-dateline-alert"
-      isOpen
-      title="Data Download Unavailable"
-      message={message}
-    />
+      <AlertUtil
+        id="data-download-unavailable-dateline-alert"
+        isOpen
+        title="Data Download Unavailable"
+        message={message}
+      />
     );
   };
 
@@ -413,9 +413,9 @@ class SmartHandoff extends Component {
                   const inputId = `${util.encodeId(value)}-${util.encodeId(layer.id)}-collection-choice`;
                   const isSelected = (selectedCollection || {}).value === value && layerIsSelected;
                   const labelId = `${inputId}-label`;
-                  const label = STD_NRT_MAP[type]
-                   + (version ? ` - v${version}` : '')
-                   + (quality ? ' (Quality)' : '');
+                  const label = STD_NRT_MAP[type] +
+                   (version ? ` - v${version}` : '') +
+                   (quality ? ' (Quality)' : '');
 
                   return (
                     <div className="collection-choice" key={inputId}>
@@ -536,7 +536,7 @@ class SmartHandoff extends Component {
               </h1>
               <hr />
               <h2>
-                <a className="help-link" onClick={showNotAvailableModal}>
+                <a role="link" tabIndex={0} className="help-link" onClick={showNotAvailableModal}>
                   Why are my layers not available?
                 </a>
               </h2>
@@ -570,7 +570,8 @@ class SmartHandoff extends Component {
 
     // Determine if the download button is enabled
     const validSelection = showBoundingBox
-      ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert : !showZoomedIntoDatelineAlert;
+      ? !selectionOutsideExtents && !showZoomedIntoDatelineAlert
+      : !showZoomedIntoDatelineAlert;
     const isValidDownload = selectedLayer && selectedLayer.id && validSelection;
 
     if (isLoading) {
@@ -591,9 +592,9 @@ class SmartHandoff extends Component {
             application.
           </div>
           <h2>
-            <a className="help-link" onClick={showNotAvailableModal}>
+            <button type="button" className="help-link" onClick={showNotAvailableModal}>
               Why are some layers not available?
-            </a>
+            </button>
           </h2>
           <hr />
           {this.renderLayerChoices()}

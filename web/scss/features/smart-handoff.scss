@@ -134,9 +134,12 @@ label[for="chk-crop-toggle"] span {
 }
 
 .help-link,
-a.help-link {
+a.help-link,
+button.help-link {
   color: #7bf;
   text-decoration: none;
+  background: none;
+  border: none;
 
   &:hover {
     color: #7bf;
@@ -331,6 +334,9 @@ a.help-link {
   color: #7bf;
   font-size: 17px;
   text-align: center;
+  background: none;
+  border: none;
+  width: 100%;
 }
 
 .toggle-more-info:hover {

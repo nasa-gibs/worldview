@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Spinner,
@@ -69,7 +69,7 @@ export default function ImagerySearch({ layer }) {
       const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
       return olderDates;
-    } catch (e) {
+    } catch {
       return [];
     }
   };
@@ -83,7 +83,7 @@ export default function ImagerySearch({ layer }) {
       const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 
       return newerDates;
-    } catch (e) {
+    } catch {
       return [];
     }
   };

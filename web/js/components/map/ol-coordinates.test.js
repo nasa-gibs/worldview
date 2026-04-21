@@ -1,6 +1,5 @@
-import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { act } from 'react-dom/test-utils';
+import { act } from 'react';
 import util from '../../util/util';
 import OlCoordinates from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
@@ -30,7 +29,9 @@ beforeEach(() => {
 
 afterEach(() => {
   util.setCoordinateFormat('latlon-dd');
-  root.unmount(container);
+  act(() => {
+    root.unmount();
+  });
   container.remove();
   container = null;
 });

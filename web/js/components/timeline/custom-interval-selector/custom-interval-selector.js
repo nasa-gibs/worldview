@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,10 +60,10 @@ function CustomIntervalSelector(props) {
   };
 
   return modalOpen && (
-    <div
+    <button
       onKeyDown={handleKeyPress}
       className={`custom-interval-widget ${hasSubdailyLayers ? 'subdaily' : ''}`}
-      tabIndex={0}
+      type="button"
       ref={(widget) => { customIntervalWidget = widget; }}
     >
       <h3 className="custom-interval-widget-header">Custom Interval Selector</h3>
@@ -79,7 +79,7 @@ function CustomIntervalSelector(props) {
         />
       </div>
       <FontAwesomeIcon icon="times" className="wv-close" onClick={closeModal} widthAuto />
-    </div>
+    </button>
   );
 }
 

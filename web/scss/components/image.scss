@@ -120,6 +120,9 @@
   padding: 5px 0;
   font-weight: 600;
   cursor: pointer;
+  background: none;
+  border: none;
+  color: inherit;
 
   &:hover {
     font-weight: 900;

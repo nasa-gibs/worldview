@@ -136,18 +136,18 @@ class ProductPickerHeader extends React.Component {
     const categoryId = category && category.id;
     const recentLayersMode = categoryType === 'recent';
     const featuredLayersMode = categoryType === 'featured';
-    const showBackButton = searchMode
-      || (categoryId !== 'featured-all'
-      && selectedProjection === 'geographic'
-      && mode !== 'category'
-      && !featuredLayersMode
-      && !recentLayersMode);
+    const showBackButton = searchMode ||
+      (categoryId !== 'featured-all' &&
+      selectedProjection === 'geographic' &&
+      mode !== 'category' &&
+      !featuredLayersMode &&
+      !recentLayersMode);
     const isBreadCrumb = showBackButton && !searchMode && width > 650;
     const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
-    const showFilterBtnMobile = recentLayersMode
-      || (searchMode ? !showMobileFacets : !selectedLayer);
-    const showFilterBnDesktop = recentLayersMode
-      || (!searchMode && !selectedLayer);
+    const showFilterBtnMobile = recentLayersMode ||
+      (searchMode ? !showMobileFacets : !selectedLayer);
+    const showFilterBnDesktop = recentLayersMode ||
+      (!searchMode && !selectedLayer);
     const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
     const filterBtnFn = !searchMode ? toggleSearchMode : toggleMobileFacets;
     const inputClass = !searchMode && searchTerm ? 'faded' : '';
@@ -211,7 +211,7 @@ class ProductPickerHeader extends React.Component {
             value={searchTerm}
             placeholder="Search"
             type="search"
-            // eslint-disable-next-line no-return-assign
+
             innerRef={(c) => (this.input = c)}
           />
         </InputGroup>

@@ -1,4 +1,3 @@
-
 import { getActiveLayers, memoizedAvailable } from '../layers/selectors';
 import util from '../../util/util';
 
@@ -56,8 +55,8 @@ export const getValidLayersForHandoffs = (state) => {
     const isAvailable = memoizedAvailable(state)(id);
     const filteredConceptIds = (conceptIds || [])
       .filter(({ type, value, version }) => type && value && version);
-    return isAvailable && projections[proj.id]
-    && !disableSmartHandoff && !!filteredConceptIds.length;
+    return isAvailable && projections[proj.id] &&
+    !disableSmartHandoff && !!filteredConceptIds.length;
   };
   return getActiveLayers(state).filter(filterForSmartHandoff);
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
@@ -89,11 +89,11 @@ function EventFilterModalBody (props) {
   const minDate = new Date('2000-01-01');
   const maxDate = util.now();
 
-  const mobileStyle = isMobile ? {
-    fontSize: '14px',
-  } : null;
-
-
+  const mobileStyle = isMobile
+    ? {
+      fontSize: '14px',
+    }
+    : null;
 
   return (
     <div className="events-filter">

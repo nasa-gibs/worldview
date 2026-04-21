@@ -18,7 +18,6 @@ import {
 } from '../palettes/selectors';
 import util from '../../util/util';
 
-
 /**
  * Get OpenLayers layers from state that were created from WV vector
  * layer definitions. NOTE: This currently also will include the associate WMS
@@ -224,11 +223,12 @@ export function setStyleFunction(opts) {
   // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
     const extentStartX = layer.getExtent()[0];
+    const fallbackExtent = extentStartX === -250
+      ? [110, -90, 180, 90]
+      : null;
     const acceptableExtent = extentStartX === 180
       ? [-180, -90, -110, 90]
-      : extentStartX === -250
-        ? [110, -90, 180, 90]
-        : null;
+      : fallbackExtent;
 
     layer.setStyle((feature, resolution) => {
       const data = state.config.vectorData[def.vectorData.id];

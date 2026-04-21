@@ -122,7 +122,7 @@ export function addLayer(id) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      layers, compare, proj, config,
+      layers, compare, config,
     } = state;
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
@@ -130,11 +130,10 @@ export function addLayer(id) {
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
+      {},
       overlays.length || 0,
-      proj.id,
       groupOverlays,
     );
     const projections = Object.keys(config.projections);
@@ -426,7 +425,7 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
   return (dispatch, getState) => {
     const state = getState();
     const {
-      layers, compare, proj, config,
+      layers, compare, config,
     } = state;
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
@@ -434,11 +433,10 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
+      {},
       overlays.length || 0,
-      proj.id,
       groupOverlays,
       bandCombo,
       selectedPreset,

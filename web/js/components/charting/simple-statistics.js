@@ -1,22 +1,19 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 function SimpleStatistics(props) {
   const { data } = props;
 
-  const {
-    median, mean, max, min, stdev, timestamp, type, endTimestamp,
-  } = data;
+  const { statData, date } = data;
 
-  let dateStr;
-  if (type === 'date') {
-    dateStr = `Date: ${timestamp}`;
-  } else {
-    dateStr = `Date range: ${timestamp} - ${endTimestamp}`;
-  }
+  const {
+    median, mean, max, min, stdev,
+  } = statData;
+
+  const dateStr = `Date: ${date}`;
 
   function formatToThreeDigits(str) {
-    if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
+    if (parseFloat(str).toFixed(3)
+      .split('.')[0].length > 4) {
       return Number(parseFloat(str).toFixed(3)).toPrecision(3);
     }
     return parseFloat(str).toFixed(3);
@@ -89,4 +86,3 @@ SimpleStatistics.propTypes = {
 };
 
 export default SimpleStatistics;
-

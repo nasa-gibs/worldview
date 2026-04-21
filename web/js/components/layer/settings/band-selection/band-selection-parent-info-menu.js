@@ -1,4 +1,3 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
@@ -34,7 +33,6 @@ export default function BandSelectionParentInfoMenu({ layer }) {
   } = layer.bandCombo;
 
   const isValidBandSelection = () => (r !== 'undefined' && r !== undefined) && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
-
 
   return (
     <div className="customize-bands-parent-info">

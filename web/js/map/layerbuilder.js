@@ -1,5 +1,3 @@
-/* eslint-disable import/no-duplicates */
-/* eslint-disable no-multi-assign */
 import OlTileGridWMTS from 'ol/tilegrid/WMTS';
 import OlSourceWMTS from 'ol/source/WMTS';
 import OlSourceTileWMS from 'ol/source/TileWMS';
@@ -105,8 +103,8 @@ export default function mapLayerBuilder(config, cache, store) {
   const getUpdatedDateRanges = (def, callback, group) => {
     const state = store.getState();
     const { config: stateConfig, proj } = state;
-    const describeDomainsUrl = stateConfig?.features?.describeDomains?.url
-      || 'https://gibs.earthdata.nasa.gov';
+    const describeDomainsUrl = stateConfig?.features?.describeDomains?.url ||
+      'https://gibs.earthdata.nasa.gov';
     const {
       id,
     } = def;
@@ -213,9 +211,9 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const dateTime = closestDate.getTime();
     // if current date is outside previous and next available dates, recheck date range
-    if (previousLayerDate && nextLayerDate
-      && dateTime > previousLayerDate.getTime()
-      && dateTime < nextLayerDate.getTime()
+    if (previousLayerDate && nextLayerDate &&
+      dateTime > previousLayerDate.getTime() &&
+      dateTime < nextLayerDate.getTime()
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
@@ -331,7 +329,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const dateOptions = { date, nextDate, previousDate };
     const key = layerKey(def, options, state);
-    // eslint-disable-next-line no-use-before-define
+
     const layer = await createLayerWrapper(def, key, options, dateOptions);
 
     return layer;
@@ -440,7 +438,8 @@ export default function mapLayerBuilder(config, cache, store) {
       proj.selected,
     );
     const sizes = !tileMatrices
-      ? [] : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+      ? []
+      : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -591,49 +590,38 @@ export default function mapLayerBuilder(config, cache, store) {
     * @param {object} attributes
     */
   const createLayerVectorAeronet = (def, options, day, state, attributes) => {
-    const { proj, animation } = state;
+    const { proj } = state;
     let date;
-    let gridExtent;
-    let layerExtent;
     const selectedProj = proj.selected;
     const source = config.sources[def.source];
-    const animationIsPlaying = animation.isPlaying;
     const isSubdaily = def.period === 'subdaily';
-    gridExtent = selectedProj.maxExtent;
-    layerExtent = gridExtent;
+    const gridExtent = selectedProj.maxExtent;
+    const layerExtent = gridExtent;
 
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
 
-    if (day) {
-      if (day === 1) {
-        layerExtent = LEFT_WING_EXTENT;
-        gridExtent = [110, -90, 180, 90];
-      } else {
-        gridExtent = [-180, -90, -110, 90];
-        layerExtent = RIGHT_WING_EXTENT;
-      }
-    }
-
-    date = getSelectedDate(state);
+    date = options.date || getSelectedDate(state);
 
     if (isSubdaily && !date) {
       date = getRequestDates(def, options).closestDate;
       date = new Date(date.getTime());
     }
-    if (day && def.wrapadjacentdays) date = util.dateAdd(date, 'day', day);
-    const breakPointLayerDef = def.breakPointLayer;
-    const breakPointResolution = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
 
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
       loader: async () => {
+        const allDataKey = `AERONET:${date.getUTCFullYear()}`;
+
         // Get data from all locations of the current year (both active and inactive)
         const getAllData = async () => {
-          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getFullYear()}_lev15.txt`;
+          const url = `https://aeronet.gsfc.nasa.gov/Site_Lists_V3/aeronet_locations_v3_${date.getUTCFullYear()}_lev15.txt`;
           const res = await fetch(url);
           const data = await res.text();
+          const cacheOptions = getCacheOptions(def.period, date);
+          // Cache the data per-year to prevent re-request on every date change
+          cache.setItem(allDataKey, data, cacheOptions);
           return data;
         };
 
@@ -648,7 +636,7 @@ export default function mapLayerBuilder(config, cache, store) {
           return data;
         };
 
-        const allData = await getAllData();
+        const allData = cache.getItem(allDataKey) || await getAllData();
         const activeData = await getActiveData();
 
         const featuresObj = [];
@@ -715,7 +703,8 @@ export default function mapLayerBuilder(config, cache, store) {
                 coordinates: [parseFloat(rowObj['Longitude(decimal_degrees)']), parseFloat(rowObj['Latitude(decimal_degrees)'])],
                 MAIN_USE: featuresObj[rowObj.Site_Name].properties ? featuresObj[rowObj.Site_Name].properties.value : 'inactivesite',
                 date: featuresObj[rowObj.Site_Name].properties
-                  ? featuresObj[rowObj.Site_Name].properties.date : new Date(date.toUTCString()),
+                  ? featuresObj[rowObj.Site_Name].properties.date
+                  : new Date(date.toUTCString()),
               };
               takenNamesAll[rowObj.Site_Name] = true;
             }
@@ -762,8 +751,8 @@ export default function mapLayerBuilder(config, cache, store) {
         let valueIndex;
         // For active data points, define a color based on their value via the color palette
         if (active) {
-          valueIndex = values.findIndex((range) => value >= range[0]
-            && (range.length < 2 || value < range[1]));
+          valueIndex = values.findIndex((range) => value >= range[0] &&
+            (range.length < 2 || value < range[1]));
           fillColor = `#${colors[valueIndex]}`;
           fillColor = fillColor.substring(0, fillColor.length - 2);
         } else {
@@ -775,11 +764,11 @@ export default function mapLayerBuilder(config, cache, store) {
           fillColor = '#808080';
         }
         // Ignore data points that fall outside of the defined range
-        if (fillColor === '#000000'
-          || (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value))
-          || (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value))
-          || (def.min && !Array.isArray(def.min) && def.min > valueIndex)
-          || (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
+        if (fillColor === '#000000' ||
+          (def.min && Array.isArray(def.min) && def.min[0] > parseFloat(value)) ||
+          (def.max && Array.isArray(def.max) && def.max[0] < parseFloat(value)) ||
+          (def.min && !Array.isArray(def.min) && def.min > valueIndex) ||
+          (def.max && !Array.isArray(def.max) && def.max < valueIndex)) {
           return null;
         }
         // Return the style for the current feature
@@ -801,27 +790,8 @@ export default function mapLayerBuilder(config, cache, store) {
       id: def.id,
     };
 
-    layer.wrap = day;
     layer.wv = attributes;
     layer.isVector = true;
-
-    if (breakPointLayerDef && !animationIsPlaying) {
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      const layerGroup = new OlLayerGroup({
-        layers: [layer, wmsLayer],
-      });
-      wmsLayer.wv = attributes;
-      return layerGroup;
-    }
-
-    if (breakPointResolution && animationIsPlaying) {
-      delete breakPointLayerDef.projections[proj.id].resolutionBreakPoint;
-      const newDef = { ...def, ...breakPointLayerDef };
-      const wmsLayer = createLayerWMS(newDef, options, day, state);
-      wmsLayer.wv = attributes;
-      return wmsLayer;
-    }
 
     return layer;
   };
@@ -1223,7 +1193,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const selectedDate = date || getSelectedDate(state);
     const isoDate = selectedDate.toISOString();
     const selectedDateString = isoDate.split('T')[0].split('-').join('');
-    const matchedLayers = def.layers.filter((layerName) => layerName.match(/([0-9])+/g)[0] === selectedDateString);
+    const matchedLayers = def.layers.filter((layerName) =>
+      layerName.match(/([0-9])+/g)[0] === selectedDateString);
     // create wmts defs from def.layers
     const wmtsDefs = matchedLayers.map((layerID) => ({
       ...def,
@@ -1250,8 +1221,11 @@ export default function mapLayerBuilder(config, cache, store) {
         proj.selected,
       );
 
+      const baseUrl = `${configSource.url}/${layerName}`;
+      const isMaxarSource = source === 'MAXAR:wmts';
+
       const sourceOptions = {
-        url: `${configSource.url}/${layerName}/{z}/{x}/{y}`,
+        url: `${baseUrl}/{z}/{x}/{y}`,
         layer: layerName,
         crossOrigin: 'anonymous',
         format,
@@ -1259,6 +1233,90 @@ export default function mapLayerBuilder(config, cache, store) {
         projection: 'EPSG:3857',
         maxZoom: 21,
       };
+
+      // Only apply overzoom fallback for MAXAR source
+      // NOAA's server redirects to clear.png for missing tiles; we fall back to parent tiles
+      if (isMaxarSource) {
+        sourceOptions.tileLoadFunction = (tile) => {
+          const image = tile.getImage();
+          const [z, x, y] = tile.tileCoord;
+
+          const tryLoadTile = (currentZ, currentX, currentY, origZ, origX, origY) => {
+            const url = `${baseUrl}/${currentZ}/${currentX}/${currentY}`;
+
+            fetch(url)
+              .then((response) => {
+                // Check if redirected to clear.png (missing tile)
+                if (response.url.includes('clear.png')) {
+                  if (currentZ > 0) {
+                    tryLoadTile(
+                      currentZ - 1,
+                      Math.floor(currentX / 2),
+                      Math.floor(currentY / 2),
+                      origZ,
+                      origX,
+                      origY,
+                    );
+                  }
+                  return null;
+                }
+                return response.blob();
+              })
+              .then((blob) => {
+                if (!blob) return;
+
+                const blobUrl = URL.createObjectURL(blob);
+
+                // If we're at the original zoom, use tile directly
+                if (currentZ === origZ) {
+                  image.src = blobUrl;
+                  image.onload = () => URL.revokeObjectURL(blobUrl);
+                  return;
+                }
+
+                // Need to crop and scale parent tile
+                const tempImg = new Image();
+                tempImg.onload = () => {
+                  const zoomDiff = origZ - currentZ;
+                  const scale = 2 ** zoomDiff;
+                  const tileSize = 256;
+                  const cropSize = tileSize / scale;
+
+                  const offsetX = (origX % scale) * cropSize;
+                  const offsetY = (origY % scale) * cropSize;
+
+                  const canvas = document.createElement('canvas');
+                  canvas.width = tileSize;
+                  canvas.height = tileSize;
+                  const ctx = canvas.getContext('2d');
+                  ctx.imageSmoothingEnabled = true;
+                  ctx.drawImage(
+                    tempImg,
+                    offsetX, offsetY, cropSize, cropSize,
+                    0, 0, tileSize, tileSize,
+                  );
+                  image.src = canvas.toDataURL();
+                  URL.revokeObjectURL(blobUrl);
+                };
+                tempImg.src = blobUrl;
+              })
+              .catch(() => {
+                if (currentZ > 0) {
+                  tryLoadTile(
+                    currentZ - 1,
+                    Math.floor(currentX / 2),
+                    Math.floor(currentY / 2),
+                    origZ,
+                    origX,
+                    origY,
+                  );
+                }
+              });
+          };
+
+          tryLoadTile(z, x, y, z, x, y);
+        };
+      }
       const tileSource = new OlSourceXYZ(sourceOptions);
 
       return new OlLayerTile({

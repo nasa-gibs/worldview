@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Cache from 'cachai';
-// eslint-disable-next-line import/no-unresolved
+
 import PQueue from 'p-queue';
 import util from '../util/util';
 import MapRunningData from '../map/runningdata';
@@ -29,7 +29,8 @@ function CombineUI(props) {
   const registerMapMouseHandlers = (maps) => {
     Object.values(maps).forEach((map) => {
       const element = map.getTargetElement();
-      const crs = map.getView().getProjection().getCode();
+      const crs = map.getView().getProjection()
+        .getCode();
 
       element.addEventListener('mouseleave', (event) => {
         events.trigger(MAP_MOUSE_OUT, event);
@@ -83,7 +84,7 @@ function CombineUI(props) {
     uiProperties.supportsPassive = false;
     try {
       const opts = Object.defineProperty({}, 'passive', {
-        // eslint-disable-next-line getter-return
+
         get() {
           uiProperties.supportsPassive = true;
         },

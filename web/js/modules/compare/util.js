@@ -29,7 +29,7 @@ export function mapLocationToCompareState(parameters, stateFromLocationObj) {
  * @param {Array} coords | Coordinates of hover point
  * @param {Object} layerAttributes | Layer Properties
  */
-export function isFromActiveCompareRegion(coords, group, compare = {}, swipeOffset) {
+export function isFromActiveCompareRegion(coords, group, swipeOffset, compare = {}) {
   const { active, mode, isCompareA } = compare;
   if (active) {
     if (mode !== 'swipe') {

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unused-state */
 import React from 'react';
 import { connect } from 'react-redux';
 import { openCustomContent } from '../../modules/modal/actions';
