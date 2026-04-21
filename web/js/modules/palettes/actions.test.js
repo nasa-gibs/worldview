@@ -336,4 +336,3 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     },
   );
 });
-
