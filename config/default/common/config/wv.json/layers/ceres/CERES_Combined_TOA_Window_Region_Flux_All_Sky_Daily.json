@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Daily": {
+      "id": "CERES_Combined_TOA_Window_Region_Flux_All_Sky_Daily",
+      "description": "ceres/CERES_Combined_TOA_Window_Region_Flux_All_Sky_Daily",
+      "tags": "top of atmosphere, cloud radiative effect",
+      "group": "overlays",
+      "layergroup": "TOA Flux"
+    }
+  }
+}
