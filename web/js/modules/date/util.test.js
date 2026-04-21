@@ -208,3 +208,4 @@ describe('daysInMonth', () => {
     expect(getDaysInMonth(d)).toBe(29);
   });
 });
+

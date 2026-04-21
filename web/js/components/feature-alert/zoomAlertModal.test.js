@@ -1,3 +1,0 @@
-test('zoomAlertModal component test', () => {
-
-});

@@ -1,3 +1,0 @@
-test('helpers util test', () => {
-
-});

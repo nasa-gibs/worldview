@@ -80,6 +80,7 @@ export function getInitialState(config) {
   return updatedState;
 }
 
+
 export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
   const getPrevOverlayGroups = () => state[compareState].overlayGroups;
@@ -120,10 +121,7 @@ export function layerReducer(state = initialState, action) {
       });
 
     case ADD_LAYERS_FOR_EVENT:
-    case REORDER_OVERLAY_GROUPS: {
-      const handleDefinedEventLayers = action?.eventLayers?.length
-        ? { $set: action.eventLayers }
-        : { $push: [] };
+    case REORDER_OVERLAY_GROUPS:
       return update(state, {
         [compareState]: {
           layers: { $set: action.layers },
@@ -131,10 +129,10 @@ export function layerReducer(state = initialState, action) {
           prevLayers: { $set: [] },
         },
         eventLayers: action.eventLayers === undefined
-          ? { $push: [] }
-          : handleDefinedEventLayers,
+          ? { $push: [] } : action.eventLayers.length
+            ? { $set: action.eventLayers } : { $push: [] },
       });
-    }
+
     case TOGGLE_OVERLAY_GROUPS:
       return update(state, {
         [compareState]: {

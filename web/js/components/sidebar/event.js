@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import lodashFind from 'lodash/find';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -117,22 +117,17 @@ function Event (props) {
             return (
               <li key={`${event.id}-${date}`} className="date">
 
-                {selectedDate === date
-                  ? (
-                    <span
-                      className="active"
-                      role="textbox"
-                      tabIndex={0}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {formatDisplayDate(date)}
-                    </span>
-                  )
+                {selectedDate === date ? (
+                  <span
+                    className="active"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {formatDisplayDate(date)}
+                  </span>
+                )
                   : (
                     <a
                       className="'date item-selected"
-                      role="link"
-                      tabIndex={0}
                       onClick={(e) => {
                         e.stopPropagation();
                         onEventSelect(date);

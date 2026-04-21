@@ -116,6 +116,7 @@ describe('dateAdd', () => {
   });
 });
 
+
 describe('daysInYear', () => {
   const tests = [
     { date: Date.UTC(2015, 5, 26), doy: '177', name: '2015 jun 26 => 177' },

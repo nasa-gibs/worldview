@@ -1,3 +1,0 @@
-test('compare container test', () => {
-
-});

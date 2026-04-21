@@ -1,3 +1,0 @@
-test('renderSplitTitle component test', () => {
-
-});

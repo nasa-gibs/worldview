@@ -1,3 +1,5 @@
+import React from 'react';
+
 function LayerCoverageInfoModal() {
   return (
     <div className="layer-coverage-info">

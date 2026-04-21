@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isMobileOnly, isTablet } from 'react-device-detect';
@@ -40,7 +42,7 @@ function AddLayersContent (props) {
           className="layers-add red"
           text={(
             <>
-              <Plus className="add-plus" size="10px" />
+              <Plus class="add-plus" size="10px" />
               Add Layers
             </>
           )}
@@ -86,9 +88,7 @@ const mapDispatchToProps = (dispatch) => ({
     });
   },
   addLayers: (isPlaying) => {
-    const modalClassName = isMobileOnly || isTablet
-      ? 'custom-layer-dialog-mobile custom-layer-dialog light'
-      : 'custom-layer-dialog light';
+    const modalClassName = isMobileOnly || isTablet ? 'custom-layer-dialog-mobile custom-layer-dialog light' : 'custom-layer-dialog light';
     if (isPlaying) {
       dispatch(stopAnimationAction());
     }

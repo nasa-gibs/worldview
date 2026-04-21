@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -32,14 +32,13 @@ function Steps(props) {
 
   return (
     <div className="step-container">
-      <button
-        type="button"
+      <a
         className={isKioskModeActive ? 'd-none' : 'step-previous'}
         aria-label="Previous"
         onClick={decreaseStep}
       >
         <FontAwesomeIcon icon="arrow-circle-left" widthAuto />
-      </button>
+      </a>
       <div className="step-counter">
         <p>
           Step
@@ -49,8 +48,7 @@ function Steps(props) {
           <span className="step-total">{totalSteps}</span>
         </p>
       </div>
-      <button
-        type="button"
+      <a
         className={isKioskModeActive ? 'd-none' : 'step-next'}
         aria-label="Next"
         onClick={incrementStep}
@@ -58,7 +56,7 @@ function Steps(props) {
         {currentStep === totalSteps
           ? <FontAwesomeIcon icon="check-circle" widthAuto />
           : <FontAwesomeIcon icon="arrow-circle-right" widthAuto />}
-      </button>
+      </a>
     </div>
   );
 }

@@ -1,3 +1,0 @@
-test('facets component test', () => {
-
-});

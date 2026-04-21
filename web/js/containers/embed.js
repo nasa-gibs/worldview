@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'reactstrap';
@@ -56,7 +56,7 @@ function Embed ({ isEmbedModeActive, selectedDate, isMobile }) {
       >
         {showClickToInteractMessage && (
           <>
-            <div role="region" onClick={handleOverlayClick} className="embed-overlay-bg" />
+            <div onClick={handleOverlayClick} className="embed-overlay-bg" />
             <div className="embed-overlay-btn">
               <FontAwesomeIcon icon="hand-pointer" size="2x" fixedWidth widthAuto />
               <p>Click anywhere to interact</p>

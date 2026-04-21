@@ -56,10 +56,10 @@ export function getNumberOfSteps(
   start,
   end,
   interval,
+  stateDelta = 1,
   maxToCheck,
   autoSelected,
   layers,
-  stateDelta = 1,
 ) {
   let delta = stateDelta;
   if (autoSelected) {
@@ -118,12 +118,11 @@ export function getStampProps(
   } else {
     stampWidth = width * 0.4;
     stampHeightByImageWidth = stampWidth / stampWidthRatio;
-    const largerStampHeightWidth = stampHeightByImageWidth > 60
-      ? 60
-      : stampHeightByImageWidth;
     stampHeight = stampHeightByImageWidth < 20
       ? 20
-      : largerStampHeightWidth;
+      : stampHeightByImageWidth > 60
+        ? 60
+        : stampHeightByImageWidth;
     dateStamp.fontSize = dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
     dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
     dateStamp.x = width * 0.01;
@@ -157,21 +156,16 @@ export function mapLocationToAnimationState(
   let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
   const endDate = lodashGet(stateFromLocation, 'animation.endDate');
-  const isActiveFromParams = parameters.ab === 'on' || parameters.ab === true;
-  const isPlayingFromParams = !!parameters.playanim && isActiveFromParams;
-
-  stateFromLocation = update(stateFromLocation, {
-    animation: {
-      isActive: { $set: isActiveFromParams },
-      isPlaying: { $set: isPlayingFromParams },
-    },
-  });
-
-  if (
-    !isActiveFromParams &&
-    (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+  if (parameters.playanim && parameters.ab) {
+    stateFromLocation = update(stateFromLocation, {
+      animation: { isPlaying: { $set: true } },
+    });
+  } else if (
+    parameters.ab !== 'on'
+    && (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
   ) {
     // wipe anim start & end dates on tour change
+
     stateFromLocation = update(stateFromLocation, {
       animation: { endDate: { $set: undefined } },
     });

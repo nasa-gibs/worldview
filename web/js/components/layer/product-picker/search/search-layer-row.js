@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, UncontrolledTooltip } from 'reactstrap';
+import { Check } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import {
   addLayer as addLayerAction,
   removeLayer as removeLayerAction,
@@ -139,24 +140,7 @@ class SearchLayerRow extends React.Component {
             onChange={this.toggleEnabled}
           />
           {isEnabled && (
-            <svg
-              stroke="currentColor"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              strokeWidth="0"
-              width="15px"
-              height="15px"
-              viewBox="0 0 20 20"
-              role="img"
-              className="check"
-            >
-              <path
-                fill="currentColor"
-                fillRule="evenodd"
-                d="M17.707 5.707 8 15.414 2.293 9.707l1.414-1.414L8 12.586l8.293-8.293z"
-                clipRule="evenodd"
-              />
-            </svg>
+            <Check class="check" size="15px" />
           )}
         </div>
         {(chartableLayer || layerNotices) && (
@@ -203,7 +187,7 @@ class SearchLayerRow extends React.Component {
             )}
           </div>
         )}
-        <button type="button" className={headerClassName} onClick={this.onRowClick}>
+        <div className={headerClassName} onClick={this.onRowClick}>
           <RenderSplitLayerTitle layer={layer} />
           {recentLayerMode && showDeleteIcon && (
             <Button
@@ -215,7 +199,7 @@ class SearchLayerRow extends React.Component {
               <FontAwesomeIcon icon="trash" widthAuto />
             </Button>
           )}
-        </button>
+        </div>
       </div>
     );
   }

@@ -162,7 +162,6 @@
   }
 
   & > a,
-  & > button,
   & > div {
     display: inline-block;
     margin: 7px 0 0 10px;
@@ -180,8 +179,6 @@
     background: variables.$wv-dark-blue;
     position: relative;
     border-radius: 5px;
-    border: none;
-    padding: 0;
 
     &.disabled {
       cursor: not-allowed;
@@ -263,8 +260,7 @@
   }
 }
 
-a .wv-animation-widget-icon,
-button .wv-animation-widget-icon {
+a .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
   position: absolute;
@@ -440,11 +436,6 @@ button .wv-animation-widget-icon {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-
-    & button {
-      border: none;
-      background: none;
-    }
 
     & .wv-minimize {
       font-size: 26px;

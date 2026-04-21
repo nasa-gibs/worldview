@@ -23,13 +23,14 @@ const getLayerId = (state, { layer }) => layer && layer.id;
 
 export function addLayer(
   id,
+  spec = {},
   layersParam,
   layerConfig,
-  spec = {},
-  overlayLength = null,
-  groupOverlays = null,
-  bandComboParam = null,
-  selectedPresetParam = null,
+  overlayLength,
+  projection,
+  groupOverlays,
+  bandComboParam,
+  selectedPresetParam,
 ) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
@@ -119,11 +120,11 @@ export function addLayer(
  * @param {*} layerConfig
  */
 export function resetLayers(config) {
-  const { defaults: { startingLayers }, layers: layerConfig } = config;
+  const { defaults: { startingLayers, projection }, layers: layerConfig } = config;
   let layers = [];
   if (startingLayers) {
     lodashEach(startingLayers, (start) => {
-      layers = addLayer(start.id, layers, layerConfig, start);
+      layers = addLayer(start.id, start, layers, layerConfig, null, projection);
     });
   }
   return layers;
@@ -140,8 +141,8 @@ export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) =
   if (!layers.collections[layer.id]) return undefined;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if ((dateCollection[i].date === dailyDate ||
-      dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
+    if ((dateCollection[i].date === dailyDate
+      || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
       return dateCollection[i];
     }
   }
@@ -176,13 +177,12 @@ export const getActiveLayerGroup = (state) => {
   const { active, activeString } = compare || {};
   if (active) {
     const layerGroups = map.ui.selected.getLayers().getArray();
-    const selectedLayerGroup = layerGroups[1]?.get('group') === activeString
-      ? layerGroups[1]
-      : map.ui.selected;
     if (layerGroups.length > 1) {
       return layerGroups[0].get('group') === activeString
         ? layerGroups[0]
-        : selectedLayerGroup;
+        : layerGroups[1].get('group') === activeString
+          ? layerGroups[1]
+          : map.ui.selected;
     }
   }
   return map.ui.selected;
@@ -263,8 +263,8 @@ const getActiveOverlayGroupsEmbed = (state) => {
   const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
   return (overlayGroupsFiltered || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id] &&
-          !!activeLayersMap[id].visible,
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
+          && !!activeLayersMap[id].visible,
     ).length,
   );
 };
@@ -434,13 +434,13 @@ export function available(id, date, layers, parameters) {
   return true;
 }
 
-function forGroup(group, activeLayers, state, spec = {}) {
+function forGroup(group, spec = {}, activeLayers, state) {
   const projId = state.proj.id;
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
-
+    // eslint-disable-next-line no-use-before-define
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
       activeLayers,
@@ -465,10 +465,10 @@ function forGroup(group, activeLayers, state, spec = {}) {
  * @param {*} spec
  * @param {*} state
  */
-export function getLayers(state, spec = {}, layersParam = null) {
+export function getLayers(state, spec = {}, layersParam) {
   const layers = layersParam || getActiveLayers(state);
-  const baselayers = forGroup('baselayers', layers, state, spec);
-  const overlays = forGroup('overlays', layers, state, spec);
+  const baselayers = forGroup('baselayers', spec, layers, state);
+  const overlays = forGroup('overlays', spec, layers, state);
   if (spec.group === 'baselayers') {
     return baselayers;
   }
@@ -514,9 +514,9 @@ export function isRenderable(id, layers, dateString, bLayers, state) {
         return false;
       }
       if (
-        otherDef.visible &&
-        otherDef.opacity === 1.0 &&
-        available(otherDef.id, date, layers, parameters)
+        otherDef.visible
+        && otherDef.opacity === 1.0
+        && available(otherDef.id, date, layers, parameters)
       ) {
         obscured = true;
         return false;
@@ -758,10 +758,12 @@ export function activateLayersForEventCategory(state, category) {
       const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
+        { visible },
         newLayers,
         layerConfig,
-        { visible },
         overlays.length,
+        projection,
+        null,
       );
     }
   });

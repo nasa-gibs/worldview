@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
@@ -11,22 +12,22 @@ function ModalComplete(props) {
   const { readMoreLinks } = currentStory;
   const closeBtn = (
     <button className="tour-close-btn" onClick={endTour} type="button">
-      <Close className="add-plus" size="14px" />
+      <Close class="add-plus" size="14px" />
     </button>
   );
   let list;
   if (
-    readMoreLinks &&
-      (Array.isArray(readMoreLinks) && readMoreLinks.length)
+    readMoreLinks
+      && (Array.isArray(readMoreLinks) && readMoreLinks.length)
   ) {
     list = (
       <>
         <p>Read more about this story at the links below:</p>
         <ul>
-          {readMoreLinks.map((linkObj) => (
-            <li key={`${linkObj.link || 'link'}-${linkObj.title || 'title'}`}>
-              <a href={linkObj.link} target="_blank" rel="noopener noreferrer">
-                {linkObj.title}
+          {readMoreLinks.map((linkId) => (
+            <li key={linkId}>
+              <a href={linkId.link} target="_blank" rel="noopener noreferrer">
+                {linkId.title}
               </a>
             </li>
           ))}

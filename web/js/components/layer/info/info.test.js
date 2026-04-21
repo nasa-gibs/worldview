@@ -1,3 +1,0 @@
-test('info component test', () => {
-
-});

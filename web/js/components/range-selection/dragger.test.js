@@ -1,3 +1,0 @@
-test('dragger component test', () => {
-
-});

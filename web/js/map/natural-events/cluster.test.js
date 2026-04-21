@@ -1,3 +1,0 @@
-test('cluster map test', () => {
-
-});

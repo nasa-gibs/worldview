@@ -1,3 +1,0 @@
-test('zoom component test', () => {
-
-});

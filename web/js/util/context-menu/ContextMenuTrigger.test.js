@@ -1,3 +1,0 @@
-test('ContextMenuTrigger util test', () => {
-
-});

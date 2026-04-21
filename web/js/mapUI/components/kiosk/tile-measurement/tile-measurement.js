@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch, shallowEqual } from 'react-redux';
 import { transformExtent } from 'ol/proj';
@@ -56,6 +57,7 @@ function TileMeasurement({ ui }) {
 
   // returns the date of the first layer that has a best date
   function findBestDate(layers, bestDatesArg) {
+    // eslint-disable-next-line no-restricted-syntax
     for (const layer of layers) {
       if (bestDatesArg[layer.id]) {
         return bestDatesArg[layer.id].date;
@@ -106,6 +108,7 @@ function TileMeasurement({ ui }) {
     return firstLayerWithBestDate;
   };
 
+
   // #5 Update the date of the map to the date that satisfies the full imagery threshold
   const updateDate = (fullImageryDate, layerPeriod) => {
     console.log('Updating application date...');
@@ -125,6 +128,7 @@ function TileMeasurement({ ui }) {
       const month = +dateParts[1] - 1;
       const day = +dateParts[2];
 
+      // eslint-disable-next-line prefer-const
       let [hour, minute, second] = timePart.split(':');
       // Remove any fractional seconds if present and the 'Z' at the end
       second = second.includes('.') ? second.split('.')[0] : second;

@@ -1,3 +1,0 @@
-test('tour container test', () => {
-
-});

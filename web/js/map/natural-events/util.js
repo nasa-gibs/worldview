@@ -250,8 +250,7 @@ export const getClusterPointEl = function (proj, cluster, map, pointClusterObj) 
   if (proj.selected.id !== 'geographic') {
     coordinates = olProj.transform(coordinates, CRS.GEOGRAPHIC, proj.selected.crs);
   }
-  const pointCountSizeClass = number < 20 ? 'medium' : 'large';
-  const sizeClass = number < 10 ? 'small' : pointCountSizeClass;
+  const sizeClass = number < 10 ? 'small' : number < 20 ? 'medium' : 'large';
 
   overlayEl.className = 'cluster-track-marker-case track-marker-case';
   textEl.className = 'cluster-track-marker-date track-marker-date';

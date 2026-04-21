@@ -24,19 +24,16 @@ import { CHANGE_TAB as CHANGE_SIDEBAR_TAB } from '../sidebar/constants';
  * @returns
  */
 const sortEvents = function(events) {
-  if (!Array.isArray(events) || events.length === 0) return [];
-
   return events
     .map((e) => {
-      const geometry = Array.isArray(e.geometry) ? e.geometry : [];
-      e.geometry = lodashOrderBy(geometry, 'date', 'desc');
+      e.geometry = lodashOrderBy(e.geometry, 'date', 'desc');
       // Discard duplicate geometry dates
       e.geometry = lodashUniqBy(e.geometry, (g) => g.date.split('T')[0]);
       return e;
     })
     .sort((eventA, eventB) => {
-      const dateA = new Date(eventA?.geometry?.[0]?.date || 0).valueOf();
-      const dateB = new Date(eventB?.geometry?.[0]?.date || 0).valueOf();
+      const dateA = new Date(eventA.geometry[0].date).valueOf();
+      const dateB = new Date(eventB.geometry[0].date).valueOf();
       return dateB - dateA;
     });
 };
@@ -67,8 +64,7 @@ export function getInitialEventsState(config) {
   const { initialDate, naturalEvents } = config;
   const { categories } = naturalEvents;
   const endDate = moment.utc(initialDate).format('YYYY-MM-DD');
-  const startDate = moment.utc(initialDate).subtract(120, 'days')
-    .format('YYYY-MM-DD');
+  const startDate = moment.utc(initialDate).subtract(120, 'days').format('YYYY-MM-DD');
   return {
     ...eventsReducerState,
     selectedCategories: categories,
@@ -174,12 +170,10 @@ export function eventsRequestReducer(actionName, state, action) {
       const key = actionName === REQUEST_EVENTS
         ? 'events'
         : 'sources';
-
-      const payload = action?.response?.[key];
       return eventRequestResponse({
         response: actionName === REQUEST_EVENTS
-          ? sortEvents(payload)
-          : (payload || null),
+          ? sortEvents(action.response[key])
+          : action.response[key],
         isLoading: false,
       });
     }

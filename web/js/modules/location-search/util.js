@@ -26,7 +26,7 @@ export function animateCoordinates(map, proj, coordinates, zoom, isKioskModeActi
   if (proj !== 'geographic') {
     [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
-  fly(map, proj, [x, y], isKioskModeActive, zoom);
+  fly(map, proj, [x, y], zoom, isKioskModeActive);
 }
 
 /**
@@ -52,7 +52,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
   const overlayEl = document.createElement('div');
   const root = createRoot(overlayEl);
   const removeMarker = () => {
-    root.unmount();
+    root.unmount(overlayEl);
     removeMarkerPin();
   };
   root.render(
@@ -171,8 +171,7 @@ export function serializeCoordinatesWrapper(coordinates, state) {
     .map((coordinate) => serializeCoordinates(coordinate))
     .filter((coordinate) => coordinate);
   const coordinatesURL = Array.isArray(coordinates)
-    ? serializeCoordinatesArray(coordinates)
-    : serializeCoordinates(coordinates);
+    ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
@@ -191,5 +190,5 @@ export function setLocalStorageCollapseState(storageValue) {
  * @param {Object} config
  * @return {Boolean} is Location Search feature enabled
  */
-export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch &&
-  features.locationSearch.url);
+export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch
+  && features.locationSearch.url);

@@ -1,3 +1,0 @@
-test('reducers module test', () => {
-
-});

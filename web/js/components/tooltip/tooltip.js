@@ -1,3 +1,4 @@
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -7,9 +8,6 @@ class Tooltip extends React.Component {
     this.state = {
       hovered: false,
     };
-    this.mouseOver = this.mouseOver.bind(this);
-    this.mouseOut = this.mouseOut.bind(this);
-    this.onClick = this.onClick.bind(this);
   }
 
   mouseOver() {
@@ -34,8 +32,8 @@ class Tooltip extends React.Component {
     const { hovered } = this.state;
     return (
       <div
-        onMouseEnter={this.mouseOver}
-        onMouseLeave={this.mouseOut}
+        onMouseEnter={this.mouseOver.bind(this)}
+        onMouseLeave={this.mouseOut.bind(this)}
         className="wv-tooltip-case"
       >
         <span>{text}</span>
@@ -49,7 +47,7 @@ class Tooltip extends React.Component {
                 /* eslint react/no-array-index-key: 1 */
                 key={`tooltip-${dataEl}-${i}`}
                 id={dataEl}
-                onClick={(dataEl) => this.onClick(dataEl)}
+                onClick={this.onClick.bind(this, dataEl)}
               >
                 {dataEl}
               </li>

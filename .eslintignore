@@ -1,0 +1,16 @@
+# /node_modules/* and /bower_components/* ignored by default
+
+build/*
+dist/*
+e2e/reports/*
+etc/*
+legacy/*
+lib/*
+options/*
+reports/*
+tasks/temp/*
+test/*
+web/build/*
+web/dist/*
+web/ext/*
+web/js/lib/*

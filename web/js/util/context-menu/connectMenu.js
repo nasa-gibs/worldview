@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Component } from 'react';
+import React, { Component } from 'react';
 
 import ContextMenuTrigger from './ContextMenuTrigger';
 import listener from './globalEventListener';

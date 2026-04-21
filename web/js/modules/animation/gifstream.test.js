@@ -1,3 +1,0 @@
-test('gifstream module test', () => {
-
-});

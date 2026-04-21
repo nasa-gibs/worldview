@@ -1,3 +1,0 @@
-test('bufferQuickAnimate mapUI test', () => {
-
-});

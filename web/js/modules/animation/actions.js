@@ -51,23 +51,19 @@ export function onActivate() {
       const deltaChangeAmt = customSelected ? customDelta : delta;
       const tenFrameDelta = 10 * deltaChangeAmt;
       const tenFramesBefore = autoSelected
-        ? autoTenFramesBefore
-        : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
+        ? autoTenFramesBefore : util.dateAdd(activeDate, timeScaleChangeUnit, -tenFrameDelta);
       const tenFramesAfter = autoSelected
-        ? autoTenFramesAfter
-        : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
-      const calculateStartDate = date.appNow < tenFramesAfter
-        ? tenFramesBefore
-        : activeDate;
+        ? autoTenFramesAfter : util.dateAdd(activeDate, timeScaleChangeUnit, tenFrameDelta);
       const startDate = animation.startDate
         ? animation.startDate
-        : calculateStartDate;
-      const calculateEndDate = date.appNow < tenFramesAfter
-        ? activeDate
-        : tenFramesAfter;
+        : date.appNow < tenFramesAfter
+          ? tenFramesBefore
+          : activeDate;
       const endDate = animation.endDate
         ? animation.endDate
-        : calculateEndDate;
+        : date.appNow < tenFramesAfter
+          ? activeDate
+          : tenFramesAfter;
       dispatch({ type: UPDATE_START_AND_END_DATE, startDate, endDate });
     }
     dispatch({ type: OPEN_ANIMATION });

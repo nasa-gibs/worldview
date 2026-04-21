@@ -1,3 +1,0 @@
-test('model map test', () => {
-
-});

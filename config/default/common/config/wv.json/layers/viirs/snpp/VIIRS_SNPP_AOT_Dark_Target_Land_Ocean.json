@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean": {
+      "id": "VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
+      "description": "viirs/snpp/VIIRS_SNPP_AOT_Dark_Target_Land_Ocean",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Optical Depth",
+      "wrapadjacentdays": true
+    }
+  }
+}

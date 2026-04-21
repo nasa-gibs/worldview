@@ -1,3 +1,0 @@
-test('event component test', () => {
-
-});

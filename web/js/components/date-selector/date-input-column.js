@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Arrow from '../util/arrow';
 import { rollDate } from '../../modules/date/util';
@@ -190,6 +190,7 @@ class DateInputColumn extends Component {
       case 'month':
         newDate = monthValidation(inputValue, date, validateDate);
         // transform month number to string (e.g., 3 -> 'MAR')
+        // eslint-disable-next-line no-restricted-globals
         if (newDate !== null && !isNaN(inputValue)) {
           inputValue = MONTH_STRING_ARRAY[inputValue - 1];
         }
@@ -253,6 +254,7 @@ class DateInputColumn extends Component {
       ? value
       : inputValue;
 
+    // eslint-disable-next-line no-restricted-globals
     if (type === 'month' && !isNaN(newValue)) {
       newValue = MONTH_STRING_ARRAY[newValue - 1];
     } else if (newValue.length === 1) {
@@ -293,8 +295,11 @@ class DateInputColumn extends Component {
     const containerBorderStyle = isValid ? {} : { borderColor: '#ff0000' };
     const inputClassName = `button-input-group${isValid ? '' : ' invalid-input'}`;
     const fontSizeStyle = fontSize ? { fontSize: `${fontSize}px` } : {};
-    const isEndDateString = isEndDate ? `${type}-${idSuffix}-end` : `${type}-${idSuffix}`;
-    const inputId = isStartDate ? `${type}-${idSuffix}-start` : isEndDateString;
+    const inputId = isStartDate
+      ? `${type}-${idSuffix}-start`
+      : isEndDate
+        ? `${type}-${idSuffix}-end`
+        : `${type}-${idSuffix}`;
 
     return (
       <div
@@ -324,7 +329,6 @@ class DateInputColumn extends Component {
           onFocus={this.handleFocus}
           onTouchStart={this.handleFocus}
           disabled={isDisabled}
-          aria-label={`${inputId} input`}
         />
         <Arrow
           direction="down"

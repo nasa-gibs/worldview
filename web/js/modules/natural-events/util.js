@@ -28,15 +28,14 @@ export function parseEvent(eventString) {
 export function serializeEvent(currentItemState) {
   const eventId = lodashGet(currentItemState, 'selected.id');
   const eventDate = lodashGet(currentItemState, 'selected.date');
-  const eventsTabActive = currentItemState.active
-    ? 'true'
-    : undefined;
-  const eventIdAndEventsTabActive = eventId && eventsTabActive
-    ? eventId
-    : eventsTabActive;
+  const eventsTabActive = currentItemState.active;
   return eventsTabActive && eventDate && eventId
     ? [eventId, eventDate].join(',')
-    : eventIdAndEventsTabActive;
+    : eventId && eventsTabActive
+      ? eventId
+      : eventsTabActive
+        ? 'true'
+        : undefined;
 }
 
 export function parseEventFilterDates(eventFilterDatesString) {
@@ -119,6 +118,7 @@ export function getEventsRequestURL (state) {
   const baseUrl = lodashGet(config, 'features.naturalEvents.host');
   const mockEvents = lodashGet(config, 'parameters.mockEvents');
   if (mockEvents) {
+    // eslint-disable-next-line no-console
     console.warn(`Using mock events data: ${mockEvents}`);
     return mockEvents === 'true'
       ? 'mock/events_data.json'

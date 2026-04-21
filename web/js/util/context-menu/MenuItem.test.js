@@ -1,3 +1,0 @@
-test('MenuItem module test', () => {
-
-});

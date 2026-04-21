@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import OlOverlay from 'ol/Overlay';
 import LineText from './text';
@@ -153,3 +153,4 @@ Line.propTypes = {
   isMobilePhone: PropTypes.bool,
   isMobileTablet: PropTypes.bool,
 };
+

@@ -1,0 +1,22 @@
+{
+  "extends": ["standard", "plugin:n/recommended"],
+  "rules": {
+    "new-cap": ["error", {}],
+    "camelcase": ["error", {
+      "ignoreDestructuring": true,
+      "properties": "never"
+    }],
+    "n/no-path-concat": "warn",
+    "n/no-deprecated-api": "warn",
+    "no-async-promise-executor": "warn"
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "n/no-unpublished-require": "off", // 96 failures across 79 files - many "@playwright/test" related
+        "n/no-unsupported-features/node-builtins": "off"
+      }
+    }
+  ]
+}

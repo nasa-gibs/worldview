@@ -1,3 +1,0 @@
-test('lookupimagetile ol test', () => {
-
-});

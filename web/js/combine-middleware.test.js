@@ -1,3 +1,0 @@
-test('combine-middleware test', () => {
-
-});

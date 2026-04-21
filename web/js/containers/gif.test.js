@@ -1,3 +1,0 @@
-test('gif container test', () => {
-
-});

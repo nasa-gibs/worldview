@@ -1,3 +1,5 @@
+import React from 'react';
+
 function EventsAlertModalBody() {
   return (
     <div className="basic-modal event-alert-modal-body">

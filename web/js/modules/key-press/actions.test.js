@@ -1,3 +1,0 @@
-test('actions module test', () => {
-
-});

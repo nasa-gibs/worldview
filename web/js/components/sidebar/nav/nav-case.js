@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Nav, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -18,12 +19,6 @@ function NavCase (props) {
     toggleSidebar,
   } = props;
 
-  const dataDownloadLabel = isChartMode
-    ? 'You must exit charting mode to download data'
-    : 'Data Download';
-  const dataDownloadClassName = isChartMode
-    ? `${tabClasses} third-tab disabled`
-    : `${tabClasses} third-tab`;
   const renderDataDownload = () => tabTypes.download && (
     <CustomNavItem
       isMobile={isMobile}
@@ -37,22 +32,20 @@ function NavCase (props) {
       label={
         isCompareMode
           ? 'You must exit comparison mode to download data'
-          : dataDownloadLabel
+          : isChartMode
+            ? 'You must exit charting mode to download data'
+            : 'Data Download'
       }
       className={
         activeTab === 'download'
           ? `${tabClasses} third-tab active`
-          : isCompareMode || dataDownloadClassName
+          : isCompareMode || isChartMode
+            ? `${tabClasses} third-tab disabled`
+            : `${tabClasses} third-tab`
       }
     />
   );
 
-  const eventsTabLabel = isChartMode
-    ? 'You must exit charting mode to use the natural events feature'
-    : 'Natural Events';
-  const eventsTabClassName = isCompareMode || isChartMode
-    ? `${tabClasses} second-tab disabled`
-    : `${tabClasses} second-tab`;
   const renderEvents = () => tabTypes.events && (
     <CustomNavItem
       id="events"
@@ -66,28 +59,28 @@ function NavCase (props) {
       label={
         isCompareMode
           ? 'You must exit comparison mode to use the natural events feature'
-          : eventsTabLabel
+          : isChartMode
+            ? 'You must exit charting mode to use the natural events feature'
+            : 'Natural Events'
       }
       className={
         activeTab === 'events'
           ? `${tabClasses} second-tab active`
-          : eventsTabClassName
+          : isCompareMode || isChartMode
+            ? `${tabClasses} second-tab disabled`
+            : `${tabClasses} second-tab`
       }
     />
   );
-  const sidebarCollapseMobile = isMobile
-    ? {
-      height: '48px',
-      width: '45px',
-    }
-    : null;
-  const collapseIconMobile = isMobile
-    ? {
-      height: '30px',
-      width: '30px',
-      color: '#fff',
-    }
-    : null;
+  const sidebarCollapseMobile = isMobile ? {
+    height: '48px',
+    width: '45px',
+  } : null;
+  const collapseIconMobile = isMobile ? {
+    height: '30px',
+    width: '30px',
+    color: '#fff',
+  } : null;
   const fontAwesomeStyle = isMobile ? 'times' : 'caret-up';
 
   return (
@@ -110,8 +103,7 @@ function NavCase (props) {
       {!isEventsTabDisabledEmbed && renderEvents()}
       {renderDataDownload()}
 
-      <button
-        type="button"
+      <div
         id="toggleIconHolder"
         className="sidebar-collapse"
         onClick={toggleSidebar}
@@ -127,7 +119,7 @@ function NavCase (props) {
         <UncontrolledTooltip id="center-align-tooltip" placement="right" target="toggleIconHolder">
           Hide sidebar
         </UncontrolledTooltip>
-      </button>
+      </div>
     </Nav>
   );
 }

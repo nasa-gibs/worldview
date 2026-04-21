@@ -1,3 +1,0 @@
-test('markers mapUI test', () => {
-
-});

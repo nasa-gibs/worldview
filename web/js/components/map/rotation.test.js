@@ -1,3 +1,0 @@
-test('rotation component test', () => {
-
-});

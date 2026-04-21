@@ -88,8 +88,8 @@ export class VectorInteractions extends React.Component {
     let toggledGranuleFootprint;
 
     // only allow hover footprints on selected side of A/B comparison
-    if (compareActive &&
-      !isFromActiveCompareRegion(pixels, activeString, swipeOffset, compareState)) {
+    if (compareActive
+      && !isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset)) {
       return;
     }
 
@@ -131,17 +131,15 @@ export class VectorInteractions extends React.Component {
         if (def?.layergroup === 'Reference') isReferenceLayer = true;
         const layerExtent = layer.get('extent');
         const pixelCoords = map.getCoordinateFromPixel(pixel);
-        const featureOutsideExtent = layerExtent &&
-        !olExtent.containsCoordinate(layerExtent, pixelCoords);
-        if (lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) ||
-          featureOutsideExtent) return;
+        const featureOutsideExtent = layerExtent
+        && !olExtent.containsCoordinate(layerExtent, pixelCoords);
+        if (lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType())
+          || featureOutsideExtent) return;
         const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
-        const isRenderedFeature = isWrapped
-          ? lon > -250 ||
-        lon < 250 || lat > -90 || lat < 90
-          : true;
-        if (isRenderedFeature &&
-          isFromActiveCompareRegion(pixel, layer.wv.group, swipeOffset, compareState)) {
+        const isRenderedFeature = isWrapped ? lon > -250
+        || lon < 250 || lat > -90 || lat < 90 : true;
+        if (isRenderedFeature
+          && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
           isActiveLayer = true;
         }
       });
@@ -198,17 +196,14 @@ export class VectorInteractions extends React.Component {
     let clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
-    const aeronetMobileSize = isAeronet ? 250 : 445;
     clickObj = getDialogObject(pixels, map, isMobile
-      ? screenSize.screenWidth
-      : aeronetMobileSize);
+      ? screenSize.screenWidth : isAeronet ? 250 : 445);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
     const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const exceededLengthLimit = clickObj.exceededLengthLimit || false;
-    const vectorModalOpenId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
-    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : vectorModalOpenId;
+    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
 
     if (isCoordinatesMarker) return;
 
@@ -247,8 +242,8 @@ export class VectorInteractions extends React.Component {
     } else if (hasNonClickableVectorLayerType) {
       activateVectorZoomAlert();
     }
-    if (Object.entries(selected).length ||
-    (Object.entries(lastSelected).length && !isVectorModalOpen)) {
+    if (Object.entries(selected).length
+    || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       if (isMobile && hasNonClickableVectorLayerType) return;
       selectVectorFeatures(selected);
     } else if (isVectorModalOpen && !Object.entries(selected).length) {
@@ -361,8 +356,7 @@ const mapDispatchToProps = (dispatch) => ({
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
-    const aeroNetModalWidth = isAeronet ? 250 : 445;
-    const modalWidth = isMobile ? screenWidth : aeroNetModalWidth;
+    const modalWidth = isMobile ? screenWidth : isAeronet ? 250 : 445;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
 
     dispatch(openCustomContent(
@@ -379,6 +373,7 @@ const mapDispatchToProps = (dispatch) => ({
         mobileFullScreen: true,
         dragHandle: '.modal-header',
         dialogKey,
+        key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: modalWidth,
         height: modalHeight,

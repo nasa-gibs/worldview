@@ -1,3 +1,0 @@
-test('removeLayer mapUI test', () => {
-
-});

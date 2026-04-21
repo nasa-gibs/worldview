@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 const _ = require('lodash')
 const fs = require('fs')
 const util = require('util')
@@ -61,6 +63,7 @@ function generateMeasurements (layers, measurementsConfig) {
     if (id.toLowerCase().includes('orbit')) {
       measurementsMap[id] = 'Orbital Track'
     } else {
+      // eslint-disable-next-line prefer-destructuring
       measurementsMap[id] = measurements[0]
     }
     // Unmodified output (all measurements):

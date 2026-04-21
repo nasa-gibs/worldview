@@ -1,4 +1,4 @@
-import { PureComponent, createRef } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 
@@ -11,8 +11,6 @@ import Draggable from 'react-draggable';
 class Dragger extends PureComponent {
   constructor(props) {
     super(props);
-
-    this.nodeRef = createRef();
     this.state = {
       isHoveredDragging: false,
       isHoveredDrag: false,
@@ -130,10 +128,16 @@ class Dragger extends PureComponent {
       ? false
       : isHoveredDrag || isHoveredDragging;
     // handle fill for hover vs non-hover and slightly different A/B draggers
-    const disabledFillColor = isHovered ? '#8e8e8e' : '#666666';
-    const comparedModeFillColor = isCompareModeActive ? '#a3a3a3' : '#8e8e8e';
-    const enabledFillColor = isHovered ? comparedModeFillColor : '#ccc';
-    const draggerFill = disabled ? disabledFillColor : enabledFillColor;
+    const draggerFill = disabled
+      ? isHovered
+        ? '#8e8e8e'
+        : '#666666'
+      : isHovered
+        ? isCompareModeActive
+          ? '#a3a3a3'
+          : '#8e8e8e'
+        : '#ccc';
+
     const draggerStroke = isHovered
       ? '#ccc'
       : '#333';
@@ -148,7 +152,6 @@ class Dragger extends PureComponent {
         ? (
           <Draggable
             axis="x"
-            nodeRef={this.nodeRef}
             onMouseDown={this.selectDragger}
             onDrag={this.handleDragDragger}
             position={{ x: draggerPosition + 25, y: 0 }}
@@ -157,7 +160,6 @@ class Dragger extends PureComponent {
             disabled={disabled}
           >
             <g
-              ref={this.nodeRef}
               style={{
                 cursor: 'pointer',
               }}

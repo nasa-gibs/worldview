@@ -4,15 +4,23 @@ import PropTypes from 'prop-types';
 class TourBox extends React.Component {
   constructor(props) {
     super(props);
-    const { backgroundImage, storyId } = props;
     this.state = {
-      styles: backgroundImage
-        ? { backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})` }
-        : {},
+      styles: { },
     };
 
     this.onMouseOver = this.onMouseOver.bind(this);
     this.onMouseOut = this.onMouseOut.bind(this);
+  }
+
+  UNSAFE_componentWillMount() {
+    const { backgroundImage, storyId } = this.props;
+    if (backgroundImage) {
+      this.setState({
+        styles: {
+          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
+        },
+      });
+    }
   }
 
   onMouseOver(e) {
@@ -45,8 +53,8 @@ class TourBox extends React.Component {
     } = this.props;
     const { styles } = this.state;
     let floatBox = '';
-    if (storyOrder.length - (index + 1) === 0 ||
-      storyOrder.length - (index + 2) === 0) {
+    if (storyOrder.length - (index + 1) === 0
+      || storyOrder.length - (index + 2) === 0) {
       floatBox = ' tour-box-float';
     }
     return (

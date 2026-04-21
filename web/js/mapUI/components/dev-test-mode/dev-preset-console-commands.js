@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -36,6 +37,7 @@ function PresetConsoleCommands () {
   const getParameters = () => {
     console.log(parameters);
   };
+
 
   return (
     <div className="d-flex flex-column justify-content-center align-items-center w-100 mt-3">

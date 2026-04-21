@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   debounce as lodashDebounce,
 } from 'lodash';
@@ -13,7 +13,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from 'react-redux';
 import { Vector as OlVectorSource } from 'ol/source';
-
 import googleTagManager from 'googleTagManager';
 import CustomButton from '../util/button';
 import Crop from '../util/image-crop';
@@ -295,9 +294,7 @@ function ChartingModeOptions(props) {
   }, [isModalOpen, modalId]);
 
   useEffect(() => {
-    if (!chartData.current ||
-      Object.keys(chartData.current).length === 0 ||
-      !isModalOpen || timeSpanSelection !== 'range') return;
+    if (!chartData.current || Object.keys(chartData.current).length === 0 || !isModalOpen || timeSpanSelection !== 'range') return;
     if (screenWidth < 768) {
       debouncedModalClose();
       updateModalOpen(false);
@@ -407,7 +404,7 @@ function ChartingModeOptions(props) {
         ok: true,
         body: parsedData,
       };
-    } catch {
+    } catch (error) {
       return {
         ok: false,
         error: SERVER_ERROR_MESSAGE,
@@ -447,8 +444,7 @@ function ChartingModeOptions(props) {
     return trimmed
       .replace(/^\[|\]$/g, '')
       .split(',')
-      .map((s) => String(s).trim()
-        .replace(/^['"]|['"]$/g, ''))
+      .map((s) => String(s).trim().replace(/^['"]|['"]$/g, ''))
       .filter(Boolean);
   }
 
@@ -549,9 +545,9 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const numDaysRequested = timeSpanSelection === 'range'
-        ? Math.floor((initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)) + 1
-        : 1;
+      const numDaysRequested = Math.floor(
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
+      ) + 1;
       const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
       const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
       const promises = [];
@@ -593,9 +589,7 @@ function ChartingModeOptions(props) {
       // unit determination: renderedPalettes
       const paletteName = layerInfo.palette.id;
       const paletteLegend = renderedPalettes[paletteName].maps[0].legend;
-      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units')
-        ? `${paletteLegend.units}`
-        : '';
+      const unitOfMeasure = Object.prototype.hasOwnProperty.call(paletteLegend, 'units') ? `${paletteLegend.units}` : '';
       const dataToRender = {
         title: layerInfo.title,
         subtitle: layerInfo.subtitle,
@@ -632,14 +626,7 @@ function ChartingModeOptions(props) {
         displayChart(chartData.current, screenWidth, toggleErrorDaysExpanded, isErrordaysExpanded);
         updateChartRequestStatus(false);
       } else {
-        chartData.current = {
-          title: dataToRender.title,
-          subtitle: dataToRender.subtitle,
-          unit: dataToRender.unit,
-          statData: { ...data.body },
-          date: primaryDate,
-        };
-        displaySimpleStats(chartData.current);
+        displaySimpleStats(dataToRender);
         updateChartRequestStatus(false);
       }
     } else {
@@ -766,6 +753,7 @@ function ChartingModeOptions(props) {
     }
     setMapViewChecked(!mapViewChecked);
   };
+
 
   const spinnerStyle = {
     width: '12px',
@@ -1034,7 +1022,7 @@ const mapDispatchToProps = (dispatch) => ({
         offsetLeft: 'calc(50% - 150px)',
         offsetTop: 50,
         width: 300,
-        height: 340,
+        height: 360,
         stayOnscreen: true,
         type: 'selection', // This forces the user to specifically close the modal
         bodyComponentProps: {

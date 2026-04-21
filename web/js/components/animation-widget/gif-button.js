@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -74,8 +75,7 @@ function GifButton(props) {
       return;
     }
     const nonDownloadableLayers = hasNonDownloadableLayer
-      ? getNonDownloadableLayers(visibleLayersForProj)
-      : null;
+      ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     await getPromise(hasCustomPalettes, 'palette', clearCustoms, 'Notice');
     await getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
@@ -87,8 +87,7 @@ function GifButton(props) {
 
     onCloseGif = () => {
       refreshStateAfterGif(hasCustomPalettes
-        ? paletteStore
-        : undefined, rotation, nonDownloadableLayers);
+        ? paletteStore : undefined, rotation, nonDownloadableLayers);
       toggleGif();
     };
     toggleGif();
@@ -96,10 +95,9 @@ function GifButton(props) {
 
   return (
     <>
-      <button
+      <a
         id="create-gif-button"
         aria-label={labelText}
-        type="button"
         className={gifDisabled ? 'wv-icon-case no-drag disabled' : 'wv-icon-case no-drag'}
         onClick={openGif}
       >
@@ -116,7 +114,7 @@ function GifButton(props) {
         >
           {showWarning ? warningMessage : labelText}
         </UncontrolledTooltip>
-      </button>
+      </a>
       {isGifActive && <GifContainer onClose={onCloseGif} />}
     </>
   );

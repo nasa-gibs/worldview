@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import lodashOrderBy from 'lodash/orderBy';
@@ -30,9 +31,8 @@ function CategoryGrid(props) {
     gutter: 10,
   };
   categories.forEach((item) => {
-    const itemPlacementInteger = item.placement === 'last' ? 3 : 2;
     let { sortOrder } = item;
-    sortOrder = item.placement === 'first' ? 1 : itemPlacementInteger;
+    sortOrder = item.placement === 'first' ? 1 : item.placement === 'last' ? 3 : 2;
     return sortOrder;
   });
   const orderedCategories = lodashOrderBy(

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
@@ -38,6 +38,7 @@ import { isLocationSearchFeatureEnabled } from '../modules/location-search/util'
 import { getAllActiveLayers } from '../modules/layers/selectors';
 import { hasNonDownloadableVisibleLayer, getNonDownloadableLayerWarning, getNonDownloadableLayers } from '../modules/image-download/util';
 import AboutModal from '../components/about/about';
+
 
 Promise.config({ cancellation: true });
 
@@ -136,8 +137,7 @@ class toolbarContainer extends Component {
       visibleLayersForProj,
     } = this.props;
     const nonDownloadableLayers = hasNonDownloadableLayer
-      ? getNonDownloadableLayers(visibleLayersForProj)
-      : null;
+      ? getNonDownloadableLayers(visibleLayersForProj) : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(hasCustomPalette, 'palette', clearCustomsSnapshot, 'Notice');
@@ -149,8 +149,7 @@ class toolbarContainer extends Component {
         ...CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
         onClose: () => {
           refreshStateAfterImageDownload(hasCustomPalette
-            ? paletteStore
-            : undefined, rotation, nonDownloadableLayers);
+            ? paletteStore : undefined, rotation, nonDownloadableLayers);
         },
       },
     );
@@ -199,14 +198,12 @@ class toolbarContainer extends Component {
     } = this.props;
     const buttonId = 'wv-share-button';
     const labelText = 'Share this map';
-    const mobileWvToolbarButtonStyle = isMobile
-      ? {
-        fontSize: '14.3px',
-        height: '44px',
-        margin: '0 0 0 4px',
-        padding: '5.72px 9.1px',
-      }
-      : null;
+    const mobileWvToolbarButtonStyle = isMobile ? {
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    } : null;
     return !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
@@ -242,14 +239,12 @@ class toolbarContainer extends Component {
       'TOOLBAR_PROJECTION',
       CUSTOM_MODAL_PROPS.TOOLBAR_PROJECTION,
     );
-    const mobileWvToolbarButtonStyle = isMobile
-      ? {
-        fontSize: '14.3px',
-        height: '44px',
-        margin: '0 0 0 4px',
-        padding: '5.72px 9.1px',
-      }
-      : null;
+    const mobileWvToolbarButtonStyle = isMobile ? {
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    } : null;
     return config.ui && config.ui.projections && !isDistractionFreeModeActive && (
       <Button
         id={buttonId}
@@ -259,7 +254,7 @@ class toolbarContainer extends Component {
           isProjectionSwitchActive
             ? 'wv-toolbar-button'
             : 'wv-toolbar-button disabled'
-        }
+      }
         disabled={!isProjectionSwitchActive}
         style={mobileWvToolbarButtonStyle}
       >
@@ -297,16 +292,14 @@ class toolbarContainer extends Component {
       )
       : () => toggleShowLocationSearch();
 
-    const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded) ||
-    shouldBeCollapsed) && !isDistractionFreeModeActive;
-    const mobileWvToolbarButtonStyle = isMobile
-      ? {
-        fontSize: '14.3px',
-        height: '44px',
-        margin: '0 0 0 4px',
-        padding: '5.72px 9.1px',
-      }
-      : null;
+    const showButton = (isMobile || (!isMobile && !isLocationSearchExpanded)
+    || shouldBeCollapsed) && !isDistractionFreeModeActive;
+    const mobileWvToolbarButtonStyle = isMobile ? {
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    } : null;
     return showButton && (
       <div id="location-search-wrapper">
         <Button
@@ -333,20 +326,16 @@ class toolbarContainer extends Component {
       isMobile,
     } = this.props;
     const buttonId = 'wv-image-button';
-    const activeImageDownloadLabel = !isImageDownloadActive
-      ? 'You must exit data download mode to use the snapshot feature'
-      : 'Take a snapshot';
-    const activeChartingLabel = isChartingActive
-      ? 'You must exit charting mode to use the snapshot feature'
-      : activeImageDownloadLabel;
     const labelText = isCompareActive
       ? 'You must exit comparison mode to use the snapshot feature'
-      : activeChartingLabel;
-    const mobileWVImageButtonStyle = isMobile
-      ? {
-        display: 'none',
-      }
-      : null;
+      : isChartingActive
+        ? 'You must exit charting mode to use the snapshot feature'
+        : !isImageDownloadActive
+          ? 'You must exit data download mode to use the snapshot feature'
+          : 'Take a snapshot';
+    const mobileWVImageButtonStyle = isMobile ? {
+      display: 'none',
+    } : null;
 
     return !isDistractionFreeModeActive && (
       <div id="snapshot-btn-wrapper">
@@ -354,10 +343,10 @@ class toolbarContainer extends Component {
         <Button
           id={buttonId}
           className={
-            isImageDownloadActive
-              ? 'wv-toolbar-button'
-              : 'wv-toolbar-button disabled'
-          }
+          isImageDownloadActive
+            ? 'wv-toolbar-button'
+            : 'wv-toolbar-button disabled'
+        }
           disabled={!isImageDownloadActive}
           aria-label={labelText}
           onClick={this.openImageDownload}
@@ -384,14 +373,12 @@ class toolbarContainer extends Component {
       : ' wv-status-hide';
     const buttonId = 'wv-info-button';
     const labelText = 'Information';
-    const mobileWvToolbarButtonStyle = isMobile
-      ? {
-        fontSize: '14.3px',
-        height: '44px',
-        margin: '0 0 0 4px',
-        padding: '5.72px 9.1px',
-      }
-      : null;
+    const mobileWvToolbarButtonStyle = isMobile ? {
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    } : null;
 
     return !isDistractionFreeModeActive && (
       <Button
@@ -412,14 +399,12 @@ class toolbarContainer extends Component {
     const {
       faSize, isDistractionFreeModeActive, toggleDistractionFreeModeAction, isMobile,
     } = this.props;
-    const mobileButtonStyle = isMobile
-      ? {
-        fontSize: '14.3px',
-        height: '44px',
-        margin: '0 0 0 4px',
-        padding: '5.72px 9.1px',
-      }
-      : null;
+    const mobileButtonStyle = isMobile ? {
+      fontSize: '14.3px',
+      height: '44px',
+      margin: '0 0 0 4px',
+      padding: '5.72px 9.1px',
+    } : null;
     const buttonId = 'wv-exit-distraction-free-mode-button';
     const labelText = 'Exit distraction free mode';
     return isDistractionFreeModeActive && (
@@ -504,8 +489,8 @@ const mapStateToProps = (state) => {
     isChartingActive,
     isDistractionFreeModeActive,
     isImageDownloadActive: Boolean(
-      lodashGet(state, 'map.ui.selected') &&
-      !isCompareActive && !isChartingActive && !isDataDownloadTabActive,
+      lodashGet(state, 'map.ui.selected')
+      && !isCompareActive && !isChartingActive && !isDataDownloadTabActive,
     ),
     isProjectionSwitchActive: Boolean(
       !isAnimatingToEvent && !isChartingActive,

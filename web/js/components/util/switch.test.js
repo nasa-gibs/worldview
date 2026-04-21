@@ -1,3 +1,0 @@
-test('switch component test', () => {
-
-});

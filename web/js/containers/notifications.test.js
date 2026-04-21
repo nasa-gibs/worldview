@@ -1,3 +1,0 @@
-test('notifications container test', () => {
-
-});

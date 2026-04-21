@@ -1,3 +1,0 @@
-test('layerbuilder map test', () => {
-
-});

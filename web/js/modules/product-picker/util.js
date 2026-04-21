@@ -34,9 +34,7 @@ export function getRecentLayers(layerConfig, proj) {
   const filterUnknownLayers = (layerDef) => layerDef !== undefined;
   const layers = JSON.parse(safeLocalStorage.getItem(RECENT_LAYERS));
   return layers && layers[proj]
-    ? layers[proj].sort(byUse).map(toLayerObj)
-      .filter(filterUnknownLayers)
-    : [];
+    ? layers[proj].sort(byUse).map(toLayerObj).filter(filterUnknownLayers) : [];
 }
 
 export function clearRecentLayers() {

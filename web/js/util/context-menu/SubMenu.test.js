@@ -1,3 +1,0 @@
-test('SubMenu module test', () => {
-
-});

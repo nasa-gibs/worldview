@@ -1,3 +1,0 @@
-test('addLayer mapUI test', () => {
-
-});

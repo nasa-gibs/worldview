@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, UncontrolledTooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -120,15 +120,15 @@ class SearchBox extends Component {
           className={buttonId}
         >
           {tooltipVisibilityCondition && (
-            <UncontrolledTooltip
-              id="center-align-tooltip"
-              trigger="hover"
-              target={buttonId}
-              boundariesElement="window"
-              placement="bottom"
-            >
-              {labelText}
-            </UncontrolledTooltip>
+          <UncontrolledTooltip
+            id="center-align-tooltip"
+            trigger="hover"
+            target={buttonId}
+            boundariesElement="window"
+            placement="bottom"
+          >
+            {labelText}
+          </UncontrolledTooltip>
           )}
           <FontAwesomeIcon icon="search-location" size="1x" widthAuto />
         </Button>
@@ -169,15 +169,15 @@ class SearchBox extends Component {
           style={positionStyle}
         >
           {tooltipVisibilityCondition && (
-            <UncontrolledTooltip
-              id="center-align-tooltip"
-              trigger="hover"
-              target={buttonId}
-              boundariesElement="window"
-              placement="bottom"
-            >
-              {labelText}
-            </UncontrolledTooltip>
+          <UncontrolledTooltip
+            id="center-align-tooltip"
+            trigger="hover"
+            target={buttonId}
+            boundariesElement="window"
+            placement="bottom"
+          >
+            {labelText}
+          </UncontrolledTooltip>
           )}
           <FontAwesomeIcon icon="times" size="1x" widthAuto />
         </Button>
@@ -194,10 +194,11 @@ class SearchBox extends Component {
     } = this.props;
 
     // handle mobile/desktop input padding with/without alert
-    const mobileSmallPadding = isMobile ? '42px' : '60px';
-    const mobileLargerPadding = isMobile ? '68px' : '84px';
-    const mobileActiveAlertSize = activeAlert ? mobileLargerPadding : mobileSmallPadding;
-    const paddingRightStyle = inputValue ? mobileActiveAlertSize : '0';
+    const paddingRightStyle = inputValue
+      ? activeAlert
+        ? isMobile ? '68px' : '84px'
+        : isMobile ? '42px' : '60px'
+      : '0';
 
     return {
       width: isMobile ? '90%' : '298px',
@@ -218,17 +219,13 @@ class SearchBox extends Component {
       ? 'Enter place name or coordinates'
       : 'Search for places or enter coordinates';
 
-    const mobileStyle = isMobile
-      ? {
-        width: '100%', display: 'flex',
-      }
-      : {
-        display: 'flex', width: '85%', background: 'inherit', border: 'none',
-      };
+    const mobileStyle = isMobile ? {
+      width: '100%', display: 'flex',
+    } : {
+      display: 'flex', width: '85%',
+    };
     return (
       <div
-        role="searchbox"
-        tabIndex={0}
         className="location-search-input-container"
         onKeyDown={this.handleKeyPress}
         style={mobileStyle}

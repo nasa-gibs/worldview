@@ -1,4 +1,5 @@
-/* eslint-disable no-restricted-globals */
+/* eslint-disable no-storage/no-browser-storage */
+/* eslint-disable no-console */
 const enabled = (function() {
   try {
     if (window.localStorage) {
@@ -8,7 +9,7 @@ const enabled = (function() {
       localStorage.removeItem(uid);
       return result && true;
     }
-  } catch {
+  } catch (error) {
     console.warn('Local storage disabled.');
     return false;
   }

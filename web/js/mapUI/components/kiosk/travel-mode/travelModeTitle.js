@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { travelModeData } from '../tile-measurement/utils/layer-data-eic';
 

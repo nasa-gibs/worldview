@@ -13,7 +13,6 @@ const {
   selectOption
 } = require('../../test-utils/hooks/basicHooks')
 
-/** @type {import('@playwright/test').Page} */
 let page
 const startParams = [
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',

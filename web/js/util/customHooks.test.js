@@ -1,3 +1,0 @@
-test('customHooks util test', () => {
-
-});

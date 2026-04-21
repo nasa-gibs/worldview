@@ -1,3 +1,0 @@
-test('util module test', () => {
-
-});

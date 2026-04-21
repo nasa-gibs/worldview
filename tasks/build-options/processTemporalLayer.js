@@ -4,11 +4,7 @@ const xml2js = require('xml2js')
 const projDict = {
   'GIBS:geographic': 'epsg4326',
   'GIBS:arctic': 'epsg3413',
-  'GIBS:antarctic': 'epsg3031',
-  'GITC:geographic': 'epsg4326',
-  'GITC:arctic': 'epsg3413',
-  'GITC:antarctic': 'epsg3031',
-  'GITC:webmercator': 'epsg3857'
+  'GIBS:antarctic': 'epsg3031'
 }
 
 function toList (val) {
@@ -59,7 +55,6 @@ async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic',
       const dateRangeEnd = []
       const rangeInterval = []
       for (const range of ranges) {
-        if (!range._text || !range._text.length) continue
         const [start, end, interval] = range._text.split('/')
         if (
           wvLayer.period === 'daily' ||

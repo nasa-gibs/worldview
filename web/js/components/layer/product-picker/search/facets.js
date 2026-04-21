@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
@@ -30,44 +31,42 @@ function Facets(props) {
 
   const classNames = isMobile || screenWidth < breakpoints.small ? 'facet-container-mobile facet-container' : 'facet-container';
 
-  return !showFacets
-    ? null
-    : (
-      <div className={classNames}>
+  return !showFacets ? null : (
+    <div className={classNames}>
 
-        <FilterChips
-          filters={filters}
-          removeFilter={removeFilter}
-          facetConfig={facetConfig}
-        />
+      <FilterChips
+        filters={filters}
+        removeFilter={removeFilter}
+        facetConfig={facetConfig}
+      />
 
-        <div className="inner-container">
-          {facetConfig.map((config) => {
-            const facet = facets[config.field];
-            const data = (facet && facet.length && facet[0].data) || [];
+      <div className="inner-container">
+        {facetConfig.map((config) => {
+          const facet = facets[config.field];
+          const data = (facet && facet.length && facet[0].data) || [];
 
-            return (
-              <ProductFacet
-                key={config.field}
-                config={config}
-                data={data}
-                collapsed={collapsedFacets[config.field]}
-                toggleCollapse={toggleCollapseFacet}
-              />
-            );
-          })}
-        </div>
-
-        {isMobile && showMobileFacets && (
-          <Button
-            className="apply-facets"
-            onClick={toggleMobileFacets}
-          >
-            Apply
-          </Button>
-        )}
+          return (
+            <ProductFacet
+              key={config.field}
+              config={config}
+              data={data}
+              collapsed={collapsedFacets[config.field]}
+              toggleCollapse={toggleCollapseFacet}
+            />
+          );
+        })}
       </div>
-    );
+
+      {isMobile && showMobileFacets && (
+        <Button
+          className="apply-facets"
+          onClick={toggleMobileFacets}
+        >
+          Apply
+        </Button>
+      )}
+    </div>
+  );
 }
 
 Facets.propTypes = {

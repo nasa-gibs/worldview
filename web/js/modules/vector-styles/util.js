@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 import {
   assign as lodashAssign,
   find as lodashFind,
@@ -61,20 +62,18 @@ export function selectedCircleStyle(style, size = 2) {
   const styleImage = style.getImage();
   const fill = styleImage.getFill();
   const radius = styleImage.getRadius() * size;
-  return fill
-    ? new Style({
-      image: new Circle({
-        radius,
-        stroke: new Stroke({
-          color: 'white',
-          width: 2,
-        }),
-        fill: new Fill({
-          color: fill.getColor().replace(/[^,]+(?=\))/, '0.5'),
-        }),
+  return fill ? new Style({
+    image: new Circle({
+      radius,
+      stroke: new Stroke({
+        color: 'white',
+        width: 2,
       }),
-    })
-    : style;
+      fill: new Fill({
+        color: fill.getColor().replace(/[^,]+(?=\))/, '0.5'),
+      }),
+    }),
+  }) : style;
 }
 
 export function selectedPolygonStyle(style) {
@@ -123,9 +122,9 @@ export function getConditionalColors(color) {
   for (let i = 0, j = array.length; i < j; i += chunk) {
     temp = array.slice(i, i + chunk);
     if (temp.length === 2) {
-      if (temp[0].length === 3 &&
-        typeof temp[0][2] === 'string' &&
-        typeof temp[1] === 'string'
+      if (temp[0].length === 3
+        && typeof temp[0][2] === 'string'
+        && typeof temp[1] === 'string'
       ) {
         labels.push(temp[0][2]);
         colors.push(temp[1]);
@@ -169,8 +168,7 @@ export function isFeatureInRenderableArea(lon, wrap, acceptableExtent) {
   if (acceptableExtent) {
     return lon > acceptableExtent[0] && lon < acceptableExtent[2];
   }
-  const isWrap = wrap === 1 ? lon > -250 && lon < -180 : false;
-  return wrap === -1 ? lon < 250 && lon > 180 : isWrap;
+  return wrap === -1 ? lon < 250 && lon > 180 : wrap === 1 ? lon > -250 && lon < -180 : false;
 }
 
 /**
@@ -239,8 +237,8 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
     }
 
     const type = feature.getGeometry().getType();
-    if (lodashIncludes(def.clickDisabledFeatures, type) ||
-      !isFromActiveCompareRegion(pixels, layer.wv.group, swipeOffset, compareState)) {
+    if (lodashIncludes(def.clickDisabledFeatures, type)
+      || !isFromActiveCompareRegion(pixels, layer.wv.group, compareState, swipeOffset)) {
       return true;
     }
     if (def.vectorData && def.vectorData.id && def.title) {
@@ -248,21 +246,14 @@ function getModalContentsAtPixel(mapProps, config, compareState, isMobile) {
       if (!selected[layerId]) selected[layerId] = [];
       const features = feature.getProperties();
       const vectorDataId = def.vectorData.id;
-      const data = lodashGet(config, ['vectorData', vectorDataId]);
-      const properties = Array.isArray(data?.mvt_properties) ? data.mvt_properties : [];
-
-      const identifyProp = lodashFind(properties, { Function: 'Identify' }) || lodashFind(properties, { function: 'Identify' });
-      const uniqueIdentifierKey = identifyProp?.Identifier;
-
+      const data = config.vectorData[vectorDataId];
+      const properties = data.mvt_properties;
+      const uniqueIdentifierKey = lodashFind(properties, { Function: 'Identify' }).Identifier;
       const titleObj = lodashFind(properties, 'IsLabel');
-      const titleKey = titleObj?.Identifier;
+      const titleKey = titleObj.Identifier;
 
-      const featureId = feature.getId();
-      const uniqueIdentifierRaw = uniqueIdentifierKey ? features?.[uniqueIdentifierKey] : featureId;
-      const uniqueIdentifier = uniqueIdentifierRaw == null ? `${layerId}:${metaArray.length}` : String(uniqueIdentifierRaw);
-
-      const titleRaw = titleKey ? features?.[titleKey] : null;
-      const title = titleRaw == null ? (def.title || 'Unknown title') : String(titleRaw);
+      const uniqueIdentifier = features[uniqueIdentifierKey];
+      const title = titleKey ? features[titleKey] : 'Unknown title';
       if (selected[layerId].includes(uniqueIdentifier)) return true;
       if (def.modalShouldFollowClicks) modalShouldFollowClicks = true;
       const obj = {

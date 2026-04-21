@@ -1,3 +1,0 @@
-test('mobile-toggle test', () => {
-
-});

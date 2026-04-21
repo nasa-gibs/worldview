@@ -1,3 +1,0 @@
-test('AbstractMenu util test', () => {
-
-});

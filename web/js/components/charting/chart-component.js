@@ -1,4 +1,4 @@
-import {
+import React, {
   useEffect,
   useRef,
   useMemo,
@@ -66,6 +66,7 @@ function getTickPositions(dataLength) {
   return tickPosArr;
 }
 
+
 function CustomXAxisTick(props) {
   const {
     x, y, fill, textAnchor, visibleTicksCount, index, payload, data,
@@ -91,8 +92,7 @@ function CustomXAxisTick(props) {
 }
 
 function formatToThreeDigits(str) {
-  if (parseFloat(str).toFixed(3)
-    .split('.')[0].length > 4) {
+  if (parseFloat(str).toFixed(3).split('.')[0].length > 4) {
     return Number(parseFloat(str).toFixed(3)).toPrecision(3);
   }
   return parseFloat(str).toFixed(3);
@@ -172,8 +172,9 @@ function ChartComponent(props) {
   // Build display string "YYYY-MM-DD,  YYYY-MM-DD,  ..." with non-breaking spaces
   const errorDatesDisplay = useMemo(() => errors?.error_days
     .map((item) => {
-      const isItemObject = item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
-      const dateStr = typeof item === 'string' ? item : isItemObject;
+      const dateStr = typeof item === 'string'
+        ? item
+        : item && typeof item === 'object' && 'date' in item ? item.date : String(item || '');
       return (dateStr || '').split('T')[0];
     })
     .filter(Boolean)
@@ -338,13 +339,12 @@ function ChartComponent(props) {
       backgroundLayerGroup.setVisible(true);
 
       const layersList = [];
-      backgroundLayerGroup.getLayers().getArray()
-        .forEach((layer) => {
-          layersList.push(new OlLayerTile({
-            source: layer.getSource(),
-            zIndex: 99,
-          }));
-        });
+      backgroundLayerGroup.getLayers().getArray().forEach((layer) => {
+        layersList.push(new OlLayerTile({
+          source: layer.getSource(),
+          zIndex: 99,
+        }));
+      });
       const copiedLayerGroup = new OlLayerGroup({
         layers: layersList,
       });
@@ -386,17 +386,16 @@ function ChartComponent(props) {
       foregroundLayer.setVisible(true);
 
       if (foregroundLayer instanceof OlLayerGroup) {
-        foregroundLayer.getLayers().getArray()
-          .forEach((layer) => {
-            layerListRef.current.push(new OlLayerTile({
-              source: layer.getSource(),
-              opacity: 0.15,
-            }));
-            layerListRef.current.push(new OlLayerTile({
-              source: layer.getSource(),
-              extent: coordinates,
-            }));
-          });
+        foregroundLayer.getLayers().getArray().forEach((layer) => {
+          layerListRef.current.push(new OlLayerTile({
+            source: layer.getSource(),
+            opacity: 0.15,
+          }));
+          layerListRef.current.push(new OlLayerTile({
+            source: layer.getSource(),
+            extent: coordinates,
+          }));
+        });
       } else {
         layerListRef.current.push(new OlLayerTile({
           source: foregroundLayer.getSource(),
@@ -444,13 +443,7 @@ function ChartComponent(props) {
             <Tooltip content={<CustomTooltip unit={unit} setHoveredDate={setHoveredDate} />} />
             {' '}
             {getLineChart(data)}
-            <XAxis
-              dataKey="name"
-              stroke="#a6a5a6"
-              interval={0}
-              tick={<CustomXAxisTick data={data} />}
-              tickLine={false}
-            />
+            <XAxis dataKey="name" stroke="#a6a5a6" interval={0} tick={<CustomXAxisTick data={data} />} tickLine={false} />
             <YAxis
               type="number"
               stroke="#a6a5a6"
@@ -498,19 +491,11 @@ function ChartComponent(props) {
               <div className="coordinate-center coordinate-subheader">Latitude</div>
               <div className="coordinate-center coordinate-subheader">Longitude</div>
               <div>Top Right:</div>
-              <div className="coordinate-mono">
-                {util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[0]}
-              </div>
-              <div className="coordinate-mono">
-                {util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[1]}
-              </div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[0]}</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[2], coordinates[3]], format).split(', ')[1]}</div>
               <div>Bottom Left:</div>
-              <div className="coordinate-mono">
-                {util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[0]}
-              </div>
-              <div className="coordinate-mono">
-                {util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[1]}
-              </div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[0]}</div>
+              <div className="coordinate-mono">{util.formatCoordinate([coordinates[0], coordinates[1]], format).split(', ')[1]}</div>
             </div>
           </div>
         </div>
@@ -520,8 +505,8 @@ function ChartComponent(props) {
             Numerical analyses performed on imagery should only
             be used for initial basic exploratory purposes.
           </span>
-          {isTruncated &&
-          (
+          {isTruncated
+          && (
             <div className="charting-disclaimer-upper">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
@@ -550,8 +535,8 @@ function ChartComponent(props) {
               </i>
             </div>
           )}
-          {errors && errors.error_count > 0 &&
-          (
+          {errors && errors.error_count > 0
+          && (
             <div className="charting-disclaimer-lower">
               <FontAwesomeIcon
                 icon="exclamation-triangle"
@@ -561,9 +546,7 @@ function ChartComponent(props) {
               />
               <i className="charting-disclaimer-block">
                 {`${errors.error_count} `}
-                {errors.error_count === 1
-                  ? 'requested date has no data and is represented as a gap in the chart.'
-                  : 'requested dates have no data and are represented as gaps in the chart.'}
+                {errors.error_count === 1 ? 'requested date has no data and is represented as a gap in the chart.' : 'requested dates have no data and are represented as gaps in the chart.'}
               </i>
               {!errorCollapsed && (
                 <div className="charting-disclaimer-dates">
@@ -573,18 +556,14 @@ function ChartComponent(props) {
                 </div>
               )}
               <div className="error-expand-button">
-                <button
-                  className="error-expand-button-inner"
-                  type="button"
-                  onClick={() => toggleErrorCollapsed(!errorCollapsed)}
-                >
+                <span className="error-expand-button-inner" onClick={() => toggleErrorCollapsed(!errorCollapsed)}>
                   {errorCollapsed ? 'more' : 'less'}
                   <FontAwesomeIcon
                     className="layer-group-collapse"
                     icon={!errorCollapsed ? 'caret-up' : 'caret-down'}
                     widthAuto
                   />
-                </button>
+                </span>
               </div>
             </div>
           )}

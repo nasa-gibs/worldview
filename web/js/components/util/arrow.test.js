@@ -1,3 +1,0 @@
-test('arrow component test', () => {
-
-});

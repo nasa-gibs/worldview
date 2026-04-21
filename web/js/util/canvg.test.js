@@ -1,3 +1,0 @@
-test('canvg util test', () => {
-
-});

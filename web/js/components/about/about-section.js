@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 export default function AboutSection(props) {
@@ -21,6 +21,7 @@ export default function AboutSection(props) {
         setSectionDescription(setData);
       } catch (e) {
         if (!controller.signal.aborted) {
+        // eslint-disable-next-line no-console
           console.error(e);
           setSectionDescription('could not load metadata');
         }

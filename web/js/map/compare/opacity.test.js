@@ -1,3 +1,0 @@
-test('opacity map test', () => {
-
-});

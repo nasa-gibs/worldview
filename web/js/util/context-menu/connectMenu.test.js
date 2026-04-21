@@ -1,3 +1,0 @@
-test('connectMenu util test', () => {
-
-});

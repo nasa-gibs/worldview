@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 /*
@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 class AxisTimeScaleChangeTooltip extends PureComponent {
   // Handle change axis timescale
   changeTimeScale = (timeScale) => {
+    // eslint-disable-next-line react/destructuring-assignment
     this.props.changeTimeScale(timeScale);
   };
 
@@ -41,8 +42,8 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
         <span
           id="current-zoom"
           className={
-            `zoom-btn zoom-level-display-text zoom-${timeScale.toLowerCase()}`
-          }
+              `zoom-btn zoom-level-display-text zoom-${timeScale.toLowerCase()}`
+            }
         >
           {timeScale}
         </span>
@@ -62,8 +63,6 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             </label>
             <span
               id="zoom-years"
-              role="menuitem"
-              tabIndex={-1}
               className="zoom-btn zoom-years"
               onClick={this.changeTimeScaleYear}
             >
@@ -71,8 +70,6 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             </span>
             <span
               id="zoom-months"
-              role="menuitem"
-              tabIndex={-1}
               className="zoom-btn zoom-months"
               onClick={this.changeTimeScaleMonth}
             >
@@ -80,37 +77,29 @@ class AxisTimeScaleChangeTooltip extends PureComponent {
             </span>
             <span
               id="zoom-days"
-              role="menuitem"
-              tabIndex={-1}
               className="zoom-btn zoom-days"
               onClick={this.changeTimeScaleDay}
             >
               DAY
             </span>
-            {hasSubdailyLayers
-              ? (
-                <>
-                  <span
-                    id="zoom-hours"
-                    role="menuitem"
-                    tabIndex={-1}
-                    className="zoom-btn zoom-hours"
-                    onClick={this.changeTimeScaleHour}
-                  >
-                    HOUR
-                  </span>
-                  <span
-                    id="zoom-minutes"
-                    role="menuitem"
-                    tabIndex={-1}
-                    className="zoom-btn zoom-minutes"
-                    onClick={this.changeTimeScaleMinute}
-                  >
-                    MINUTE
-                  </span>
-                </>
-              )
-              : null}
+            {hasSubdailyLayers ? (
+              <>
+                <span
+                  id="zoom-hours"
+                  className="zoom-btn zoom-hours"
+                  onClick={this.changeTimeScaleHour}
+                >
+                  HOUR
+                </span>
+                <span
+                  id="zoom-minutes"
+                  className="zoom-btn zoom-minutes"
+                  onClick={this.changeTimeScaleMinute}
+                >
+                  MINUTE
+                </span>
+              </>
+            ) : null}
           </div>
         </div>
       </div>

@@ -1,3 +1,0 @@
-test('travelModeColorbars mapUI test', () => {
-
-});

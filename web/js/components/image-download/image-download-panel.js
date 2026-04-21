@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import googleTagManager from 'googleTagManager';
 import { getActivePalettes } from '../../modules/palettes/selectors';
 import {
@@ -31,9 +30,9 @@ const RESOLUTION_KEY = {
 
 function ImageDownloadPanel(props) {
   const {
-    fileType = 'image/jpeg',
-    isWorldfile = false,
-    resolution = '1',
+    fileType,
+    isWorldfile,
+    resolution,
     getLayers,
     url,
     lonlats,
@@ -41,16 +40,16 @@ function ImageDownloadPanel(props) {
     date,
     markerCoordinates,
     onPanelChange,
-    fileTypeOptions = true,
+    fileTypeOptions,
     fileTypes,
-    secondLabel = 'Format',
-    worldFileOptions = true,
+    secondLabel,
+    worldFileOptions,
     datelineMessage,
     map,
     viewExtent,
     resolutions,
-    maxImageSize = '8200px x 8200px',
-    firstLabel = 'Resolution (per pixel)',
+    maxImageSize,
+    firstLabel,
     geoLatLong,
     onLatLongChange,
   } = props;
@@ -67,11 +66,10 @@ function ImageDownloadPanel(props) {
 
   useEffect(() => {
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray()
-      .map((layer) => [
-        layer.wv.id,
-        layer.wv.granuleDates,
-      ]));
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
+      layer.wv.id,
+      layer.wv.granuleDates,
+    ]));
     const layerDefs = layerList.map((def) => ({
       ...def, granuleDates: granuleDatesMap.get(def.id),
     }));
@@ -80,18 +78,13 @@ function ImageDownloadPanel(props) {
     setShowGranuleWarning(isTruncated);
   }, []);
 
-  useEffect(() => {
-    setResolution(resolution);
-  }, [resolution]);
-
   const onDownload = (width, height) => {
     const time = new Date(date.getTime());
 
     const layerList = getLayers();
-    const granuleDatesMap = new Map(map.getLayers().getArray()
-      .map((layer) => [
-        layer.wv.id, layer.wv.granuleDates,
-      ]));
+    const granuleDatesMap = new Map(map.getLayers().getArray().map((layer) => [
+      layer.wv.id, layer.wv.granuleDates,
+    ]));
     const layerDefs = layerList.map((def) => ({
       ...def, granuleDates: granuleDatesMap.get(def.id),
     }));
@@ -159,22 +152,20 @@ function ImageDownloadPanel(props) {
       const value = currIsWorldfile ? 1 : 0;
       return (
         <div className="wv-image-header">
-          {currFileType === 'application/vnd.google-earth.kmz'
-            ? (
-              <select disabled>
-                <option value={0}>No</option>
-              </select>
-            )
-            : (
-              <select
-                id="wv-image-worldfile"
-                value={value}
-                onChange={(e) => handleChange('worldfile', e.target.value)}
-              >
-                <option value="0">No</option>
-                <option value="1">Yes</option>
-              </select>
-            )}
+          {currFileType === 'application/vnd.google-earth.kmz' ? (
+            <select disabled>
+              <option value={0}>No</option>
+            </select>
+          ) : (
+            <select
+              id="wv-image-worldfile"
+              value={value}
+              onChange={(e) => handleChange('worldfile', e.target.value)}
+            >
+              <option value="0">No</option>
+              <option value="1">Yes</option>
+            </select>
+          )}
           Worldfile (.zip)
         </div>
       );
@@ -241,7 +232,7 @@ function ImageDownloadPanel(props) {
             {' '}
             granules, additional
             granules are omitted.
-          </p>
+          </p> // eslint-disable-line react/jsx-one-expression-per-line
         )}
         <ResTable
           width={width}
@@ -256,6 +247,17 @@ function ImageDownloadPanel(props) {
     </>
   );
 }
+
+ImageDownloadPanel.defaultProps = {
+  fileType: 'image/jpeg',
+  fileTypeOptions: true,
+  firstLabel: 'Resolution (per pixel)',
+  isWorldfile: false,
+  maxImageSize: '8200px x 8200px',
+  resolution: '1',
+  secondLabel: 'Format',
+  worldFileOptions: true,
+};
 
 ImageDownloadPanel.propTypes = {
   datelineMessage: PropTypes.string,

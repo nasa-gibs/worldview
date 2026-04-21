@@ -1,4 +1,4 @@
-import { PureComponent, createRef } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import lodashRound from 'lodash/round';
@@ -16,7 +16,6 @@ class TimelineDragger extends PureComponent {
    */
   constructor(props) {
     super(props);
-    this.nodeRef = createRef();
     this.state = {
       position: props.position,
       backgroundColor: props.backgroundColor,
@@ -31,17 +30,13 @@ class TimelineDragger extends PureComponent {
    * Update state if position has changed
    * @param {object} props
    */
-  componentDidUpdate(prevProps) {
+  UNSAFE_componentWillReceiveProps(props) {
     const { position, max } = this.state;
-    const positionChanged = prevProps.position !== this.props.position;
-    const maxChanged = prevProps.max !== this.props.max;
-
-    if (positionChanged && this.props.position !== position) {
-      this.setState({ position: this.props.position });
+    if (props.position !== position) {
+      this.setState({ position: props.position });
     }
-
-    if (maxChanged && this.props.max !== max) {
-      this.setState({ max: this.props.max });
+    if (props.max !== max) {
+      this.setState({ max: props.max });
     }
   }
 
@@ -178,7 +173,6 @@ class TimelineDragger extends PureComponent {
     const { position } = this.state;
     return (
       <Draggable
-        nodeRef={this.nodeRef}
         onDrag={this.handleDrag}
         position={{ x: position, y: yOffset }}
         onStop={() => {
@@ -186,7 +180,7 @@ class TimelineDragger extends PureComponent {
         }}
         axis="x"
       >
-        <g ref={this.nodeRef}>
+        <g>
           {!path
             ? this.getDefaultDragger(visibility)
             : this.getCustomDragger(visibility)}

@@ -1,3 +1,0 @@
-test('util component test', () => {
-
-});

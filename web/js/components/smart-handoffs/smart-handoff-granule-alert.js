@@ -1,3 +1,5 @@
+import React from 'react';
+
 function GranuleAlertModalBody() {
   return (
     <div className="basic-modal">
@@ -34,6 +36,7 @@ function GranuleAlertModalBody() {
           the &quot;Set Area of Interest&quot; box should address this.
         </li>
       </ol>
+
 
     </div>
   );

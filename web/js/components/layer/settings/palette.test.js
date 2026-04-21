@@ -1,3 +1,0 @@
-test('palette component test', () => {
-
-});

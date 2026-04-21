@@ -52,7 +52,7 @@ export default class SubMenu extends AbstractMenu {
         this.listenId = listener.register(() => {}, this.hideSubMenu);
     }
 
-    getSubMenuType() {  
+    getSubMenuType() { // eslint-disable-line class-methods-use-this
         return SubMenu;
     }
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
@@ -31,6 +31,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath, describe
         setFn(metadataHtml || 'No description was found for this layer.');
       } catch (e) {
         if (!controller.signal.aborted) {
+          // eslint-disable-next-line no-console
           console.error(e);
         }
       }
@@ -68,31 +69,27 @@ export default function LayerInfo ({ layer, measurementDescriptionPath, describe
             )}
           </span>
           <span id={`${id}-endDate`} className="layer-date-end">
-            {isRange
-              ? (
-                <>
-                  -
-                  <FormattedEndDate />
-                </>
-              )
-              : startDate && ' - Present'}
+            {isRange ? (
+              <>
+                -
+                <FormattedEndDate />
+              </>
+            ) : startDate && ' - Present'}
           </span>
           {needDateRanges && <DateRanges layer={layer} describeDomainsUrl={describeDomainsUrl} />}
         </div>
       )}
-      {layerMetadata
-        ? (
-          <div
-            id="layer-metadata"
-            className="layer-metadata"
-            dangerouslySetInnerHTML={{ __html: layerMetadata }}
-          />
-        )
-        : (
-          <div id="layer-metadata" className="layer-metadata">
-            <p>Loading Layer Description...</p>
-          </div>
-        )}
+      {layerMetadata ? (
+        <div
+          id="layer-metadata"
+          className="layer-metadata"
+          dangerouslySetInnerHTML={{ __html: layerMetadata }}
+        />
+      ) : (
+        <div id="layer-metadata" className="layer-metadata">
+          <p>Loading Layer Description...</p>
+        </div>
+      )}
 
       {measurementMetadata && (
         <div

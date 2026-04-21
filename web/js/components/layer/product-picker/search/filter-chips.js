@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -17,29 +18,26 @@ export default function FilterChips(props) {
     }));
   });
 
-  return !filters.length
-    ? null
-    : (
-      <div className="bag-o-chips">
-        {filterValues.map(({
-          field, displayValue, value,
-        }) => (
-          <button
-            key={field + value}
-            className="filter-chip"
-            type="button"
-            onClick={() => removeFilter(field, value)}
-          >
-            <span dangerouslySetInnerHTML={{ __html: displayValue }} />
-            <FontAwesomeIcon
-              icon="times"
-              fixedWidth
-              widthAuto
-            />
-          </button>
-        ))}
-      </div>
-    );
+  return !filters.length ? null : (
+    <div className="bag-o-chips">
+      {filterValues.map(({
+        field, displayValue, value,
+      }) => (
+        <div
+          key={field + value}
+          className="filter-chip"
+          onClick={() => removeFilter(field, value)}
+        >
+          <span dangerouslySetInnerHTML={{ __html: displayValue }} />
+          <FontAwesomeIcon
+            icon="times"
+            fixedWidth
+            widthAuto
+          />
+        </div>
+      ))}
+    </div>
+  );
 }
 
 FilterChips.propTypes = {

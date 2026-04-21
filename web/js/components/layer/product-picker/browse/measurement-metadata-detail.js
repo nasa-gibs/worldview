@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,7 +38,7 @@ function MeasurementMetadataDetail (props) {
       } catch (e) {
         if (!controller.signal.aborted) {
           setLoading(false);
-
+          // eslint-disable-next-line no-console
           console.error(e);
         }
       }
@@ -91,15 +91,14 @@ function MeasurementMetadataDetail (props) {
           {renderMetadataForLayers()}
         </div>
         {doesMetaDataNeedExpander && (
-          <button
+          <div
             className="metadata-more"
-            type="button"
             onClick={() => setMetadataExpansion(!isMetadataExpanded)}
           >
             <span className={isMetadataExpanded ? 'ellipsis up' : 'ellipsis'}>
               {isMetadataExpanded ? '^' : '...'}
             </span>
-          </button>
+          </div>
         )}
       </div>
     );

@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -18,8 +18,7 @@ class CollapsedButton extends PureComponent {
       <div
         className={classes}
       >
-        <button
-          type="button"
+        <a
           id={buttonId}
           aria-label={labelText}
           onClick={onclick}
@@ -41,7 +40,7 @@ class CollapsedButton extends PureComponent {
               </span>
             )}
           {!isMobile && <FontAwesomeIcon className="expand-icon" icon="caret-down" widthAuto />}
-        </button>
+        </a>
       </div>
     );
   }

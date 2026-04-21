@@ -48,9 +48,15 @@ const babelLoaderExcludes = [
   /core-js/
 ]
 // Include any modules that need to be transpiled by babel-loader
+const transpileDependencies = [
+  'react-visibility-sensor'
+]
 if (devMode) {
-  // Don't transpile dependencies in /node_modules by default.
-  babelLoaderExcludes.push(/node_modules/)
+  // Don't transpile any dependencies in /node_modules except those found
+  // in transpileDependencies array
+  babelLoaderExcludes.push(
+    new RegExp(`node_modules(?!(/|\\\\)(${transpileDependencies.join('|')})).*`)
+  )
 }
 
 module.exports = {
@@ -95,7 +101,6 @@ module.exports = {
           options: {
             compact: false, // fixes https://stackoverflow.com/questions/29576341/what-does-the-code-generator-has-deoptimised-the-styling-of-some-file-as-it-e
             cacheDirectory: devMode,
-            configFile: path.resolve(__dirname, 'babel.config.js'),
             plugins: [devMode && require.resolve('react-refresh/babel')].filter(Boolean)
           }
         },

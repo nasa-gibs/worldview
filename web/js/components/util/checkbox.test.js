@@ -1,3 +1,0 @@
-test('checkbox component test', () => {
-
-});

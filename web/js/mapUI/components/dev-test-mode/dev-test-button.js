@@ -1,3 +1,4 @@
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
 import { toggleCustomContent } from '../../../modules/modal/actions';

@@ -61,7 +61,7 @@ export const mapLocationToState = (state, location) => {
   const { config } = state;
   if (location.search) {
     const parameters = util.fromQueryString(location.search);
-    let stateFromLocation = location.query || {};
+    let stateFromLocation = location.query;
     stateFromLocation = mapLocationToDateState(
       parameters,
       stateFromLocation,
@@ -136,10 +136,10 @@ export const mapLocationToState = (state, location) => {
   }
   const startTour = checkTourBuildTimestamp(state.config);
   if (
-    startTour &&
-      config.features.tour &&
-      config.stories &&
-      config.storyOrder
+    startTour
+      && config.features.tour
+      && config.stories
+      && config.storyOrder
   ) {
     return update(state, {
       tour: { active: { $set: true } },
@@ -200,13 +200,6 @@ const getParameters = function(config, parameters) {
         serializeNeedsGlobalState: true,
         serialize: (currentItemState, state) => {
           let interval = currentItemState;
-          const isCustomSelected = get(state, 'date.customSelected');
-          const customDelta = get(state, 'date.customDelta');
-          const customInterval = get(state, 'date.customInterval');
-          // check if custom interval is equivalent to a normal interval to fall-back if available
-          if (isCustomSelected && customDelta === 1 && customInterval) {
-            interval = customInterval;
-          }
           // check if subdaily timescale zoom to determine if reset is needed
           if (interval > 3) {
             if (!subdailyLayersActive(state)) {
@@ -226,7 +219,7 @@ const getParameters = function(config, parameters) {
         serialize: (currentItemState, state) => {
           const customDelta = get(state, 'date.customDelta');
           const customInterval = get(state, 'date.customInterval');
-          if (customDelta === 1 && customInterval) {
+          if (customDelta === 1 && customInterval === 3) {
             return undefined;
           }
           return currentItemState;
@@ -540,8 +533,7 @@ const getParameters = function(config, parameters) {
           const isChartingRange = get(state, 'charting.timeSpanSelection') === 'range';
           const timeSpanEndDate = get(state, 'charting.timeSpanEndDate');
           return isChartingRange && !!timeSpanEndDate
-            ? serializeDateChartingWrapper(currentItemState, state)
-            : undefined;
+            ? serializeDateChartingWrapper(currentItemState, state) : undefined;
         },
         parse: (str) => parsePermalinkDate(now, str, parameters.l, config),
       },

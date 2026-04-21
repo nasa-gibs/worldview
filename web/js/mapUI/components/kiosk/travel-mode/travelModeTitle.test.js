@@ -1,3 +1,0 @@
-test('travelModeTitle mapUI test', () => {
-
-});

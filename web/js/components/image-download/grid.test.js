@@ -1,3 +1,0 @@
-test('grid component test', () => {
-
-});

@@ -1,3 +1,0 @@
-test('util map test', () => {
-
-});

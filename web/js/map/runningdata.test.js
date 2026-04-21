@@ -1,3 +1,0 @@
-test('runningdata map test', () => {
-
-});

@@ -1,3 +1,0 @@
-test('datelines component test', () => {
-
-});

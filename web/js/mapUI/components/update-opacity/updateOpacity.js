@@ -60,24 +60,14 @@ function UpdateOpacity(props) {
   const updateOpacity = (actionObj) => {
     const { id, opacity } = actionObj;
     const def = lodashFind(activeLayers, { id });
-    if (!def) {
-      updateLayerVisibilities();
-      return;
-    }
     if (def.type === 'granule') {
       updateGranuleLayerOpacity(def, activeString, opacity, compare);
     } else {
       const layerGroup = findLayer(def, activeString);
-      if (!layerGroup || typeof layerGroup.setOpacity !== 'function') {
-        updateLayerVisibilities();
-        return;
-      }
       layerGroup.setOpacity(opacity);
-      if (typeof layerGroup.getLayersArray === 'function') {
-        layerGroup.getLayersArray().forEach((l) => {
-          l.setOpacity(opacity);
-        });
-      }
+      layerGroup.getLayersArray().forEach((l) => {
+        l.setOpacity(opacity);
+      });
     }
     updateLayerVisibilities();
   };

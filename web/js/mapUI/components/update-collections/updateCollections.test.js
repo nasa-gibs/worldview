@@ -1,3 +1,0 @@
-test('updatecollections mapUI test', () => {
-
-});

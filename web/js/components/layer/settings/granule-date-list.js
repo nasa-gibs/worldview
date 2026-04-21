@@ -1,14 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useEffect, useMemo, useState } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  arrayMove,
-  useSortable,
-} from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowCircleUp, faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
@@ -20,14 +13,20 @@ const { events } = util;
 const itemHeight = 30;
 const itemMargin = 2;
 
-const getItemStyle = (isDragging, isHover, isLastMovedItem, sortableStyle) => ({
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+};
+
+const getItemStyle = (isDragging, isHover, isLastMovedItem, draggableStyle) => ({
   userSelect: 'none',
   height: itemHeight,
   marginBottom: itemMargin,
   outline: isLastMovedItem ? '1px solid #007BFF' : 'none',
   border: isHover ? '1px solid #eee' : '1px solid #666',
-  ...sortableStyle,
-  zIndex: isDragging ? 1 : undefined,
+  ...draggableStyle,
 });
 
 const getListStyle = (needsScrollBar, items, screenHeight) => {
@@ -46,224 +45,257 @@ const getListStyle = (needsScrollBar, items, screenHeight) => {
   };
 };
 
-const checkGranuleDateSorting = (granuleDates) => {
-  const dates = granuleDates || [];
-  for (let i = 0; i < dates.length - 1; i += 1) {
-    if (dates[i] < dates[i + 1]) {
-      return false;
+class GranuleDateList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hoveredItem: null,
+      lastMovedItem: null,
+      sorted: true,
+      items: [],
+    };
+    this.onDragEnd = this.onDragEnd.bind(this);
+  }
+
+  componentDidMount() {
+    const { granuleDates } = this.props;
+    this.setItems(granuleDates);
+    this.checkGranuleDateSorting(granuleDates);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { granuleDates } = this.props;
+    if (JSON.stringify(granuleDates) !== JSON.stringify(prevProps.granuleDates)) {
+      this.setItems(granuleDates);
+      this.checkGranuleDateSorting(granuleDates);
     }
   }
-  return true;
-};
 
-function SortableGranuleItem(props) {
-  const {
-    date,
-    index,
-    itemsLength,
-    hoveredItem,
-    lastMovedItem,
-    onMouseEnter,
-    onMouseLeave,
-    onMoveUp,
-    onMoveDown,
-  } = props;
-
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({ id: date });
-
-  const sortableStyle = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
-
-  const renderDownBtn = () => index < itemsLength - 1 && (
-    <button
-      type="button"
-      className="granule-date-item-down-button"
-      onPointerDown={(e) => e.stopPropagation()}
-      onClick={(e) => onMoveDown(e, index, date)}
-    >
-      <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth widthAuto />
-    </button>
-  );
-  const renderUpBtn = () => index > 0 && (
-    <button
-      type="button"
-      className="granule-date-item-up-button"
-      onPointerDown={(e) => e.stopPropagation()}
-      onClick={(e) => onMoveUp(e, index, date)}
-    >
-      <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth widthAuto />
-    </button>
-  );
-
-  return (
-    <div
-      className="granule-date-item"
-      onMouseEnter={() => onMouseEnter(date)}
-      onMouseLeave={() => onMouseLeave()}
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      style={getItemStyle(
-        isDragging,
-        hoveredItem === date,
-        lastMovedItem === date,
-        sortableStyle,
-      )}
-    >
-      <div className="granule-date monospace">
-        {date}
-      </div>
-      <div className="granule-date-buttons">
-        {renderDownBtn()}
-        {renderUpBtn()}
-      </div>
-    </div>
-  );
-}
-
-function GranuleDateList(props) {
-  const {
-    def,
-    granuleCount,
-    granuleDates,
-    resetGranuleLayerDates,
-    granulePlatform,
-    screenHeight,
-    updateGranuleLayerOptions,
-  } = props;
-
-  const [hoveredItem, setHoveredItem] = useState(null);
-  const [lastMovedItem, setLastMovedItem] = useState(null);
-  const [sorted, setSorted] = useState(true);
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    const newItems = granuleDates || [];
-    setItems(newItems);
-    setSorted(checkGranuleDateSorting(newItems));
-  }, [granuleDates]);
-
-  const onDragEnd = (event) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
-
-    const sourceIndex = items.indexOf(active.id);
-    const destinationIndex = items.indexOf(over.id);
-    if (sourceIndex < 0 || destinationIndex < 0 || sourceIndex === destinationIndex) return;
-
-    const reorderedItems = arrayMove(items, sourceIndex, destinationIndex);
-    setItems(reorderedItems);
-    setSorted(checkGranuleDateSorting(reorderedItems));
+  // handle update on complete granule item drag
+  onDragEnd = (result) => {
+    const { updateGranuleLayerOptions, granuleCount, def } = this.props;
+    // dropped granule outside the list
+    if (!result.destination) {
+      return;
+    }
+    const reorderedItems = this.reorderItems(
+      result.source.index,
+      result.destination.index,
+    );
     updateGranuleLayerOptions(reorderedItems, def, granuleCount);
-    setLastMovedItem(active.id);
+    this.setState({
+      lastMovedItem: result.draggableId, // granule date
+    });
   };
 
-  const moveUp = (e, sourceIndex, granuleDate) => {
+  // move granule item to top of list
+  moveUp = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    if (sourceIndex <= 0) return;
-    const reorderedItems = arrayMove(items, sourceIndex, sourceIndex - 1);
-    setItems(reorderedItems);
-    setSorted(checkGranuleDateSorting(reorderedItems));
+    const { updateGranuleLayerOptions, granuleCount, def } = this.props;
+    const reorderedItems = this.reorderItems(
+      sourceIndex,
+      sourceIndex - 1,
+    );
     updateGranuleLayerOptions(reorderedItems, def, granuleCount);
-    setLastMovedItem(granuleDate);
+    this.setState({
+      lastMovedItem: granuleDate,
+    });
   };
 
-  const moveDown = (e, sourceIndex, granuleDate) => {
+  // move granule item to top of list
+  moveDown = (e, sourceIndex, granuleDate) => {
     e.preventDefault();
-    if (sourceIndex >= items.length - 1) return;
-    const reorderedItems = arrayMove(items, sourceIndex, sourceIndex + 1);
-    setItems(reorderedItems);
-    setSorted(checkGranuleDateSorting(reorderedItems));
+    const { updateGranuleLayerOptions, granuleCount, def } = this.props;
+    const reorderedItems = this.reorderItems(
+      sourceIndex,
+      sourceIndex + 1,
+    );
     updateGranuleLayerOptions(reorderedItems, def, granuleCount);
-    setLastMovedItem(granuleDate);
+    this.setState({
+      lastMovedItem: granuleDate,
+    });
   };
 
-  const onClickReset = (e) => {
+  // reorder granule items based on source and target index
+  reorderItems = (sourceIndex, destinationIndex) => {
+    const { items } = this.state;
+    const reorderedItems = reorder(
+      items,
+      sourceIndex,
+      destinationIndex,
+    );
+    return reorderedItems;
+  };
+
+  // reset granule order
+  onClickReset = (e) => {
     e.preventDefault();
+    const { resetGranuleLayerDates, def } = this.props;
     resetGranuleLayerDates(def.id);
-    setLastMovedItem(null);
+    this.setState({
+      lastMovedItem: null,
+    });
   };
 
-  const handleMouseOverItem = (granuleDate) => {
+  // set local granule item state
+  setItems = (items) => {
+    this.setState({
+      items,
+    });
+  };
+
+  // handle mouse over item
+  handleMouseOverItem = (granuleDate) => {
+    const { granulePlatform } = this.props;
     events.trigger(GRANULE_HOVERED, granulePlatform, granuleDate);
-    setHoveredItem(granuleDate);
+    this.setState({
+      hoveredItem: granuleDate,
+    });
   };
 
-  const handleMouseLeaveItem = () => {
+  // handle mouse leave item
+  handleMouseLeaveItem = () => {
+    const { granulePlatform } = this.props;
     events.trigger(GRANULE_HOVERED, granulePlatform, null);
-    setHoveredItem(null);
+    this.setState({
+      hoveredItem: null,
+    });
   };
 
-  const maxNumItemsNoScrollNeeded = 8;
-  const needsScrollBar = items.length > maxNumItemsNoScrollNeeded;
-  const listStyle = useMemo(
-    () => getListStyle(needsScrollBar, items, screenHeight),
-    [needsScrollBar, items, screenHeight],
-  );
+  // determine if grnaule dates are in order - used for RESET button toggle
+  checkGranuleDateSorting = (granuleDates) => {
+    const { sorted } = this.state;
+    let isSorted = true;
+    for (let i = 0; i < granuleDates.length - 1; i += 1) {
+      if (granuleDates[i] < granuleDates[i + 1]) {
+        isSorted = false;
+        break;
+      }
+    }
+    if (sorted !== isSorted) {
+      this.setState({
+        sorted: isSorted,
+      });
+    }
+  };
 
-  return (
-    <div className="layer-granule-date-draggable-list" style={{ paddingLeft: '4px', marginBottom: '14px' }}>
-      <h2 className="wv-header">
-        Granule Layer Date Order
-        <span style={{ float: 'right' }}>
-          <Button
-            onClick={(e) => onClickReset(e)}
-            className="granule-list-reset-button"
-            block={false}
-            style={{ lineHeight: '6px' }}
-            disabled={sorted}
-            color={sorted ? 'secondary' : 'primary'}
+  renderDraggableGranule = (date, index) => {
+    const {
+      items,
+      hoveredItem,
+      lastMovedItem,
+    } = this.state;
+    const renderDownBtn = () => index < items.length - 1 && (
+      <button
+        type="button"
+        className="granule-date-item-down-button"
+        onClick={(e) => this.moveDown(e, index, date)}
+      >
+        <FontAwesomeIcon icon={faArrowCircleDown} fixedWidth widthAuto />
+      </button>
+    );
+    const renderUpBtn = () => index > 0 && (
+      <button
+        type="button"
+        className="granule-date-item-up-button"
+        onClick={(e) => this.moveUp(e, index, date)}
+      >
+        <FontAwesomeIcon icon={faArrowCircleUp} fixedWidth widthAuto />
+      </button>
+    );
+
+    return (
+      <Draggable
+        key={date}
+        draggableId={date}
+        index={index}
+        direction="vertical"
+      >
+        {(provided, snapshot) => (
+          <div
+            className="granule-date-item"
+            onMouseEnter={() => this.handleMouseOverItem(date)}
+            onMouseLeave={() => this.handleMouseLeaveItem()}
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={getItemStyle(
+              snapshot.isDragging,
+              hoveredItem === date,
+              lastMovedItem === date,
+              provided.draggableProps.style,
+            )}
           >
-            RESET
-          </Button>
-        </span>
-      </h2>
-      {items.length > 0
-        ? (
-          <DndContext
-            collisionDetection={closestCenter}
-            onDragEnd={onDragEnd}
-          >
-            <SortableContext
-              items={items}
-              strategy={verticalListSortingStrategy}
-            >
-              <div style={listStyle}>
-                {items.map((date, index) => (
-                  <SortableGranuleItem
-                    key={date}
-                    date={date}
-                    index={index}
-                    itemsLength={items.length}
-                    hoveredItem={hoveredItem}
-                    lastMovedItem={lastMovedItem}
-                    onMouseEnter={handleMouseOverItem}
-                    onMouseLeave={handleMouseLeaveItem}
-                    onMoveUp={moveUp}
-                    onMoveDown={moveDown}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
-        )
-        : (
-          <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
-            <p className="granule-date-item-no-granules-available">No granules available.</p>
-            <br />
+            <div className="granule-date monospace">
+              {date}
+            </div>
+            <div className="granule-date-buttons">
+              {renderDownBtn()}
+              {renderUpBtn()}
+            </div>
           </div>
         )}
-    </div>
-  );
+      </Draggable>
+    );
+  };
+
+  render() {
+    const { items, sorted } = this.state;
+    const { screenHeight, def } = this.props;
+    const maxNumItemsNoScrollNeeded = 8;
+    const granuleDateLength = items.length;
+    const needsScrollBar = granuleDateLength > maxNumItemsNoScrollNeeded;
+    const droppableId = `droppable-granule-date-list-${def.id}`;
+
+    return (
+      <div className="layer-granule-date-draggable-list" style={{ paddingLeft: '4px', marginBottom: '14px' }}>
+        <h2 className="wv-header">
+          Granule Layer Date Order
+          <span style={{ float: 'right' }}>
+            <Button
+              onClick={(e) => this.onClickReset(e)}
+              className="granule-list-reset-button"
+              block={false}
+              style={{ lineHeight: '6px' }}
+              disabled={sorted}
+              color={sorted ? 'secondary' : 'primary'}
+            >
+              RESET
+            </Button>
+          </span>
+        </h2>
+        {items.length > 0
+          ? (
+
+            <DragDropContext onDragEnd={this.onDragEnd}>
+              <Droppable
+                droppableId={droppableId}
+                direction="vertical"
+                type="granule"
+              >
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    style={getListStyle(needsScrollBar, items, screenHeight)}
+                    {...provided.droppableProps}
+                  >
+                    {items.map(this.renderDraggableGranule)}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
+            </DragDropContext>
+
+          )
+          : (
+            <div style={{ marginBottom: '14px', color: '#a0a0a0' }}>
+              <p className="granule-date-item-no-granules-available">No granules available.</p>
+              <br />
+            </div>
+          )}
+      </div>
+    );
+  }
 }
 
 GranuleDateList.propTypes = {
@@ -273,19 +305,8 @@ GranuleDateList.propTypes = {
   resetGranuleLayerDates: PropTypes.func,
   granulePlatform: PropTypes.string,
   screenHeight: PropTypes.number,
+  toggleHoveredGranule: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,
 };
 
 export default GranuleDateList;
-
-SortableGranuleItem.propTypes = {
-  date: PropTypes.string,
-  index: PropTypes.number,
-  itemsLength: PropTypes.number,
-  hoveredItem: PropTypes.string,
-  lastMovedItem: PropTypes.string,
-  onMouseEnter: PropTypes.func,
-  onMouseLeave: PropTypes.func,
-  onMoveUp: PropTypes.func,
-  onMoveDown: PropTypes.func,
-};

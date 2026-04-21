@@ -30,12 +30,7 @@ export function mapLocationToProjState(parameters, stateFromLocationObj, state) 
     const selected = lodashGet(state, `config.projections.${projId}`);
     if (selected) {
       stateFromLocation = update(stateFromLocation, {
-        proj: {
-          $set: {
-            ...(lodashGet(stateFromLocation, 'proj') || {}),
-            selected,
-          },
-        },
+        proj: { selected: { $set: selected } },
       });
     }
   } else if (parameters.switch) {
@@ -51,12 +46,7 @@ export function mapLocationToProjState(parameters, stateFromLocationObj, state) 
   } else {
     const selected = lodashGet(state, 'config.projections.geographic');
     stateFromLocation = update(stateFromLocation, {
-      proj: {
-        $set: {
-          ...(lodashGet(stateFromLocation, 'proj') || {}),
-          selected,
-        },
-      },
+      proj: { selected: { $set: selected } },
     });
   }
   return stateFromLocation;

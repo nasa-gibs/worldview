@@ -188,8 +188,8 @@ sup {
   top: -0.5em;
 }
 
-*:focus:not(:focus-visible),
-button:focus:not(:focus-visible) {
+[data-whatintent="mouse"] *:focus,
+[data-whatintent="mouse"] button:focus {
   outline: 0;
 }
 

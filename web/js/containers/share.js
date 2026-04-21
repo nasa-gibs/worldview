@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import copy from 'copy-to-clipboard';
@@ -155,13 +155,6 @@ class ShareLinkContainer extends Component {
     if (feedbackEnabled) sendFeedback(feedbackIsInitiated, isMobile);
   };
 
-  handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      return this.openFeedback();
-    }
-    return null;
-  };
-
   renderNavTabs = () => {
     const { embedDisableNavLink, isMobile } = this.props;
     const { activeTab } = this.state;
@@ -247,20 +240,18 @@ class ShareLinkContainer extends Component {
       activeTab,
       isShort,
     } = this.state;
-    const shortLinkValue = isShort &&
-          shortLink.response &&
-          shortLink.response.link
-      ? shortLink.response.link
-      : this.getPermalink();
     const value = shortLink.isLoading && isShort
       ? 'Please wait...'
-      : shortLinkValue;
+      : isShort
+          && shortLink.response
+          && shortLink.response.link
+        ? shortLink.response.link
+        : this.getPermalink();
 
     const url = window.location.href;
     const preventShorten = url.length > 2048;
     const isDisabled = shortLink.isLoading || preventShorten;
-    const shortenWarning = preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time';
-    const tooltipText = isDisabled ? shortenWarning : '';
+    const tooltipText = isDisabled ? preventShorten ? 'URL has too many characters to shorten' : 'Link cannot be shortened at this time' : '';
 
     return (
       <TabPane tabId="link" className="share-tab-link">
@@ -302,7 +293,7 @@ class ShareLinkContainer extends Component {
             <p>
               Please
               {' '}
-              <a role="link" tabIndex={0} onKeyDown={this.handleKeyDown} onClick={this.openFeedback} id="feedback-url">contact us</a>
+              <a onClick={this.openFeedback} id="feedback-url">contact us</a>
               {' '}
               to enable Worldview embedding on your website.
             </p>

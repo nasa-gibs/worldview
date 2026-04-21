@@ -1,3 +1,0 @@
-test('load util test', () => {
-
-});

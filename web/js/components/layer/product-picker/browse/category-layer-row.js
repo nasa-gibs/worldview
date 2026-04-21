@@ -21,6 +21,7 @@ import {
   hasMeasurementSetting as hasSettingSelector,
 } from '../../../../modules/layers/selectors';
 
+
 /**
  * A single category result row
  * @class CategoryLayerRow
@@ -179,12 +180,12 @@ class CategoryLayerRow extends React.Component {
         <TabContent id={`${measurement.id}-${sources[validActiveIndex].id}`}>
           <TabPane>
             {this.renderSourceSettings(sources[validActiveIndex])}
-            {isMobile &&
-              (
-                <MeasurementMetadataDetail
-                  source={sources[validActiveIndex]}
-                  isMobile={isMobile}
-                />
+            {isMobile
+              && (
+              <MeasurementMetadataDetail
+                source={sources[validActiveIndex]}
+                isMobile={isMobile}
+              />
               )}
           </TabPane>
         </TabContent>
@@ -210,9 +211,8 @@ class CategoryLayerRow extends React.Component {
         id={`accordion-${category.id}-${measurement.id}`}
         key={`${category.id}-${measurement.id}`}
       >
-        <button
+        <div
           onClick={() => selectMeasurement(id)}
-          type="button"
           className="measurement-row-header"
         >
           <h3>{measurement.title}</h3>
@@ -220,7 +220,7 @@ class CategoryLayerRow extends React.Component {
           {isSelected
             ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" widthAuto />
             : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" widthAuto />}
-        </button>
+        </div>
         {isSelected ? this.renderContent() : ''}
       </div>
     );

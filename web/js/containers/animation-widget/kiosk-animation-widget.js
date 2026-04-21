@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { formatKioskDate } from '../../components/kiosk/util';
 
@@ -32,3 +33,4 @@ KioskAnimationWidget.propTypes = {
 };
 
 export default KioskAnimationWidget;
+

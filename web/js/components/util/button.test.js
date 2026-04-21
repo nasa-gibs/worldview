@@ -1,3 +1,0 @@
-test('button component test', () => {
-
-});

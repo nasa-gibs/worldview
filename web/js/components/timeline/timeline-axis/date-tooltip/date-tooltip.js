@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { getDaysInYear, getDisplayDate } from '../../date-util';
 
@@ -151,13 +151,12 @@ class DateTooltip extends Component {
 
     const tooltipStyle = this.getTooltipStyle(showDraggerTooltip, showHoverTooltip);
 
-    const doyValue = dayOfYear < 100
-      ? `0${dayOfYear}`
-      : dayOfYear;
     // add leading zero(s) for single digits
     dayOfYear = dayOfYear < 10
       ? `00${dayOfYear}`
-      : doyValue;
+      : dayOfYear < 100
+        ? `0${dayOfYear}`
+        : dayOfYear;
 
     const tooltipClass = `date-tooltip ${shouldDisplayDraggerTooltip ? 'date-tooltip-fade' : ''}`;
     return (

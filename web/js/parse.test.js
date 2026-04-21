@@ -1,3 +1,0 @@
-test('parse test', () => {
-
-});

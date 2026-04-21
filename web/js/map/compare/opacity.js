@@ -7,15 +7,13 @@ import { COMPARE_MOVE_END } from '../../util/constants';
 
 const { events } = util;
 
+let slider;
 let value = 50;
 
 export default class Opacity {
   constructor(olMap, store, eventListenerStringObj, valueOverride) {
     this.map = olMap;
     this.sliderCase = document.createElement('div');
-    this.root = createRoot(this.sliderCase);
-    this.mapCase = null;
-    this.isDestroyed = false;
     value = Number(valueOverride) || value;
     this.create(store);
   }
@@ -25,7 +23,7 @@ export default class Opacity {
     const { dateA, dateB } = getCompareDates(state);
     this.dateA = dateA;
     this.dateB = dateB;
-    this.renderSlider(this.map.getLayers().getArray());
+    slider = this.createSlider(this.map.getLayers().getArray());
     this.oninput(value);
   }
 
@@ -35,36 +33,22 @@ export default class Opacity {
   update(store) {
     const state = store.getState();
     const { dateA, dateB } = getCompareDates(state);
-    this.dateA = dateA;
-    this.dateB = dateB;
-    this.renderSlider(this.map.getLayers().getArray());
-    this.oninput(value);
+    if (dateA !== this.dateA || dateB !== this.dateB) {
+      this.destroy();
+      this.create(store);
+    } else {
+      [this.firstLayer, this.secondLayer] = this.map.getLayers().getArray();
+      this.oninput(value);
+    }
   }
 
   /**
    * Remove all nodes
    */
   destroy() {
-    if (this.isDestroyed) return;
-    this.isDestroyed = true;
-
-    const root = this.root;
-    const sliderCase = this.sliderCase;
-    const mapCase = this.mapCase;
-
-    // Prevent further renders immediately.
-    this.root = null;
-
-    // Avoid unmounting during an in-progress React render elsewhere.
-    setTimeout(() => {
-      try {
-        root?.unmount();
-      } finally {
-        if (mapCase && sliderCase && sliderCase.parentNode === mapCase) {
-          mapCase.removeChild(sliderCase);
-        }
-      }
-    }, 0);
+    const root = createRoot(slider);
+    root.unmount(slider);
+    this.mapCase.removeChild(slider);
   }
 
   /**
@@ -72,22 +56,19 @@ export default class Opacity {
    * @param {Object} map | OL Map Object
    * @param {Object} secondLayer | Second layer group on Map
    */
-  renderSlider(layerArray) {
-    if (this.isDestroyed || !this.root) return;
+  createSlider(layerArray) {
     [this.firstLayer, this.secondLayer] = layerArray;
-    if (!this.mapCase) {
-      this.mapCase = document.getElementById('wv-map');
-    }
+    this.mapCase = document.getElementById('wv-map');
     const Props = {
       onSlide: this.oninput.bind(this),
       value,
       dateA: this.dateA,
       dateB: this.dateB,
     };
-    if (this.mapCase && this.sliderCase.parentNode !== this.mapCase) {
-      this.mapCase.appendChild(this.sliderCase);
-    }
-    this.root.render(React.createElement(OpacitySlider, Props));
+    this.mapCase.appendChild(this.sliderCase);
+    const root = createRoot(this.sliderCase);
+    root.render(React.createElement(OpacitySlider, Props));
+    return this.sliderCase;
   }
 
   /**

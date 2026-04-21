@@ -60,7 +60,6 @@ export function dateReducer(state = dateReducerState, action) {
         customInterval: interval,
         customDelta: delta,
         customSelected: !(!interval && !delta),
-        autoSelected: false,
       };
     }
     case CHANGE_AUTO_INTERVAL: {
@@ -68,7 +67,6 @@ export function dateReducer(state = dateReducerState, action) {
       return {
         ...state,
         autoSelected,
-        customSelected: false,
       };
     }
     case CHANGE_INTERVAL:

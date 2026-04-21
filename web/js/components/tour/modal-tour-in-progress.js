@@ -7,11 +7,6 @@ import { Close } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui'
 import Steps from './widget-steps';
 
 class ModalInProgress extends React.Component {
-  constructor(props) {
-    super(props);
-    this.stepContentRef = React.createRef();
-  }
-
   render() {
     const {
       className,
@@ -27,7 +22,7 @@ class ModalInProgress extends React.Component {
     } = this.props;
     const closeBtn = (
       <button className={isKioskModeActive ? 'd-none' : 'end-tour-close-btn'} onClick={endTour} type="button">
-        <Close className="add-plus" size="14px" />
+        <Close class="add-plus" size="14px" />
       </button>
     );
     return (
@@ -47,12 +42,12 @@ class ModalInProgress extends React.Component {
             <i className="modal-icon" aria-hidden="true" />
           </ModalHeader>
           <ModalBody>
-            { }
+            {/* eslint-disable */}
             <div
-              ref={this.stepContentRef}
+              ref="stepContent"
               dangerouslySetInnerHTML={{ __html: description }}
             />
-            { }
+            {/* eslint-enable */}
           </ModalBody>
           <ModalFooter>
             <Steps

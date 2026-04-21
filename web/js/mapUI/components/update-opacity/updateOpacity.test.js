@@ -1,3 +1,0 @@
-test('updateOpacity mapUI test', () => {
-
-});

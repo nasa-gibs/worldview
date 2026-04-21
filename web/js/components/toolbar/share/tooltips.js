@@ -1,4 +1,5 @@
-import { PureComponent } from 'react';
+/* eslint-disable react/destructuring-assignment */
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {
   Tooltip,

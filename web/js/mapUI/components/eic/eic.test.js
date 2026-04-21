@@ -1,3 +1,0 @@
-test('eic mapUI test', () => {
-
-});

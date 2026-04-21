@@ -29,6 +29,7 @@ export function mapIsExtentValid(extentBound) {
     extent = extent.toArray();
   }
   lodashEach(extent, (value) => {
+    // eslint-disable-next-line no-restricted-globals
     if (isNaN(value)) {
       valid = false;
       return false;
@@ -228,6 +229,7 @@ export function mapAdjustAntiMeridian(polygon, adjustSign) {
  *
  */
 export function mapDistance2D(p1, p2) {
+  // eslint-disable-next-line no-restricted-properties
   return Math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2);
 }
 

@@ -6,6 +6,7 @@ import {
 } from './constants';
 import { getCollectionsUrl, getConceptUrl } from './selectors';
 
+// eslint-disable-next-line import/prefer-default-export
 export function selectCollection(conceptId, layerId) {
   return {
     type: SELECT_COLLECTION,
@@ -91,3 +92,4 @@ export function validateLayersConceptIds (layers) {
     }
   };
 }
+

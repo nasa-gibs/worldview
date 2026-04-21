@@ -1,3 +1,0 @@
-test('wait component test', () => {
-
-});
