@@ -1,0 +1,3 @@
+test('globalEventListener util test', () => {
+
+});

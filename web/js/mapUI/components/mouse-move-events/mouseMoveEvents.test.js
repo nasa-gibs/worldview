@@ -1,0 +1,3 @@
+test('mouseMoveEvents mapUI test', () => {
+
+});

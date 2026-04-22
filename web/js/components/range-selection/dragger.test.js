@@ -1,0 +1,3 @@
+test('dragger component test', () => {
+
+});

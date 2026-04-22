@@ -1,0 +1,3 @@
+test('checkbox component test', () => {
+
+});

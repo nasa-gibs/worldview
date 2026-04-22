@@ -1,0 +1,3 @@
+test('updateProjection mapUI test', () => {
+
+});

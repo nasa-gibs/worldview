@@ -1,0 +1,3 @@
+test('rotation component test', () => {
+
+});
