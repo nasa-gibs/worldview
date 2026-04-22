@@ -2,11 +2,10 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
-  cloneDeep as lodashCloneDeep,
   findIndex as lodashFindIndex,
   find as lodashFind,
 } from 'lodash';
-import { getActiveLayers } from '../../../modules/layers/selectors';
+import { getLayers } from '../../../modules/layers/selectors';
 import * as layerConstants from '../../../modules/layers/constants';
 import { clearPreload as clearPreloadAction } from '../../../modules/date/actions';
 import { DISPLAY_STATIC_MAP } from '../../../modules/ui/constants';
@@ -14,13 +13,13 @@ import { DISPLAY_STATIC_MAP } from '../../../modules/ui/constants';
 function AddLayer(props) {
   const {
     action,
-    activeLayersState,
     activeString,
     clearPreload: dispatchClearPreload,
     compareDate,
     compareMapUi,
     mode,
     preloadNextTiles,
+    projFilteredLayers,
     updateLayerVisibilities,
     ui,
   } = props;
@@ -37,9 +36,9 @@ function AddLayer(props) {
     try {
       const { createLayer } = ui;
       const date = layerDate || compareDate;
-      const activeLayers = activeLayersParam || activeLayersState;
-      const reverseLayers = lodashCloneDeep(activeLayers).reverse();
+      const reverseLayers = projFilteredLayers;
       const index = lodashFindIndex(reverseLayers, { id: def.id });
+      if (index === -1) return;
       const mapLayers = ui.selected.getLayers().getArray();
       const firstLayer = mapLayers[0];
 
@@ -133,13 +132,14 @@ function AddLayer(props) {
 }
 
 const mapStateToProps = (state) => {
-  const { compare, date } = state;
+  const { compare, date, layers, proj } = state;
   const { activeString, mode } = compare;
   const { selected, selectedB } = date;
-  const activeLayersState = getActiveLayers(state);
+  const layerState = { layers, compare, proj };
+  const projFilteredLayers = getLayers(layerState, { reverse: true });
   const compareDate = compare.active && activeString === 'activeB' ? selectedB : selected;
   return {
-    activeLayersState,
+    projFilteredLayers,
     compareDate,
     activeString,
     mode,
@@ -160,7 +160,6 @@ export default React.memo(
 );
 
 AddLayer.propTypes = {
-  activeLayersState: PropTypes.array,
   activeString: PropTypes.string,
   action: PropTypes.object,
   clearPreload: PropTypes.func,
@@ -168,6 +167,7 @@ AddLayer.propTypes = {
   compareMapUi: PropTypes.object,
   mode: PropTypes.string,
   preloadNextTiles: PropTypes.func,
+  projFilteredLayers: PropTypes.array,
   selected: PropTypes.object,
   updateLayerVisibilities: PropTypes.func,
   ui: PropTypes.object,
