@@ -52,6 +52,7 @@ function CombineUI(props) {
 
   const cache = new Cache(400);
   const layerQueue = new PQueue({ concurrency: 3 });
+  const layerCreationQueue = new PQueue({ concurrency: 6 });
   const compareMapUi = mapCompare(store);
   const runningdata = new MapRunningData(compareMapUi, store);
   const { createLayer, layerKey } = mapLayerBuilder(config, cache, store);
@@ -123,6 +124,7 @@ function CombineUI(props) {
       ui={ui}
       setUI={setUI}
       layerQueue={layerQueue}
+      layerCreationQueue={layerCreationQueue}
     />
   );
 }

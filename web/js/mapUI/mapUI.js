@@ -68,6 +68,7 @@ function MapUI(props) {
     isStaticMapActive,
     isTravelModeActive,
     lastArrowDirection,
+    layerCreationQueue,
     layerQueue,
     lastPreloadDate,
     layers,
@@ -379,6 +380,7 @@ function MapUI(props) {
         compareMapUi={compareMapUi}
         config={config}
         getGranuleOptions={getGranuleOptions}
+        layerCreationQueue={layerCreationQueue}
         models={models}
         preloadForCompareMode={preloadForCompareMode}
         projectionTrigger={projectionTrigger}
@@ -521,6 +523,7 @@ MapUI.propTypes = {
   isStaticMapActive: PropTypes.bool,
   isTravelModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
+  layerCreationQueue: PropTypes.object,
   layerQueue: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   lastPreloadDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),

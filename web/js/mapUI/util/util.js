@@ -258,6 +258,7 @@ export async function loadLayersWithSlots({
   defs,
   createLayer,
   mapUI,
+  queue,
   updateLayerVisibilities,
   getLayerOptions,
 }) {
@@ -288,27 +289,34 @@ export async function loadLayersWithSlots({
     updateLayerVisibilities?.();
   };
 
-  const layerPromises = defs.map(async (def, index) => {
-    try {
-      const options = getLayerOptions?.(def) || {};
-      const layer = await createLayer(def, options);
+  // Yield to the browser event loop so the render pipeline can run between layers.
+  const yieldToMain = () => new Promise((resolve) => { setTimeout(resolve, 0); });
 
-      if (layer) {
-        layerSlots[index] = layer;
+  const layerPromises = defs.map((def, index) => {
+    const task = async () => {
+      try {
+        const options = getLayerOptions?.(def) || {};
+        const layer = await createLayer(def, options);
 
-        // Skip if a newer operation has superseded this one.
-        if (currentOpId !== loadOperationId) {
-          return { status: 'fulfilled', value: layer, def, skipped: true };
+        if (layer) {
+          layerSlots[index] = layer;
+
+          // Skip if a newer operation has superseded this one.
+          if (currentOpId !== loadOperationId) {
+            return { status: 'fulfilled', value: layer, def, skipped: true };
+          }
+
+          insertLayerAtCorrectPosition(layer, index);
+          await yieldToMain();
         }
 
-        insertLayerAtCorrectPosition(layer, index);
+        return { status: 'fulfilled', value: layer, def };
+      } catch (error) {
+        console.warn(`Layer creation failed for ${def.id}:`, error);
+        return { status: 'rejected', reason: error, def };
       }
-
-      return { status: 'fulfilled', value: layer, def };
-    } catch (error) {
-      console.warn(`Layer creation failed for ${def.id}:`, error);
-      return { status: 'rejected', reason: error, def };
-    }
+    };
+    return queue ? queue.add(task) : task();
   });
 
   await Promise.allSettled(layerPromises);

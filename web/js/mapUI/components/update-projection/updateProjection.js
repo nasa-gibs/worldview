@@ -40,6 +40,7 @@ function UpdateProjection(props) {
     dateCompareState,
     fitToLeadingExtent,
     getGranuleOptions,
+    layerCreationQueue,
     isKioskModeActive,
     isMobile,
     layerState,
@@ -148,6 +149,7 @@ function UpdateProjection(props) {
         defs,
         createLayer,
         mapUI,
+        queue: layerCreationQueue,
         updateLayerVisibilities,
         getLayerOptions: (def) => {
           const options = getGranuleOptions(
@@ -506,6 +508,7 @@ UpdateProjection.propTypes = {
   dateCompareState: PropTypes.object,
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
+  layerCreationQueue: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   layerState: PropTypes.object,
