@@ -1141,8 +1141,8 @@ p.recharts-tooltip-label {
 .layer-settings-modal {
   width: 300px;
 
-  .wv-checkbox::before {
-    margin-right: 8px;
+  .wv-header {
+    margin-bottom: 12px !important;
   }
 
   @media (max-width: variables.$mobile-max-width) {
@@ -1223,7 +1223,11 @@ p.recharts-tooltip-label {
   }
 
   .layer-threshold-select {
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
+
+    .wv-checkbox label {
+      margin-left: 5px;
+    }
   }
 
   .wv-label-opacity,
@@ -1269,12 +1273,16 @@ p.recharts-tooltip-label {
     margin-left: 6px;
   }
 
+  .wv-palette-selector .wv-header {
+    margin-bottom: 16px !important;
+  }
+
   .layer-opacity-select .wv-header {
     margin-top: 0;
   }
 
   .layer-orbit-tracks .wv-checkbox {
-    margin: 10px 0 10px 10px;
+    margin: 10px 0;
     display: flex;
     align-items: center;
 

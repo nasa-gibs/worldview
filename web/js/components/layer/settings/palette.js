@@ -170,7 +170,7 @@ function PaletteSelect (props) {
       id={`wv-palette-selector${index}`}
     >
       <h2 className="wv-header">Color Palette</h2>
-      <Scrollbar style={{ maxHeight: '200px' }}>
+      <Scrollbar style={{ maxHeight: '165px' }}>
         {renderDefault()}
         {
 
