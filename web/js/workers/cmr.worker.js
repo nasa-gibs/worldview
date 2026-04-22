@@ -1,3 +1,8 @@
+// NOTE: This worker runs as a standalone script (not bundled via webpack),
+// so it cannot import from util/cmr.js. These constants mirror those in util/cmr.js.
+const CMR_BASE_URL = 'https://cmr.earthdata.nasa.gov/search/';
+const CMR_CLIENT_ID = 'Worldview';
+
 /**
  * @method makeTime
  * @param {string} date
@@ -58,9 +63,10 @@ async function requestGranules(params) {
   const granules = [];
   let hits = Infinity;
   let searchAfter = false;
-  const url = `https://cmr.earthdata.nasa.gov/search/granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
+  const url = `${CMR_BASE_URL}granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
   do { // run the query at least once
-    const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'Worldview' } : { 'Client-Id': 'Worldview' };
+    const headers = { 'Client-Id': CMR_CLIENT_ID };
+    if (searchAfter) headers['Cmr-Search-After'] = searchAfter;
     const res = await fetch(url, { headers });
     searchAfter = res.headers.get('Cmr-Search-After');
     hits = parseInt(res.headers.get('Cmr-Hits'), 10);
