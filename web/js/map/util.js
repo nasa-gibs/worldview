@@ -282,24 +282,3 @@ export function extractDateFromTileErrorURL(url) {
   return null;
 }
 
-/**
- * @method getLayerGranuleRanges
- * @param {object} layer
- * @returns {array} granuleDateRanges
- * @description
- * Get granule date ranges for a given layer
-*/
-export function getLayerGranuleRanges(layer) {
-  const worker = new Worker('js/workers/cmr.worker.js');
-  return new Promise((resolve, reject) => {
-    worker.onmessage = (event) => {
-      resolve(event.data);
-      worker.terminate();
-    };
-    worker.onerror = (error) => {
-      reject(error);
-      worker.terminate();
-    };
-    worker.postMessage({ funcName: 'getLayerGranuleRanges', args: [layer] });
-  });
-}
