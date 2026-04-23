@@ -162,9 +162,6 @@ function UpdateProjection(props) {
           if (def.id.includes('TEMPO')) {
             options.tempoCallback = addTEMPODateRanges;
           }
-          if (def.palette) {
-            requestPalette(def.id);
-          }
           return options;
         },
       });
