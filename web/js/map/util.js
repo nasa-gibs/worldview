@@ -281,4 +281,3 @@ export function extractDateFromTileErrorURL(url) {
   console.error('Date not found in the URL.');
   return null;
 }
-

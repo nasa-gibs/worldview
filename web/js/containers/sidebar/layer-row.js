@@ -954,4 +954,5 @@ LayerRow.propTypes = {
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDate: PropTypes.instanceOf(Date),
   describeDomainsUrl: PropTypes.string,
+  cmrBaseUrl: PropTypes.string,
 };
