@@ -149,7 +149,8 @@ function UpdateProjection(props) {
         defs,
         createLayer,
         mapUI,
-        queue: layerCreationQueue,
+        queue: saveCache ? null : layerCreationQueue,
+        skipYield: saveCache,
         updateLayerVisibilities,
         getLayerOptions: (def) => {
           const options = getGranuleOptions(

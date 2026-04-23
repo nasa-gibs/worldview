@@ -259,6 +259,7 @@ export async function loadLayersWithSlots({
   createLayer,
   mapUI,
   queue,
+  skipYield,
   updateLayerVisibilities,
   getLayerOptions,
 }) {
@@ -307,7 +308,7 @@ export async function loadLayersWithSlots({
           }
 
           insertLayerAtCorrectPosition(layer, index);
-          await yieldToMain();
+          if (!skipYield) await yieldToMain();
         }
 
         return { status: 'fulfilled', value: layer, def };
