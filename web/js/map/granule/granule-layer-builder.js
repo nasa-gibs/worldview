@@ -22,19 +22,15 @@ import {
   transformGranulesForProj,
 } from './util';
 import util from '../../util/util';
+import { cmrFetch } from '../../util/cmr';
 
 const { toISOStringSeconds } = util;
 
+const CMR_ERROR_DIALOG_THROTTLE_MS = 30 * 1000;
+
 export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
-  const getGranuleUrl = getGranulesUrlSelector(store.getState());
-  const baseGranuleUrl = getGranuleUrl();
-  const CMR_AJAX_OPTIONS = {
-    url: baseGranuleUrl,
+  const CMR_FETCH_OPTIONS = {
     cache: 'force-cache',
-    headers: { 'Client-Id': 'Worldview' },
-    traditional: true,
-    dataType: 'json',
-    timeout: 30 * 1000,
   };
 
   function dispathCMRErrorDialog (title) {
@@ -47,7 +43,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
 
   const throttleDispathCMRErrorDialog = lodashThrottle(
     dispathCMRErrorDialog.bind(this),
-    CMR_AJAX_OPTIONS.timeout,
+    CMR_ERROR_DIALOG_THROTTLE_MS,
     { leading: true, trailing: false },
   );
 
@@ -80,7 +76,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       showLoading();
       const promises = paramsArray.map((params) => {
         const requestUrl = getGranulesUrl(params);
-        return fetch(requestUrl, CMR_AJAX_OPTIONS);
+        return cmrFetch(requestUrl, CMR_FETCH_OPTIONS);
       });
       const responses = await Promise.allSettled(promises);
       const fulfilledResponses = responses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
