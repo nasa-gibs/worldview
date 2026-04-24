@@ -555,6 +555,10 @@ li.item.productsitem.inmotion,
       line-height: 16px;
     }
   }
+
+  .tooltip-arrow {
+    pointer-events: none;
+  }
 }
 
 .productsitem button.wv-layers-close {

@@ -1,3 +1,7 @@
+// NOTE: This worker runs as a standalone script (not bundled via webpack),
+// so it cannot import from util/cmr.js. These constants mirror those in util/cmr.js.
+const CMR_CLIENT_ID = 'Worldview';
+
 /**
  * @method makeTime
  * @param {string} date
@@ -48,7 +52,7 @@ function mergeSortedGranuleDateRanges(granules) {
  * @description
  * Request granules from CMR
 */
-async function requestGranules(params) {
+async function requestGranules(params, cmrBaseUrl) {
   const {
     shortName,
     extent,
@@ -58,15 +62,16 @@ async function requestGranules(params) {
   const granules = [];
   let hits = Infinity;
   let searchAfter = false;
-  const url = `https://cmr.earthdata.nasa.gov/search/granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
-  do { // run the query at least once
-    const headers = searchAfter ? { 'Cmr-Search-After': searchAfter, 'Client-Id': 'Worldview' } : { 'Client-Id': 'Worldview' };
+  const url = `${cmrBaseUrl}granules.json?shortName=${shortName}&bounding_box=${extent.join(',')}&temporal=${startDate}/${endDate}&sort_key=start_date&pageSize=2000`;
+  do {
+    const headers = { 'Client-Id': CMR_CLIENT_ID };
+    if (searchAfter) headers['Cmr-Search-After'] = searchAfter;
     const res = await fetch(url, { headers });
     searchAfter = res.headers.get('Cmr-Search-After');
     hits = parseInt(res.headers.get('Cmr-Hits'), 10);
     const data = await res.json();
     granules.push(...data.feed.entry);
-  } while (searchAfter || hits > granules.length); // searchAfter will not be present if there are no more results https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html#search-after
+  } while (searchAfter || hits > granules.length);
 
   return granules;
 }
@@ -78,7 +83,7 @@ async function requestGranules(params) {
  * @description
  * Get granule date ranges for a given layer
 */
-async function getLayerGranuleRanges(layer) {
+async function getLayerGranuleRanges(layer, cmrBaseUrl) {
   const extent = [-180, -90, 180, 90];
   const startDate = new Date(layer.startDate).toISOString();
   const endDate = layer.endDate ? new Date(layer.endDate).toISOString() : new Date().toISOString();
@@ -89,9 +94,9 @@ async function getLayerGranuleRanges(layer) {
     startDate,
     endDate,
   };
-  const nrtGranules = await requestGranules(nrtParams);
+  const nrtGranules = await requestGranules(nrtParams, cmrBaseUrl);
   let nonNRTGranules = [];
-  if (shortName.includes('_NRT')) { // if NRT, also get non-NRT granules
+  if (shortName.includes('_NRT')) {
     const nonNRTShortName = shortName.replace('_NRT', '');
     const nonNRTParams = {
       shortName: nonNRTShortName,
@@ -99,7 +104,7 @@ async function getLayerGranuleRanges(layer) {
       startDate,
       endDate,
     };
-    nonNRTGranules = await requestGranules(nonNRTParams);
+    nonNRTGranules = await requestGranules(nonNRTParams, cmrBaseUrl);
   }
   const granules = [...nonNRTGranules, ...nrtGranules];
   const granuleDateRanges = granules.map(({
@@ -117,7 +122,7 @@ const functions = {
 };
 
 onmessage = async (event) => {
-  const { data } = event;
-  const result = await functions[data.operation]?.(...data.args);
+  const { operation, args, cmrBaseUrl } = event.data;
+  const result = await functions[operation]?.(args[0], cmrBaseUrl);
   postMessage(result);
 };

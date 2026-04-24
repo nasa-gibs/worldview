@@ -13,6 +13,7 @@ import { faCircleDot, faCircle } from '@fortawesome/free-solid-svg-icons';
 import googleTagManager from 'googleTagManager';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
 import util from '../../util/util';
+import { buildGranulesUrl, cmrFetch } from '../../util/cmr';
 import {
   getPalette as getPaletteSelector,
   getPaletteLegends,
@@ -104,6 +105,7 @@ function LayerRow (props) {
     map,
     selectedDate,
     describeDomainsUrl,
+    cmrBaseUrl,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -171,10 +173,21 @@ function LayerRow (props) {
           }
           return maxExtent[i];
         });
-        const olderUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=P0Y0M0DT0H0M/${zeroedDate}&sort_key=-start_date&pageSize=1`;
-        const newerUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${extent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&sort_key=-start_date&pageSize=1`;
-        const headers = { 'Client-Id': 'Worldview' };
-        const requests = [fetch(olderUrl, { headers }), fetch(newerUrl, { headers })];
+        const olderUrl = buildGranulesUrl(cmrBaseUrl, {
+          conceptId: conceptID,
+          bbox: extent.join(','),
+          temporal: `P0Y0M0DT0H0M/${zeroedDate}`,
+          sortKey: '-start_date',
+          pageSize: 1,
+        });
+        const newerUrl = buildGranulesUrl(cmrBaseUrl, {
+          conceptId: conceptID,
+          bbox: extent.join(','),
+          temporal: `${zeroedDate}/P0Y0M1DT0H0M`,
+          sortKey: '-start_date',
+          pageSize: 1,
+        });
+        const requests = [cmrFetch(olderUrl), cmrFetch(newerUrl)];
         const responses = await Promise.allSettled(requests);
         const [olderRes, newerRes] = responses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
         if (!olderRes.ok || !newerRes.ok) return;
@@ -762,6 +775,7 @@ const makeMapStateToProps = () => {
     const measurementDescriptionPath = getDescriptionPath(state, ownProps);
     const { ddvZoomAlerts, ddvLocationAlerts } = state.alerts;
     const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
+    const cmrBaseUrl = config?.features?.cmr?.url;
 
     return {
       compare,
@@ -790,6 +804,7 @@ const makeMapStateToProps = () => {
       selectedDate,
       renderedPalette: renderedPalettes[paletteName],
       describeDomainsUrl,
+      cmrBaseUrl,
     };
   };
 };
@@ -939,4 +954,5 @@ LayerRow.propTypes = {
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedDate: PropTypes.instanceOf(Date),
   describeDomainsUrl: PropTypes.string,
+  cmrBaseUrl: PropTypes.string,
 };
