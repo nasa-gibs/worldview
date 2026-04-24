@@ -131,14 +131,22 @@ function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
     }
 
     // discontinuous, add new range
-    if (bufferedStartTime > lastRangeEndTime || keepDateIntervals) {
+    if (bufferedStartTime > lastRangeEndTime) {
+      return [...acc, [makeDateString(startTime), makeDateString(endTime),
+        ...formattedPeriod]];
+    }
+
+    // When keepDateIntervals is true, preserve each interval as a separate
+    // range even if it overlaps — but still skip exact duplicates (handled
+    // by the "within current range" check above).
+    if (keepDateIntervals) {
       return [...acc, [makeDateString(startTime), makeDateString(endTime),
         ...formattedPeriod]];
     }
 
     // intersects current range, merge
     if (bufferedStartTime <= lastRangeEndTime &&
-      bufferedEndTime > lastRangeEndTime && !keepDateIntervals) {
+      bufferedEndTime > lastRangeEndTime) {
       return acc.with(-1, [acc.at(-1)[0], makeDateString(endTime)]);
     }
 

@@ -57,6 +57,14 @@ export class VectorInteractions extends React.Component {
     events.on(MAP_SINGLE_CLICK, this.singleClick);
   }
 
+  componentDidUpdate(prevProps) {
+    const { granuleFootprints } = this.props;
+    const { granuleDate } = this.state;
+    if (granuleDate && prevProps.granuleFootprints !== granuleFootprints) {
+      this.clearGranuleFootprint();
+    }
+  }
+
   componentWillUnmount() {
     events.off(MAP_MOVE_END, this.moveEnd);
     events.off(MAP_MOUSE_MOVE, this.mouseMove);
