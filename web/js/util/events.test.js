@@ -31,3 +31,39 @@ test('any listener called on any event', () => {
   events.trigger('event2');
   expect(listener).toHaveBeenCalledTimes(2);
 });
+
+describe('self.any()', () => {
+  it('throws when no callback is provided', () => {
+    expect(() => events.any()).toThrow('No listener specified');
+  });
+
+  it('throws when callback is null', () => {
+    expect(() => events.any(null)).toThrow('No listener specified');
+  });
+
+  it('registers a listener that is called on any trigger', () => {
+    const listener = jest.fn();
+    events.any(listener);
+    events.trigger('someEvent', 'arg1');
+    expect(listener).toHaveBeenCalledWith('arg1');
+  });
+});
+
+describe('self.trigger() — allListeners', () => {
+  it('calls all-listeners registered via any() with trigger arguments', () => {
+    const listener = jest.fn();
+    events.any(listener);
+    events.trigger('anotherEvent', 'x', 'y');
+    expect(listener).toHaveBeenCalledWith('x', 'y');
+  });
+
+  it('calls multiple any-listeners on trigger', () => {
+    const listener1 = jest.fn();
+    const listener2 = jest.fn();
+    events.any(listener1);
+    events.any(listener2);
+    events.trigger('multiEvent');
+    expect(listener1).toHaveBeenCalled();
+    expect(listener2).toHaveBeenCalled();
+  });
+});

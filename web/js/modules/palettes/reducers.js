@@ -16,7 +16,7 @@ import {
   CLEAR_CUSTOM,
   SET_DISABLED_CLASSIFICATION,
 } from './constants';
-import { INIT_SECOND_LAYER_GROUP } from '../layers/constants';
+import { INIT_SECOND_LAYER_GROUP, SYNC_SECOND_LAYER_GROUP } from '../layers/constants';
 
 export const defaultPaletteState = {
   rendered: {},
@@ -65,6 +65,13 @@ export function paletteReducer(state = defaultPaletteState, action) {
       if (!isEmpty(state.activeB)) return state;
       return lodashAssign({}, state, {
         activeB: lodashCloneDeep(state.active),
+      });
+    case SYNC_SECOND_LAYER_GROUP:
+      // Merge A's palette entries into B. B entries take precedence (listed
+      // second) so existing B-side customizations are preserved; new layers
+      // synced from A get A's palette settings as defaults.
+      return lodashAssign({}, state, {
+        activeB: lodashAssign({}, lodashCloneDeep(state.active), lodashCloneDeep(state.activeB)),
       });
     case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_CUSTOM:
