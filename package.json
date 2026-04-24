@@ -142,7 +142,7 @@
     "stylelint-high-performance-animation": "^1.11.0",
     "tar": "^7.5.13",
     "terser-webpack-plugin": "^5.4.0",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "webpack": "^5.106.2",
     "webpack-bundle-analyzer": "^5.3.0",
     "webpack-cli": "^7.0.2",
