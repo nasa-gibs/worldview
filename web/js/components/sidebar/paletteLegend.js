@@ -269,7 +269,7 @@ function PaletteLegend(props) {
       const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
       const acceptableDifference = isContinuousVectorLayer ? 1 : 2;
       // {label,len,index}
-      legendObj = getLegendObject(legend, colorHex, acceptableDifference, palette);
+      legendObj = getLegendObject(legend, colorHexState, acceptableDifference, palette);
       if (legendObj) {
         percent = getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
@@ -387,19 +387,14 @@ function PaletteLegend(props) {
    * @param {Number} index | Legend Index
    */
   const renderClasses = (legend, legendIndex) => {
-    const activeKeyObj = isRunningDataState && colorHexState &&
-      getLegendObject(legend, colorHexState, 5);
-    const legendClass = activeKeyObj
-      ? 'wv-running wv-palettes-legend wv-palettes-classes'
-      : 'wv-palettes-legend wv-palettes-classes';
     const singleKey = legend.colors.length === 1;
     const legendTooltip = legend.tooltips && legend.tooltips.length ? legend.tooltips[0] : '';
     const trackLabel = layer.track && legendTooltip
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
-    const activeKeyObj = isRunningData && colorHex &&
-      this.getLegendObject(legend, colorHex, 5, palette);
+    const activeKeyObj = isRunningData && colorHexState &&
+      this.getLegendObject(legend, colorHexState, 5, palette);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';
