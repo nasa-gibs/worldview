@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { ListGroupItem, UncontrolledTooltip } from 'reactstrap';
 import { connect } from 'react-redux';
@@ -29,7 +30,11 @@ function MeasurementLayerRow (props) {
     title,
     selectedDate,
     layerNotices,
+    isChartable,
   } = props;
+
+  const [isHoveringChartingIcon, setIsHoveringChartingIcon] = useState(false);
+
   const layerIsUnavailable = !available(layer.id, selectedDate, [layer]);
   const listItemClass = layerIsUnavailable || layerNotices ? 'unavailable' : '';
   // Replace periods in id since period causes issue with tooltip targeting
@@ -60,7 +65,7 @@ function MeasurementLayerRow (props) {
       >
         {layerIsUnavailable && (<FontAwesomeIcon icon="ban" id="availability-info" widthAuto />)}
         {layerNotices && (<FontAwesomeIcon icon="exclamation-triangle" id="notice-info" widthAuto />)}
-        {(layerNotices || layerIsUnavailable) && (
+        {(layerNotices || layerIsUnavailable || isHoveringChartingIcon) && (
           <UncontrolledTooltip
             id="center-align-tooltip"
             target={itemElementId}
@@ -81,7 +86,26 @@ function MeasurementLayerRow (props) {
               </div>
             )}
             {layerNotices && (<div dangerouslySetInnerHTML={{ __html: layerNotices }} />)}
+            {isHoveringChartingIcon && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: 'Create time series charts or get statistics for this layer',
+                }}
+              />
+            )}
           </UncontrolledTooltip>
+        )}
+        {isChartable && (
+          <span
+            className="chartable-icon-wrapper"
+            onMouseEnter={() => setIsHoveringChartingIcon(true)}
+            onMouseLeave={() => setIsHoveringChartingIcon(false)}
+          >
+            <i
+              id={`${layer.id}-chartable-info`}
+              className="layer-notice-icon chartable-icon"
+            />
+          </span>
         )}
       </Checkbox>
     </ListGroupItem>
@@ -90,6 +114,7 @@ function MeasurementLayerRow (props) {
 
 MeasurementLayerRow.propTypes = {
   addLayer: PropTypes.func,
+  isChartable: PropTypes.bool,
   isEnabled: PropTypes.bool,
   isMobile: PropTypes.bool,
   layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
@@ -103,12 +128,15 @@ MeasurementLayerRow.propTypes = {
 const mapStateToProps = (state, ownProps) => {
   const { notifications, screenSize } = state;
   const activeLayerMap = getActiveLayersMap(state);
-  const { id } = ownProps.layer;
+  const { layer } = ownProps;
+  const { id, colormapType, layerPeriod, disableCharting } = layer;
+  const isChartable = Object.prototype.hasOwnProperty.call(layer, 'palette') && Object.prototype.hasOwnProperty.call(layer, 'colormapType') && colormapType === 'continuous' && layerPeriod === 'Daily' && !disableCharting;
   return {
     isEnabled: !!activeLayerMap[id],
     isMobile: screenSize.isMobile,
     selectedDate: getSelectedDate(state),
     layerNotices: getLayerNoticesForLayer(id, notifications),
+    isChartable,
   };
 };
 

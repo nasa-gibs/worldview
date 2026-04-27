@@ -1225,6 +1225,7 @@ class Timeline extends React.Component {
       toggleActiveCompareState,
       proj,
       describeDomainsUrl,
+      cmrBaseUrl,
     } = this.props;
     const {
       animationEndLocation,
@@ -1390,6 +1391,7 @@ class Timeline extends React.Component {
                           matchingTimelineCoverage={matchingTimelineCoverage}
                           proj={proj}
                           describeDomainsUrl={describeDomainsUrl}
+                          cmrBaseUrl={cmrBaseUrl}
                         />
 
                         <AxisHoverLine
@@ -1659,6 +1661,7 @@ function mapStateToProps(state) {
     appNow,
   );
   const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
+  const cmrBaseUrl = config?.features?.cmr?.url;
 
   return {
     appNow,
@@ -1723,6 +1726,7 @@ function mapStateToProps(state) {
     newCustomDelta,
     proj: proj.selected,
     describeDomainsUrl,
+    cmrBaseUrl,
   };
 }
 
@@ -1865,4 +1869,5 @@ Timeline.propTypes = {
   updateAppNow: PropTypes.func,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   describeDomainsUrl: PropTypes.string,
+  cmrBaseUrl: PropTypes.string,
 };
