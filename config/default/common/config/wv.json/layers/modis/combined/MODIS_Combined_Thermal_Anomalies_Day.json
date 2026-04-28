@@ -18,6 +18,16 @@
         "id": "MODIS_All_Thermal_Anomalies",
         "immutable": true
       },
+      "projections": {
+        "geographic": {
+          "resolutionBreakPoint": 0.017578125,
+          "source": "GIBS:wms"
+        },
+        "arctic": {
+          "source": "GIBS:wms:arctic",
+          "resolutionBreakPoint": 2048
+        }
+      },
       "breakPointLayer": {
         "id": "MODIS_Combined_Thermal_Anomalies_Day",
         "type": "wms",

@@ -1,6 +1,7 @@
 {
 	"layerOrder": [
 		"World_Imagery",
+		"AMSRU2_Sea_Ice_Motion_12km_vB04_STD",
 		"ACTIVATE_HU-25_Falcon_Ozone",
 		"ACTIVATE_King_Air_Flight_Track",
 		"AJAX_Alpha_Jet_Ozone",

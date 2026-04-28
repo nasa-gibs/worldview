@@ -1,0 +1,57 @@
+{
+  "layers": {
+    "AMSRU2_Sea_Ice_Motion_12km_vB04_STD": {
+      "id": "AMSRU2_Sea_Ice_Motion_12km_vB04_STD",
+      "title": "Sea Ice Motion",
+      "subtitle": "AU2SI12_MOTION_N_vB04_STD",
+      "tags": "",
+      "group": "overlays",
+      "type": "vector",
+      "ongoing": false,
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "vectorStyle": {
+        "id": "AMSRU2_Sea_Ice_Motion_12km_vB04_STD",
+        "arctic": {
+          "id": "AMSRU2_Sea_Ice_Motion_12km"
+        }
+      },
+      "palette": {
+        "id": "AMSRU2_Sea_Ice_Motion_12km",
+        "immutable": true
+      },
+      "projections": {
+        "geographic": {
+          "source": "GIBS:wms",
+          "resolutionBreakPoint": 0.017578125
+        },
+        "arctic": {
+          "resolutionBreakPoint": 2048,
+          "source": "GIBS:wms:arctic"
+        }
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "id",
+        "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "AMSRU2_Sea_Ice_Motion_12km_vB04_STD",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          },
+          "arctic": {
+            "resolutionBreakPoint": 2048,
+            "source": "GIBS:wms:arctic"
+          }
+        }
+      }
+    }
+  }
+}
