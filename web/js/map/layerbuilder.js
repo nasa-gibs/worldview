@@ -1158,7 +1158,7 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     if (!vectorStyle.url) {
-      applyStyle(def, layer, state, options);
+      applyStyle(def, layer, state, options, tileGrid.getResolutions());
     } else {
       await olmsApplyStyle(layer, vectorStyle.url, {
         resolutions: tileGrid.getResolutions(),
