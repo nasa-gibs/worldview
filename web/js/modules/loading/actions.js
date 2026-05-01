@@ -1,16 +1,15 @@
-import { LOADING_START, LOADING_STOP } from './constants';
+import { LOADING_START, LOADING_STOP, LOADING_LOADING_LIST_ADD, LOADING_LOADED_LIST_ADD } from './constants';
 
 export const LOADING_GRANULES = 'LOADING/GRANULES';
 export const MAP_LOADING = 'LOADING/MAP_LOADING';
 
-export function startLoading(key, msg) {
+export function startLoading(key) {
   return (dispatch, getState) => {
     const { animation } = getState();
     if (animation.isPlaying) return;
     dispatch({
       type: LOADING_START,
       key,
-      msg,
     });
   };
 }
@@ -22,6 +21,28 @@ export function stopLoading(key) {
     dispatch({
       type: LOADING_STOP,
       key,
+    });
+  };
+}
+
+export function addToLoadingList(item) {
+  return (dispatch, getState) => {
+    const { animation } = getState();
+    if (animation.isPlaying) return;
+    dispatch({
+      type: LOADING_LOADING_LIST_ADD,
+      item,
+    });
+  };
+}
+
+export function addToLoadedList(item) {
+  return (dispatch, getState) => {
+    const { animation } = getState();
+    if (animation.isPlaying) return;
+    dispatch({
+      type: LOADING_LOADED_LIST_ADD,
+      item,
     });
   };
 }

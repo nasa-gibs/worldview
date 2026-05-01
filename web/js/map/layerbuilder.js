@@ -48,6 +48,7 @@ import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
+import { addToLoadingList, addToLoadedList } from '../modules/loading/actions';
 
 const componentToHex = (c) => {
   const hex = c.toString(16);
@@ -479,6 +480,14 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const tileSource = new OlSourceWMTS(sourceOptions);
 
+    !day && tileSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && tileSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
+
     const layerTile = new OlLayerTile({
       preload: 0,
       source: tileSource,
@@ -575,6 +584,14 @@ export default function mapLayerBuilder(config, cache, store) {
     }
     const resolutionBreakPoint = lodashGet(def, `breakPointLayer.projections.${proj.id}.resolutionBreakPoint`);
     const tileSource = new OlSourceTileWMS(sourceOptions);
+
+    !day && tileSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && tileSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
 
     const layer = new OlLayerTile({
       preload: 0,
@@ -724,6 +741,14 @@ export default function mapLayerBuilder(config, cache, store) {
         const formattedFeatures = vectorSource.getFormat().readFeatures(geoJson);
         vectorSource.addFeatures(formattedFeatures);
       },
+    });
+
+    !day && vectorSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && vectorSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
     });
 
     let colors = [];
@@ -884,6 +909,14 @@ export default function mapLayerBuilder(config, cache, store) {
       }),
     });
 
+    !day && tileSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && tileSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
+
     const sortMethods = {
       descending: (a, b) => a - b,
       ascending: (a, b) => b - a,
@@ -1002,6 +1035,14 @@ export default function mapLayerBuilder(config, cache, store) {
       },
     });
 
+    !day && cmrSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && cmrSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
+
     const source = config.sources[def.source];
 
     const tileUrlFunction = (tileCoord) => {
@@ -1039,6 +1080,14 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
+
+    !day && xyzSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && xyzSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
 
     const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(options.group === 'active' ? date.selected : date.selectedB)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
@@ -1086,6 +1135,14 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const xyzSource = new OlSourceXYZ(xyzSourceOptions);
 
+    !day && xyzSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && xyzSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
+
     const requestDate = util.toISOStringSeconds(util.roundTimeOneMinute(options.group === 'active' ? date.selected : date.selectedB)).slice(0, 10);
     const className = `${def.id} ${requestDate}`;
 
@@ -1104,11 +1161,19 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const url = `${source.url}/${urlParams}`;
 
+    const imageSource = new OlImageTile({ url });
+
+    !day && imageSource.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && imageSource.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
+
     return new OlLayerTile({
       extent: [-180, -90, 180, 90],
-      source: new OlImageTile({
-        url,
-      }),
+      source: imageSource,
     });
   };
 
@@ -1148,6 +1213,14 @@ export default function mapLayerBuilder(config, cache, store) {
       tileGrid,
     };
     const source = new SourceVectorTile(sourceOptions);
+
+    !day && source.on('tileloadstart', () => {
+      store.dispatch(addToLoadingList?.(def.id));
+    });
+
+    !day && source.on('tileloadend', () => {
+      store.dispatch(addToLoadedList?.(def.id));
+    });
 
     const layer = new LayerVectorTile({
       source,
@@ -1308,6 +1381,14 @@ export default function mapLayerBuilder(config, cache, store) {
         };
       }
       const tileSource = new OlSourceXYZ(sourceOptions);
+
+      !day && tileSource.on('tileloadstart', () => {
+        store.dispatch(addToLoadingList?.(def.id));
+      });
+
+      !day && tileSource.on('tileloadend', () => {
+        store.dispatch(addToLoadedList?.(def.id));
+      });
 
       return new OlLayerTile({
         source: tileSource,

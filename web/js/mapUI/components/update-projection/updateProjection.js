@@ -27,6 +27,7 @@ import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette as requestPaletteAction } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
 import { addTEMPODateRanges as addTEMPODateRangesAction } from '../../../modules/layers/actions';
+import { addToLoadingList as addToLoadingListAction, addToLoadedList as addToLoadedListAction } from '../../../modules/loading/actions';
 import { loadLayersWithSlots } from '../../util/util';
 
 function UpdateProjection(props) {
@@ -56,6 +57,8 @@ function UpdateProjection(props) {
     renderedPalettes,
     requestPalette,
     addTEMPODateRanges,
+    addToLoadingList,
+    addToLoadedList,
   } = props;
 
   const layerStateRef = useRef(layerState);
@@ -113,6 +116,8 @@ function UpdateProjection(props) {
         if (def.id.includes('TEMPO')) {
           options.tempoCallback = addTEMPODateRanges;
         }
+        options.addToLoadingList = addToLoadingList;
+        options.addToLoadedList = addToLoadedList;
         return createLayer(def, options);
       });
     const compareLayerGroup = await Promise.all(layers);
@@ -162,6 +167,8 @@ function UpdateProjection(props) {
           if (def.id.includes('TEMPO')) {
             options.tempoCallback = addTEMPODateRanges;
           }
+          options.addToLoadingList = addToLoadingList;
+          options.addToLoadedList = addToLoadedList;
           return options;
         },
       });
@@ -489,6 +496,12 @@ const mapDispatchToProps = (dispatch) => ({
   addTEMPODateRanges: (layer, dateRanges, activeString) => {
     dispatch(addTEMPODateRangesAction(layer, dateRanges, activeString));
   },
+  addToLoadingList: (item) => {
+    dispatch(addToLoadingListAction(item.id));
+  },
+  addToLoadedList: (item) => {
+    dispatch(addToLoadedListAction(item.id));
+  },
 });
 
 export default connect(
@@ -522,4 +535,6 @@ UpdateProjection.propTypes = {
   renderedPalettes: PropTypes.object,
   requestPalette: PropTypes.func,
   addTEMPODateRanges: PropTypes.func,
+  addToLoadingList: PropTypes.func,
+  addToLoadedList: PropTypes.func,
 };
