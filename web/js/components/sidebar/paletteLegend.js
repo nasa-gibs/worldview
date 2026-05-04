@@ -394,7 +394,7 @@ function PaletteLegend(props) {
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
     const activeKeyObj = isRunningData && colorHexState &&
-      this.getLegendObject(legend, colorHexState, 5, palette);
+      getLegendObject(legend, colorHexState, 5, palette);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'
       : 'wv-palettes-legend wv-palettes-classes';
