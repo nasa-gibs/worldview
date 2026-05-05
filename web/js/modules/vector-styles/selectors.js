@@ -174,7 +174,7 @@ export function setStyleFunction(opts) {
   if (!map) return undefined;
   const { proj } = state;
   const { selected } = state.vectorStyles;
-  const { resolutions } = proj.selected;
+  const resolutions = opts.resolutions || proj.selected.resolutions;
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const customPalette = def.custom;
@@ -315,7 +315,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, s
  * @param {Object} state
  * @param {Object} options
  */
-export const applyStyle = (def, olVectorLayer, state, options) => {
+export const applyStyle = (def, olVectorLayer, state, options, resolutions) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
@@ -333,6 +333,7 @@ export const applyStyle = (def, olVectorLayer, state, options) => {
     state,
     vectorStyleSource,
     styleSelection: false,
+    ...resolutions && { resolutions },
   };
 
   setStyleFunction(opts);
