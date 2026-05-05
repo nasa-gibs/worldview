@@ -117,14 +117,14 @@ test('Closing and reopening layer picker restores state.', async () => {
     layerDetailsDateRange
   } = selectors
   await page.locator('.product-outer-list-case .search-row:nth-child(1)').click()
-  await expect(layerDetailHeader).toContainText('Land Surface Reflectance(True Color)Suomi NPP / VIIRS')
+  await expect(layerDetailHeader).toContainText('Corrected Reflectance(True Color)Terra / MODIS')
   await layersModalCloseButton.click()
   await expect(layersAll).not.toBeVisible()
   await addLayers.click()
   await expect(layersSearchRow).toHaveCount(5)
   await expect(layerResultsCountText).toContainText('Showing 5 out of')
   await expect(layerDetails).toBeVisible()
-  await expect(layerDetailHeader).toContainText('Land Surface Reflectance(True Color)Suomi NPP / VIIRS')
+  await expect(layerDetailHeader).toContainText('Corrected Reflectance(True Color)Terra / MODIS')
   await expect(layerDetailsDateRange).toBeVisible()
   const filterChip = await page.locator('.filter-chip')
   await expect(filterChip).toHaveCount(1)
