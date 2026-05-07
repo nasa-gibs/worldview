@@ -32,7 +32,7 @@ import {
   getGranulePlatform,
 } from '../../../modules/layers/selectors';
 import {
-  setThresholdRangeAndSquash,
+  setThresholdRangeSquashAndNoClip,
   setCustomPalette as setCustomPaletteAction,
   clearCustomPalette as clearCustomPaletteAction,
   setToggledClassification,
@@ -156,6 +156,7 @@ class LayerSettings extends React.Component {
                   end={end}
                   layerId={layer.id}
                   squashed={!!palette.squash}
+                  noclipped={!!palette.noclip}
                   index={i}
                   palette={palette}
                 />
@@ -250,6 +251,7 @@ class LayerSettings extends React.Component {
               layerId={layer.id}
               end={end}
               squashed={!!palette.squash}
+              noclipped={!!palette.noclip}
               groupName={groupName}
               index={0}
               palette={palette}
@@ -404,9 +406,12 @@ const mapDispatchToProps = (dispatch) => ({
       refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
   },
-  setThresholdRange: (layerId, min, max, squash, index, groupName) => {
+  setThresholdRange: (layerId, min, max, squash, noclip, index, groupName) => {
+    const props = {
+      min, max, squash, noclip,
+    };
     dispatch(
-      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName),
+      setThresholdRangeSquashAndNoClip(layerId, props, index, groupName),
     );
   },
   setFilterRange: (layerId, min, max, index, groupName) => {

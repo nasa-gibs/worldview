@@ -9,7 +9,7 @@ import {
   REQUEST_PALETTE_SUCCESS,
   SET_CUSTOM,
   REQUEST_PALETTE_START,
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
   LOADED_CUSTOM_PALETTES,
   BULK_PALETTE_RENDERING_SUCCESS,
   BULK_PALETTE_PRELOADING_SUCCESS,
@@ -73,7 +73,7 @@ export function paletteReducer(state = defaultPaletteState, action) {
       return lodashAssign({}, state, {
         activeB: lodashAssign({}, lodashCloneDeep(state.active), lodashCloneDeep(state.activeB)),
       });
-    case SET_THRESHOLD_RANGE_AND_SQUASH:
+    case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_CUSTOM:
     case SET_DISABLED_CLASSIFICATION:
     case CLEAR_CUSTOM:

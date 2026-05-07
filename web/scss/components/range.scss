@@ -3,12 +3,12 @@
 .form-range {
     &::-moz-range-track {
       height: 6px;
-      background-color: #ccc;
+      background-color: #4f4f4f;
     }
 
     &::-ms-track {
       height: 6px;
-      background-color: #ccc;
+      background-color: #4f4f4f;
     }
 
     // Customize the handle
@@ -45,16 +45,16 @@
       height: 4px;
       background: linear-gradient(
         to right,
-        #ABE2FB 0%,
-        #ABE2FB var(--value-percent, 0%),
-        #ccc var(--value-percent, 0%),
-        #ccc 100%
+        #3e7ac1 0%,
+        #3e7ac1 var(--value-percent, 0%),
+        #4f4f4f var(--value-percent, 0%),
+        #4f4f4f 100%
       );
     }
 
     &:not(.double-range)::-moz-range-progress {
       height: 4px;
-      background-color: variables.$wv-dark-blue;
+      background-color: #3e7ac1;
     }
   }
 
@@ -112,26 +112,26 @@
     border-bottom-right-radius: 0;
     background: linear-gradient(
       to right,
-      #ccc 0%,
-      #ccc var(--min-range-percent),
-      #ABE2FB var(--min-range-percent),
-      #ABE2FB 100%
+      #4f4f4f 0%,
+      #4f4f4f var(--min-range-percent),
+      #3e7ac1 var(--min-range-percent),
+      #3e7ac1 100%
     );
   }
 
   &.start-range::-moz-range-track {
     height: 4px;
-    border: solid 1px #ccc;
+    border: solid 1px #4f4f4f;
     border-left: none;
     border-right: none;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     background: linear-gradient(
       to right,
-      #ccc 0%,
-      #ccc var(--min-range-percent),
-      variables.$wv-dark-blue var(--min-range-percent),
-      variables.$wv-dark-blue 100%
+      #4f4f4f 0%,
+      #4f4f4f var(--min-range-percent),
+      #3e7ac1 var(--min-range-percent),
+      #3e7ac1 100%
     );
   }
 
@@ -140,26 +140,26 @@
     border-bottom-left-radius: 0;
     background: linear-gradient(
       to right,
-      #ABE2FB 0%,
-      #ABE2FB var(--max-range-percent),
-      #ccc var(--max-range-percent),
-      #ccc 100%
+      #3e7ac1 0%,
+      #3e7ac1 var(--max-range-percent),
+      #4f4f4f var(--max-range-percent),
+      #4f4f4f 100%
     );
   }
 
   &.end-range::-moz-range-track {
     height: 4px;
-    border: solid 1px #ccc;
+    border: solid 1px #4f4f4f;
     border-left: none;
     border-right: none;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     background: linear-gradient(
       to right,
-      variables.$wv-dark-blue 0%,
-      variables.$wv-dark-blue var(--max-range-percent),
-      #ccc var(--max-range-percent),
-      #ccc 100%
+      #3e7ac1 0%,
+      #3e7ac1 var(--max-range-percent),
+      #4f4f4f var(--max-range-percent),
+      #4f4f4f 100%
     );
   }
 }

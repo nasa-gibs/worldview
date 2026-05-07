@@ -301,6 +301,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
     let minObj = lodashAssign({}, { key: 'min', array: [] }, DEFAULT_OBJ);
     let maxObj = lodashAssign({}, { key: 'max', array: [] }, DEFAULT_OBJ);
     let squashObj = lodashAssign({}, { key: 'squash', array: [] }, DEFAULT_OBJ);
+    let noClipObj = lodashAssign({}, { key: 'noclip', array: [] }, DEFAULT_OBJ);
     let disabledObj = lodashAssign({}, { key: 'disabled', array: [] }, DEFAULT_OBJ);
     const attrArray = [];
     for (let i = 0; i < count; i += 1) {
@@ -347,6 +348,12 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
         squashObj,
         count,
       );
+      noClipObj = createPaletteAttributeObject(
+        paletteDef,
+        true,
+        noClipObj,
+        count,
+      );
       disabledObj = createPaletteAttributeObject(
         paletteDef,
         disabledValue,
@@ -355,7 +362,7 @@ export function getPaletteAttributeArray(layerId, palettes, state) {
       );
     }
 
-    [palObj, minObj, maxObj, squashObj, disabledObj].forEach((obj) => {
+    [palObj, minObj, maxObj, squashObj, noClipObj, disabledObj].forEach((obj) => {
       if (obj.isActive || (obj.key === 'disabled' && obj.value !== '')) {
         attrArray.push({
           id: obj.key === 'custom' ? 'palette' : obj.key,
@@ -393,6 +400,7 @@ export function loadPalettes(permlinkState, stateObject) {
         const min = [];
         const max = [];
         let squash = [];
+        let noclip = [];
         let count = 0;
         if (layerDef.custom) {
           lodashEach(layerDef.custom, (value, index) => {
@@ -449,6 +457,9 @@ export function loadPalettes(permlinkState, stateObject) {
         if (layerDef.squash) {
           squash = layerDef.squash;
         }
+        if (layerDef.noclip) {
+          noclip = layerDef.noclip;
+        }
         if (layerDef.disabled) {
           lodashEach(layerDef.disabled, (value, index) => {
             try {
@@ -473,7 +484,10 @@ export function loadPalettes(permlinkState, stateObject) {
             const vmin = min.length > 0 ? min[i] : undefined;
             const vmax = max.length > 0 ? max[i] : undefined;
             const vsquash = squash.length > 0 ? squash[i] : undefined;
-            const props = { min: vmin, max: vmax, squash: vsquash };
+            const vnoclip = noclip.length > 0 ? noclip[i] : undefined;
+            const props = {
+              min: vmin, max: vmax, squash: vsquash, noclip: vnoclip,
+            };
             const newPalettes = setRangeSelector(
               layerId,
               props,
