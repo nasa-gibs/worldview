@@ -269,7 +269,6 @@ function AnimationWidget (props) {
   const renderDesktopAnimationWidget = (
     <DesktopAnimationWidget
       animationCustomModalOpen={animationCustomModalOpen}
-      autoplay={autoplay}
       customModalType={customModalType}
       isDistractionFreeModeActive={isDistractionFreeModeActive}
       endDate={endDate}
