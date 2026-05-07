@@ -17,7 +17,6 @@ import {
   getLookup as getPaletteLookup,
 } from '../palettes/selectors';
 import util from '../../util/util';
-import { symbol } from 'prop-types';
 
 /**
  * Get OpenLayers layers from state that were created from WV vector

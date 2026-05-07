@@ -829,49 +829,7 @@ export default function mapLayerBuilder(config, cache, store) {
     if (!source) {
       throw new Error(`${def.id}: Invalid source: ${def.source}`);
     }
-    // const matrixSet = source.matrixSets[def.matrixSet];
-    const matrixSet = {
-      id: '250m',
-      maxResolution: 8192,
-      resolutions: [
-        8192,
-        4096,
-        2048,
-        1024,
-        512,
-        256,
-      ],
-      tileSize: [
-        512,
-        512,
-      ],
-      tileMatrices: [
-        {
-          matrixWidth: 2,
-          matrixHeight: 2,
-        },
-        {
-          matrixWidth: 4,
-          matrixHeight: 4,
-        },
-        {
-          matrixWidth: 8,
-          matrixHeight: 8,
-        },
-        {
-          matrixWidth: 16,
-          matrixHeight: 16,
-        },
-        {
-          matrixWidth: 32,
-          matrixHeight: 32,
-        },
-        {
-          matrixWidth: 64,
-          matrixHeight: 64,
-        },
-      ],
-    };
+    const matrixSet = source.matrixSets[def.matrixSet];
     if (!matrixSet) {
       throw new Error(`${def.id}: Undefined matrix set: ${def.matrixSet}`);
     }
