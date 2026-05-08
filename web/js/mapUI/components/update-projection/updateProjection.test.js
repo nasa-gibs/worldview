@@ -422,7 +422,7 @@ describe('UpdateProjection', () => {
     afterEach(() => { jest.useRealTimers(); });
 
     [
-      paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH,
+      paletteConstants.SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
       paletteConstants.SET_CUSTOM,
       paletteConstants.SET_DISABLED_CLASSIFICATION,
       paletteConstants.CLEAR_CUSTOM,
