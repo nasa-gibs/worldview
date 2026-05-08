@@ -18,7 +18,7 @@ import {
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
 } from '../palettes/constants';
 
 const config = fixtures.config();
@@ -196,16 +196,18 @@ describe('layer Reducer tests', () => {
     expect(response.active.prevLayers).toEqual(initialLayers);
   });
 
-  test('SET_THRESHOLD_RANGE_AND_SQUASH action updates palette-related props [layers-reducer-update-palettes]', () => {
+  test('SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP action updates palette-related props [layers-reducer-update-palettes]', () => {
     const response = layerReducer(initialState, {
-      type: SET_THRESHOLD_RANGE_AND_SQUASH,
-      props: { squash: true, min: 0.3 },
+      type: SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
+      props: { squash: true, noclip: true, min: 0.3 },
       id: 'terra-cr',
       activeString: 'active',
     });
     const responseLayer = getTestLayer(response.active.layers);
     expect(getTestLayer(initialLayers).squash).toEqual(undefined);
+    expect(getTestLayer(initialLayers).noclip).toEqual(undefined);
     expect(responseLayer.squash).toBeTruthy();
+    expect(responseLayer.noclip).toBeTruthy();
     expect(responseLayer.min).toEqual(0.3);
   });
 

@@ -380,7 +380,7 @@ function UpdateProjection(props) {
         return undefined;
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
         return reloadLayers();
-      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
+      case paletteConstants.SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
