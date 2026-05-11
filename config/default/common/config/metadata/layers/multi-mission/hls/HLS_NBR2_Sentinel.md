@@ -19,6 +19,6 @@ This layer contains a mix of imagery from Sentinel-2A, Sentinel-2B, and Sentinel
 - Sentinel-2B: September 18, 2017 to Present
 - Sentinel-2C: January 21, 2025 to Present
 
-This imagery layer is provided dynamically through the [NASA Interagency Implementation and Advanced Concepts Team (IMPACT)](https://www.earthdata.nasa.gov/about/impact). As it is dynamically generated, it may take slightly longer to display than normal. The imagery is only available at higher zoom levels.
+This imagery layer is provided dynamically through the [TiTiler-CMR API](https://developmentseed.org/titiler-cmr/) developed by Office of Data Science and Informatics (ODSI) at Marshall Space Flight Center. As it is dynamically generated, it may take slightly longer to display than normal. The imagery is only available at higher zoom levels.
 
 References: HLSS30 v002 [doi:10.5067/HLS/HLSS30.002](https://doi.org/10.5067/HLS/HLSS30.002)

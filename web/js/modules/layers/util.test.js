@@ -24,7 +24,7 @@ let defaultStateFromLocation = {
 };
 const globalState = fixtures.getState();
 const config = fixtures.config();
-const PALETTE_LAYER_STRING = 'AMSRE_Brightness_Temp_89H_Night(hidden,opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true),mask';
+const PALETTE_LAYER_STRING = 'AMSRE_Brightness_Temp_89H_Night(hidden,opacity=0.54,palette=red_2,min=224,225,max=294,295,squash=true,noclip=true),mask';
 const VECTOR_LAYER_STRING = 'OrbitTracks_Aqua_Ascending(hidden,opacity=0.46,style=yellow1),mask';
 
 test('Layer parser, retrieves correct number of palette layers from permalink string [layers-palette-layers]', () => {
@@ -45,6 +45,11 @@ test('Layer parser, gets squashed boolean from permalink string [layers-squashed
   const layers = layersParse12(PALETTE_LAYER_STRING, config);
   const layer = layers[0];
   expect(layer.squash[0]).toBe(true);
+});
+test('Layer parser, gets noclipped boolean from permalink string [layers-noclipped-boolean]', () => {
+  const layers = layersParse12(PALETTE_LAYER_STRING, config);
+  const layer = layers[0];
+  expect(layer.noclip[0]).toBe(true);
 });
 test('Layer parser, gets correct min value from permalink string [layers-min-value]', () => {
   const layers = layersParse12(PALETTE_LAYER_STRING, config);

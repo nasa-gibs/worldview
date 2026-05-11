@@ -5,7 +5,7 @@ import { assign, cloneDeep } from 'lodash';
 import update from 'immutability-helper';
 import {
   requestPalette,
-  setThresholdRangeAndSquash,
+  setThresholdRangeSquashAndNoClip,
   setCustomPalette,
   clearCustomPalette,
 } from './actions';
@@ -14,7 +14,7 @@ import {
   REQUEST_PALETTE_START,
   REQUEST_PALETTE_SUCCESS,
   REQUEST_PALETTE_FAILURE,
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
   SET_CUSTOM,
   CLEAR_CUSTOM,
 } from './constants';
@@ -76,12 +76,12 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
   beforeEach(() => {
     fetch.resetMocks();
   });
-  test(`test ${setThresholdRangeAndSquash} action with min equal to 1`, () => {
+  test(`test ${setThresholdRangeSquashAndNoClip} action with min equal to 1`, () => {
     const store = mockStore(stateWithLayers);
-    store.dispatch(setThresholdRangeAndSquash('terra-aod', { min: 1 }, 0, 'active'));
+    store.dispatch(setThresholdRangeSquashAndNoClip('terra-aod', { min: 1 }, 0, 'active'));
     const response = store.getActions()[0];
 
-    expect(response.type).toEqual(SET_THRESHOLD_RANGE_AND_SQUASH);
+    expect(response.type).toEqual(SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP);
     expect(response.props).toEqual({ min: 1 });
     expect(response.groupName).toEqual('active');
     expect(response.layerId).toEqual('terra-aod');
@@ -94,18 +94,19 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     expect(response.palettes['terra-aod'].maps[0].min).toEqual(1);
     expect(response.palettes['terra-aod'].maps[0].max).toEqual(undefined);
     expect(response.palettes['terra-aod'].maps[0].squash).toEqual(undefined);
+    expect(response.palettes['terra-aod'].maps[0].noclip).toEqual(undefined);
     expect(response.palettes['terra-aod'].lookup).toEqual(
       config.palettes.lookups['terra-aod']['min-1'],
     );
   });
-  test(`test ${setThresholdRangeAndSquash} action with squash and max [palettes-actions-threshold]`, () => {
+  test(`test ${setThresholdRangeSquashAndNoClip} action with squash and max [palettes-actions-threshold-1]`, () => {
     const store = mockStore(stateWithLayers);
     store.dispatch(
-      setThresholdRangeAndSquash('terra-aod', { max: 1, squash: true }, 0, 'active'),
+      setThresholdRangeSquashAndNoClip('terra-aod', { max: 1, squash: true }, 0, 'active'),
     );
     const response = store.getActions()[0];
 
-    expect(response.type).toEqual(SET_THRESHOLD_RANGE_AND_SQUASH);
+    expect(response.type).toEqual(SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP);
     expect(response.props).toEqual({ max: 1, squash: true });
     expect(response.groupName).toEqual('active');
     expect(response.layerId).toEqual('terra-aod');
@@ -119,6 +120,29 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     expect(response.palettes['terra-aod'].maps[0].squash).toEqual(true);
     expect(response.palettes['terra-aod'].lookup).toEqual(
       config.palettes.lookups['terra-aod']['max-1-squashed'],
+    );
+  });
+  test(`test ${setThresholdRangeSquashAndNoClip} action with noclip and max [palettes-actions-threshold-2]`, () => {
+    const store = mockStore(stateWithLayers);
+    store.dispatch(
+      setThresholdRangeSquashAndNoClip('terra-aod', { max: 1, noclip: true }, 0, 'active'),
+    );
+    const response = store.getActions()[0];
+
+    expect(response.type).toEqual(SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP);
+    expect(response.props).toEqual({ max: 1, noclip: true });
+    expect(response.groupName).toEqual('active');
+    expect(response.layerId).toEqual('terra-aod');
+    expect(response.activeString).toEqual('active');
+    expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual([
+      '00ff00ff',
+      'ffff00ff',
+      'ff0000ff',
+    ]);
+    expect(response.palettes['terra-aod'].maps[0].max).toEqual(1);
+    expect(response.palettes['terra-aod'].maps[0].noclip).toEqual(true);
+    expect(response.palettes['terra-aod'].lookup).toEqual(
+      config.palettes.lookups['terra-aod']['max-1-noclipped'],
     );
   });
   test(`test ${setCustomPalette} action with red-1 fixture palette [palettes-actions-set-custom]`, () => {
@@ -180,7 +204,7 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
     expect(response.activeString).toEqual('active');
   });
   test(
-    `test ${clearCustomPalette} action with threshold and squash applied [palettes-actions-clear-custom-threshold]`,
+    `test ${clearCustomPalette} action with threshold and squash applied [palettes-actions-clear-custom-threshold-1]`,
     () => {
       let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
       terraAOD = update(terraAOD, {
@@ -242,6 +266,72 @@ describe('Test lookup actions [palettes-actions-lookup]', () => {
       expect(response.palettes['terra-aod'].maps[0].squash).toEqual(true);
       expect(response.palettes['terra-aod'].lookup).toEqual(
         config.palettes.lookups['terra-aod']['max-1-squashed'],
+      );
+    },
+  );
+  test(
+    `test ${clearCustomPalette} action with threshold and noclip applied [palettes-actions-clear-custom-threshold-2]`,
+    () => {
+      let terraAOD = assign({}, config.palettes.rendered['terra-aod']);
+      terraAOD = update(terraAOD, {
+        lookup: { $set: config.palettes.lookups['terra-aod']['red-1'] },
+      });
+      terraAOD = update(terraAOD, {
+        maps: {
+          0: {
+            custom: {
+              $set: 'red-1',
+            },
+          },
+        },
+      });
+      terraAOD = update(terraAOD, {
+        maps: {
+          0: {
+            legend: {
+              colors: { $set: config.palettes.custom['red-1'].colors },
+            },
+          },
+        },
+      });
+      terraAOD = update(terraAOD, {
+        maps: {
+          0: {
+            max: { $set: 1 },
+          },
+        },
+      });
+      terraAOD = update(terraAOD, {
+        maps: {
+          0: {
+            noclip: { $set: true },
+          },
+        },
+      });
+      const previousPaletteObject = cloneDeep(terraAOD);
+
+      const customPalatteState = update(stateWithLayers, {
+        palettes: { active: { $set: { 'terra-aod': terraAOD } } },
+      });
+
+      const store = mockStore(customPalatteState);
+      store.dispatch(clearCustomPalette('terra-aod', 0, 'active'));
+      const response = store.getActions()[0];
+      expect(response.type).toEqual(CLEAR_CUSTOM);
+      expect(previousPaletteObject.lookup).toBeDefined();
+      expect(response.groupName).toEqual('active');
+      expect(response.layerId).toEqual('terra-aod');
+      expect(response.activeString).toEqual('active');
+
+      expect(response.palettes['terra-aod'].maps[0].legend.colors).toEqual([
+        '00ff00ff',
+        'ffff00ff',
+        'ff0000ff',
+      ]);
+      expect(response.palettes['terra-aod'].maps[0].max).toEqual(1);
+      expect(response.palettes['terra-aod'].maps[0].noclip).toEqual(true);
+      expect(response.palettes['terra-aod'].lookup).toEqual(
+        config.palettes.lookups['terra-aod']['max-1-noclipped'],
       );
     },
   );
