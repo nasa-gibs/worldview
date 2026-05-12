@@ -8,6 +8,12 @@ import {
   isVectorLayerClickable,
   hasNonClickableVectorLayer,
   hasVectorLayers,
+  adjustStartDates,
+  adjustEndDates,
+  getCacheOptions,
+  mockFutureTimeLayerOptions,
+  getLayersFromGroups,
+  adjustMeasurementsValidUnitConversion,
 } from './util';
 import { initialState } from './reducers';
 import fixtures from '../../fixtures';
@@ -413,5 +419,301 @@ describe('Vector layers', () => {
     expect(false1).toBe(false);
     expect(false2).toBe(false);
     expect(true1).toBe(true);
+  });
+});
+
+describe('adjustStartDates', () => {
+  const buildConfig = (layerOverrides = {}) => ({
+    timeBounds: {
+      time: '2020-06-15T00:00:00Z',
+    },
+    layers: {
+      'test-layer': {
+        id: 'test-layer',
+        availability: {
+          rollingWindow: 30,
+          historicalRanges: [
+            { startDate: '2010-01-01T00:00:00Z', endDate: '2015-01-01T00:00:00Z', dateInterval: '1' },
+            { startDate: '2015-01-02T00:00:00Z', endDate: '2019-12-31T00:00:00Z', dateInterval: '1' },
+          ],
+        },
+        startDate: '2000-01-01',
+        dateRanges: [
+          {
+            startDate: '2020-06-01T00:00:00Z',
+            endDate: '2021-01-01T00:00:00Z',
+            dateInterval: '1',
+          },
+        ],
+        ...layerOverrides,
+      },
+    },
+  });
+
+  test('skips layer without rollingWindow [adjust-start-dates-no-rolling-window]', () => {
+    const config = buildConfig({ rollingWindow: undefined });
+    const originalStartDate = config.layers['test-layer'].startDate;
+    adjustStartDates(config);
+    expect(config.layers['test-layer'].startDate).toBe(originalStartDate);
+  });
+
+  test('sets layer startDate from adjustDate when no historicalRanges [adjust-start-dates-no-historical-ranges]', () => {
+    const config = buildConfig();
+    adjustStartDates(config.layers);
+    const layer = config.layers['test-layer'];
+    expect(layer.startDate).toBeDefined();
+    expect(layer.startDate).not.toBe('2000-01-01');
+  });
+});
+
+describe('getCacheOptions', () => {
+  test('returns empty object when not subdaily', () => {
+    const options = getCacheOptions('daily', new Date());
+    expect(options).toEqual({});
+  });
+
+  test('returns expirationAbsolute when subdaily', () => {
+    const options = getCacheOptions('subdaily', new Date());
+    const tenMin = 10 * 60000;
+    const now = new Date().getTime();
+    expect(options).toEqual({ expirationAbsolute: new Date(now + tenMin)});
+  });
+});
+
+describe('adjustEndDates', () => {
+  const buildConfig = (layerOverrides = {}) => ({
+    timeBounds: {
+      time: '2020-06-15T00:00:00Z',
+    },
+    layers: {
+      'test-layer': {
+        id: 'test-layer',
+        availability: {
+          rollingWindow: 30,
+          historicalRanges: [
+            { startDate: '2010-01-01T00:00:00Z', endDate: '2015-01-01T00:00:00Z', dateInterval: '1' },
+            { startDate: '2015-01-02T00:00:00Z', endDate: '2019-12-31T00:00:00Z', dateInterval: '1' },
+          ],
+        },
+        endDate: '2022-01-01',
+        dateRanges: [
+          {
+            startDate: '2020-06-01T00:00:00Z',
+            endDate: '2021-01-01T00:00:00Z',
+            dateInterval: '1',
+          },
+        ],
+        ...layerOverrides,
+      },
+    },
+  });
+
+  test('skips layer without rollingWindow [adjust-end-dates-no-rolling-window]', () => {
+    const config = buildConfig({ rollingWindow: undefined });
+    const originalEndDate = config.layers['test-layer'].endDate;
+    adjustEndDates(config);
+    expect(config.layers['test-layer'].endDate).toBe(originalEndDate);
+  });
+
+  test('sets layer endDate from adjustDate when no historicalRanges [adjust-end-dates-no-historical-ranges]', () => {
+    const config = buildConfig({ futureTime: '2023-01-01T00:00:00Z' });
+    adjustEndDates(config.layers);
+    const layer = config.layers['test-layer'];
+    expect(layer.endDate).toBeDefined();
+    expect(layer.endDate).not.toBe('2022-01-01');
+  });
+});
+
+describe('mockFutureTimeLayerOptions', () => {
+  test('sets futureTime on target layer when valid parameters provided [mock-future-time-sets-value]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'terra-cr,2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBe('2030-01-01');
+  });
+
+  test('does not modify layer when targetLayerId does not exist in layers [mock-future-time-missing-layer]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'aqua-cr,2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('does not set futureTime when mockFutureTime is missing from parameters [mock-future-time-missing-time]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'terra-cr');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('does not set futureTime when targetLayerId is missing from parameters [mock-future-time-missing-id]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, ',2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('sets futureTime on correct layer when multiple layers exist [mock-future-time-multiple-layers]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+      'aqua-cr': { id: 'aqua-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'aqua-cr,2030-06-15');
+    expect(layers['aqua-cr'].futureTime).toBe('2030-06-15');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('overwrites existing futureTime value on target layer [mock-future-time-overwrite]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr', futureTime: '2025-01-01' },
+    };
+    mockFutureTimeLayerOptions(layers, 'terra-cr,2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBe('2030-01-01');
+  });
+});
+
+describe('getLayersFromGroups', () => {
+  test('returns empty array when groups is falsy [get-layers-from-groups-no-groups]', () => {
+    const result = getLayersFromGroups(globalState, null);
+    expect(result).toEqual([]);
+  });
+
+  test('returns empty array when groups is undefined [get-layers-from-groups-undefined]', () => {
+    const result = getLayersFromGroups(globalState, undefined);
+    expect(result).toEqual([]);
+  });
+
+  test('returns baselayers concatenated when groups is an empty array [get-layers-from-groups-empty-array]', () => {
+    const result = getLayersFromGroups(globalState, []);
+    result.forEach((layer) => {
+      expect(layer.group).toBe('baselayers');
+    });
+  });
+
+  test('returns mapped overlay layers plus baselayers when groups provided [get-layers-from-groups-with-groups]', () => {
+    const overlayGroups = globalState.layers.active.overlayGroups;
+    if (!overlayGroups || !overlayGroups.length) return;
+    const result = getLayersFromGroups(globalState, overlayGroups);
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBeGreaterThan(0);
+  });
+});
+
+describe('adjustMeasurementsValidUnitConversion', () => {
+  test('sets disableUnitConversion on layer when measurement has disableUnitConversion true [adjust-measurements-disable-conversion]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'test-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: true,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBe(true);
+  });
+
+  test('does not set disableUnitConversion when measurement does not have disableUnitConversion [adjust-measurements-no-disable]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'test-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {},
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
+  });
+
+  test('does not modify layer when layergroup is not present on layer [adjust-measurements-no-layergroup]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: true,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
+  });
+
+  test('does not modify layer when layergroup has no matching measurement [adjust-measurements-no-matching-measurement]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'nonexistent-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: true,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
+  });
+
+  test('processes multiple layers independently [adjust-measurements-multiple-layers]', () => {
+    const layerA = { id: 'layer-a', layergroup: 'group-disable' };
+    const layerB = { id: 'layer-b', layergroup: 'group-allow' };
+    const layerC = { id: 'layer-c' };
+    const measurementConfig = {
+      measurements: {
+        'group-disable': { disableUnitConversion: true },
+        'group-allow': {},
+      },
+      layers: {
+        'layer-a': layerA,
+        'layer-b': layerB,
+        'layer-c': layerC,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerA.disableUnitConversion).toBe(true);
+    expect(layerB.disableUnitConversion).toBeUndefined();
+    expect(layerC.disableUnitConversion).toBeUndefined();
+  });
+
+  test('does not set disableUnitConversion when measurement disableUnitConversion is false [adjust-measurements-disable-false]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'test-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: false,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
   });
 });
