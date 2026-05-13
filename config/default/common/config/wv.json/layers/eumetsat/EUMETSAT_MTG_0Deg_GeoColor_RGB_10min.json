@@ -3,7 +3,7 @@
       "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min": {
       "id": "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
       "title": "GeoColor RGB (10 minute, Meteosat Third Generation (MTG), 0 Degree)",
-      "subtitle": "MSG/SEVIRI",
+      "subtitle": "MTG/FCI",
       "description": "eumetsat/EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
       "tags": "eumetsat ring",
       "group": "overlays",
@@ -13,7 +13,7 @@
       "disableSnapshot": true,
       "period": "subdaily",
       "layergroup": "Geostationary",
-      "startDate": "2021-02-06T00:00:00Z",
+      "startDate": "2024-09-24T00:00:00Z",
       "dateRanges": [
         {
           "dateInterval": "10"

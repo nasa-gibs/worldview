@@ -3,7 +3,7 @@
         "Geostationary": {
             "id": "geostationary",
             "title":    "Geostationary",
-            "subtitle": "Geostationary Ring, GOES-East, GOES-West, Himawari-9, MSG-0 Degree, MSG-Indian Ocean, MTG",
+            "subtitle": "Geostationary Ring, GOES-East, GOES-West, Himawari-9, MSG (0 Degree), MSG (Indian Ocean), MTG (0 Degree)",
             "sources": {
               "Geostationary Ring": {
                     "id": "geostationary-ring",
@@ -53,9 +53,9 @@
                       "Himawari_AHI_Air_Mass"
                     ]
                 },
-                "MTG": {
-                    "id": "MTG",
-                    "title": "MTG",
+                "MTG-0 Degree": {
+                    "id": "mtg-0-deg",
+                    "title": "MTG (0 Degree)",
                     "description": "",
                     "image": "",
                     "settings": [
@@ -64,7 +64,7 @@
                 },
                 "MSG-0 Degree": {
                     "id": "msg-0-deg",
-                    "title": "MSG-0 Degree",
+                    "title": "MSG (0 Degree)",
                     "description": "",
                     "image": "",
                     "settings": [
@@ -73,7 +73,7 @@
                 },
                 "MSG-Indian Ocean": {
                     "id": "msg-idoc",
-                    "title": "MSG-Indian Ocean",
+                    "title": "MSG (Indian Ocean)",
                     "description": "",
                     "image": "",
                     "settings": [

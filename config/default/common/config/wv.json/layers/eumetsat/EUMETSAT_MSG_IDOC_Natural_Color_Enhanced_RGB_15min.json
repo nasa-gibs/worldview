@@ -13,7 +13,7 @@
       "disableSnapshot": true,
       "period": "subdaily",
       "layergroup": "Geostationary",
-      "startDate": "2021-02-06T00:00:00Z",
+      "startDate": "2020-08-01T00:00:00Z",
       "dateRanges": [
         {
           "dateInterval": "15"
