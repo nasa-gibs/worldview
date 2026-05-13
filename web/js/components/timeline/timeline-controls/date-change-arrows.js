@@ -1,4 +1,4 @@
-import { PureComponent } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ArrowChevronLeft, ArrowChevronRight } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
@@ -12,164 +12,153 @@ import {
 const ANIMATION_DELAY = 600; // interval for timestep
 const CLICK_HOLD_DELAY = 200; // wait before click is considered a hold
 
-let arrowDownCheckTimer = null;
-// left/right arrow intervals
-const intervals = {
-  left: 0,
-  right: 0,
-};
+function DateChangeArrows(props) {
+  const {
+    handleSelectNowButton,
+    isMobile,
+    leftArrowDisabled,
+    leftArrowDown: leftArrowDownProp,
+    nowButtonDisabled,
+    rightArrowDisabled,
+    rightArrowDown: rightArrowDownProp,
+    arrowDown,
+    tilesPreloaded,
+    isKioskModeActive,
+    isEmbedModeActive,
+    setArrowDown,
+    setArrowUp,
+  } = props;
 
-class DateChangeArrows extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.arrowDownMap = {
-      left: props.leftArrowDown,
-      right: props.rightArrowDown,
-    };
-  }
+  const intervalsRef = useRef({ left: 0, right: 0 });
+  const arrowDownCheckTimerRef = useRef(null);
 
-  componentDidUpdate (prevProps) {
-    const {
-      tilesPreloaded, arrowDown, leftArrowDown, rightArrowDown,
-    } = this.props;
+  // Refs to always access the latest callbacks
+  const leftArrowDownRef = useRef(leftArrowDownProp);
+  leftArrowDownRef.current = leftArrowDownProp;
+  const rightArrowDownRef = useRef(rightArrowDownProp);
+  rightArrowDownRef.current = rightArrowDownProp;
 
-    // Keep arrowDownMap in sync so click-and-hold always uses the latest callbacks
-    if (leftArrowDown !== prevProps.leftArrowDown || rightArrowDown !== prevProps.rightArrowDown) {
-      this.arrowDownMap = {
-        left: leftArrowDown,
-        right: rightArrowDown,
-      };
+  const arrowDownMap = useCallback((direction) => {
+    if (direction === 'left') {
+      leftArrowDownRef.current();
+    } else {
+      rightArrowDownRef.current();
     }
+  }, []);
 
-    const notAnimating = !intervals.left && !intervals.right;
-
+  // Start click-and-hold interval when tiles are preloaded and arrow is held
+  useEffect(() => {
+    const notAnimating = !intervalsRef.current.left && !intervalsRef.current.right;
     if (tilesPreloaded && arrowDown && notAnimating) {
-      // set interval for holding arrow down
-      intervals[arrowDown] = setInterval(this.arrowDownMap[arrowDown], ANIMATION_DELAY);
+      intervalsRef.current[arrowDown] = setInterval(
+        () => arrowDownMap(arrowDown),
+        ANIMATION_DELAY,
+      );
     }
-  }
+  }, [tilesPreloaded, arrowDown]);
 
-  componentWillUnmount() {
-    clearInterval(intervals.left);
-    clearInterval(intervals.right);
-  }
+  // Cleanup intervals on unmount
+  useEffect(() => () => {
+    clearInterval(intervalsRef.current.left);
+    clearInterval(intervalsRef.current.right);
+  }, []);
 
-  clickAndHold = (direction) => {
-    const { setArrowDown } = this.props;
-    setArrowDown(direction);
-    arrowDownCheckTimer = null;
-  };
-
-  onArrowDown = (direction) => {
-    this.arrowDownMap[direction]();
-    arrowDownCheckTimer = setTimeout(() => {
-      this.clickAndHold(direction);
+  const onArrowDown = (direction) => {
+    arrowDownMap(direction);
+    arrowDownCheckTimerRef.current = setTimeout(() => {
+      setArrowDown(direction);
+      arrowDownCheckTimerRef.current = null;
     }, CLICK_HOLD_DELAY);
   };
 
-  onArrowUp = (direction) => {
-    const { setArrowUp, arrowDown } = this.props;
-    if (arrowDownCheckTimer) {
-      clearTimeout(arrowDownCheckTimer);
+  const onArrowUp = (direction) => {
+    if (arrowDownCheckTimerRef.current) {
+      clearTimeout(arrowDownCheckTimerRef.current);
     }
-    clearInterval(intervals[direction]);
-    intervals[direction] = 0;
+    clearInterval(intervalsRef.current[direction]);
+    intervalsRef.current[direction] = 0;
     if (arrowDown) setArrowUp();
   };
 
-  render() {
-    const {
-      handleSelectNowButton,
-      isMobile,
-      leftArrowDisabled,
-      nowButtonDisabled,
-      rightArrowDisabled,
-      arrowDown,
-      tilesPreloaded,
-      isKioskModeActive,
-      isEmbedModeActive,
-    } = this.props;
+  const leftArrowMouseDown = () => onArrowDown('left');
+  const rightArrowMouseDown = () => onArrowDown('right');
+  const leftArrowMouseUp = () => onArrowUp('left');
+  const rightArrowMouseUp = () => onArrowUp('right');
 
-    const leftArrowDown = () => this.onArrowDown('left');
-    const rightArrowDown = () => this.onArrowDown('right');
-    const leftArrowUp = () => this.onArrowUp('left');
-    const rightArrowUp = () => this.onArrowUp('right');
+  return (
+    <div className="arrow-group">
+      {arrowDown && !tilesPreloaded && (
+        <LoadingIndicator
+          title="Loading ..."
+          bodyMsg="Keep holding to animate the map!"
+        />
+      )}
 
-    return (
-      <div className="arrow-group">
-        {arrowDown && !tilesPreloaded && (
-          <LoadingIndicator
-            title="Loading ..."
-            bodyMsg="Keep holding to animate the map!"
+      {/* LEFT ARROW */}
+      <button
+        type="button"
+        className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
+        id="left-arrow-group"
+        onMouseDown={leftArrowMouseDown}
+        onMouseUp={leftArrowMouseUp}
+        onMouseLeave={leftArrowMouseUp}
+        aria-disabled={leftArrowDisabled}
+        aria-label="Decrement date"
+      >
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText="Decrement date"
+          placement="top"
+          target="left-arrow-group"
+        />
+        <ArrowChevronLeft className="arrow" size="30px" />
+      </button>
+
+      {/* RIGHT ARROW */}
+      <button
+        type="button"
+        className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
+        id="right-arrow-group"
+        onMouseDown={rightArrowMouseDown}
+        onMouseUp={rightArrowMouseUp}
+        onMouseLeave={rightArrowMouseUp}
+        aria-disabled={rightArrowDisabled}
+        aria-label="Increment date"
+      >
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText="Increment date"
+          placement="top"
+          target="right-arrow-group"
+        />
+        <ArrowChevronRight className="arrow" size="30px" />
+      </button>
+
+      {/* NOW BUTTON */}
+      <button
+        type="button"
+        className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
+        id="now-button-group"
+        onClick={handleSelectNowButton}
+        aria-disabled={nowButtonDisabled}
+        aria-label="Latest available date"
+
+      >
+        <HoverTooltip
+          isMobile={isMobile}
+          labelText="Latest available date"
+          placement="top"
+          target="now-button-group"
+        />
+        <svg height="30" width="30" viewBox="0 0 40 28">
+          <path
+            d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z M 26,30 26,0 34,0 34,30 z"
+            className="arrow"
           />
-        )}
-
-        {/* LEFT ARROW */}
-        <button
-          type="button"
-          className={`button-action-group${leftArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
-          id="left-arrow-group"
-          onMouseDown={leftArrowDown}
-          onMouseUp={leftArrowUp}
-          onMouseLeave={leftArrowUp}
-          aria-disabled={leftArrowDisabled}
-          aria-label="Decrement date"
-        >
-          <HoverTooltip
-            isMobile={isMobile}
-            labelText="Decrement date"
-            placement="top"
-            target="left-arrow-group"
-          />
-          <ArrowChevronLeft className="arrow" size="30px" />
-        </button>
-
-        {/* RIGHT ARROW */}
-        <button
-          type="button"
-          className={`button-action-group${rightArrowDisabled ? ' button-disabled' : ''} ${isKioskModeActive && !isEmbedModeActive ? 'd-none' : ''}`}
-          id="right-arrow-group"
-          onMouseDown={rightArrowDown}
-          onMouseUp={rightArrowUp}
-          onMouseLeave={rightArrowUp}
-          aria-disabled={rightArrowDisabled}
-          aria-label="Increment date"
-        >
-          <HoverTooltip
-            isMobile={isMobile}
-            labelText="Increment date"
-            placement="top"
-            target="right-arrow-group"
-          />
-          <ArrowChevronRight className="arrow" size="30px" />
-        </button>
-
-        {/* NOW BUTTON */}
-        <button
-          type="button"
-          className={`button-action-group now-button-group${nowButtonDisabled ? ' button-disabled' : ''} ${isKioskModeActive ? 'd-none' : ''}`}
-          id="now-button-group"
-          onClick={handleSelectNowButton}
-          aria-disabled={nowButtonDisabled}
-          aria-label="Latest available date"
-
-        >
-          <HoverTooltip
-            isMobile={isMobile}
-            labelText="Latest available date"
-            placement="top"
-            target="now-button-group"
-          />
-          <svg height="30" width="30" viewBox="0 0 40 28">
-            <path
-              d="M 10.240764,0 24,15 10.240764,30 0,30 13.759236,15 0,0 10.240764,0 z M 26,30 26,0 34,0 34,30 z"
-              className="arrow"
-            />
-          </svg>
-        </button>
-      </div>
-    );
-  }
+        </svg>
+      </button>
+    </div>
+  );
 }
 
 const mapStateToProps = (state) => {
