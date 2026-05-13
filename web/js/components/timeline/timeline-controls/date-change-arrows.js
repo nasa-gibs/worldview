@@ -29,7 +29,18 @@ class DateChangeArrows extends PureComponent {
   }
 
   componentDidUpdate (prevProps) {
-    const { tilesPreloaded, arrowDown } = this.props;
+    const {
+      tilesPreloaded, arrowDown, leftArrowDown, rightArrowDown,
+    } = this.props;
+
+    // Keep arrowDownMap in sync so click-and-hold always uses the latest callbacks
+    if (leftArrowDown !== prevProps.leftArrowDown || rightArrowDown !== prevProps.rightArrowDown) {
+      this.arrowDownMap = {
+        left: leftArrowDown,
+        right: rightArrowDown,
+      };
+    }
+
     const notAnimating = !intervals.left && !intervals.right;
 
     if (tilesPreloaded && arrowDown && notAnimating) {
