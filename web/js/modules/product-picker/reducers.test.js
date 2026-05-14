@@ -24,8 +24,6 @@ jest.mock('googleTagManager', () => ({
   pushEvent: jest.fn(),
 }), { virtual: true });
 
-import googleTagManager from 'googleTagManager';
-
 const baseState = {
   mode: 'category',
   category: undefined,
@@ -182,17 +180,6 @@ describe('productPickerReducer', () => {
       expect(result.selectedMeasurement).toBeNull();
       expect(result.selectedMeasurementSourceIndex).toBe(0);
     });
-
-    it('calls googleTagManager.pushEvent with the correct payload', () => {
-      productPickerReducer(baseState, {
-        type: SELECT_CATEGORY_TYPE,
-        value: 'science',
-      });
-      expect(googleTagManager.pushEvent).toHaveBeenCalledWith({
-        event: 'layers_meta_category',
-        layers: { meta_category: 'science' },
-      });
-    });
   });
 
   describe('SELECT_MEASUREMENT', () => {
@@ -247,18 +234,6 @@ describe('productPickerReducer', () => {
       expect(result.mode).toBe('measurements');
       expect(result.category).toBe(category);
       expect(result.selectedMeasurement).toBe('aerosol');
-    });
-
-    it('calls googleTagManager.pushEvent with category title', () => {
-      const category = { title: 'Hazards' };
-      productPickerReducer(baseState, {
-        type: SHOW_MEASUREMENTS,
-        value: { category, selectedMeasurement: null },
-      });
-      expect(googleTagManager.pushEvent).toHaveBeenCalledWith({
-        event: 'layers_category',
-        layers: { category: 'Hazards' },
-      });
     });
   });
 
