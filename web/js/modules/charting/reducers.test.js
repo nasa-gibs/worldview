@@ -83,20 +83,26 @@ describe('chartingReducer', () => {
 
   describe('TOGGLE_REQUEST_IN_PROGRESS', () => {
     it('sets chartRequestInProgress to true', () => {
-      const state = chartingReducer(initialChartingState, { type: TOGGLE_REQUEST_IN_PROGRESS, status: true });
+      const state = chartingReducer(
+        initialChartingState, { type: TOGGLE_REQUEST_IN_PROGRESS, status: true },
+      );
       expect(state.chartRequestInProgress).toBe(true);
     });
 
     it('sets chartRequestInProgress to false', () => {
       const inProgress = { ...initialChartingState, chartRequestInProgress: true };
-      const state = chartingReducer(inProgress, { type: TOGGLE_REQUEST_IN_PROGRESS, status: false });
+      const state = chartingReducer(
+        inProgress, { type: TOGGLE_REQUEST_IN_PROGRESS, status: false },
+      );
       expect(state.chartRequestInProgress).toBe(false);
     });
   });
 
   describe('TOGGLE_MODAL_OPEN', () => {
     it('sets isChartOpen to true', () => {
-      const state = chartingReducer(initialChartingState, { type: TOGGLE_MODAL_OPEN, status: true });
+      const state = chartingReducer(
+        initialChartingState, { type: TOGGLE_MODAL_OPEN, status: true },
+      );
       expect(state.isChartOpen).toBe(true);
     });
 
@@ -117,24 +123,32 @@ describe('chartingReducer', () => {
 
   describe('TOGGLE_AOI_SELECTED_ON_OFF', () => {
     it('sets aoiSelected to the explicit action value when action.action is not null', () => {
-      const state = chartingReducer(initialChartingState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: true });
+      const state = chartingReducer(
+        initialChartingState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: true },
+      );
       expect(state.aoiSelected).toBe(true);
     });
 
     it('sets aoiSelected to false via explicit action value', () => {
       const selectedState = { ...initialChartingState, aoiSelected: true };
-      const state = chartingReducer(selectedState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: false });
+      const state = chartingReducer(
+        selectedState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: false },
+      );
       expect(state.aoiSelected).toBe(false);
     });
 
     it('toggles aoiSelected when action.action is null', () => {
-      const state = chartingReducer(initialChartingState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: null });
+      const state = chartingReducer(
+        initialChartingState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: null },
+      );
       expect(state.aoiSelected).toBe(true);
     });
 
     it('toggles aoiSelected from true to false when action.action is null', () => {
       const selectedState = { ...initialChartingState, aoiSelected: true };
-      const state = chartingReducer(selectedState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: null });
+      const state = chartingReducer(
+        selectedState, { type: TOGGLE_AOI_SELECTED_ON_OFF, action: null },
+      );
       expect(state.aoiSelected).toBe(false);
     });
 
