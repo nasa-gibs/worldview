@@ -61,6 +61,7 @@ function ImageDownloadPanel(props) {
     feedbackIsInitiated,
     isMobile,
     sendFeedback,
+    onResolutionChange,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -77,6 +78,11 @@ function ImageDownloadPanel(props) {
     abortControllerRef.current?.abort();
     setIsSnapshotInProgress(false);
     setSnapshotStatus('');
+  };
+
+  const changeResolution = (res) => {
+    onResolutionChange(res);
+    setResolution(res);
   };
 
   useEffect(() => {
@@ -110,7 +116,7 @@ function ImageDownloadPanel(props) {
   }, []);
 
   useEffect(() => {
-    setResolution(resolution);
+    changeResolution(resolution);
   }, [resolution]);
 
   const onDownload = async () => {
@@ -172,13 +178,14 @@ function ImageDownloadPanel(props) {
       setIsSnapshotInProgress(false);
       setSnapshotStatus('');
       abortControllerRef.current = null;
+      changeResolution(currResolution);
     }
   };
 
   const handleChange = (type, value) => {
     let valueIn = value;
     if (type === 'resolution') {
-      setResolution(valueIn);
+      changeResolution(valueIn);
     } else if (type === 'worldfile') {
       valueIn = Boolean(Number(value));
       setIsWorldfile(valueIn);
@@ -418,4 +425,5 @@ ImageDownloadPanel.propTypes = {
   feedbackIsInitiated: PropTypes.bool,
   isMobile: PropTypes.bool,
   sendFeedback: PropTypes.func,
+  onResolutionChange: PropTypes.func,
 };

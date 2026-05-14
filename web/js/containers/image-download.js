@@ -61,6 +61,7 @@ class ImageDownloadContainer extends Component {
     this.debounceBoundaryStateUpdate = lodashDebounce(onBoundaryChange, 200);
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onLatLongChange = this.onLatLongChange.bind(this);
+    this.onResolutionChange = this.onResolutionChange.bind(this);
   }
 
   /**
@@ -140,6 +141,16 @@ class ImageDownloadContainer extends Component {
     this.debounceBoundaryStateUpdate(newBoundaries);
   }
 
+  /**
+  * Update resolution value on change
+  * @param {Object} res
+  *
+  * @returns {null}
+  */
+  onResolutionChange(res) {
+    this.setState({ resolution: res });
+  }
+
   render() {
     const {
       proj,
@@ -205,6 +216,7 @@ class ImageDownloadContainer extends Component {
           onLatLongChange={this.onLatLongChange}
           geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
           map={map.ui.selected}
+          onResolutionChange={this.onResolutionChange}
         />
         <Crop
           x={x}
