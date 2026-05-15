@@ -160,7 +160,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@edsc/earthdata-react-icons": "^0.0.2",
+    "@edsc/earthdata-react-icons": "^0.0.3",
     "@elastic/react-search-ui": "^1.24.2",
     "@elastic/react-search-ui-views": "^1.24.2",
     "@fortawesome/fontawesome-svg-core": "^7.2.0",
