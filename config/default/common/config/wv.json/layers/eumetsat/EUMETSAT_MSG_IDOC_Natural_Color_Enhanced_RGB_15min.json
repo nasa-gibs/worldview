@@ -1,0 +1,30 @@
+{
+  "layers": {
+    "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min": {
+      "id": "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min",
+      "title": "Natural Color Enhanced RGB (15 minute, Meteosat Second Generation (MSG), Indian Ocean)",
+      "subtitle": "MSG/SEVIRI",
+      "description": "eumetsat/EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min",
+      "tags": "eumetsat ring",
+      "group": "overlays",
+      "type": "wms",
+      "format": "image/png",
+      "wrapX": true,
+      "disableSnapshot": true,
+      "period": "subdaily",
+      "layergroup": "Geostationary",
+      "startDate": "2020-08-01T00:00:00Z",
+      "dateRanges": [
+        {
+          "dateInterval": "15"
+        }
+      ],
+      "projections": {
+        "geographic": {
+          "source": "EUMETSAT:wms",
+          "layer": "msg_iodc:rgb_naturalenhncd"
+        }
+      }
+    }
+  }
+}
