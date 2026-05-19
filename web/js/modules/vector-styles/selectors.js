@@ -246,6 +246,47 @@ export function setStyleFunction(opts) {
     });
   }
 
+  // Modify Sea Ice Motion points to symbols (triangle) indicating the direction of motion
+  if (glStyle.name === 'AMSRU2_Sea_Ice_Motion_12km') {
+    const targetColor = glStyle.layers[0].paint?.['circle-color'] || glStyle.layers[0].paint?.['line-color'];
+    glStyle.layers = glStyle.layers.flatMap(layer => {
+      if (layer.id.includes('_Point')) {
+        layer.type = 'symbol';
+        layer.paint = { 'text-color': targetColor };
+        layer.layout = {
+          'text-field': '\u25B4', // triangle pointing right
+          'text-size': 35,
+        };
+        layer.filter = ['==', ['get', 'type'], 'endpoint'];
+      }
+      return [layer];
+    });
+
+    layer.setStyle((feature, resolution) => {
+      const styles = styleFunction(feature, resolution);
+
+      if (feature.getGeometry().getType() === 'Point') {
+        const props = feature.getProperties();
+        const dx = props.end_x_projected - props.start_x_projected;
+        const dy = props.end_y_projected - props.start_y_projected;
+
+        const rotation = Math.atan2(dx, dy);
+
+        if (styles) {
+          const stylesArray = Array.isArray(styles) ? styles : [styles];
+          stylesArray.forEach(style => {
+            const text = style.getText();
+            if (text && typeof text.setRotation === 'function') {
+              text.setRotation(rotation);
+            }
+          });
+          return stylesArray;
+        }
+      }
+      return styles;
+    });
+  };
+
   return vectorStyleId;
 }
 
