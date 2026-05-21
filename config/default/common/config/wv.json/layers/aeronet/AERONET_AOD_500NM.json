@@ -10,7 +10,6 @@
       "tags": "vectors aeronet aod",
       "type": "vector",
       "layergroup": "Aerosol Optical Depth",
-      "disableSnapshot": true,
       "vectorStyle": {
         "id": "AERONET_AOD_500NM"
       },

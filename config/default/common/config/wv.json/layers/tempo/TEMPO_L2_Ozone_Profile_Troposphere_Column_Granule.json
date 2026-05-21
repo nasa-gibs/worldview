@@ -12,7 +12,6 @@
       "period": "subdaily",
       "count": 1,
       "dataAvailability": "dd",
-      "disableSnapshot": true,
       "shiftadjacentdays": false
     }
   }

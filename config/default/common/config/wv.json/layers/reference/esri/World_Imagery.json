@@ -10,7 +10,6 @@
         "layergroup": "Reference",
         "format": "image/png",
         "type": "esriMapServer",
-        "disableSnapshot": true,
         "wrapX": false,
         "projections": {
           "geographic": {

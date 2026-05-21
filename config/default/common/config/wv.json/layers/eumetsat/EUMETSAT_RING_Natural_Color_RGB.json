@@ -10,7 +10,6 @@
       "type": "wms",
       "format": "image/png",
       "wrapX": true,
-      "disableSnapshot": true,
       "period": "subdaily",
       "layergroup": "Geostationary",
       "startDate": "2021-02-06T00:00:00Z",
