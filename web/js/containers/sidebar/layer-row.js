@@ -54,6 +54,7 @@ const getItemStyle = (isDragging, sortableStyle) => ({
   top: null,
   left: null,
   zIndex: isDragging ? 1 : undefined,
+  touchAction: 'none',
 });
 
 function LayerRow (props) {
@@ -257,6 +258,10 @@ function LayerRow (props) {
     setDisabled(isDisabled);
   }, [isDisabled]);
 
+  useEffect(() => {
+    toggleShowButtons(isMobile);
+  }, [isMobile]);
+
   const toggleDropdownMenuVisible = () => {
     if (showDropdownMenu) {
       setDropdownBtnVisible(false);
@@ -381,6 +386,8 @@ function LayerRow (props) {
           id={layerInfoBtnId}
           aria-label={layerInfoBtnTitle}
           className="button wv-layers-info layer-options-dropdown-item"
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
           onClick={() => onInfoClick(layer, title, measurementDescriptionPath, describeDomainsUrl)}
         >
           {layerInfoBtnTitle}
@@ -389,12 +396,16 @@ function LayerRow (props) {
           id={layerOptionsBtnId}
           aria-label={layerOptionsBtnTitle}
           className="button wv-layers-options layer-options-dropdown-item"
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
           onClick={() => onOptionsClick(layer, title, zot)}
         >
           {layerOptionsBtnTitle}
         </DropdownItem>
         <DropdownItem
           id={removeLayerBtnId}
+          onPointerDown={stopDndActivation}
+          onMouseDown={stopDndActivation}
           onClick={() => removeLayer()}
           className="button wv-layers-options layer-options-dropdown-item"
         >
@@ -501,13 +512,13 @@ function LayerRow (props) {
   };
 
   const mouseOver = () => {
-    if (isMobile) return;
+    if (isMobile || isDragging) return;
     events.trigger(SIDEBAR_LAYER_HOVER, layer.id, true);
     toggleShowButtons(true);
   };
 
   const mouseLeave = () => {
-    if (isMobile) return;
+    if (isMobile || isDragging) return;
     events.trigger(SIDEBAR_LAYER_HOVER, layer.id, false);
     toggleShowButtons(false);
   };
