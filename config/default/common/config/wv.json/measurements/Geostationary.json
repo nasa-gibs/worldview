@@ -3,7 +3,7 @@
         "Geostationary": {
             "id": "geostationary",
             "title":    "Geostationary",
-            "subtitle": "Geostationary Ring, GOES-East, GOES-West, Himawari-9",
+            "subtitle": "Geostationary Ring, GOES-East, GOES-West, Himawari-9, MSG (0 Degree), MSG (Indian Ocean), MTG (0 Degree)",
             "sources": {
               "Geostationary Ring": {
                     "id": "geostationary-ring",
@@ -11,11 +11,11 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                     	"EUMETSAT_RING_Airmass_RGB",
-                      "EUMETSAT_RING_Ash_RGB",
-                      "EUMETSAT_RING_Dust_RGB",
                       "EUMETSAT_RING_Natural_Color_RGB",
-                      "EUMETSAT_RING_IR108"
+                      "EUMETSAT_RING_IR108",
+                      "EUMETSAT_RING_Airmass_RGB",
+                      "EUMETSAT_RING_Ash_RGB",
+                      "EUMETSAT_RING_Dust_RGB"
                     ]
                   },
                 "GOES-East": {
@@ -51,6 +51,33 @@
                       "Himawari_AHI_Band3_Red_Visible_1km",
                       "Himawari_AHI_Band13_Clean_Infrared",
                       "Himawari_AHI_Air_Mass"
+                    ]
+                },
+                "MTG-0 Degree": {
+                    "id": "mtg-0-deg",
+                    "title": "MTG (0 Degree)",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                    	"EUMETSAT_MTG_0Deg_GeoColor_RGB_10min"
+                    ]
+                },
+                "MSG-0 Degree": {
+                    "id": "msg-0-deg",
+                    "title": "MSG (0 Degree)",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+		                "EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min"
+                    ]
+                },
+                "MSG-Indian Ocean": {
+                    "id": "msg-idoc",
+                    "title": "MSG (Indian Ocean)",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+		                "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min"
                     ]
                 }
             }
