@@ -113,7 +113,7 @@ function DateLines(props) {
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, compare, settings, modal,
+    proj, map, compare, settings, modal, imageDownload,
   } = state;
   const isImageDownload = modal.id === 'TOOLBAR_SNAPSHOT' && modal.isOpen;
   const isGeographic = proj.selected.crs === CRS.GEOGRAPHIC;
@@ -125,7 +125,7 @@ const mapStateToProps = (state) => {
     isCompareActive: compare.active,
     mapIsRendered: map.rendered,
     hideText: isImageDownload || !isGeographic,
-    alwaysShow: isImageDownload || settings.alwaysShowDatelines,
+    alwaysShow: (isImageDownload && !imageDownload.inProgress) || settings.alwaysShowDatelines,
     isMobilePhone,
     isMobileTablet,
   };

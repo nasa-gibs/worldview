@@ -3,6 +3,7 @@ import {
   UPDATE_FILE_TYPE,
   UPDATE_RESOLUTION,
   UPDATE_WORLDFILE,
+  UPDATE_IN_PROGRESS,
 } from './constants';
 
 export function updateBoundaries(obj) {
@@ -21,5 +22,11 @@ export function onPanelChange(type, value) {
   return {
     type: actionType,
     value,
+  };
+}
+export function updateInProgress(obj) {
+  return {
+    type: UPDATE_IN_PROGRESS,
+    inProgress: obj,
   };
 }

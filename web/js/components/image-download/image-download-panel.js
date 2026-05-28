@@ -21,6 +21,7 @@ import WaitOverlay from './wait';
 import SnapshotError from './snapshot-error';
 import onClickFeedback from '../../modules/feedback/util';
 import initFeedback from '../../modules/feedback/actions';
+import { subdailyLayersActive } from '../../modules/layers/selectors';
 
 const RESOLUTION_KEY = {
   0.075: '7.5cm',
@@ -60,8 +61,10 @@ function ImageDownloadPanel(props) {
     openSnapshotErrorModal,
     feedbackIsInitiated,
     isMobile,
+    isSubdaily,
     sendFeedback,
     onResolutionChange,
+    onProgressChange,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -78,6 +81,7 @@ function ImageDownloadPanel(props) {
     abortControllerRef.current?.abort();
     setIsSnapshotInProgress(false);
     setSnapshotStatus('');
+    onProgressChange(false);
   };
 
   const changeResolution = (res) => {
@@ -119,7 +123,7 @@ function ImageDownloadPanel(props) {
     changeResolution(resolution);
   }, [resolution]);
 
-  const onDownload = async () => {
+  const onDownload = async (width, height) => {
     const layerList = getLayers();
     const snapshotFormat = currFileType === 'application/vnd.google-earth.kmz' ? 'kmz' : currFileType.split('/').at(-1);
 
@@ -128,6 +132,12 @@ function ImageDownloadPanel(props) {
     abortControllerRef.current = abortController;
     setIsSnapshotInProgress(true);
     setSnapshotStatus('Preparing snapshot...');
+    onProgressChange(true);
+
+    let formattedDate = date.toISOString();
+    if (!isSubdaily) {
+      formattedDate = formattedDate.split('T')[0];
+    }
 
     const snapshotOptions = {
       format: snapshotFormat,
@@ -136,9 +146,11 @@ function ImageDownloadPanel(props) {
       map,
       worldfile: currIsWorldfile,
       abortSignal: abortController.signal,
-      filename: `snapshot-${date.toISOString()}`,
+      filename: `snapshot-${formattedDate}`,
       projection,
       onerror: openSnapshotErrorModal,
+      width,
+      height,
     };
 
     const timeout = setTimeout(onCancelSnapshot, 180_000);
@@ -177,6 +189,7 @@ function ImageDownloadPanel(props) {
       clearTimeout(timeout);
       setIsSnapshotInProgress(false);
       setSnapshotStatus('');
+      onProgressChange(false);
       abortControllerRef.current = null;
       changeResolution(currResolution);
     }
@@ -362,6 +375,7 @@ const mapStateToProps = (state) => {
   return {
     feedbackIsInitiated: feedback.isInitiated,
     isMobile: screenSize.isMobileDevice,
+    isSubdaily: subdailyLayersActive(state),
   };
 };
 
@@ -424,6 +438,8 @@ ImageDownloadPanel.propTypes = {
   openSnapshotErrorModal: PropTypes.func,
   feedbackIsInitiated: PropTypes.bool,
   isMobile: PropTypes.bool,
+  isSubdaily: PropTypes.bool,
   sendFeedback: PropTypes.func,
   onResolutionChange: PropTypes.func,
+  onProgressChange: PropTypes.func,
 };

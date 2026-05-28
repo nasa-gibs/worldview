@@ -27,6 +27,7 @@ import {
 import {
   onPanelChange as onPanelChangeAction,
   updateBoundaries,
+  updateInProgress,
 } from '../modules/image-download/actions';
 import { getNormalizedCoordinate } from '../components/location-search/util';
 import { CRS } from '../modules/map/constants';
@@ -164,6 +165,7 @@ class ImageDownloadContainer extends Component {
       hasSubdailyLayers,
       markerCoordinates,
       onPanelChange,
+      onProgressChange,
     } = this.props;
     const {
       resolution, isWorldfile, fileType, bottomLeftLatLong, topRightLatLong, boundaries,
@@ -217,6 +219,7 @@ class ImageDownloadContainer extends Component {
           geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
           map={map.ui.selected}
           onResolutionChange={this.onResolutionChange}
+          onProgressChange={onProgressChange}
         />
         <Crop
           x={x}
@@ -300,6 +303,9 @@ const mapDispatchToProps = (dispatch) => ({
   onBoundaryChange: (obj) => {
     dispatch(updateBoundaries(obj));
   },
+  onProgressChange: (obj) => {
+    dispatch(updateInProgress(obj));
+  },
 });
 
 export default connect(
@@ -312,6 +318,7 @@ ImageDownloadContainer.propTypes = {
   fileType: PropTypes.string.isRequired,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onBoundaryChange: PropTypes.func.isRequired,
+  onProgressChange: PropTypes.func.isRequired,
   onPanelChange: PropTypes.func.isRequired,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   url: PropTypes.string.isRequired,

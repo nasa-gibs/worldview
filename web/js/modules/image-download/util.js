@@ -660,6 +660,7 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) 
     originalSource.tileLoadFunction_;
 
   const cancellableTileLoadFunction = async (tile, src) => {
+    if (tile.getState() === 2) return;
     try {
       tile.setState(olTileState.LOADING);
       const response = await fetch(src, { signal: abortSignal });
@@ -862,6 +863,8 @@ export async function snapshot(options) {
     filename = 'Worldview Snapshot',
     projection,
     onerror,
+    width,
+    height,
   } = options;
 
   // Check if operation was cancelled before starting
@@ -1020,8 +1023,8 @@ export async function snapshot(options) {
     extent,
     crs,
     metersPerPixel,
-    captureWidth: outputWidth / dpr,
-    captureHeight: outputHeight / dpr,
+    captureWidth: width,
+    captureHeight: height,
     inputFormat: 'png',
     outputFormat: format === 'kmz' ? 'kml' : format,
     worldfile,
