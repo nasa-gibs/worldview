@@ -269,6 +269,10 @@
         "count": {
           "type": "number"
         },
+        "dayRange": {
+          "type": "number",
+          "minimum": 1
+        },
         "ongoing": {
           "type": "boolean"
         },
