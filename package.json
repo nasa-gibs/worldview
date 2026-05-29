@@ -84,12 +84,12 @@
     "upload": "node tasks/util/upload.js"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@babel/eslint-parser": "^7.28.6",
-    "@babel/plugin-transform-class-properties": "^7.28.6",
-    "@babel/plugin-transform-private-methods": "^7.28.6",
-    "@babel/preset-env": "^7.29.5",
-    "@babel/preset-react": "^7.28.5",
+    "@babel/core": "^7.29.7",
+    "@babel/eslint-parser": "^7.29.7",
+    "@babel/plugin-transform-class-properties": "^7.29.7",
+    "@babel/plugin-transform-private-methods": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
     "@playwright/test": "^1.60.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
     "@stylistic/eslint-plugin": "^5.10.0",
@@ -145,11 +145,11 @@
     "stylelint-config-standard-scss": "^16.0.0",
     "stylelint-high-performance-animation": "^1.11.0",
     "tar": "^7.5.15",
-    "terser-webpack-plugin": "^5.6.0",
+    "terser-webpack-plugin": "^5.6.1",
     "uuid": "^14.0.0",
-    "webpack": "^5.107.1",
+    "webpack": "^5.107.2",
     "webpack-bundle-analyzer": "^5.3.0",
-    "webpack-cli": "^7.0.2",
+    "webpack-cli": "^7.0.3",
     "webpack-dev-middleware": "^8.0.3",
     "webpack-dev-server": "^5.2.4",
     "xml-js": "^1.6.11",
@@ -225,6 +225,9 @@
     "semver": "^7.5.4",
     "@gilbarbara/hooks": {
       "react": "^19.2.4"
+    },
+    "sockjs": {
+      "uuid": "^11.1.1"
     }
   },
   "browserslist": [
