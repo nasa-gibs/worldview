@@ -56,6 +56,12 @@ LookupImageTile.prototype.load = async function () {
     let imageProcessed = false;
 
     const onImageLoad = function() {
+      // Clear existing canvas to prevent memory leak (#1510)
+      if (that.canvas_) {
+        that.canvas_.width = 0;
+        that.canvas_.height = 0;
+        that.canvas_ = null;
+      }
       that.canvas_ = document.createElement('canvas');
       that.canvas_.width = that.image_.width;
       that.canvas_.height = that.image_.height;
@@ -91,6 +97,12 @@ LookupImageTile.prototype.load = async function () {
         const decodedPNG = await decodePNG(buffer);
         const { width, height, data } = decodedPNG;
 
+        // Clear existing canvas to prevent memory leak (#1510)
+        if (that.canvas_) {
+          that.canvas_.width = 0;
+          that.canvas_.height = 0;
+          that.canvas_ = null;
+        }
         that.canvas_ = document.createElement('canvas');
         that.canvas_.width = width;
         that.canvas_.height = height;
