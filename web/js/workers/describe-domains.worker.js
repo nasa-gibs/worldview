@@ -66,22 +66,29 @@ function periodToTime(period) {
   const oneMinute = 60_000;
   const oneHour = 3_600_000;
   const oneDay = 86_400_000;
-  const lookup = {
-    S: oneSecond,
-    M: oneMinute,
-    H: oneHour,
-    D: oneDay,
-  };
-  const processedPeriod = period.replace('PT', '');
-  const numberMatch = processedPeriod.match(/[0-9]+/g);
-  const unitMatch = processedPeriod.match(/[a-zA-Z]+/g);
-  const time = numberMatch.reduce((acc, val, idx) => {
-    const number = Number(val);
-    const unit = unitMatch[idx];
-    const milliseconds = number * lookup[unit?.toUpperCase?.()];
-    const invalid = Number.isNaN(milliseconds);
-    const valueToAdd = invalid ? (console.warn(`Invalid period: ${period}`), 0) : milliseconds;
-    return acc + valueToAdd;
+  const lookup = [
+    {
+      D: oneDay,
+    },
+    {
+      S: oneSecond,
+      M: oneMinute,
+      H: oneHour,
+    },
+  ];
+  const processedPeriod = period.replace('P', '').split('T');
+  const time = processedPeriod.reduce((accPortion, valPortion, index) => {
+    if (!valPortion.length) return accPortion;
+    const numberMatch = valPortion.match(/[0-9]+/g);
+    const unitMatch = valPortion.match(/[a-zA-Z]+/g);
+    return accPortion + numberMatch.reduce((acc, val, idx) => {
+      const number = Number(val);
+      const unit = unitMatch[idx];
+      const milliseconds = number * lookup[index][unit?.toUpperCase?.()];
+      const invalid = Number.isNaN(milliseconds);
+      const valueToAdd = invalid ? (console.warn(`Invalid period: ${period}`), 0) : milliseconds;
+      return acc + valueToAdd;
+    }, 0);
   }, 0);
 
   return time || 360_000;
