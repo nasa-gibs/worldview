@@ -134,8 +134,48 @@ const renderSettings = (layer = standardLayer, propOverrides = {}) => render(
   </Provider>,
 );
 
+import { fireEvent } from '@testing-library/react';
+
+const singleLegend = {
+  id: 'legend-1',
+  title: 'Legend 1',
+  type: 'continuous',
+  colors: ['#ff0000', '#00ff00'],
+  refs: ['ref0', 'ref1'],
+};
+
+const classificationLegend = {
+  id: 'legend-class',
+  title: 'Classification',
+  type: 'classification',
+  colors: ['#ff0000', '#00ff00'],
+  refs: ['ref0', 'ref1'],
+};
+
+const singleColorClassLegend = {
+  id: 'legend-single-class',
+  title: 'Single Class',
+  type: 'classification',
+  colors: ['#ff0000'],
+  refs: ['ref0'],
+};
+
+const unknownTypeLegend = {
+  id: 'legend-unknown',
+  title: 'Unknown',
+  type: 'something-else',
+  colors: ['#ff0000', '#00ff00'],
+  refs: ['ref0', 'ref1'],
+};
+
+const basePalette = { legend: { colors: ['#ff0000', '#00ff00'] }, squash: false, noclip: false };
+
 beforeEach(() => {
   jest.clearAllMocks();
+  const { getPaletteLegends, getPalette, getPaletteLegend } = require('../../../modules/palettes/selectors');
+  getPaletteLegends.mockReturnValue(null);
+  getPalette.mockReturnValue(basePalette);
+  getPaletteLegend.mockReturnValue(null);
 });
 
 describe('LayerSettings', () => {
@@ -236,6 +276,149 @@ describe('LayerSettings', () => {
       getGranuleLayer.mockReturnValue({ dates: null, count: 5 });
       renderSettings(standardLayer);
       expect(screen.queryByTestId('granule-count-slider')).not.toBeInTheDocument();
+    });
+
+    it('renders GranuleDateList when allowGranuleReorder is set in localStorage', () => {
+      const { getItem } = require('../../../util/local-storage');
+      getItem.mockReturnValue('true');
+      const { getGranuleLayer } = require('../../../modules/layers/selectors');
+      getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
+      renderSettings(standardLayer);
+      expect(screen.getByTestId('granule-date-list')).toBeInTheDocument();
+    });
+  });
+
+  describe('renderCustomPalettes — single palette', () => {
+    it('renders Palette and PaletteThreshold for a continuous single legend', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([singleLegend]);
+      getPaletteLegend.mockReturnValue(singleLegend);
+      renderSettings(standardLayer);
+      expect(screen.getByTestId('palette')).toBeInTheDocument();
+      expect(screen.getByTestId('palette-threshold')).toBeInTheDocument();
+    });
+
+    it('renders ClassificationToggle for a classification legend with multiple colors', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([classificationLegend]);
+      getPaletteLegend.mockReturnValue(classificationLegend);
+      renderSettings(standardLayer);
+      expect(screen.getByTestId('classification-toggle')).toBeInTheDocument();
+    });
+
+    it('does not render PaletteThreshold for a classification legend', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([classificationLegend]);
+      getPaletteLegend.mockReturnValue(classificationLegend);
+      renderSettings(standardLayer);
+      expect(screen.queryByTestId('palette-threshold')).not.toBeInTheDocument();
+    });
+
+    it('does not render custom palettes when layer has no palette field', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([singleLegend]);
+      getPaletteLegend.mockReturnValue(singleLegend);
+      renderSettings({ ...standardLayer, palette: undefined });
+      expect(screen.queryByTestId('palette')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('renderMultiColormapCustoms — multi-palette', () => {
+    const multiLegends = [
+      { ...singleLegend, id: 'leg-0', title: 'Band 1' },
+      { ...singleLegend, id: 'leg-1', title: 'Band 2' },
+    ];
+
+    it('renders tabbed nav for multiple palettes (continuous)', () => {
+      const { getPaletteLegends } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue(multiLegends);
+      renderSettings(standardLayer);
+      expect(screen.getByText('Band 1')).toBeInTheDocument();
+      expect(screen.getByText('Band 2')).toBeInTheDocument();
+    });
+
+    it('switches active tab when nav link is clicked', () => {
+      const { getPaletteLegends } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue(multiLegends);
+      renderSettings(standardLayer);
+      fireEvent.click(screen.getByText('Band 2'));
+      // No crash and tab content still renders
+      expect(screen.getByText('Band 2')).toBeInTheDocument();
+    });
+
+    it('renders ClassificationToggle tab for classification legend with multiple colors', () => {
+      const { getPaletteLegends } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([
+        { ...classificationLegend, id: 'leg-0', title: 'Class A' },
+        { ...singleLegend, id: 'leg-1', title: 'Band B' },
+      ]);
+      renderSettings(standardLayer);
+      expect(screen.getByTestId('classification-toggle')).toBeInTheDocument();
+    });
+
+    it('renders "No customizations available" tab for unknown palette type with multiple colors', () => {
+      const { getPaletteLegends } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([
+        { ...unknownTypeLegend, id: 'leg-0', title: 'Unknown A' },
+        { ...singleLegend, id: 'leg-1', title: 'Band B' },
+      ]);
+      renderSettings(standardLayer);
+      expect(screen.getByText('No customizations available for this palette.')).toBeInTheDocument();
+    });
+  });
+
+  describe('vector layer customization', () => {
+    const vectorLayer = {
+      id: 'vector-layer-1',
+      opacity: 1,
+      type: 'vector',
+      palette: { id: 'blue-1', recommended: [] },
+    };
+
+    it('does not render palette customizations for Orbital Track vector layers', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([singleLegend]);
+      getPaletteLegend.mockReturnValue(singleLegend);
+      renderSettings({ ...vectorLayer, layergroup: 'Orbital Track' });
+      expect(screen.queryByTestId('palette')).not.toBeInTheDocument();
+    });
+
+    it('does not render palette customizations for Reference vector layers', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([singleLegend]);
+      getPaletteLegend.mockReturnValue(singleLegend);
+      renderSettings({ ...vectorLayer, layergroup: 'Reference' });
+      expect(screen.queryByTestId('palette')).not.toBeInTheDocument();
+    });
+
+    it('renders palette customizations for non-restricted vector layers', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([singleLegend]);
+      getPaletteLegend.mockReturnValue(singleLegend);
+      renderSettings({ ...vectorLayer, layergroup: 'Science' });
+      expect(screen.getByTestId('palette')).toBeInTheDocument();
+    });
+
+    it('does not render palette customizations when disableCustomPalettes is true', () => {
+      const { getPaletteLegends, getPaletteLegend } = require('../../../modules/palettes/selectors');
+      getPaletteLegends.mockReturnValue([singleLegend]);
+      getPaletteLegend.mockReturnValue(singleLegend);
+      renderSettings({ ...vectorLayer, layergroup: 'Science', disableCustomPalettes: true });
+      expect(screen.queryByTestId('palette')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('AERONET classification layer', () => {
+    it('renders ClassificationToggle for single-color AERONET classification legend in multi-palette tab', () => {
+      const { getPaletteLegends } = require('../../../modules/palettes/selectors');
+      // Two legends triggers renderMultiColormapCustoms;
+      // AERONET id bypasses the colors.length > 1 guard
+      getPaletteLegends.mockReturnValue([
+        { ...singleColorClassLegend, id: 'leg-0', title: 'Leg 0' },
+        { ...singleLegend, id: 'leg-1', title: 'Leg 1' },
+      ]);
+      renderSettings({ ...standardLayer, id: 'AERONET_AOD_500nm' });
+      expect(screen.getByTestId('classification-toggle')).toBeInTheDocument();
     });
   });
 });
