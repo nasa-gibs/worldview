@@ -12,6 +12,7 @@
       "period": "subdaily",
       "count": 1,
       "dataAvailability": "dd",
+      "disableGIF": true,
       "shiftadjacentdays": false
     }
   }

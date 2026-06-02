@@ -8,7 +8,7 @@
       "layergroup": "Reference",
       "type": "vector",
       "wrapX": true,
-      "disableSnapshot": true
+      "disableGIF": true
     }
   }
 }

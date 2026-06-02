@@ -11,6 +11,7 @@
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
+      "disableGIF": true,
       "disableCustomPalettes": true,
       "layergroup": "Suborbital Ship Tracks",
       "vectorStyle": {

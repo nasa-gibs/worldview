@@ -1138,15 +1138,16 @@ export function getPixelFromPercentage(maxDimension, percent) {
 /**
  * Find if there are layers that cannot be downloaded
  * @param {Array} visibleLayers
+ * @param {boolean} isFromSnapshot
  *
  * @return {Bool}
  */
-export function hasNonDownloadableVisibleLayer(visibleLayers, isFromSnapshot) {
+export function hasNonDownloadableVisibleLayer(visibleLayers, isFromSnapshot = false) {
   // Only needed during transition period where image snapshot is frontend and
   // gif creation is backend. Should be removed when both are frontend,
   // and the actual layer objects updated to remove disableSnapshot as needed
-  if (isFromSnapshot) return false;
-  return visibleLayers.some(({ disableSnapshot = false }) => disableSnapshot);
+  if (isFromSnapshot) return visibleLayers.some(({ disableSnapshot = false }) => disableSnapshot);
+  return visibleLayers.some(({ disableGIF = false }) => disableGIF);
 }
 /**
  * Get string of layers to be removed if alert is accepted
@@ -1167,30 +1168,33 @@ export function getNamesOfNondownloadableLayers(nonDownloadableLayers) {
 /**
  * Get warning that shows layers that will be removed if notification is accepted
  * @param {Array} nonDownloadableLayers
+ * @param {boolean} isFromSnapshot
  *
  * @return {String}
  */
-export function getNonDownloadableLayerWarning(nonDownloadableLayer) {
+export function getNonDownloadableLayerWarning(nonDownloadableLayer, isFromSnapshot = false) {
   const layerStr = getNamesOfNondownloadableLayers(nonDownloadableLayer);
   if (!layerStr) return '';
   const multiLayers = layerStr.indexOf(',') > -1;
   const layerPluralStr = multiLayers ? 'layers' : 'layer';
   const thisTheseStr = multiLayers ? 'these' : 'this';
-  return `The ${layerStr} ${layerPluralStr} cannot be included in a snapshot.
+  const typeName = isFromSnapshot ? 'snapshot' : 'GIF';
+  return `The ${layerStr} ${layerPluralStr} cannot be included in a ${typeName}.
     Would you like to temporarily hide ${thisTheseStr} layer?`;
 }
 /**
  * Get array of layers that will be removed if notification is accepted
  * @param {Array} visibleLayers
+ * @param {boolean} isFromSnapshot
  *
  * @return {Array}
  */
-export function getNonDownloadableLayers(visibleLayers, isFromSnapshot) {
+export function getNonDownloadableLayers(visibleLayers, isFromSnapshot = false) {
   // Only needed during transition period where image snapshot is frontend and
   // gif creation is backend. Should be removed when both are frontend,
   // and the actual layer objects updated to remove disableSnapshot as needed
-  if (isFromSnapshot) return visibleLayers;
-  return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
+  if (isFromSnapshot) return visibleLayers.filter(({ disableSnapshot = false }) => disableSnapshot);
+  return visibleLayers.filter(({ disableGIF = false }) => disableGIF);
 }
 /**
  * Get dateline message for selecting snapshot area

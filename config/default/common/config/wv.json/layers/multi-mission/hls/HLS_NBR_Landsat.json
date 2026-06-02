@@ -22,6 +22,7 @@
         "colormap_name": "puor",
         "bands_regex": "B[0-9][0-9]"
       },
+      "disableGIF": true,
       "minZoom": 7,
       "wrapX": false,
       "projections": {

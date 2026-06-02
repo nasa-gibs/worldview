@@ -11,9 +11,10 @@
       "tags": "wdpa pa national park protected areas",
       "format": "image/png",
       "type": "xyz",
+      "disableSnapshot": true,
+      "disableGIF": true,
       "layergroup": "Reference",
       "wrapX": true,
-      "disableSnapshot": true,
       "maxZoom": 12,
       "projections": {
         "geographic": {
