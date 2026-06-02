@@ -569,7 +569,7 @@ const mapDispatchToProps = (dispatch) => ({
   notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
     const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj, true);
     const bodyComponentProps = {
-      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers),
+      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers, true),
       cancel: () => {
         dispatch(onToggle());
       },
