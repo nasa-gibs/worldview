@@ -9,6 +9,7 @@
         "group": "baselayers",
         "layergroup": "Reference",
         "format": "image/png",
+        "disableSnapshot": true,
         "type": "esriMapServer",
         "wrapX": false,
         "projections": {

@@ -13,6 +13,7 @@
       "type": "xyz",
       "layergroup": "Reference",
       "wrapX": true,
+      "disableSnapshot": true,
       "maxZoom": 12,
       "projections": {
         "geographic": {
