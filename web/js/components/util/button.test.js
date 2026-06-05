@@ -130,7 +130,6 @@ describe('Button', () => {
       const btn = screen.getByRole('button');
       const stopPropagation = jest.fn();
       fireEvent.mouseDown(btn, { stopPropagation });
-      // stopPropagation is synthetic — verify the button still exists and no error thrown
       expect(btn).toBeInTheDocument();
     });
   });
