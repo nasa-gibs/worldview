@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from '@testing-library/react';
+/* eslint-disable react/prop-types */
+import { render, fireEvent, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TourIntro from './content-intro';
 

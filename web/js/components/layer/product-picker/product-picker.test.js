@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import { render, act } from '@testing-library/react';
 import { Provider } from 'react-redux';

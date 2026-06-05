@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import { render, fireEvent, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -15,7 +16,11 @@ jest.mock('@fortawesome/react-fontawesome', () => ({
 jest.mock('reactstrap', () => ({
   InputGroup: ({ children, ...props }) => <div {...props}>{children}</div>,
   Input: ({ innerRef, ...props }) => <input ref={innerRef} {...props} />,
-  Button: ({ children, onClick, ...props }) => <button onClick={onClick} {...props}>{children}</button>,
+  Button: ({
+    children,
+    onClick,
+    ...props
+  }) => <button onClick={onClick} {...props}>{children}</button>,
   Breadcrumb: ({ children, ...props }) => <nav {...props}>{children}</nav>,
   BreadcrumbItem: ({ children, tag: Tag = 'div', ...props }) => <Tag {...props}>{children}</Tag>,
   UncontrolledTooltip: ({ children }) => <div data-testid="tooltip">{children}</div>,
