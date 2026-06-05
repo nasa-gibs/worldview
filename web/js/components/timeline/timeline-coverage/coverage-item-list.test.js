@@ -28,7 +28,9 @@ jest.mock('../../../util/util', () => ({
     [`${prefix}Hour`]: date.getUTCHours(),
     [`${prefix}Minute`]: date.getUTCMinutes(),
   })),
-  getTimezoneOffsetDate: jest.fn((date) => date),
+  getTimezoneOffsetDate: jest.fn(
+    (date) => new Date(date.getTime() - date.getTimezoneOffset() * 60000),
+  ),
   encodeId: jest.fn((id) => id),
 }));
 
