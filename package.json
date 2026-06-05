@@ -106,7 +106,7 @@
     "css-minimizer-webpack-plugin": "^8.0.0",
     "css-url-relative-plugin": "^1.1.0",
     "cssnano": "^8.0.1",
-    "eslint": "^9.39.4",
+    "eslint": "^10.4.1",
     "eslint-import-resolver-webpack": "^0.13.11",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-jest": "^29.15.2",
