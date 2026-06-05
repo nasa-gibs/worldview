@@ -1019,15 +1019,15 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
-      const params = assets.map((asset) => `bands=${asset}`);
+      const params = assets.map((asset) => `assets=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
       params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
-      params.push(`bands_regex=${def?.bandCombo?.bands_regex}`);
+      params.push(`assets_regex=${def?.bandCombo?.bands_regex}`);
       params.push(`color_formula=${def?.bandCombo?.color_formula}`);
 
-      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}@1x?concept_id=${def.collectionConceptID}&datetime=${zeroedDateTile}/${lastDateTile}&post_process=swir&backend=rasterio&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `rasterio/tiles/WGS1984Quad/${z}/${x}/${y}?collection_concept_id=${def.collectionConceptID}&temporal=${zeroedDateTile}/${lastDateTile}&post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };
