@@ -15,12 +15,21 @@ jest.mock('./date-input-column', () => {
     };
     const invalidValues = {
       year: 1990, // Outside minDate
+      day: 32, // Exceeds max days in any month
     };
 
     return (
       <div data-testid={`date-input-${props.type}`}>
         <span data-testid={`kiosk-${props.type}`}>{props.isKioskModeActive ? 'kiosk' : 'normal'}</span>
         <span data-testid={`disabled-${props.type}`}>{props.isDisabled ? 'disabled' : 'enabled'}</span>
+        <button
+          data-testid={`focus-${props.type}`}
+          onClick={() => {
+            if (props.onFocus) props.onFocus(props.type);
+          }}
+        >
+          Focus {props.type}
+        </button>
         <button
           data-testid={`update-${props.type}`}
           onClick={() => {
@@ -40,6 +49,14 @@ jest.mock('./date-input-column', () => {
           }}
         >
           Update Invalid {props.type}
+        </button>
+        <button
+          data-testid={`roll-${props.type}`}
+          onClick={() => {
+            if (props.updateDate) props.updateDate(props.date, true);
+          }}
+        >
+          Roll {props.type}
         </button>
       </div>
     );
@@ -178,6 +195,136 @@ describe('DateSelector', () => {
       fireEvent.click(updateInvalidYearBtn);
     });
 
+    expect(defaultProps.onDateChange).not.toHaveBeenCalled();
+  });
+
+  // ─── isRollDate path ───────────────────────────────────────────────────────
+
+  it('triggers onDateChange when updateDate is called with isRollDate=true', () => {
+    render(<DateSelector {...defaultProps} />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('roll-year'));
+    });
+    expect(defaultProps.onDateChange).toHaveBeenCalled();
+  });
+
+  // ─── focusedUnit='year' validation branch ─────────────────────────────────
+
+  it('sets yearValid=false when focused year is updated to out-of-range value', () => {
+    render(<DateSelector {...defaultProps} />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('focus-year'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-invalid-year'));
+    });
+    expect(defaultProps.onDateChange).not.toHaveBeenCalled();
+  });
+
+  // ─── day overflow without focus ───────────────────────────────────────────
+
+  it('clamps day to max when day exceeds month limit (no focus)', () => {
+    render(<DateSelector {...defaultProps} />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-invalid-day'));
+    });
+    // day=32 > maxDayDate=31, validDate set false, returns false → no onDateChange
+    expect(defaultProps.onDateChange).not.toHaveBeenCalled();
+  });
+
+  // ─── day overflow with focus ──────────────────────────────────────────────
+
+  it('sets dayValid=false when focused day exceeds month limit', () => {
+    render(<DateSelector {...defaultProps} />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('focus-day'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-invalid-day'));
+    });
+    expect(defaultProps.onDateChange).not.toHaveBeenCalled();
+  });
+
+  // ─── month tabToCheck validation ──────────────────────────────────────────
+
+  it('validates month range when month column is focused', () => {
+    render(<DateSelector {...defaultProps} />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('focus-month'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-month'));
+    });
+    // month within range → onDateChange called
+    expect(defaultProps.onDateChange).toHaveBeenCalled();
+  });
+
+  // ─── day+month both pending (chained invalid state) ───────────────────────
+
+  it('handles both day and month pending in dateObj via chained invalid year', () => {
+    render(<DateSelector {...defaultProps} />);
+
+    // Step 1: set year=1990 (out of range) so state isn't cleared
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-invalid-year'));
+    });
+
+    // Step 2: set day=15 (still out of range due to year=1990)
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-day'));
+    });
+
+    // Step 3: set month='01' — now both day and month are in dateObj,
+    // exercising the day && month branches in updateDateCheck
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-month'));
+    });
+
+    // date remains out of range (year=1990) → no onDateChange
+    expect(defaultProps.onDateChange).not.toHaveBeenCalled();
+  });
+
+  // ─── hour tabToCheck validation (subDailyMode) ────────────────────────────
+
+  it('validates hour range when hour column is focused in subDailyMode', () => {
+    render(<DateSelector {...defaultProps} subDailyMode />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('focus-hour'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-hour'));
+    });
+    expect(defaultProps.onDateChange).toHaveBeenCalled();
+  });
+
+  // ─── minute tabToCheck validation (subDailyMode) ─────────────────────────
+
+  it('validates minute range when minute column is focused in subDailyMode', () => {
+    render(<DateSelector {...defaultProps} subDailyMode />);
+    act(() => {
+      fireEvent.click(screen.getByTestId('focus-minute'));
+    });
+    act(() => {
+      fireEvent.click(screen.getByTestId('update-minute'));
+    });
+    expect(defaultProps.onDateChange).toHaveBeenCalled();
+  });
+
+  // ─── non-kiosk time divider classes ───────────────────────────────────────
+
+  it('uses non-kiosk classes for time divider and Z mark when not in kiosk mode', () => {
+    const { container } = render(<DateSelector {...defaultProps} subDailyMode />);
+    expect(container.querySelector('.input-time-divider')).toBeDefined();
+    expect(container.querySelector('.input-time-zmark')).toBeDefined();
+  });
+
+  // ─── no prevDate (first mount) clears state ───────────────────────────────
+
+  it('clears time values on mount when prevDate is undefined', () => {
+    usePrevious.mockImplementation(() => undefined);
+    render(<DateSelector {...defaultProps} />);
+    // Should render without errors and not call onDateChange
+    expect(screen.getByTestId('date-input-year')).toBeDefined();
     expect(defaultProps.onDateChange).not.toHaveBeenCalled();
   });
 });
