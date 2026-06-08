@@ -702,7 +702,7 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) 
 function toggleHighResTileGrids (map, abortSignal, tileMatrixID, onerror) {
   const layers = map.getAllLayers();
   const restoreSources = layers
-    .filter((layer) => layer?.isVisible())
+    .filter((layer) => layer.getVisible())
     .map((layer) => updateHighResTileGrids(layer, abortSignal, tileMatrixID, onerror));
 
   return () => restoreSources.forEach((restoreSource) => restoreSource());
