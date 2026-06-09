@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter,
@@ -6,67 +6,60 @@ import {
 import { Close } from '@edsc/earthdata-react-icons/horizon-design-system/hds/ui';
 import Steps from './widget-steps';
 
-class ModalInProgress extends React.Component {
-  constructor(props) {
-    super(props);
-    this.stepContentRef = React.createRef();
-  }
-
-  render() {
-    const {
-      className,
-      currentStory,
-      description,
-      modalInProgress,
-      endTour,
-      currentStep,
-      totalSteps,
-      decreaseStep,
-      incrementStep,
-      isKioskModeActive,
-    } = this.props;
-    const closeBtn = (
-      <button className={isKioskModeActive ? 'd-none' : 'end-tour-close-btn'} onClick={endTour} type="button">
-        <Close className="add-plus" size="14px" />
-      </button>
-    );
-    return (
-      <div>
-        <Modal
-          isOpen={modalInProgress}
-          toggle={endTour}
-          wrapClassName="tour tour-in-progress"
-          className={
-            `${className} ${currentStory.type}`
-          }
-          backdrop={false}
-          keyboard={false}
-        >
-          <ModalHeader toggle={endTour} close={closeBtn} style={{ display: 'flex', alignItems: 'baseline' }}>
-            {currentStory.title}
-            <i className="modal-icon" aria-hidden="true" />
-          </ModalHeader>
-          <ModalBody>
-            { }
-            <div
-              ref={this.stepContentRef}
-              dangerouslySetInnerHTML={{ __html: description }}
-            />
-            { }
-          </ModalBody>
-          <ModalFooter>
-            <Steps
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-              decreaseStep={decreaseStep}
-              incrementStep={incrementStep}
-              isKioskModeActive={isKioskModeActive}
-            />
-          </ModalFooter>
-        </Modal>
-      </div>
-    );
-  }
+function ModalInProgress({
+  className,
+  currentStory,
+  description,
+  modalInProgress,
+  endTour,
+  currentStep,
+  totalSteps,
+  decreaseStep,
+  incrementStep,
+  isKioskModeActive,
+}) {
+  const stepContentRef = useRef(null);
+  const closeBtn = (
+    <button className={isKioskModeActive ? 'd-none' : 'end-tour-close-btn'} onClick={endTour} type="button">
+      <Close className="add-plus" size="14px" />
+    </button>
+  );
+  return (
+    <div>
+      <Modal
+        isOpen={modalInProgress}
+        toggle={endTour}
+        wrapClassName="tour tour-in-progress"
+        className={
+          `${className} ${currentStory.type}`
+        }
+        backdrop={false}
+        keyboard={false}
+      >
+        <ModalHeader toggle={endTour} close={closeBtn} style={{ display: 'flex', alignItems: 'baseline' }}>
+          {currentStory.title}
+          <i className="modal-icon" aria-hidden="true" />
+        </ModalHeader>
+        <ModalBody>
+          { }
+          <div
+            ref={stepContentRef}
+            dangerouslySetInnerHTML={{ __html: description }}
+          />
+          { }
+        </ModalBody>
+        <ModalFooter>
+          <Steps
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+            decreaseStep={decreaseStep}
+            incrementStep={incrementStep}
+            isKioskModeActive={isKioskModeActive}
+          />
+        </ModalFooter>
+      </Modal>
+    </div>
+  );
 }
 
 ModalInProgress.propTypes = {
