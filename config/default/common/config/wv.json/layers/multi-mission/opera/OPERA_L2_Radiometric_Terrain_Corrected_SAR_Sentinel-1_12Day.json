@@ -1,0 +1,39 @@
+{
+  "layers": {
+    "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day": {
+      "id": "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day",
+      "layer": "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1",
+      "title": "OPERA Radiometric Terrain Corrected SAR Backscatter 12-Day (False Color)",
+      "subtitle": "RTC-S1/Sentinel-1",
+      "ongoing": true,
+      "enableCMRDataFinder": true,
+      "description": "multi-mission/opera/OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1",
+      "tags": "asf asfdaac rtc synthetic aperture radar backscatter opera",
+      "group": "overlays",
+      "layergroup": "RTC SAR Backscatter",
+      "dayRange": 12,
+      "type": "wmts",
+      "format": "image/png",
+      "period": "daily",
+      "startDate": "2025-01-10T00:00:00Z",
+      "daynight": ["day", "night"],
+      "conceptIds": [
+        {
+          "type": "STD",
+          "value": "C2777436413-ASF",
+          "shortName": "OPERA_L2_RTC-S1_V1",
+          "title": "OPERA Radiometric Terrain Corrected SAR Backscatter from Sentinel-1 validated product (Version 1)",
+          "version": "1",
+          "dataCenter": "ASF"
+        }
+      ],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic",
+          "matrixSet": "31.25m",
+          "layer": "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1"
+        }
+      }
+    }
+  }
+}
