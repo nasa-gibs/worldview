@@ -124,6 +124,7 @@
 		"TEMPO_L3_Ozone_Profile_Total_Column",
   	"TEMPO_L3_Ozone_Profile_Troposphere_Column",
 		"VIIRS_NOAA21_DayNightBand",
+		"VIIRS_NOAA20_GapFilled_BRDF_Corrected_DayNightBand_Radiance",
 		"VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
 		"VIIRS_NOAA20_DayNightBand_AtSensor_M15",
 		"VIIRS_NOAA20_DayNightBand",

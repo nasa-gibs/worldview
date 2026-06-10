@@ -27,6 +27,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
+                        "VIIRS_NOAA20_GapFilled_BRDF_Corrected_DayNightBand_Radiance",
                         "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
                         "VIIRS_NOAA20_DayNightBand"
