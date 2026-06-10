@@ -21,13 +21,13 @@ function BODY_COMPONENT() {
   );
 }
 class ErrorBoundary extends React.Component {
+  static getDerivedStateFromError() {
+    return { error: true };
+  }
+
   constructor(props) {
     super(props);
     this.state = { error: false };
-  }
-
-  static getDerivedStateFromError() {
-    return { error: true };
   }
 
   componentDidCatch(error, info) {
