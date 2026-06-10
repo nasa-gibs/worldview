@@ -311,7 +311,7 @@ export default function mapLayerBuilder(config, cache, store) {
     options.group = options.group || activeString;
 
     // If layer is a TEMPO layer, fetch updated date ranges
-    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+    if (def?.id?.includes('TEMPO') && !def?.tempoDateRanges && tempoCallback) {
       tempoCallback(def, [], options.group);
       getUpdatedDateRanges(def, tempoCallback, options.group);
     }
