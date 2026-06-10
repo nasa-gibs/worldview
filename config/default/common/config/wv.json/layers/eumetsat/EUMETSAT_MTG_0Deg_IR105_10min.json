@@ -1,10 +1,10 @@
 {
   "layers": {
-      "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min": {
-      "id": "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
-      "title": "GeoColor (10 minute)",
+      "EUMETSAT_MTG_0Deg_IR105_10min": {
+      "id": "EUMETSAT_MTG_0Deg_IR105_10min",
+      "title": "Infrared (10.5 µm, 10 minute)",
       "subtitle": "MTG, 0 Degree/FCI",
-      "description": "eumetsat/EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
+      "description": "eumetsat/EUMETSAT_MTG_0Deg_IR105_10min",
       "tags": "eumetsat ring",
       "group": "overlays",
       "type": "wms",
@@ -22,7 +22,7 @@
       "projections": {
         "geographic": {
           "source": "EUMETSAT:wms",
-          "layer": "mtg_fd:rgb_geocolour"
+          "layer": "mtg_fd:ir105_hrfi"
         }
       }
     }

@@ -68,7 +68,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-		                "EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min"
+		                "EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min",
+                    		"EUMETSAT_MTG_0Deg_IR105_10min"
                     ]
                 },
                 "MSG-Indian Ocean": {
