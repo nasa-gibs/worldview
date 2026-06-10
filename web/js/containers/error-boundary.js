@@ -26,12 +26,13 @@ class ErrorBoundary extends React.Component {
     this.state = { error: false };
   }
 
+  static getDerivedStateFromError() {
+    return { error: true };
+  }
+
   componentDidCatch(error, info) {
     const { errorAlert } = this.props;
-    this.setState({ error: true });
-    // Display fallback UI
     errorAlert();
-    // log the error
     console.warn(error, info);
   }
 
