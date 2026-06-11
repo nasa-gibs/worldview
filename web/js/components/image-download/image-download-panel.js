@@ -325,7 +325,7 @@ function ImageDownloadPanel(props) {
         <ResTable
           width={width}
           height={height}
-          fileSize={((width * height * 24) / 8388608).toFixed(2)}
+          fileSize={(((width * height) ** 0.89) * 6.88 / 8388608).toFixed(2)}
           maxImageSize={`${maxWidth}px x ${maxHeight}px`}
           validSize={imageSizeValid({
             maxHeight,

@@ -142,6 +142,10 @@ class toolbarContainer extends Component {
     toggleDialogVisible(false);
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
+    // Allow time for view to un-rotate
+    if (isRotated) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
     await openModal(
       'TOOLBAR_SNAPSHOT',
       {
