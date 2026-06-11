@@ -3,9 +3,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GifPanel from './gif-panel';
-import { getDimensions } from '../../modules/gif-download/util';
+import { getDimensions } from '../../modules/image-download/util';
 
-jest.mock('../../modules/gif-download/util', () => ({
+jest.mock('../../modules/image-download/util', () => ({
   getDimensions: jest.fn(),
 }));
 

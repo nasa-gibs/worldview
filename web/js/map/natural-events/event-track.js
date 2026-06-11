@@ -166,7 +166,7 @@ function EventTrack () {
   const mapRef = useRef(map);
   useEffect(() => {
     mapRef.current = map;
-    map?.on?.('moveend', () => setMapMoves((c) => c + 1));
+    map?.on('moveend', () => setMapMoves((c) => c + 1));
   }, [map]);
   useEffect(() => {
     showAllTracksRef.current = showAllTracks;
