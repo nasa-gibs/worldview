@@ -11,16 +11,19 @@ const thumbsize = 26;
 class PaletteThreshold extends React.Component {
   constructor(props) {
     super(props);
-    const { start, end, squashed } = props;
+    const {
+      start, end, squashed, noclipped,
+    } = props;
     this.state = {
       start,
       end,
       squashed,
+      noclipped,
       avg: Math.round((start + end) / 2),
       sliderWidth: 264,
     };
     this.debounceSetRange = lodashDebounce(props.setRange, 300);
-    this.updateSquash = this.updateSquash.bind(this);
+    this.updateSquashOrNoClip = this.updateSquashOrNoClip.bind(this);
     this.updateThreshold = this.updateThreshold.bind(this);
     this.slider = React.createRef();
   }
@@ -32,12 +35,15 @@ class PaletteThreshold extends React.Component {
     }
   }
 
-  updateSquash() {
+  updateSquashOrNoClip(type) {
     const {
       setRange, layerId, index, groupName, palette, legend,
     } = this.props;
-    const { start, end, squashed } = this.state;
-    const isSquashed = !squashed;
+    const {
+      start, end, squashed, noclipped,
+    } = this.state;
+    const isSquashed = type === 'squash' ? !squashed : squashed;
+    const isNoClipped = type === 'noclip' ? !noclipped : noclipped;
     const startIndex = legend.refs[start];
     const endIndex = legend.refs[end];
 
@@ -46,10 +52,15 @@ class PaletteThreshold extends React.Component {
       parseFloat(palette.entries.refs.indexOf(startIndex)),
       parseFloat(palette.entries.refs.lastIndexOf(endIndex)),
       isSquashed,
+      isNoClipped,
       index,
       groupName,
     );
-    this.setState({ squashed: isSquashed });
+    if (type === 'squash') {
+      this.setState({ squashed: isSquashed });
+    } else {
+      this.setState({ noclipped: isNoClipped });
+    }
   }
 
   /**
@@ -60,7 +71,9 @@ class PaletteThreshold extends React.Component {
     const {
       layerId, index, groupName, palette, legend,
     } = this.props;
-    const { start, end, squashed } = this.state;
+    const {
+      start, end, squashed, noclipped,
+    } = this.state;
     const newStart = parseInt(thresholdArray[0], 10);
     const newEnd = parseInt(thresholdArray[1], 10);
     const startRef = legend.refs[newStart];
@@ -97,6 +110,7 @@ class PaletteThreshold extends React.Component {
       min,
       max,
       squashed,
+      noclipped,
       index,
       groupName,
     );
@@ -116,7 +130,7 @@ class PaletteThreshold extends React.Component {
 
   render() {
     const {
-      start, end, squashed, avg, sliderWidth,
+      start, end, squashed, noclipped, avg, sliderWidth,
     } = this.state;
     const {
       index, min, max, legend, globalTemperatureUnit,
@@ -172,7 +186,18 @@ class PaletteThreshold extends React.Component {
             label="Squash Palette"
             classNames="wv-squash-button-check"
             id={`wv-squash-button-check${index}`}
-            onCheck={this.updateSquash}
+            onCheck={() => this.updateSquashOrNoClip('squash')}
+          />
+        </div>
+        <div id={`wv-palette-clip${index}`} className="wv-palette-clip">
+          <Checkbox
+            name="Clip Palette"
+            color="gray"
+            checked={!noclipped}
+            label="Clip Palette"
+            classNames="wv-clip-button-check"
+            id={`wv-clip-button-check${index}`}
+            onCheck={() => this.updateSquashOrNoClip('noclip')}
           />
         </div>
         <div
@@ -225,6 +250,7 @@ PaletteThreshold.propTypes = {
   palette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setRange: PropTypes.func,
   squashed: PropTypes.bool,
+  noclipped: PropTypes.bool,
   start: PropTypes.number,
 };
 

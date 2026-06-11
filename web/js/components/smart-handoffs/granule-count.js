@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
 import PropTypes from 'prop-types';
+import { cmrFetch } from '../../util/cmr';
 
 export default function GranuleCount (props) {
   const {
@@ -28,7 +29,7 @@ export default function GranuleCount (props) {
   } = state;
 
   const requestGranules = async (url) => {
-    const granulesResponse = await fetch(url, { timeout: 5000 });
+    const granulesResponse = await cmrFetch(url);
     const result = await granulesResponse.json();
     return lodashGet(result, 'feed.entry', []);
   };

@@ -1,0 +1,3 @@
+test('gif container test', () => {
+
+});

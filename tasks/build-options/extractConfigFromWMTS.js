@@ -360,8 +360,9 @@ async function processLayer (gcLayer, wvLayers, entry) {
   }
 
   // ows:Metadata (vector data, palettes, vector style)
-  const metadataArr = gcLayer['ows:Metadata']
-  if (metadataArr) {
+  // Normalize to a flat array and remove falsy/undefined values
+  const metadataArr = [gcLayer['ows:Metadata']].flat().filter(Boolean)
+  if (metadataArr.length > 0) {
     if (skipPalettesSet.has(ident)) {
       totalWarningCount++
       if (mode === 'verbose') {

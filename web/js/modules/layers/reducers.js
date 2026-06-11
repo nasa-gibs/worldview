@@ -6,6 +6,7 @@ import update from 'immutability-helper';
 import {
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
+  SYNC_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
   TOGGLE_LAYER_VISIBILITY,
   TOGGLE_COLLAPSE_OVERLAY_GROUP,
@@ -28,7 +29,7 @@ import {
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
   SET_DISABLED_CLASSIFICATION,
 } from '../palettes/constants';
 import {
@@ -147,22 +148,46 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case TOGGLE_COLLAPSE_OVERLAY_GROUP:
+    case TOGGLE_COLLAPSE_OVERLAY_GROUP: {
+      const groupIndex = getGroupIndex();
+      if (groupIndex < 0) return state;
       return update(state, {
         [compareState]: {
           overlayGroups: {
-            [getGroupIndex()]: {
+            [groupIndex]: {
               collapsed: { $set: action.collapsed },
             },
           },
         },
       });
+    }
 
     case INIT_SECOND_LAYER_GROUP:
       return {
         ...state,
         activeB: lodashCloneDeep(state.active),
       };
+
+    // Add layers that were added to A after compare was last exited.
+    // Layers missing from B because the user removed them are NOT re-added.
+    case SYNC_SECOND_LAYER_GROUP: {
+      const bLayerIds = new Set(state.activeB.layers.map((l) => l.id));
+      const lastExitIds = new Set(action.lastExitALayerIds || []);
+      const newLayers = state.active.layers.filter(
+        (l) => !bLayerIds.has(l.id) && !lastExitIds.has(l.id),
+      );
+      if (!newLayers.length) return state;
+      return {
+        ...state,
+        activeB: {
+          ...state.activeB,
+          layers: [
+            ...state.activeB.layers,
+            ...lodashCloneDeep(newLayers),
+          ],
+        },
+      };
+    }
 
     case TOGGLE_LAYER_VISIBILITY:
       if (getLayerIndex() === -1) return state;
@@ -190,7 +215,7 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case SET_THRESHOLD_RANGE_AND_SQUASH:
+    case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_DISABLED_CLASSIFICATION: {
       const layerIndex = getLayerIndex();
       if (layerIndex < 0) return state;
@@ -307,6 +332,7 @@ export function layerReducer(state = initialState, action) {
         granuleDateRanges,
       } = action;
       const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
 
       return update(state, {
         [compareState]: {
@@ -434,6 +460,7 @@ export function layerReducer(state = initialState, action) {
         tempoDateRanges,
       } = action;
       const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
 
       return update(state, {
         [compareState]: {

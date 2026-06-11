@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import PQueue, { TimeoutError } from 'p-queue';
@@ -42,295 +42,129 @@ const getInitialBufferSize = (numberOfFrames, speed) => {
  * need to be pre-loaded, based on avg fetch time and playback speed,
  * in order for playback to begin without having to stop to buffer.
  */
-class PlayQueue extends React.Component {
-  constructor(props) {
-    super(props);
-    const { numberOfFrames, speed } = props;
-    this.state = {
-      isAnimating: false,
-      loadedItems: 0,
-    };
-    this.fetchTimes = [];
-    this.queue = new PQueue({
-      concurrency: CONCURRENT_REQUESTS,
-      timeout: 3000,
-    });
-    this.inQueueObject = {};
-    this.bufferObject = {};
-    this.bufferArray = [];
-    this.initialBufferSize = getInitialBufferSize(numberOfFrames, speed);
-    this.minBufferLength = null;
-    this.canPreloadAll = numberOfFrames <= this.initialBufferSize;
-    this.abortController = null;
-    this.isBetweenSteps = false;
-    this.hasPlayStarted = false;
-    this.onPropertyChange = this.onPropertyChange.bind(this);
-    this.onMoveEnd = this.onMoveEnd.bind(this);
-  }
+function PlayQueue(props) {
+  const {
+    numberOfFrames,
+    speed,
+    map,
+    startDate,
+    endDate,
+    snappedCurrentDate,
+    isLoopActive,
+    selectDate,
+    togglePlaying,
+    interval,
+    delta,
+    autoSelected,
+    layers,
+    promiseImageryForTime,
+    isPlaying,
+    currentDate,
+    onClose,
+    isMobile,
+    isKioskModeActive,
+  } = props;
+  const queue = new PQueue({
+    concurrency: CONCURRENT_REQUESTS,
+    timeout: 3000,
+  });
+  const initialBufferSize = getInitialBufferSize(numberOfFrames, speed);
+  const fetchTimes = [];
+  const minBufferLength = null;
+  const canPreloadAll = numberOfFrames <= initialBufferSize;
+  let inQueueObject = {};
+  let bufferArray = [];
+  let abortController = null;
+  let isBetweenSteps = false;
+  let hasPlayStarted = false;
+  let playingDate;
+  let mounted = false;
+  let frameDates = [];
 
-  componentDidMount() {
-    const {
-      map,
-    } = this.props;
-    this.mounted = true;
-    // this.queue.on('completed', (dateStr) => {
-    //   console.debug(dateStr, this.queue.size, this.queue.pending);
-    // });
-    map.ui.selected.getView().on('propertychange', this.onPropertyChange);
-    map.ui.selected.on('moveend', this.onMoveEnd);
-    this.playingDate = this.getStartDate();
-    this.checkQueue();
-    this.checkShouldPlay();
-    this.determineFrameDates();
-  }
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [loadedItems, setLoadedItems] = useState(0);
+  const bufferObjectRef = useRef({});
+  const isLoopActiveRef = useRef(isLoopActive);
 
-  componentWillUnmount() {
-    const {
-      map,
-    } = this.props;
-    this.mounted = false;
-    this.clearCache();
-    this.queue.clear();
-    map.ui.selected.getView().un('propertychange', this.onPropertyChange);
-    map.ui.selected.un('moveend', this.onMoveEnd);
-    if (this.abortController) {
-      this.abortController.abort();
-    }
-  }
-
-  onPropertyChange() {
-    if (this.isBetweenSteps) return;
-    this.isBetweenSteps = true;
-  }
-
-  onMoveEnd() {
-    if (!this.isBetweenSteps) return;
-    this.isBetweenSteps = false;
-    this.checkShouldPlay();
-  }
-
-  /**
-   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
-   */
-  determineFrameDates() {
-    const { startDate, endDate } = this.props;
-    let frameDate = startDate;
-    this.frameDates = [];
-    this.frameDates.push(toString(frameDate));
-    while (frameDate < endDate) {
-      frameDate = this.nextDate(frameDate);
-      this.frameDates.push(toString(frameDate));
-    }
-  }
-
-  /**
-   * Determines whether to start at current date or the selected start date
-   */
-  getStartDate() {
-    const { startDate, endDate, snappedCurrentDate } = this.props;
-    const nextDate = this.nextDate(snappedCurrentDate);
-    const nextDateAfterSnapped = this.nextDate(nextDate);
-    if (snappedCurrentDate > startDate && nextDate < endDate && nextDateAfterSnapped < endDate) {
-      return toString(nextDate);
-    }
-    return toString(startDate);
-  }
-
-  /**
-   * Gets the last date that should be added to the queue
-   */
-  getLastInQueue = function() {
-    const { isLoopActive, startDate, endDate } = this.props;
-    let currentDate = toDate(this.playingDate);
-    const currentBufferSize = util.objectLength(this.bufferObject);
-    const queueLength = currentBufferSize || this.initialBufferSize;
-
-    let i = 1;
-    while (i < queueLength) {
-      if (this.nextDate(currentDate) > endDate) {
-        if (!isLoopActive) {
-          return toString(currentDate);
-        }
-        currentDate = startDate;
-      } else {
-        currentDate = this.nextDate(currentDate);
-      }
-      i += 1;
-    }
-    return toString(currentDate);
-  };
-
-  /**
-  * Queue up initial dates to create a minimum buffer
-  * @param {Date} animStartDate | 1-Day prior to the Animation Start Date
-  * @return {void}
-  */
-  initialPreload(animStartDate) {
-    const {
-      numberOfFrames, selectDate, togglePlaying, startDate,
-    } = this.props;
-    let currentDate = animStartDate;
-    const lastInQueue = this.getLastInQueue();
-    if (numberOfFrames <= 1) {
-      // if only one frame will play just move to that date
-      selectDate(startDate);
-      togglePlaying();
-      return;
-    }
-    for (let i = 0; i < this.initialBufferSize; i += 1) {
-      this.addDate(currentDate, true);
-      currentDate = this.getNextBufferDate();
-      if (toString(currentDate) === lastInQueue) {
-        this.addDate(currentDate, true);
-      }
-    }
-  }
-
-  isPreloadSufficient() {
-    const { numberOfFrames } = this.props;
-    const currentBufferSize = util.objectLength(this.bufferObject);
-    if (currentBufferSize === numberOfFrames) {
-      return true;
-    }
-    if (currentBufferSize < this.initialBufferSize) {
-      return false;
-    }
-    if (this.fetchTimes.length < this.initialBufferSize) {
-      this.checkQueue();
-      return false;
-    }
-    return false;
-  }
-
-  checkShouldPlay = function(loopStart) {
-    const { startDate } = this.props;
-    const { isAnimating } = this.state;
-    const currentDate = toDate(this.playingDate);
-    const restartLoop = loopStart && currentDate.getTime() === startDate.getTime();
-
-    if ((isAnimating || this.hasPlayStarted) && !loopStart) {
-      return true;
-    }
-    if (this.isPreloadSufficient() || restartLoop) {
-      if (this.isBetweenSteps) return true;
-      // console.debug('Started: ', Date.now());
-      this.hasPlayStarted = true;
-      return this.play();
-    }
-    return this.checkQueue();
-  };
-
-  checkShouldLoop() {
-    const {
-      isLoopActive, startDate, togglePlaying, speed,
-    } = this.props;
-    const loopDelay = speed === 0.5 ? 2000 : 1500;
-
-    if (isLoopActive) {
-      this.playingDate = toString(startDate);
-      setTimeout(() => {
-        if (!this.mounted) return;
-        this.checkShouldPlay(true);
-        this.checkQueue();
-      }, loopDelay);
-    } else {
-      togglePlaying();
-    }
-  }
-
-  /**
-   * Either do inital preload or queue next item
-   */
-  checkQueue() {
-    if (!this.bufferArray[0] && !this.inQueueObject[this.playingDate]) {
-      const currentDate = toDate(this.playingDate);
-      this.initialPreload(currentDate);
-      return;
-    }
-    const nextInQueue = toString(this.getNextBufferDate());
-    if (
-      !this.bufferObject[nextInQueue] &&
-      !this.inQueueObject[nextInQueue] &&
-      !this.canPreloadAll
-    ) {
-      this.addItemToQueue();
-    }
-  }
-
-  clearCache = () => {
-    this.bufferObject = {};
-    this.bufferArray = [];
-    this.inQueueObject = {};
-  };
-
-  nextDate(date) {
-    const {
-      interval,
-      delta,
-      autoSelected,
-      layers,
-    } = this.props;
+  function nextDate(date) {
     if (autoSelected) {
       return util.dateAdd(date, 'minute', getNextImageryDelta(layers, date, 1));
     }
     return util.dateAdd(date, interval, delta);
   }
 
-  getNextBufferDate() {
-    const { startDate, endDate } = this.props;
-    const strDate = this.bufferArray[this.bufferArray.length - 1];
+  function onPropertyChange() {
+    if (isBetweenSteps) return;
+    isBetweenSteps = true;
+  }
+
+  function onMoveEnd() {
+    if (!isBetweenSteps) return;
+    isBetweenSteps = false;
+    checkShouldPlay();
+  }
+
+  function getNextBufferDate() {
+    const strDate = bufferArray[bufferArray.length - 1];
     const lastInBuffer = toDate(strDate);
-    const nextDate = this.nextDate(lastInBuffer);
-    if (lastInBuffer >= endDate || nextDate > endDate) {
-      return startDate;
+    const nextDateObj = nextDate(lastInBuffer);
+    if (lastInBuffer >= endDate || nextDateObj > endDate) {
+      return new Date(startDate.getTime());
     }
-    return nextDate;
+    return nextDateObj;
   }
 
   /**
-   * Add next date to the queue
+   * Gets the last date that should be added to the queue
    */
-  addItemToQueue() {
-    const { startDate, endDate } = this.props;
-    const nextDate = this.getNextBufferDate();
-    const nextDateStr = toString(nextDate);
-    const dateInRange = nextDate <= endDate && nextDate >= startDate;
-    const shouldQueue = !this.inQueueObject[nextDateStr] && !this.bufferObject[nextDateStr];
-    if (shouldQueue && dateInRange) {
-      this.addDate(nextDate);
+  function getLastInQueue() {
+    let currentDateObj = toDate(playingDate);
+    const currentBufferSize = util.objectLength(bufferObjectRef.current);
+    const queueLength = currentBufferSize || initialBufferSize;
+
+    let i = 1;
+    while (i < queueLength) {
+      if (nextDate(currentDateObj) > endDate) {
+        if (!isLoopActiveRef.current) {
+          return toString(currentDateObj);
+        }
+        currentDateObj = startDate;
+      } else {
+        currentDateObj = nextDate(currentDateObj);
+      }
+      i += 1;
     }
-  }
+    return toString(currentDateObj);
+  };
 
   /**
    * Gets next date based on current increments
    */
-  async addDate(date, initialLoad) {
-    const { promiseImageryForTime } = this.props;
-    let { loadedItems } = this.state;
+  async function addDate(date, initialLoad) {
     const strDate = toString(date);
-    if (this.inQueueObject[strDate] || this.bufferObject[strDate]) {
+    if (inQueueObject[strDate] || bufferObjectRef.current[strDate]) {
       return;
     }
-    this.inQueueObject[strDate] = date;
-    this.bufferArray.push(strDate);
+    inQueueObject[strDate] = date;
+    bufferArray.push(strDate);
 
     try {
-      await this.queue.add(async () => {
+      await queue.add(async () => {
         const startTime = Date.now();
         await promiseImageryForTime(date);
         const elapsedTime = Date.now() - startTime;
         const fetchTime = elapsedTime >= MIN_REQUEST_TIME_MS ? elapsedTime : MIN_REQUEST_TIME_MS;
-        this.fetchTimes.push(fetchTime);
-        this.setState({ loadedItems: loadedItems += 1 });
+        fetchTimes.push(fetchTime);
+        setLoadedItems(util.objectLength(bufferObjectRef.current) + 1);
 
-        if (!this.mounted) return true;
-        this.bufferObject[strDate] = strDate;
-        delete this.inQueueObject[strDate];
-        const currentBufferSize = util.objectLength(this.bufferObject);
+        if (!mounted) return true;
+        bufferObjectRef.current[strDate] = strDate;
+        delete inQueueObject[strDate];
+        const currentBufferSize = util.objectLength(bufferObjectRef.current);
 
-        if (!initialLoad || this.canPreloadAll || currentBufferSize >= this.initialBufferSize) {
-          this.checkQueue();
-          this.checkShouldPlay();
+        if (!initialLoad || canPreloadAll || currentBufferSize >= initialBufferSize) {
+          checkQueue();
+          checkShouldPlay();
         }
 
         return strDate;
@@ -342,25 +176,185 @@ class PlayQueue extends React.Component {
     }
   }
 
-  play() {
-    const { togglePlaying } = this.props;
-    const { isAnimating } = this.state;
-    if (!isAnimating) {
-      this.setState({ isAnimating: true });
+  /**
+  * Queue up initial dates to create a minimum buffer
+  * @param {Date} animStartDate | 1-Day prior to the Animation Start Date
+  * @return {void}
+  */
+  function initialPreload(animStartDate) {
+    let currentDateObj = animStartDate;
+    const lastInQueue = getLastInQueue();
+    if (numberOfFrames <= 1) {
+      // if only one frame will play just move to that date
+      selectDate(startDate);
+      togglePlaying();
+      return;
     }
-    this.animate();
+    for (let i = 0; i < initialBufferSize; i += 1) {
+      addDate(currentDateObj, true);
+      currentDateObj = getNextBufferDate();
+      if (toString(currentDateObj) === lastInQueue) {
+        addDate(currentDateObj, true);
+      }
+    }
+  }
+
+  /**
+   * Add next date to the queue
+   */
+  function addItemToQueue() {
+    const nextDateObj = getNextBufferDate();
+    const nextDateStr = toString(nextDateObj);
+    const dateInRange = nextDateObj <= endDate && nextDateObj >= startDate;
+    const shouldQueue = !inQueueObject[nextDateStr] && !bufferObjectRef.current[nextDateStr];
+    if (shouldQueue && dateInRange) {
+      addDate(nextDateObj);
+    }
+  }
+
+  /**
+   * Either do inital preload or queue next item
+   */
+  function checkQueue() {
+    if (!bufferArray[0] && !inQueueObject[playingDate]) {
+      const currentDateObj = toDate(playingDate);
+      initialPreload(currentDateObj);
+      return;
+    }
+    const nextInQueue = toString(getNextBufferDate());
+    if (
+      !bufferObjectRef.current[nextInQueue] &&
+      !inQueueObject[nextInQueue] &&
+      !canPreloadAll
+    ) {
+      addItemToQueue();
+    }
+  }
+
+  function isPreloadSufficient() {
+    const currentBufferSize = util.objectLength(bufferObjectRef.current);
+    if (currentBufferSize === numberOfFrames) {
+      return true;
+    }
+    if (currentBufferSize < initialBufferSize) {
+      return false;
+    }
+    if (fetchTimes.length < initialBufferSize) {
+      checkQueue();
+      return false;
+    }
+    return false;
+  }
+
+  function play() {
+    if (!isAnimating) {
+      setIsAnimating(true);
+    }
+    animate();
     if (document.hidden) {
       togglePlaying();
     }
   }
 
-  stopPlaying() {
-    this.abortController.abort();
-    this.setState({ isAnimating: false });
-    this.hasPlayStarted = false;
+  /**
+   * Determines whether to start at current date or the selected start date
+   */
+  function getStartDate() {
+    const nextDateObj = nextDate(snappedCurrentDate);
+    const nextDateAfterSnapped = nextDate(nextDateObj);
+    if (snappedCurrentDate > startDate && nextDateObj < endDate && nextDateAfterSnapped < endDate) {
+      return toString(nextDateObj);
+    }
+    return toString(startDate);
   }
 
-  animationInterval(ms, callback) {
+  function checkShouldPlay(loopStart) {
+    const currentDateObj = toDate(playingDate);
+    const restartLoop = loopStart && currentDateObj.getTime() === startDate.getTime();
+
+    if ((isAnimating || hasPlayStarted) && !loopStart) {
+      return true;
+    }
+    if (isPreloadSufficient() || restartLoop) {
+      if (isBetweenSteps) return true;
+      // console.debug('Started: ', Date.now());
+      hasPlayStarted = true;
+      return play();
+    }
+    return checkQueue();
+  };
+
+  /**
+   * Create a frameDates array of each date to be played to be used in getPlaybackPosition()
+   */
+  function determineFrameDates() {
+    let frameDate = startDate;
+    frameDates = [];
+    frameDates.push(toString(frameDate));
+    while (frameDate < endDate) {
+      frameDate = nextDate(frameDate);
+      frameDates.push(toString(frameDate));
+    }
+  }
+
+  const clearCache = () => {
+    bufferObjectRef.current = {};
+    bufferArray = [];
+    inQueueObject = {};
+  };
+
+  useEffect(() => {
+    mounted = true;
+    // queue.on('completed', (dateStr) => {
+    //   console.debug(dateStr, queue.size, queue.pending);
+    // });
+    map.ui.selected.getView().on('propertychange', onPropertyChange);
+    map.ui.selected.on('moveend', onMoveEnd);
+    playingDate = getStartDate();
+    checkQueue();
+    checkShouldPlay();
+    determineFrameDates();
+
+    return () => {
+      mounted = false;
+      clearCache();
+      queue.clear();
+      map.ui.selected.getView().un('propertychange', onPropertyChange);
+      map.ui.selected.un('moveend', onMoveEnd);
+      if (abortController) {
+        abortController.abort();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    isLoopActiveRef.current = isLoopActive;
+  }, [isLoopActive]);
+
+  function checkShouldLoop() {
+    const loopDelay = speed === 0.5 ? 2000 : 1500;
+
+    if (isLoopActiveRef.current) {
+      playingDate = toString(startDate);
+      setTimeout(() => {
+        if (!mounted) return;
+        checkShouldPlay(true);
+        checkQueue();
+      }, loopDelay);
+    } else {
+      togglePlaying();
+    }
+  }
+
+  function stopPlaying() {
+    if (abortController) {
+      abortController.abort();
+    }
+    setIsAnimating(false);
+    hasPlayStarted = false;
+  }
+
+  function animationInterval(ms, callback) {
     const start = document.timeline.currentTime;
     const scheduleFrame = (time) => {
       const elapsedTime = time - start;
@@ -371,7 +365,7 @@ class PlayQueue extends React.Component {
       setTimeout(() => requestAnimationFrame(frame), delay);
     };
     const frame = (time) => {
-      if (this.abortController.signal.aborted) return;
+      if (abortController.signal.aborted) return;
       callback(time);
       scheduleFrame(time);
     };
@@ -381,83 +375,75 @@ class PlayQueue extends React.Component {
   /**
    * Loops through frames at a specified time interval
    */
-  animate() {
-    const {
-      selectDate, endDate, speed, isPlaying,
-    } = this.props;
-    let currentDateStr = this.playingDate;
-    let nextDate;
+  function animate() {
+    let currentDateStr = playingDate;
+    let nextDateObj;
     let nextDateStr;
-    this.abortController = new AbortController();
+    abortController = new AbortController();
 
     const player = () => {
-      if (!this.mounted) {
-        return this.abortController.abort();
+      if (!mounted) {
+        return abortController.abort();
       }
-      const currentDate = toDate(currentDateStr);
-      nextDate = this.nextDate(currentDate);
-      nextDateStr = toString(nextDate);
+      const currentDateObj = toDate(currentDateStr);
+      nextDateObj = nextDate(currentDateObj);
+      nextDateStr = toString(nextDateObj);
 
-      this.checkQueue();
+      checkQueue();
       if (isPlaying) {
-        selectDate(currentDate);
+        selectDate(currentDateObj);
       }
-      this.playingDate = currentDateStr;
+      playingDate = currentDateStr;
 
       // Advance to next
       currentDateStr = nextDateStr;
 
       // End of animation range
-      if (nextDate > endDate) {
-        this.abortController.abort();
-        this.checkShouldLoop();
+      if (nextDateObj > endDate) {
+        abortController.abort();
+        checkShouldLoop();
         return true;
       }
 
       // Playback caught up with buffer :(
-      if (!this.bufferObject[nextDateStr]) {
-        this.stopPlaying();
-        this.checkQueue();
+      if (!bufferObjectRef.current[nextDateStr]) {
+        stopPlaying();
+        checkQueue();
         return true;
       }
-      if (!isPlaying || !this.mounted) {
-        this.stopPlaying();
+      if (!isPlaying || !mounted) {
+        stopPlaying();
       }
-      return this.checkQueue();
+      return checkQueue();
     };
     const animIntervalMS = speed === 0.5 ? 2000 : 1000 / speed;
-    this.animationInterval(animIntervalMS, player);
+    animationInterval(animIntervalMS, player);
   }
 
-  getPlaybackPosition() {
-    const { isAnimating } = this.state;
-    const { currentDate } = this.props;
+  function getPlaybackPosition() {
     if (!isAnimating) {
       return 0;
     }
     const currentDateStr = toString(currentDate);
-    const position = this.frameDates.indexOf(currentDateStr) + 1;
-    const percentage = (position / this.frameDates.length) * 100;
+    const position = frameDates.indexOf(currentDateStr) + 1;
+    const percentage = (position / frameDates.length) * 100;
     return percentage;
   }
 
-  render() {
-    const { isAnimating } = this.state;
-    const { onClose, isMobile, isKioskModeActive } = this.props;
-    const loadedItems = util.objectLength(this.bufferObject);
-    const title = !this.minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
-    const mobileProgressStyle = {
-      position: 'absolute',
-      bottom: 0,
-      width: '100%',
-      height: '6px',
-    };
+  const title = !minBufferLength ? 'Determining buffer size...' : 'Preloading buffer...';
+  const mobileProgressStyle = {
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: '6px',
+  };
 
-    return isAnimating
+  return (
+    isAnimating
       ? isMobile && (
         <Progress
           style={mobileProgressStyle}
-          value={this.getPlaybackPosition()}
+          value={getPlaybackPosition()}
           color="dark"
         />
       )
@@ -466,11 +452,11 @@ class PlayQueue extends React.Component {
           title={title}
           onClose={onClose}
           loadedItems={loadedItems}
-          totalItems={this.minBufferLength || 100}
+          totalItems={minBufferLength || 100}
           isKioskModeActive={isKioskModeActive}
         />
-      );
-  }
+      )
+  );
 }
 
 PlayQueue.propTypes = {

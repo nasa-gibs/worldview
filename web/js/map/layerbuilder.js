@@ -24,6 +24,7 @@ import lodashGet from 'lodash/get';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import { applyBackground, applyStyle as olmsApplyStyle } from 'ol-mapbox-style';
 import util from '../util/util';
+import { buildGranulesUrl, cmrSearchAfterFetch } from '../util/cmr';
 import lookupFactory from '../ol/lookupimagetile';
 import granuleLayerBuilder from './granule/granule-layer-builder';
 import {
@@ -112,7 +113,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
-        worker.terminate(); // terminate the worker
+        worker.terminate();
         const newRanges = event.data.map(([startDate, endDate, dateInterval]) => ({
           startDate, endDate, dateInterval,
         }));
@@ -129,7 +130,10 @@ export default function mapLayerBuilder(config, cache, store) {
       }
       return worker.postMessage({ operation: 'mergeDomains', args: [domains, 60_000, true] });
     };
-    worker.onerror = () => worker.terminate();
+    worker.onerror = () => {
+      worker.terminate();
+      callback(def, oldRanges, group);
+    };
     let startDate = new Date(def.startDate);
     const endDate = def.endDate ? new Date(def.endDate).toISOString() : new Date().toISOString();
     // If there are any existing dateRanges, find any after the latest one
@@ -309,7 +313,7 @@ export default function mapLayerBuilder(config, cache, store) {
     options.group = options.group || activeString;
 
     // If layer is a TEMPO layer, fetch updated date ranges
-    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+    if (def?.id?.includes('TEMPO') && !def?.tempoDateRanges && tempoCallback) {
       tempoCallback(def, [], options.group);
       getUpdatedDateRanges(def, tempoCallback, options.group);
     }
@@ -456,6 +460,7 @@ export default function mapLayerBuilder(config, cache, store) {
 
     // force currently selected time to be 59 seconds.
     // This is to compensate for the inability to select seconds in the timeline
+    layerDate = new Date(layerDate.getTime());
     layerDate.setSeconds(59);
     const tileGrid = new OlTileGridWMTS(tileGridOptions);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
@@ -965,30 +970,15 @@ export default function mapLayerBuilder(config, cache, store) {
           }
           return cmrMaxExtent[i];
         });
-        const getGranules = () => {
-          const entries = [];
-          return async function requestGranules(searchAfter) {
-            const headers = {
-              'Client-Id': 'Worldview',
-            };
-            headers['cmr-search-after'] = searchAfter ?? '';
-            const url = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${clampedExtent.join(',')}&temporal=${zeroedDate}/P0Y0M1DT0H0M&pageSize=2000`;
-            const cmrRes = await fetch(url, { headers });
-            const resHeaders = cmrRes.headers;
-            const granules = await cmrRes.json();
-            const resEntries = granules?.feed?.entry || [];
-
-            entries.push(...resEntries);
-
-            if (resHeaders.has('cmr-search-after')) {
-              await requestGranules(resHeaders.get('cmr-search-after'));
-            }
-            return entries;
-          };
-        };
-
-        const granuleGetter = getGranules();
-        const granules = await granuleGetter();
+        const { config: stateConfig } = store.getState();
+        const cmrBaseUrl = stateConfig?.features?.cmr?.url;
+        const granuleUrl = buildGranulesUrl(cmrBaseUrl, {
+          conceptId: conceptID,
+          bbox: clampedExtent.join(','),
+          temporal: `${zeroedDate}/P0Y0M1DT0H0M`,
+          pageSize: 2000,
+        });
+        const { entries: granules } = await cmrSearchAfterFetch(granuleUrl);
 
         const features = granules.map((granule) => {
           const coords = granule.polygons[0][0].split(' ').reduce((acc, coord, i, arr) => {
@@ -1040,15 +1030,15 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
-      const params = assets.map((asset) => `bands=${asset}`);
+      const params = assets.map((asset) => `assets=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
       params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
-      params.push(`bands_regex=${def?.bandCombo?.bands_regex}`);
+      params.push(`assets_regex=${def?.bandCombo?.bands_regex}`);
       params.push(`color_formula=${def?.bandCombo?.color_formula}`);
 
-      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}@1x?concept_id=${def.collectionConceptID}&datetime=${zeroedDateTile}/${lastDateTile}&post_process=swir&backend=rasterio&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `rasterio/tiles/WGS1984Quad/${z}/${x}/${y}?collection_concept_id=${def.collectionConceptID}&temporal=${zeroedDateTile}/${lastDateTile}&post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };
@@ -1182,7 +1172,7 @@ export default function mapLayerBuilder(config, cache, store) {
     });
 
     if (!vectorStyle.url) {
-      applyStyle(def, layer, state, options);
+      applyStyle(def, layer, state, options, tileGrid.getResolutions());
     } else {
       await olmsApplyStyle(layer, vectorStyle.url, {
         resolutions: tileGrid.getResolutions(),
@@ -1388,6 +1378,8 @@ export default function mapLayerBuilder(config, cache, store) {
         group: options.group,
         nextDate,
         previousDate,
+        ...(options.cmrRebuildAttempts != null &&
+          { cmrRebuildAttempts: options.cmrRebuildAttempts }),
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);

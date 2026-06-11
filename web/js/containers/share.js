@@ -122,17 +122,15 @@ class ShareLinkContainer extends Component {
 
   copyToClipboard = (url) => {
     const { activeTab } = this.state;
-    const options = window.clipboardData ? {} : { format: 'text/plain' };
     googleTagManager.pushEvent({
       event: 'share_link_copy',
       link_type: activeTab,
     });
-    options.onCopy = () => {
+    copy(url, { format: 'text/plain' }).then(() => {
       this.setState({
         tooltipToggleTime: Date.now(),
       });
-    };
-    copy(url, options);
+    });
   };
 
   getPermalink = (isEmbed) => {

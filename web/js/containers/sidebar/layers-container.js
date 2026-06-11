@@ -48,6 +48,7 @@ function SortableOverlayGroup(props) {
   } = useSortable({
     id: groupName,
     disabled: isEmbedModeActive || isAnimating,
+    animateLayoutChanges: () => false,
   });
 
   const style = {
