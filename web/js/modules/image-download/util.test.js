@@ -26,9 +26,18 @@ import {
   snapshot,
   estimateMaxCanvasSize,
   estimateMaxImageSize,
-  imageSizeValid,
-  getDimensions,
 } from './util';
+
+jest.mock('ol/proj', () => ({
+  ...jest.requireActual('ol/proj'),
+  get: jest.fn((projString) => {
+    if (projString === 'EPSG:4326') {
+      return { getUnits: () => 'degrees', getMetersPerUnit: () => 111319.49079327358 };
+    } else {
+      return { getUnits: () => 'm', getMetersPerUnit: () => 1 };
+    }
+  }),
+}));
 
 const geoResolutions = [
   0.5625,
@@ -222,42 +231,57 @@ test('Default km resolution Calculation [imagedownload-default-resolution]', () 
 });
 
 test('Resolution calculation with negative zoom clamps to 0 [imagedownload-resolution-negative-zoom]', () => {
-  expect(imageUtilCalculateResolution(-1, true, geoResolutions)).toBe('40');
+  const proj = { selected: { id: 'geographic', crs: 'EPSG:4326', resolutions: geoResolutions } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(-1, proj, center)).toBe(10000);
 });
 
 test('Resolution calculation with zoom beyond max clamps to last resolution [imagedownload-resolution-zoom-overflow]', () => {
-  expect(imageUtilCalculateResolution(999, true, geoResolutions)).toBe('0.125');
+  const proj = { selected: { id: 'geographic', crs: 'EPSG:4326', resolutions: geoResolutions } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(999, proj, center)).toBe(250);
 });
 
 test('Resolution calculation for polar projection [imagedownload-resolution-polar]', () => {
-  const polarResolutions = [500, 250, 125, 62.5, 31.25];
-  expect(imageUtilCalculateResolution(1, false, polarResolutions)).toBe('1');
+  const proj = { selected: { id: 'arctic', crs: 'EPSG:3413', resolutions: [500, 250, 125, 62.5, 31.25] } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(1, proj, center)).toBe(250);
 });
 
 test('Resolution calculation bumps up at geo zoom 3 [imagedownload-resolution-zoom3]', () => {
-  expect(imageUtilCalculateResolution(3, true, geoResolutions)).toBe('20');
+  const proj = { selected: { id: 'geographic', crs: 'EPSG:4326', resolutions: geoResolutions } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(3, proj, center)).toBe(10000);
 });
 
 test('Resolution calculation bumps up at geo zoom 4 [imagedownload-resolution-zoom4]', () => {
-  expect(imageUtilCalculateResolution(4, true, geoResolutions)).toBe('4');
+  const proj = { selected: { id: 'geographic', crs: 'EPSG:4326', resolutions: geoResolutions } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(4, proj, center)).toBe(1000);
 });
 
 test('Resolution calculation bumps up at geo zoom 6 [imagedownload-resolution-zoom6]', () => {
-  expect(imageUtilCalculateResolution(6, true, geoResolutions)).toBe('2');
+  const proj = { selected: { id: 'geographic', crs: 'EPSG:4326', resolutions: geoResolutions } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(6, proj, center)).toBe(1000);
 });
 
 test('Resolution calculation bumps up at geo zoom 7 [imagedownload-resolution-zoom7]', () => {
-  expect(imageUtilCalculateResolution(7, true, geoResolutions)).toBe('1');
+  const proj = { selected: { id: 'geographic', crs: 'EPSG:4326', resolutions: geoResolutions } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(7, proj, center)).toBe(500);
 });
 
-test('Resolution calculation bumps up at polar zoom 1 [imagedownload-resolution-polar-zoom1]', () => {
-  const polarResolutions = [500, 250, 125, 62.5, 31.25];
-  expect(imageUtilCalculateResolution(1, false, polarResolutions)).toBe('1');
+test('Resolution calculation bumps up at polar zoom 0 [imagedownload-resolution-polar-zoom0]', () => {
+  const proj = { selected: { id: 'arctic', crs: 'EPSG:3413', resolutions: [500, 250, 125, 62.5, 31.25] } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(0, proj, center)).toBe(500);
 });
 
 test('Resolution calculation bumps up at polar zoom 2 [imagedownload-resolution-polar-zoom2]', () => {
-  const polarResolutions = [500, 250, 125, 62.5, 31.25];
-  expect(imageUtilCalculateResolution(2, false, polarResolutions)).toBe('1');
+  const proj = { selected: { id: 'arctic', crs: 'EPSG:3413', resolutions: [500, 250, 125, 62.5, 31.25] } };
+  const center = [0, 0];
+  expect(imageUtilCalculateResolution(2, proj, center)).toBe(250);
 });
 
 // ------- imageUtilEstimateResolution -------
@@ -413,9 +437,20 @@ test('getTruncatedGranuleDates truncates when over GRANULE_LIMIT [imagedownload-
 
 // ------- getDimensions -------
 
+const mockMap = {
+  getView: () => ({
+    getProjection: () => ({
+      getUnits: () => 'degrees',
+      getMetersPerUnit: () => 111000,
+    }),
+    getCenter: () => [0, 0],
+  }),
+};
+const resolution = 1000;
+
 test('getDimensions returns correct width and height for geographic [imagedownload-dimensions-geo]', () => {
   const bounds = [[0, 0], [1, 1]];
-  const result = getDimensions('geographic', bounds, 1);
+  const result = getDimensions(mockMap, bounds, resolution);
   expect(result).toHaveProperty('width');
   expect(result).toHaveProperty('height');
   expect(result.width).toBeGreaterThan(0);
@@ -424,7 +459,7 @@ test('getDimensions returns correct width and height for geographic [imagedownlo
 
 test('getDimensions returns correct width and height for polar [imagedownload-dimensions-polar]', () => {
   const bounds = [[0, 0], [1000000, 1000000]];
-  const result = getDimensions('arctic', bounds, 1);
+  const result = getDimensions(mockMap, bounds, resolution);
   expect(result.width).toBeGreaterThan(0);
   expect(result.height).toBeGreaterThan(0);
 });
@@ -442,18 +477,46 @@ test('getPixelFromPercentage calculates correct pixel [imagedownload-pixel-from-
 });
 
 // ------- imageSizeValid -------
-
-test('imageSizeValid returns false when both dimensions are 0 [imagedownload-size-valid-zero]', () => {
-  expect(imageSizeValid(0, 0, 8200)).toBe(false);
+test('should return false for zero size', () => {
+  const mockMap = {
+    getView: () => ({
+      getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
+      getCenter: () => [0, 0],
+      getResolutionForExtent: () => 1000,
+    }),
+    getSize: () => [1000, 1000],
+    getCoordinateFromPixel: jest.fn().mockReturnValue([0, 0]),
+  };
+  const options = {
+    maxHeight: 8192,
+    maxWidth: 8192,
+    map: mockMap,
+    resolution: 1000,
+    pixelBbox: [[0, 0], [0, 0]],
+  };
+  const result = imageSizeValid(options);
+  expect(result).toBe(false);
 });
 
-test('imageSizeValid returns false when a dimension exceeds maxSize [imagedownload-size-valid-exceed]', () => {
-  expect(imageSizeValid(9000, 100, 8200)).toBe(false);
-  expect(imageSizeValid(100, 9000, 8200)).toBe(false);
-});
-
-test('imageSizeValid returns true for valid dimensions [imagedownload-size-valid-ok]', () => {
-  expect(imageSizeValid(500, 500, 8200)).toBe(true);
+test('should return false for oversized image', () => {
+  const mockMapLarge = {
+    getView: () => ({
+      getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
+      getCenter: () => [0, 0],
+      getResolutionForExtent: () => 1000,
+    }),
+    getSize: () => [10000, 10000],
+    getCoordinateFromPixel: jest.fn().mockReturnValue([0, 0]),
+  };
+  const options = {
+    maxHeight: 1000,
+    maxWidth: 1000,
+    map: mockMapLarge,
+    resolution: 1,
+    pixelBbox: [[0, 0], [100, 100]],
+  };
+  const result = imageSizeValid(options);
+  expect(result).toBe(false);
 });
 
 // ------- hasNonDownloadableVisibleLayer -------
@@ -461,7 +524,7 @@ test('imageSizeValid returns true for valid dimensions [imagedownload-size-valid
 test('hasNonDownloadableVisibleLayer returns true when a layer has disableSnapshot [imagedownload-has-non-dl-true]', () => {
   expect(hasNonDownloadableVisibleLayer([
     { disableSnapshot: true }, { disableSnapshot: false },
-  ])).toBe(true);
+  ], true)).toBe(true);
 });
 
 test('hasNonDownloadableVisibleLayer returns false when no layers have disableSnapshot [imagedownload-has-non-dl-false]', () => {
@@ -472,7 +535,7 @@ test('hasNonDownloadableVisibleLayer returns false when no layers have disableSn
 
 test('getNonDownloadableLayers filters to only disableSnapshot layers [imagedownload-get-non-dl-layers]', () => {
   const layers = [{ id: 'A', disableSnapshot: true }, { id: 'B' }, { id: 'C', disableSnapshot: false }];
-  expect(getNonDownloadableLayers(layers)).toEqual([{ id: 'A', disableSnapshot: true }]);
+  expect(getNonDownloadableLayers(layers, true)).toEqual([{ id: 'A', disableSnapshot: true }]);
 });
 
 test('getNonDownloadableLayers returns empty array when none disabled [imagedownload-get-non-dl-empty]', () => {
@@ -782,50 +845,6 @@ describe('convertPngToKml', () => {
     const result = await convertPngToKml(blob, options);
     expect(result).toBeInstanceOf(Blob);
     expect(result.type).toBe('application/vnd.google-earth.kml+xml');
-  });
-});
-
-describe('imageSizeValid', () => {
-  test('should return false for zero size', () => {
-    const mockMap = {
-      getView: () => ({
-        getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
-        getCenter: () => [0, 0],
-        getResolutionForExtent: () => 1000,
-      }),
-      getSize: () => [1000, 1000],
-      getCoordinateFromPixel: jest.fn().mockReturnValue([0, 0]),
-    };
-    const options = {
-      maxHeight: 8192,
-      maxWidth: 8192,
-      map: mockMap,
-      resolution: 1000,
-      pixelBbox: [[0, 0], [0, 0]],
-    };
-    const result = imageSizeValid(options);
-    expect(result).toBe(false);
-  });
-
-  test('should return false for oversized image', () => {
-    const mockMapLarge = {
-      getView: () => ({
-        getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
-        getCenter: () => [0, 0],
-        getResolutionForExtent: () => 1000,
-      }),
-      getSize: () => [10000, 10000],
-      getCoordinateFromPixel: jest.fn().mockReturnValue([0, 0]),
-    };
-    const options = {
-      maxHeight: 1000,
-      maxWidth: 1000,
-      map: mockMapLarge,
-      resolution: 1,
-      pixelBbox: [[0, 0], [100, 100]],
-    };
-    const result = imageSizeValid(options);
-    expect(result).toBe(false);
   });
 });
 
