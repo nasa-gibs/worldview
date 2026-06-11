@@ -5,7 +5,6 @@ import {
   SET_VALID_LAYERS_CONCEPTIDS,
 } from './constants';
 import { getCollectionsUrl, getConceptUrl } from './selectors';
-import { cmrFetch } from '../../util/cmr';
 
 export function selectCollection(conceptId, layerId) {
   return {
@@ -24,7 +23,7 @@ export function fetchAvailableTools() {
       const { smartHandoffs } = state.config.features;
       availableTools = await Promise.all(smartHandoffs.map(async (tool) => {
         const url = getConceptUrl(state)(tool.conceptId);
-        const response = await cmrFetch(url);
+        const response = await fetch(url, { timeout: 5000 });
         const result = await response.json();
         return {
           name: tool.toolName,
@@ -53,7 +52,7 @@ export function validateLayersConceptIds (layers) {
 
     try {
       const conceptIdRequest = async (url) => {
-        const granulesResponse = await cmrFetch(url);
+        const granulesResponse = await fetch(url, { timeout: 5000 });
         const result = await granulesResponse.json();
         return lodashGet(result, 'feed.entry', []);
       };

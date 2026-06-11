@@ -1,3 +1,0 @@
-test('sidebar container test', () => {
-
-});

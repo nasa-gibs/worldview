@@ -191,24 +191,14 @@ const updateLookup = function(layerId, palettesObj, state) {
     const disabled = palette.disabled || [];
     lodashEach(source, (color, indexArg) => {
       let targetColor;
-      if ((indexArg < min || indexArg > max || disabled.includes(indexArg)) && !palette.noclip) {
+      if (indexArg < min || indexArg > max || disabled.includes(indexArg)) {
         targetColor = '00000000';
       } else {
-        let sourcePercent;
-        let targetIndex;
-        let modifiedIndex = indexArg;
-        // If noclip is active, modify indexes outside the min/max range
-        // so that the targetIndex is calculated correctly for them
-        if (palette.noclip) {
-          if (indexArg < min) {
-            modifiedIndex = palette.squash ? min : min - 1;
-          } else if (indexArg > max) {
-            modifiedIndex = palette.squash ? max : max + 1;
-          }
-        }
+        let sourcePercent; let
+          targetIndex;
         if (palette.squash) {
-          sourcePercent = (modifiedIndex - min) / (max - min);
-          if (modifiedIndex === max) {
+          sourcePercent = (indexArg - min) / (max - min);
+          if (indexArg === max) {
             sourcePercent = 1.0;
           }
           targetIndex = Math.floor(sourcePercent * targetCount);
@@ -216,7 +206,7 @@ const updateLookup = function(layerId, palettesObj, state) {
             targetIndex = targetCount - 1;
           }
         } else {
-          sourcePercent = modifiedIndex / sourceCount;
+          sourcePercent = indexArg / sourceCount;
           targetIndex = Math.round(sourcePercent * targetCount);
         }
         targetColor = target[targetIndex];
@@ -384,9 +374,6 @@ export function getKey(layerId, groupStr, state) {
   if (def.squash) {
     keys.push('squash');
   }
-  if (def.noclip) {
-    keys.push('noclip');
-  }
   return keys.join(',');
 }
 
@@ -471,7 +458,7 @@ export function setRange(layerId, props, indexInt, palettes, state) {
   let index = indexInt;
   let { min } = props;
   let { max } = props;
-  const { squash, noclip } = props;
+  const { squash } = props;
   let newPalettes = prepare(layerId, palettes, state);
   index = lodashIsUndefined(index) ? 0 : index;
   if (min === 0) {
@@ -495,7 +482,6 @@ export function setRange(layerId, props, indexInt, palettes, state) {
             max,
             min,
             squash,
-            noclip,
           },
         },
       },

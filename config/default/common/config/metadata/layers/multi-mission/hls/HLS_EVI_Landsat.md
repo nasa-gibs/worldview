@@ -20,6 +20,6 @@ Landsat 9 launched on September 27, 2021 and was subsequently added to the HLS p
 - Landsat 8: April 11, 2013 - Present
 - Landsat 9: May 31, 2022 - Present
 
-This imagery layer is provided dynamically through the [TiTiler-CMR API](https://developmentseed.org/titiler-cmr/) developed by Office of Data Science and Informatics (ODSI) at Marshall Space Flight Center. As it is dynamically generated, it may take slightly longer to display than normal. The imagery is only available at higher zoom levels.
+This imagery layer is provided dynamically through the [NASA Interagency Implementation and Advanced Concepts Team (IMPACT)](https://www.earthdata.nasa.gov/about/impact). As it is dynamically generated, it may take slightly longer to display than normal. The imagery is only available at higher zoom levels.
 
 References: HLSL30 v002 [doi:10.5067/HLS/HLSL30.002](https://doi.org/10.5067/HLS/HLSL30.002)

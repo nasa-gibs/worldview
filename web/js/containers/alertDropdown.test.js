@@ -1,3 +1,0 @@
-test('alertDropdown container test', () => {
-
-});

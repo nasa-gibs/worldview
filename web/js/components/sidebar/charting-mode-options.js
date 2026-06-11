@@ -549,9 +549,9 @@ function ChartingModeOptions(props) {
     });
     const requestedLayerSource = layerInfo.projections.geographic.source;
     if (requestedLayerSource === 'GIBS:geographic') {
-      const numDaysRequested = timeSpanSelection === 'range'
-        ? Math.floor((initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24)) + 1
-        : 1;
+      const numDaysRequested = Math.floor(
+        (initialEndDate - initialStartDate) / (1000 * 60 * 60 * 24),
+      ) + 1;
       const requestsNeeded = Math.ceil(Math.min(MAX_DAYS, numDaysRequested) / STEP_NUM);
       const requestsSize = Math.ceil(numDaysRequested / requestsNeeded);
       const promises = [];

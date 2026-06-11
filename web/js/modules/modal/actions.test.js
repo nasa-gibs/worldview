@@ -7,13 +7,11 @@ import {
   renderTemplate,
   requestTemplate,
   onToggle,
-  onClose,
-  toggleAboutModal,
-  toggleCustomContent,
 } from './actions';
 import * as constants from './constants';
 import util from '../../util/util';
 
+// jsdom polyfills
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
@@ -73,6 +71,7 @@ describe('Modal open actions', () => {
     `renderTemplate action returns ${constants.RENDER_TEMPLATE} type [modal-actions-render-template]`,
     () => {
       const templateModalKey = 'somePageName';
+
       const expectedAction = {
         type: constants.RENDER_TEMPLATE,
         key: util.encodeId(templateModalKey),
@@ -84,73 +83,11 @@ describe('Modal open actions', () => {
       );
     },
   );
-
-  test(`onClose action returns ${constants.CLOSE} as type [modal-actions-close]`, () => {
-    const expectedAction = {
-      type: constants.CLOSE,
-    };
-    expect(onClose()).toEqual(expectedAction);
-  });
-
-  test(`toggleAboutModal returns ${constants.OPEN_ABOUT} when isOpen is true [modal-actions-open-about]`, () => {
-    const expectedAction = {
-      type: constants.OPEN_ABOUT,
-    };
-    expect(toggleAboutModal(true)).toEqual(expectedAction);
-  });
-
-  test(`toggleAboutModal returns ${constants.CLOSE_ABOUT} when isOpen is false [modal-actions-close-about]`, () => {
-    const expectedAction = {
-      type: constants.CLOSE_ABOUT,
-    };
-    expect(toggleAboutModal(false)).toEqual(expectedAction);
-  });
 });
-
-describe('toggleCustomContent actions', () => {
-  test(`dispatches ${constants.CLOSE} when modal is open with same key [modal-actions-toggle-custom-close]`, () => {
-    const key = 'CUSTOM_MODAL_KEY';
-    const params = { headerText: constants.TEST_HEADER };
-    const store = mockStore({ modal: { id: key, isOpen: true } });
-    store.dispatch(toggleCustomContent(key, params));
-    expect(store.getActions()).toEqual([{ type: constants.CLOSE }]);
-  });
-
-  test(`dispatches ${constants.OPEN_CUSTOM} when modal is closed [modal-actions-toggle-custom-open]`, () => {
-    const key = 'CUSTOM_MODAL_KEY';
-    const params = { headerText: constants.TEST_HEADER };
-    const store = mockStore({ modal: { id: key, isOpen: false } });
-    store.dispatch(toggleCustomContent(key, params));
-    expect(store.getActions()).toEqual([
-      {
-        type: constants.OPEN_CUSTOM,
-        key,
-        customProps: params,
-      },
-    ]);
-  });
-
-  test(`dispatches ${constants.OPEN_CUSTOM} when modal key differs [modal-actions-toggle-custom-different-key]`, () => {
-    const key = 'CUSTOM_MODAL_KEY';
-    const differentKey = 'DIFFERENT_MODAL_KEY';
-    const params = { headerText: constants.TEST_HEADER };
-    const store = mockStore({ modal: { id: differentKey, isOpen: true } });
-    store.dispatch(toggleCustomContent(key, params));
-    expect(store.getActions()).toEqual([
-      {
-        type: constants.OPEN_CUSTOM,
-        key,
-        customProps: params,
-      },
-    ]);
-  });
-});
-
 describe('Template fetching', () => {
   beforeEach(() => {
     fetch.resetMocks();
   });
-
   test('triggers start and success action types [modal-actions-success]', () => {
     const loc = 'mock/';
     fetch.mockResponseOnce(constants.ABOUT_MOCK_RESPONSE);
@@ -168,7 +105,6 @@ describe('Template fetching', () => {
         expect(store.getActions()).toEqual(expectedActions);
       });
   });
-
   test(`creates ${constants.TEMPLATE_REQUEST_FAILURE} Action [modal-actions-failure]`, () => {
     const loc = 'mock/';
     fetch.mockRejectOnce(ERROR_MESSAGE);

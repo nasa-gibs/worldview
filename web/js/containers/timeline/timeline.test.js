@@ -1,3 +1,0 @@
-test('timeline container test', () => {
-
-});

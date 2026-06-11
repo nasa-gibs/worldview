@@ -11,7 +11,7 @@ import {
 
 /**
  * @param {String} layerId
- * @param {Object} props | contains min max squash and noclip attributes
+ * @param {Object} props | contains min max and squash attributes
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */

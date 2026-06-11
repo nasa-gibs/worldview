@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
@@ -27,7 +27,6 @@ import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
 import { requestPalette as requestPaletteAction } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
 import { addTEMPODateRanges as addTEMPODateRangesAction } from '../../../modules/layers/actions';
-import { loadLayersWithSlots } from '../../util/util';
 
 function UpdateProjection(props) {
   const {
@@ -40,7 +39,6 @@ function UpdateProjection(props) {
     dateCompareState,
     fitToLeadingExtent,
     getGranuleOptions,
-    layerCreationQueue,
     isKioskModeActive,
     isMobile,
     layerState,
@@ -143,65 +141,43 @@ function UpdateProjection(props) {
       }
       clearLayers(saveCache);
       const defs = getLayers(layerStateRef.current, { reverse: true });
-
-      // Async loading — each layer renders as soon as it resolves.
-      await loadLayersWithSlots({
-        defs,
-        createLayer,
-        mapUI,
-        queue: saveCache ? null : layerCreationQueue,
-        skipYield: saveCache,
-        updateLayerVisibilities,
-        getLayerOptions: (def) => {
-          const options = getGranuleOptions(
-            layerStateRef.current,
-            def,
-            compare.activeString,
-            granuleOptions,
-          );
-          if (def.id.includes('TEMPO')) {
-            options.tempoCallback = addTEMPODateRanges;
-          }
-          return options;
-        },
+      const layerPromises = defs.map((def) => {
+        const options = getGranuleOptions(
+          layerStateRef.current,
+          def,
+          compare.activeString,
+          granuleOptions,
+        );
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
+        }
+        return createLayer(def, options);
       });
-      return; // Exit early since we've handled the non-compare case
+      const layerResults = await Promise.allSettled(layerPromises);
+      const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
+      mapUI?.setLayers(createdLayers);
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
+      clearLayers(saveCache);
       const stateArrayGroups = stateArray
         .map(async (arr) => getCompareLayerGroup(arr, layerStateRef.current, granuleOptions));
-      // Chain onto any in-flight processingPromise so updateDate
-      // and other async callers wait for this build to finish.
-      const previousPromise = ui.processingPromise || Promise.resolve();
-      const compareLoadPromise = previousPromise
-        .catch(() => {}) // don't let a prior failure block this build
-        .then(() => Promise.all(stateArrayGroups))
-        .then((compareLayerGroups) => {
-          clearLayers(saveCache);
-          mapUI?.setLayers(compareLayerGroups);
-          compareMapUi.create(mapUI, compare.mode);
-        });
-      ui.processingPromise = compareLoadPromise;
-      await compareLoadPromise;
-      // Only clear if we're still the latest — a newer call may have chained on.
-      if (ui.processingPromise === compareLoadPromise) {
-        ui.processingPromise = null;
-      }
+      const compareLayerGroups = await Promise.all(stateArrayGroups);
+      mapUI?.setLayers(compareLayerGroups);
+      compareMapUi.create(mapUI, compare.mode);
     }
     updateLayerVisibilities();
   }
 
   const onStopAnimation = function() {
-    // Only vector layers need a reload here for style refresh.
-    // Granule layers are already rebuilt by updateDate via SELECT_DATE.
-    const hasVectorLayers = activeLayers.some(({ type }) => type === 'vector');
-    if (hasVectorLayers) {
-      // Wait for any pending updateDate work before rebuilding.
-      const waitFor = ui.processingPromise || Promise.resolve();
-      waitFor.catch(() => {}).then(() => reloadLayers());
+    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
+    if (needsRefresh) {
+      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
+      // try to modify map layers asynchronously so we need to set a timeout to allow
+      // the updateDate() function to complete before trying to call reloadLayers() here
+      setTimeout(reloadLayers, 100);
     }
   };
 
@@ -380,7 +356,7 @@ function UpdateProjection(props) {
         return undefined;
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
         return reloadLayers();
-      case paletteConstants.SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
+      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
@@ -424,13 +400,10 @@ function UpdateProjection(props) {
     .map((layer) => layer.granuleDateRanges);
 
   const prevActiveLayers = usePrevious(activeLayers);
-  const prevActiveString = usePrevious(compare.activeString);
+  const [selectedDate, setSelectedDate] = useState(dateCompareState.date.selected);
 
   useEffect(() => {
     if (!ui.selected) return;
-    // Skip reload on A↔B tab switch — handled by CHANGE_STATE in actionSwitch.
-    if (compare.active && compare.activeString !== prevActiveString) return;
-
     const prevL2Layers = selectL2Layers(prevActiveLayers);
     const activeL2Layers = selectL2Layers(activeLayers);
     // Check if new date ranges have been added to L2 layers.
@@ -441,8 +414,10 @@ function UpdateProjection(props) {
     ) && prevL2Layers.includes(undefined);
     // Check if new layers have been added
     const hasNewLayers = prevActiveLayers.length !== activeLayers.length;
-    // Date changes are handled by updateDate, not here.
-    const needsReload = hasNewDateRanges || hasNewLayers;
+    // Check if the date has changed
+    const hasNewDate = selectedDate !== dateCompareState.date.selected;
+    const needsReload = hasNewDateRanges || hasNewLayers || hasNewDate;
+    setSelectedDate(dateCompareState.date.selected);
     if (needsReload) {
       reloadLayers(null, true);
     }
@@ -473,6 +448,7 @@ const mapStateToProps = (state) => {
     proj,
     map,
     renderedPalettes,
+    requestPaletteAction,
   };
 };
 
@@ -497,29 +473,28 @@ export default connect(
 )(UpdateProjection);
 
 UpdateProjection.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
-  compare: PropTypes.object,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  compare: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareMode: PropTypes.string,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
-  layerCreationQueue: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  layerState: PropTypes.object,
-  map: PropTypes.object,
-  models: PropTypes.object,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  models: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadForCompareMode: PropTypes.func,
-  proj: PropTypes.object,
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   projectionTrigger: PropTypes.number,
-  ui: PropTypes.object,
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
   updateMapUI: PropTypes.func,
-  renderedPalettes: PropTypes.object,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
   addTEMPODateRanges: PropTypes.func,
 };

@@ -5,7 +5,7 @@ import {
 import { requestAction } from '../core/actions';
 import {
   REQUEST_PALETTE,
-  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
+  SET_THRESHOLD_RANGE_AND_SQUASH,
   CLEAR_CUSTOM,
   SET_CUSTOM,
   SET_DISABLED_CLASSIFICATION,
@@ -42,11 +42,11 @@ export function requestPalette(id) {
 
 /**
  * @param {String} layerId
- * @param {Object} props | contains min max squash and noclip attributes
+ * @param {Object} props | contains min max and squash attributes
  * @param {Number} index | Palette index value for multi-paletted layers
  * @param {String} groupName | layer group string
  */
-export function setThresholdRangeSquashAndNoClip(layerId, props, index, groupName) {
+export function setThresholdRangeAndSquash(layerId, props, index, groupName) {
   return (dispatch, getState) => {
     const state = getState();
     const newActivePalettesObj = setRangeSelector(
@@ -57,7 +57,7 @@ export function setThresholdRangeSquashAndNoClip(layerId, props, index, groupNam
       state,
     );
     dispatch({
-      type: SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
+      type: SET_THRESHOLD_RANGE_AND_SQUASH,
       groupName,
       activeString: groupName,
       layerId,
@@ -173,16 +173,14 @@ export function clearCustoms(keepDisabledClassification) {
     const { palettes, compare } = state;
     const groupName = compare.activeString;
     const activePalettes = palettes[groupName];
-    const props = {
-      squash: undefined, noclip: undefined, min: undefined, max: undefined,
-    };
+    const props = { squash: undefined, min: undefined, max: undefined };
     lodashForOwn(activePalettes, (value, key) => {
       activePalettes[key].maps.forEach((colormap, index) => {
         if (colormap.custom) {
           dispatch(clearCustomPalette(key, index, groupName));
         }
-        if (colormap.max || colormap.min || colormap.squash || colormap.noclip) {
-          dispatch(setThresholdRangeSquashAndNoClip(key, props, index, groupName));
+        if (colormap.max || colormap.min || colormap.squash) {
+          dispatch(setThresholdRangeAndSquash(key, props, index, groupName));
         }
         if (colormap.disabled && !keepDisabledClassification) {
           dispatch(setToggledClassification(key, undefined, index, groupName));
@@ -244,16 +242,13 @@ export function refreshPalettes(activePalettes) {
     const groupName = getState().compare.activeString;
     lodashForOwn(activePalettes, (value, key) => {
       activePalettes[key].maps.forEach((colormap, index) => {
-        const props = {
-          squash: colormap.squash, noclip: colormap.noclip, min: colormap.min, max: colormap.max,
-        };
         if (colormap.custom) {
           dispatch(setCustomPalette(key, colormap.custom, index, groupName));
         }
-        if (colormap.max || colormap.min || colormap.squash || colormap.noclip) {
-          dispatch(setThresholdRangeSquashAndNoClip(
+        if (colormap.max || colormap.min || colormap.squash) {
+          dispatch(setThresholdRangeAndSquash(
             key,
-            props,
+            { squash: colormap.squash, min: colormap.min, max: colormap.max },
             index,
             groupName,
           ));

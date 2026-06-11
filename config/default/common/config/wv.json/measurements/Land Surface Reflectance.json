@@ -80,9 +80,9 @@
                         "MISR_Directional_Hemispherical_Reflectance_Average_Natural_Color_Monthly"
                     ]
                  },
-                "HLS-Sentinel": {
+                "HLS-Sentinel2": {
                     "id": "HLS: Sentinel-2",
-                    "title": "HLS: Sentinel-2/MSI",
+                    "title": "HLS: Sentinel-2A & 2B/MSI",
                     "description": "multi-mission/hls/Reflectance",
                     "image": "",
                     "settings": [
@@ -98,7 +98,7 @@
                         "OrbitTracks_Sentinel-2C_Descending"
                     ]
                 },
-                "HLS-Landsat": {
+                "HLS-Landsat8": {
                     "id": "HLS: Landsat 8 & 9",
                     "title": "HLS: Landsat 8 & 9/OLI",
                     "description": "multi-mission/hls/Reflectance",

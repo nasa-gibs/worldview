@@ -5,9 +5,9 @@
             "title":    "Water Indices",
             "subtitle": "Harmonized Landsat Sentinel-2 (HLS)",
             "sources": {
-                "HLS-Sentinel": {
+                "HLS-Sentinel2": {
                     "id": "HLS: Sentinel-2",
-                    "title": "HLS: Sentinel-2/MSI",
+                    "title": "HLS: Sentinel-2A & 2B/MSI",
                     "description": "",
                     "image": "",
                     "settings": [
@@ -18,7 +18,7 @@
                         "OrbitTracks_Sentinel-2B_Descending"
                     ]
                 },
-                "HLS-Landsat": {
+                "HLS-Landsat8": {
                     "id": "HLS: Landsat 8 & 9",
                     "title": "HLS: Landsat 8 & 9/OLI",
                     "description": "",

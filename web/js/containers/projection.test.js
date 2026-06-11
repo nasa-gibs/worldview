@@ -1,3 +1,0 @@
-test('projection container test', () => {
-
-});

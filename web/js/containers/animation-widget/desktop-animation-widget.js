@@ -13,6 +13,7 @@ function DesktopAnimationWidget(props) {
   const nodeRef = useRef(null);
   const {
     animationCustomModalOpen,
+    autoplay,
     customModalType,
     endDate,
     handleDragStart,
@@ -49,7 +50,7 @@ function DesktopAnimationWidget(props) {
     onSlide(speed);
   };
 
-  const hideWidget = isDistractionFreeModeActive ? 'd-none' : '';
+  const hideWidget = autoplay || isDistractionFreeModeActive ? 'd-none' : '';
 
   return (
     <Draggable
@@ -136,6 +137,7 @@ function DesktopAnimationWidget(props) {
 
 DesktopAnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
+  autoplay: PropTypes.bool,
   customModalType: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   handleDragStart: PropTypes.func,

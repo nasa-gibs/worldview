@@ -1,3 +1,0 @@
-test('zot container test', () => {
-
-});

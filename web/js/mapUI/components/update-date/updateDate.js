@@ -29,7 +29,7 @@ function UpdateDate(props) {
     isCompareActive,
     layerState,
     preloadNextTiles,
-    allActiveLayersState,
+    state,
     ui,
     updateLayerVisibilities,
     vectorStyleState,
@@ -59,132 +59,25 @@ function UpdateDate(props) {
     setStyleFunction(def, vectorStyleId, vectorStyles, null, vectorStyleState);
   }
 
-  async function updateCompareLayer(
-    def, index, mapLayerCollection, groupOverride, extraOptions, seq,
-  ) {
+  async function updateCompareLayer (def, index, mapLayerCollection) {
     const { createLayer } = ui;
-    const group = groupOverride || activeString;
     const options = {
-      group,
-      date: getSelectedDate(dateCompareState, group === 'activeB' ? 'selectedB' : 'selected'),
-      ...getGranuleOptions(granuleState, def, group),
-      ...extraOptions,
+      group: activeString,
+      date: getSelectedDate(dateCompareState),
+      ...getGranuleOptions(granuleState, def, activeString),
     };
     const updatedLayer = await createLayer(def, options);
-    // Re-read current group after await since reloadLayers may have restructured it.
-    let targetCollection = mapLayerCollection;
-    let targetIndex = index;
-    if (isCompareActive && ui.selected) {
-      const allGroups = ui.selected.getLayers().getArray();
-      const currentGroupLayer = allGroups.find((lg) => lg.get('group') === group);
-      if (currentGroupLayer?.getLayers) {
-        const freshCollection = currentGroupLayer.getLayers();
-        // Re-find by id after await since concurrent rebuilds can shift indices.
-        const freshArr = freshCollection.getArray();
-        const freshIndex = lodashFindIndex(
-          freshArr, { wv: { def: { id: def.id } } },
-        );
-        if (freshIndex === -1) return;
-        targetCollection = freshCollection;
-        targetIndex = freshIndex;
-      }
-    }
-    // Skip if a more recent updateDate already rendered a newer frame here.
-    // Allows late-arriving layers to progressively render while preventing
-    // out-of-order overwrites.
-    const existing = targetCollection.getArray()[targetIndex];
-    if (existing?.wv?.appliedSeq > seq) return;
-    updatedLayer.wv = { ...updatedLayer.wv, appliedSeq: seq };
-    targetCollection.setAt(targetIndex, updatedLayer);
-    compareMapUi.update(group);
+    mapLayerCollection.setAt(index, updatedLayer);
+    compareMapUi.update(activeString);
   }
 
-  // Rebuild empty granule layers on a specific compare side.
-  const MAX_CMR_REBUILD_ATTEMPTS = 3;
-  async function rebuildEmptyCompareGranules(targetString, isStale) {
-    if (!isCompareActive || !ui.selected) return;
-    if (ui.processingPromise) {
-      await ui.processingPromise;
-      if (isStale()) return;
-    }
-
-    const allGroups = ui.selected.getLayers().getArray();
-    const targetGroup = allGroups.find((g) => g.get('group') === targetString);
-    if (!targetGroup) return;
-
-    const targetCollection = targetGroup.getLayers();
-    const targetLayers = targetCollection.getArray();
-
-    // Use live OL layers, not the Redux snapshot which may be stale.
-    const rebuildCandidates = targetLayers
-      .map((layer, index) => ({ layer, index }))
-      .filter(({ layer }) => {
-        const { wv } = layer;
-        return wv?.def?.type === 'granule' &&
-          wv.pendingCmrRebuild &&
-          (wv.cmrRebuildAttempts || 0) < MAX_CMR_REBUILD_ATTEMPTS;
-      });
-
-    await Promise.allSettled(rebuildCandidates.map(async ({ layer, index }) => {
-      const extra = { cmrRebuildAttempts: layer.wv.cmrRebuildAttempts || 0 };
-      await updateCompareLayer(layer.wv.def, index, targetCollection, targetString, extra);
-    }));
-  }
-
-  // Rebuild empty granule layers on both compare sides.
-  async function rebuildAllEmptyCompareGranules(isStale) {
-    const inactiveString = activeString === 'active' ? 'activeB' : 'active';
-    await Promise.allSettled([
-      rebuildEmptyCompareGranules(activeString, isStale),
-      rebuildEmptyCompareGranules(inactiveString, isStale),
-    ]);
-  }
-
-  // Rebuild empty granule layers in non-compare (flat) mode.
-  async function rebuildEmptyNonCompareGranules(isStale) {
-    if (isCompareActive || !ui.selected) return;
+  async function updateDate(outOfStepChange, skipTitiler) {
     const { createLayer } = ui;
 
     const layerGroup = getActiveLayerGroup(layerState);
     const mapLayerCollection = layerGroup.getLayers();
     const layers = mapLayerCollection.getArray();
-
-    const rebuildCandidates = layers
-      .map((layer, index) => ({ layer, index }))
-      .filter(({ layer }) => {
-        const { wv } = layer;
-        return wv?.def?.type === 'granule' &&
-          wv.pendingCmrRebuild &&
-          (wv.cmrRebuildAttempts || 0) < MAX_CMR_REBUILD_ATTEMPTS;
-      });
-
-    await Promise.allSettled(rebuildCandidates.map(async ({ layer }) => {
-      const def = layer.wv.def;
-      const layerOptions = {
-        granuleCount: getGranuleCount(granuleState, def.id),
-        cmrRebuildAttempts: layer.wv.cmrRebuildAttempts || 0,
-      };
-      const updatedLayer = await createLayer(def, layerOptions);
-      if (isStale()) return;
-      const freshLayers = mapLayerCollection.getArray();
-      const freshIndex = freshLayers.findIndex(({ wv }) => wv?.def?.id === def.id);
-      if (freshIndex === -1) return;
-      mapLayerCollection.setAt(freshIndex, updatedLayer);
-    }));
-  }
-
-  async function updateDate(outOfStepChange) {
-    const { createLayer } = ui;
-
-    // Sequence counter to discard stale results from rapid date changes.
-    ui.dateUpdateSeq = (ui.dateUpdateSeq || 0) + 1;
-    const mySeq = ui.dateUpdateSeq;
-    const isStale = () => ui.dateUpdateSeq !== mySeq;
-
-    const layerGroup = getActiveLayerGroup(layerState);
-    const mapLayerCollection = layerGroup.getLayers();
-    const layers = mapLayerCollection.getArray();
-    const activeLayersArray = getAllActiveLayers(allActiveLayersState);
+    const activeLayersArray = getAllActiveLayers(state);
 
     const visibleLayers = activeLayersArray.filter(({ id, visible }) => layers
       .findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
@@ -195,11 +88,8 @@ function UpdateDate(props) {
         .includes(def.period);
       const index = findLayerIndex(def);
       const hasVectorStyles = config.vectorStyles && lodashGet(def, 'vectorStyle.id');
-      if (isCompareActive && layers.length && (temporalLayer || type === 'granule')) {
-        await updateCompareLayer(
-          def, index, mapLayerCollection,
-          undefined, undefined, mySeq,
-        );
+      if (isCompareActive && layers.length) {
+        await updateCompareLayer(def, index, mapLayerCollection, layers, skipTitiler);
       } else if (temporalLayer) {
         if (index !== undefined && index !== -1) {
           const layerValue = layers[index];
@@ -207,12 +97,7 @@ function UpdateDate(props) {
             ? { granuleCount: getGranuleCount(granuleState, id) }
             : { previousLayer: layerValue ? layerValue.wv : null };
           const updatedLayer = await createLayer(def, layerOptions);
-          const freshIndex = findLayerIndex(def);
-          if (freshIndex === undefined || freshIndex === -1) return;
-          const existing = mapLayerCollection.getArray()[freshIndex];
-          if (existing?.wv?.appliedSeq > mySeq) return;
-          updatedLayer.wv = { ...updatedLayer.wv, appliedSeq: mySeq };
-          mapLayerCollection.setAt(freshIndex, updatedLayer);
+          mapLayerCollection.setAt(index, updatedLayer);
         }
       }
       if (hasVectorStyles && temporalLayer) {
@@ -220,7 +105,6 @@ function UpdateDate(props) {
       }
     });
     await Promise.allSettled(layerPromises);
-    if (isStale()) return;
     updateLayerVisibilities();
     if (!outOfStepChange) {
       preloadNextTiles();
@@ -229,17 +113,11 @@ function UpdateDate(props) {
 
   const actionSwitch = () => {
     if (action.type === dateConstants.SELECT_DATE) {
-      // Show already-loaded layers right away while CMR requests are in flight.
-      updateLayerVisibilities();
-
       if (ui.processingPromise) {
-        const waitedPromise = ui.processingPromise;
         return new Promise((resolve) => {
-          resolve(waitedPromise);
+          resolve(ui.processingPromise);
         }).then(() => {
-          if (ui.processingPromise === waitedPromise) {
-            ui.processingPromise = null;
-          }
+          ui.processingPromise = null;
           return updateDate(action.outOfStep);
         });
       }
@@ -248,29 +126,15 @@ function UpdateDate(props) {
     if (action.type === layerConstants.TOGGLE_LAYER_VISIBILITY ||
       action.type === layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY) {
       const outOfStep = false;
-      return updateDate(outOfStep);
-    }
-    // Rebuild layers when date ranges arrive late (L2/TEMPO, NRT).
-    // Separate counter so SELECT_DATE doesn't stale-abort CMR rebuilds.
-    if (action.type === layerConstants.ADD_GRANULE_DATE_RANGES) {
-      ui.cmrRebuildSeq = (ui.cmrRebuildSeq || 0) + 1;
-      const mySeq = ui.cmrRebuildSeq;
-      const isStale = () => ui.cmrRebuildSeq !== mySeq;
-      updateLayerVisibilities();
-      const rebuildPromise = isCompareActive
-        ? rebuildAllEmptyCompareGranules(isStale)
-        : rebuildEmptyNonCompareGranules(isStale);
-      return rebuildPromise.then(() => {
-        if (!isStale()) updateLayerVisibilities();
-      });
+      // if date not changing we do not want to recreate titiler layer
+      const skipTitiler = true;
+      return updateDate(outOfStep, skipTitiler);
     }
     return undefined;
   };
 
   useEffect(() => {
-    actionSwitch()?.catch((error) => {
-      console.warn('updateDate actionSwitch failed:', error);
-    });
+    actionSwitch();
   }, [action]);
 
   return null;
@@ -287,18 +151,15 @@ const mapStateToProps = (state) => {
   const granuleState = { compare, layers };
   const layerState = { compare, map };
   const vectorStyleState = { proj, vectorStyles, config };
-  // Minimal slice for getAllActiveLayers — avoids passing entire Redux state
-  // which defeats React-Redux shallow equality checks.
-  const allActiveLayersState = { proj, compare, layers };
 
   return {
     activeLayers,
     activeString,
-    allActiveLayersState,
     dateCompareState,
     granuleState,
     isCompareActive,
     layerState,
+    state,
     vectorStyleState,
   };
 };
@@ -308,19 +169,19 @@ export default connect(
 )(UpdateDate);
 
 UpdateDate.propTypes = {
-  action: PropTypes.object,
-  activeLayers: PropTypes.array,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   activeString: PropTypes.string,
-  compareMapUi: PropTypes.object,
-  config: PropTypes.object,
-  dateCompareState: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   getGranuleOptions: PropTypes.func,
-  granuleState: PropTypes.object,
+  granuleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCompareActive: PropTypes.bool,
-  layerState: PropTypes.object,
+  layerState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloadNextTiles: PropTypes.func,
-  allActiveLayersState: PropTypes.object,
-  ui: PropTypes.object,
+  state: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   updateLayerVisibilities: PropTypes.func,
-  vectorStyleState: PropTypes.object,
+  vectorStyleState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

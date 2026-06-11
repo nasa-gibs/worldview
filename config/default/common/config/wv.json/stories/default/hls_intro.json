@@ -13,12 +13,12 @@
           "link": "https://www.earthdata.nasa.gov/data/projects/hls"
         },
         {
-          "title": "Tutorial: Find Landsat and Sentinel-2 Imagery by Area of Interest in Worldview",
-          "link": "https://www.earthdata.nasa.gov/learn/tutorials/find-landsat-sentinel-2-imagery-area-interest-worldview"
+          "title": "HLSL30 v002 HLS Landsat Operational Land Imager Surface Reflectance and TOA Brightness Daily Global 30m",
+          "link": "https://lpdaac.usgs.gov/products/hlsl30v002/"
         },
         {
-          "title": "Tutorial: Customize HLS RGB Imagery Composites in Worldview",
-          "link": "https://www.earthdata.nasa.gov/learn/tutorials/customize-hls-rgb-imagery-composites-worldview"
+          "title": "HLSS30 v002 HLS Sentinel-2 Multi-Spectral Instrument Surface Reflectance Daily Global 30m",
+          "link": "https://lpdaac.usgs.gov/products/hlss30v002/"
         }
       ],
       "steps": [

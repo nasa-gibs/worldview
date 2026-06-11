@@ -68,7 +68,6 @@ function MapUI(props) {
     isStaticMapActive,
     isTravelModeActive,
     lastArrowDirection,
-    layerCreationQueue,
     layerQueue,
     lastPreloadDate,
     layers,
@@ -122,7 +121,7 @@ function MapUI(props) {
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
-      case paletteConstants.SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
+      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
@@ -138,7 +137,6 @@ function MapUI(props) {
       case dateConstants.SELECT_DATE:
       case layerConstants.TOGGLE_LAYER_VISIBILITY:
       case layerConstants.TOGGLE_OVERLAY_GROUP_VISIBILITY:
-      case layerConstants.ADD_GRANULE_DATE_RANGES:
         return setDateAction(action);
       case layerConstants.UPDATE_OPACITY:
         return setOpacityAction(action);
@@ -188,17 +186,10 @@ function MapUI(props) {
     ui.selectedVectors = newSelection;
   };
 
-  useEffect(() => {
-    const handleOrientation = () => {
-      setTimeout(() => { setProjectionTrigger((prev) => prev + 1); }, 200);
-    };
-    events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
-    window.addEventListener('orientationchange', handleOrientation);
-    return () => {
-      events.off(REDUX_ACTION_DISPATCHED, subscribeToStore);
-      window.removeEventListener('orientationchange', handleOrientation);
-    };
-  }, []);
+  events.on(REDUX_ACTION_DISPATCHED, subscribeToStore);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(() => { setProjectionTrigger((projectionTrigger) => projectionTrigger + 1); }, 200);
+  });
 
   const updateExtent = () => {
     const map = ui.selected;
@@ -211,14 +202,11 @@ function MapUI(props) {
   };
 
   const updateLayerVisibilities = () => {
-    // Guard against early calls before map is ready
-    if (!ui.selected) return;
-
     const layerGroup = ui.selected.getLayers();
 
     const setRenderable = (layer, parentCompareGroup) => {
       const { id, group } = layer.wv;
-      const dateGroup = layer.get('date') || (group === 'active' ? 'selected' : 'selectedB');
+      const dateGroup = layer.get('date') || group === 'active' ? 'selected' : 'selectedB';
       const date = getSelectedDate(dateCompareState, dateGroup);
       const layers = getActiveLayers(activeLayersState, parentCompareGroup || group);
       const renderable = isRenderableLayer(id, layers, date, null, renderableLayersState);
@@ -379,7 +367,6 @@ function MapUI(props) {
         compareMapUi={compareMapUi}
         config={config}
         getGranuleOptions={getGranuleOptions}
-        layerCreationQueue={layerCreationQueue}
         models={models}
         preloadForCompareMode={preloadForCompareMode}
         projectionTrigger={projectionTrigger}
@@ -522,7 +509,6 @@ MapUI.propTypes = {
   isStaticMapActive: PropTypes.bool,
   isTravelModeActive: PropTypes.bool,
   lastArrowDirection: PropTypes.string,
-  layerCreationQueue: PropTypes.object,
   layerQueue: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   lastPreloadDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),

@@ -564,24 +564,10 @@ export function getNextImageryDelta(layers, date, signConstant) {
   let invalidLayerCount = 0;
   const dateAObj = new Date(date);
   let hasDeltaChanged = false;
+  let dateRanges;
   for (let i = 0; i < layers.length; i += 1) {
-    let dateRanges;
     if (Object.prototype.hasOwnProperty.call(layers[i], 'tempoDateRanges')) {
       dateRanges = layers[i].tempoDateRanges;
-    } else if (Object.prototype.hasOwnProperty.call(layers[i], 'granuleDateRanges') &&
-      layers[i].granuleDateRanges?.length) {
-      // granuleDateRanges are stored as [[start, end], ...] arrays from CMR/DD workers;
-      // convert to the {startDate, endDate, dateInterval} format used below.
-      // When dateInterval is absent (CMR), derive it from the range span in minutes.
-      dateRanges = layers[i].granuleDateRanges.map(
-        ([startDate, endDate, dateInterval]) => {
-          const interval = dateInterval ||
-            String(Math.max(1, Math.ceil(
-              ((new Date(endDate) - new Date(startDate)) / 1000) / 60,
-            )));
-          return { startDate, endDate, dateInterval: interval };
-        },
-      );
     } else if (Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges')) {
       dateRanges = layers[i].dateRanges;
     }

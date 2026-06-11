@@ -1,5 +1,0 @@
-The Natural Color Enhanced RGB (15 minute, Meteosat Second Generation (MSG), Indian Ocean) layer is an RGB which utilizes three SEVIRI solar channels: NIR1.6, VIS0.8 and VIS0.6. It is similar to a Natural Color RGB product, with the difference that the ice-clouds and snow covered surfaces and clouds are not shown in typical cyan color but in desaturated tones, i.e. in white shades, making it more natural for human perception. The disk is centered on the Indian Ocean. This imagery is updated every 15 minutes.
-
-From 1 June 2022, Meteosat-9 at 45.5° E is the prime satellite for the Indian Ocean Data Coverage (IODC) service, replacing Meteosat-8 (located at 41.5° E while in operation).
-
-This imagery has been made available through an API service of [Natural Colour Enhanced RGB - MSG - Indian Ocean](https://data.eumetsat.int/product/EO:EUM:DAT:MSG:NCL_ENH-IODC) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)).

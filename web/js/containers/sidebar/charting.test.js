@@ -1,3 +1,0 @@
-test('charting container test', () => {
-
-});

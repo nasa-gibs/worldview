@@ -1,3 +1,0 @@
-test('embed container test', () => {
-
-});

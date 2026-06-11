@@ -27,7 +27,7 @@ const landsatPresets = [
     img: 'HLS_False_Color_Urban_Landsat_th.jpg',
   },
   {
-    id: 'FalseColorVegetation_Landsat',
+    id: 'FalseColorVegetation_landsat',
     title: 'False Color (Vegetation)',
     r: 'B06',
     g: 'B05',
@@ -37,7 +37,7 @@ const landsatPresets = [
     img: 'HLS_False_Color_Vegetation_Landsat_th.jpg',
   },
   {
-    id: 'HLS_SWIR_Landsat',
+    id: 'HLS_SWIR_Landsat_th.jpg',
     title: 'Shortwave Infrared',
     r: 'B07',
     g: 'B05',
@@ -47,7 +47,7 @@ const landsatPresets = [
     img: 'HLS_SWIR_Landsat_th.jpg',
   },
   {
-    id: 'HLS_NDVI_Landsat',
+    id: 'HLS_NDVI_Landsat_th.jpg',
     title: 'Vegetation Index (NDVI)',
     assets: ['B05', 'B04'],
     expression: '(B05-B04)/(B05+B04)',
@@ -57,17 +57,7 @@ const landsatPresets = [
     img: 'HLS_NDVI_Landsat_th.jpg',
   },
   {
-    id: 'HLS_EVI_Landsat',
-    title: 'Enhanced Vegetation Index (EVI)',
-    assets: ['B05', 'B04', 'B02'],
-    expression: '(2.5*(B05-B04))/(B05+6*B04-7.5*B02+1)',
-    rescale: '-1,1',
-    colormap_name: 'brbg',
-    bands_regex: 'B[0-9][0-9]',
-    img: 'HLS_EVI_Landsat_th.jpg',
-  },
-  {
-    id: 'HLS_NDWI_Landsat',
+    id: 'HLS_NDWI_Landsat_th.jpg',
     title: 'Water Index (NDWI)',
     assets: ['B05', 'B03'],
     expression: '(B03-B05)/(B03+B05)',
@@ -77,7 +67,7 @@ const landsatPresets = [
     img: 'HLS_NDWI_Landsat_th.jpg',
   },
   {
-    id: 'HLS_NDSI_Landsat',
+    id: 'HLS_NDSI_Landsat_th.jpg',
     title: 'Snow Index (NDSI)',
     assets: ['B03', 'B06'],
     expression: '(B03-B06)/(B03+B06)',
@@ -87,7 +77,7 @@ const landsatPresets = [
     img: 'HLS_NDSI_Landsat_th.jpg',
   },
   {
-    id: 'HLS_Moisture_Index_Landsat',
+    id: 'HLS_NDMI_Landsat_th.jpg',
     title: 'Moisture Index (NDMI)',
     assets: ['B05', 'B06'],
     expression: '(B05-B06)/(B05+B06)',
@@ -97,7 +87,17 @@ const landsatPresets = [
     img: 'HLS_NDMI_Landsat_th.jpg',
   },
   {
-    id: 'HLS_SAVI_Landsat',
+    id: 'HLS_EVI_Landsat_th.jpg',
+    title: 'Enhanced Vegetation Index (EVI)',
+    assets: ['B05', 'B04', 'B02'],
+    expression: '(2.5*(B05-B04))/(B05+6*B04-7.5*B02+1)',
+    rescale: '-1,1',
+    colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9]',
+    img: 'HLS_EVI_Landsat_th.jpg',
+  },
+  {
+    id: 'HLS_SAVI_Landsat_th.jpg',
     title: 'Soil Adjusted Vegetation Index (SAVI)',
     assets: ['B05', 'B04'],
     expression: '1.5*((B05-B04)/(B05+B04+0.5))',
@@ -107,7 +107,7 @@ const landsatPresets = [
     img: 'HLS_SAVI_Landsat_th.jpg',
   },
   {
-    id: 'HLS_MSAVI_Landsat',
+    id: 'HLS_MSAVI_Landsat_th.jpg',
     title: 'Modified Soil Adjusted Vegetation Index (MSAVI)',
     assets: ['B05', 'B04'],
     expression: '(2*B05+1-sqrt((2*B05+1)**2-8*(B05-B04)))/2',
@@ -117,7 +117,7 @@ const landsatPresets = [
     img: 'HLS_MSAVI_Landsat_th.jpg',
   },
   {
-    id: 'HLS_NBR_Landsat',
+    id: 'HLS_NBR_Landsat_th.jpg',
     title: 'Burn Ratio (NBR)',
     assets: ['B05', 'B07'],
     expression: '(B05-B07)/(B05+B07)',
@@ -127,7 +127,7 @@ const landsatPresets = [
     img: 'HLS_NBR_Landsat_th.jpg',
   },
   {
-    id: 'HLS_NBR2_Landsat',
+    id: 'HLS_NBR2_Landsat_th.jpg',
     title: 'Burn Ratio 2 (NBR2)',
     assets: ['B06', 'B07'],
     expression: '(B06-B07)/(B06+B07)',
@@ -137,7 +137,7 @@ const landsatPresets = [
     img: 'HLS_NBR2_Landsat_th.jpg',
   },
   {
-    id: 'HLS_TVI_Landsat',
+    id: 'HLS_TVI_Landsat_th.jpg',
     title: 'Triangular Vegetation Index (TVI)',
     assets: ['B03', 'B04', 'B05'],
     expression: '(120*(B05-B03)-200*(B04-B03))/2',
@@ -190,7 +190,7 @@ const sentinelPresets = [
     img: 'HLS_SWIR_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_NDVI_Sentinel',
+    id: 'HLS_NDVI_Sentinel_th.jpg',
     title: 'Vegetation Index (NDVI)',
     assets: ['B08', 'B04'],
     expression: '(B08-B04)/(B08+B04)',
@@ -201,17 +201,7 @@ const sentinelPresets = [
     img: 'HLS_NDVI_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_EVI_Sentinel',
-    title: 'Enhanced Vegetation Index (EVI)',
-    assets: ['B8A', 'B04', 'B02'],
-    expression: '(2.5*(B8A-B04))/(B8A+6*B04-7.5*B02+1)',
-    rescale: '-1,1',
-    colormap_name: 'brbg',
-    bands_regex: 'B[0-9][0-9A-Za-z]',
-    img: 'HLS_EVI_Sentinel_th.jpg',
-  },
-  {
-    id: 'HLS_NDWI_Sentinel',
+    id: 'HLS_NDWI_Sentinel_th.jpg',
     title: 'Water Index (NDWI)',
     assets: ['B08', 'B03'],
     expression: '(B03-B08)/(B03+B08)',
@@ -222,7 +212,7 @@ const sentinelPresets = [
     img: 'HLS_NDWI_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_NDSI_Sentinel',
+    id: 'HLS_NDSI_Sentinel_th.jpg',
     title: 'Snow Index (NDSI)',
     assets: ['B03', 'B11'],
     expression: '(B03-B11)/(B03+B11)',
@@ -233,7 +223,7 @@ const sentinelPresets = [
     img: 'HLS_NDSI_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_Moisture_Index_Sentinel',
+    id: 'HLS_NDMI_Sentinel_th.jpg',
     title: 'Moisture Index (NDMI)',
     assets: ['B8A', 'B11'],
     expression: '(B8A-B11)/(B8A+B11)',
@@ -244,7 +234,17 @@ const sentinelPresets = [
     img: 'HLS_NDMI_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_SAVI_Sentinel',
+    id: 'HLS_EVI_Sentinel_th.jpg',
+    title: 'Enhanced Vegetation Index (EVI)',
+    assets: ['B8A', 'B04', 'B02'],
+    expression: '(2.5*(B8A-B04))/(B8A+6*B04-7.5*B02+1)',
+    rescale: '-1,1',
+    colormap_name: 'brbg',
+    bands_regex: 'B[0-9][0-9A-Za-z]',
+    img: 'HLS_EVI_Sentinel_th.jpg',
+  },
+  {
+    id: 'HLS_SAVI_Sentinel_th.jpg',
     title: 'Soil Adjusted Vegetation Index (SAVI)',
     assets: ['B8A', 'B04'],
     expression: '1.428*((B8A-B04)/(B8A+B04+0.428))',
@@ -254,7 +254,7 @@ const sentinelPresets = [
     img: 'HLS_SAVI_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_MSAVI_Sentinel',
+    id: 'HLS_MSAVI_Sentinel_th.jpg',
     title: 'Modified Soil Adjusted Vegetation Index (MSAVI)',
     assets: ['B8A', 'B04'],
     expression: '(2*B8A+1-sqrt((2*B8A+1)**2-8*(B8A-B04)))/2',
@@ -264,7 +264,7 @@ const sentinelPresets = [
     img: 'HLS_MSAVI_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_NBR_Sentinel',
+    id: 'HLS_NBR_Sentinel_th.jpg',
     title: 'Burn Ratio (NBR)',
     assets: ['B8A', 'B12'],
     expression: '(B8A-B12)/(B8A+B12)',
@@ -274,7 +274,7 @@ const sentinelPresets = [
     img: 'HLS_NBR_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_NBR2_Sentinel',
+    id: 'HLS_NBR2_Sentinel_th.jpg',
     title: 'Burn Ratio 2 (NBR2)',
     assets: ['B11', 'B12'],
     expression: '(B11-B12)/(B11+B12)',
@@ -284,7 +284,7 @@ const sentinelPresets = [
     img: 'HLS_NBR2_Sentinel_th.jpg',
   },
   {
-    id: 'HLS_TVI_Sentinel',
+    id: 'HLS_TVI_Sentinel_th.jpg',
     title: 'Triangular Vegetation Index (TVI)',
     assets: ['B03', 'B04', 'B8A'],
     expression: '(120*(B8A-B03)-200*(B04-B03))/2',

@@ -1,3 +1,0 @@
-test('modal container test', () => {
-
-});

@@ -51,7 +51,7 @@
                         "VIIRS_NOAA20_EVI_8Day"
                     ]
                 },
-                "HLS-Sentinel": {
+                "HLS-Sentinel2": {
                     "id": "HLS: Sentinel-2",
                     "title": "HLS: Sentinel-2/MSI",
                     "description": "multi-mission/hls/Reflectance",
@@ -70,7 +70,7 @@
                         "OrbitTracks_Sentinel-2B_Descending"
                     ]
                 },
-                "HLS-Landsat": {
+                "HLS-Landsat8": {
                     "id": "HLS: Landsat 8 & 9",
                     "title": "HLS: Landsat 8 & 9/OLI",
                     "description": "",

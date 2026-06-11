@@ -1,25 +1,24 @@
 @use "variables";
 
 .wv-palette-selector {
-  width: 272px;
-  height: 200px;
+  width: 280px;
+  height: 220px;
   position: relative;
 }
 
 .wv-palette-selector-row {
+  background: #eee;
   padding: 0.5em;
   margin-right: 10px;
   color: #000;
+  margin-bottom: 1px;
   min-height: 41px;
   display: flex;
   align-items: center;
-  margin-top: -6px;
-  margin-left: -6px;
 }
 
 .wv-palette-selector-row label {
-  margin-left: 7px;
-  color: #b5b5b7 !important;
+  margin-left: 10px;
 }
 
 .wv-palette-label {
@@ -28,7 +27,7 @@
 }
 
 .wv-palette-selector-row img {
-  border: 1px solid #b5b5b7;
+  border: 1px solid #404040;
   vertical-align: middle;
 }
 

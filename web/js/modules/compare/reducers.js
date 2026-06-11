@@ -27,9 +27,6 @@ export function compareReducer(state = initialCompareState, action) {
       return lodashAssign({}, state, {
         active: !state.active,
         bStatesInitiated: true,
-        // When exiting compare, snapshot A's layer IDs so re-entry SYNC
-        // can distinguish "removed by user" from "added after exit".
-        ...(state.active && { lastExitALayerIds: action.lastExitALayerIds }),
       });
     case CHANGE_MODE:
       return lodashAssign({}, state, {

@@ -66,29 +66,22 @@ function periodToTime(period) {
   const oneMinute = 60_000;
   const oneHour = 3_600_000;
   const oneDay = 86_400_000;
-  const lookup = [
-    {
-      D: oneDay,
-    },
-    {
-      S: oneSecond,
-      M: oneMinute,
-      H: oneHour,
-    },
-  ];
-  const processedPeriod = period.replace('P', '').split('T');
-  const time = processedPeriod.reduce((accPortion, valPortion, index) => {
-    if (!valPortion.length) return accPortion;
-    const numberMatch = valPortion.match(/[0-9]+/g);
-    const unitMatch = valPortion.match(/[a-zA-Z]+/g);
-    return accPortion + numberMatch.reduce((acc, val, idx) => {
-      const number = Number(val);
-      const unit = unitMatch[idx];
-      const milliseconds = number * lookup[index][unit?.toUpperCase?.()];
-      const invalid = Number.isNaN(milliseconds);
-      const valueToAdd = invalid ? (console.warn(`Invalid period: ${period}`), 0) : milliseconds;
-      return acc + valueToAdd;
-    }, 0);
+  const lookup = {
+    S: oneSecond,
+    M: oneMinute,
+    H: oneHour,
+    D: oneDay,
+  };
+  const processedPeriod = period.replace('PT', '');
+  const numberMatch = processedPeriod.match(/[0-9]+/g);
+  const unitMatch = processedPeriod.match(/[a-zA-Z]+/g);
+  const time = numberMatch.reduce((acc, val, idx) => {
+    const number = Number(val);
+    const unit = unitMatch[idx];
+    const milliseconds = number * lookup[unit?.toUpperCase?.()];
+    const invalid = Number.isNaN(milliseconds);
+    const valueToAdd = invalid ? (console.warn(`Invalid period: ${period}`), 0) : milliseconds;
+    return acc + valueToAdd;
   }, 0);
 
   return time || 360_000;
@@ -138,22 +131,14 @@ function mergeDomains(domains, timeBuffer, keepDateIntervals = false) {
     }
 
     // discontinuous, add new range
-    if (bufferedStartTime > lastRangeEndTime) {
-      return [...acc, [makeDateString(startTime), makeDateString(endTime),
-        ...formattedPeriod]];
-    }
-
-    // When keepDateIntervals is true, preserve each interval as a separate
-    // range even if it overlaps — but still skip exact duplicates (handled
-    // by the "within current range" check above).
-    if (keepDateIntervals) {
+    if (bufferedStartTime > lastRangeEndTime || keepDateIntervals) {
       return [...acc, [makeDateString(startTime), makeDateString(endTime),
         ...formattedPeriod]];
     }
 
     // intersects current range, merge
     if (bufferedStartTime <= lastRangeEndTime &&
-      bufferedEndTime > lastRangeEndTime) {
+      bufferedEndTime > lastRangeEndTime && !keepDateIntervals) {
       return acc.with(-1, [acc.at(-1)[0], makeDateString(endTime)]);
     }
 

@@ -74,6 +74,6 @@ test('Disable playback when max frames exceeded', async () => {
   await expect(playButton).not.toHaveClass(/disabled/)
   // App should not freeze when dates roll over
   await animateYearUp.click()
-  await expect(yearStartInput).toHaveValue('1950')
+  await expect(yearStartInput).toHaveValue('1948')
   await expect(playButton).toHaveClass(/disabled/)
 })

@@ -1434,7 +1434,6 @@ class TimelineAxis extends Component {
     const {
       addGranuleDateRanges,
       describeDomainsUrl,
-      cmrBaseUrl,
     } = this.props;
     const {
       cmrAvailability,
@@ -1449,7 +1448,7 @@ class TimelineAxis extends Component {
         addGranuleDateRanges(def, event.data);
       };
       worker.onerror = () => worker.terminate();
-      worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def], cmrBaseUrl });
+      worker.postMessage({ operation: 'getLayerGranuleRanges', args: [def] });
     }
     // if opted in to DescribeDomains availability, get granule date ranges if needed
     if (dataAvailability === 'dd') {
@@ -1716,7 +1715,6 @@ TimelineAxis.propTypes = {
   updatePositioningOnSimpleDrag: PropTypes.func,
   updateTimelineMoveAndDrag: PropTypes.func,
   describeDomainsUrl: PropTypes.string,
-  cmrBaseUrl: PropTypes.string,
 };
 
 export default TimelineAxis;

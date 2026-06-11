@@ -294,9 +294,6 @@ export async function promiseImageryForTour(state, layers, dateString, activeStr
     if (layer.squash) {
       keys.push('squash');
     }
-    if (layer.noclip) {
-      keys.push('noclip');
-    }
     if (keys.length > 0) {
       options.style = keys.join(',');
     }

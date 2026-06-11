@@ -9,8 +9,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^googleTagManager$': '<rootDir>/web/js/components/util/google-tag-manager.js',
-    '^ol-mapbox-style$': '<rootDir>/node_modules/ol-mapbox-style/src/index.js',
-    '\\.(css|less|scss|sass)$': 'identity-obj-proxy'
+    '^ol-mapbox-style$': '<rootDir>/node_modules/ol-mapbox-style/src/index.js'
   },
   transformIgnorePatterns: [],
   testPathIgnorePatterns: [

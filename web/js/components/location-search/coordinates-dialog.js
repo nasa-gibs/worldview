@@ -40,7 +40,8 @@ class CoordinatesDialog extends Component {
   };
 
   copyToClipboard(coords) {
-    copy(coords, { format: 'text/plain' }).then(() => {
+    const options = window.clipboardData ? {} : { format: 'text/plain' };
+    options.onCopy = () => {
       this.setState({
         tooltipToggleTime: Date.now(),
         isCopyToClipboardTooltipVisible: true,
@@ -53,7 +54,8 @@ class CoordinatesDialog extends Component {
           searchElement.blur();
         }, 50);
       }
-    });
+    };
+    copy(coords, options);
   }
 
   // close dialog and remove map marker

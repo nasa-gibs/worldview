@@ -185,7 +185,6 @@ function LayerList(props) {
   const renderHeader = () => (
     <div
       className="layer-group-header"
-      style={{ touchAction: 'none' }}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
       {...dragHandleProps}

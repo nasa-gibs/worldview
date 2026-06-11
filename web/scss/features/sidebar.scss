@@ -1141,10 +1141,6 @@ p.recharts-tooltip-label {
 .layer-settings-modal {
   width: 300px;
 
-  .wv-header {
-    margin-bottom: 12px !important;
-  }
-
   @media (max-width: variables.$mobile-max-width) {
     width: 100%;
   }
@@ -1223,11 +1219,7 @@ p.recharts-tooltip-label {
   }
 
   .layer-threshold-select {
-    margin-bottom: 4rem;
-
-    .wv-checkbox label {
-      margin-left: 5px;
-    }
+    margin-bottom: 3rem;
   }
 
   .wv-label-opacity,
@@ -1248,24 +1240,12 @@ p.recharts-tooltip-label {
   }
 
   .wv-palette-squash {
-    display: inline-block;
+    float: right;
+    margin-top: -26px;
 
     .wv-checkbox.gray span {
       color: #eee;
     }
-  }
-
-  .wv-palette-clip {
-    display: inline-block;
-    margin-left: 20px;
-
-    .wv-checkbox.gray span {
-      color: #eee;
-    }
-  }
-
-  .wv-layer-options-threshold {
-    margin-top: 10px;
   }
 
   /** inline-block extra spacing */
@@ -1273,16 +1253,12 @@ p.recharts-tooltip-label {
     margin-left: 6px;
   }
 
-  .wv-palette-selector .wv-header {
-    margin-bottom: 16px !important;
-  }
-
   .layer-opacity-select .wv-header {
     margin-top: 0;
   }
 
   .layer-orbit-tracks .wv-checkbox {
-    margin: 10px 0;
+    margin: 10px 0 10px 10px;
     display: flex;
     align-items: center;
 

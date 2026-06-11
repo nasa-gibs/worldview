@@ -48,9 +48,11 @@ function RightClickMenu(props) {
   }
 
   function copyCoordsToClipboard() {
-    copy(formattedCoordinates, { format: 'text/plain' }).then(() => {
-      setToolTipToggleTime(Date.now());
-    });
+    const options = {
+      format: 'text/plain',
+    };
+    copy(formattedCoordinates, options);
+    setToolTipToggleTime(Date.now());
   }
 
   function handleMeasurementMenu(action) {

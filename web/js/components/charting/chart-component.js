@@ -27,7 +27,7 @@ import {
 import util from '../../util/util';
 
 // Gets the indices of the tick positions so that they are evenly spaced
-export function getTickPositions(dataLength) {
+function getTickPositions(dataLength) {
   // If dataLength is too small, just show first and last tick
   if (dataLength < 8) return [0, dataLength - 1];
 
@@ -66,7 +66,7 @@ export function getTickPositions(dataLength) {
   return tickPosArr;
 }
 
-export function CustomXAxisTick(props) {
+function CustomXAxisTick(props) {
   const {
     x, y, fill, textAnchor, visibleTicksCount, index, payload, data,
   } = props;
@@ -90,7 +90,7 @@ export function CustomXAxisTick(props) {
   );
 }
 
-export function formatToThreeDigits(str) {
+function formatToThreeDigits(str) {
   if (parseFloat(str).toFixed(3)
     .split('.')[0].length > 4) {
     return Number(parseFloat(str).toFixed(3)).toPrecision(3);
@@ -98,7 +98,7 @@ export function formatToThreeDigits(str) {
   return parseFloat(str).toFixed(3);
 }
 
-export function CustomTooltip({
+function CustomTooltip({
   active, payload, label, unit, setHoveredDate,
 }) {
   setHoveredDate(label);
