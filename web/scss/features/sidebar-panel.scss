@@ -555,6 +555,10 @@ li.item.productsitem.inmotion,
       line-height: 16px;
     }
   }
+
+  .tooltip-arrow {
+    pointer-events: none;
+  }
 }
 
 .productsitem button.wv-layers-close {
@@ -715,9 +719,11 @@ li.item.productsitem.inmotion,
       min-height: 44px;
 
       .layer-buttons {
-        height: 26px;
-        width: 26px;
-        background: #ccc;
+        width: auto;
+        min-width: 36px;
+        min-height: 36px;
+        background: transparent;
+        overflow: visible;
 
         .wv-layers-close {
           height: 25px;
@@ -740,6 +746,7 @@ li.item.productsitem.inmotion,
       margin-top: -13px;
     }
 
+    button.visibility,
     a.visibility {
       width: 45px;
     }

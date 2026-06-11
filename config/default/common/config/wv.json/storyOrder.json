@@ -1,5 +1,6 @@
 {
     "storyOrder": [
+        "worldview_intro",
         "milky_seas",
         "land_disturbance",
         "el_nino",
@@ -10,7 +11,6 @@
         "black_marble_night_lights",
         "geostationary",
         "fires_overview_2019",
-        "worldview_intro",
         "clouds",
         "australia_fires_2019_2020",
         "dust_storms_overview_2019",

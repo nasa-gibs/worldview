@@ -46,6 +46,7 @@ export function addLayer(
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
+  def.noclip = spec.noclip || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || def.count || undefined;
 

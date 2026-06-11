@@ -16,6 +16,7 @@ import {
 import {
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
+  SYNC_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
   REORDER_OVERLAY_GROUPS,
   TOGGLE_LAYER_VISIBILITY,
@@ -44,6 +45,13 @@ import { getGranuleFootprints } from '../../map/granule/util';
 export function initSecondLayerGroup() {
   return {
     type: INIT_SECOND_LAYER_GROUP,
+  };
+}
+
+export function syncSecondLayerGroup(lastExitALayerIds) {
+  return {
+    type: SYNC_SECOND_LAYER_GROUP,
+    lastExitALayerIds,
   };
 }
 
@@ -228,15 +236,12 @@ export function toggleGroupVisibility(ids, visible) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeLayers = getActiveLayersSelector(getState());
-    activeLayers.forEach((layerObj) => {
-      const layer = layerObj;
-      if (ids.includes(layer.id)) {
-        layer.visible = visible;
-      }
-    });
+    const updatedLayers = activeLayers.map((layer) => (
+      ids.includes(layer.id) ? { ...layer, visible } : layer
+    ));
     dispatch({
       type: TOGGLE_OVERLAY_GROUP_VISIBILITY,
-      layers: activeLayers,
+      layers: updatedLayers,
       activeString: compare.activeString,
     });
   };
@@ -351,18 +356,44 @@ export function updateGranuleLayerState(layer) {
   };
 }
 
+const granuleRangesEqual = (a, b) => {
+  if (a === b) return true;
+  if (!a || !b || a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) {
+    if (a[i][0] !== b[i][0] || a[i][1] !== b[i][1]) return false;
+  }
+  return true;
+};
+
 export function addGranuleDateRanges(layer, granuleDateRanges) {
   return (dispatch, getState) => {
-    const state = getState();
-    const { activeString } = state.compare;
+    const { active: compareActive, activeString } = getState().compare;
     const { id } = layer;
 
-    dispatch({
-      type: ADD_GRANULE_DATE_RANGES,
-      activeString,
-      id,
-      granuleDateRanges,
-    });
+    const dispatchForSide = (side) => {
+      // Re-read state so the dedup check sees results of prior dispatches.
+      const freshState = getState();
+      const existingLayer = getActiveLayersSelector(freshState, side).find((l) => l.id === id);
+      if (!existingLayer) return;
+      if (granuleRangesEqual(existingLayer.granuleDateRanges, granuleDateRanges)) {
+        return;
+      }
+      dispatch({
+        type: ADD_GRANULE_DATE_RANGES,
+        activeString: side,
+        id,
+        granuleDateRanges,
+      });
+    };
+
+    dispatchForSide(activeString);
+
+    // In compare mode, sync the same ranges to the other side so the B-side
+    // timeline coverage bar is populated regardless of which side is active.
+    if (compareActive) {
+      const otherSide = activeString === 'active' ? 'activeB' : 'active';
+      dispatchForSide(otherSide);
+    }
   };
 }
 

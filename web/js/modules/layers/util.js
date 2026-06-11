@@ -880,7 +880,7 @@ export function serializeLayers(layers, state, groupName) {
       });
     }
     if (def.palette &&
-      (def.custom || def.min || def.max || def.squash || def.disabled ||
+      (def.custom || def.min || def.max || def.squash || def.noclip || def.disabled ||
         (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
       // If layer has palette and palette attributes
       const paletteAttributeArray = getPaletteAttributeArray(
@@ -945,6 +945,7 @@ const getLayerSpec = (attributes) => {
   let max;
   let min;
   let squash;
+  let noclip;
   let custom;
   let disabled;
   let count;
@@ -1018,6 +1019,18 @@ const getLayerSpec = (attributes) => {
         squash = squashArray.length ? squashArray : undefined;
       }
     }
+    if (attr.id === 'noclip') {
+      if (attr.value === true) {
+        noclip = [true];
+      } else if (typeof attr.value === 'string') {
+        const noClipArray = [];
+        const values = util.toArray(attr.value.split(';'));
+        lodashEach(values, (value) => {
+          noClipArray.push(value === 'true');
+        });
+        noclip = noClipArray.length ? noClipArray : undefined;
+      }
+    }
 
     if (attr.id === 'bands') {
       const values = util.toArray(attr.value.split(';'));
@@ -1055,6 +1068,7 @@ const getLayerSpec = (attributes) => {
     ...isArray(custom) && { custom },
     ...isArray(min) && { min },
     ...isArray(squash) && { squash },
+    ...isArray(noclip) && { noclip },
     ...isArray(max) && { max },
     ...isArray(disabled) && { disabled },
   };
