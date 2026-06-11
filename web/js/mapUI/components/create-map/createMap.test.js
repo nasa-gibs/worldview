@@ -334,11 +334,11 @@ describe('CreateMap', () => {
       expect(mapConfig.loadTilesWhileInteracting).toBe(true);
     });
 
-    it('sets maxTilesLoading to 32', () => {
+    it('sets maxTilesLoading to Number.MAX_SAFE_INTEGER', () => {
       const { props } = buildDefaultProps();
       renderComponent(props);
       const mapConfig = OlMap.mock.calls[0][0];
-      expect(mapConfig.maxTilesLoading).toBe(32);
+      expect(mapConfig.maxTilesLoading).toBe(Number.MAX_SAFE_INTEGER);
     });
 
     it('sets map.wv with scaleMetric and scaleImperial', () => {
