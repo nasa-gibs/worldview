@@ -19,6 +19,11 @@ const startParams = [
   'v=-1,-1,1,1',
   't=2018-06-01'
 ]
+const subdailyParams = [
+  'l=TEMPO_L2_Formaldehyde_Vertical_Column_Granule(count=1)',
+  'v=-1,-1,1,1',
+  't=2024-06-01'
+]
 const downloadDir = 'test-downloads'
 
 test.beforeAll(() => {
@@ -55,7 +60,7 @@ test('download button downloads an image', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.jpeg')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.jpeg')
 
   const filePath = path.join(downloadDir, suggestedFilename)
 
@@ -93,7 +98,7 @@ test('download PNG format with different resolution', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.png')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.png')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -125,7 +130,7 @@ test('download GeoTIFF with worldfile enabled', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.tif')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -160,7 +165,35 @@ test('download GeoTIFF with entire globe selected', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.tif')
+
+  const filePath = path.join(downloadDir, suggestedFilename)
+  await download.saveAs(filePath)
+
+  expect(fs.existsSync(filePath)).toBeTruthy()
+  const fileStats = fs.statSync(filePath)
+  expect(fileStats.size).toBeGreaterThan(0)
+
+  fs.unlinkSync(filePath)
+})
+
+test('download PNG format with subdaily layer', async () => {
+  test.setTimeout(200_500)
+  const url = await joinUrl(subdailyParams, null)
+  await page.goto(url)
+  await closeModal(page)
+  await openImageDownloadPanel(page)
+
+  // Change format to PNG
+  const formatSelect = page.locator('#wv-image-format')
+  await formatSelect.selectOption('image/png')
+
+  await clickDownload(page)
+  await expect(page.locator('.wv-snapshot-progress-dialog')).toBeVisible()
+
+  const download = await downloadPromise
+  const suggestedFilename = download.suggestedFilename()
+  await expect(suggestedFilename).toMatch('snapshot-2024-06-01T00_00_59.000Z.png')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)

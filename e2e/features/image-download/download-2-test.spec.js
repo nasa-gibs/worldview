@@ -63,7 +63,7 @@ test('download KMZ format with larger area', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.kmz')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.kmz')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -93,7 +93,7 @@ test('download with different date and layers', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2020-01-15T00_00_00.000Z.jpeg')
+  await expect(suggestedFilename).toMatch('snapshot-2020-01-15.jpeg')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -132,7 +132,7 @@ test('download Arctic projection with PNG format', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.png')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.png')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -166,7 +166,7 @@ test('download with high resolution (60m)', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.jpeg')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.jpeg')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
@@ -205,7 +205,7 @@ test('download with Antarctic projection and GeoTIFF', async () => {
 
   const download = await downloadPromise
   const suggestedFilename = download.suggestedFilename()
-  await expect(suggestedFilename).toMatch('snapshot-2018-06-01T00_00_00.000Z.tif')
+  await expect(suggestedFilename).toMatch('snapshot-2018-06-01.tif')
 
   const filePath = path.join(downloadDir, suggestedFilename)
   await download.saveAs(filePath)
