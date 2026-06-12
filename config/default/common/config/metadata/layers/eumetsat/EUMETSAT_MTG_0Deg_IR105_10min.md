@@ -1,3 +1,5 @@
-Rectified (level 1c) Meteosat FCI IR10.5 μm band full disk image in high spatial resolution (1km). Level 1c image here corresponds to initially geolocated and radiometrically pre-processed image data without full georeferencing and cal/val in spatial and spectral domains applied.
+The Infrared (10.5 µm, 10 minute) layer dispalys rectified (level 1c) Meteosat FCI IR10.5 μm band full disk image in high spatial resolution (1km). Level 1c image here corresponds to initially geolocated and radiometrically pre-processed image data without full georeferencing and cal/val in spatial and spectral domains applied.
 
-This imagery has been made available through an API service of [FCI HRFI IR10.5 μm Image - MTG - 0 degree](https://data.eumetsat.int/product/EO:EUM:DAT:0871) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)). Please provide credit to EUMETSAT and NASA when this imagery is used.
+IR channels provide continuous, day and night, temperature readings of clouds, land and sea surfaces, aids in cloud and other atmospheric feature identification/classification (e.g. estimation of cloud top height). IR channels are so-called atmospheric window channels (where the absorption of the gas molecules is low).
+
+This imagery has been made available through an API service of [FCI HRFI IR10.5 μm Image - MTG - 0 degree](https://data.eumetsat.int/product/EO:EUM:DAT:0871) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)).

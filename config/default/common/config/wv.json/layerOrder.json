@@ -208,6 +208,7 @@
 		"EUMETSAT_MTG_0Deg_IR105_10min",
 		"EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min",
 		"EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min",
+		"EUMETSAT_MSG_IDOC_IR108_10min",
 		"GOES-East_ABI_Band2_Red_Visible_1km",
 		"GOES-West_ABI_Band2_Red_Visible_1km",
 		"Himawari_AHI_Band3_Red_Visible_1km",
