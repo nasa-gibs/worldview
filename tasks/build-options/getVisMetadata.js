@@ -117,7 +117,10 @@ const skipLayers = [
   'EUMETSAT_RING_IR108',
   'EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min',
   'EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min',
-  'EUMETSAT_MTG_0Deg_GeoColor_RGB_10min'
+  'EUMETSAT_MTG_0Deg_GeoColor_RGB_10min',
+  'EUMETSAT_MTG_0Deg_IR105_10min',
+  'EUMETSAT_MSG_IDOC_IR108_10min'
+
 ]
 
 // NOTE: Only using these properties at this time
