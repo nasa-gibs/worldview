@@ -1,47 +1,37 @@
-import React from 'react';
+import { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 
-class OpacitySelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: props.start,
-    };
+const OpacitySelect = ({ layer, setOpacity, start = 100 }) => {
+  const [value, setValue] = useState(start);
 
-    this.debouncedSetOpacity = debounce((layerId, opacity) => {
-      const { setOpacity } = this.props;
+  const debouncedSetOpacity = useRef(
+    debounce((layerId, opacity) => {
       setOpacity(layerId, opacity);
-    }, 100);
-  }
+    }, 100),
+  ).current;
 
-  render() {
-    const { layer, start } = this.props;
-    const { value } = this.state;
-    return (
-      <div className="layer-opacity-select settings-component">
-        <h2 className="wv-header">Opacity</h2>
-        <input
-          type="range"
-          className="form-range"
-          defaultValue={start}
-          onChange={(e) => {
-            const val = parseFloat(e.target.value);
-            this.debouncedSetOpacity(layer.id, (val / 100).toFixed(2));
-            this.setState({ value: val });
-          }}
-          style={{ '--value-percent': `${value}%` }}
-        />
-        <div className="wv-label wv-label-opacity mt-1">
-          {`${value}%`}
-        </div>
+  return (
+    <div className="layer-opacity-select settings-component">
+      <h2 className="wv-header">Opacity</h2>
+      <input
+        type="range"
+        className="form-range"
+        defaultValue={start}
+        onChange={(e) => {
+          const val = parseFloat(e.target.value);
+          debouncedSetOpacity(layer.id, (val / 100).toFixed(2));
+          setValue(val);
+        }}
+        style={{ '--value-percent': `${value}%` }}
+      />
+      <div className="wv-label wv-label-opacity mt-1">
+        {`${value}%`}
       </div>
-    );
-  }
-}
-OpacitySelect.defaultProps = {
-  start: 100,
+    </div>
+  );
 };
+
 OpacitySelect.propTypes = {
   layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setOpacity: PropTypes.func,
