@@ -19,14 +19,15 @@ import {
 } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
-  resolutionsGeo,
-  resolutionsPolar,
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
   fileTypesGeo,
   fileTypesPolar,
 } from '../modules/image-download/constants';
 import {
   onPanelChange as onPanelChangeAction,
   updateBoundaries,
+  updateInProgress,
 } from '../modules/image-download/actions';
 import { getNormalizedCoordinate } from '../components/location-search/util';
 import { CRS } from '../modules/map/constants';
@@ -61,6 +62,7 @@ class ImageDownloadContainer extends Component {
     this.debounceBoundaryStateUpdate = lodashDebounce(onBoundaryChange, 200);
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onLatLongChange = this.onLatLongChange.bind(this);
+    this.onResolutionChange = this.onResolutionChange.bind(this);
   }
 
   /**
@@ -140,6 +142,16 @@ class ImageDownloadContainer extends Component {
     this.debounceBoundaryStateUpdate(newBoundaries);
   }
 
+  /**
+  * Update resolution value on change
+  * @param {Object} res
+  *
+  * @returns {null}
+  */
+  onResolutionChange(res) {
+    this.setState({ resolution: res });
+  }
+
   render() {
     const {
       proj,
@@ -153,6 +165,7 @@ class ImageDownloadContainer extends Component {
       hasSubdailyLayers,
       markerCoordinates,
       onPanelChange,
+      onProgressChange,
     } = this.props;
     const {
       resolution, isWorldfile, fileType, bottomLeftLatLong, topRightLatLong, boundaries,
@@ -165,13 +178,14 @@ class ImageDownloadContainer extends Component {
     const lonLat2 = olProj.transform(topRightLatLong, CRS.GEOGRAPHIC, crs);
     const isGeoProjection = proj.id === 'geographic';
     const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
-    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
+    const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const mapView = map.ui.selected.getView();
+    const center = mapView.getCenter();
     const newResolution = resolution ||
       imageUtilCalculateResolution(
         Math.round(mapView.getZoom()),
-        isGeoProjection,
-        proj.selected.resolutions,
+        proj,
+        center,
       );
     const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
     const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
@@ -185,6 +199,7 @@ class ImageDownloadContainer extends Component {
           fileType={fileType}
           resolutions={resolutions}
           lonlats={[lonLat1, lonLat2]}
+          boundaries={[x, y, x2, y2]}
           resolution={newResolution}
           isWorldfile={isWorldfile}
           hasSubdailyLayers={hasSubdailyLayers}
@@ -203,6 +218,8 @@ class ImageDownloadContainer extends Component {
           onLatLongChange={this.onLatLongChange}
           geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
           map={map.ui.selected}
+          onResolutionChange={this.onResolutionChange}
+          onProgressChange={onProgressChange}
         />
         <Crop
           x={x}
@@ -286,6 +303,9 @@ const mapDispatchToProps = (dispatch) => ({
   onBoundaryChange: (obj) => {
     dispatch(updateBoundaries(obj));
   },
+  onProgressChange: (obj) => {
+    dispatch(updateInProgress(obj));
+  },
 });
 
 export default connect(
@@ -298,6 +318,7 @@ ImageDownloadContainer.propTypes = {
   fileType: PropTypes.string.isRequired,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onBoundaryChange: PropTypes.func.isRequired,
+  onProgressChange: PropTypes.func.isRequired,
   onPanelChange: PropTypes.func.isRequired,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   url: PropTypes.string.isRequired,

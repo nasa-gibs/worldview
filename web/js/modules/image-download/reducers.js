@@ -4,6 +4,7 @@ import {
   UPDATE_FILE_TYPE,
   UPDATE_WORLDFILE,
   UPDATE_RESOLUTION,
+  UPDATE_IN_PROGRESS,
   fileTypesPolar,
 } from './constants';
 import { CHANGE_PROJECTION } from '../projection/constants';
@@ -12,7 +13,8 @@ export const defaultState = {
   fileType: 'image/jpeg',
   boundaries: undefined,
   isWorldfile: false,
-  resolution: '',
+  resolution: undefined,
+  inProgress: false,
 };
 
 export function imageDownloadReducer(state = defaultState, action) {
@@ -40,6 +42,10 @@ export function imageDownloadReducer(state = defaultState, action) {
         : state.fileType;
       return lodashAssign({}, defaultState, { fileType });
     }
+    case UPDATE_IN_PROGRESS:
+      return lodashAssign({}, state, {
+        inProgress: action.inProgress,
+      });
     default:
       return state;
   }

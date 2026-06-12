@@ -9,8 +9,9 @@
         "group": "baselayers",
         "layergroup": "Reference",
         "format": "image/png",
-        "type": "esriMapServer",
         "disableSnapshot": true,
+        "disableGIF": true,
+        "type": "esriMapServer",
         "wrapX": false,
         "projections": {
           "geographic": {

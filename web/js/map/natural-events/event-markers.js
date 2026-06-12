@@ -44,6 +44,7 @@ const createPin = function(id, category, isSelected, title, hideTooltip) {
       title,
       id,
       hideTooltip,
+      withPin: true,
     }),
   );
   return new OlOverlay({

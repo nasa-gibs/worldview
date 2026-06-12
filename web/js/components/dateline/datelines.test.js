@@ -68,6 +68,7 @@ describe('DateLines', () => {
       settings: { alwaysShowDatelines: false },
       modal: { id: '', isOpen: false },
       screenSize: { isMobilePhone: false, isMobileTablet: false },
+      imageDownload: { inProgress: false },
     });
   });
 

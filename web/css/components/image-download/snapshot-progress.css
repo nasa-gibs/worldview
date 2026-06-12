@@ -1,0 +1,72 @@
+/* Snapshot progress styles */
+.wv-snapshot-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #222;
+  color: white;
+  border: none;
+  flex-direction: column;
+  border-radius: 6px;
+  opacity: 1;
+}
+
+.wv-snapshot-progress-message {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: white;
+}
+
+.wv-snapshot-progress-message::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 10px;
+  border: 2px solid white;
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: wv-snapshot-spin 1s linear infinite;
+}
+
+.wv-snapshot-progress-actions {
+  flex-shrink: 0;
+  padding: 1rem;
+}
+
+@keyframes wv-snapshot-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.wv-snapshot-progress-dialog {
+  position: absolute;
+  background-color: #222;
+  color: white;
+  left: 0;
+  top: 40%;
+  z-index: 9999999999;
+  box-sizing: unset;
+  opacity: 1;
+  border: 1px solid #555;
+  border-radius: 6px;
+
+  button {
+    cursor: pointer;
+  }
+}
+
+.wv-snapshot-progress-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.95);
+  opacity: 1;
+  cursor: wait;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}

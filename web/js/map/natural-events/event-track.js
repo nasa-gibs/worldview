@@ -157,6 +157,7 @@ function EventTrack () {
 
   const [trackDetails, setTrackDetails] = useState({});
   const [allTrackDetails, setAllTrackDetails] = useState([]);
+  const [mapMoves, setMapMoves] = useState(0);
   const trackDetailsRef = useRef();
   trackDetailsRef.current = trackDetails;
   const allTrackDetailsRef = useRef();
@@ -165,6 +166,7 @@ function EventTrack () {
   const mapRef = useRef(map);
   useEffect(() => {
     mapRef.current = map;
+    map?.on?.('moveend', () => setMapMoves((c) => c + 1));
   }, [map]);
   useEffect(() => {
     showAllTracksRef.current = showAllTracks;
@@ -445,7 +447,7 @@ function EventTrack () {
       }
     },
     [map, isPlaying, extent, selectedDate, isAnimatingToEvent, eventsData, selectedEvent,
-      showAllTracksRef.current, highlightedEvent, showAllTracks],
+      showAllTracksRef.current, highlightedEvent, showAllTracks, mapMoves],
   );
 
   return null;

@@ -21,7 +21,7 @@ import {
   requestNotifications as requestNotificationsAction,
   setNotifications,
 } from '../modules/notifications/actions';
-import { clearCustomsSnapshot, refreshPalettes } from '../modules/palettes/actions';
+import { refreshPalettes } from '../modules/palettes/actions';
 import { clearRotate, refreshRotation } from '../modules/map/actions';
 import {
   showLayers, hideLayers,
@@ -136,13 +136,16 @@ class toolbarContainer extends Component {
       visibleLayersForProj,
     } = this.props;
     const nonDownloadableLayers = hasNonDownloadableLayer
-      ? getNonDownloadableLayers(visibleLayersForProj)
+      ? getNonDownloadableLayers(visibleLayersForProj, true)
       : null;
     const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
-    await this.getPromise(hasCustomPalette, 'palette', clearCustomsSnapshot, 'Notice');
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
+    // Allow time for view to un-rotate
+    if (isRotated) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
     await openModal(
       'TOOLBAR_SNAPSHOT',
       {
@@ -498,7 +501,7 @@ const mapStateToProps = (state) => {
     activePalettes,
     config: state.config,
     faSize,
-    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj),
+    hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj, true),
     isAboutOpen: modalAbout.isOpen,
     isCompareActive,
     isChartingActive,
@@ -568,9 +571,9 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   notify: (type, action, visibleLayersForProj) => new Promise((resolve, reject, cancel) => {
-    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj);
+    const nonDownloadableLayers = type !== 'layers' ? null : getNonDownloadableLayers(visibleLayersForProj, true);
     const bodyComponentProps = {
-      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers),
+      bodyText: type !== 'layers' ? notificationWarnings[type] : getNonDownloadableLayerWarning(nonDownloadableLayers, true),
       cancel: () => {
         dispatch(onToggle());
       },

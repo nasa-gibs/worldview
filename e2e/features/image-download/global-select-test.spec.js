@@ -12,8 +12,7 @@ const startParams = [
   'p=geographic',
   'v=-180,-90,180,90',
   'l=MODIS_Terra_CorrectedReflectance_TrueColor',
-  't=2018-06-01',
-  'imageDownload='
+  't=2018-06-01'
 ]
 
 const defaultCoords = '180.0000'

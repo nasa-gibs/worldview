@@ -79,7 +79,7 @@
 
 .wv-image-coords {
   position: absolute;
-  z-index: 4;
+  z-index: 1;
   white-space: pre;
   color: #fff;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
@@ -144,4 +144,31 @@
   top: 10px;
   right: 20px;
   width: 5px;
+}
+
+.modal-dialog.snapshot-error {
+  position: absolute;
+  width: 25%;
+  left: 37.5%;
+  top: 160px;
+}
+
+.wv-snapshot-warning {
+  margin: 4px;
+  margin-bottom: 8px;
+  line-height: 19px !important;
+}
+
+.wv-snapshot-warning-icon {
+  font-size: 1.2em;
+  margin-right: 8px;
+}
+
+.snapshot-feedback {
+  color: #7bf !important;
+  cursor: pointer;
+}
+
+.snapshot-feedback:hover {
+  text-decoration: underline !important;
 }
