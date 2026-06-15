@@ -1,11 +1,11 @@
 {
   "layers": {
-      "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min": {
-      "id": "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
-      "title": "GeoColor (10 minute)",
-      "subtitle": "MTG, 0 Degree/FCI",
-      "description": "eumetsat/EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
-      "tags": "eumetsat ring",
+      "EUMETSAT_MSG_IDOC_IR108_10min": {
+      "id": "EUMETSAT_MSG_IDOC_IR108_10min",
+      "title": "Infrared (10.8 µm, 10 minute)",
+      "subtitle": "MSG, Indian Ocean/FCI",
+      "description": "eumetsat/EUMETSAT_MSG_IDOC_IR108_10min",
+      "tags": "eumetsat",
       "group": "overlays",
       "type": "wms",
       "format": "image/png",
@@ -13,7 +13,7 @@
       "disableSnapshot": true,
       "period": "subdaily",
       "layergroup": "Geostationary",
-      "startDate": "2024-09-24T00:00:00Z",
+      "startDate": "2020-08-01T00:00:00Z",
       "dateRanges": [
         {
           "dateInterval": "10"
@@ -22,7 +22,7 @@
       "projections": {
         "geographic": {
           "source": "EUMETSAT:wms",
-          "layer": "mtg_fd:rgb_geocolour"
+          "layer": "msg_iodc:ir108"
         }
       }
     }
