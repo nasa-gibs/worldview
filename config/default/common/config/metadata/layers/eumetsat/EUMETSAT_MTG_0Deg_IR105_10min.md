@@ -1,4 +1,4 @@
-The Infrared (10.5 µm, 10 minute) layer dispalys rectified (level 1c) Meteosat FCI IR10.5 μm band full disk image in high spatial resolution (1km). Level 1c image here corresponds to initially geolocated and radiometrically pre-processed image data without full georeferencing and cal/val in spatial and spectral domains applied.
+The Infrared (10.5 µm, 10 minute) layer displays rectified (level 1c) Meteosat FCI IR10.5 μm band full disk image in high spatial resolution (1km). Level 1c image here corresponds to initially geolocated and radiometrically pre-processed image data without full georeferencing and cal/val in spatial and spectral domains applied.
 
 IR channels provide continuous, day and night, temperature readings of clouds, land and sea surfaces, aids in cloud and other atmospheric feature identification/classification (e.g. estimation of cloud top height). IR channels are so-called atmospheric window channels (where the absorption of the gas molecules is low).
 
