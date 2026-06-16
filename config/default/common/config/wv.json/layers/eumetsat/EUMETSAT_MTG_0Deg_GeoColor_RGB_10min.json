@@ -2,8 +2,8 @@
   "layers": {
       "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min": {
       "id": "EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
-      "title": "GeoColor RGB (10 minute, Meteosat Third Generation (MTG), 0 Degree)",
-      "subtitle": "MTG/FCI",
+      "title": "GeoColor (10 minute)",
+      "subtitle": "MTG, 0 Degree/FCI",
       "description": "eumetsat/EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
       "tags": "eumetsat ring",
       "group": "overlays",
