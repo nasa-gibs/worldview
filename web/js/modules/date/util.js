@@ -551,6 +551,56 @@ export const rollDate = function(date, interval, amount, minDate, maxDate) {
 };
 
 /**
+ * Retrieves the dateRanges for the given layer
+ *
+ * @method getDateRanges
+ * @param  {object} layer Selected layer
+ * @returns {array} Array of dateRanges.
+ */
+function getDateRanges(layer) {
+  let dateRanges = [];
+  if (Object.prototype.hasOwnProperty.call(layer, 'tempoDateRanges')) {
+    dateRanges = layer.tempoDateRanges;
+  } else if (Object.prototype.hasOwnProperty.call(layer, 'granuleDateRanges') &&
+    layer.granuleDateRanges?.length) {
+    // granuleDateRanges are stored as [[start, end], ...] arrays from CMR/DD workers;
+    // convert to the {startDate, endDate, dateInterval} format used below.
+    // When dateInterval is absent (CMR), derive it from the range span in minutes.
+    dateRanges = layer.granuleDateRanges.map(
+      ([startDate, endDate, dateInterval]) => {
+        const interval = dateInterval ||
+          String(Math.max(1, Math.ceil(
+            ((new Date(endDate) - new Date(startDate)) / 1000) / 60,
+          )));
+        return { startDate, endDate, dateInterval: interval };
+      },
+    );
+  } else if (Object.prototype.hasOwnProperty.call(layer, 'dateRanges')) {
+    dateRanges = layer.dateRanges;
+  }
+  return dateRanges;
+}
+
+/**
+ * Gets the dateRanges between two dates for auto increments
+ *
+ * @method getValidDateRanges
+ * @param  {Array} layers
+ * @param  {object} dateA Start date
+ * @param  {object} dateB End date
+ * @returns {Number} Array of dateRanges.
+ */
+export function getValidDateRanges(layers, dateA, dateB) {
+  for (let i = 0; i < layers.length; i += 1) {
+    const dateRanges = getDateRanges(layers[i]);
+    if (dateRanges && layers[i].visible) {
+      return dateRanges.filter((element) => new Date(element.startDate) <= dateB &&
+        new Date(element.endDate) >= dateA);
+    }
+  }
+}
+
+/**
  * Gets the next imagery delta for auto increments
  *
  * @method getNextImageryDelta
@@ -565,35 +615,16 @@ export function getNextImageryDelta(layers, date, signConstant) {
   const dateAObj = new Date(date);
   let hasDeltaChanged = false;
   for (let i = 0; i < layers.length; i += 1) {
-    let dateRanges;
-    if (Object.prototype.hasOwnProperty.call(layers[i], 'tempoDateRanges')) {
-      dateRanges = layers[i].tempoDateRanges;
-    } else if (Object.prototype.hasOwnProperty.call(layers[i], 'granuleDateRanges') &&
-      layers[i].granuleDateRanges?.length) {
-      // granuleDateRanges are stored as [[start, end], ...] arrays from CMR/DD workers;
-      // convert to the {startDate, endDate, dateInterval} format used below.
-      // When dateInterval is absent (CMR), derive it from the range span in minutes.
-      dateRanges = layers[i].granuleDateRanges.map(
-        ([startDate, endDate, dateInterval]) => {
-          const interval = dateInterval ||
-            String(Math.max(1, Math.ceil(
-              ((new Date(endDate) - new Date(startDate)) / 1000) / 60,
-            )));
-          return { startDate, endDate, dateInterval: interval };
-        },
-      );
-    } else if (Object.prototype.hasOwnProperty.call(layers[i], 'dateRanges')) {
-      dateRanges = layers[i].dateRanges;
-    }
-    if (!dateRanges || !layers[i].visible) {
+    const dateRanges = getDateRanges(layers[i]);
+    if (!dateRanges || !dateRanges.length || !layers[i].visible) {
       invalidLayerCount += 1;
     } else if (signConstant > 0) {
       // Forward in time
       const foundIndex = dateRanges.findIndex(
-        (element) => element.startDate > date,
+        (element) => new Date(element.startDate) > dateAObj,
       );
-      const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
-      // endingIndex gives 10 tries to find a valid next interval
+      const startingIndex = foundIndex < 0 ? 0 : foundIndex;
+      // endingIndex gives 5 tries to find a valid next interval
       const endingIndex = foundIndex + 5 > dateRanges.length
         ? dateRanges.length
         : foundIndex + 5;
@@ -634,10 +665,10 @@ export function getNextImageryDelta(layers, date, signConstant) {
     } else {
       // Backward in time
       const foundIndex = [...dateRanges].reverse().findIndex(
-        (element) => element.endDate < date,
+        (element) => new Date(element.endDate) < dateAObj,
       );
-      const startingIndex = foundIndex - 5 < 0 ? 0 : foundIndex - 5;
-      // endingIndex gives 10 tries to find a valid next interval
+      const startingIndex = foundIndex < 0 ? 0 : foundIndex;
+      // endingIndex gives 5 tries to find a valid next interval
       const endingIndex = foundIndex + 5 > dateRanges.length
         ? dateRanges.length
         : foundIndex + 5;

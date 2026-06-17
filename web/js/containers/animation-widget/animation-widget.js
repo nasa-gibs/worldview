@@ -427,7 +427,7 @@ const mapStateToProps = (state) => {
   }
   const useInterval = customSelected ? customInterval || 3 : interval;
   const useDelta = customSelected && customDelta ? customDelta : delta;
-  const subDailyInterval = useInterval > 3;
+  const subDailyInterval = useInterval > 3 || autoSelected;
   const subDailyMode = subDailyInterval && hasSubdailyLayers;
   const maxFrames = 300;
   const mobileMaxFrames = 50;
@@ -497,7 +497,8 @@ const mapStateToProps = (state) => {
     looping: loop,
     map,
     proj,
-    promiseImageryForTime: (dateArg) => promiseImageryForTimeUtil(state, dateArg),
+    promiseImageryForTime: (dateArg) =>
+      promiseImageryForTimeUtil(state, dateArg, undefined, autoSelected),
     isEmbedModeActive,
     playDisabled: !screenSize.isMobileDevice
       ? numberOfFrames >= maxFrames || numberOfFrames === 1
