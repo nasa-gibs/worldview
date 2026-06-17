@@ -366,7 +366,9 @@ function PlayQueue(props) {
   }
 
   function stopPlaying() {
-    abortController.abort();
+    if (abortController) {
+      abortController.abort();
+    }
     setIsAnimating(false);
     hasPlayStarted = false;
   }
