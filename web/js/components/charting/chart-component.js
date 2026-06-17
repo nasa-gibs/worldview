@@ -140,7 +140,8 @@ function ChartComponent(props) {
     liveData,
     mapView,
     createLayer,
-    overviewMapLayerDef,
+    landWaterMapLayerDef,
+    coastlinesMapLayerDef,
     layers,
     toggleErrorDaysExpanded,
   } = props;
@@ -331,18 +332,29 @@ function ChartComponent(props) {
       source: new OlVectorSource({
         features: [boxFeature],
       }),
+      zIndex: 99,
     });
 
     const createLayerWrapper = async () => {
-      const backgroundLayerGroup = await createLayer(overviewMapLayerDef);
-      backgroundLayerGroup.setVisible(true);
+      const landWaterLayerGroup = await createLayer(landWaterMapLayerDef);
+      landWaterLayerGroup.setVisible(true);
+
+      const coastlinesLayerGroup = await createLayer(coastlinesMapLayerDef);
+      coastlinesLayerGroup.setVisible(true);
 
       const layersList = [];
-      backgroundLayerGroup.getLayers().getArray()
+      landWaterLayerGroup.getLayers().getArray()
         .forEach((layer) => {
           layersList.push(new OlLayerTile({
             source: layer.getSource(),
-            zIndex: 99,
+            zIndex: 95,
+          }));
+        });
+      coastlinesLayerGroup.getLayers().getArray()
+        .forEach((layer) => {
+          layersList.push(new OlLayerTile({
+            source: layer.getSource(),
+            zIndex: 96,
           }));
         });
       const copiedLayerGroup = new OlLayerGroup({
@@ -391,20 +403,24 @@ function ChartComponent(props) {
             layerListRef.current.push(new OlLayerTile({
               source: layer.getSource(),
               opacity: 0.15,
+              zIndex: 97,
             }));
             layerListRef.current.push(new OlLayerTile({
               source: layer.getSource(),
               extent: coordinates,
+              zIndex: 98,
             }));
           });
       } else {
         layerListRef.current.push(new OlLayerTile({
           source: foregroundLayer.getSource(),
           opacity: 0.15,
+          zIndex: 97,
         }));
         layerListRef.current.push(new OlLayerTile({
           source: foregroundLayer.getSource(),
           extent: coordinates,
+          zIndex: 98,
         }));
       }
       layerListRef.current.forEach((layer) => {
@@ -424,7 +440,7 @@ function ChartComponent(props) {
     if (hoveredDate) {
       createHoveredLayerWrapper();
     }
-  }, [overviewMapLayerDef, layerId, hoveredDate]);
+  }, [landWaterMapLayerDef, coastlinesMapLayerDef, layerId, hoveredDate]);
 
   return (
     <div className="charting-chart-container">
@@ -604,12 +620,14 @@ const mapStateToProps = (state) => {
     ui,
   } = map;
 
-  const layerId = 'Coastlines_15m';
+  const landWaterLayerId = 'Land_Water_Map';
+  const coastlinesLayerId = 'Coastlines_15m';
 
   return {
     mapView: ui.selected.getView(),
     createLayer: ui.createLayer,
-    overviewMapLayerDef: layers.layerConfig[layerId],
+    landWaterMapLayerDef: layers.layerConfig[landWaterLayerId],
+    coastlinesMapLayerDef: layers.layerConfig[coastlinesLayerId],
     layers,
   };
 };
@@ -618,7 +636,8 @@ ChartComponent.propTypes = {
   liveData: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   mapView: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   createLayer: PropTypes.func,
-  overviewMapLayerDef: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  landWaterMapLayerDef: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  coastlinesMapLayerDef: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   layers: PropTypes.shape,
   toggleErrorDaysExpanded: PropTypes.func,
 };
