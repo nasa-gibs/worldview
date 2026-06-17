@@ -733,18 +733,30 @@ describe('Vector layer icon', () => {
   });
 
   it('has disabled class when hasClickableFeature is false', () => {
-    const { container } = renderComponent({ isVectorLayer: true, isVisible: true, hasClickableFeature: false });
+    const { container } = renderComponent({
+      isVectorLayer: true,
+      isVisible: true,
+      hasClickableFeature: false,
+    });
     expect(container.querySelector('.layer-pointer-icon')).toHaveClass('disabled');
   });
 
   it('does not have disabled class when hasClickableFeature is true', () => {
-    const { container } = renderComponent({ isVectorLayer: true, isVisible: true, hasClickableFeature: true });
+    const { container } = renderComponent({
+      isVectorLayer: true,
+      isVisible: true,
+      hasClickableFeature: true,
+    });
     expect(container.querySelector('.layer-pointer-icon')).not.toHaveClass('disabled');
   });
 
   it('calls openVectorAlertModal on click', () => {
     const openVectorAlertModal = jest.fn();
-    const { container } = renderComponent({ isVectorLayer: true, isVisible: true, openVectorAlertModal });
+    const { container } = renderComponent({
+      isVectorLayer: true,
+      isVisible: true,
+      openVectorAlertModal,
+    });
     fireEvent.click(container.querySelector('.layer-pointer-icon'));
     expect(openVectorAlertModal).toHaveBeenCalled();
   });
@@ -759,7 +771,11 @@ describe('Chartable layer icon', () => {
   });
 
   it('does not render when isChartingActive', () => {
-    const { container } = renderComponent({ isChartableLayer: true, isVisible: true, isChartingActive: true });
+    const { container } = renderComponent({
+      isChartableLayer: true,
+      isVisible: true,
+      isChartingActive: true,
+    });
     expect(container.querySelector('.layer-chartable-icon')).not.toBeInTheDocument();
   });
 
@@ -886,7 +902,12 @@ describe('useEffects', () => {
 
   it('does not call requestPalette when renderedPalette not empty', () => {
     const requestPalette = jest.fn();
-    renderComponent({ hasPalette: true, renderedPalette: { maps: [] }, isLoading: false, requestPalette });
+    renderComponent({
+      hasPalette: true,
+      renderedPalette: { maps: [] },
+      isLoading: false,
+      requestPalette,
+    });
     expect(requestPalette).not.toHaveBeenCalled();
   });
 
@@ -937,7 +958,9 @@ describe('mapStateToProps', () => {
 
   it('maps isEmbedModeActive from embed', () => {
     const msp = capturedMakeMapStateToProps();
-    expect(msp(makeState({ embed: { isEmbedModeActive: true } }), ownProps).isEmbedModeActive).toBe(true);
+    expect(msp(makeState({
+      embed: { isEmbedModeActive: true },
+    }), ownProps).isEmbedModeActive).toBe(true);
   });
 
   it('maps isAnimating from animation.isPlaying', () => {
@@ -947,7 +970,9 @@ describe('mapStateToProps', () => {
 
   it('maps isDistractionFreeModeActive from ui', () => {
     const msp = capturedMakeMapStateToProps();
-    expect(msp(makeState({ ui: { isDistractionFreeModeActive: true } }), ownProps).isDistractionFreeModeActive).toBe(true);
+    expect(msp(makeState({
+      ui: { isDistractionFreeModeActive: true },
+    }), ownProps).isDistractionFreeModeActive).toBe(true);
   });
 
   it('maps ddvZoomAlerts and ddvLocationAlerts', () => {

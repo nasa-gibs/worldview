@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 jest.mock('../../components/kiosk/util', () => ({

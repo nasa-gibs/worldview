@@ -219,12 +219,18 @@ describe('MapInteractions mapStateToProps', () => {
   });
 
   test('isNaturalEventsActive is false when config.features.naturalEvents is false', () => {
-    const result = capturedMapStateToProps(buildState({ naturalEvents: false, eventsActive: true }));
+    const result = capturedMapStateToProps(buildState({
+      naturalEvents: false,
+      eventsActive: true,
+    }));
     expect(result.isNaturalEventsActive).toBe(false);
   });
 
   test('isNaturalEventsActive is false when events.active is false', () => {
-    const result = capturedMapStateToProps(buildState({ naturalEvents: true, eventsActive: false }));
+    const result = capturedMapStateToProps(buildState({
+      naturalEvents: true,
+      eventsActive: false,
+    }));
     expect(result.isNaturalEventsActive).toBe(false);
   });
 });
