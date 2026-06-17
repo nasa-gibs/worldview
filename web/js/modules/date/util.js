@@ -588,7 +588,7 @@ function getDateRanges(layer) {
  * @param  {Array} layers
  * @param  {object} dateA Start date
  * @param  {object} dateB End date
- * @returns {Number} Array of dateRanges.
+ * @returns {Array} Array of dateRanges.
  */
 export function getValidDateRanges(layers, dateA, dateB) {
   for (let i = 0; i < layers.length; i += 1) {

@@ -56,11 +56,12 @@ jest.mock('../../util/util', () => {
 
 jest.mock('../../modules/date/util', () => ({
   getNextImageryDelta: jest.fn(() => new Date('2026-05-01T00:00:00Z')),
+  getValidDateRanges: jest.fn(() => [new Date('2026-05-01T00:00:00Z')]),
 }));
 
 const PlayQueue = require('./play-queue').default;
 const { TimeoutError } = require('p-queue');
-const { getNextImageryDelta } = jest.requireMock('../../modules/date/util');
+const { getValidDateRanges } = jest.requireMock('../../modules/date/util');
 
 describe('PlayQueue Component', () => {
   let defaultProps;
@@ -252,7 +253,7 @@ describe('PlayQueue Component', () => {
 
   it('uses autoSelected date calculation when enabled', async () => {
     await renderPlayQueue({ autoSelected: true, layers: [{}] });
-    expect(getNextImageryDelta).toHaveBeenCalled();
+    expect(getValidDateRanges).toHaveBeenCalled();
   });
 
   it('selects the startDate immediately when there is only one frame', async () => {
