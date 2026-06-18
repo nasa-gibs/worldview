@@ -289,7 +289,7 @@ describe('Date range building', () => {
     expect(dateRanges.length).toBe(4);
     expect(dateRanges[3].endDate).toBe('2021-04-30T16:00:00Z');
   });
-  test('test limited date range returned for layer with single date range and interval [layers-limited-date-range]', () => {
+  test('test limited date range returned for layer with single date range and interval [layers-limited-date-range]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -301,10 +301,10 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('2020-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('2020-01-01'));
     expect(dates.length).toBe(3);
   });
-  test('test only next date returned (out of range past) [layers-out-of-range-past]', () => {
+  test('test only next date returned (out of range past) [layers-out-of-range-past]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -316,10 +316,10 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('1990-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('1990-01-01'));
     expect(dates.length).toBe(1);
   });
-  test('test no dates returned (out of range future) [layers-out-of-range-future]', () => {
+  test('test no dates returned (out of range future) [layers-out-of-range-future]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -331,10 +331,10 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('2030-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('2030-01-01'));
     expect(dates.length).toBe(0);
   });
-  test('test date range returned from given start/end date range for layer coverage panel [layers-coverage-panel]', () => {
+  test('test date range returned from given start/end date range for layer coverage panel [layers-coverage-panel]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -346,7 +346,7 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));
     const isFirstDateEqual = dates[0].toISOString() === '2017-12-01T00:00:00.000Z';
     const isLastDateEqual = dates[dates.length - 1].toISOString() === '2018-01-31T00:00:00.000Z';
     expect(dates.length).toBe(62);
