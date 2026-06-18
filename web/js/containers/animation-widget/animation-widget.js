@@ -54,6 +54,7 @@ function AnimationWidget (props) {
     endDate,
     hasFutureLayers,
     hasSubdailyLayers,
+    hasTempoProduct,
     interval,
     isActive,
     isCollapsed,
@@ -274,6 +275,7 @@ function AnimationWidget (props) {
       endDate={endDate}
       handleDragStart={handleDragStart}
       hasSubdailyLayers={hasSubdailyLayers}
+      hasTempoProduct={hasTempoProduct}
       interval={interval}
       isKioskModeActive={isKioskModeActive}
       isPlaying={isPlaying}
@@ -398,6 +400,7 @@ const mapStateToProps = (state) => {
   } = date;
 
   const hasSubdailyLayers = subdailyLayersActive(state);
+  const hasTempoProduct = layers[compare.activeString].layers.filter((layer) => layer.visible && layer.id.includes('TEMPO')).length > 0;
   const activeLayersForProj = getAllActiveLayers(state);
   const hasFutureLayers = activeLayersForProj.filter((layer) => layer.futureTime).length > 0;
   const layerDateRange = getDateRange({}, activeLayersForProj);
@@ -485,6 +488,7 @@ const mapStateToProps = (state) => {
     screenHeight,
     hasFutureLayers,
     hasSubdailyLayers,
+    hasTempoProduct,
     subDailyMode,
     delta: useDelta,
     interval: TIME_SCALE_FROM_NUMBER[useInterval] || 'day',
@@ -559,6 +563,7 @@ AnimationWidget.propTypes = {
   endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasFutureLayers: PropTypes.bool,
   hasSubdailyLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   interval: PropTypes.string,
   isActive: PropTypes.bool,
   isCollapsed: PropTypes.bool,
