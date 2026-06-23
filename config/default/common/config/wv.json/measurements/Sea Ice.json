@@ -26,7 +26,7 @@
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/SeaIce",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Sea_Ice",
@@ -36,7 +36,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/terra/SeaIce",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Sea_Ice",
