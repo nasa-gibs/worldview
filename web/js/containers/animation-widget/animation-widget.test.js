@@ -601,7 +601,7 @@ describe('props forwarded to child widgets', () => {
 
 describe('mapStateToProps', () => {
   const buildMockState = (overrides = {}) => ({
-    compare: { active: false, ...(overrides.compare || {}) },
+    compare: { active: false, activeString: 'active', ...(overrides.compare || {}) },
     animation: {
       startDate: new Date('2021-01-01'),
       endDate: new Date('2021-03-01'),
