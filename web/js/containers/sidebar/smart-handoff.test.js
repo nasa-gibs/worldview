@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 import '@testing-library/jest-dom';
 
-jest.mock('googleTagManager', () => ({ pushEvent: jest.fn() }), { virtual: true });
+jest.mock('googleTagManager', () => ({ pushEvent: jest.fn() }));
 
 jest.mock('ol/proj', () => ({
   transform: jest.fn((coords) => coords),
@@ -475,7 +475,7 @@ describe('renderCropBox', () => {
   });
 
   it('pushes GTM event when checkbox is toggled on', () => {
-    const { getByTestId } = renderComponent();
+    const { getByTestId } = renderComponent({ showBoundingBox: false });
     fireEvent.click(getByTestId('crop-checkbox'));
     expect(googleTagManager.pushEvent).toHaveBeenCalledWith({
       event: 'smart_handoffs_toggle_true_target_area',
