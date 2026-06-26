@@ -87,7 +87,7 @@
     "@babel/core": "^7.29.7",
     "@babel/eslint-parser": "^7.29.7",
     "@babel/plugin-transform-class-properties": "^7.29.7",
-    "@babel/plugin-transform-private-methods": "^7.29.7",
+    "@babel/plugin-transform-private-methods": "^8.0.1",
     "@babel/preset-env": "^7.29.7",
     "@babel/preset-react": "^7.29.7",
     "@playwright/test": "^1.61.0",
