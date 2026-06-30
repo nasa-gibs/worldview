@@ -21,10 +21,6 @@ function BODY_COMPONENT() {
   );
 }
 class ErrorBoundary extends React.Component {
-  static getDerivedStateFromError() {
-    return { error: true };
-  }
-
   constructor(props) {
     super(props);
     this.state = { error: false };
@@ -32,7 +28,10 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, info) {
     const { errorAlert } = this.props;
+    this.setState({ error: true });
+    // Display fallback UI
     errorAlert();
+    // log the error
     console.warn(error, info);
   }
 
