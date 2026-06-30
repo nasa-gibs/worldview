@@ -1,0 +1,47 @@
+{
+  "layers": {
+    "KORUS-AQ_DC-8_Ozone": {
+      "id": "KORUS-AQ_DC-8_Ozone",
+      "title": "Ozone and Flight Track (Per Flight)",
+      "subtitle": "KORUS-AQ/NASA DC-8",
+      "description": "korus-aq/KORUS-AQ_DC-8_Ozone",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector korea suborbital",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableSnapshot": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "KORUS-AQ_DC-8_Ozone",
+        "geographic": {
+          "id": "KORUS-AQ_DC-8_Ozone"
+        }
+      },
+      "palette": {
+        "id": "KORUS-AQ_DC-8_Ozone",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "Altitude",
+        "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "KORUS-AQ_DC-8_Ozone",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
+      }
+    }
+  }
+}
