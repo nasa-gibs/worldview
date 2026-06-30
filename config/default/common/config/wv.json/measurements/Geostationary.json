@@ -59,7 +59,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                    	"EUMETSAT_MTG_0Deg_GeoColor_RGB_10min"
+                    	"EUMETSAT_MTG_0Deg_GeoColor_RGB_10min",
+                      "EUMETSAT_MTG_0Deg_IR105_10min"
                     ]
                 },
                 "MSG-0 Degree": {
@@ -77,7 +78,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-		                "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min"
+		                "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min",
+                    "EUMETSAT_MSG_IDOC_IR108_10min"
                     ]
                 }
             }

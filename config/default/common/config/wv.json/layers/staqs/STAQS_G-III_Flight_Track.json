@@ -27,8 +27,20 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "GPS_Alt_m_",
+        "property": "Altitude",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "STAQS_G-III_Flight_Track",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

@@ -140,7 +140,7 @@ function buildState(overrides = {}) {
     proj: {
       selected: {
         crs: 'EPSG:4326',
-        maxExtent: overrides.maxExtent === undefined ? [-180, -90, 180, 90] : overrides.maxExtent,
+        maxExtent: overrides.maxExtent === undefined,
       },
     },
     config: { projections: { geographic: { crs: 'EPSG:4326' } } },

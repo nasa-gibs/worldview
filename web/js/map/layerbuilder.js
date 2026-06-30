@@ -32,7 +32,7 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
-import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -101,7 +101,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * For TEMPO layers, get and set the product's dateRanges
    * so that they are up-to-date and not stale from build-time
    */
-  const getUpdatedDateRanges = (def, callback, group) => {
+  const getUpdatedDateRanges = async (def, callback, group) => {
     const state = store.getState();
     const { config: stateConfig, proj } = state;
     const describeDomainsUrl = stateConfig?.features?.describeDomains?.url ||
@@ -110,6 +110,10 @@ export default function mapLayerBuilder(config, cache, store) {
       id,
     } = def;
     let oldRanges = [];
+    const result = await fetchSubdailyDateRanges(def.id);
+    if (result) {
+      def.dateRanges = result;
+    }
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
@@ -201,7 +205,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  const getRequestDates = (def, options) => {
+  const getRequestDates = async (def, options) => {
     const state = store.getState();
     const { date } = state;
     const { appNow } = date;
@@ -221,10 +225,16 @@ export default function mapLayerBuilder(config, cache, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
+      if (!def.dateRanges && def.period === 'subdaily') {
+        const result = await fetchSubdailyDateRanges(def.id);
+        if (result) {
+          def.dateRanges = result;
+        }
+      }
       const { dateRanges, ongoing, period } = def;
       let dateRange;
       if (!ongoing) {
-        dateRange = datesInDateRanges(def, closestDate);
+        dateRange = await datesInDateRanges(def, closestDate);
       } else {
         let endDateLimit;
         let startDateLimit;
@@ -311,9 +321,9 @@ export default function mapLayerBuilder(config, cache, store) {
     options.group = options.group || activeString;
 
     // If layer is a TEMPO layer, fetch updated date ranges
-    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+    if (def?.id?.includes('TEMPO') && !def?.tempoDateRanges && tempoCallback) {
       tempoCallback(def, [], options.group);
-      getUpdatedDateRanges(def, tempoCallback, options.group);
+      await getUpdatedDateRanges(def, tempoCallback, options.group);
     }
 
     // if gibs/dns failure, display static image layer
@@ -326,7 +336,7 @@ export default function mapLayerBuilder(config, cache, store) {
       closestDate,
       nextDate,
       previousDate,
-    } = getRequestDates(def, options);
+    } = await getRequestDates(def, options);
     const date = closestDate;
     if (date && !options.date) {
       options.date = date;

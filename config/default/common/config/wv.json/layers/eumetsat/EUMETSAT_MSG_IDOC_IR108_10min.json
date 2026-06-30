@@ -1,0 +1,30 @@
+{
+  "layers": {
+      "EUMETSAT_MSG_IDOC_IR108_10min": {
+      "id": "EUMETSAT_MSG_IDOC_IR108_10min",
+      "title": "Infrared (10.8 µm, 10 minute)",
+      "subtitle": "MSG, Indian Ocean/FCI",
+      "description": "eumetsat/EUMETSAT_MSG_IDOC_IR108_10min",
+      "tags": "eumetsat",
+      "group": "overlays",
+      "type": "wms",
+      "format": "image/png",
+      "wrapX": true,
+      "disableSnapshot": true,
+      "period": "subdaily",
+      "layergroup": "Geostationary",
+      "startDate": "2020-08-01T00:00:00Z",
+      "dateRanges": [
+        {
+          "dateInterval": "10"
+        }
+      ],
+      "projections": {
+        "geographic": {
+          "source": "EUMETSAT:wms",
+          "layer": "msg_iodc:ir108"
+        }
+      }
+    }
+  }
+}

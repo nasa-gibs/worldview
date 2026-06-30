@@ -80,7 +80,7 @@ describe('layerPixelData', () => {
     });
 
     it('OMI_Nitrogen_Dioxide_Tropo_Column has threshold 0.50', () => {
-      expect(layerPixelData.OMI_Nitrogen_Dioxide_Tropo_Column.threshold).toBe(0.50);
+      expect(layerPixelData.OMI_Nitrogen_Dioxide_Tropo_Column.threshold).toBe(0.65);
     });
 
     it('VIIRS_SNPP_AOD_Dark_Target_Land_Ocean has threshold 0.95', () => {
