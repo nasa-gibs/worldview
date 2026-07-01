@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import { render } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 jest.mock('./coverage-line', () => function MockCoverageLine({
@@ -176,13 +176,15 @@ describe('CoverageItemContainer', () => {
       expect(getMaxEndDate).toHaveBeenCalledWith(layer, true);
     });
 
-    it('renders MULTI CoverageLines for dates within range', () => {
+    it('renders MULTI CoverageLines for dates within range', async () => {
       const getDatesInDateRange = jest.fn(() => [dateInRange]);
       const layer = { ...defaultLayer, dateRanges: singleRange };
       const { getByTestId } = renderComponent({
         needDateRangeBuilt: true, layer, getDatesInDateRange,
       });
-      expect(getByTestId('coverage-line-layer-abc-0').dataset.lineType).toBe('MULTI');
+      await waitFor(() => {
+        expect(getByTestId('coverage-line-layer-abc-0').dataset.lineType).toBe('MULTI');
+      });
     });
 
     it('renders no MULTI CoverageLines when all dates fall outside range', () => {
@@ -213,33 +215,37 @@ describe('CoverageItemContainer', () => {
       expect(getMaxEndDate).toHaveBeenCalledWith(layer, true);
     });
 
-    it('passes MULTI start date from itemRange.date', () => {
+    it('passes MULTI start date from itemRange.date', async () => {
       const getDatesInDateRange = jest.fn(() => [dateInRange]);
       const layer = { ...defaultLayer, dateRanges: singleRange };
       const { getByTestId } = renderComponent({
         needDateRangeBuilt: true, layer, getDatesInDateRange,
       });
-      expect(getByTestId('coverage-line-layer-abc-0').dataset.start).toBe(dateInRange.toISOString());
+      await waitFor(() => {
+        expect(getByTestId('coverage-line-layer-abc-0').dataset.start).toBe(dateInRange.toISOString());
+      });
     });
 
-    it('calls getRangeDateEndWithAddedInterval for each range item', () => {
+    it('calls getRangeDateEndWithAddedInterval for each range item', async () => {
       const getDatesInDateRange = jest.fn(() => [dateInRange]);
       const getRangeDateEndWithAddedInterval = jest.fn(() => new Date('2020-07-01'));
       const layer = { ...defaultLayer, dateRanges: singleRange };
       renderComponent({
         needDateRangeBuilt: true, layer, getDatesInDateRange, getRangeDateEndWithAddedInterval,
       });
-      expect(getRangeDateEndWithAddedInterval).toHaveBeenCalledTimes(1);
-      expect(getRangeDateEndWithAddedInterval).toHaveBeenCalledWith(
-        layer,
-        new Date(dateInRange.toISOString()),
-        'day',
-        1,
-        undefined,
-      );
+      await waitFor(() => {
+        expect(getRangeDateEndWithAddedInterval).toHaveBeenCalledTimes(1);
+        expect(getRangeDateEndWithAddedInterval).toHaveBeenCalledWith(
+          layer,
+          new Date(dateInRange.toISOString()),
+          'day',
+          1,
+          undefined,
+        );
+      });
     });
 
-    it('uses dateInterval as numeric interval in getRangeDateEndWithAddedInterval', () => {
+    it('uses dateInterval as numeric interval in getRangeDateEndWithAddedInterval', async () => {
       const rangeWith5Interval = [{ startDate: '2020-01-01', endDate: '2020-12-31', dateInterval: '5' }];
       const getDatesInDateRange = jest.fn(() => [dateInRange]);
       const getRangeDateEndWithAddedInterval = jest.fn(() => new Date('2020-06-20'));
@@ -247,16 +253,18 @@ describe('CoverageItemContainer', () => {
       renderComponent({
         needDateRangeBuilt: true, layer, getDatesInDateRange, getRangeDateEndWithAddedInterval,
       });
-      expect(getRangeDateEndWithAddedInterval).toHaveBeenCalledWith(
-        layer,
-        expect.any(Date),
-        'day',
-        5,
-        undefined,
-      );
+      await waitFor(() => {
+        expect(getRangeDateEndWithAddedInterval).toHaveBeenCalledWith(
+          layer,
+          expect.any(Date),
+          'day',
+          5,
+          undefined,
+        );
+      });
     });
 
-    it('calls getMatchingCoverageLineDimensions per MULTI range item', () => {
+    it('calls getMatchingCoverageLineDimensions per MULTI range item', async () => {
       const getDatesInDateRange = jest.fn(() => [dateInRange]);
       const getMatchingCoverageLineDimensions = jest.fn(() => [{ visible: true }]);
       const layer = { ...defaultLayer, dateRanges: singleRange };
@@ -267,14 +275,16 @@ describe('CoverageItemContainer', () => {
         getMatchingCoverageLineDimensions,
       });
       // once for the single MULTI item
-      expect(getMatchingCoverageLineDimensions).toHaveBeenCalledWith(
-        layer,
-        expect.any(Date),
-        expect.any(Date),
-      );
+      await waitFor(() => {
+        expect(getMatchingCoverageLineDimensions).toHaveBeenCalledWith(
+          layer,
+          expect.any(Date),
+          expect.any(Date),
+        );
+      });
     });
 
-    it('filters invisible dimensions for MULTI range items', () => {
+    it('filters invisible dimensions for MULTI range items', async () => {
       const getDatesInDateRange = jest.fn(() => [dateInRange]);
       const getMatchingCoverageLineDimensions = jest.fn(() => [
         { visible: true },
@@ -284,10 +294,12 @@ describe('CoverageItemContainer', () => {
       const { getByTestId } = renderComponent({
         needDateRangeBuilt: true, layer, getDatesInDateRange, getMatchingCoverageLineDimensions,
       });
-      expect(getByTestId('coverage-line-layer-abc-0').dataset.optionsCount).toBe('1');
+      await waitFor(() => {
+        expect(getByTestId('coverage-line-layer-abc-0').dataset.optionsCount).toBe('1');
+      });
     });
 
-    it('deduplicates dates from overlapping ranges via object key overwrite', () => {
+    it('deduplicates dates from overlapping ranges via object key overwrite', async () => {
       const duplicateDate = new Date('2020-06-15');
       const twoRanges = [
         { startDate: '2020-01-01', endDate: '2020-12-31', dateInterval: '1' },
@@ -299,7 +311,9 @@ describe('CoverageItemContainer', () => {
       const { container } = renderComponent({
         needDateRangeBuilt: true, layer, getDatesInDateRange,
       });
-      expect(container.querySelectorAll('[data-line-type="MULTI"]')).toHaveLength(1);
+      await waitFor(() => {
+        expect(container.querySelectorAll('[data-line-type="MULTI"]')).toHaveLength(1);
+      });
     });
   });
 
@@ -398,7 +412,7 @@ describe('CoverageItemContainer', () => {
       expect(getDatesInDateRange).not.toHaveBeenCalled();
     });
 
-    it('reflects updated layerDateRanges in render after frontDate change', () => {
+    it('reflects updated layerDateRanges in render after frontDate change', async () => {
       const getDatesInDateRange = jest.fn(() => []);
       const layer = { ...defaultLayer, dateRanges: singleRange };
       const { rerender, container } = renderComponent({
@@ -416,7 +430,9 @@ describe('CoverageItemContainer', () => {
           frontDate="2020-03-01"
         />,
       );
-      expect(container.querySelectorAll('[data-line-type="MULTI"]')).toHaveLength(1);
+      await waitFor(() => {
+        expect(container.querySelectorAll('[data-line-type="MULTI"]')).toHaveLength(1);
+      });
     });
   });
 });
