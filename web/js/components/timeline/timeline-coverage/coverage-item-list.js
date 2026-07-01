@@ -241,7 +241,7 @@ class CoverageItemList extends Component {
   * @param {Boolean} isLastInRange
   * @returns {Array} dateIntervalStartDates
   */
-  getDatesInDateRange = (def, range, endDateLimit, isLastInRange) => {
+  getDatesInDateRange = async (def, range, endDateLimit, isLastInRange) => {
     const {
       appNow,
       backDate,
@@ -290,7 +290,7 @@ class CoverageItemList extends Component {
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
       if (this.layerDateArrayCache[id][layerIdDates] === undefined) {
-        dateIntervalStartDates = datesInDateRanges(
+        dateIntervalStartDates = await datesInDateRanges(
           def,
           startDateLimit,
           startDateLimit,
