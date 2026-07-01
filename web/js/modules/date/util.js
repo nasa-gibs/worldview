@@ -593,11 +593,12 @@ function getDateRanges(layer) {
 export function getValidDateRanges(layers, dateA, dateB) {
   for (let i = 0; i < layers.length; i += 1) {
     const dateRanges = getDateRanges(layers[i]);
-    if (dateRanges && layers[i].visible) {
+    if (dateRanges && dateRanges.length && layers[i].visible) {
       return dateRanges.filter((element) => new Date(element.startDate) <= dateB &&
         new Date(element.endDate) >= dateA);
     }
   }
+  return [];
 }
 
 /**
