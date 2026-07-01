@@ -3,7 +3,7 @@
         "Aerosol Optical Depth": {
             "id": "aerosol-optical-depth",
             "title":    "Aerosol Optical Depth",
-            "subtitle": "AERONET, Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, Suomi NPP/OMPS LP, NOAA-20/VIIRS, NOAA-21/OMPS LP, MERRA-2",
+            "subtitle": "AERONET, Aura/OMI, Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, Terra/MISR, SeaWiFS Deep Blue, Suomi NPP/VIIRS, Suomi NPP/OMPS LP, NOAA-20/VIIRS, NOAA-21/OMPS LP, NOAA-21/VIIRS, MERRA-2",
             "sources": {
                 "AERONET": {
                     "id": "aeronet",
@@ -98,7 +98,9 @@
                       "settings": [
                         "VIIRS_SNPP_AOD_Dark_Target_Land_Ocean",
                         "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
+                        "VIIRS_SNPP_AOD_Deep_Blue_Land_Ocean",
                         "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
+                        "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Land_Ocean",
                         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "OrbitTracks_Suomi_NPP_Ascending"
                       ]
@@ -121,7 +123,9 @@
                       "settings": [
                         "VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean",
                         "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
+                        "VIIRS_NOAA20_AOD_Deep_Blue_Land_Ocean",
                         "VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate",
+                        "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Land_Ocean",
                         "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "OrbitTracks_NOAA-20_Ascending"
                       ]
@@ -133,6 +137,8 @@
                       "image": "",
                       "settings": [
                         "VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean",
+                        "VIIRS_NOAA21_AOD_Deep_Blue_Land_Ocean",
+                        "VIIRS_NOAA21_Angstrom_Exponent_Deep_Blue_Land_Ocean",
                         "OrbitTracks_NOAA-21_Ascending"
                       ]
                 },
