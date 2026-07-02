@@ -161,7 +161,8 @@ function NaturalEvents() {
     if (!map || eventsDataIsLoading) return;
 
     const loadingChange = eventsDataIsLoading !== prevEventsDataIsLoading;
-    const selectedEventChange = prevSelectedEvent !== undefined && selectedEvent !== prevSelectedEvent;
+    const selectedEventChange = prevSelectedEvent !== undefined &&
+      selectedEvent !== prevSelectedEvent;
 
     if (selectedEvent && loadingChange && !eventsDataIsLoading) {
       zoomIfVisible(selectedEvent);
