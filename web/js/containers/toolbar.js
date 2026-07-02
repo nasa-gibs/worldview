@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
 import {
   get as lodashGet,
-  cloneDeep as lodashCloneDeep,
   filter as lodashFilter,
 } from 'lodash';
 import Promise from 'bluebird';
@@ -28,7 +27,6 @@ import {
 } from '../modules/layers/actions';
 import { notificationWarnings } from '../modules/image-download/constants';
 import Notify from '../components/image-download/notify';
-import { hasCustomPaletteInActiveProjection } from '../modules/palettes/util';
 import LocationSearch from '../components/location-search/location-search';
 import {
   toggleShowLocationSearch as toggleShowLocationSearchAction,
@@ -126,9 +124,7 @@ class toolbarContainer extends Component {
   async openImageDownload() {
     const {
       openModal,
-      hasCustomPalette,
       isRotated,
-      activePalettes,
       rotation,
       refreshStateAfterImageDownload,
       toggleDialogVisible,
@@ -138,7 +134,6 @@ class toolbarContainer extends Component {
     const nonDownloadableLayers = hasNonDownloadableLayer
       ? getNonDownloadableLayers(visibleLayersForProj, true)
       : null;
-    const paletteStore = lodashCloneDeep(activePalettes);
     toggleDialogVisible(false);
     await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
     await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
@@ -151,9 +146,7 @@ class toolbarContainer extends Component {
       {
         ...CUSTOM_MODAL_PROPS.TOOLBAR_SNAPSHOT,
         onClose: () => {
-          refreshStateAfterImageDownload(hasCustomPalette
-            ? paletteStore
-            : undefined, rotation, nonDownloadableLayers);
+          refreshStateAfterImageDownload(undefined, rotation, nonDownloadableLayers);
         },
       },
     );
@@ -471,7 +464,6 @@ const mapStateToProps = (state) => {
     modal,
     modalAbout,
     notifications,
-    palettes,
     proj,
     screenSize,
     sidebar,
@@ -479,26 +471,22 @@ const mapStateToProps = (state) => {
   } = state;
   const { isDistractionFreeModeActive, isKioskModeActive } = ui;
   const { numberUnseen, type } = notifications;
-  const { activeString } = compare;
   const activeLayersForProj = getAllActiveLayers(state);
   const isMobile = screenSize.isMobileDevice;
   const faSize = isMobile ? '2x' : '1x';
   const isCompareActive = compare.active;
   const isChartingActive = charting.active;
   const isLocationSearchExpanded = locationSearch.isExpanded;
-  const activePalettes = palettes[activeString];
   const { isAnimatingToEvent } = events;
   const { activeTab } = sidebar;
   const isDataDownloadTabActive = activeTab === 'download';
   const { isOpen: modalIsOpen } = modal;
-  const filteredLayers = activeLayersForProj.filter((layer) => !(layer.colormapType === 'classification' && layer.type !== 'vector'));
 
   // Collapse when Image download / GIF /  is open or measure tool active
   const snapshotModalOpen = modalIsOpen && modal.id === 'TOOLBAR_SNAPSHOT';
   const shouldBeCollapsed = snapshotModalOpen || measure.isActive || animation.gifActive;
   const visibleLayersForProj = lodashFilter(activeLayersForProj, 'visible');
   return {
-    activePalettes,
     config: state.config,
     faSize,
     hasNonDownloadableLayer: hasNonDownloadableVisibleLayer(visibleLayersForProj, true),
@@ -517,10 +505,6 @@ const mapStateToProps = (state) => {
     isLocationSearchExpanded,
     isMobile,
     isRotated: Boolean(map.rotation !== 0),
-    hasCustomPalette: hasCustomPaletteInActiveProjection(
-      filteredLayers,
-      activePalettes,
-    ),
     modalIsOpen,
     notificationType: type,
     notificationContentNumber: numberUnseen,
@@ -611,11 +595,9 @@ export default connect(
 )(toolbarContainer);
 
 toolbarContainer.propTypes = {
-  activePalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasNonDownloadableLayer: PropTypes.bool,
   config: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   faSize: PropTypes.string,
-  hasCustomPalette: PropTypes.bool,
   isAboutOpen: PropTypes.bool,
   isCompareActive: PropTypes.bool,
   isChartingActive: PropTypes.bool,
