@@ -4,9 +4,20 @@
 // Mocks
 // ---------------------------------------------------------------------------
 
-jest.mock('react-dom/client', () => ({
-  createRoot: jest.fn(() => ({ render: jest.fn() })),
-}));
+jest.mock('react-dom/client', () => {
+  const actual = jest.requireActual('react-dom/client');
+  return {
+    ...actual,
+    createRoot: jest.fn((container) => {
+      // Use the real createRoot for @testing-library/react containers,
+      // mock it for EventIcon pin overlays created via document.createElement
+      if (container?.parentNode) {
+        return actual.createRoot(container);
+      }
+      return { render: jest.fn(), unmount: jest.fn() };
+    }),
+  };
+});
 
 jest.mock('ol/Overlay', () =>
   jest.fn().mockImplementation((opts) => ({
@@ -51,9 +62,9 @@ jest.mock('googleTagManager', () => ({ pushEvent: jest.fn() }));
 jest.mock('../../components/sidebar/event-icon', () => () => null);
 
 jest.mock('../../modules/natural-events/actions', () => ({
-  selectEvent: jest.fn(),
-  highlightEvent: jest.fn(),
-  unHighlightEvent: jest.fn(),
+  selectEvent: jest.fn((id, date) => ({ type: 'SELECT_EVENT', id, date })),
+  highlightEvent: jest.fn((id, date) => ({ type: 'HIGHLIGHT_EVENT', id, date })),
+  unHighlightEvent: jest.fn(() => ({ type: 'UNHIGHLIGHT_EVENT' })),
 }));
 
 jest.mock('../../modules/natural-events/util', () => ({
@@ -61,7 +72,7 @@ jest.mock('../../modules/natural-events/util', () => ({
 }));
 
 jest.mock('../../modules/natural-events/selectors', () => ({
-  getFilteredEvents: jest.fn(() => []),
+  getFilteredEvents: jest.fn((state) => state.filteredEvents || []),
 }));
 
 jest.mock('../../modules/map/constants', () => ({
@@ -75,14 +86,18 @@ jest.mock('../../modules/map/constants', () => ({
 // ---------------------------------------------------------------------------
 // Imports
 // ---------------------------------------------------------------------------
+import React from 'react';
+import { render, cleanup, act } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureMockStore from 'redux-mock-store';
 import googleTagManager from 'googleTagManager';
 import { getDefaultEventDate } from '../../modules/natural-events/util';
 import * as olExtent from 'ol/extent';
 import * as olProj from 'ol/proj';
 
-import ConnectedEventMarkers from './event-markers';
+import EventMarkers from './event-markers';
 
-const EventMarkers = ConnectedEventMarkers.WrappedComponent;
+const mockStoreCreator = configureMockStore([]);
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -124,31 +139,49 @@ const buildPolygonEvent = (overrides = {}) => ({
   ...overrides,
 });
 
-const defaultProps = () => ({
-  eventsData: [],
-  eventsDataIsLoading: false,
-  map: buildMap(),
-  mapUi: buildMapUi(),
-  proj: geographicProj(),
-  selectedEvent: null,
-  selectedDate: '2023-01-01',
-  isMobile: false,
-  isAnimatingToEvent: false,
-  selectEvent: jest.fn(),
-  highlightEvent: jest.fn(),
-  unHighlightEvent: jest.fn(),
-});
+const buildStoreState = (overrides = {}) => {
+  const map = overrides.map || buildMap();
+  const mapUi = overrides.mapUi || buildMapUi();
+  return {
+    map: { ui: { selected: map, ...mapUi } },
+    proj: overrides.proj || geographicProj(),
+    events: {
+      selected: overrides.selectedEvent || null,
+      isAnimatingToEvent: overrides.isAnimatingToEvent || false,
+    },
+    screenSize: { isMobileDevice: overrides.isMobile || false },
+    filteredEvents: overrides.eventsData || [],
+    requestedEvents: { isLoading: overrides.eventsDataIsLoading || false },
+    date: { selected: overrides.selectedDate || '2023-01-01' },
+    sidebar: { activeTab: 'events' },
+  };
+};
 
-const createInstance = (props) => {
-  const instance = new EventMarkers(props);
-  instance.props = props;
-  instance.state = { markers: [] };
-  instance.setState = jest.fn((updater, callback) => {
-    const next = typeof updater === 'function' ? updater(instance.state) : updater;
-    instance.state = { ...instance.state, ...next };
-    if (callback) callback();
+const renderComponent = (storeOverrides = {}) => {
+  const state = buildStoreState(storeOverrides);
+  const store = mockStoreCreator(state);
+  let result;
+  act(() => {
+    result = render(
+      <Provider store={store}>
+        <EventMarkers />
+      </Provider>,
+    );
   });
-  return instance;
+  return { ...result, store, state };
+};
+
+const rerenderWithNewStore = (rerender, storeOverrides = {}) => {
+  const state = buildStoreState(storeOverrides);
+  const store = mockStoreCreator(state);
+  act(() => {
+    rerender(
+      <Provider store={store}>
+        <EventMarkers />
+      </Provider>,
+    );
+  });
+  return { store, state };
 };
 
 // ---------------------------------------------------------------------------
@@ -161,100 +194,152 @@ describe('EventMarkers', () => {
     getDefaultEventDate.mockReturnValue('2023-01-01');
   });
 
+  afterEach(() => {
+    cleanup();
+  });
+
   // -------------------------------------------------------------------------
-  // componentDidMount
+  // Mount behavior (replaces componentDidMount)
   // -------------------------------------------------------------------------
-  describe('componentDidMount', () => {
-    it('calls draw() when eventsDataIsLoading is false', () => {
-      const instance = createInstance(defaultProps());
-      const drawSpy = jest.spyOn(instance, 'draw').mockImplementation(() => {});
-      instance.componentDidMount();
-      expect(drawSpy).toHaveBeenCalledTimes(1);
+  describe('mount behavior', () => {
+    it('calls draw when eventsDataIsLoading is false', () => {
+      const map = buildMap();
+      renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).toHaveBeenCalledTimes(1);
     });
 
-    it('does NOT call draw() when eventsDataIsLoading is true', () => {
-      const instance = createInstance({ ...defaultProps(), eventsDataIsLoading: true });
-      const drawSpy = jest.spyOn(instance, 'draw').mockImplementation(() => {});
-      instance.componentDidMount();
-      expect(drawSpy).not.toHaveBeenCalled();
+    it('does NOT call draw when eventsDataIsLoading is true', () => {
+      const map = buildMap();
+      renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        eventsDataIsLoading: true,
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).not.toHaveBeenCalled();
     });
   });
 
   // -------------------------------------------------------------------------
-  // componentDidUpdate
+  // Update behavior (replaces componentDidUpdate)
   // -------------------------------------------------------------------------
-  describe('componentDidUpdate', () => {
-    let instance;
-    let removeSpy;
-    let drawSpy;
+  describe('update behavior', () => {
+    it('redraws when loading transitions from true → false', () => {
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        eventsDataIsLoading: true,
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).not.toHaveBeenCalled();
 
-    beforeEach(() => {
-      instance = createInstance(defaultProps());
-      removeSpy = jest.spyOn(instance, 'remove').mockImplementation(() => {});
-      drawSpy = jest.spyOn(instance, 'draw').mockImplementation(() => {});
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [buildPointEvent()],
+        eventsDataIsLoading: false,
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).toHaveBeenCalled();
     });
 
-    it('calls remove() + draw() when loading transitions from true → false', () => {
-      instance.props = { ...defaultProps(), eventsDataIsLoading: false };
-      instance.componentDidUpdate({ ...defaultProps(), eventsDataIsLoading: true });
-      expect(removeSpy).toHaveBeenCalled();
-      expect(drawSpy).toHaveBeenCalled();
+    it('redraws when the projection changes', () => {
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        proj: geographicProj(),
+        selectedEvent: { id: 'other-event' },
+      });
+      map.addOverlay.mockClear();
+      map.removeOverlay.mockClear();
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [buildPointEvent()],
+        proj: polarProj(),
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).toHaveBeenCalled();
     });
 
-    it('calls remove() + draw() when the projection changes', () => {
-      const prevProj = geographicProj();
-      const nextProj = polarProj();
-      instance.props = { ...defaultProps(), proj: nextProj };
-      instance.componentDidUpdate({ ...defaultProps(), proj: prevProj });
-      expect(removeSpy).toHaveBeenCalled();
-      expect(drawSpy).toHaveBeenCalled();
+    it('redraws when animation finishes (true → false)', () => {
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        isAnimatingToEvent: true,
+        selectedEvent: { id: 'other-event' },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [buildPointEvent()],
+        isAnimatingToEvent: false,
+        selectedEvent: { id: 'other-event' },
+      });
+      // Should have drawn at least once after animation finished
+      expect(map.addOverlay).toHaveBeenCalled();
     });
 
-    it('calls remove() + draw() when animation finishes (true → false)', () => {
-      instance.props = { ...defaultProps(), isAnimatingToEvent: false };
-      instance.componentDidUpdate({ ...defaultProps(), isAnimatingToEvent: true });
-      expect(removeSpy).toHaveBeenCalled();
-      expect(drawSpy).toHaveBeenCalled();
+    it('redraws when selectedEvent changes', () => {
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: { id: 'event-old' },
+      });
+      map.addOverlay.mockClear();
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: { id: 'event-new' },
+      });
+      expect(map.addOverlay).toHaveBeenCalled();
     });
 
-    it('calls remove() + draw() when selectedEvent changes', () => {
-      const prevEvent = { id: 'event-old' };
-      const nextEvent = { id: 'event-new' };
-      instance.props = { ...defaultProps(), selectedEvent: nextEvent };
-      instance.componentDidUpdate({ ...defaultProps(), selectedEvent: prevEvent });
-      expect(removeSpy).toHaveBeenCalled();
-      expect(drawSpy).toHaveBeenCalled();
-    });
-
-    it('does NOT call remove() or draw() when nothing relevant changes', () => {
-      const props = defaultProps();
-      instance.props = { ...props };
-      instance.componentDidUpdate({ ...props });
-      expect(removeSpy).not.toHaveBeenCalled();
-      expect(drawSpy).not.toHaveBeenCalled();
-    });
-
-    it('does NOT call remove() or draw() when selectedEvent stays null', () => {
-      // Both current and prev props must share the same proj reference so
-      // projChange is false, and eventsDataIsLoading/isAnimatingToEvent must
-      // also be unchanged — only selectedEvent (null → null) differs.
+    it('does NOT redraw when nothing relevant changes', () => {
+      const map = buildMap();
       const sharedProj = geographicProj();
-      instance.props = { ...defaultProps(), proj: sharedProj, selectedEvent: null };
-      instance.componentDidUpdate({ ...defaultProps(), proj: sharedProj, selectedEvent: null });
-      expect(removeSpy).not.toHaveBeenCalled();
-      expect(drawSpy).not.toHaveBeenCalled();
+      const sharedSelected = { id: 'event-1' };
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        proj: sharedProj,
+        selectedEvent: sharedSelected,
+      });
+      map.addOverlay.mockClear();
+
+      // Re-render with same references
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [buildPointEvent()],
+        proj: sharedProj,
+        selectedEvent: sharedSelected,
+      });
+      expect(map.addOverlay).not.toHaveBeenCalled();
     });
   });
 
   // -------------------------------------------------------------------------
-  // componentWillUnmount
+  // Unmount behavior (replaces componentWillUnmount)
   // -------------------------------------------------------------------------
-  describe('componentWillUnmount', () => {
-    it('calls remove() when the component unmounts', () => {
-      const instance = createInstance(defaultProps());
-      const removeSpy = jest.spyOn(instance, 'remove').mockImplementation(() => {});
-      instance.componentWillUnmount();
-      expect(removeSpy).toHaveBeenCalledTimes(1);
+  describe('unmount behavior', () => {
+    it('calls remove when the component unmounts', () => {
+      const map = buildMap();
+      const { unmount } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).toHaveBeenCalled();
+      unmount();
+      expect(map.removeOverlay).toHaveBeenCalled();
     });
   });
 
@@ -263,8 +348,8 @@ describe('EventMarkers', () => {
   // -------------------------------------------------------------------------
   describe('render', () => {
     it('returns null', () => {
-      const instance = createInstance(defaultProps());
-      expect(instance.render()).toBeNull();
+      const { container } = renderComponent();
+      expect(container.innerHTML).toBe('');
     });
   });
 
@@ -272,14 +357,16 @@ describe('EventMarkers', () => {
   // draw() – guard clauses
   // -------------------------------------------------------------------------
   describe('draw() – guard clauses', () => {
-    it('returns null when eventsData is null', () => {
-      const instance = createInstance({ ...defaultProps(), eventsData: null });
-      expect(instance.draw()).toBeNull();
+    it('does not add overlays when eventsData is null', () => {
+      const map = buildMap();
+      renderComponent({ map, eventsData: null });
+      expect(map.addOverlay).not.toHaveBeenCalled();
     });
 
-    it('returns null when eventsData is an empty array', () => {
-      const instance = createInstance({ ...defaultProps(), eventsData: [] });
-      expect(instance.draw()).toBeNull();
+    it('does not add overlays when eventsData is an empty array', () => {
+      const map = buildMap();
+      renderComponent({ map, eventsData: [] });
+      expect(map.addOverlay).not.toHaveBeenCalled();
     });
   });
 
@@ -289,92 +376,79 @@ describe('EventMarkers', () => {
   describe('draw() – geographic projection, Point geometry', () => {
     it('adds a pin overlay to the map', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPointEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(map.addOverlay).toHaveBeenCalled();
     });
 
     it('sets the correct pin position from Point coordinates', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPointEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       const overlay = map.addOverlay.mock.calls[0][0];
       expect(overlay.setPosition).toHaveBeenCalledWith([10, 20]);
     });
 
     it('falls back to a default category when the category id is not in the icons list', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      expect(() => renderComponent({
         map,
         eventsData: [buildPointEvent({ categories: [{ id: 'unknown', title: 'Unknown' }] })],
         selectedEvent: { id: 'other-event' },
-      });
-      expect(() => instance.draw()).not.toThrow();
+      })).not.toThrow();
       expect(map.addOverlay).toHaveBeenCalled();
     });
 
     it('uses selectedEvent.date for geometry lookup when the event is selected', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPointEvent()],
         selectedEvent: { id: 'event-1', date: '2023-02-15' },
       });
-      instance.draw();
       expect(map.addOverlay).toHaveBeenCalled();
     });
 
-    it('calls map.getView().changed() and map.renderSync() via the setState callback', () => {
+    it('calls map.getView().changed() and map.renderSync() after drawing', () => {
       const mockChanged = jest.fn();
       const map = {
         ...buildMap(),
         getView: jest.fn(() => ({ changed: mockChanged })),
       };
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPointEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(mockChanged).toHaveBeenCalled();
       expect(map.renderSync).toHaveBeenCalled();
     });
 
     it('hides tooltips when isMobile is true', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      expect(() => renderComponent({
         map,
         isMobile: true,
         eventsData: [buildPointEvent()],
         selectedEvent: { id: 'other-event' },
-      });
-      expect(() => instance.draw()).not.toThrow();
+      })).not.toThrow();
     });
 
     it('hides tooltips when isAnimatingToEvent is true', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      expect(() => renderComponent({
         map,
         isAnimatingToEvent: true,
         eventsData: [buildPointEvent()],
+        eventsDataIsLoading: false,
         selectedEvent: { id: 'other-event' },
-      });
-      expect(() => instance.draw()).not.toThrow();
+      })).not.toThrow();
     });
   });
 
@@ -384,13 +458,11 @@ describe('EventMarkers', () => {
   describe('draw() – geographic projection, Polygon geometry', () => {
     it('computes the bounding-box centre for a Polygon event', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPolygonEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(olExtent.boundingExtent).toHaveBeenCalled();
       expect(olExtent.getCenter).toHaveBeenCalled();
       expect(map.addOverlay).toHaveBeenCalled();
@@ -398,25 +470,21 @@ describe('EventMarkers', () => {
 
     it('adds a bounding-box layer when the Polygon event IS selected', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPolygonEvent()],
         selectedEvent: { id: 'event-2' },
       });
-      instance.draw();
       expect(map.addLayer).toHaveBeenCalled();
     });
 
     it('does NOT add a bounding-box layer when the Polygon event is NOT selected', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPolygonEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(map.addLayer).not.toHaveBeenCalled();
     });
   });
@@ -427,42 +495,36 @@ describe('EventMarkers', () => {
   describe('draw() – polar projection', () => {
     it('transforms Point coordinates for a polar projection', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         proj: polarProj(),
         eventsData: [buildPointEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(olProj.transform).toHaveBeenCalled();
       expect(map.addOverlay).toHaveBeenCalled();
     });
 
     it('handles a Polygon in polar projection and adds bounding-box when selected', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         proj: polarProj(),
         eventsData: [buildPolygonEvent()],
         selectedEvent: { id: 'event-2' },
       });
-      instance.draw();
       expect(map.addLayer).toHaveBeenCalled();
       expect(olExtent.getCenter).toHaveBeenCalled();
     });
 
     it('handles a Polygon in polar projection WITHOUT bounding-box when not selected', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         proj: polarProj(),
         eventsData: [buildPolygonEvent()],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(map.addLayer).not.toHaveBeenCalled();
       expect(map.addOverlay).toHaveBeenCalled();
     });
@@ -474,34 +536,29 @@ describe('EventMarkers', () => {
   describe('draw() – geometry edge cases', () => {
     it('skips adding an overlay when the event has no geometry entries', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPointEvent({ geometry: [] })],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(map.addOverlay).not.toHaveBeenCalled();
     });
 
     it('falls back to geometry[0] when no geometry matches the resolved date', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [buildPointEvent({
           geometry: [{ type: 'Point', date: '2022-06-15T00:00:00Z', coordinates: [5, 15] }],
         })],
         selectedEvent: { id: 'other-event' },
       });
-      instance.draw();
       expect(map.addOverlay).toHaveBeenCalled();
     });
 
     it('creates a marker overlay for each event in eventsData', () => {
       const map = buildMap();
-      const instance = createInstance({
-        ...defaultProps(),
+      renderComponent({
         map,
         eventsData: [
           buildPointEvent({ id: 'event-1' }),
@@ -510,7 +567,6 @@ describe('EventMarkers', () => {
         ],
         selectedEvent: { id: 'event-1' },
       });
-      instance.draw();
       expect(map.addOverlay).toHaveBeenCalledTimes(3);
     });
   });
@@ -521,53 +577,53 @@ describe('EventMarkers', () => {
   describe('remove()', () => {
     it('is a no-op when the markers array is empty', () => {
       const map = buildMap();
-      const instance = createInstance({ ...defaultProps(), map });
-      instance.remove();
+      const { unmount } = renderComponent({ map });
+      unmount();
       expect(map.removeOverlay).not.toHaveBeenCalled();
       expect(map.removeLayer).not.toHaveBeenCalled();
     });
 
-    it('calls setMap(null) and removeOverlay for a marker pin', () => {
+    it('calls setMap(null) and removeOverlay for a marker pin on unmount', () => {
       const map = buildMap();
-      const pin = { setMap: jest.fn(), element: document.createElement('div'), setPosition: jest.fn() };
-      const instance = createInstance({ ...defaultProps(), map });
-      instance.state = { markers: [{ pin }] };
-      instance.remove();
+      const { unmount } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: { id: 'other-event' },
+      });
+      expect(map.addOverlay).toHaveBeenCalled();
+      const pin = map.addOverlay.mock.calls[0][0];
+      unmount();
       expect(pin.setMap).toHaveBeenCalledWith(null);
       expect(map.removeOverlay).toHaveBeenCalledWith(pin);
     });
 
-    it('calls setMap(null) and removeLayer for a marker boundingBox', () => {
+    it('calls setMap(null) and removeLayer for a marker boundingBox on unmount', () => {
       const map = buildMap();
-      const pin = { setMap: jest.fn(), element: document.createElement('div'), setPosition: jest.fn() };
-      const boundingBox = { setMap: jest.fn() };
-      const instance = createInstance({ ...defaultProps(), map });
-      instance.state = { markers: [{ pin, boundingBox }] };
-      instance.remove();
+      const { unmount } = renderComponent({
+        map,
+        eventsData: [buildPolygonEvent()],
+        selectedEvent: { id: 'event-2' },
+      });
+      expect(map.addLayer).toHaveBeenCalled();
+      const boundingBox = map.addLayer.mock.calls[0][0];
+      unmount();
       expect(boundingBox.setMap).toHaveBeenCalledWith(null);
       expect(map.removeLayer).toHaveBeenCalledWith(boundingBox);
     });
 
-    it('resets markers state to []', () => {
-      const map = buildMap();
-      const pin = { setMap: jest.fn(), element: document.createElement('div'), setPosition: jest.fn() };
-      const instance = createInstance({ ...defaultProps(), map });
-      instance.state = { markers: [{ pin }] };
-      instance.remove();
-      expect(instance.setState).toHaveBeenCalledWith({ markers: [] });
-    });
-
     it('removes tooltip DOM elements with class event-icon-tooltip', () => {
       const map = buildMap();
-      const pin = { setMap: jest.fn(), element: document.createElement('div'), setPosition: jest.fn() };
       const tooltip = document.createElement('div');
       tooltip.className = 'event-icon-tooltip';
       document.body.appendChild(tooltip);
       const tooltipRemoveSpy = jest.spyOn(tooltip, 'remove');
 
-      const instance = createInstance({ ...defaultProps(), map });
-      instance.state = { markers: [{ pin }] };
-      instance.remove();
+      const { unmount } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: { id: 'other-event' },
+      });
+      unmount();
 
       expect(tooltipRemoveSpy).toHaveBeenCalled();
       tooltip.parentNode?.removeChild(tooltip);
@@ -579,63 +635,61 @@ describe('EventMarkers', () => {
   // -------------------------------------------------------------------------
   describe('addInteractions()', () => {
     const setup = (overrides = {}) => {
-      const selectEvent = jest.fn();
-      const highlightEvent = jest.fn();
-      const unHighlightEvent = jest.fn();
-      const instance = createInstance({
-        ...defaultProps(),
-        selectEvent,
-        highlightEvent,
-        unHighlightEvent,
+      const map = buildMap();
+      const { store } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent: overrides.isSelected ? { id: 'event-1' } : { id: 'other-event' },
         mapUi: buildMapUi(overrides.supportsPassive || false),
       });
-      const pinEl = document.createElement('div');
-      document.body.appendChild(pinEl);
-      const event = buildPointEvent();
-      const date = '2023-01-01';
-      const isSelected = overrides.isSelected || false;
-      instance.addInteractions({ pin: { element: pinEl } }, event, date, isSelected);
-      return { pinEl, selectEvent, highlightEvent, unHighlightEvent, event, date };
+      const overlay = map.addOverlay.mock.calls[0]?.[0];
+      const pinEl = overlay?.element;
+      return { pinEl, store };
     };
 
     afterEach(() => {
       document.body.innerHTML = '';
     });
 
-    it('calls highlightEvent on mouseenter', () => {
-      const { pinEl, highlightEvent, event, date } = setup();
+    it('dispatches highlightEvent on mouseenter', () => {
+      const { pinEl, store } = setup();
       pinEl.dispatchEvent(new MouseEvent('mouseenter'));
-      expect(highlightEvent).toHaveBeenCalledWith(event.id, date);
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'HIGHLIGHT_EVENT' }));
     });
 
-    it('calls unHighlightEvent on mouseleave', () => {
-      const { pinEl, unHighlightEvent } = setup();
+    it('dispatches unHighlightEvent on mouseleave', () => {
+      const { pinEl, store } = setup();
       pinEl.dispatchEvent(new MouseEvent('mouseleave'));
-      expect(unHighlightEvent).toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'UNHIGHLIGHT_EVENT' }));
     });
 
-    it('calls selectEvent on click when not selected and not dragged', () => {
-      const { pinEl, selectEvent, event, date } = setup();
+    it('dispatches selectEvent on click when not selected and not dragged', () => {
+      const { pinEl, store } = setup();
       pinEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      expect(selectEvent).toHaveBeenCalledWith(event.id, date);
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'SELECT_EVENT' }));
     });
 
-    it('does NOT call selectEvent when the event is already selected', () => {
-      const { pinEl, selectEvent } = setup({ isSelected: true });
+    it('does NOT dispatch selectEvent when the event is already selected', () => {
+      const { pinEl, store } = setup({ isSelected: true });
       pinEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      expect(selectEvent).not.toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'SELECT_EVENT' }));
     });
 
-    it('does NOT call selectEvent after more than 2 mousemove events (drag)', () => {
-      const { pinEl, selectEvent } = setup();
+    it('does NOT dispatch selectEvent after more than 2 mousemove events (drag)', () => {
+      const { pinEl, store } = setup();
       pinEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      expect(selectEvent).not.toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'SELECT_EVENT' }));
     });
 
     it('pushes a Google Tag Manager event on successful selection', () => {
@@ -648,7 +702,7 @@ describe('EventMarkers', () => {
     });
 
     it('resets willSelect and moveCount on a new mousedown after a drag', () => {
-      const { pinEl, selectEvent } = setup();
+      const { pinEl, store } = setup();
       pinEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('mousemove', { bubbles: true }));
@@ -656,14 +710,16 @@ describe('EventMarkers', () => {
       // A fresh mousedown resets willSelect and moveCount
       pinEl.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       pinEl.dispatchEvent(new MouseEvent('click', { bubbles: true }));
-      expect(selectEvent).toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'SELECT_EVENT' }));
     });
 
     it('fires selectEvent on touchend when not selected and not dragged', () => {
-      const { pinEl, selectEvent, event, date } = setup();
+      const { pinEl, store } = setup();
       pinEl.dispatchEvent(new TouchEvent('touchstart', { bubbles: true }));
       pinEl.dispatchEvent(new TouchEvent('touchend', { bubbles: true }));
-      expect(selectEvent).toHaveBeenCalledWith(event.id, date);
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'SELECT_EVENT' }));
     });
 
     it('uses { passive: true } listener option when supportsPassive is true', () => {
@@ -680,19 +736,6 @@ describe('EventMarkers', () => {
       const falseCalls = spy.mock.calls.filter(([, , opts]) => opts === false);
       expect(falseCalls.length).toBeGreaterThan(0);
       spy.mockRestore();
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // Redux connect wiring smoke test
-  // -------------------------------------------------------------------------
-  describe('redux connect wiring', () => {
-    it('exports a connected component as the default export', () => {
-      expect(ConnectedEventMarkers).toBeDefined();
-    });
-
-    it('exposes the unwrapped class as WrappedComponent', () => {
-      expect(ConnectedEventMarkers.WrappedComponent).toBe(EventMarkers);
     });
   });
 });

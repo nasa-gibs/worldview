@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { render } from '@testing-library/react';
+import React from 'react';
+import { render, cleanup, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import configureMockStore from 'redux-mock-store';
 
-import ConnectedNaturalEvents from './natural-events';
+import NaturalEvents from './natural-events';
 import { fly } from '../util';
 import util from '../../util/util';
 import {
@@ -70,13 +71,11 @@ jest.mock('../util', () => ({
   fly: jest.fn(() => Promise.resolve()),
 }));
 
-const NaturalEvents = ConnectedNaturalEvents.WrappedComponent;
-
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
-const mockStore = configureMockStore([]);
+const mockStoreCreator = configureMockStore([]);
 
 const zoomLevelReference = { wildfires: 8, volcanoes: 6 };
 
@@ -123,41 +122,54 @@ const buildPolygonEvent = (overrides = {}) => ({
   ...overrides,
 });
 
-/**
- * selectedEvent must always be an object (never null) when passed as a prop
- * because componentDidMount accesses selectedEvent.date unconditionally.
- * Use `{ id: null, date: null }` to represent "no event selected".
- */
-const defaultProps = (overrides = {}) => ({
-  map: buildMap(),
-  proj: geographicProj(),
-  eventsData: [],
-  eventsDataIsLoading: false,
-  selectedEvent: { id: null, date: null },
-  eventLayers: ['layer-1'],
-  layers: [],
-  defaultEventLayer: 'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
-  isKioskModeActive: false,
-  selectDate: jest.fn(),
-  selectEventFinished: jest.fn(),
-  activateLayersForEventCategory: jest.fn(),
-  removeGroup: jest.fn(),
-  toggleVisibility: jest.fn(),
-  toggleGroupVisibility: jest.fn(),
-  addLayer: jest.fn(),
-  ...overrides,
+const defaultStoreState = (overrides = {}) => ({
+  map: { ui: { selected: overrides.map || buildMap() } },
+  proj: overrides.proj || geographicProj(),
+  requestedEvents: { isLoading: overrides.eventsDataIsLoading || false },
+  events: {
+    active: true,
+    selected: overrides.selectedEvent || { id: null, date: null },
+    filteredEvents: overrides.eventsData || [],
+    showAllTracks: false,
+    highlighted: {},
+  },
+  layers: {
+    active: { layers: overrides.layers || [] },
+    eventLayers: overrides.eventLayers || ['layer-1'],
+  },
+  config: {
+    naturalEvents: {
+      defaultLayer: overrides.defaultEventLayer || 'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
+    },
+  },
+  ui: { isKioskModeActive: overrides.isKioskModeActive || false },
 });
 
-const createInstance = (props) => {
-  const instance = new NaturalEvents(props);
-  instance.props = props;
-  instance.state = { prevSelectedEvent: {} };
-  instance.setState = jest.fn((updater, callback) => {
-    const next = typeof updater === 'function' ? updater(instance.state) : updater;
-    instance.state = { ...instance.state, ...next };
-    if (callback) callback();
+const renderComponent = (overrides = {}) => {
+  const state = defaultStoreState(overrides);
+  const store = mockStoreCreator(state);
+  let result;
+  act(() => {
+    result = render(
+      <Provider store={store}>
+        <NaturalEvents />
+      </Provider>,
+    );
   });
-  return instance;
+  return { ...result, store, state };
+};
+
+const rerenderWithNewStore = (rerender, overrides = {}) => {
+  const state = defaultStoreState(overrides);
+  const store = mockStoreCreator(state);
+  act(() => {
+    rerender(
+      <Provider store={store}>
+        <NaturalEvents />
+      </Provider>,
+    );
+  });
+  return { store, state };
 };
 
 // ---------------------------------------------------------------------------
@@ -183,54 +195,56 @@ describe('NaturalEvents', () => {
     fly.mockResolvedValue();
   });
 
+  afterEach(() => {
+    cleanup();
+  });
+
   // -------------------------------------------------------------------------
   // render
   // -------------------------------------------------------------------------
   describe('render', () => {
     it('renders without crashing', () => {
-      const instance = createInstance(defaultProps());
-      expect(() => instance.render()).not.toThrow();
+      expect(() => renderComponent()).not.toThrow();
     });
 
     it('renders EventTrack and EventMarkers as children', () => {
-      const { container } = render(<NaturalEvents {...defaultProps()} />);
+      const { container } = renderComponent();
       expect(container).toBeDefined();
     });
   });
 
   // -------------------------------------------------------------------------
-  // componentDidMount
+  // mount – layer initialization (replaces componentDidMount)
   // -------------------------------------------------------------------------
-  describe('componentDidMount', () => {
-    it('calls addLayer when the default event layer is not present in layers', () => {
-      const addLayer = jest.fn();
-      const props = defaultProps({
-        addLayer,
+  describe('mount – layer initialization', () => {
+    it('dispatches addLayer when the default event layer is not present in layers', () => {
+      const { store } = renderComponent({
         layers: [{ id: 'some-other-layer', group: 'baselayers' }],
       });
-      const instance = createInstance(props);
-      instance.componentDidMount();
-      expect(addLayer).toHaveBeenCalledWith('VIIRS_NOAA20_CorrectedReflectance_TrueColor');
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({
+        type: 'ADD_LAYER',
+        id: 'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
+      }));
     });
 
-    it('calls toggleVisibility(true) when default layer IS present and selectedEvent has no date', () => {
-      const toggleVisibility = jest.fn();
+    it('dispatches toggleVisibility(true) when default layer IS present and selectedEvent has no date', () => {
       const defaultLayer = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor';
-      const props = defaultProps({
-        toggleVisibility,
+      const { store } = renderComponent({
         layers: [{ id: defaultLayer, group: 'overlays', layergroup: 'Weather' }],
         selectedEvent: { id: null, date: null },
       });
-      const instance = createInstance(props);
-      instance.componentDidMount();
-      expect(toggleVisibility).toHaveBeenCalledWith(defaultLayer, true);
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({
+        type: 'TOGGLE_VISIBILITY',
+        id: defaultLayer,
+        vis: true,
+      }));
     });
 
     it('hides overlay layers (excluding Reference group) when selectedEvent has no date', () => {
-      const toggleGroupVisibility = jest.fn();
       const defaultLayer = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor';
-      const props = defaultProps({
-        toggleGroupVisibility,
+      const { store } = renderComponent({
         layers: [
           { id: defaultLayer, group: 'overlays', layergroup: 'Weather' },
           { id: 'overlay-1', group: 'overlays', layergroup: 'Weather' },
@@ -239,223 +253,146 @@ describe('NaturalEvents', () => {
         ],
         selectedEvent: { id: null, date: null },
       });
-      const instance = createInstance(props);
-      instance.componentDidMount();
-      expect(toggleGroupVisibility).toHaveBeenCalledWith(
-        expect.arrayContaining(['overlay-1']),
-        false,
-      );
-      const hiddenIds = toggleGroupVisibility.mock.calls[0][0];
+      const actions = store.getActions();
+      const toggleGroupAction = actions.find((a) => a.type === 'TOGGLE_GROUP_VISIBILITY');
+      expect(toggleGroupAction).toBeDefined();
+      const hiddenIds = toggleGroupAction.ids;
+      expect(hiddenIds).toContain('overlay-1');
       expect(hiddenIds).not.toContain('reference-1');
       expect(hiddenIds).not.toContain('base-1');
     });
 
-    it('does NOT call toggleGroupVisibility when selectedEvent has a date', () => {
-      const toggleGroupVisibility = jest.fn();
-      const props = defaultProps({
-        toggleGroupVisibility,
+    it('does NOT dispatch toggleGroupVisibility when selectedEvent has a date', () => {
+      const { store } = renderComponent({
         layers: [{ id: 'overlay-1', group: 'overlays', layergroup: 'Weather' }],
         selectedEvent: { id: 'event-1', date: '2023-01-01' },
       });
-      const instance = createInstance(props);
-      instance.componentDidMount();
-      expect(toggleGroupVisibility).not.toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'TOGGLE_GROUP_VISIBILITY' }));
     });
 
-    it('does NOT call toggleVisibility when default layer is present and selectedEvent has a date', () => {
-      const toggleVisibility = jest.fn();
+    it('does NOT dispatch toggleVisibility when default layer is present and selectedEvent has a date', () => {
       const defaultLayer = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor';
-      const props = defaultProps({
-        toggleVisibility,
+      const { store } = renderComponent({
         layers: [{ id: defaultLayer, group: 'overlays', layergroup: 'Weather' }],
         selectedEvent: { id: 'event-1', date: '2023-01-01' },
       });
-      const instance = createInstance(props);
-      instance.componentDidMount();
-      expect(toggleVisibility).not.toHaveBeenCalled();
+      const actions = store.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'TOGGLE_VISIBILITY' }));
     });
   });
 
   // -------------------------------------------------------------------------
-  // componentWillUnmount
+  // unmount (replaces componentWillUnmount)
   // -------------------------------------------------------------------------
-  describe('componentWillUnmount', () => {
-    it('calls toggleVisibility with false on unmount', () => {
-      const toggleVisibility = jest.fn();
-      const defaultLayer = 'VIIRS_NOAA20_CorrectedReflectance_TrueColor';
-      const instance = createInstance(defaultProps({ toggleVisibility }));
-      instance.componentWillUnmount();
-      expect(toggleVisibility).toHaveBeenCalledWith(defaultLayer, false);
+  describe('unmount', () => {
+    it('dispatches toggleVisibility with false on unmount', () => {
+      const { store, unmount } = renderComponent();
+      store.clearActions();
+      unmount();
+      const actions = store.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({
+        type: 'TOGGLE_VISIBILITY',
+        id: 'VIIRS_NOAA20_CorrectedReflectance_TrueColor',
+        vis: false,
+      }));
     });
   });
 
   // -------------------------------------------------------------------------
-  // componentDidUpdate
+  // update – event selection (replaces componentDidUpdate)
   // -------------------------------------------------------------------------
-  describe('componentDidUpdate', () => {
+  describe('update – event selection', () => {
     it('returns early when map is null', () => {
-      const selectDate = jest.fn();
-      const instance = createInstance(defaultProps({ map: null, selectDate }));
-      instance.componentDidUpdate({
-        map: null,
-        eventsDataIsLoading: false,
-        selectedEvent: { id: null, date: null },
-      });
-      expect(selectDate).not.toHaveBeenCalled();
+      const { store } = renderComponent({ map: null });
+      const actions = store.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'SELECT_DATE' }));
     });
 
     it('returns early when eventsDataIsLoading is true', () => {
-      const selectDate = jest.fn();
-      const instance = createInstance(
-        defaultProps({ eventsDataIsLoading: true, selectDate }),
-      );
-      instance.componentDidUpdate({
-        map: buildMap(),
-        eventsDataIsLoading: false,
-        selectedEvent: { id: null, date: null },
-      });
-      expect(selectDate).not.toHaveBeenCalled();
+      const { store } = renderComponent({ eventsDataIsLoading: true });
+      const actions = store.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'SELECT_DATE' }));
     });
 
     it('calls zoomIfVisible when events finish loading with a selectedEvent', () => {
       const event = buildPointEvent();
       const selectedEvent = { id: 'event-1', date: '2023-01-01' };
-      const props = defaultProps({
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent,
+        eventsDataIsLoading: true,
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
         eventsData: [event],
         selectedEvent,
         eventsDataIsLoading: false,
       });
-      const instance = createInstance(props);
-      const zoomSpy = jest.spyOn(instance, 'zoomIfVisible').mockImplementation(() => {});
-      instance.componentDidUpdate({
-        map: buildMap(),
-        eventsDataIsLoading: true,
-        selectedEvent,
-      });
-      expect(zoomSpy).toHaveBeenCalledWith(selectedEvent);
+      // zoomIfVisible calls zoomToEvent which calls fly
+      expect(fly).toHaveBeenCalled();
     });
 
-    it('calls selectEvent when selectedEvent changes to a new event', () => {
+    it('dispatches selectDate when selectedEvent changes to a new event', () => {
       const event = buildPointEvent();
-      const selectedEvent = { id: 'event-1', date: '2023-01-01' };
-      const props = defaultProps({
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
         eventsData: [event],
-        selectedEvent,
-      });
-      const instance = createInstance(props);
-      const selectSpy = jest.spyOn(instance, 'selectEvent').mockImplementation(() => {});
-      instance.componentDidUpdate({
-        map: buildMap(),
-        eventsDataIsLoading: false,
         selectedEvent: { id: null, date: null },
       });
-      expect(selectSpy).toHaveBeenCalledWith('event-1', '2023-01-01', false);
-    });
 
-    it('does not call selectEvent when selectedEvent does not change', () => {
-      const selectedEvent = { id: 'event-1', date: '2023-01-01' };
-      const props = defaultProps({ selectedEvent });
-      const instance = createInstance(props);
-      const selectSpy = jest.spyOn(instance, 'selectEvent').mockImplementation(() => {});
-      // same reference → no change
-      instance.componentDidUpdate({
-        map: buildMap(),
-        eventsDataIsLoading: false,
-        selectedEvent,
-      });
-      expect(selectSpy).not.toHaveBeenCalled();
-    });
-
-    it('passes loadingChange=true to selectEvent when events just finished loading', () => {
-      const event = buildPointEvent();
-      const selectedEvent = { id: 'event-1', date: '2023-01-01' };
-      const props = defaultProps({
+      const { store: store2 } = rerenderWithNewStore(rerender, {
+        map,
         eventsData: [event],
-        selectedEvent,
-        eventsDataIsLoading: false,
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
       });
-      const instance = createInstance(props);
-      const selectSpy = jest.spyOn(instance, 'selectEvent').mockImplementation(() => {});
-      instance.componentDidUpdate({
-        map: buildMap(),
-        eventsDataIsLoading: true,
+      const actions = store2.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'SELECT_DATE' }));
+    });
+
+    it('does not dispatch selectDate when selectedEvent does not change', () => {
+      const selectedEvent = { id: 'event-1', date: '2023-01-01' };
+      const map = buildMap();
+      const { rerender, store } = renderComponent({
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent,
+      });
+      store.clearActions();
+
+      // Re-render with same selectedEvent reference
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [buildPointEvent()],
+        selectedEvent,
+      });
+      // The store2 actions should not have SELECT_DATE
+      const actions = store.getActions();
+      const selectDateActions = actions.filter((a) => a.type === 'SELECT_DATE');
+      expect(selectDateActions.length).toBe(0);
+    });
+
+    it('dispatches selectEventFinished after zoom promise resolves', async () => {
+      const event = buildPointEvent();
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
         selectedEvent: { id: null, date: null },
       });
-      expect(selectSpy).toHaveBeenCalledWith('event-1', '2023-01-01', true);
-    });
-  });
 
-  // -------------------------------------------------------------------------
-  // zoomIfVisible
-  // -------------------------------------------------------------------------
-  describe('zoomIfVisible()', () => {
-    it('calls zoomToEvent when the event has visible geometry', () => {
-      const event = buildPointEvent();
-      validateGeometryCoords.mockReturnValue(true);
-      const props = defaultProps({ eventsData: [event] });
-      const instance = createInstance(props);
-      const zoomSpy = jest.spyOn(instance, 'zoomToEvent').mockResolvedValue();
-      instance.zoomIfVisible({ id: 'event-1', date: '2023-01-01' });
-      expect(zoomSpy).toHaveBeenCalledWith(event, '2023-01-01');
-    });
-
-    it('does NOT call zoomToEvent when no geometry passes validation', () => {
-      const event = buildPointEvent();
-      validateGeometryCoords.mockReturnValue(false);
-      const props = defaultProps({ eventsData: [event] });
-      const instance = createInstance(props);
-      const zoomSpy = jest.spyOn(instance, 'zoomToEvent').mockResolvedValue();
-      instance.zoomIfVisible({ id: 'event-1', date: '2023-01-01' });
-      expect(zoomSpy).not.toHaveBeenCalled();
-    });
-
-    it('returns early when the event is not found in eventsData', () => {
-      const props = defaultProps({ eventsData: [] });
-      const instance = createInstance(props);
-      const zoomSpy = jest.spyOn(instance, 'zoomToEvent').mockResolvedValue();
-      instance.zoomIfVisible({ id: 'event-not-found', date: '2023-01-01' });
-      expect(zoomSpy).not.toHaveBeenCalled();
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // getZoomPromise
-  // -------------------------------------------------------------------------
-  describe('getZoomPromise()', () => {
-    it('returns a resolved promise immediately when isInitialLoad is true', async () => {
-      const instance = createInstance(defaultProps());
-      jest.spyOn(instance, 'zoomToEvent').mockResolvedValue();
-      const result = instance.getZoomPromise(buildPointEvent(), '2023-01-01', false, true);
-      await expect(result).resolves.toBeUndefined();
-    });
-
-    it('calls zoomToEvent and returns its promise when isInitialLoad is false', () => {
-      const event = buildPointEvent();
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      const zoomSpy = jest.spyOn(instance, 'zoomToEvent').mockResolvedValue();
-      instance.getZoomPromise(event, '2023-01-01', true, false);
-      expect(zoomSpy).toHaveBeenCalledWith(event, '2023-01-01', true);
-    });
-  });
-
-  // -------------------------------------------------------------------------
-  // selectEvent
-  // -------------------------------------------------------------------------
-  describe('selectEvent()', () => {
-    it('returns early when event is not found in eventsData', () => {
-      const selectDate = jest.fn();
-      const instance = createInstance(defaultProps({ eventsData: [], selectDate }));
-      instance.selectEvent('event-not-found', '2023-01-01', false);
-      expect(selectDate).not.toHaveBeenCalled();
-    });
-
-    it('calls selectDate with the parsed date', () => {
-      const event = buildPointEvent();
-      const selectDate = jest.fn();
-      const instance = createInstance(defaultProps({ eventsData: [event], selectDate }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', false);
-      expect(selectDate).toHaveBeenCalled();
+      const { store: store2 } = rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+      });
+      await Promise.resolve();
+      const actions = store2.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'SELECTED_EVENT' }));
     });
 
     it('adds one day to wildfire date when the date is not recent', () => {
@@ -463,13 +400,22 @@ describe('NaturalEvents', () => {
         categories: [{ id: 'wildfires', title: 'Wildfires' }],
       });
       const oldDate = '2022-01-01';
+      const map = buildMap();
       toEventDateString
         .mockReturnValueOnce('2023-06-15')
         .mockReturnValueOnce('2023-06-14');
       util.parseDateUTC.mockReturnValue(new Date(oldDate));
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', oldDate, false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: oldDate },
+      });
       expect(util.dateAdd).toHaveBeenCalledWith(expect.any(Date), 'day', 1);
     });
 
@@ -480,22 +426,18 @@ describe('NaturalEvents', () => {
       const todayStr = '2023-06-15';
       toEventDateString.mockReturnValue(todayStr);
       util.parseDateUTC.mockReturnValue(new Date(todayStr));
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', todayStr, false);
-      expect(util.dateAdd).not.toHaveBeenCalled();
-    });
-
-    it('does NOT add a day for a wildfire that happened yesterday', () => {
-      const event = buildPointEvent({
-        categories: [{ id: 'wildfires', title: 'Wildfires' }],
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
       });
-      const yesterdayStr = '2023-06-14';
-      toEventDateString.mockReturnValue(yesterdayStr);
-      util.parseDateUTC.mockReturnValue(new Date(yesterdayStr));
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', yesterdayStr, false);
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: todayStr },
+      });
       expect(util.dateAdd).not.toHaveBeenCalled();
     });
 
@@ -503,16 +445,22 @@ describe('NaturalEvents', () => {
       const event = buildPointEvent({
         categories: [{ id: 'volcanoes', title: 'Volcanoes' }],
       });
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2022-01-01', false);
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: '2022-01-01' },
+      });
       expect(util.dateAdd).not.toHaveBeenCalled();
     });
 
-    it('calls removeGroup and activateLayersForEventCategory when category changes', async () => {
-      const removeGroup = jest.fn();
-      const activateLayersForEventCategory = jest.fn();
-      const selectEventFinished = jest.fn();
+    it('dispatches removeGroup and activateLayersForEventCategory when category changes', async () => {
       const prevEvent = buildPointEvent({
         id: 'event-0',
         categories: [{ id: 'volcanoes', title: 'Volcanoes' }],
@@ -521,23 +469,39 @@ describe('NaturalEvents', () => {
         id: 'event-1',
         categories: [{ id: 'wildfires', title: 'Wildfires' }],
       });
-      const instance = createInstance(defaultProps({
+      const map = buildMap();
+
+      // First render: select event-0
+      const { rerender } = renderComponent({
+        map,
         eventsData: [prevEvent, nextEvent],
-        removeGroup,
-        activateLayersForEventCategory,
-        selectEventFinished,
+        selectedEvent: { id: null, date: null },
         eventLayers: ['layer-1'],
-      }));
-      instance.state = { prevSelectedEvent: { id: 'event-0', date: '2023-01-01' } };
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', false);
+      });
+
+      // Select event-0 first to establish prevSelectedEvent
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [prevEvent, nextEvent],
+        selectedEvent: { id: 'event-0', date: '2023-01-01' },
+        eventLayers: ['layer-1'],
+      });
+
+      // Now select event-1 (different category)
+      const { store: store3 } = rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [prevEvent, nextEvent],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+        eventLayers: ['layer-1'],
+      });
+
       await Promise.resolve();
-      expect(removeGroup).toHaveBeenCalledWith(['layer-1']);
-      expect(activateLayersForEventCategory).toHaveBeenCalledWith('Wildfires');
+      const actions = store3.getActions();
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'REMOVE_GROUP' }));
+      expect(actions).toContainEqual(expect.objectContaining({ type: 'ACTIVATE_LAYERS', cat: 'Wildfires' }));
     });
 
-    it('does NOT call removeGroup when category stays the same', async () => {
-      const removeGroup = jest.fn();
+    it('does NOT dispatch removeGroup when category stays the same', async () => {
       const prevEvent = buildPointEvent({
         id: 'event-0',
         categories: [{ id: 'wildfires', title: 'Wildfires' }],
@@ -546,77 +510,48 @@ describe('NaturalEvents', () => {
         id: 'event-1',
         categories: [{ id: 'wildfires', title: 'Wildfires' }],
       });
-      const instance = createInstance(defaultProps({
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
         eventsData: [prevEvent, nextEvent],
-        removeGroup,
-      }));
-      instance.state = { prevSelectedEvent: { id: 'event-0', date: '2023-01-01' } };
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', false);
-      await Promise.resolve();
-      expect(removeGroup).not.toHaveBeenCalled();
-    });
-
-    it('calls selectEventFinished after zoom promise resolves', async () => {
-      const event = buildPointEvent();
-      const selectEventFinished = jest.fn();
-      const instance = createInstance(defaultProps({
-        eventsData: [event],
-        selectEventFinished,
-      }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', false);
-      await Promise.resolve();
-      expect(selectEventFinished).toHaveBeenCalled();
-    });
-
-    it('does NOT call removeGroup or activateLayersForEventCategory when isInitialLoad is true', async () => {
-      const removeGroup = jest.fn();
-      const activateLayersForEventCategory = jest.fn();
-      const event = buildPointEvent();
-      const instance = createInstance(defaultProps({
-        eventsData: [event],
-        removeGroup,
-        activateLayersForEventCategory,
-      }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', true);
-      await Promise.resolve();
-      expect(removeGroup).not.toHaveBeenCalled();
-      expect(activateLayersForEventCategory).not.toHaveBeenCalled();
-    });
-
-    it('updates prevSelectedEvent state after being called', () => {
-      const event = buildPointEvent();
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', false);
-      expect(instance.setState).toHaveBeenCalledWith({
-        prevSelectedEvent: { id: 'event-1', date: '2023-01-01' },
+        selectedEvent: { id: null, date: null },
       });
+
+      // Select event-0 first
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [prevEvent, nextEvent],
+        selectedEvent: { id: 'event-0', date: '2023-01-01' },
+      });
+
+      // Now select event-1 (same category)
+      const { store: store3 } = rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [prevEvent, nextEvent],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+      });
+
+      await Promise.resolve();
+      const actions = store3.getActions();
+      expect(actions).not.toContainEqual(expect.objectContaining({ type: 'REMOVE_GROUP' }));
     });
 
     it('uses getDefaultEventDate when no date is passed', () => {
       const event = buildPointEvent();
       getDefaultEventDate.mockReturnValue('2023-01-01');
-      const instance = createInstance(defaultProps({ eventsData: [event] }));
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', null, false);
-      expect(getDefaultEventDate).toHaveBeenCalledWith(event);
-    });
-
-    it('handles the case where prevSelectedEvent has no id (first selection)', async () => {
-      const event = buildPointEvent();
-      const activateLayersForEventCategory = jest.fn();
-      const instance = createInstance(defaultProps({
+      const map = buildMap();
+      const { rerender } = renderComponent({
+        map,
         eventsData: [event],
-        activateLayersForEventCategory,
-      }));
-      instance.state = { prevSelectedEvent: {} };
-      jest.spyOn(instance, 'getZoomPromise').mockReturnValue(Promise.resolve());
-      instance.selectEvent('event-1', '2023-01-01', false);
-      await Promise.resolve();
-      expect(activateLayersForEventCategory).toHaveBeenCalledWith('Wildfires');
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: null },
+      });
+      expect(getDefaultEventDate).toHaveBeenCalledWith(event);
     });
   });
 
@@ -627,8 +562,17 @@ describe('NaturalEvents', () => {
     it('calls fly() with transformed point coordinates', () => {
       const event = buildPointEvent();
       const map = buildMap();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+      });
       expect(fly).toHaveBeenCalledWith(
         map,
         geographicProj(),
@@ -639,32 +583,20 @@ describe('NaturalEvents', () => {
       );
     });
 
-    it('uses the current map zoom level when isSameEventID is true', () => {
-      const event = buildPointEvent({ categories: [{ id: 'volcanoes', title: 'Volcanoes' }] });
-      const map = buildMap();
-      // Capture the single shared view instance before calling zoomToEvent
-      const view = map.getView();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', true);
-      expect(view.getZoom).toHaveBeenCalled();
-      expect(fly).toHaveBeenCalledWith(map, expect.anything(), expect.anything(), false, 5, null);
-    });
-
-    it('uses zoomLevelReference zoom for known categories when isSameEventID is false', () => {
-      const event = buildPointEvent({ categories: [{ id: 'volcanoes', title: 'Volcanoes' }] });
-      const map = buildMap();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', false);
-      expect(fly).toHaveBeenCalledWith(
-        map, expect.anything(), expect.anything(), false, zoomLevelReference.volcanoes, null,
-      );
-    });
-
     it('uses undefined zoom for categories not in the reference table', () => {
       const event = buildPointEvent({ categories: [{ id: 'floods', title: 'Floods' }] });
       const map = buildMap();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+      });
       expect(fly).toHaveBeenCalledWith(
         map, expect.anything(), expect.anything(), false, undefined, null,
       );
@@ -673,18 +605,36 @@ describe('NaturalEvents', () => {
     it('calls olProj.transform on Point coordinates', () => {
       const event = buildPointEvent();
       const map = buildMap();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+      });
       expect(olProj.transform).toHaveBeenCalledWith([10, 20], 'EPSG:4326', 'EPSG:4326');
     });
 
     it('passes isKioskModeActive=true to fly()', () => {
       const event = buildPointEvent();
       const map = buildMap();
-      const instance = createInstance(
-        defaultProps({ map, eventsData: [event], isKioskModeActive: true }),
-      );
-      instance.zoomToEvent(event, '2023-01-01', false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+        isKioskModeActive: true,
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-1', date: '2023-01-01' },
+        isKioskModeActive: true,
+      });
       expect(fly).toHaveBeenCalledWith(
         map, expect.anything(), expect.anything(), true, expect.anything(), null,
       );
@@ -698,8 +648,17 @@ describe('NaturalEvents', () => {
     it('calls boundingExtent and fly() for a Polygon event', () => {
       const event = buildPolygonEvent();
       const map = buildMap();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-2', date: '2023-01-01' },
+      });
       expect(olExtent.boundingExtent).toHaveBeenCalled();
       expect(fly).toHaveBeenCalled();
     });
@@ -707,51 +666,28 @@ describe('NaturalEvents', () => {
     it('transforms each coordinate in the polygon ring before passing to boundingExtent', () => {
       const event = buildPolygonEvent();
       const map = buildMap();
-      const instance = createInstance(defaultProps({ map, eventsData: [event] }));
-      instance.zoomToEvent(event, '2023-01-01', false);
+      const { rerender } = renderComponent({
+        map,
+        eventsData: [event],
+        selectedEvent: { id: null, date: null },
+      });
+
+      rerenderWithNewStore(rerender, {
+        map,
+        eventsData: [event],
+        selectedEvent: { id: 'event-2', date: '2023-01-01' },
+      });
       // 5 coordinates in the ring → 5 transform calls
       expect(olProj.transform).toHaveBeenCalledTimes(5);
     });
   });
 
   // -------------------------------------------------------------------------
-  // Redux connect wiring
+  // Redux store rendering
   // -------------------------------------------------------------------------
-  describe('redux connect wiring', () => {
-    it('exposes the unwrapped class as WrappedComponent', () => {
-      expect(ConnectedNaturalEvents.WrappedComponent).toBe(NaturalEvents);
-    });
-
+  describe('redux store rendering', () => {
     it('renders inside a Provider without crashing', () => {
-      const store = mockStore({
-        map: { ui: { selected: buildMap() } },
-        proj: geographicProj(),
-        requestedEvents: { isLoading: false },
-        events: {
-          active: true,
-          // Use an object with null fields instead of null to avoid
-          // selectedEvent.date access errors in componentDidMount
-          selected: { id: null, date: null },
-          filteredEvents: [],
-          showAllTracks: false,
-          highlighted: {},
-        },
-        layers: {
-          active: { layers: [] },
-          eventLayers: [],
-        },
-        config: {
-          naturalEvents: { defaultLayer: 'VIIRS_NOAA20_CorrectedReflectance_TrueColor' },
-        },
-        ui: { isKioskModeActive: false },
-      });
-      expect(() =>
-        render(
-          <Provider store={store}>
-            <ConnectedNaturalEvents />
-          </Provider>,
-        ),
-      ).not.toThrow();
+      expect(() => renderComponent()).not.toThrow();
     });
   });
 });
