@@ -188,11 +188,6 @@ function ChartingModeOptions(props) {
     setTopRightLatLong(topRight);
     debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
     setMapViewChecked(false);
-    if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
   };
 
   const { initialStartDate, initialEndDate } = initializeDates(timeSpanStartDate, timeSpanEndDate);
@@ -250,20 +245,10 @@ function ChartingModeOptions(props) {
     if (!aoiCoordinates || aoiCoordinates.length === 0) {
       debouncedUpdateAOICoordinates([...bottomLeftLatLong, ...topRightLatLong]);
     }
-    if (maxExtent) {
-      let inLeftWing;
-      let inRightWing;
-      if (aoiCoordinates && aoiCoordinates.length > 0) {
-        inLeftWing = aoiCoordinates[0] < maxExtent[0] && aoiCoordinates[2] < maxExtent[0];
-        inRightWing = aoiCoordinates[0] > maxExtent[2] && aoiCoordinates[2] > maxExtent[2];
-      } else {
-        inLeftWing = bottomLeftLatLong[0] < maxExtent[0] && topRightLatLong[0] < maxExtent[0];
-        inRightWing = bottomLeftLatLong[0] > maxExtent[2] && topRightLatLong[0] > maxExtent[2];
-      }
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
     return () => {
       isMounted.current = false;
+      updateAOICoordinates([]);
+      setIsWithinWings(null);
     };
   }, []);
 
@@ -272,6 +257,22 @@ function ChartingModeOptions(props) {
       setIsPostRender(true);
     }
   }, [fromButton]);
+
+  // Track whether the bounding box is within the wings of the map
+  useEffect(() => {
+    if (!maxExtent) return;
+
+    let inLeftWing, inRightWing;
+
+    if (aoiCoordinates && aoiCoordinates.length > 0) {
+      inLeftWing = aoiCoordinates[0] < maxExtent[0];
+      inRightWing = aoiCoordinates[2] > maxExtent[2];
+    } else {
+      inLeftWing = bottomLeftLatLong[0] < maxExtent[0];
+      inRightWing = topRightLatLong[0] > maxExtent[2];
+    }
+    setIsWithinWings(inLeftWing || inRightWing);
+  }, [maxExtent, aoiCoordinates, bottomLeftLatLong, topRightLatLong]);
 
   function formatDateForImageStat(dateObj) {
     const dateString = new Date(dateObj);
@@ -695,17 +696,13 @@ function ChartingModeOptions(props) {
       onUpdateStartDate(startDate);
       onUpdateEndDate(endDate);
     }
+
     if (!aoiCoordinates || aoiCoordinates.length === 0) {
       const bottomLeft = getLatLongFromPixelValue(x, y2);
       const topRight = getLatLongFromPixelValue(x2, y);
       setBottomLeftLatLong(bottomLeft);
       setTopRightLatLong(topRight);
       debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
-      if (maxExtent) {
-        const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-        const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-        setIsWithinWings(inLeftWing || inRightWing);
-      }
       return;
     }
     if (viewExtent.every((val, index) => val === aoiCoordinates[index])) {
@@ -722,11 +719,6 @@ function ChartingModeOptions(props) {
     setBoundaries(newBoundaries);
     setBottomLeftLatLong([aoiCoordinates[0], aoiCoordinates[1]]);
     setTopRightLatLong([aoiCoordinates[2], aoiCoordinates[3]]);
-    if (maxExtent) {
-      const inLeftWing = aoiCoordinates[0] < maxExtent[0] && aoiCoordinates[2] < maxExtent[0];
-      const inRightWing = aoiCoordinates[0] > maxExtent[2] && aoiCoordinates[2] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
   });
 
   const onLatLongChange = (coordsArray) => {
@@ -745,16 +737,21 @@ function ChartingModeOptions(props) {
     setTopRightLatLong(topRight);
     debouncedUpdateAOICoordinates([...bottomLeft, ...topRight]);
     setMapViewChecked(false);
-    if (maxExtent) {
-      const inLeftWing = bottomLeft[0] < maxExtent[0] && topRight[0] < maxExtent[0];
-      const inRightWing = bottomLeft[0] > maxExtent[2] && topRight[0] > maxExtent[2];
-      setIsWithinWings(inLeftWing || inRightWing);
-    }
   };
 
   const toggleMapView = () => {
     if (!mapViewChecked) {
-      onLatLongChange(viewExtent);
+      // Clamp extent values to the visible map area
+      const clampedViewExtent = viewExtent.map((val, index) => {
+        if (!maxExtent) return val;
+        if (index % 2 === 0) {
+          // Longitude value (x)
+          return Math.min(Math.max(val, maxExtent[0]), maxExtent[2]);
+        }
+        // Latitude value (y)
+        return Math.min(Math.max(val, maxExtent[1]), maxExtent[3]);
+      });
+      onLatLongChange(clampedViewExtent);
     } else {
       const boundariesObj = {
         x: screenWidth / 2 - 100,
@@ -880,6 +877,21 @@ function ChartingModeOptions(props) {
           valid={!chartRequestInProgress && !isWithinWings}
           text={requestBtnText}
         />
+        <style>{`
+          #charting-create-button:disabled {
+            pointer-events: auto !important;
+            cursor: not-allowed;
+          }
+        `}</style>
+        {isWithinWings && (
+          <UncontrolledTooltip
+            id="charting-create-button"
+            target="charting-create-button"
+            placement="right"
+          >
+            Please adjust your AOI to be within the current day's extent to generate a chart.
+          </UncontrolledTooltip>
+        )}
       </div>
       {chartRequestInProgress && (
         <WaitOverlay

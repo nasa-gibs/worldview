@@ -24,8 +24,7 @@ class CoverageItemContainer extends Component {
     const { dateRanges } = layer;
     // handle date range query/array building
     if (needDateRangeBuilt) {
-      const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
-      this.updateDateRangeState(dateRangesToDisplay);
+      this.callDateRangeHelper(dateRanges);
     }
   }
 
@@ -43,21 +42,25 @@ class CoverageItemContainer extends Component {
 
     if (frontDateChanged || backDateChanged) {
       if (needDateRangeBuilt) {
-        const dateRangesToDisplay = this.getDateRangeToDisplay(dateRanges);
-        this.updateDateRangeState(dateRangesToDisplay);
+        this.callDateRangeHelper(dateRanges);
       }
     }
+  }
+
+  async callDateRangeHelper(dateRanges) {
+    const dateRangesToDisplay = await this.getDateRangeToDisplay(dateRanges);
+    this.updateDateRangeState(dateRangesToDisplay);
   }
 
   /**
   * @desc getDateRangeToDisplay
   * @param {Array} dateRanges
-  * @returns {ArrayBuffer} multiDateToDisplay
+  * @returns {Promise() <ArrayBuffer>} multiDateToDisplay
   */
-  getDateRangeToDisplay = (dateRanges) => {
+  getDateRangeToDisplay = async (dateRanges) => {
     const { getMaxEndDate, getDatesInDateRange, layer } = this.props;
 
-    const multiDateToDisplay = dateRanges.reduce((dates, range, innerIndex) => {
+    const multiDateToDisplay = await dateRanges.reduce(async (dates, range, innerIndex) => {
       const multiCoverageDates = { ...dates };
       const { dateInterval, startDate, endDate } = range;
       const isLastInRange = innerIndex === dateRanges.length - 1;
@@ -67,7 +70,8 @@ class CoverageItemContainer extends Component {
       // get dates based on date ranges
       const startDateTime = new Date(startDate).getTime();
       const endDateTime = new Date(endDate).getTime();
-      const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
+      const dateIntervalStartDates = await getDatesInDateRange(
+        layer, range, endDateLimit, isLastInRange);
 
       // add date intervals to multiCoverageDates object to catch repeats
       dateIntervalStartDates.forEach((dateIntStartDate) => {

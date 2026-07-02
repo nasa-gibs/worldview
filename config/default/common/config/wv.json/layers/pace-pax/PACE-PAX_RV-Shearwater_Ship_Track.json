@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "Time_Start",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {

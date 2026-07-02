@@ -618,38 +618,38 @@ describe('CoverageItemList', () => {
       expect(datesInDateRanges).toHaveBeenCalledTimes(1);
     });
 
-    it('returns [] when startDate is after endDateLimit', () => {
+    it('returns [] when startDate is after endDateLimit', async () => {
       renderComponent();
       const futureRange = { ...validRange, startDate: '2022-01-01' };
-      const result = capturedContainerProps
+      const result = await capturedContainerProps
         .getDatesInDateRange(makeDef(), futureRange, endDateLimit, false);
       expect(result).toEqual([]);
       expect(datesInDateRanges).not.toHaveBeenCalled();
     });
 
-    it('returns [] when rangeEnd is before startDateLimit', () => {
+    it('returns [] when rangeEnd is before startDateLimit', async () => {
       renderComponent();
       // rangeEnd = new Date('2019-01-01'), startDateLimit ≈ 2019-12-31
       const pastRange = { startDate: '2020-01-01', endDate: '2019-01-01', dateInterval: '1' };
-      const result = capturedContainerProps
+      const result = await capturedContainerProps
         .getDatesInDateRange(makeDef(), pastRange, endDateLimit, false);
       expect(result).toEqual([]);
       expect(datesInDateRanges).not.toHaveBeenCalled();
     });
 
-    it('caches the result and avoids duplicate datesInDateRanges calls', () => {
+    it('caches the result and avoids duplicate datesInDateRanges calls', async () => {
       renderComponent();
-      capturedContainerProps.getDatesInDateRange(makeDef(), validRange, endDateLimit, false);
-      capturedContainerProps.getDatesInDateRange(makeDef(), validRange, endDateLimit, false);
+      await capturedContainerProps.getDatesInDateRange(makeDef(), validRange, endDateLimit, false);
+      await capturedContainerProps.getDatesInDateRange(makeDef(), validRange, endDateLimit, false);
       expect(datesInDateRanges).toHaveBeenCalledTimes(1);
     });
 
-    it('uses cached result for second call', () => {
+    it('uses cached result for second call', async () => {
       const fakeDate = new Date('2020-06-01');
-      datesInDateRanges.mockReturnValueOnce([fakeDate]);
+      datesInDateRanges.mockImplementation(() => Promise.resolve([fakeDate]));
       renderComponent();
       capturedContainerProps.getDatesInDateRange(makeDef(), validRange, endDateLimit, false);
-      const second = capturedContainerProps
+      const second = await capturedContainerProps
         .getDatesInDateRange(makeDef(), validRange, endDateLimit, false);
       expect(second).toEqual([fakeDate]);
     });

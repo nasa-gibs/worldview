@@ -34,44 +34,36 @@ describe('LineText Component', () => {
     cleanup();
   });
 
-  describe('Constructor & State', () => {
-    it('should initialize with correct state', () => {
-      const instance = new LineText(defaultProps);
-
-      expect(instance.state.overlay).toBe('');
-      expect(instance.nodeRef).toBeDefined();
-      expect(instance.nodeRef.current).toBeNull();
-    });
-  });
-
   describe('getDateText', () => {
-    it('should return comparison text when compare is active (left)', () => {
-      const props = { ...defaultProps, isCompareActive: true, isLeft: true };
-      const instance = new LineText(props);
-      const result = instance.getDateText();
+    it('should display comparison text when compare is active (left)', () => {
+      const props = {
+        ...defaultProps, isCompareActive: true, isLeft: true, active: true,
+      };
+      const { container } = render(<LineText {...props} />);
+      const texts = container.querySelectorAll('text');
 
-      expect(result).toEqual({
-        dateLeft: '+ 1 day',
-        dateRight: '',
-      });
+      expect(texts[0].textContent).toBe('+ 1 day');
+      expect(texts[1].textContent).toBe('');
     });
 
-    it('should return comparison text when compare is active (right)', () => {
-      const props = { ...defaultProps, isCompareActive: true, isLeft: false };
-      const instance = new LineText(props);
-      const result = instance.getDateText();
+    it('should display comparison text when compare is active (right)', () => {
+      const props = {
+        ...defaultProps, isCompareActive: true, isLeft: false, active: true,
+      };
+      const { container } = render(<LineText {...props} />);
+      const texts = container.querySelectorAll('text');
 
-      expect(result).toEqual({
-        dateLeft: '',
-        dateRight: '- 1 day',
-      });
+      expect(texts[0].textContent).toBe('');
+      expect(texts[1].textContent).toBe('- 1 day');
     });
 
-    it('should return dates from selector when compare is not active', () => {
+    it('should display dates from selector when compare is not active', () => {
       const mockDate = new Date('2023-01-15');
       const mockDateA = '2023-01-16';
       const mockDateB = '2023-01-15';
-      const props = { ...defaultProps, date: mockDate, isCompareActive: false };
+      const props = {
+        ...defaultProps, date: mockDate, isCompareActive: false, active: true,
+      };
 
       util.dateAdd.mockReturnValue(new Date('2023-01-16'));
       compareSelectors.getCompareDates.mockReturnValue({
@@ -79,15 +71,13 @@ describe('LineText Component', () => {
         dateB: mockDateB,
       });
 
-      const instance = new LineText(props);
-      const result = instance.getDateText();
+      const { container } = render(<LineText {...props} />);
+      const texts = container.querySelectorAll('text');
 
       expect(util.dateAdd).toHaveBeenCalledWith(mockDate, 'day', 1);
       expect(compareSelectors.getCompareDates).toHaveBeenCalled();
-      expect(result).toEqual({
-        dateLeft: mockDateA,
-        dateRight: mockDateB,
-      });
+      expect(texts[0].textContent).toBe(mockDateA);
+      expect(texts[1].textContent).toBe(mockDateB);
     });
   });
 

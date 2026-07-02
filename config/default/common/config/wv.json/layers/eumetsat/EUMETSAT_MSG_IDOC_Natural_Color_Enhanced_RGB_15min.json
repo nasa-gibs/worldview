@@ -2,8 +2,8 @@
   "layers": {
     "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min": {
       "id": "EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min",
-      "title": "Natural Color Enhanced RGB (15 minute, Meteosat Second Generation (MSG), Indian Ocean)",
-      "subtitle": "MSG/SEVIRI",
+      "title": "Natural Color Enhanced (15 minute)",
+      "subtitle": "MSG, Indian Ocean/SEVIRI",
       "description": "eumetsat/EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min",
       "tags": "eumetsat ring",
       "group": "overlays",

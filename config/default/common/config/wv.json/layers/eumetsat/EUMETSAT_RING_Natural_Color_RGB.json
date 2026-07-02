@@ -2,7 +2,7 @@
   "layers": {
     "EUMETSAT_RING_Natural_Color_RGB": {
       "id": "EUMETSAT_RING_Natural_Color_RGB",
-      "title": "Natural Color RGB (3 hour, Geostationary Ring)",
+      "title": "Natural Color (Geostationary Ring, 3 hour)",
       "subtitle": "MSG/SEVIRI, Himawari/AHI, GOES/ABI",
       "description": "eumetsat/EUMETSAT_RING_Natural_Color_RGB",
       "tags": "eumetsat ring",
