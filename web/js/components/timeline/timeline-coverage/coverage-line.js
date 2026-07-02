@@ -154,8 +154,8 @@ class CoverageLine extends PureComponent {
       layerPeriod,
       index,
     } = this.props;
-    return options.map((option) => (
-      <g clipPath="url(#coverageLineBoundary)">
+    return options.map((option, i) => (
+      <g clipPath="url(#coverageLineBoundary)" key={`${id}-${i}`}>
         {this.createMatchingCoverageLineDOMEl(
           id,
           option,

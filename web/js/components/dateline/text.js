@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import OlOverlay from 'ol/Overlay';
 import util from '../../util/util';
@@ -16,42 +16,33 @@ const textStyles = {
   recRadius: 3,
 };
 
-class LineText extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      overlay: '',
-    };
-    this.nodeRef = React.createRef();
-  }
+const LineText = ({
+  active, date, x, isCompareActive, isLeft, map, textCoords,
+}) => {
+  const nodeRef = useRef(null);
+  const [overlay, setOverlay] = useState(null);
 
-  componentDidMount() {
-    const { x, map } = this.props;
-    const overlay = new OlOverlay({
-      element: this.nodeRef.current,
+  useEffect(() => {
+    const newOverlay = new OlOverlay({
+      element: nodeRef.current,
       stopEvent: false,
     });
-    overlay.setPosition([x, 90]);
-    map.addOverlay(overlay);
-    this.setState({ overlay });
-  }
+    newOverlay.setPosition([x, 90]);
+    map.addOverlay(newOverlay);
+    setOverlay(newOverlay);
+  }, []);
 
-  componentDidUpdate() {
-    const { overlay } = this.state;
-    const { x, textCoords } = this.props;
-    overlay.setPosition([x, textCoords[1]]);
-  }
+  useEffect(() => {
+    if (overlay) {
+      overlay.setPosition([x, textCoords[1]]);
+    }
+  }, [overlay, x, textCoords]);
 
-  getDateText() {
-    const { date, isCompareActive, isLeft } = this.props;
+  const getDateText = () => {
     if (isCompareActive) {
       return {
-        dateLeft: isLeft
-          ? '+ 1 day'
-          : '',
-        dateRight: isLeft
-          ? ''
-          : '- 1 day',
+        dateLeft: isLeft ? '+ 1 day' : '',
+        dateRight: isLeft ? '' : '- 1 day',
       };
     }
     const dateState = {
@@ -63,69 +54,66 @@ class LineText extends React.Component {
       dateLeft: dateA,
       dateRight: dateB,
     };
-  }
+  };
 
-  render() {
-    const { active, isCompareActive } = this.props;
-    const {
-      textWidth, recRadius, textY, width, textOpacity, textHeight, rectOpacity,
-    } = textStyles;
-    const { dateLeft, dateRight } = this.getDateText();
-    const leftTextWidth = isCompareActive ? 60 : textWidth;
-    const rightTextWidth = isCompareActive ? 60 : textWidth;
-    const svgStyle = {
-      position: 'absolute',
-      transform: `translateX(${-(leftTextWidth + 25)}px)`,
-      overflow: 'visible',
-      width: '100px',
-      userSelect: 'none',
-      pointerEvents: 'none',
-      left: '0',
-    };
+  const {
+    textWidth, recRadius, textY, width, textOpacity, textHeight, rectOpacity,
+  } = textStyles;
+  const { dateLeft, dateRight } = getDateText();
+  const leftTextWidth = isCompareActive ? 60 : textWidth;
+  const rightTextWidth = isCompareActive ? 60 : textWidth;
+  const svgStyle = {
+    position: 'absolute',
+    transform: `translateX(${-(leftTextWidth + 25)}px)`,
+    overflow: 'visible',
+    width: '100px',
+    userSelect: 'none',
+    pointerEvents: 'none',
+    left: '0',
+  };
 
-    return (
-      <svg
-        ref={this.nodeRef}
-        className="dateline-text"
-        style={svgStyle}
-      >
-        {active && (
-          <>
-            <rect
-              width={leftTextWidth + 10}
-              height={textHeight}
-              x={0}
-              rx={recRadius}
-              opacity={dateLeft ? rectOpacity : '0'}
-            />
-            <text
-              y={textY}
-              x={6}
-              width={width}
-              opacity={dateLeft ? textOpacity : '0'}
-            >
-              {dateLeft}
-            </text>
-            <rect
-              width={rightTextWidth + 10}
-              height={textHeight}
-              x={leftTextWidth + 40}
-              rx={recRadius}
-              opacity={dateRight ? rectOpacity : '0'}
-            />
-            <text
-              y={textY}
-              x={leftTextWidth + 46}
-              opacity={dateRight ? textOpacity : '0'}
-            >
-              {dateRight}
-            </text>
-          </>
-        )}
-      </svg>
-    );
-  }
-}
+  return (
+    <svg
+      ref={nodeRef}
+      className="dateline-text"
+      style={svgStyle}
+    >
+      {active && (
+        <>
+          <rect
+            width={leftTextWidth + 10}
+            height={textHeight}
+            x={0}
+            rx={recRadius}
+            opacity={dateLeft ? rectOpacity : '0'}
+          />
+          <text
+            y={textY}
+            x={6}
+            width={width}
+            opacity={dateLeft ? textOpacity : '0'}
+          >
+            {dateLeft}
+          </text>
+          <rect
+            width={rightTextWidth + 10}
+            height={textHeight}
+            x={leftTextWidth + 40}
+            rx={recRadius}
+            opacity={dateRight ? rectOpacity : '0'}
+          />
+          <text
+            y={textY}
+            x={leftTextWidth + 46}
+            opacity={dateRight ? textOpacity : '0'}
+          >
+            {dateRight}
+          </text>
+        </>
+      )}
+    </svg>
+  );
+};
 
 LineText.propTypes = {
   active: PropTypes.bool,

@@ -3,7 +3,7 @@
       "Suborbital Flight Tracks": {
           "id": "Suborbital Flight Tracks",
           "title":    "Suborbital Flight Tracks",
-          "subtitle": "ACTIVATE, AJAX, ARCSIX, ASIA-AQ, DCOTSS, STAQS, TRACER, PACE-PAX",
+          "subtitle": "ACTIVATE, AJAX, ARCSIX, ASIA-AQ, DCOTSS, KORUS-AQ, STAQS, TRACER, PACE-PAX",
           "sources": {
             "ACTIVATE": {
                   "id": "activate",
@@ -41,8 +41,9 @@
                   "description": "",
                   "image": "",
                   "settings": [
-                 "ASIA-AQ_G-III_Flight_Track",
-		         "ASIA-AQ_DC-8_NO2"
+                 "ASIA-AQ_DC-8_NO2",
+                 "ASIA-AQ_G-III_Flight_Track"
+
                   ]
               },
               "DCOTSS": {
@@ -53,6 +54,16 @@
                   "settings": [
                  "DCOTSS_ER-2_ROZE_Ozone",
 		         "DCOTSS_ER-2_UCATS_Ozone"
+                  ]
+              },
+              "KORUS-AQ": {
+                  "id": "korus-aq",
+                  "title": "KORUS-AQ",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                      "KORUS-AQ_DC-8_Ozone",
+                      "KORUS-AQ_B-200_Flight_Track"
                   ]
               },
                "STAQS": {

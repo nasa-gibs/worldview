@@ -6,7 +6,7 @@ import { Progress } from 'reactstrap';
 import LoadingIndicator from './loading-indicator';
 import util from '../../util/util';
 import {
-  getNextImageryDelta,
+  getValidDateRanges,
 } from '../../modules/date/util';
 
 // We assume anything this fast or faster is a frame that was pulled from the cache
@@ -85,10 +85,18 @@ function PlayQueue(props) {
   const [loadedItems, setLoadedItems] = useState(0);
   const bufferObjectRef = useRef({});
   const isLoopActiveRef = useRef(isLoopActive);
+  const validDateRangesRef = useRef(getValidDateRanges(layers, startDate, endDate));
 
   function nextDate(date) {
     if (autoSelected) {
-      return util.dateAdd(date, 'minute', getNextImageryDelta(layers, date, 1));
+      const foundIndex = validDateRangesRef.current.findIndex(
+        (element) => new Date(element.startDate) > new Date(date),
+      );
+      // If date is not found within dateRanges, force date back to start
+      if (foundIndex < 0) {
+        return util.dateAdd(date, 'day', 1);
+      }
+      return new Date(validDateRangesRef.current[foundIndex].startDate);
     }
     return util.dateAdd(date, interval, delta);
   }
@@ -122,7 +130,7 @@ function PlayQueue(props) {
     const currentBufferSize = util.objectLength(bufferObjectRef.current);
     const queueLength = currentBufferSize || initialBufferSize;
 
-    let i = 1;
+    let i = 0;
     while (i < queueLength) {
       if (nextDate(currentDateObj) > endDate) {
         if (!isLoopActiveRef.current) {
@@ -172,6 +180,17 @@ function PlayQueue(props) {
     } catch (error) {
       if (error instanceof TimeoutError) {
         console.error('Imagery loading timed out after 3 seconds');
+        setLoadedItems(util.objectLength(bufferObjectRef.current) + 1);
+
+        if (!mounted) return true;
+        bufferObjectRef.current[strDate] = strDate;
+        delete inQueueObject[strDate];
+        const currentBufferSize = util.objectLength(bufferObjectRef.current);
+
+        if (!initialLoad || canPreloadAll || currentBufferSize >= initialBufferSize) {
+          checkQueue();
+          checkShouldPlay();
+        }
       }
     }
   }

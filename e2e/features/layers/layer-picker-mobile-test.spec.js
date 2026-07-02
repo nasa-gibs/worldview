@@ -143,7 +143,7 @@ test('Searching for layers', async () => {
     aodCheckbox
   } = selectors
   await layersSearchField.fill('aerosol optical depth')
-  await expect(layersSearchRow).toHaveCount(24)
+  await expect(layersSearchRow).toHaveCount(27)
   await expect(aodCheckbox).toBeVisible()
 })
 

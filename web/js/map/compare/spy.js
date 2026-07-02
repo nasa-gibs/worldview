@@ -95,7 +95,7 @@ const removeListenersFromLayers = function(layers) {
  */
 const removeInverseListenersFromLayers = function(layers) {
   lodashEach(layers, (layer) => {
-    layer.un('prerender', inverseClip);
+    layer.un('postrender', inverseClip);
     layer.un('postrender', restore);
   });
 };
@@ -170,6 +170,10 @@ export default class Spy {
       this.destroy();
       this.create(store);
     } else {
+      removeListenersFromLayers(topLayers);
+      removeInverseListenersFromLayers(bottomLayers);
+      topLayers.length = 0;
+      bottomLayers.length = 0;
       const mapLayers = this.map.getLayers().getArray();
       applyEventsToBaseLayers(
         mapLayers[0],
@@ -189,6 +193,9 @@ export default class Spy {
     this.mapCase.removeChild(label);
     removeListenersFromLayers(topLayers);
     removeInverseListenersFromLayers(bottomLayers);
+    topLayers.length = 0;
+    bottomLayers.length = 0;
+    mousePosition = null;
   }
 
   /**

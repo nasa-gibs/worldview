@@ -29,6 +29,18 @@
       "renderOrder": {
         "property": "Altitude",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "STAQS_G-V_Flight_Track",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

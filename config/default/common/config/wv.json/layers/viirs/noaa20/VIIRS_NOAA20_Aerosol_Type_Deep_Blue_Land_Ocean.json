@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Land_Ocean": {
+      "id": "VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Land_Ocean",
+      "description": "viirs/noaa20/VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Land_Ocean",
+      "tags": "",
+      "group": "overlays",
+      "layergroup": "Aerosol Type",
+      "wrapadjacentdays": true
+    }
+  }
+}
