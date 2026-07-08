@@ -121,6 +121,10 @@ async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic',
     } catch (error) {
       console.error(`Error fetching ${describeDomainsAllUrl}: ${error}`)
     }
+    // Fall back to original ranges if the 'all' endpoint fetch failed
+    if (!rangesAll) {
+      rangesAll = ranges
+    }
     // Fetch ranges year-by-year if more than 10,000 ranges, as they may not all be present in all.xml
     if (rangesAll.length > 10000 && startYear) {
       const endYear = new Date().getFullYear()
