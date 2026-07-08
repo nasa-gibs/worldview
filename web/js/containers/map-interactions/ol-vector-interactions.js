@@ -71,6 +71,7 @@ export function VectorInteractions(props) {
   const granuleDateRef = useRef(granuleDate);
   const granulePlatformRef = useRef(granulePlatform);
   const granuleFootprintsRef = useRef(granuleFootprints);
+  const isShowingClickRef = useRef(isShowingClick);
 
   const prevGranuleFootprints = usePrevious(granuleFootprints);
 
@@ -131,6 +132,10 @@ export function VectorInteractions(props) {
     granuleFootprintsRef.current = granuleFootprints;
   }, [granuleFootprints]);
 
+  useEffect(() => {
+    isShowingClickRef.current = isShowingClick;
+  }, [isShowingClick]);
+
   function clearGranuleFootprint() {
     setGranuleDate(null);
     setGranulePlatformState(null);
@@ -180,7 +185,7 @@ export function VectorInteractions(props) {
   function handleCursorChange(pixel, map, lon, lat) {
     const hasFeatures = map.hasFeatureAtPixel(pixel);
 
-    if (hasFeatures && !isShowingClick && !measureIsActive) {
+    if (hasFeatures && !isShowingClickRef.current && !measureIsActive) {
       let isActiveLayer = false;
       let isReferenceLayer = false;
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
@@ -207,7 +212,7 @@ export function VectorInteractions(props) {
       if (isActiveLayer && !isReferenceLayer) {
         changeCursor(true);
       }
-    } else if (!hasFeatures && isShowingClick) {
+    } else if (!hasFeatures && isShowingClickRef.current) {
       changeCursor(false);
     }
   }
