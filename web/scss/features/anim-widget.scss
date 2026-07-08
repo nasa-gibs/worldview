@@ -122,7 +122,7 @@
 .wv-animation-widget {
   width: 334px;
   border-radius: 5px;
-  height: 136px;
+  height: 142px;
   background: #212121;
   color: #fff;
   padding: 1px 0;
@@ -492,7 +492,6 @@ button .wv-animation-widget-icon {
     height: 100%;
     background: variables.$wv-solid-black;
     border-radius: 0;
-    margin-top: 0;
     padding: 0;
 
     & #loop-button {

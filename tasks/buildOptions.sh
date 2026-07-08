@@ -113,6 +113,7 @@ else
 
   # Run extractConfigFromWMTS.js script with config.json
   if [ -e "$BUILD_DIR/config.json" ] ; then
+    mkdir -p "$DEST_DIR"/config/dateRanges
     if [ "$MODE" == "verbose" ] ; then
       echo "Run extractConfigFromWMTS.js script with config.json"
     fi

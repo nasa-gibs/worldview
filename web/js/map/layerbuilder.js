@@ -32,7 +32,7 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
-import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -114,7 +114,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * For TEMPO layers, get and set the product's dateRanges
    * so that they are up-to-date and not stale from build-time
    */
-  const getUpdatedDateRanges = (def, callback, group) => {
+  const getUpdatedDateRanges = async (def, callback, group) => {
     const state = store.getState();
     const { config: stateConfig, proj } = state;
     const describeDomainsUrl = stateConfig?.features?.describeDomains?.url ||
@@ -123,6 +123,10 @@ export default function mapLayerBuilder(config, cache, store) {
       id,
     } = def;
     let oldRanges = [];
+    const result = await fetchSubdailyDateRanges(def.id);
+    if (result) {
+      def.dateRanges = result;
+    }
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
@@ -214,7 +218,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  const getRequestDates = (def, options) => {
+  const getRequestDates = async (def, options) => {
     const state = store.getState();
     const { date } = state;
     const { appNow } = date;
@@ -234,10 +238,16 @@ export default function mapLayerBuilder(config, cache, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
+      if (!def.dateRanges && def.period === 'subdaily') {
+        const result = await fetchSubdailyDateRanges(def.id);
+        if (result) {
+          def.dateRanges = result;
+        }
+      }
       const { dateRanges, ongoing, period } = def;
       let dateRange;
       if (!ongoing) {
-        dateRange = datesInDateRanges(def, closestDate);
+        dateRange = await datesInDateRanges(def, closestDate);
       } else {
         let endDateLimit;
         let startDateLimit;
@@ -324,9 +334,9 @@ export default function mapLayerBuilder(config, cache, store) {
     options.group = options.group || activeString;
 
     // If layer is a TEMPO layer, fetch updated date ranges
-    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+    if (def?.id?.includes('TEMPO') && !def?.tempoDateRanges && tempoCallback) {
       tempoCallback(def, [], options.group);
-      getUpdatedDateRanges(def, tempoCallback, options.group);
+      await getUpdatedDateRanges(def, tempoCallback, options.group);
     }
 
     // if gibs/dns failure, display static image layer
@@ -339,7 +349,7 @@ export default function mapLayerBuilder(config, cache, store) {
       closestDate,
       nextDate,
       previousDate,
-    } = getRequestDates(def, options);
+    } = await getRequestDates(def, options);
     const date = closestDate;
     if (date && !options.date) {
       options.date = date;
@@ -1032,15 +1042,15 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
-      const params = assets.map((asset) => `bands=${asset}`);
+      const params = assets.map((asset) => `assets=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
       params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
-      params.push(`bands_regex=${def?.bandCombo?.bands_regex}`);
+      params.push(`assets_regex=${def?.bandCombo?.bands_regex}`);
       params.push(`color_formula=${def?.bandCombo?.color_formula}`);
 
-      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}@1x?concept_id=${def.collectionConceptID}&datetime=${zeroedDateTile}/${lastDateTile}&post_process=swir&backend=rasterio&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `rasterio/tiles/WGS1984Quad/${z}/${x}/${y}?collection_concept_id=${def.collectionConceptID}&temporal=${zeroedDateTile}/${lastDateTile}&post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };

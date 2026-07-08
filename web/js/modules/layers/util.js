@@ -685,6 +685,23 @@ const getSubdailyDateRange = ({
 };
 
 /**
+   * Return an array of dateRanges for subdaily layers
+   *
+   * @method fetchSubdailyDateRanges
+   * @param  {String} def            The layer id
+   * @return {Array}                 An array of dateRanges
+   */
+export async function fetchSubdailyDateRanges(id) {
+  try {
+    const response = await fetch(`config/dateRanges/${id}.json`);
+    const result = await response.json();
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+/**
    * Return an array of dates based on the dateRange the current date falls in.
    *
    * @method datesInDateRanges
@@ -697,14 +714,22 @@ const getSubdailyDateRange = ({
    * @param  {Object} appNow         A date object of appNow (current date or set explicitly)
    * @return {Array}                 An array of dates with normalized timezones
    */
-export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
+export async function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
-    dateRanges,
     futureTime,
     period,
     ongoing,
   } = def;
   let dateArray = [];
+  if (!def.dateRanges && def.period === 'subdaily') {
+    const result = await fetchSubdailyDateRanges(def.id);
+    if (result) {
+      def.dateRanges = result;
+    }
+  }
+  const {
+    dateRanges,
+  } = def;
   if (!dateRanges) { return dateArray; }
   const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let currentDate = new Date(date);
@@ -1489,7 +1514,8 @@ export function adjustStartDates(layers) {
       console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }
 
-    if (Array.isArray(historicalRanges) && historicalRanges.length) {
+    if (Array.isArray(historicalRanges) && historicalRanges.length &&
+      Array.isArray(dateRanges) && dateRanges.length) {
       layer.startDate = historicalRanges[0].startDate;
       historicalRanges.reverse().forEach((range) => {
         layer.dateRanges.unshift(range);

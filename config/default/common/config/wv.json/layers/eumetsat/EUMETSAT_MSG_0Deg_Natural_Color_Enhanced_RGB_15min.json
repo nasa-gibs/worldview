@@ -2,8 +2,8 @@
   "layers": {
     "EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min": {
       "id": "EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min",
-      "title": "Natural Color Enhanced RGB (15 minute, Meteosat Second Generation (MSG), 0 Degree)",
-      "subtitle": "MSG/SEVIRI",
+      "title": "Natural Color Enhanced (15 minute)",
+      "subtitle": "MSG, 0 Degree/SEVIRI",
       "description": "eumetsat/EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min",
       "tags": "eumetsat ring",
       "group": "overlays",

@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "O3_UCATS",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {

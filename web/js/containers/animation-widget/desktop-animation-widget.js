@@ -17,6 +17,7 @@ function DesktopAnimationWidget(props) {
     endDate,
     handleDragStart,
     hasSubdailyLayers,
+    hasTempoProduct,
     interval,
     isDistractionFreeModeActive,
     isPlaying,
@@ -71,6 +72,7 @@ function DesktopAnimationWidget(props) {
             <TimeScaleIntervalChange
               timeScaleChangeUnit={interval}
               hasSubdailyLayers={hasSubdailyLayers}
+              hasTempoProduct={hasTempoProduct}
               modalType={customModalType.ANIMATION}
               isDisabled={isPlaying}
             />
@@ -140,6 +142,7 @@ DesktopAnimationWidget.propTypes = {
   endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   interval: PropTypes.string,
   isDistractionFreeModeActive: PropTypes.bool,
   isPlaying: PropTypes.bool,

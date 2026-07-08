@@ -77,3 +77,69 @@ test('reprojects (0,0) to (-45, 90) for EPSG:3413', () => {
   });
   expect(container.innerHTML).toMatchSnapshot();
 });
+
+test('clears coordinates when pixel coordinate is null', () => {
+  map.getCoordinateFromPixel = () => null;
+  act(() => {
+    events.trigger(MAP_MOUSE_MOVE, {}, map, 'EPSG:4326');
+  });
+  expect(container.querySelector('.wv-coords-map')).toBeNull();
+});
+
+test('clears coordinates when lat is out of bounds (>90)', () => {
+  map.getCoordinateFromPixel = () => [0, 5000000];
+  act(() => {
+    events.trigger(MAP_MOUSE_MOVE, {}, map, 'EPSG:4326');
+  });
+  expect(container.querySelector('.wv-coords-map')).toBeNull();
+});
+
+test('clears coordinates when lon is far out of bounds (>250) for geographic', () => {
+  map.getCoordinateFromPixel = () => [300, 10];
+  act(() => {
+    events.trigger(MAP_MOUSE_MOVE, {}, map, 'EPSG:4326');
+  });
+  expect(container.querySelector('.wv-coords-map')).toBeNull();
+});
+
+test('does not clear coordinates when mouseOut target has wv-coords-map class', () => {
+  map.getCoordinateFromPixel = () => [10, 20];
+  act(() => {
+    events.trigger(MAP_MOUSE_MOVE, {}, map, 'EPSG:4326');
+  });
+  const coordsEl = container.querySelector('.wv-coords-map');
+  expect(coordsEl).not.toBeNull();
+
+  const mockTarget = { classList: { contains: (cls) => cls === 'wv-coords-map' } };
+  act(() => {
+    events.trigger(MAP_MOUSE_OUT, { relatedTarget: mockTarget });
+  });
+  expect(container.querySelector('.wv-coords-map')).not.toBeNull();
+});
+
+test('hides coordinates container on mobile (display none)', () => {
+  const mobileContainer = document.createElement('div');
+  document.body.appendChild(mobileContainer);
+  const mobileRoot = createRoot(mobileContainer);
+  act(() => {
+    mobileRoot.render(<OlCoordinates show isMobile />);
+  });
+  const coordsCase = mobileContainer.querySelector('#ol-coords-case');
+  expect(coordsCase.style.display).toBe('none');
+  act(() => { mobileRoot.unmount(); });
+  mobileContainer.remove();
+});
+
+test('renders coordinates container element', () => {
+  const coordsCase = container.querySelector('#ol-coords-case');
+  expect(coordsCase).not.toBeNull();
+});
+
+test('shows coordinates in dms format when format is set', () => {
+  util.setCoordinateFormat('latlon-dms');
+  map.getCoordinateFromPixel = () => [10, 20];
+  act(() => {
+    events.trigger(MAP_MOUSE_MOVE, {}, map, 'EPSG:4326');
+  });
+  expect(container.innerHTML).toMatchSnapshot();
+});

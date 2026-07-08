@@ -2,7 +2,7 @@
   "layers": {
     "EUMETSAT_RING_Dust_RGB": {
       "id": "EUMETSAT_RING_Dust_RGB",
-      "title": "Dust (3 hour, Geostationary Ring)",
+      "title": "Dust (Geostationary Ring, 3 hour)",
       "subtitle": "MSG/SEVIRI, Himawari/AHI, GOES/ABI",
       "description": "eumetsat/EUMETSAT_RING_Dust_RGB",
       "tags": "eumetsat ring",

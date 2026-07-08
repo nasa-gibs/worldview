@@ -114,9 +114,10 @@ describe('chartingReducer', () => {
   });
 
   describe('UPDATE_AOI_COORDINATES', () => {
-    it('updates aoiCoordinates with the provided extent', () => {
+    it('updates aoiCoordinates with the provided extent when', () => {
+      const activeState = { ...initialChartingState, active: true };
       const extent = [10, 20, 30, 40];
-      const state = chartingReducer(initialChartingState, { type: UPDATE_AOI_COORDINATES, extent });
+      const state = chartingReducer(activeState, { type: UPDATE_AOI_COORDINATES, extent });
       expect(state.aoiCoordinates).toEqual(extent);
     });
   });
