@@ -124,7 +124,7 @@
     "jest": "^30.4.2",
     "jest-canvas-mock": "^2.5.2",
     "jest-environment-jsdom": "^30.4.1",
-    "jest-fetch-mock": "^3.0.3",
+    "jest-fetch-mock": "^4.2.0",
     "mini-css-extract-plugin": "^2.10.2",
     "neostandard": "^0.13.0",
     "node-dir": "^0.1.17",
