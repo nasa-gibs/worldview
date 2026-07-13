@@ -3,7 +3,6 @@ import { getRenderPixel } from 'ol/render';
 import { getCompareDates } from '../../modules/compare/selectors';
 
 let mousePosition = null;
-let spy = null;
 const topLayers = [];
 const bottomLayers = [];
 const DEFAULT_RADIUS = 140;
@@ -135,6 +134,11 @@ export default class Spy {
   constructor(olMap, store) {
     this.mapCase = document.getElementById('wv-map');
     this.map = olMap;
+    // Bind handlers once so addSpy() and destroy() reference the same function
+    // objects — otherwise removeEventListener/un can never remove them.
+    this.updateSpy = this.updateSpy.bind(this);
+    this.hideSpy = this.hideSpy.bind(this);
+    this.showSpy = this.showSpy.bind(this);
     const state = store.getState();
     const isBInside = state.compare.isCompareA;
     this.isBInside = isBInside;
@@ -148,7 +152,7 @@ export default class Spy {
   create(store) {
     const state = store.getState();
     const isBInside = isCompareA(state);
-    spy = this.addSpy(this.map, state);
+    this.addSpy(this.map, state);
     this.isBInside = isBInside;
     this.update(store);
   }
@@ -188,8 +192,10 @@ export default class Spy {
    * Remove all nodes and listeners
    */
   destroy() {
-    spy.removeEventListener('mousemove', this.updateSpy);
+    this.mapCase.removeEventListener('mousemove', this.updateSpy);
     this.map.un('pointerdrag', this.updateSpy);
+    this.mapCase.removeEventListener('mouseleave', this.hideSpy);
+    this.mapCase.removeEventListener('mouseenter', this.showSpy);
     this.mapCase.removeChild(label);
     removeListenersFromLayers(topLayers);
     removeInverseListenersFromLayers(bottomLayers);
@@ -244,10 +250,10 @@ export default class Spy {
     label.innerHTML = getDateText(state);
 
     this.mapCase.appendChild(label);
-    this.mapCase.addEventListener('mousemove', this.updateSpy.bind(this));
-    map.on('pointerdrag', this.updateSpy.bind(this));
-    this.mapCase.addEventListener('mouseleave', this.hideSpy.bind(this));
-    this.mapCase.addEventListener('mouseenter', this.showSpy.bind(this));
+    this.mapCase.addEventListener('mousemove', this.updateSpy);
+    map.on('pointerdrag', this.updateSpy);
+    this.mapCase.addEventListener('mouseleave', this.hideSpy);
+    this.mapCase.addEventListener('mouseenter', this.showSpy);
 
     return this.mapCase;
   }
