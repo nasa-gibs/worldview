@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
@@ -70,7 +70,6 @@ function DismissableAlerts(props) {
     if (isDistractionFreeModeActive) {
       setDistractionFreeModeInitLoad(true);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // componentDidUpdate: clear init load flag when distraction free mode is deactivated

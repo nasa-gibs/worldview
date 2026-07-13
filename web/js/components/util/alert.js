@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 import { createPortal } from 'react-dom';
@@ -19,7 +19,6 @@ function AlertUtil({
   const [isOpen, setIsOpen] = useState(isOpenProp);
 
   // Replaces constructor timeout + componentWillUnmount cleanup
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (timeout && onDismiss) {
       const timer = setTimeout(() => {
