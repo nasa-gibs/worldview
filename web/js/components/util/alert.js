@@ -1,105 +1,87 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Alert } from 'reactstrap';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-/*
- * A react component, Builds a rather specific
- * interactive widget
- *
- * @class AlertComponent
- * @extends React.Component
- */
-export default class AlertUtil extends React.Component {
-  constructor(props) {
-    super(props);
-    if (props.timeout && props.onDismiss) {
-      this.timeout = setTimeout(() => {
-        props.onDismiss();
-      }, props.timeout);
-    }
-    this.state = {
-      isOpen: props.isOpen,
-    };
-  }
+function AlertUtil({
+  id,
+  isOpen: isOpenProp,
+  title,
+  message,
+  messageTitle,
+  icon,
+  onDismiss,
+  onClick,
+  timeout,
+  noPortal,
+}) {
+  const [isOpen, setIsOpen] = useState(isOpenProp);
 
-  componentWillUnmount() {
-    if (this.timeout) {
-      clearTimeout(this.timeout);
+  // Replaces constructor timeout + componentWillUnmount cleanup
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (timeout && onDismiss) {
+      const timer = setTimeout(() => {
+        onDismiss();
+      }, timeout);
+      return () => clearTimeout(timer);
     }
-  }
+  }, []);
 
-  closeAlert() {
-    const { onDismiss } = this.props;
-    this.setState({ isOpen: false });
+  const closeAlert = () => {
+    setIsOpen(false);
     if (onDismiss) {
       onDismiss();
     }
-  }
+  };
 
-  renderAlert() {
-    const {
-      id,
-      title,
-      message,
-      messageTitle,
-      icon,
-      onDismiss,
-      onClick,
-    } = this.props;
-    const { isOpen } = this.state;
-
-    return (
-      <Alert
-        id={id}
-        className="wv-alert"
-        isOpen={isOpen}
+  const alertContent = (
+    <Alert
+      id={id}
+      className="wv-alert"
+      isOpen={isOpen}
+    >
+      <div
+        role="alertdialog"
+        className="alert-content"
+        title={title}
+        onClick={onClick}
+        style={{ paddingRight: !onDismiss ? 8 : 5 }}
       >
-        <div
-          role="alertdialog"
-          className="alert-content"
-          title={title}
-          onClick={onClick}
-          style={{ paddingRight: !onDismiss ? 8 : 5 }}
-        >
-          <FontAwesomeIcon
-            icon={icon || 'exclamation-triangle'}
-            className="wv-alert-icon"
-            size="1x"
-            widthAuto
-          />
-          <div className="alert-text">
-            <p className="wv-alert-title">
-              {messageTitle}
-            </p>
-            <em className="wv-alert-message">
-              <b>{message}</b>
-            </em>
-          </div>
+        <FontAwesomeIcon
+          icon={icon || 'exclamation-triangle'}
+          className="wv-alert-icon"
+          size="1x"
+          widthAuto
+        />
+        <div className="alert-text">
+          <p className="wv-alert-title">
+            {messageTitle}
+          </p>
+          <em className="wv-alert-message">
+            <b>{message}</b>
+          </em>
         </div>
-        {onDismiss && (
-          <button
-            type="button"
-            id={`${id}-close`}
-            className="close-alert"
-            onClick={() => this.closeAlert()}
-          >
-            <FontAwesomeIcon icon="times" className="exit" size="1x" widthAuto />
-          </button>
-        )}
-      </Alert>
-    );
-  }
+      </div>
+      {onDismiss && (
+        <button
+          type="button"
+          id={`${id}-close`}
+          className="close-alert"
+          onClick={() => closeAlert()}
+        >
+          <FontAwesomeIcon icon="times" className="exit" size="1x" widthAuto />
+        </button>
+      )}
+    </Alert>
+  );
 
-  render() {
-    const { noPortal } = this.props;
-    const alertContainer = document.getElementById('wv-alert-container');
-    if (!noPortal && alertContainer) {
-      return createPortal(this.renderAlert(), document.getElementById('wv-alert-container'));
-    }
-    return this.renderAlert();
+  const alertContainer = document.getElementById('wv-alert-container');
+  if (!noPortal && alertContainer) {
+    return createPortal(alertContent, alertContainer);
   }
+  return alertContent;
 }
 
 AlertUtil.defaultProps = {
@@ -118,3 +100,5 @@ AlertUtil.propTypes = {
   timeout: PropTypes.number,
   title: PropTypes.string,
 };
+
+export default AlertUtil;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import AlertUtil from '../components/util/alert';
@@ -23,184 +23,178 @@ const {
   DISSMISSED_DDV_LOCATION_ALERT,
 } = safeLocalStorage.keys;
 
-class DismissableAlerts extends React.Component {
-  constructor(props) {
-    super(props);
+function DismissableAlerts(props) {
+  const {
+    dismissVectorZoomAlert,
+    dismissVectorExceededAlert,
+    hasSubdailyLayers,
+    isCompareActive,
+    isDistractionFreeModeActive,
+    isEmbedModeActive,
+    isEventsActive,
+    isSmall,
+    isMobile,
+    isAnimationActive,
+    isVectorZoomAlertPresent,
+    isVectorExceededAlertPresent,
+    openAlertModal,
+    isDDVZoomAlertPresent,
+    isDDVLocationAlertPresent,
+    openGranuleAlertModal,
+    openZoomAlertModal,
+    ddvZoomAlerts,
+    ddvLocationAlerts,
+  } = props;
 
-    this.state = {
-      hasDismissedEvents: !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
-      hasDismissedCompare: !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
-      hasDismissedDistractionFree: !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
-      hasDismissedDDVZoom: !!safeLocalStorage.getItem(DISSMISSED_DDV_ZOOM_ALERT),
-      hasDismissedDDVLocation: !!safeLocalStorage.getItem(DISSMISSED_DDV_LOCATION_ALERT),
-      distractionFreeModeInitLoad: false,
-    };
-  }
+  const [hasDismissedEvents, setHasDismissedEvents] = useState(
+    () => !!safeLocalStorage.getItem(DISMISSED_EVENT_VIS_ALERT),
+  );
+  const [hasDismissedCompare, setHasDismissedCompare] = useState(
+    () => !!safeLocalStorage.getItem(DISMISSED_COMPARE_ALERT),
+  );
+  const [hasDismissedDistractionFree, setHasDismissedDistractionFree] = useState(
+    () => !!safeLocalStorage.getItem(DISMISSED_DISTRACTION_FREE_ALERT),
+  );
+  const [hasDismissedDDVZoom, setHasDismissedDDVZoom] = useState(
+    () => !!safeLocalStorage.getItem(DISSMISSED_DDV_ZOOM_ALERT),
+  );
+  const [hasDismissedDDVLocation, setHasDismissedDDVLocation] = useState(
+    () => !!safeLocalStorage.getItem(DISSMISSED_DDV_LOCATION_ALERT),
+  );
+  const [distractionFreeModeInitLoad, setDistractionFreeModeInitLoad] = useState(false);
 
-  componentDidMount() {
-    const { isDistractionFreeModeActive } = this.props;
+  const prevDistractionFreeRef = useRef(isDistractionFreeModeActive);
+
+  // componentDidMount: set init load flag if distraction free mode is already active
+  useEffect(() => {
     if (isDistractionFreeModeActive) {
-      this.toggleDistractionFreeModeInitLoad(true);
+      setDistractionFreeModeInitLoad(true);
     }
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  componentDidUpdate(prevProps) {
-    const { isDistractionFreeModeActive } = this.props;
-    const { distractionFreeModeInitLoad } = this.state;
-    const isDistractionFreeModeActiveChanged = prevProps.isDistractionFreeModeActive &&
-    !isDistractionFreeModeActive;
-    if (distractionFreeModeInitLoad && isDistractionFreeModeActiveChanged) {
-      this.toggleDistractionFreeModeInitLoad(false);
+  // componentDidUpdate: clear init load flag when distraction free mode is deactivated
+  useEffect(() => {
+    const prev = prevDistractionFreeRef.current;
+    prevDistractionFreeRef.current = isDistractionFreeModeActive;
+    if (distractionFreeModeInitLoad && prev && !isDistractionFreeModeActive) {
+      setDistractionFreeModeInitLoad(false);
     }
-  }
+  }, [isDistractionFreeModeActive, distractionFreeModeInitLoad]);
 
-  toggleDistractionFreeModeInitLoad(isActive) {
-    this.setState({ distractionFreeModeInitLoad: isActive });
-  }
-
-  /**
-   * Update state and local storage when
-   * alert is dismissed
-   *
-   * @param {String} storageKey
-   * @param {String} stateKey
-   */
-  dismissAlert(storageKey, stateKey) {
+  const dismissAlert = (storageKey, stateKey) => {
     safeLocalStorage.setItem(storageKey, true);
-    this.setState({ [stateKey]: true });
-  }
+    const setters = {
+      hasDismissedEvents: setHasDismissedEvents,
+      hasDismissedCompare: setHasDismissedCompare,
+      hasDismissedDistractionFree: setHasDismissedDistractionFree,
+      hasDismissedDDVZoom: setHasDismissedDDVZoom,
+      hasDismissedDDVLocation: setHasDismissedDDVLocation,
+    };
+    if (setters[stateKey]) setters[stateKey](true);
+  };
 
-  render() {
-    const {
-      dismissVectorZoomAlert,
-      dismissVectorExceededAlert,
-      hasSubdailyLayers,
-      isCompareActive,
-      isDistractionFreeModeActive,
-      isEmbedModeActive,
-      isEventsActive,
-      isSmall,
-      isMobile,
-      isAnimationActive,
-      isVectorZoomAlertPresent,
-      isVectorExceededAlertPresent,
-      openAlertModal,
-      isDDVZoomAlertPresent,
-      isDDVLocationAlertPresent,
-      openGranuleAlertModal,
-      openZoomAlertModal,
-      ddvZoomAlerts,
-      ddvLocationAlerts,
-    } = this.props;
-    const {
-      hasDismissedEvents,
-      hasDismissedCompare,
-      hasDismissedDistractionFree,
-      distractionFreeModeInitLoad,
-      hasDismissedDDVZoom,
-      hasDismissedDDVLocation,
-    } = this.state;
-    const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
-    const hasFailCondition = !HAS_LOCAL_STORAGE ||
+  const { eventModalProps, compareModalProps, vectorModalProps } = MODAL_PROPERTIES;
+  const hasFailCondition = !HAS_LOCAL_STORAGE ||
     isEmbedModeActive ||
     distractionFreeModeInitLoad;
-    if (hasFailCondition) return null;
+  if (hasFailCondition) return null;
 
-    const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
-    const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
-    const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
-    const showDDVZoomAlert = isDDVZoomAlertPresent && !hasDismissedDDVZoom;
-    const showDDVLocationAlert = isDDVLocationAlertPresent && !hasDismissedDDVLocation;
+  const showEventsAlert = !isSmall && !hasDismissedEvents && isEventsActive;
+  const showCompareAlert = !isSmall && !hasDismissedCompare && isCompareActive;
+  const showAnimationAlert = isMobile && isAnimationActive && hasSubdailyLayers;
+  const showDDVZoomAlert = isDDVZoomAlertPresent && !hasDismissedDDVZoom;
+  const showDDVLocationAlert = isDDVLocationAlertPresent && !hasDismissedDDVLocation;
 
-    return isDistractionFreeModeActive
-      ? !hasDismissedDistractionFree && (
-        <AlertUtil
-          id="distraction-free-mode-active-alert"
-          isOpen
-          noPortal
-          onDismiss={() => this.dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
-          message="You are now in distraction free mode. Click the eye button to exit."
-        />
-      )
-      : (
-        <>
-          {showEventsAlert && (
+  return isDistractionFreeModeActive
+    ? !hasDismissedDistractionFree && (
+      <AlertUtil
+        id="distraction-free-mode-active-alert"
+        isOpen
+        noPortal
+        onDismiss={() => dismissAlert(DISMISSED_DISTRACTION_FREE_ALERT, 'hasDismissedDistractionFree')}
+        message="You are now in distraction free mode. Click the eye button to exit."
+      />
+    )
+    : (
+      <>
+        {showEventsAlert && (
+          <AlertUtil
+            id="event-alert"
+            isOpen
+            noPortal
+            onClick={() => openAlertModal(eventModalProps)}
+            onDismiss={() => dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
+            message="Events may not be visible at all times."
+          />
+        )}
+        {showCompareAlert && (
+          <AlertUtil
+            isOpen
+            noPortal
+            onClick={() => openAlertModal(compareModalProps)}
+            onDismiss={() => dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
+            message="You are now in comparison mode."
+          />
+        )}
+        {isVectorZoomAlertPresent && (
+          <AlertUtil
+            isOpen
+            noPortal
+            onClick={() => openAlertModal(vectorModalProps)}
+            onDismiss={dismissVectorZoomAlert}
+            message="Vector features may not be clickable at all zoom levels."
+          />
+        )}
+        {isVectorExceededAlertPresent && (
+          <AlertUtil
+            isOpen
+            noPortal
+            onDismiss={dismissVectorExceededAlert}
+            message="Too many results at selected point. Zoom in map to see more individual points."
+          />
+        )}
+        {showAnimationAlert && (
+          <AlertUtil
+            isOpen
+            noPortal
+            icon="info-circle"
+            message="Some animations may use a large amount of data (>100MB)"
+            onDismiss={() => {}}
+          />
+        )}
+        {showDDVZoomAlert &&
+          ddvZoomAlerts.map((layer) => (
             <AlertUtil
-              id="event-alert"
+              key={`ddv-zoom-${layer}`}
+              id={`zoom-alert-${`${layer}`.replace(/[^a-z0-9_-]/gi, '-')}`}
               isOpen
               noPortal
-              onClick={() => openAlertModal(eventModalProps)}
-              onDismiss={() => this.dismissAlert(DISMISSED_EVENT_VIS_ALERT, 'hasDismissedEvents')}
-              message="Events may not be visible at all times."
+              title="Zoom in to see imagery for this layer"
+              messageTitle={layer}
+              message="Imagery is not available at this zoom level."
+              onDismiss={() => dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
+              onClick={openZoomAlertModal}
             />
-          )}
-          {showCompareAlert && (
+          ))}
+        { showDDVLocationAlert &&
+          ddvLocationAlerts.map((layer) => (
             <AlertUtil
+              key={`ddv-location-${layer}`}
+              id={`granule-alert-${`${layer}`.replace(/[^a-z0-9_-]/gi, '-')}`}
               isOpen
               noPortal
-              onClick={() => openAlertModal(compareModalProps)}
-              onDismiss={() => this.dismissAlert(DISMISSED_COMPARE_ALERT, 'hasDismissedCompare')}
-              message="You are now in comparison mode."
+              title="Try moving the map or select a different date in the layer's settings."
+              messageTitle={layer}
+              message="Imagery is not available at this location or date."
+              onDismiss={() => dismissAlert(DISSMISSED_DDV_LOCATION_ALERT, 'hasDismissedDDVLocation')}
+              onClick={openGranuleAlertModal}
             />
-          )}
-          {isVectorZoomAlertPresent && (
-            <AlertUtil
-              isOpen
-              noPortal
-              onClick={() => openAlertModal(vectorModalProps)}
-              onDismiss={dismissVectorZoomAlert}
-              message="Vector features may not be clickable at all zoom levels."
-            />
-          )}
-          {isVectorExceededAlertPresent && (
-            <AlertUtil
-              isOpen
-              noPortal
-              onDismiss={dismissVectorExceededAlert}
-              message="Too many results at selected point. Zoom in map to see more individual points."
-            />
-          )}
-          {showAnimationAlert && (
-            <AlertUtil
-              isOpen
-              noPortal
-              icon="info-circle"
-              message="Some animations may use a large amount of data (>100MB)"
-              onDismiss={() => {}}
-            />
-          )}
-          {showDDVZoomAlert &&
-            ddvZoomAlerts.map((layer) => (
-              <AlertUtil
-                key={`ddv-zoom-${layer}`}
-                id={`zoom-alert-${`${layer}`.replace(/[^a-z0-9_-]/gi, '-')}`}
-                isOpen
-                noPortal
-                title="Zoom in to see imagery for this layer"
-                messageTitle={layer}
-                message="Imagery is not available at this zoom level."
-                onDismiss={() => this.dismissAlert(DISSMISSED_DDV_ZOOM_ALERT, 'hasDismissedDDVZoom')}
-                onClick={openZoomAlertModal}
-              />
-            ))}
-          { showDDVLocationAlert &&
-            ddvLocationAlerts.map((layer) => (
-              <AlertUtil
-                key={`ddv-location-${layer}`}
-                id={`granule-alert-${`${layer}`.replace(/[^a-z0-9_-]/gi, '-')}`}
-                isOpen
-                noPortal
-                title="Try moving the map or select a different date in the layer's settings."
-                messageTitle={layer}
-                message="Imagery is not available at this location or date."
-                onDismiss={() => this.dismissAlert(DISSMISSED_DDV_LOCATION_ALERT, 'hasDismissedDDVLocation')}
-                onClick={openGranuleAlertModal}
-              />
-            ))}
-        </>
-      );
-  }
+          ))}
+      </>
+    );
 }
+
 const mapDispatchToProps = (dispatch) => ({
   openAlertModal: ({ id, props }) => {
     dispatch(openCustomContent(id, props));

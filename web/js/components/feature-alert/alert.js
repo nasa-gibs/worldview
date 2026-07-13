@@ -1,32 +1,19 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { openCustomContent } from '../../modules/modal/actions';
-// import safeLocalStorage from '../../util/local-storage';
 
-class FeaturedAlert extends React.Component {
-  constructor(props) {
-    super(props);
-    const alertHasBeenShown = true;
-    this.state = {
-      showAlert: !alertHasBeenShown,
-    };
-  }
-
-  render() {
-    // const { showAlert } = this.state;
-    return '';
-    // return (
-    //   <AlertUtil
-    //     id={'geostationary-alert'}
-    //     isOpen={showAlert}
-    //     iconClassName='faLayerGroup'
-    //     onClick={this.props.showModal.bind(this)}
-    //     onDismiss={this.dismissAlert.bind(this)}
-    //     message="Check out our new geostationary layers!"
-    //     noPortal={true}
-    //   />
-    // );
-  }
+function FeaturedAlert() {
+  return '';
+  // return (
+  //   <AlertUtil
+  //     id={'geostationary-alert'}
+  //     isOpen={showAlert}
+  //     iconClassName='faLayerGroup'
+  //     onClick={showModal}
+  //     onDismiss={dismissAlert}
+  //     message="Check out our new geostationary layers!"
+  //     noPortal={true}
+  //   />
+  // );
 }
 
 const mapDispatchToProps = (dispatch) => ({

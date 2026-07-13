@@ -7,26 +7,11 @@ jest.mock('../../modules/modal/actions', () => ({
 }));
 
 describe('FeaturedAlert component', () => {
-  it('constructs with showAlert false when alertHasBeenShown is true', () => {
-    const Wrapped = FeaturedAlert.WrappedComponent || FeaturedAlert;
-    const instance = new Wrapped({});
-    expect(instance.state).toBeDefined();
-    expect(instance.state.showAlert).toBe(false);
-  });
-
   it('renders empty string', () => {
+    const Wrapped = FeaturedAlert.WrappedComponent || FeaturedAlert;
     const { container } = render(
-      React.createElement(FeaturedAlert.WrappedComponent || FeaturedAlert),
+      React.createElement(Wrapped),
     );
     expect(container.innerHTML).toBe('');
-  });
-
-  it('calls provided showModal prop when invoked externally', () => {
-    const Wrapped = FeaturedAlert.WrappedComponent || FeaturedAlert;
-    const mockShow = jest.fn();
-    const instance = new Wrapped({ showModal: mockShow });
-    // simulate an external call to the prop
-    instance.props.showModal();
-    expect(mockShow).toHaveBeenCalled();
   });
 });
