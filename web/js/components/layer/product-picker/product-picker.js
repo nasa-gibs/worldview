@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -42,6 +42,9 @@ function ProductPicker(props) {
 
   const [modalElement, setModalElement] = useState(undefined);
 
+  const filtersRef = useRef(filters);
+  const searchTermRef = useRef(searchTerm);
+
   const prevMode = usePrevious(mode);
   const prevCategoryType = usePrevious(categoryType);
 
@@ -49,7 +52,7 @@ function ProductPicker(props) {
     const modalElementNew = document.getElementById('layer_picker_component');
     setModalElement(modalElementNew);
     return () => {
-      saveSearchState(filters, searchTerm);
+      saveSearchState(filtersRef.current, searchTermRef.current);
     };
   }, []);
 
@@ -66,6 +69,14 @@ function ProductPicker(props) {
       setModalClass();
     }
   }, [mode, categoryType]);
+
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
+
+  useEffect(() => {
+    searchTermRef.current = searchTerm;
+  }, [searchTerm]);
 
   function setModalClass() {
     if (mode === 'category' && categoryType !== 'recent') {
