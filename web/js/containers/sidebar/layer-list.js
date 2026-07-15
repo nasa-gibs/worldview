@@ -137,6 +137,7 @@ function LayerList(props) {
         names={getNames(id)}
         isDisabled={!available(id)}
         isVisible={visible}
+        palette={layer.palette}
       />
     );
   };
