@@ -3,8 +3,17 @@
         "RTC SAR Backscatter": {
             "id": "rtc-sar-backscatter",
             "title":    "RTC SAR Backscatter",
-            "subtitle": "RTC-S1/Sentinel-1",
+            "subtitle": "NISAR GCOV, RTC-S1/Sentinel-1",
             "sources": {
+                "NISAR GCOV": {
+                    "id": "nisar-gcov",
+                    "title": "NISAR GCOV",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "NISAR_L2_Geocoded_Polarimetric_Covariance"
+                    ]
+                },
                 "RTC-S1/Sentinel-1": {
                     "id": "rtc-s1-sentinel-1",
                     "title": "RTC-S1/Sentinel-1",
