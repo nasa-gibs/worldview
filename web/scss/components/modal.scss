@@ -4,6 +4,10 @@
 .modal-dialog {
   @include variables.wv-modal-dialog;
 
+  &.draggable-modal {
+    user-select: none;
+  }
+
   h1 {
     font-size: 22px;
   }
@@ -51,6 +55,7 @@
   .modal-body {
     background-color: #222;
     border-radius: variables.$wv-menu-border-radius;
+    user-select: text;
 
     & .modal-footer {
       padding-bottom: 0;
