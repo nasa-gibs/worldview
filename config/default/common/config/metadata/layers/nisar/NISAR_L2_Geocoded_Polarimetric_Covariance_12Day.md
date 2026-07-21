@@ -1,6 +1,6 @@
 The NISAR Radiometric Terrain Corrected SAR Backscatter from L2 Geocoded Covariance (False Color) PROVISIONAL visualization presents radiometrically terrain corrected backscatter values from NISAR [Provisional](https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/data-maturity-levels) Level-2 (L2) [Geocoded Polarimetric Covariance](https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1) (GCOV) products. The imagery is displayed using a false-color RGB decomposition to facilitate visual interpretation of the SAR backscatter data.
 
-This 12-Day layer loads the twelve past days of images, with the latest date displayed on top.
+This rolling 12-day layer loads the past twelve days of images, with the latest date displayed on top.
 
 The NASA-ISRO Synthetic Aperture Radar (NISAR) can image the Earth’s surface in light or darkness, penetrating through clouds and smoke. Its 12-day repeat cycle provides a reliable source of imagery for monitoring surface conditions. For products acquired using [multiple frequencies](https://nisar-docs.asf.alaska.edu/nisar-intro/#nisar-frequencies), the higher-resolution frequency is displayed. All products are resampled to 15.5 m pixel spacing in this visualization, regardless of the source resolution.
 

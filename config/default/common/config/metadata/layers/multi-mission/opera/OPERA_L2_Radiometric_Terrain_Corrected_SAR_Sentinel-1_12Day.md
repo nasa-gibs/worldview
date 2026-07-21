@@ -1,6 +1,6 @@
 The OPERA Radiometric Terrain Corrected SAR Backscatter from Sentinel-1 (RTC-S1) is a Level-2 (L2) product. It provides terrain-corrected radar images with a 30-meter pixel spacing and a temporal resolution of a few days to weeks on average, depending on the location. Each RTC-S1 product is derived from a Sentinel-1 Interferometric Wide (IW) Single-Look Complex (SLC) burst, provided by the European Space Agency (ESA). Synthetic aperture radar (SAR) images deliver all-weather, day-and-night, imaging of the Earth’s surface.
 
-This 12-Day layer loads the twelve past days of images, with the latest date displayed on top.
+This rolling 12-day layer loads the past twelve days of images, with the latest date displayed on top.
 
 RTC-S1 images are displayed in false-color for better visual interpretation of the SAR backscatter data. The false-color RGB visualization combines both co-polarized VV (vertical transmit vertical receive) or HH (horizontal transmit horizontal receive) backscatter values (red and blue) with cross-polarized VH or HV values (green) to generate a color image from SAR data. In this false-color scale, vegetated areas appear green; urban and/or sparsely vegetated areas appear white/pink; calm water, dry sand, and frozen ground appears black; and rough water appears purple or magenta. Note there are other land covers not listed that may have similar appearance and it is recommended that users consult auxiliary datasets to help determine the land cover of interest.
 

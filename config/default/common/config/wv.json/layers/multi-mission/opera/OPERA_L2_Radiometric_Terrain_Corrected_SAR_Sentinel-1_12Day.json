@@ -3,10 +3,11 @@
     "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day": {
       "id": "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day",
       "layer": "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1",
-      "title": "OPERA Radiometric Terrain Corrected SAR Backscatter 12-Day (False Color)",
+      "title": "OPERA Radiometric Terrain Corrected SAR Backscatter (rolling 12-day) (False Color)",
       "subtitle": "RTC-S1/Sentinel-1",
       "ongoing": true,
       "enableCMRDataFinder": false,
+      "disableSnapshot": true,
       "description": "multi-mission/opera/OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day",
       "tags": "asf asfdaac rtc synthetic aperture radar backscatter opera",
       "group": "overlays",
