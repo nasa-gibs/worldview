@@ -1,0 +1,15 @@
+The NISAR Radiometric Terrain Corrected SAR Backscatter from L2 Geocoded Covariance (False Color) PROVISIONAL visualization presents radiometrically terrain corrected backscatter values from NISAR [Provisional](https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/data-maturity-levels) Level-2 (L2) [Geocoded Polarimetric Covariance](https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1) (GCOV) products. The imagery is displayed using a false-color RGB decomposition to facilitate visual interpretation of the SAR backscatter data.
+
+This 12-Day layer loads the twelve past days of images, with the latest date displayed on top.
+
+The NASA-ISRO Synthetic Aperture Radar (NISAR) can image the Earth’s surface in light or darkness, penetrating through clouds and smoke. Its 12-day repeat cycle provides a reliable source of imagery for monitoring surface conditions. For products acquired using [multiple frequencies](https://nisar-docs.asf.alaska.edu/nisar-intro/#nisar-frequencies), the higher-resolution frequency is displayed. All products are resampled to 15.5 m pixel spacing in this visualization, regardless of the source resolution.
+
+The visualization applied to acquisitions with multiple [polarimetric channels](https://nisar-docs.asf.alaska.edu/nisar-intro/#nisar-polarization) (dual-pol or quad-pol) combines co-polarized backscatter (HH or VV) values in the red and blue channels with cross-polarized values (HV or VH) in the green channel. In this false-color scale, vegetated areas appear green; urban and/or sparsely vegetated areas appear orange or yellow; calm water, dry sand, and frozen ground all appear blue; and rough water may appear red.
+
+Single-polarization acquisitions, collected mostly in polar regions or over open ocean, are also colorized. Because they only have one available polarization, there is less information to integrate into the false-color visualization. The color bar passes from blue to green to orange to yellow, indicating co-polarized backscatter values from low to high. Calm water or dry soil is still generally blue, and urban areas are still generally yellow, but vegetated areas may exhibit a different color of green/orange than in the dual-pol RGB decomposition for the same area. Wet snow may appear very yellow, while drier snow is more green or blue.
+
+Note that different landcover types may appear similar to each other in this visualization. Consider referencing other imagery when interpreting this visualization.
+
+The NISAR GCOV products are produced by the NISAR Project, managed by the Jet Propulsion Laboratory, and distributed by the Alaska Satellite Facility, both under contract with NASA.
+
+References: doi:[10.5067/NIL2GCOV-P1](https://doi.org/10.5067/NIL2GCOV-P1)
