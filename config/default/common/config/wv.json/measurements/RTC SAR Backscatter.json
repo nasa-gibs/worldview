@@ -11,7 +11,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "NISAR_L2_Geocoded_Polarimetric_Covariance"
+                        "NISAR_L2_Geocoded_Polarimetric_Covariance",
+                        "NISAR_L2_Geocoded_Polarimetric_Covariance_12Day"
                     ]
                 },
                 "RTC-S1/Sentinel-1": {
@@ -20,7 +21,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1"
+                        "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1",
+                        "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day"
                     ]
                 }
             }

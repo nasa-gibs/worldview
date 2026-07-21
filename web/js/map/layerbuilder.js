@@ -65,6 +65,19 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const getLayer = async (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
+
+    // For dayRange layers, create one WMTS layer per day in the range
+    // Oldest first (bottom) so newest imagery renders on top
+    if (def.dayRange) {
+      const layers = [];
+      for (let dayOffset = -def.dayRange; dayOffset <= 0; dayOffset += 1) {
+        const dayLayer = await createLayerFunc(def, options, dayOffset, state, attributes);
+        dayLayer.wv = attributes;
+        layers.push(dayLayer);
+      }
+      return new OlLayerGroup({ layers });
+    }
+
     const layer = await createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
     if (!wrapLayer) {
@@ -440,15 +453,16 @@ export default function mapLayerBuilder(config, cache, store) {
       layerDate = getRequestDates(def, options).closestDate;
       layerDate = new Date(layerDate.getTime());
     }
-    if (day && wrapadjacentdays && !isSubdaily) {
+    if (day && (wrapadjacentdays || def.dayRange) && !isSubdaily) {
       layerDate = util.dateAdd(layerDate, 'day', day);
     }
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    const dayForExtent = def.dayRange ? null : day;
     const { origin, extent } = calcExtentsFromLimits(
       configMatrixSet,
       matrixSetLimits,
-      day,
+      dayForExtent,
       proj.selected,
     );
     const sizes = !tileMatrices
