@@ -119,7 +119,9 @@ const skipLayers = [
   'EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min',
   'EUMETSAT_MTG_0Deg_GeoColor_RGB_10min',
   'EUMETSAT_MTG_0Deg_IR105_10min',
-  'EUMETSAT_MSG_IDOC_IR108_10min'
+  'EUMETSAT_MSG_IDOC_IR108_10min',
+  'OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day',
+  'NISAR_L2_Geocoded_Polarimetric_Covariance_12Day'
 
 ]
 
