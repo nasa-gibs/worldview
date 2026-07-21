@@ -458,10 +458,11 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    const dayForExtent = def.dayRange ? null : day;
     const { origin, extent } = calcExtentsFromLimits(
       configMatrixSet,
       matrixSetLimits,
-      day,
+      dayForExtent,
       proj.selected,
     );
     const sizes = !tileMatrices
