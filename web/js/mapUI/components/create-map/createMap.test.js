@@ -24,6 +24,7 @@ jest.mock('../../../util/util', () => ({
     events: {
       trigger: jest.fn(),
       on: jest.fn(),
+      off: jest.fn(),
     },
   },
 }));
