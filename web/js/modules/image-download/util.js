@@ -668,7 +668,6 @@ function updateHighResTileGrids(layer, abortSignal, tileMatrixID = -1, onerror) 
       const imageUrl = URL.createObjectURL(blob);
       await originalTileLoadFunction(tile, imageUrl);
       URL.revokeObjectURL(imageUrl);
-      tile.setState(olTileState.LOADED);
     } catch (error) {
       if (error.name === 'AbortError') return;
       tile.setState(olTileState.ERROR);
