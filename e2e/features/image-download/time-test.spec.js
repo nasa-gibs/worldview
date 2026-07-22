@@ -25,7 +25,7 @@ test.afterAll(async () => {
 })
 
 test('Image for today', async () => {
-  const url = await joinUrl(startParams, '&now=2018-06-01T3')
+  const url = await joinUrl(startParams, '&now=2018-06-01T7')
   await page.goto(url)
   await closeModal(page)
   await openImageDownloadPanel(page)
