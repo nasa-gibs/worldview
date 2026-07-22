@@ -1,0 +1,40 @@
+{
+  "layers": {
+    "NISAR_L2_Geocoded_Polarimetric_Covariance_12Day": {
+      "id": "NISAR_L2_Geocoded_Polarimetric_Covariance_12Day",
+      "layer": "NISAR_L2_Geocoded_Polarimetric_Covariance",
+      "title": "NISAR Normalized Radar Backscatter (False Color) (rolling 12-day) PROVISIONAL ",
+      "subtitle": "NISAR GCOV",
+      "ongoing": true,
+      "enableCMRDataFinder": false,
+      "disableSnapshot": true,
+      "description": "nisar/NISAR_L2_Geocoded_Polarimetric_Covariance_12Day",
+      "tags": "asf asfdaac synthetic aperture radar backscatter nisar",
+      "group": "overlays",
+      "layergroup": "RTC SAR Backscatter",
+      "dayRange": 12,
+      "type": "wmts",
+      "format": "image/png",
+      "period": "daily",
+      "startDate": "2026-06-17T00:00:00Z",
+      "daynight": ["day", "night"],
+      "conceptIds": [
+        {
+          "type": "STD",
+          "value": "C2854338529-ASF",
+          "shortName": "NISAR_L2_GCOV_PROVISIONAL_V1",
+          "title": "NISAR Provisional Geocoded Polarimetric Covariance Product (Version 1)",
+          "version": "1",
+          "dataCenter": "ASF"
+        }
+      ],
+      "projections": {
+        "geographic": {
+         "source": "GIBS:geographic",
+         "matrixSet": "15.625m",
+         "layer": "NISAR_L2_Geocoded_Polarimetric_Covariance"
+        }
+      }
+    }
+  }
+}

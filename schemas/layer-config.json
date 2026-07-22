@@ -272,6 +272,10 @@
         "count": {
           "type": "number"
         },
+        "dayRange": {
+          "type": "number",
+          "minimum": 1
+        },
         "ongoing": {
           "type": "boolean"
         },
@@ -441,12 +445,16 @@
       },
       "allOf": [
         {
-          "description": "Prevents this one-off 'layer' prop from being allowed on other layers",
+          "description": "Prevents the 'layer' prop from being allowed on other layers",
           "if": {
             "properties": {
               "id": {
                 "not": {
-                  "const": "World_Database_on_Protected_Areas"
+                  "enum": [
+                    "World_Database_on_Protected_Areas",
+                    "OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day",
+                    "NISAR_L2_Geocoded_Polarimetric_Covariance_12Day"
+                  ]
                 }
               }
             }
