@@ -8,10 +8,11 @@
     appearance: none !important;
     width: 16px;
     height: 16px;
-    border: 1px solid #eee;
+    border: 1px solid #b5b5b7;
     border-radius: 50%;
     background: none;
     position: relative;
+    cursor: pointer;
   }
 
 
@@ -27,9 +28,9 @@
 
 .wv-radio.checked input {
   appearance: none !important;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #eee;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #eee;
   border-radius: 50%;
   background: #1d67e3;
   box-shadow: 0 0 0 1px #1d67e3;
