@@ -7,7 +7,7 @@
       "subtitle": "RTC-S1/Sentinel-1",
       "ongoing": true,
       "enableCMRDataFinder": false,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "description": "multi-mission/opera/OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day",
       "tags": "asf asfdaac rtc synthetic aperture radar backscatter opera",
       "group": "overlays",

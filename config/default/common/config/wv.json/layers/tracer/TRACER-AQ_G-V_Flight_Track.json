@@ -10,7 +10,7 @@
       "tags": "vector tracer",
       "ongoing": false,
       "disableCharting": true,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "dataAvailability": "dd",
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {

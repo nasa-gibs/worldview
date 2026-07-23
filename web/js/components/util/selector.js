@@ -35,5 +35,5 @@ Selector.propTypes = {
   onChange: PropTypes.func,
   optionArray: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   optionName: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.number || PropTypes.string,
 };

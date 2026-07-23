@@ -32,7 +32,7 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
-import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange, nearestInterval } from '../modules/layers/util';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -44,7 +44,6 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
@@ -89,6 +88,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
     return new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
       layers: [layer, layerNext, layerPrior],
     });
   };
@@ -305,7 +305,9 @@ export default function mapLayerBuilder(config, cache, store) {
     const projectionURL = `images/map/bluemarble-${id}.jpg`;
 
     const layer = new ImageLayer({
+      className: `wv-layer-static-${id}`,
       source: new Static({
+        interpolate: false,
         url: projectionURL,
         projection: crs,
         imageExtent: maxExtent,
@@ -468,6 +470,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const sizes = !tileMatrices
       ? []
       : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+    const calcMatrixIds = matrixIds || resolutions.map((set, index) => index);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -475,7 +478,7 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: shifted ? RIGHT_WING_EXTENT : extent,
       sizes,
       resolutions,
-      matrixIds: matrixIds || resolutions.map((set, index) => index),
+      matrixIds: calcMatrixIds,
       tileSize: tileSize[0],
     };
 
@@ -483,17 +486,19 @@ export default function mapLayerBuilder(config, cache, store) {
     // This is to compensate for the inability to select seconds in the timeline
     layerDate = new Date(layerDate.getTime());
     layerDate.setSeconds(59);
+    const tileGrid = new OlTileGridWMTS(tileGridOptions);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
-      url: sourceURL + urlParameters,
+      interpolate: false,
+      url: `${sourceURL}${urlParameters}`,
       layer: layer || id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
       transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
-      tileGrid: new OlTileGridWMTS(tileGridOptions),
+      tileGrid,
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };
@@ -504,6 +509,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
 
     const layerTile = new OlLayerTile({
+      className: `wv-layer-${id}`,
       preload: 0,
       source: tileSource,
     });
@@ -580,6 +586,7 @@ export default function mapLayerBuilder(config, cache, store) {
     urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const sourceOptions = {
+      interpolate: false,
       url: source.url + urlParameters,
       cacheSize: 4096,
       wrapX: true,
@@ -601,6 +608,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceTileWMS(sourceOptions);
 
     const layer = new OlLayerTile({
+      className: `wv-layer-${def.id}`,
       preload: 0,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
@@ -758,6 +766,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const layer = new OlLayerVector({
+      className: `wv-layer-${def.id}`,
       extent: layerExtent,
       source: vectorSource,
       style (feature, resolution) {
@@ -926,6 +935,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const layer = new LayerVectorTile({
+      className: `wv-layer-${def.id}`,
       renderOrder: orderFunction,
       extent: layerExtent,
       source: tileSource,
@@ -943,6 +953,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
+        className: `wv-layer-group-${def.id}`,
         layers: [layer, wmsLayer],
       });
       wmsLayer.wv = attributes;
@@ -1057,6 +1068,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const xyzSourceOptions = {
+      interpolate: false,
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
@@ -1079,6 +1091,7 @@ export default function mapLayerBuilder(config, cache, store) {
       maxZoom: def.minZoom,
     });
     const layerGroup = new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
       layers: [footprintLayer, layer],
     });
 
@@ -1102,6 +1115,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const xyzSourceOptions = {
+      interpolate: false,
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
@@ -1239,6 +1253,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const isMaxarSource = source === 'MAXAR:wmts';
 
       const sourceOptions = {
+        interpolate: false,
         url: `${baseUrl}/{z}/{x}/{y}`,
         layer: layerName,
         crossOrigin: 'anonymous',
@@ -1339,7 +1354,10 @@ export default function mapLayerBuilder(config, cache, store) {
         extent: shifted ? RIGHT_WING_EXTENT : extent,
       });
     });
-    const layer = new OlLayerGroup({ layers });
+    const layer = new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
+      layers,
+    });
     return layer;
   };
 
