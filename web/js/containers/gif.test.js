@@ -133,6 +133,7 @@ const defaultProps = {
     ui: {
       selected: {
         getView: jest.fn(() => ({ getZoom: jest.fn(() => 3) })),
+        getCoordinateFromPixel: jest.fn(() => [0, 0]),
       },
     },
   },

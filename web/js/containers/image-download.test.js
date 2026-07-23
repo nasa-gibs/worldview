@@ -81,6 +81,7 @@ const makeMapUi = () => ({
     getView: jest.fn(() => ({
       getZoom: jest.fn(() => 4),
       calculateExtent: jest.fn(() => [0, 0, 100, 100]),
+      getCenter: jest.fn(() => [0, 0]),
     })),
     getSize: jest.fn(() => [1024, 768]),
   },

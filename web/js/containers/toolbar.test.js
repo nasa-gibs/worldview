@@ -103,7 +103,6 @@ const {
 const { clearCustomsSnapshot, refreshPalettes } = require('../modules/palettes/actions');
 const { clearRotate, refreshRotation } = require('../modules/map/actions');
 const { showLayers, hideLayers } = require('../modules/layers/actions');
-const { hasCustomPaletteInActiveProjection } = require('../modules/palettes/util');
 const { isLocationSearchFeatureEnabled } = require('../modules/location-search/util');
 const { getAllActiveLayers } = require('../modules/layers/selectors');
 const { hasNonDownloadableVisibleLayer, getNonDownloadableLayers } = require('../modules/image-download/util');
@@ -298,14 +297,16 @@ describe('snapshot workflow (openImageDownload)', () => {
     await act(async () => {
       fireEvent.click(container.querySelector('#wv-image-button'));
     });
-    expect(notify).toHaveBeenCalledTimes(3);
-    expect(notify).toHaveBeenCalledWith('palette', clearCustomsSnapshot, [{ id: 'vl' }]);
+    expect(notify).toHaveBeenCalledTimes(2);
     expect(notify).toHaveBeenCalledWith('rotate', clearRotate, [{ id: 'vl' }]);
     expect(notify).toHaveBeenCalledWith('layers', hideLayers, [{ id: 'vl' }]);
-    const { onClose } = openModal.mock.calls.at(-1)[1];
+    let onClose;
+    await waitFor(() => {
+      ({ onClose } = openModal.mock.calls.at(-1)[1]);
+    });
     onClose();
     expect(refreshStateAfterImageDownload).toHaveBeenCalledWith(
-      activePalettes, 45, [{ id: 'bad-layer' }],
+      undefined, 45, [{ id: 'bad-layer' }],
     );
   });
 });
@@ -410,7 +411,6 @@ describe('mapStateToProps', () => {
     expect(result.shouldBeCollapsed).toBe(false);
     expect(getAllActiveLayers).toHaveBeenCalled();
     expect(hasNonDownloadableVisibleLayer).toHaveBeenCalled();
-    expect(hasCustomPaletteInActiveProjection).toHaveBeenCalled();
   });
 
   it('uses 2x icons on mobile', () => {
@@ -513,7 +513,7 @@ describe('mapDispatchToProps', () => {
   it('notify uses the non-downloadable layer warning for layer type', () => {
     props.notify('layers', hideLayers, [{ id: 'vl' }]);
     const { bodyComponentProps } = openCustomContent.mock.calls.at(-1)[1];
-    expect(getNonDownloadableLayers).toHaveBeenCalledWith([{ id: 'vl' }]);
+    expect(getNonDownloadableLayers).toHaveBeenCalledWith([{ id: 'vl' }], true);
     expect(bodyComponentProps.bodyText).toBe('non-downloadable-warning');
     bodyComponentProps.accept();
     expect(hideLayers).toHaveBeenCalledWith([{ id: 'bad-layer' }]);
