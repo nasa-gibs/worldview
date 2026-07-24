@@ -28,7 +28,7 @@ jest.mock('../core/actions', () => ({
   requestAction: jest.fn(),
 }));
 
-import { getEventsRequestURL } from './util';
+import { getEventsRequestURL, safeParseEonet } from './util';
 import { requestAction } from '../core/actions';
 
 describe('requestEvents', () => {
@@ -55,6 +55,8 @@ describe('requestEvents', () => {
       'REQUEST_EVENTS',
       'http://mock-url/events',
       'application/json',
+      null,
+      { parser: safeParseEonet},
     );
   });
 });

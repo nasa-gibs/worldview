@@ -196,3 +196,27 @@ export const validateGeometryCoords = (geometry, proj) => {
   }
   return undefined;
 };
+
+/**
+* Helper to safely recover valid EONET events from a malformed JSON payload.
+*/
+export function safeParseEonet(rawText) {
+  try {
+    return JSON.parse(rawText);
+  } catch (err) {
+    console.warn('[EONET] Malformed payload received. Salvaging valid events...', err);
+    const matches = rawText.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g) || [];
+    const events = [];
+
+    for (const match of matches) {
+      if (match.includes('"id"') && match.includes('"geometry"')) {
+        try {
+          events.push(JSON.parse(match));
+        } catch (e) {
+          console.log('Invalid event format:', e);
+        }
+      }
+    }
+    return { events };
+  }
+}
