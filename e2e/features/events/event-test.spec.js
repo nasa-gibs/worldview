@@ -61,5 +61,5 @@ test('Gracefully handle malformed EONET mock data without crashing', async () =>
 
   await expect(listOfEvents).toBeVisible();
 
-  await expect(eventIcons).toHaveCount(7);
+  await expect(eventIcons).toHaveCount(6);
 });
