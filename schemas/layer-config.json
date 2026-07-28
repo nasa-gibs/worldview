@@ -41,6 +41,9 @@
         "disableSnapshot": {
           "type": "boolean"
         },
+        "disableGIF": {
+          "type": "boolean"
+        },
         "sourceOverride": {
           "type": "string"
         },

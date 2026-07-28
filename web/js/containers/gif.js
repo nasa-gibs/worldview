@@ -12,13 +12,13 @@ import GifPanel from '../components/animation-widget/gif-panel';
 import util from '../util/util';
 import Crop from '../components/util/image-crop';
 import {
-  resolutionsGeo,
-  resolutionsPolar,
-} from '../modules/image-download/constants';
+  RESOLUTIONS_GEO,
+  RESOLUTIONS_POLAR,
+} from '../modules/gif-download/constants';
 import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
-} from '../modules/image-download/util';
+} from '../modules/gif-download/util';
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getImageArray from '../modules/animation/selectors';
@@ -110,7 +110,7 @@ class GIF extends Component {
       x, y, x2, y2,
     } = boundaries;
     const isGeoProjection = proj.id === 'geographic';
-    const resolutions = isGeoProjection ? resolutionsGeo : resolutionsPolar;
+    const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const lonlats = imageUtilGetCoordsFromPixelValues(
       boundaries,
       map.ui.selected,
