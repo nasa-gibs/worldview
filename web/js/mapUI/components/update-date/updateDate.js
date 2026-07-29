@@ -189,7 +189,8 @@ function UpdateDate(props) {
     const visibleLayers = activeLayersArray.filter(({ id, visible }) => layers
       .findIndex(({ wv }) => wv?.def?.id === id) !== -1 && visible);
 
-    const layerPromises = visibleLayers.map(async (def) => {
+    // Helper function for loading updated layer from def
+    const createLayerPromise = async (def) => {
       const { id, type } = def;
       const temporalLayer = ['subdaily', 'daily', 'monthly', 'yearly']
         .includes(def.period);
@@ -218,6 +219,14 @@ function UpdateDate(props) {
       if (hasVectorStyles && temporalLayer) {
         updateVectorStyles(def);
       }
+    };
+    const layerPromises = visibleLayers.filter(
+      (def) => def.type !== 'granule').map(async (def) => {
+      await createLayerPromise(def);
+    });
+    // Seperate granule-type layers to be loaded asynchronously
+    visibleLayers.filter((def) => def.type === 'granule').forEach((def) => {
+      createLayerPromise(def);
     });
     await Promise.allSettled(layerPromises);
     if (isStale()) return;
