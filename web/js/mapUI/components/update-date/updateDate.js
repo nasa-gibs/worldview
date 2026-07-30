@@ -221,11 +221,11 @@ function UpdateDate(props) {
       }
     };
     const layerPromises = visibleLayers.filter(
-      (def) => def.type !== 'granule').map(async (def) => {
+      (def) => outOfStepChange || def.type !== 'granule').map(async (def) => {
       await createLayerPromise(def);
     });
     // Seperate granule-type layers to be loaded asynchronously
-    visibleLayers.filter((def) => def.type === 'granule').forEach((def) => {
+    !outOfStepChange && visibleLayers.filter((def) => def.type === 'granule').forEach((def) => {
       createLayerPromise(def);
     });
     await Promise.allSettled(layerPromises);
