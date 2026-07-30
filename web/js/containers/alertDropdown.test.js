@@ -12,8 +12,12 @@ jest.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: (props) => <i data-testid="fa-icon" data-icon={String(props.icon)} />,
 }));
 
-jest.mock('../components/feature-alert/alert', () => () => <div data-testid="feature-alert" />);
-jest.mock('./alerts', () => () => <div data-testid="alerts" />);
+jest.mock('./alerts', () => () => (
+  <>
+    <div data-testid="alerts" />
+    <div data-testid="alerts-2" />
+  </>
+));
 
 const AlertDropdown = require('./alertDropdown').default;
 
@@ -52,9 +56,8 @@ describe('AlertDropdown', () => {
     expect(container.querySelector('.wv-alert-dropdown')).toHaveAttribute('hidden');
   });
 
-  it('renders FeatureAlert and Alerts inside the alert container', () => {
+  it('renders Alerts inside the alert container', () => {
     const { getByTestId } = render(<AlertDropdown isTourActive={false} />);
-    expect(getByTestId('feature-alert')).toBeInTheDocument();
     expect(getByTestId('alerts')).toBeInTheDocument();
   });
 
