@@ -344,7 +344,7 @@ describe('dragging', () => {
     });
     // maxLeft = 1200-300, maxTop = 800-200
     expect(mockModalProps.style.left).toBe(900);
-    expect(mockModalProps.style.top).toBe(600);
+    expect(mockModalProps.style.top).toBe(597.5);
   });
 
   it('ignores non-left-button mousedown', () => {

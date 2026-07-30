@@ -54,9 +54,11 @@ function ModalContainer(props) {
   const [height, setHeight] = useState(propsHeight);
   const [offsetLeft, setOffsetLeft] = useState(propsOffsetLeft);
   const [offsetTop, setOffsetTop] = useState(propsOffsetTop);
-  const [offsetRight, setOffsetRight] = useState(propsOffsetRight);
-  const [measuredElement, setMeasuredElement] = useState();
+  const [offsetRight] = useState(propsOffsetRight);
   const [isDragging, setIsDragging] = useState(false);
+  const measuredElementRef = useRef();
+  const widthRef = useRef(width);
+  const heightRef = useRef(height);
   const dragStartRef = useRef({
     x: 0,
     y: 0,
@@ -70,15 +72,10 @@ function ModalContainer(props) {
   const prevScreenWidth = usePrevious(screenWidth);
   const prevWidth = usePrevious(width);
   const prevHeight = usePrevious(height);
-  const prevMeasuredElement = usePrevious(measuredElement);
-  const prevMeasuredWidth = usePrevious(measuredElement?.getBoundingClientRect().width);
-  const prevMeasuredHeight = usePrevious(measuredElement?.getBoundingClientRect().height);
-
-  const handleElement = useCallback((node) => {
-    if (node !== null) {
-      setMeasuredElement(node);
-    }
-  }, []);
+  const prevMeasuredElement = usePrevious(measuredElementRef.current);
+  const prevMeasuredWidth = usePrevious(measuredElementRef.current?.getBoundingClientRect().width);
+  const prevMeasuredHeight = usePrevious(
+    measuredElementRef.current?.getBoundingClientRect().height);
 
   const beginDrag = useCallback((e, { dragHandle, stayOnscreen }) => {
     if (!e || e.button !== 0) return;
@@ -86,11 +83,11 @@ function ModalContainer(props) {
     if (!e.target?.closest?.(dragHandle)) return;
     if (e.target?.closest?.('button, a, input, select, textarea')) return;
 
-    const rect = measuredElement?.getBoundingClientRect?.();
+    const rect = measuredElementRef.current?.getBoundingClientRect?.();
     const startLeft = typeof offsetLeft === 'number' ? offsetLeft : (rect?.left || 0);
     const startTop = typeof offsetTop === 'number' ? offsetTop : (rect?.top || 0);
-    const elWidth = width || rect?.width || 0;
-    const elHeight = height || rect?.height || 0;
+    const elWidth = widthRef.current || width || rect?.width || 0;
+    const elHeight = heightRef.current || height || rect?.height || 0;
 
     dragStartRef.current = {
       x: e.clientX,
@@ -103,7 +100,7 @@ function ModalContainer(props) {
     };
 
     setIsDragging(true);
-  }, [measuredElement, offsetLeft, offsetTop, width, height]);
+  }, [measuredElementRef.current, offsetLeft, offsetTop, width, height]);
 
   useEffect(() => {
     if (!isDragging) return undefined;
@@ -116,9 +113,9 @@ function ModalContainer(props) {
       let nextLeft = start.left + dx;
       let nextTop = start.top + dy;
 
-      if (start.stayOnscreen && start.width && start.height) {
-        const maxLeft = Math.max(0, screenWidth - start.width);
-        const maxTop = Math.max(0, screenHeight - start.height);
+      if (start.stayOnscreen && widthRef.current && heightRef.current) {
+        const maxLeft = Math.max(0, screenWidth - widthRef.current);
+        const maxTop = Math.max(0, screenHeight - heightRef.current - 2.5);
         nextLeft = Math.min(Math.max(0, nextLeft), maxLeft);
         nextTop = Math.min(Math.max(0, nextTop), maxTop);
       }
@@ -140,21 +137,36 @@ function ModalContainer(props) {
     };
   }, [isDragging, screenWidth, screenHeight]);
 
+  useEffect(() => {
+    widthRef.current = width;
+  }, [width]);
+
+  useEffect(() => {
+    heightRef.current = height;
+  }, [height]);
+
   const onParamChange = (e, { size }) => {
     if (e) {
       e.stopPropagation();
     }
-    const elWidth = autoSetWidth && measuredElement
-      ? measuredElement.getBoundingClientRect().width
+    const elWidth = autoSetWidth && measuredElementRef.current
+      ? measuredElementRef.current.getBoundingClientRect().width
       : size.width;
-    const elHeight = autoSetHeight && measuredElement
-      ? measuredElement.getBoundingClientRect().height
+    const elHeight = autoSetHeight && measuredElementRef.current
+      ? measuredElementRef.current.getBoundingClientRect().height
       : size.height;
     setWidth(elWidth);
     setHeight(elHeight);
-    setOffsetLeft(size.offsetLeft);
-    setOffsetTop(size.offsetTop);
-    setOffsetRight(size.offsetRight);
+    if (size.stayOnscreen) {
+      const maxLeft = Math.max(0, screenWidth - elWidth);
+      const maxTop = Math.max(0, screenHeight - elHeight - 2.5);
+      if (measuredElementRef.current?.getBoundingClientRect().left > maxLeft) {
+        setOffsetLeft(maxLeft);
+      }
+      if (measuredElementRef.current?.getBoundingClientRect().top > maxTop) {
+        setOffsetTop(maxTop);
+      }
+    }
   };
 
   const onResize = (e, { size }) => {
@@ -178,11 +190,11 @@ function ModalContainer(props) {
     const modalWidthChanged = propsWidth !== prevWidth;
     const modalHeightChanged = propsHeight !== prevHeight;
     const measuredElementChanged = (autoSetWidth || autoSetHeight) &&
-      measuredElement !== prevMeasuredElement;
+      measuredElementRef.current !== prevMeasuredElement;
     const measuredWidthChanged = autoSetWidth &&
-      measuredElement?.getBoundingClientRect().width !== prevMeasuredWidth;
+      measuredElementRef.current?.getBoundingClientRect().width !== prevMeasuredWidth;
     const measuredHeightChanged = autoSetHeight &&
-      measuredElement?.getBoundingClientRect().height !== prevMeasuredHeight;
+      measuredElementRef.current?.getBoundingClientRect().height !== prevMeasuredHeight;
     const measureChange = measuredElementChanged || measuredWidthChanged || measuredHeightChanged;
     const toggleFunction = toggleWithClose(onToggle, onClose, isOpen);
     if ((modalWidthChanged || modalHeightChanged || measureChange) && isOpen) {
@@ -328,14 +340,14 @@ function ModalContainer(props) {
           backdrop={backdrop}
           id={lowerCaseId}
           size={size}
-          className={isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}
+          className={`${isTemplateModal ? 'template-modal' : modalClassName || 'default-modal'}${isDraggable ? ' draggable-modal' : ''}`}
           autoFocus={autoFocus || false}
           style={style}
           wrapClassName={`${modalWrapClass} ${lowerCaseId}`}
           modalTransition={{ timeout: isDraggable ? 0 : timeout || 100 }}
           fade={!isDraggable}
         >
-          <div ref={handleElement} onMouseDown={handleModalMouseDown} style={{ height: '100%' }}>
+          <div ref={measuredElementRef} onMouseDown={handleModalMouseDown} style={{ height: '100%' }}>
             {CompletelyCustomModal
               ? (
                 <CompletelyCustomModal
