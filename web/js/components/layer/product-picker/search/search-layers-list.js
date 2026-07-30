@@ -62,7 +62,7 @@ function SearchLayerList(props) {
       setFirstLoadAutoSelect(true);
     }
     if (prevResults !== results) {
-      loadMoreItems();
+      loadMoreItems(0, prevResults);
     }
   }, [selectedLayer, results]);
 
@@ -101,9 +101,9 @@ function SearchLayerList(props) {
     selectLayer(layer);
   }
 
-  function loadMoreItems() {
+  function loadMoreItems(page, prev) {
     // If results changed, reset
-    if (!hasMoreItems) {
+    if (prev) {
       setVisibleItems([]);
       setHasMoreItems(true);
       setNextIndex(0);
