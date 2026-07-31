@@ -653,7 +653,7 @@ function LayerRow (props) {
           {...attributes}
           {...listeners}
         >
-          <div className="layer-buttons">
+          <div className={showButtons ? 'layer-buttons' : 'layer-buttons hidden'}>
             {showButtons && renderControls()}
           </div>
           <h4 title={names.title}>{names.title}</h4>

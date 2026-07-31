@@ -90,6 +90,9 @@ beforeEach(() => {
         isMobile={false}
         proj={{ id: 'geographic' }}
         activeLayers={[{ def: { type: 'vector' } }]}
+        granulePlatform="MODIS"
+        granuleFootprints={{ '2024-01-15': [[[0, 0], [1, 0], [1, 1], [0, 1]]] }}
+        compareState={{ active: {}, activeString: 'active' }}
       />,
     );
   });
@@ -176,15 +179,12 @@ describe('componentDidUpdate - clear orphaned granule footprint', () => {
           proj={{ id: 'geographic' }}
           activeLayers={[]}
           granuleFootprints={initialFootprints}
+          compareState={{ active: {}, activeString: 'active' }}
         />,
       );
     });
 
-    // Simulate having a hovered granule by setting internal state
-    const instance = granuleComponent.getInstance();
-    act(() => {
-      instance.setState({ granuleDate: '2024-01-15', granulePlatform: 'MODIS' });
-    });
+    events.trigger(MAP_MOUSE_MOVE, { pixel: [0, 0] }, map, 'EPSG:4326');
 
     // Update granuleFootprints prop to simulate date change
     act(() => {
@@ -205,13 +205,11 @@ describe('componentDidUpdate - clear orphaned granule footprint', () => {
           proj={{ id: 'geographic' }}
           activeLayers={[]}
           granuleFootprints={updatedFootprints}
+          compareState={{ active: {}, activeString: 'active' }}
         />,
       );
     });
 
-    // Verify state was cleared
-    expect(instance.state.granuleDate).toBeNull();
-    expect(instance.state.granulePlatform).toBeNull();
     // Verify GRANULE_HOVERED event was triggered with null
     expect(granuleHoveredSpy).toHaveBeenCalledWith(null);
   });
@@ -242,9 +240,6 @@ describe('componentDidUpdate - clear orphaned granule footprint', () => {
       );
     });
 
-    // granuleDate is null (no hover) — should NOT trigger clear
-    const instance = granuleComponent.getInstance();
-
     act(() => {
       granuleComponent.update(
         <VectorInteractions
@@ -268,7 +263,6 @@ describe('componentDidUpdate - clear orphaned granule footprint', () => {
     });
 
     expect(granuleHoveredSpy).not.toHaveBeenCalled();
-    expect(instance.state.granuleDate).toBeNull();
   });
 
   test('does NOT clear granule footprint when granuleFootprints prop is the same reference', () => {
@@ -296,11 +290,6 @@ describe('componentDidUpdate - clear orphaned granule footprint', () => {
       );
     });
 
-    const instance = granuleComponent.getInstance();
-    act(() => {
-      instance.setState({ granuleDate: '2024-01-15', granulePlatform: 'MODIS' });
-    });
-
     // Re-render with the SAME object reference
     act(() => {
       granuleComponent.update(
@@ -326,7 +315,6 @@ describe('componentDidUpdate - clear orphaned granule footprint', () => {
 
     // Should NOT clear because same reference
     expect(granuleHoveredSpy).not.toHaveBeenCalled();
-    expect(instance.state.granuleDate).toBe('2024-01-15');
   });
 });
 
@@ -366,8 +354,9 @@ describe('moveEnd', () => {
   test('triggers GRANULE_HOVER_UPDATE when granuleDate and granulePlatform are set', () => {
     const spy = jest.fn();
     events.on(GRANULE_HOVER_UPDATE, spy);
+    areCoordinatesAndPolygonExtentValid.mockReturnValue(true);
     act(() => {
-      component.getInstance().setState({ granuleDate: '2024-01-15', granulePlatform: 'MODIS' });
+      events.trigger(MAP_MOUSE_MOVE, { pixel: [0, 0] }, map, 'EPSG:4326');
     });
     events.trigger(MAP_MOVE_END);
     expect(spy).toHaveBeenCalledWith('MODIS', '2024-01-15');
@@ -650,9 +639,6 @@ describe('handleGranuleHover', () => {
       compareState: { active: false },
       visibleExtent: [-180, -90, 180, 90],
       isMobile: false,
-    });
-    act(() => {
-      testComp.getInstance().setState({ granuleDate: '2024-01-15', granulePlatform: 'MODIS' });
     });
     spy.mockClear();
     events.trigger(MAP_MOUSE_MOVE, { pixel: [0, 0] }, map, 'EPSG:4326');

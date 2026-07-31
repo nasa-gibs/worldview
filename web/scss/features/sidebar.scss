@@ -718,6 +718,7 @@ div#group-overlays-checkbox-case {
 
 .charting-disclaimer-dates {
   margin-left: 17px;
+  line-height: 20px;
 }
 
 .error-expand-button {
@@ -741,7 +742,7 @@ div#group-overlays-checkbox-case {
   }
 }
 
-.charting-disclaimer-block {
+.charting-disclaimer-lower > .charting-disclaimer-block {
   line-height: 35px;
   display: block;
   margin-left: 40px;
