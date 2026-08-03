@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -24,48 +24,51 @@ import { JOYRIDE_INCREMENT } from '../../../util/constants';
 
 const { events } = util;
 
-class ProductPickerHeader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.revertToInitialScreen = this.revertToInitialScreen.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.onSearchInputFocus = this.onSearchInputFocus.bind(this);
-    this.resetSearch = this.resetSearch.bind(this);
-  }
+function ProductPickerHeader(props) {
+  const {
+    isMobile,
+    filters,
+    searchTerm,
+    searchConfig,
+    saveSearchState,
+    toggleCategoryMode,
+    setSearchTerm,
+    showMobileFacets,
+    toggleMobileFacets,
+    category,
+    unselectLayer,
+    mode,
+    toggleSearchMode,
+    categoryType,
+    layerCount,
+    results,
+    selectedLayer,
+    selectedProjection,
+    width,
+  } = props;
 
-  componentDidMount() {
-    const { isMobile } = this.props;
+  const inputRef = useRef(null);
+
+  useEffect(() => {
     setTimeout(() => {
-      if (this.input && !isMobile) this.input.focus();
+      if (inputRef.current && !isMobile) inputRef.current.focus();
     }, 500);
-  }
+  }, []);
 
   /**
    * Go back to original screen
    * @method revertToInitialScreen
    */
-  revertToInitialScreen(e) {
-    const {
-      filters,
-      searchTerm,
-      searchConfig,
-      saveSearchState,
-      toggleCategoryMode,
-    } = this.props;
+  function revertToInitialScreen(e) {
     e.preventDefault();
     saveSearchState(filters, searchTerm, searchConfig);
     toggleCategoryMode();
   }
 
-  handleChange = (e) => {
-    const {
-      setSearchTerm,
-      showMobileFacets,
-      toggleMobileFacets,
-    } = this.props;
+  const handleChange = (e) => {
     const { value } = e.target;
 
-    this.onSearchInputFocus();
+    onSearchInputFocus();
     setSearchTerm(value, {
       shouldClearFilters: false,
       debounce: 200,
@@ -77,15 +80,14 @@ class ProductPickerHeader extends React.Component {
     }
   };
 
-  renderBreadCrumb() {
-    const { category } = this.props;
+  function renderBreadCrumb() {
     return (
       <Breadcrumb tag="nav" className="layer-bread-crumb">
         <BreadcrumbItem
           tag="a"
           title="Back to Layer Categories"
           href="#"
-          onClick={this.revertToInitialScreen}
+          onClick={revertToInitialScreen}
         >
           Categories
         </BreadcrumbItem>
@@ -96,8 +98,7 @@ class ProductPickerHeader extends React.Component {
     );
   }
 
-  resetSearch() {
-    const { setSearchTerm, unselectLayer } = this.props;
+  function resetSearch() {
     unselectLayer();
     setSearchTerm('', {
       shouldClearFilters: true,
@@ -105,8 +106,7 @@ class ProductPickerHeader extends React.Component {
     });
   }
 
-  onSearchInputFocus (e) {
-    const { mode, toggleSearchMode } = this.props;
+  function onSearchInputFocus (e) {
     if (mode !== 'search') {
       setTimeout(() => {
         events.trigger(JOYRIDE_INCREMENT);
@@ -115,119 +115,101 @@ class ProductPickerHeader extends React.Component {
     }
   }
 
-  render() {
-    const {
-      category,
-      categoryType,
-      filters,
-      isMobile,
-      layerCount,
-      mode,
-      showMobileFacets,
-      toggleMobileFacets,
-      results,
-      searchTerm,
-      selectedLayer,
-      selectedProjection,
-      toggleSearchMode,
-      width,
-    } = this.props;
-    const searchMode = mode === 'search';
-    const categoryId = category && category.id;
-    const recentLayersMode = categoryType === 'recent';
-    const featuredLayersMode = categoryType === 'featured';
-    const showBackButton = searchMode ||
-      (categoryId !== 'featured-all' &&
-      selectedProjection === 'geographic' &&
-      mode !== 'category' &&
-      !featuredLayersMode &&
-      !recentLayersMode);
-    const isBreadCrumb = showBackButton && !searchMode && width > 650;
-    const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
-    const showFilterBtnMobile = recentLayersMode ||
-      (searchMode ? !showMobileFacets : !selectedLayer);
-    const showFilterBnDesktop = recentLayersMode ||
-      (!searchMode && !selectedLayer);
-    const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
-    const filterBtnFn = !searchMode ? toggleSearchMode : toggleMobileFacets;
-    const inputClass = !searchMode && searchTerm ? 'faded' : '';
+  const searchMode = mode === 'search';
+  const categoryId = category && category.id;
+  const recentLayersMode = categoryType === 'recent';
+  const featuredLayersMode = categoryType === 'featured';
+  const showBackButton = searchMode ||
+    (categoryId !== 'featured-all' &&
+    selectedProjection === 'geographic' &&
+    mode !== 'category' &&
+    !featuredLayersMode &&
+    !recentLayersMode);
+  const isBreadCrumb = showBackButton && !searchMode && width > 650;
+  const showReset = !!(filters.length || searchTerm.length) && mode === 'search';
+  const showFilterBtnMobile = recentLayersMode ||
+    (searchMode ? !showMobileFacets : !selectedLayer);
+  const showFilterBnDesktop = recentLayersMode ||
+    (!searchMode && !selectedLayer);
+  const showFilterBn = isMobile ? showFilterBtnMobile : showFilterBnDesktop;
+  const filterBtnFn = !searchMode ? toggleSearchMode : toggleMobileFacets;
+  const inputClass = !searchMode && searchTerm ? 'faded' : '';
 
-    return (
-      <>
-        <InputGroup id="layer-search" className="layer-search">
-          {showBackButton && (
-            <>
-              <Button
-                id="layer-back-button"
-                className="back-button"
-                color="secondary"
-                onClick={this.revertToInitialScreen}
-              >
-                <UncontrolledTooltip
-                  id="center-align-tooltip"
-                  placement="right"
-                  target="layer-back-button"
-                >
-                  Return to category view
-                </UncontrolledTooltip>
-                <FontAwesomeIcon icon="arrow-left" widthAuto />
-              </Button>
-              {isBreadCrumb && this.renderBreadCrumb()}
-            </>
-          )}
-
-          {showReset && (
+  return (
+    <>
+      <InputGroup id="layer-search" className="layer-search">
+        {showBackButton && (
+          <>
             <Button
-              className="clear-filters"
-              onClick={() => this.resetSearch()}
-            >
-              Reset
-            </Button>
-          )}
-
-          {showFilterBn && (
-            <Button
-              id="layer-filter-button"
-              className="filter-button"
-              onClick={filterBtnFn}
-              aria-label="Filtered layer search"
+              id="layer-back-button"
+              className="back-button"
+              color="secondary"
+              onClick={revertToInitialScreen}
             >
               <UncontrolledTooltip
                 id="center-align-tooltip"
                 placement="right"
-                target="layer-filter-button"
+                target="layer-back-button"
               >
-                Filtered layer search
+                Return to category view
               </UncontrolledTooltip>
-              <FontAwesomeIcon icon="filter" widthAuto />
+              <FontAwesomeIcon icon="arrow-left" widthAuto />
             </Button>
-          )}
-
-          <Input
-            className={inputClass}
-            onChange={this.handleChange}
-            onClick={this.onSearchInputFocus}
-            id="layers-search-input"
-            value={searchTerm}
-            placeholder="Search"
-            type="search"
-
-            innerRef={(c) => (this.input = c)}
-          />
-        </InputGroup>
-
-        {mode === 'search' && (
-          <div className="header-filter-container">
-            <div className="results-text">
-              {results.length === layerCount
-                ? `Showing ${results.length} layers`
-                : `Showing ${results.length} out of ${layerCount}`}
-            </div>
-          </div>
+            {isBreadCrumb && renderBreadCrumb()}
+          </>
         )}
-      </>
-    );
-  }
+
+        {showReset && (
+          <Button
+            className="clear-filters"
+            onClick={() => resetSearch()}
+          >
+            Reset
+          </Button>
+        )}
+
+        {showFilterBn && (
+          <Button
+            id="layer-filter-button"
+            className="filter-button"
+            onClick={filterBtnFn}
+            aria-label="Filtered layer search"
+          >
+            <UncontrolledTooltip
+              id="center-align-tooltip"
+              placement="right"
+              target="layer-filter-button"
+            >
+              Filtered layer search
+            </UncontrolledTooltip>
+            <FontAwesomeIcon icon="filter" widthAuto />
+          </Button>
+        )}
+
+        <Input
+          className={inputClass}
+          onChange={handleChange}
+          onClick={onSearchInputFocus}
+          id="layers-search-input"
+          value={searchTerm}
+          placeholder="Search"
+          type="search"
+
+          innerRef={(c) => (inputRef.current = c)}
+        />
+      </InputGroup>
+
+      {mode === 'search' && (
+        <div className="header-filter-container">
+          <div className="results-text">
+            {results.length === layerCount
+              ? `Showing ${results.length} layers`
+              : `Showing ${results.length} out of ${layerCount}`}
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
 ProductPickerHeader.propTypes = {

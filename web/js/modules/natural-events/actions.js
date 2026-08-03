@@ -17,6 +17,7 @@ import {
   UNHIGHLIGHT_EVENT,
 } from './constants';
 import { requestAction } from '../core/actions';
+import { safeParseEonet } from './util';
 
 export function requestEvents() {
   return (dispatch, getState) => {
@@ -27,6 +28,8 @@ export function requestEvents() {
       REQUEST_EVENTS,
       requestUrl,
       'application/json',
+      null,
+      { parser: safeParseEonet },
     );
   };
 }

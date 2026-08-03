@@ -330,7 +330,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const options = optionsObj;
     const state = store.getState();
     const { compare: { activeString } } = state;
-    const { ui: { isKioskModeActive, displayStaticMap } } = state;
+    const { ui: { displayStaticMap } } = state;
     const { tempoCallback } = options;
 
     options.group = options.group || activeString;
@@ -342,7 +342,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     // if gibs/dns failure, display static image layer
-    if (displayStaticMap && isKioskModeActive) {
+    if (displayStaticMap) {
       const layer = await createStaticImageLayer();
       return layer;
     }

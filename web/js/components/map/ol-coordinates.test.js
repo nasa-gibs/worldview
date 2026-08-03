@@ -5,7 +5,14 @@ import OlCoordinates from './ol-coordinates';
 import { registerProjections } from '../../fixtures';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 
-jest.mock('react-redux', () => ({ connect: () => (OlCoordinatesMock) => OlCoordinatesMock }));
+const mockDispatch = jest.fn();
+jest.mock('react-redux', () => ({
+  useSelector: jest.fn((selector) => selector({
+    settings: { coordinateFormat: 'latlon-dd' },
+    screenSize: { isMobileDevice: false },
+  })),
+  useDispatch: () => mockDispatch,
+}));
 
 const { events } = util;
 let container;
@@ -34,6 +41,7 @@ afterEach(() => {
   });
   container.remove();
   container = null;
+  mockDispatch.mockClear();
 });
 
 test('shows coordinates of (10, 20) when moving the mouse', () => {
@@ -118,16 +126,28 @@ test('does not clear coordinates when mouseOut target has wv-coords-map class', 
 });
 
 test('hides coordinates container on mobile (display none)', () => {
+  const { useSelector } = require('react-redux');
+  useSelector.mockImplementation((selector) => selector({
+    settings: { coordinateFormat: 'latlon-dd' },
+    screenSize: { isMobileDevice: true },
+  }));
+
   const mobileContainer = document.createElement('div');
   document.body.appendChild(mobileContainer);
   const mobileRoot = createRoot(mobileContainer);
   act(() => {
-    mobileRoot.render(<OlCoordinates show isMobile />);
+    mobileRoot.render(<OlCoordinates show />);
   });
   const coordsCase = mobileContainer.querySelector('#ol-coords-case');
   expect(coordsCase.style.display).toBe('none');
   act(() => { mobileRoot.unmount(); });
   mobileContainer.remove();
+
+  // Reset mock
+  useSelector.mockImplementation((selector) => selector({
+    settings: { coordinateFormat: 'latlon-dd' },
+    screenSize: { isMobileDevice: false },
+  }));
 });
 
 test('renders coordinates container element', () => {

@@ -5,7 +5,7 @@ import {
   includes as lodashIncludes,
   groupBy as lodashGroupBy,
 } from 'lodash';
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import * as olExtent from 'ol/extent';
 import { transform } from 'ol/proj';
@@ -25,6 +25,7 @@ import { changeCursor as changeCursorActionCreator } from '../../modules/map/act
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 import { CRS, FULL_MAP_EXTENT } from '../../modules/map/constants';
+import usePrevious from '../../util/customHooks';
 import {
   GRANULE_HOVERED,
   GRANULE_HOVER_UPDATE,
@@ -36,44 +37,108 @@ import {
 
 const { events } = util;
 
-export class VectorInteractions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      granuleDate: null,
-      granulePlatform: null,
-    };
-    const options = { leading: true, trailing: true };
-    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
-    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
-    this.moveEnd = this.moveEnd.bind(this);
-    this.singleClick = this.singleClick.bind(this);
-  }
+export function VectorInteractions(props) {
+  const {
+    granuleFootprints,
+    compareState,
+    granulePlatform,
+    swipeOffset,
+    visibleExtent,
+    isShowingClick,
+    changeCursor,
+    measureIsActive,
+    proj,
+    isCoordinateSearchActive,
+    isMobile,
+    screenSize,
+    lastSelected,
+    openVectorDialog,
+    onCloseModal,
+    selectVectorFeatures,
+    modalState,
+    getDialogObject,
+    activeLayers,
+    activateVectorZoomAlert,
+    activateVectorExceededResultsAlert,
+    clearVectorExceededResultsAlert,
+    isEmbedModeActive,
+    isVectorExceededAlertPresent,
+  } = props;
 
-  componentDidMount() {
-    events.on(MAP_MOVE_END, this.moveEnd);
-    events.on(MAP_MOUSE_MOVE, this.mouseMove);
-    events.on(MAP_MOUSE_OUT, this.mouseOut);
-    events.on(MAP_SINGLE_CLICK, this.singleClick);
-  }
+  const [granuleDate, setGranuleDate] = useState(null);
+  const [, setGranulePlatformState] = useState(null);
 
-  componentDidUpdate(prevProps) {
-    const { granuleFootprints } = this.props;
-    const { granuleDate } = this.state;
-    if (granuleDate && prevProps.granuleFootprints !== granuleFootprints) {
-      this.clearGranuleFootprint();
+  const granuleDateRef = useRef(granuleDate);
+  const granulePlatformRef = useRef(granulePlatform);
+  const granuleFootprintsRef = useRef(granuleFootprints);
+  const isShowingClickRef = useRef(isShowingClick);
+
+  const prevGranuleFootprints = usePrevious(granuleFootprints);
+
+  function mouseOut() {
+    mouseMoveThrottled.cancel();
+    events.trigger(GRANULE_HOVERED, null);
+  };
+
+  function mouseMove({ pixel }, map, crs) {
+    const coord = map.getCoordinateFromPixel(pixel);
+    const [lon, lat] = transform(coord, crs, CRS.GEOGRAPHIC);
+
+    if (measureIsActive || isCoordinateSearchActive) {
+      return;
     }
+    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
+      return;
+    }
+    if (granuleFootprints && !isMobile) {
+      handleGranuleHover(pixel, coord);
+    }
+    handleCursorChange(pixel, map, lon, lat);
   }
 
-  componentWillUnmount() {
-    events.off(MAP_MOVE_END, this.moveEnd);
-    events.off(MAP_MOUSE_MOVE, this.mouseMove);
-    events.off(MAP_MOUSE_OUT, this.mouseOut);
-    events.off(MAP_SINGLE_CLICK, this.singleClick);
-  }
+  const options = { leading: true, trailing: true };
+  const mouseMoveThrottled = lodashThrottle(mouseMove, 200, options);
+  const mouseOutThrottled = lodashThrottle(mouseOut, 200, options);
 
-  clearGranuleFootprint() {
-    this.setState({ granuleDate: null, granulePlatform: null });
+  useEffect(() => {
+    events.on(MAP_MOVE_END, moveEnd);
+    events.on(MAP_MOUSE_MOVE, mouseMoveThrottled);
+    events.on(MAP_MOUSE_OUT, mouseOutThrottled);
+    events.on(MAP_SINGLE_CLICK, singleClick);
+
+    return () => {
+      events.off(MAP_MOVE_END, moveEnd);
+      events.off(MAP_MOUSE_MOVE, mouseMoveThrottled);
+      events.off(MAP_MOUSE_OUT, mouseOutThrottled);
+      events.off(MAP_SINGLE_CLICK, singleClick);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (granuleDate && prevGranuleFootprints !== granuleFootprints) {
+      clearGranuleFootprint();
+    }
+  }, [granuleDate, granuleFootprints]);
+
+  useEffect(() => {
+    granuleDateRef.current = granuleDate;
+  }, [granuleDate]);
+
+  useEffect(() => {
+    granulePlatformRef.current = granulePlatform;
+  }, [granulePlatform]);
+
+  useEffect(() => {
+    granuleFootprintsRef.current = granuleFootprints;
+  }, [granuleFootprints]);
+
+  useEffect(() => {
+    isShowingClickRef.current = isShowingClick;
+  }, [isShowingClick]);
+
+  function clearGranuleFootprint() {
+    setGranuleDate(null);
+    setGranulePlatformState(null);
     events.trigger(GRANULE_HOVERED, null);
   }
 
@@ -83,14 +148,7 @@ export class VectorInteractions extends React.Component {
   * @param {Array} pixels
   * @param {Array} coord
   */
-  handleGranuleHover = (pixels, mouseCoords) => {
-    const {
-      compareState,
-      granulePlatform,
-      granuleFootprints,
-      swipeOffset,
-      visibleExtent,
-    } = this.props;
+  function handleGranuleHover(pixels, mouseCoords) {
     const { active: compareActive, activeString } = compareState;
 
     let toggledGranuleFootprint;
@@ -103,9 +161,9 @@ export class VectorInteractions extends React.Component {
 
     // check if coordinates and polygon extent are within and not exceeding max extent
     Object
-      .keys(granuleFootprints)
+      .keys(granuleFootprintsRef.current)
       .forEach((date) => {
-        const points = granuleFootprints[date];
+        const points = granuleFootprintsRef.current[date];
         const isValidPolygon = areCoordinatesAndPolygonExtentValid(
           points,
           mouseCoords,
@@ -113,23 +171,21 @@ export class VectorInteractions extends React.Component {
         );
         if (isValidPolygon) {
           toggledGranuleFootprint = true;
-          events.trigger(GRANULE_HOVERED, granulePlatform, date);
-          this.setState({ granulePlatform, granuleDate: date });
+          events.trigger(GRANULE_HOVERED, granulePlatformRef.current, date);
+          setGranuleDate(date);
+          setGranulePlatformState(granulePlatformRef.current);
         }
       });
 
     if (!toggledGranuleFootprint) {
-      this.clearGranuleFootprint();
+      clearGranuleFootprint();
     }
   };
 
-  handleCursorChange(pixel, map, lon, lat) {
-    const {
-      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
-    } = this.props;
+  function handleCursorChange(pixel, map, lon, lat) {
     const hasFeatures = map.hasFeatureAtPixel(pixel);
 
-    if (hasFeatures && !isShowingClick && !measureIsActive) {
+    if (hasFeatures && !isShowingClickRef.current && !measureIsActive) {
       let isActiveLayer = false;
       let isReferenceLayer = false;
       map.forEachFeatureAtPixel(pixel, (feature, layer) => {
@@ -156,50 +212,18 @@ export class VectorInteractions extends React.Component {
       if (isActiveLayer && !isReferenceLayer) {
         changeCursor(true);
       }
-    } else if (!hasFeatures && isShowingClick) {
+    } else if (!hasFeatures && isShowingClickRef.current) {
       changeCursor(false);
     }
   }
 
-  moveEnd() {
-    const { granuleDate, granulePlatform } = this.state;
-    if (granuleDate && granulePlatform) {
-      events.trigger(GRANULE_HOVER_UPDATE, granulePlatform, granuleDate);
+  function moveEnd() {
+    if (granuleDateRef.current && granulePlatformRef.current) {
+      events.trigger(GRANULE_HOVER_UPDATE, granulePlatformRef.current, granuleDateRef.current);
     }
   }
 
-  mouseOut = () => {
-    this.mouseMove.cancel();
-    events.trigger(GRANULE_HOVERED, null);
-  };
-
-  mouseMove({ pixel }, map, crs) {
-    const {
-      isCoordinateSearchActive, measureIsActive, granuleFootprints, isMobile,
-    } = this.props;
-    const coord = map.getCoordinateFromPixel(pixel);
-    const [lon, lat] = transform(coord, crs, CRS.GEOGRAPHIC);
-
-    if (measureIsActive || isCoordinateSearchActive) {
-      return;
-    }
-    if (lon < -250 || lon > 250 || lat < -90 || lat > 90) {
-      return;
-    }
-    if (granuleFootprints && !isMobile) {
-      this.handleGranuleHover(pixel, coord);
-    }
-    this.handleCursorChange(pixel, map, lon, lat);
-  }
-
-  singleClick(e, map) {
-    const {
-      screenSize, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
-      modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
-      activateVectorZoomAlert, activateVectorExceededResultsAlert, clearVectorExceededResultsAlert,
-      proj, isEmbedModeActive, isVectorExceededAlertPresent, isMobile,
-    } = this.props;
-
+  function singleClick(e, map) {
     if (measureIsActive || isCoordinateSearchActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
@@ -230,7 +254,7 @@ export class VectorInteractions extends React.Component {
 
     if (isMobile) {
       const coord = map.getCoordinateFromPixel(pixels);
-      this.handleGranuleHover(pixels, coord);
+      handleGranuleHover(pixels, coord);
     }
 
     if (metaArray.length) {
@@ -265,9 +289,7 @@ export class VectorInteractions extends React.Component {
     }
   }
 
-  render() {
-    return null;
-  }
+  return null;
 }
 
 function mapStateToProps(state) {

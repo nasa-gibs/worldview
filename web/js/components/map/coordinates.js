@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 
@@ -9,55 +8,41 @@ const formatOrder = {
   'latlon-dms': 'latlon-dd',
 };
 
-export default class Coordinates extends React.Component {
-  constructor(props) {
-    super(props);
-    this.changeFormat = this.changeFormat.bind(this);
-  }
-
-  changeFormat() {
-    const { format, onFormatChange } = this.props;
+export default function Coordinates({ latitude, longitude, format, crs, onFormatChange }) {
+  const changeFormat = () => {
     const nextFormat = formatOrder[format];
     onFormatChange(nextFormat);
+  };
+
+  if (latitude === null || longitude === null) {
+    return null;
   }
 
-  render() {
-    const {
-      latitude, longitude, format, crs,
-    } = this.props;
-    if (latitude === null) {
-      return null;
-    }
-    if (longitude === null) {
-      return null;
-    }
+  const coords = util.formatCoordinate(
+    [longitude, latitude],
+    format,
+  );
 
-    const coords = util.formatCoordinate(
-      [longitude, latitude],
-      format,
-    );
-
-    return (
-      <button
-        type="button"
-        id="coords-panel"
-        className="wv-coords-map wv-coords-map-btn"
-        onClick={this.changeFormat}
-      >
+  return (
+    <button
+      type="button"
+      id="coords-panel"
+      className="wv-coords-map wv-coords-map-btn"
+      onClick={changeFormat}
+    >
+      <span className="map-coord">
+        {coords}
+      </span>
+      <div className="map-coord-format">
         <span className="map-coord">
-          {coords}
+          {crs}
         </span>
-        <div className="map-coord-format">
-          <span className="map-coord">
-            {crs}
-          </span>
-          <div aria-label="Change coordinates format" className="coord-btn">
-            <i className="coord-switch" />
-          </div>
+        <div aria-label="Change coordinates format" className="coord-btn">
+          <i className="coord-switch" />
         </div>
-      </button>
-    );
-  }
+      </div>
+    </button>
+  );
 }
 
 Coordinates.propTypes = {
