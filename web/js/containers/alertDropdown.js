@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import FeatureAlert from '../components/feature-alert/alert';
 import Alerts from './alerts';
 
 export default function AlertDropdown(isTourActive) {
@@ -26,7 +25,6 @@ export default function AlertDropdown(isTourActive) {
         {dropdownOpen ? <FontAwesomeIcon icon="fa-solid fa-caret-down" widthAuto /> : <FontAwesomeIcon icon="fa-solid fa-caret-up" widthAuto />}
       </button>
       <div ref={containerRef} hidden={!(dropdownOpen || notifications === 1)} id="wv-alert-container" className="wv-alert-container">
-        <FeatureAlert />
         <Alerts />
       </div>
       <div className="wv-alert-footer" hidden={!dropdownOpen || notifications <= 1}>

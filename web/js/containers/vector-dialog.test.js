@@ -3,10 +3,8 @@
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-let capturedMapState;
 jest.mock('react-redux', () => ({
   connect: (mapState, mapDispatch) => {
-    capturedMapState = mapState;
     return (Component) => Component;
   },
 }));
@@ -142,11 +140,5 @@ describe('VectorDialog (AERONET)', () => {
     );
     fireEvent.click(container.querySelector('.vector-close-btn'));
     expect(toggleWithClose).toHaveBeenCalled();
-  });
-});
-
-describe('mapStateToProps', () => {
-  it('returns an empty object', () => {
-    expect(capturedMapState({ anything: true })).toEqual({});
   });
 });

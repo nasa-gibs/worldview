@@ -25,10 +25,12 @@ function AddLayer(props) {
   } = props;
 
   /**
- * Initiates the adding of a layer
- * @param {object} def - layer Specs
- * @returns {void}
- */
+  * Initiates the adding of a layer
+  * @param {object} def - layer Specs
+  * @param {string|object} layerDate - optional date override
+  * @param {array} activeLayersParam - optional active layers
+  * @returns {void}
+  */
   const addLayer = async function(def, layerDate, activeLayersParam) {
     // Immediately update visibility for already-loaded layers before async layer creation
     updateLayerVisibilities();
@@ -39,56 +41,46 @@ function AddLayer(props) {
       const reverseLayers = projFilteredLayers;
       const index = lodashFindIndex(reverseLayers, { id: def.id });
       if (index === -1) return;
+      const targetOrder = reverseLayers.map((l) => l.id);
       const mapLayers = ui.selected.getLayers().getArray();
       const firstLayer = mapLayers[0];
 
-      if (firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true) {
-        const activelayer = firstLayer.get('group') === activeString
+      const isGrouped = firstLayer && firstLayer.get('group') && firstLayer.get('granule') !== true;
+
+      let targetGroup;
+      if (isGrouped) {
+        const activeLayerGroup = firstLayer.get('group') === activeString
           ? firstLayer
           : mapLayers[1];
-        const options = {
-          date,
-          group: activeString,
-        };
-        const newLayer = await createLayer(def, options);
-
-        // Check for and remove any existing layer with the same ID to avoid duplicates
-        const groupLayers = activelayer.getLayers();
-        const existingIndex = groupLayers.getArray().findIndex(
-          (l) => l.wv?.id === def.id,
-        );
-        let adjustedIndex = index;
-        if (existingIndex >= 0) {
-          groupLayers.removeAt(existingIndex);
-          if (existingIndex < index) adjustedIndex -= 1;
-        }
-
-        if (adjustedIndex <= groupLayers.getLength()) {
-          groupLayers.insertAt(adjustedIndex, newLayer);
-        } else {
-          groupLayers.push(newLayer);
-        }
-        compareMapUi.create(ui.selected, mode);
+        targetGroup = activeLayerGroup.getLayers();
       } else {
-        const newLayer = await createLayer(def);
-        const layers = ui.selected.getLayers();
-
-        // Check for and remove any existing layer with the same ID to avoid duplicates
-        const existingIndex = layers.getArray().findIndex(
-          (l) => l.wv?.id === def.id,
-        );
-        let adjustedIndex = index;
-        if (existingIndex >= 0) {
-          layers.removeAt(existingIndex);
-          if (existingIndex < index) adjustedIndex -= 1;
-        }
-
-        if (adjustedIndex <= layers.getLength()) {
-          layers.insertAt(adjustedIndex, newLayer);
-        } else {
-          layers.push(newLayer);
-        }
+        targetGroup = ui.selected.getLayers();
       }
+
+      const options = isGrouped ? { date, group: activeString } : undefined;
+      const newLayer = await createLayer(def, options);
+
+      const currentOlLayers = targetGroup.getArray();
+
+      // Check for and remove existing layer instance with same ID
+      const existingIndex = currentOlLayers.findIndex((l) => l.wv?.id === def.id);
+      if (existingIndex >= 0) {
+        targetGroup.removeAt(existingIndex);
+      }
+
+      const updatedOlLayers = targetGroup.getArray();
+      const insertPosition = getRelativeOlIndex(updatedOlLayers, targetOrder, index);
+
+      if (insertPosition < targetGroup.getLength()) {
+        targetGroup.insertAt(insertPosition, newLayer);
+      } else {
+        targetGroup.push(newLayer);
+      }
+
+      if (isGrouped) {
+        compareMapUi.create(ui.selected, mode);
+      }
+
       updateLayerVisibilities();
       preloadNextTiles();
     } catch (error) {
@@ -111,6 +103,36 @@ function AddLayer(props) {
     const { createLayer } = ui;
     const newLayer = await createLayer();
     ui.selected.getLayers().insertAt(0, newLayer);
+  };
+
+  /**
+  * Helper to calculate the relative OpenLayers insertion index based on current Redux target order.
+  * @param {array} currentOlLayers - Array of current OL layer instances
+  * @param {array} targetOrder - Array of layer IDs in desired order (e.g. projFilteredLayers IDs)
+  * @param {number} targetIndex - Index of the layer being inserted in targetOrder
+  * @returns {number} Calculated OpenLayers insertion index
+  */
+  const getRelativeOlIndex = (currentOlLayers, targetOrder, targetIndex) => {
+    let hasValidIds = false;
+    const targetId = targetOrder[targetIndex];
+
+    for (let i = 0; i < currentOlLayers.length; i += 1) {
+      const currentOlLayerId = currentOlLayers[i]?.wv?.id || currentOlLayers[i]?.id;
+      if (currentOlLayerId && currentOlLayerId !== targetId) {
+        const currentReduxIndex = targetOrder.indexOf(currentOlLayerId);
+        if (currentReduxIndex !== -1) {
+          hasValidIds = true;
+          if (currentReduxIndex > targetIndex) {
+            return i;
+          }
+        }
+      }
+    }
+
+    if (!hasValidIds) return targetIndex;
+
+    // If no higher layer was found, fall back to targetIndex
+    return currentOlLayers.length;
   };
 
   useEffect(() => {

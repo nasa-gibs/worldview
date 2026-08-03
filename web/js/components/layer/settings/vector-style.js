@@ -1,24 +1,26 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import Scrollbar from '../../util/scrollbar';
 import { isConditional } from '../../../modules/vector-styles/util';
 
-class VectorStyleSelect extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeVectorStyle: props.activeVectorStyle,
-    };
-  }
+function VectorStyleSelect(props) {
+  const {
+    activeVectorStyle,
+    layer,
+    clearStyle,
+    setStyle,
+    groupName,
+    index,
+    vectorStyles,
+  } = props;
+
+  const [activeVectorStyleState, setActiveVectorStyleState] = useState(activeVectorStyle);
 
   /**
    * Pass vector style to model after selection
    * @param {String} id | custom VectorStyle Id
    */
-  onChangeVectorStyle(vectorStyleId) {
-    const {
-      layer, clearStyle, setStyle, groupName,
-    } = this.props;
+  function onChangeVectorStyle(vectorStyleId) {
     setTimeout(() => {
       if (vectorStyleId === layer.id) {
         clearStyle(layer, vectorStyleId, groupName);
@@ -26,29 +28,28 @@ class VectorStyleSelect extends React.Component {
         setStyle(layer, vectorStyleId, groupName);
       }
     }, 0);
-    this.setState({ activeVectorStyle: vectorStyleId });
+    setActiveVectorStyleState(vectorStyleId);
   }
 
   /**
    * Apply logic to render correct vectorStyle selection
    * @param {String} id | Legend Id
    */
-  customLegend(styleLayerObject) {
-    const { activeVectorStyle } = this.state;
+  function customLegend(styleLayerObject) {
     const description = styleLayerObject['source-description'] || styleLayerObject.id;
     const isConditionalStyling = styleLayerObject.paint ? isConditional(styleLayerObject.paint['line-color'] || styleLayerObject.paint['circle-color'] || styleLayerObject.paint['fill-color']) : false;
 
     return isConditionalStyling
-      ? this.renderLegendMultiItem(
+      ? renderLegendMultiItem(
         styleLayerObject,
         styleLayerObject.id,
         description,
       )
-      : this.renderSelectorItemSingle(
+      : renderSelectorItemSingle(
         styleLayerObject,
         styleLayerObject.id,
         description,
-        activeVectorStyle === styleLayerObject.id,
+        activeVectorStyleState === styleLayerObject.id,
       );
   }
 
@@ -59,7 +60,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} description | Colormap name
    */
 
-  renderLegendMultiItem(vectorStyle, vectorStyleId, description) {
+  function renderLegendMultiItem(vectorStyle, vectorStyleId, description) {
     const caseDefaultClassName = 'wv-palette-selector-row ';
     const array = Array.from(vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']);
     array.shift();
@@ -110,7 +111,7 @@ class VectorStyleSelect extends React.Component {
    * @param {String} description | Colormap name
    * @param {Boolean} isSelected | is this colormap active
    */
-  renderSelectorItemSingle(vectorStyle, vectorStyleId, description, isSelected) {
+  function renderSelectorItemSingle(vectorStyle, vectorStyleId, description, isSelected) {
     const color = vectorStyle.paint
       ? vectorStyle.paint['line-color'] || vectorStyle.paint['circle-color'] || vectorStyle.paint['fill-color']
       : 'rgb(255, 255, 255)';
@@ -122,7 +123,7 @@ class VectorStyleSelect extends React.Component {
           id={`wv-palette-radio-${vectorStyleId}`}
           type="radio"
           name="wv-palette-radio"
-          onClick={() => this.onChangeVectorStyle(vectorStyleId)}
+          onClick={() => onChangeVectorStyle(vectorStyleId)}
         />
         {isSelected && (
           <span className="dot" />
@@ -140,40 +141,38 @@ class VectorStyleSelect extends React.Component {
     );
   }
 
-  render() {
-    const { index, vectorStyles, layer } = this.props;
-    const vectorStyleId = layer.vectorStyle.id;
-    const vectorStyle = vectorStyles[vectorStyleId];
-    const vectorStyleLayers = vectorStyle.layers;
+  const vectorStyleId = layer.vectorStyle.id;
+  const vectorStyle = vectorStyles[vectorStyleId];
+  const vectorStyleLayers = vectorStyle.layers;
 
-    const uniqueStyleLayers = vectorStyleLayers.filter((a) => {
-      if (!this[a.id]) {
-        this[a.id] = true;
-        return true;
-      }
-      return false;
-    }, Object.create(null));
-    return (
-      <div
-        className="wv-palette-selector settings-component noselect"
-        id={`wv-palette-selector${index}`}
-      >
-        <h2 className="wv-header">Vector Styles</h2>
-        <Scrollbar style={{ maxHeight: '200px' }}>
-          {
+  const unqiueLayersSeen = new Set();
 
-            uniqueStyleLayers.map((styleLayerObject) => {
-              if (styleLayerObject && styleLayerObject) {
-                const item = this.customLegend(styleLayerObject);
-                return item;
-              }
-              return false;
-            })
+  const uniqueStyleLayers = vectorStyleLayers.filter((a) => {
+    if (!unqiueLayersSeen.has(a.id)) {
+      unqiueLayersSeen.add(a.id);
+      return true;
+    }
+    return false;
+  }, Object.create(null));
+
+  return (
+    <div
+      className="wv-palette-selector settings-component noselect"
+      id={`wv-palette-selector${index}`}
+    >
+      <h2 className="wv-header">Vector Styles</h2>
+      {vectorStyleLayers.length}
+      <Scrollbar style={{ maxHeight: '200px' }}>
+        {uniqueStyleLayers && uniqueStyleLayers.map((styleLayerObject) => {
+          if (styleLayerObject && styleLayerObject) {
+            const item = customLegend(styleLayerObject);
+            return item;
           }
-        </Scrollbar>
-      </div>
-    );
-  }
+          return false;
+        })}
+      </Scrollbar>
+    </div>
+  );
 }
 
 VectorStyleSelect.propTypes = {

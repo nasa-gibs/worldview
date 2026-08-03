@@ -515,7 +515,7 @@ function ChartingModeOptions(props) {
       if (dataset.ok && !!dataset.body) {
         Object.keys(dataset.body).forEach((key) => {
           if (key === 'errors') {
-            const errorDays = normalizeErrorDays(dataset.body.errors.error_days);
+            const errorDays = normalizeErrorDays(dataset.body.errors);
             output.body.errors.error_count += dataset.body.errors.error_count;
             output.body.errors.error_days.push(...errorDays);
           } else if (key === 'hist') {
