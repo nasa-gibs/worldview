@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useEffectEvent } from 'react';
 import { connect } from 'react-redux';
 import { getActiveGranuleFootPrints } from '../../../modules/layers/selectors';
 import { GRANULE_HOVERED, GRANULE_HOVER_UPDATE } from '../../../util/constants';
@@ -24,7 +24,7 @@ function GranuleHover(props) {
     };
   }, []);
 
-  const onGranuleHover = (platform, date, update) => {
+  const onGranuleHover = useEffectEvent((platform, date, update) => {
     const proj = ui.selected.getView().getProjection()
       .getCode();
     if (!granuleFootprints[proj]) return;
@@ -33,9 +33,9 @@ function GranuleHover(props) {
       geometry = getActiveGranuleFootPrints(state)[date];
     }
     granuleFootprints[proj].addFootprint(geometry, date);
-  };
+  });
 
-  const onGranuleHoverUpdate = (platform, date) => {
+  const onGranuleHoverUpdate = useEffectEvent((platform, date) => {
     const proj = ui.selected.getView().getProjection()
       .getCode();
     if (!granuleFootprints[proj]) return;
@@ -45,7 +45,7 @@ function GranuleHover(props) {
     }
     if (!geometry) return;
     granuleFootprints[proj].updateFootprint(geometry, date);
-  };
+  });
 
   return null;
 }
