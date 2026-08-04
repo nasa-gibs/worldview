@@ -99,8 +99,6 @@ function TileMeasurement({ ui }) {
       layersMeetingThresholdForDate = 0;
     }
 
-    const firstLayerWithBestDate = findBestDate(layers, bestDates);
-
     if (!firstLayerWithBestDate) {
       console.error(`No date found that satisfies the full imagery thresholds. There is no best date selected for ${layers[0].id}.`);
       return dates[0];
