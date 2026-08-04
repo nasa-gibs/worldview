@@ -1,0 +1,1 @@
+The Tropospheric Emissions: Monitoring of Pollution (TEMPO) geostationary satellite was there to monitor the fires.
