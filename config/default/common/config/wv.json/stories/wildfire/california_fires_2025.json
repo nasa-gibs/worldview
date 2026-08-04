@@ -1,0 +1,116 @@
+{
+  "stories": {
+    "california_fires_2025": {
+      "id": "california_fires_2025",
+      "type": "wildfire",
+      "title": "Wildfires in California (2025)",
+      "description": "Satellite views of California fires shows extent of burning.",
+      "backgroundImage": "california_fires_falsecolor.png",
+      "backgroundImageHover": "",
+      "readMoreLinks": [
+        {
+          "title": "NASA Earth Observatory - Explosive Fire Activity in Australia",
+          "link": "https://earthobservatory.nasa.gov/images/146125/explosive-fire-activity-in-australia"
+        },
+        {
+          "title": "NASA Earth Observatory - Fires and Smoke Engulf Southeastern Australia",
+          "link": "https://earthobservatory.nasa.gov/images/146110/fires-and-smoke-engulf-southeastern-australia"
+        },
+        {
+          "title": "NASA Earthdata - Wildfires",
+          "link": "https://www.earthdata.nasa.gov/topics/human-dimensions/wildfires"
+        },
+        {
+          "title": "NASA Earthdata - Fire Information for Resource Management System (FIRMS) - Download MODIS/VIIRS Fire Data",
+          "link": "https://www.earthdata.nasa.gov/data/tools/firms"
+        },
+        {
+          "title": "NASA Disasters Program - Australia Fires 2020",
+          "link": "https://disasters.nasa.gov/what-we-do/disasters/disasters-activations/australia-fires-2020"
+        }
+      ],
+      "steps": [
+        {
+          "description": "step001.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-186.41658034973491,-102.87186796148461,174.97902197208876,60.36354065026348&l=Reference_Labels_15m(hidden),Reference_Features_15m(hidden),Coastlines_15m,VIIRS_NOAA20_Thermal_Anomalies_375m_Day,VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&t=2025-01-07-T00%3A00%3A00Z"
+        },
+        {
+          "description": "step002.html",
+          "transition": {
+            "element": "animation",
+            "action": "play"
+          },
+          "stepLink": "v=-123.99732658106109,30.905761756068138,-114.34870564812093,35.26385734552641&as=2025-01-07-T00%3A00%3A00Z&ae=2025-01-11-T00%3A00%3A00Z&l=Reference_Labels_15m,Coastlines_15m,VIIRS_NOAA20_Thermal_Anomalies_375m_Day,VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&aa=true&ab=on&t=2025-01-07-T00%3A00%3A00Z"
+        },
+        {
+          "description": "step003.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-123.99732658106109,30.905761756068138,-114.34870564812093,35.26385734552641&z=4&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L3_Ozone_Profile_Troposphere_Column,TEMPO_L3_Ozone_UV_Aerosol_Index,TEMPO_L3_NO2_Vertical_Column_Troposphere,VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&t=2025-01-08-T21%3A00%3A59Z"
+        },
+        {
+          "description": "step004.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-123.99732658106109,30.905761756068138,-114.34870564812093,35.26385734552641&z=4&ias=true&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L3_Ozone_Profile_Troposphere_Column(hidden),TEMPO_L3_Ozone_UV_Aerosol_Index,TEMPO_L3_NO2_Vertical_Column_Troposphere(hidden),VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&l1=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L3_Ozone_Profile_Troposphere_Column(hidden),TEMPO_L3_Ozone_UV_Aerosol_Index(hidden),TEMPO_L3_NO2_Vertical_Column_Troposphere,VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg1=true&ca=true&cv=59&t=2025-01-09-T21%3A00%3A59Z&t1=2025-01-09-T21%3A00%3A59Z"
+        },
+        {
+          "description": "step005.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-146.89909193987947,13.982516173478295,-54.50005713431138,55.71737433145548&z=4&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L3_Ozone_Profile_Troposphere_Column(hidden),TEMPO_L3_Ozone_UV_Aerosol_Index(hidden),TEMPO_L3_NO2_Vertical_Column_Troposphere,VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&t=2025-01-09-T18%3A00%3A59Z"
+        },
+        {
+          "description": "step006.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-159.46760098107058,11.296700718755108,-49.471290175339135,60.97990833058759&z=4&i=4&as=2025-01-09-T13%3A00%3A00Z&ae=2025-01-09-T23%3A00%3A00Z&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L3_Ozone_Profile_Troposphere_Column(hidden),TEMPO_L3_Ozone_UV_Aerosol_Index(hidden),TEMPO_L3_NO2_Vertical_Column_Troposphere,VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&ab=on&t=2025-01-09-T13%3A00%3A59Z"
+        },
+        {
+          "description": "step007.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-160.80314618507333,12.423893388593328,-77.03548506456379,50.26012687789912&z=4&i=5&ics=true&ici=5&icd=10&as=2025-01-16-T16%3A00%3A00Z&ae=2025-01-16-T16%3A50%3A00Z&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule(count=1),VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&al=true&ab=on&t=2025-01-16-T16%3A00%3A59Z"
+        },
+        {
+          "description": "step008.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-160.80314618507333,12.423893388593328,-77.03548506456379,50.26012687789912&z=4&i=5&ics=true&ici=5&icd=10&as=2025-01-16-T18%3A00%3A00Z&ae=2025-01-16-T18%3A50%3A00Z&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule(count=1),VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&al=true&ab=on&t=2025-01-16-T18%3A00%3A59Z"
+        },
+        {
+          "description": "step009.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-160.80314618507333,12.423893388593328,-77.03548506456379,50.26012687789912&z=4&i=5&ics=true&ici=5&icd=10&as=2025-01-16-T20%3A00%3A00Z&ae=2025-01-16-T20%3A50%3A00Z&l=VIIRS_NOAA20_Thermal_Anomalies_375m_Day,Reference_Labels_15m,Coastlines_15m,TEMPO_L2_NO2_Vertical_Column_Troposphere_Granule(count=1),VIIRS_NOAA20_CorrectedReflectance_TrueColor&lg=true&al=true&ab=on&t=2025-01-16-T20%3A00%3A59Z"
+        },
+        {
+          "description": "step010.html",
+          "transition": {
+            "element": "",
+            "action": ""
+          },
+          "stepLink": "v=-119.39709171214199,33.61732834329404,-117.29769150715069,34.565586839246&l=Reference_Labels_15m,Coastlines_15m,VIIRS_NOAA20_Thermal_Anomalies_375m_Day(hidden),NOAA_2025_ERI_WMTS,VIIRS_NOAA20_CorrectedReflectance_TrueColor(hidden)&lg=true&t=2025-01-09-T04%3A20%3A59Z"
+        }
+      ]
+    }
+  }
+}
