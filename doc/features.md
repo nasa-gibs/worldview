@@ -8,6 +8,19 @@ CGI files. Next, enable these features in your configuration file.
 
 By default during the build process we try to fetch images of layers from our Snapshots application to show as previews in the layer picker component.  However, this will only work for layers that are present in NASA GIBS (Global Imagery Browse Services).  If you are serving your own layers, you will likely wish to disable this feature by setting `"previewSnapshots": false` in `config/default/common/features.json`.
 
+## Skipping Layer Metadata
+
+During the build process, Worldview fetches imagery layer metadata from the GIBS Layer Metadata API (see `vismetadata.url` in `config/default/common/features.json`) for every layer in the layer order. By default a fixed set of layers that do not exist in GIBS is skipped and won't be fetched. If you are serving your own layers, you can skip additional layers by adding their IDs to the `vismetadata.skipLayers` array:
+
+```
+"vismetadata": {
+    "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
+    "skipLayers": ["your_internal_layer"]
+}
+```
+
+Layers listed here are skipped in addition to the default set, so existing behavior is preserved.
+
 ## Natural Events
 
 This feature provides natural events queried by Earth Observatory Natural Event Tracker (EONET) by default. To enable, edit `config/default/common/features.json` and set:
