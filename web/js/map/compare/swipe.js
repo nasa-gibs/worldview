@@ -197,13 +197,16 @@ export default class Swipe {
     this.map = olMap;
     this.getSwipeOffset = getSwipeOffset;
     percentSwipe = valueOverride / 100;
-    this.create(store);
-    window.addEventListener('resize', () => {
+    // Stable handler reference so create()/destroy() add and remove the same
+    // listener — previously this was an anonymous fn that could never be removed,
+    // leaking one window 'resize' listener per destroy()/create() cycle.
+    this.onResize = () => {
       if (document.querySelector('.ab-swipe-line')) {
         this.destroy();
         this.create(store);
       }
-    });
+    };
+    this.create(store);
   }
 
   create(store) {
@@ -212,10 +215,12 @@ export default class Swipe {
     this.dateA = dateA;
     this.dateB = dateB;
     line = addLineOverlay(this.map, this.dateA, this.dateB, this.updateExtents);
+    window.addEventListener('resize', this.onResize);
     this.update(store);
   }
 
   destroy = () => {
+    window.removeEventListener('resize', this.onResize);
     mapCase.removeChild(line);
     lodashEach(layersSideA, (layer) => {
       layer.un('prerender', this.setClipMaskA);
