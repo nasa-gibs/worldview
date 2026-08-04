@@ -67,6 +67,9 @@ function TileMeasurement({ ui }) {
   // #4 Loop through layers and dates to find the first date that satisfies full imagery thresholds
   const findFullImageryDate = async (layers, dates) => {
     console.log('Date range found... Finding date with satisfactory imagery...');
+    const firstLayerWithBestDate = findBestDate(layers, bestDates);
+    if (firstLayerWithBestDate) dates.push(firstLayerWithBestDate);
+
     for (let i = 0; i < dates.length; i += 1) {
       let layersMeetingThresholdForDate = 0;
       console.log(`-----Loop #${i + 1} for date ${dates[i]}-----`);
