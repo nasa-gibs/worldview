@@ -1,0 +1,1 @@
+Extreme drought and strong winds caused extremely dry vegetation to be readily burned.
