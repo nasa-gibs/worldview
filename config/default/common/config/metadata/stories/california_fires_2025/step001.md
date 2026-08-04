@@ -1,0 +1,1 @@
+In January 2025, southern California experienced one of the worst wildfire disasters in California's recorded history.
