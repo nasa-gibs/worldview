@@ -67,9 +67,10 @@ const outputFile = argv.layerMetadata
 const metadataConfig = features.features.vismetadata
 const url = metadataConfig.url
 const daacMap = metadataConfig.daacMap || {}
+const configuredSkipLayers = metadataConfig.skipLayers || []
 
 // These are alias or otherwise layers that don't exist in GIBS
-const skipLayers = [
+const defaultSkipLayers = [
   'Land_Water_Map',
   'Land_Mask',
   'World_Database_on_Protected_Areas',
@@ -124,6 +125,8 @@ const skipLayers = [
   'NISAR_L2_Geocoded_Polarimetric_Covariance_12Day'
 
 ]
+
+const skipLayers = defaultSkipLayers.concat(configuredSkipLayers)
 
 // NOTE: Only using these properties at this time
 const useKeys = [
