@@ -737,6 +737,7 @@ function createMapRestore(map, extent, abortSignal, tileMatrixID, onerror) {
   const originalStyleHeight = mapElement.style.height;
 
   const restoreLayers = toggleHighResTileGrids(map, abortSignal, tileMatrixID, onerror);
+  restoreLayers();
 
   return () => {
     // Restore original map size
