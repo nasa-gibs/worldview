@@ -76,6 +76,7 @@ function ImageDownloadPanel(props) {
   const [isSnapshotInProgress, setIsSnapshotInProgress] = useState(false);
   const [snapshotStatus, setSnapshotStatus] = useState('');
   const abortControllerRef = useRef(null);
+  const dimensionsRef = useRef(null);
 
   const onCancelSnapshot = () => {
     abortControllerRef.current?.abort();
@@ -155,6 +156,7 @@ function ImageDownloadPanel(props) {
 
     const timeout = setTimeout(onCancelSnapshot, 180_000);
     try {
+      dimensionsRef.current = getDimensions(map, lonlats, currResolution);
       setSnapshotStatus('Creating snapshot...');
       const startTime = Date.now();
       await snapshot(snapshotOptions);
@@ -192,6 +194,7 @@ function ImageDownloadPanel(props) {
       onProgressChange(false);
       abortControllerRef.current = null;
       changeResolution(currResolution);
+      dimensionsRef.current = null;
     }
   };
 
@@ -271,7 +274,7 @@ function ImageDownloadPanel(props) {
   };
 
   const { crs } = projection.selected;
-  const dimensions = getDimensions(map, lonlats, currResolution);
+  const dimensions = dimensionsRef.current || getDimensions(map, lonlats, currResolution);
   const { height } = dimensions;
   const { width } = dimensions;
   const filetypeSelect = renderFileTypeSelect();
