@@ -12,7 +12,6 @@
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_Aerosol_Type_Deep_Blue_Land_Ocean",
-                        "VIIRS_SNPP_Aerosol_Type_Deep_Blue_Best_Estimate",
                         "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 },
@@ -23,7 +22,6 @@
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Land_Ocean",
-                        "VIIRS_NOAA20_Aerosol_Type_Deep_Blue_Best_Estimate",
                         "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
