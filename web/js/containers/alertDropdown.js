@@ -1,19 +1,32 @@
-import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import {
+  useState, useRef, useEffect, useCallback,
+} from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Alerts from './alerts';
 
 export default function AlertDropdown(isTourActive) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [notifications, setNotifications] = useState(0);
   const containerRef = useRef(null);
-  const notifications = containerRef?.current?.children.length;
+  const observerRef = useRef(null);
+
+  const updateNotifications = useCallback(() => {
+    setNotifications(containerRef.current?.children.length || 0);
+  }, []);
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node) return;
+    updateNotifications();
+    observerRef.current = new MutationObserver(updateNotifications);
+    observerRef.current.observe(node, { childList: true });
+    return () => observerRef.current?.disconnect();
+  }, []);
+
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const { isTourActive: tourActive } = isTourActive;
-  const isDistractionFreeModeActive = useSelector((state) => state.ui.isDistractionFreeModeActive);
-  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
 
   return (
-    <div className="wv-alert-dropdown" hidden={isDistractionFreeModeActive || tourActive || isMobile}>
+    <div className="wv-alert-dropdown">
       <button type="button" hidden={notifications <= 1} onClick={toggle}>
         <FontAwesomeIcon
           icon="exclamation-triangle"
