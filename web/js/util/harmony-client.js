@@ -9,29 +9,31 @@
  */
 
 const TOKEN_KEY = 'worldview_harmony_bearer_token';
-let _token = null;
+let harmonyToken = null;
 
-function _loadToken() {
-  if (_token !== null) return _token;
-  try { _token = sessionStorage.getItem(TOKEN_KEY) || null; } catch {}
-  return _token;
+/* eslint-disable no-restricted-globals */
+function loadToken() {
+  if (harmonyToken !== null) return harmonyToken;
+  try { harmonyToken = sessionStorage.getItem(TOKEN_KEY) || null; } catch {}
+  return harmonyToken;
 }
 
 export function setHarmonyToken(token) {
-  _token = token ? token.trim() : null;
+  harmonyToken = token ? token.trim() : null;
   try {
-    if (_token) sessionStorage.setItem(TOKEN_KEY, _token);
+    if (harmonyToken) sessionStorage.setItem(TOKEN_KEY, harmonyToken);
     else sessionStorage.removeItem(TOKEN_KEY);
   } catch {}
 }
+/* eslint-enable no-restricted-globals */
 
-export function getHarmonyToken() { return _loadToken(); }
-export function hasHarmonyToken() { return !!_loadToken(); }
+export function getHarmonyToken() { return loadToken(); }
+export function hasHarmonyToken() { return !!loadToken(); }
 
-function _headers(json = true) {
+function headers(json = true) {
   const h = {};
   if (json) h.Accept = 'application/json';
-  const t = _loadToken();
+  const t = loadToken();
   if (t) h.Authorization = `Bearer ${t}`;
   return h;
 }
@@ -61,7 +63,7 @@ export async function submitHarmonyRequest(baseUrl, collectionId, shortname, dat
   url.searchParams.set('format', 'image/png');
   variables.forEach((v) => url.searchParams.append('variable', v));
 
-  const res = await fetch(url.toString(), { method: 'GET', headers: _headers() });
+  const res = await fetch(url.toString(), { method: 'GET', headers: headers() });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`Harmony request failed: ${res.status} — ${body}`);
@@ -80,8 +82,10 @@ export async function submitHarmonyRequest(baseUrl, collectionId, shortname, dat
 export async function pollHarmonyJob(baseUrl, jobId, onProgress) {
   const statusUrl = `${baseUrl}/jobs/${jobId}`;
   while (true) {
-    await new Promise((r) => setTimeout(r, 1000));
-    const res = await fetch(statusUrl, { headers: _headers() });
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1000);
+    });
+    const res = await fetch(statusUrl, { headers: headers() });
     if (!res.ok) {
       const body = await res.text().catch(() => '');
       throw new Error(`Job status check failed: ${res.status} — ${body}`);
@@ -123,9 +127,12 @@ export async function generateHarmonyTexture(
   let lon0 = 0;
   if (worldFileUrl) {
     try {
-      const wfRes = await fetch(worldFileUrl, { headers: _headers(false) });
+      const wfRes = await fetch(worldFileUrl, { headers: headers(false) });
       if (wfRes.ok) {
-        const lines = (await wfRes.text()).trim().split(/\r?\n/).map(Number);
+        const lines = (await wfRes.text())
+          .trim()
+          .split(/\r?\n/)
+          .map(Number);
         if (lines.length >= 5 && isFinite(lines[4])) lon0 = lines[4];
       }
     } catch {}
@@ -147,7 +154,7 @@ export async function generateHarmonyTexture(
 export async function loadFlowImageData(src, lon0 = 0) {
   let imageSrc = src;
   if (src.startsWith('http')) {
-    const t = _loadToken();
+    const t = loadToken();
     const res = await fetch(src, { headers: t ? { Authorization: `Bearer ${t}` } : {} });
     if (!res.ok) throw new Error(`Image fetch failed: ${res.status}`);
     const blob = await res.blob();

@@ -1376,7 +1376,6 @@ export default function mapLayerBuilder(config, cache, store) {
    * @returns {object} OpenLayers Flow layer
    */
   const createLayerFlow = (def, options, day, state) => {
-    const { proj } = state;
     const {
       id, maxSpeed: flowMaxSpeed,
     } = def;
@@ -1427,11 +1426,11 @@ export default function mapLayerBuilder(config, cache, store) {
         return tileImageCache[cacheKey];
       }
 
-      const wmtsUrl = `${gibsBaseUrl}?SERVICE=WMTS&REQUEST=GetTile`
-        + `&VERSION=1.0.0&LAYER=${gibsLayerId}&STYLE=default`
-        + `&FORMAT=image/png&TILEMATRIXSET=${configMatrixSet.id}`
-        + `&TILEMATRIX=${z}&TILEROW=${y}&TILECOL=${x}`
-        + `&TIME=${dateParam}`;
+      const wmtsUrl = `${gibsBaseUrl}?SERVICE=WMTS&REQUEST=GetTile` +
+        `&VERSION=1.0.0&LAYER=${gibsLayerId}&STYLE=default` +
+        `&FORMAT=image/png&TILEMATRIXSET=${configMatrixSet.id}` +
+        `&TILEMATRIX=${z}&TILEROW=${y}&TILECOL=${x}` +
+        `&TIME=${dateParam}`;
 
       const promise = new Promise((resolve) => {
         const img = new Image();
@@ -1564,7 +1563,7 @@ export default function mapLayerBuilder(config, cache, store) {
         style: { color: flowColorExpression },
       });
       flowLayer.setOpacity(0);
-      
+
       flowLayer.on('postrender', (evt) => {
         if (evt.frameState) {
           evt.frameState.animate = false;
@@ -1574,7 +1573,7 @@ export default function mapLayerBuilder(config, cache, store) {
           map.render();
         }
       });
-      
+
       return flowLayer;
     };
 
@@ -1616,12 +1615,12 @@ export default function mapLayerBuilder(config, cache, store) {
         const oldFlow = currentFlow;
         currentFlow = makeFlow();
         wrapper.getLayers().push(currentFlow);
-        
+
         if (warmUpId !== null) {
           cancelAnimationFrame(warmUpId);
           warmUpId = null;
         }
-        
+
         currentFlow.once('prerender', () => {
           let frames = 0;
           const doWarmUp = () => {
