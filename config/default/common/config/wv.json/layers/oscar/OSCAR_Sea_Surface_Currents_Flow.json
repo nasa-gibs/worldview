@@ -1,0 +1,25 @@
+{
+  "layers": {
+    "OSCAR_Sea_Surface_Currents_Flow": {
+      "id": "OSCAR_Sea_Surface_Currents_Flow",
+      "type": "harmony-flow",
+      "title": "OSCAR Sea Surface Currents (Animated Flow)",
+      "subtitle": "PO.DAAC / JPL",
+      "description": "oscar/OSCAR_Sea_Surface_Currents_Flow",
+      "tags": "podaac PO.DAAC OSCAR ocean currents flow animated particle velocity",
+      "group": "overlays",
+      "layergroup": "Sea Surface Currents",
+      "period": "daily",
+      "startDate": "2021-01-01T00:00:00Z",
+      "wrapadjacentdays": true,
+      "maxSpeed": 2.0,
+      "opacity": 1.0,
+      "disableGIF": true,
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}

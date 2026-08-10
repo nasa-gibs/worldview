@@ -441,6 +441,16 @@
               }
             }
           }
+        },
+        "opacity": {
+          "description": "Layer opacity value between 0 and 1",
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "maxSpeed": {
+          "description": "Maximum speed for color scaling (m/s)",
+          "type": "number"
         }
       },
       "allOf": [
@@ -494,6 +504,7 @@
       "enum": [
         "composite:wmts",
         "granule",
+        "harmony-flow",
         "indexedVector",
         "titiler",
         "vector",
