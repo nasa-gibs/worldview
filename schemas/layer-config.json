@@ -451,6 +451,26 @@
         "maxSpeed": {
           "description": "Maximum speed for color scaling (m/s)",
           "type": "number"
+        },
+        "minU": {
+          "description": "Minimum eastward velocity component for Flow layer encoding (m/s)",
+          "type": "number"
+        },
+        "maxU": {
+          "description": "Maximum eastward velocity component for Flow layer encoding (m/s)",
+          "type": "number"
+        },
+        "minV": {
+          "description": "Minimum northward velocity component for Flow layer encoding (m/s)",
+          "type": "number"
+        },
+        "maxV": {
+          "description": "Maximum northward velocity component for Flow layer encoding (m/s)",
+          "type": "number"
+        },
+        "matrixSet": {
+          "description": "WMTS tile matrix set identifier",
+          "type": "string"
         }
       },
       "allOf": [

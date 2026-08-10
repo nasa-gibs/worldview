@@ -15,9 +15,16 @@
       "maxSpeed": 2.0,
       "opacity": 1.0,
       "disableGIF": true,
+      "layer": "GHRSST_L4_MUR25_Sea_Surface_Temperature",
+      "matrixSet": "2km",
+      "minU": -2.92,
+      "maxU": 2.93,
+      "minV": -2.81,
+      "maxV": 2.69,
       "projections": {
         "geographic": {
-          "source": "GIBS:geographic"
+          "source": "GIBS:geographic",
+          "matrixSet": "2km"
         }
       }
     }

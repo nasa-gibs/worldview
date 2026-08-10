@@ -1377,19 +1377,23 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const createLayerFlow = (def, options, day, state) => {
     const {
-      id, maxSpeed: flowMaxSpeed,
+      id, maxSpeed: flowMaxSpeed, layer, matrixSet, source,
+      minU, maxU, minV, maxV,
     } = def;
     const { date } = options;
 
-    // OSCAR dataset encoding parameters
-    // These define how float velocities were mapped to 0-255 PNG channels
-    const source = 'GIBS:geographic';
-    const matrixSet = '2km';
-    const gibsLayerName = 'GHRSST_L4_MUR25_Sea_Surface_Temperature';
-    const minU = -2.92;
-    const maxU = 2.93;
-    const minV = -2.81;
-    const maxV = 2.69;
+    // Validate required configuration
+    if (!layer) {
+      throw new Error(`${id}: Missing 'layer' property in layer configuration`);
+    }
+    if (!matrixSet) {
+      throw new Error(`${id}: Missing 'matrixSet' property in layer configuration`);
+    }
+    if (minU === undefined || maxU === undefined || minV === undefined || maxV === undefined) {
+      throw new Error(`${id}: Missing velocity encoding parameters (minU/maxU/minV/maxV)`);
+    }
+
+    const gibsLayerName = layer;
 
     const configSource = config.sources[source];
     if (!configSource) {
