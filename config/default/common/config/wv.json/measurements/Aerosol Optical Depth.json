@@ -99,9 +99,7 @@
                         "VIIRS_SNPP_AOD_Dark_Target_Land_Ocean",
                         "VIIRS_SNPP_Angstrom_Exponent_Dark_Target_Ocean",
                         "VIIRS_SNPP_AOD_Deep_Blue_Land_Ocean",
-                        "VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate",
                         "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Land_Ocean",
-                        "VIIRS_SNPP_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "OrbitTracks_Suomi_NPP_Ascending"
                       ]
                 },
@@ -124,9 +122,7 @@
                         "VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean",
                         "VIIRS_NOAA20_Angstrom_Exponent_Dark_Target_Ocean",
                         "VIIRS_NOAA20_AOD_Deep_Blue_Land_Ocean",
-                        "VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate",
                         "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Land_Ocean",
-                        "VIIRS_NOAA20_Angstrom_Exponent_Deep_Blue_Best_Estimate",
                         "OrbitTracks_NOAA-20_Ascending"
                       ]
                 },
