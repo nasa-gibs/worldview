@@ -63,13 +63,21 @@ const processTileLayer = (layer, map, view) => {
   let emptyTiles = 0; // 4
   const otherTileStates = [];
 
-  const tileCoordFunction = async (tileCoord) => {
-    const tile = source.getTile(tileCoord[0], tileCoord[1], tileCoord[2], 1, sourceProjection);
-    const tileState = tile.getState();
+  const renderer = layer.getRenderer();
+  const tileCache = renderer && renderer.getTileCache ? renderer.getTileCache() : null;
+  const tileByCoord = new Map();
+  if (tileCache) {
+    tileCache.forEach((tile) => {
+      tileByCoord.set(tile.getTileCoord().join('/'), tile);
+    });
+  }
+
+  const tileCoordFunction = (tileCoord) => {
     expectedTileCount += 1;
+    const tile = tileByCoord.get(tileCoord.join('/'));
+    const tileState = tile ? tile.getState() : 0;
     if (tileState === 2) {
-      // eslint-disable-next-line no-underscore-dangle
-      const image = tile.image_;
+      const image = tile.getImage();
       const isTileImageValid = checkTileImage(image);
       if (!isTileImageValid) {
         loadedTileCount += 1;

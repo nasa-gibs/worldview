@@ -16,7 +16,7 @@
       "type": "wmts",
       "format": "image/png",
       "period": "daily",
-      "startDate": "2026-06-17T00:00:00Z",
+      "startDate": "2025-10-29T00:00:00Z",
       "daynight": ["day", "night"],
       "conceptIds": [
         {

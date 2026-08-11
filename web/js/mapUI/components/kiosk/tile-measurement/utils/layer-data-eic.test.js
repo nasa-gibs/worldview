@@ -174,104 +174,104 @@ describe('bestDates', () => {
   });
 
   describe('individual layer best dates', () => {
-    it('GOES-East_ABI_GeoColor has date 2023-10-30T23:50:00.000Z', () => {
-      expect(bestDates['GOES-East_ABI_GeoColor'].date).toBe('2023-10-30T23:50:00.000Z');
+    it('GOES-East_ABI_GeoColor has date 2026-07-27T18:29:00.000Z', () => {
+      expect(bestDates['GOES-East_ABI_GeoColor'].date).toBe('2026-07-27T18:29:00.000Z');
     });
 
-    it('GOES-West_ABI_GeoColor has date 2023-10-30T23:50:00.000Z', () => {
-      expect(bestDates['GOES-West_ABI_GeoColor'].date).toBe('2023-10-30T23:50:00.000Z');
+    it('GOES-West_ABI_GeoColor has date 2026-07-27T18:41:00.000Z', () => {
+      expect(bestDates['GOES-West_ABI_GeoColor'].date).toBe('2026-07-27T18:41:00.000Z');
     });
 
-    it('Himawari_AHI_Band3_Red_Visible_1km has date 2023-10-30T23:50:00.000Z', () => {
-      expect(bestDates.Himawari_AHI_Band3_Red_Visible_1km.date).toBe('2023-10-30T23:50:00.000Z');
+    it('Himawari_AHI_Band3_Red_Visible_1km has date 2026-07-27T18:41:00.000Z', () => {
+      expect(bestDates.Himawari_AHI_Band3_Red_Visible_1km.date).toBe('2026-07-27T18:41:00.000Z');
     });
 
-    it('MODIS_Terra_CorrectedReflectance_TrueColor has date 2023-10-29', () => {
-      expect(bestDates.MODIS_Terra_CorrectedReflectance_TrueColor.date).toBe('2023-10-29');
+    it('MODIS_Terra_CorrectedReflectance_TrueColor has date 2026-07-27', () => {
+      expect(bestDates.MODIS_Terra_CorrectedReflectance_TrueColor.date).toBe('2026-07-27');
     });
 
-    it('VIIRS_SNPP_DayNightBand_At_Sensor_Radiance has date 2023-10-30', () => {
-      expect(bestDates.VIIRS_SNPP_DayNightBand_At_Sensor_Radiance.date).toBe('2023-10-30');
+    it('VIIRS_SNPP_DayNightBand_At_Sensor_Radiance has date 2026-07-27', () => {
+      expect(bestDates.VIIRS_SNPP_DayNightBand_At_Sensor_Radiance.date).toBe('2026-07-27');
     });
 
-    it('VIIRS_SNPP_CorrectedReflectance_TrueColor has date 2023-10-30', () => {
-      expect(bestDates.VIIRS_SNPP_CorrectedReflectance_TrueColor.date).toBe('2023-10-30');
+    it('VIIRS_SNPP_CorrectedReflectance_TrueColor has date 2026-07-27', () => {
+      expect(bestDates.VIIRS_SNPP_CorrectedReflectance_TrueColor.date).toBe('2026-07-27');
     });
 
-    it('IMERG_Precipitation_Rate has date 2023-10-30', () => {
-      expect(bestDates.IMERG_Precipitation_Rate.date).toBe('2023-10-30');
+    it('IMERG_Precipitation_Rate has date 2026-07-26', () => {
+      expect(bestDates.IMERG_Precipitation_Rate.date).toBe('2026-07-26');
     });
 
-    it('GHRSST_L4_MUR_Sea_Surface_Temperature has date 2023-10-30', () => {
-      expect(bestDates.GHRSST_L4_MUR_Sea_Surface_Temperature.date).toBe('2023-10-30');
+    it('GHRSST_L4_MUR_Sea_Surface_Temperature has date 2026-07-26', () => {
+      expect(bestDates.GHRSST_L4_MUR_Sea_Surface_Temperature.date).toBe('2026-07-26');
     });
 
-    it('MODIS_Aqua_Land_Surface_Temp_Day has date 2023-10-30', () => {
-      expect(bestDates.MODIS_Aqua_Land_Surface_Temp_Day.date).toBe('2023-10-30');
+    it('MODIS_Aqua_Land_Surface_Temp_Day has date 2026-07-26', () => {
+      expect(bestDates.MODIS_Aqua_Land_Surface_Temp_Day.date).toBe('2026-07-26');
     });
 
-    it('MODIS_Aqua_CorrectedReflectance_TrueColor has date 2023-10-29', () => {
-      expect(bestDates.MODIS_Aqua_CorrectedReflectance_TrueColor.date).toBe('2023-10-29');
+    it('MODIS_Aqua_CorrectedReflectance_TrueColor has date 2026-07-26', () => {
+      expect(bestDates.MODIS_Aqua_CorrectedReflectance_TrueColor.date).toBe('2026-07-26');
     });
 
-    it('OMI_Nitrogen_Dioxide_Tropo_Column has date 2023-10-27', () => {
-      expect(bestDates.OMI_Nitrogen_Dioxide_Tropo_Column.date).toBe('2023-10-27');
+    it('OMI_Nitrogen_Dioxide_Tropo_Column has date 2026-07-20', () => {
+      expect(bestDates.OMI_Nitrogen_Dioxide_Tropo_Column.date).toBe('2026-07-20');
     });
 
-    it('VIIRS_SNPP_AOD_Dark_Target_Land_Ocean has date 2023-10-29', () => {
-      expect(bestDates.VIIRS_SNPP_AOD_Dark_Target_Land_Ocean.date).toBe('2023-10-29');
+    it('VIIRS_SNPP_AOD_Dark_Target_Land_Ocean has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_SNPP_AOD_Dark_Target_Land_Ocean.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate has date 2023-10-30', () => {
-      expect(bestDates.VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate.date).toBe('2023-10-30');
+    it('VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_SNPP_AOT_Deep_Blue_Best_Estimate.date).toBe('2026-07-26');
     });
 
-    it('AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night has date 2023-10-17', () => {
-      expect(bestDates.AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night.date).toBe('2023-10-17');
+    it('AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night has date 2026-07-20', () => {
+      expect(bestDates.AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Night.date).toBe('2026-07-20');
     });
 
-    it('AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day has date 2023-10-17', () => {
-      expect(bestDates.AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day.date).toBe('2023-10-17');
+    it('AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day has date 2026-07-19', () => {
+      expect(bestDates.AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day.date).toBe('2026-07-19');
     });
 
-    it('VIIRS_NOAA20_CorrectedReflectance_TrueColor has date 2023-10-30', () => {
-      expect(bestDates.VIIRS_NOAA20_CorrectedReflectance_TrueColor.date).toBe('2023-10-30');
+    it('VIIRS_NOAA20_CorrectedReflectance_TrueColor has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_NOAA20_CorrectedReflectance_TrueColor.date).toBe('2026-07-26');
     });
 
-    it('CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly has date 2023-10-30', () => {
-      expect(bestDates.CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly.date).toBe('2023-10-30');
+    it('CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly has date 2018-10-31', () => {
+      expect(bestDates.CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly.date).toBe('2018-10-31');
     });
 
-    it('TEMPO_L3_NO2_Vertical_Column_Troposphere has date 2024-06-03T17:00:00.000Z', () => {
-      expect(bestDates.TEMPO_L3_NO2_Vertical_Column_Troposphere.date).toBe('2024-06-03T17:00:00.000Z');
+    it('TEMPO_L3_NO2_Vertical_Column_Troposphere has date 2026-07-27T17:13:00.000Z', () => {
+      expect(bestDates.TEMPO_L3_NO2_Vertical_Column_Troposphere.date).toBe('2026-07-27T17:13:00.000Z');
     });
 
-    it('TEMPO_L3_Ozone_Column_Amount has date 2024-06-03T17:00:00.000Z', () => {
-      expect(bestDates.TEMPO_L3_Ozone_Column_Amount.date).toBe('2024-06-03T17:00:00.000Z');
+    it('TEMPO_L3_Ozone_Column_Amount has date 2026-07-27T17:13:00.000Z', () => {
+      expect(bestDates.TEMPO_L3_Ozone_Column_Amount.date).toBe('2026-07-27T17:13:00.000Z');
     });
 
-    it('VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance has date 2024-10-01', () => {
-      expect(bestDates.VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance.date).toBe('2024-10-01');
+    it('VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_NOAA20_DayNightBand_AtSensor_M15 has date 2024-10-01', () => {
-      expect(bestDates.VIIRS_NOAA20_DayNightBand_AtSensor_M15.date).toBe('2024-10-01');
+    it('VIIRS_NOAA20_DayNightBand_AtSensor_M15 has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_NOAA20_DayNightBand_AtSensor_M15.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate has date 2024-10-01', () => {
-      expect(bestDates.VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate.date).toBe('2024-10-01');
+    it('VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean has date 2024-10-01', () => {
-      expect(bestDates.VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean.date).toBe('2024-10-01');
+    it('VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_NOAA21_CorrectedReflectance_TrueColor has date 2024-10-01', () => {
-      expect(bestDates.VIIRS_NOAA21_CorrectedReflectance_TrueColor.date).toBe('2024-10-01');
+    it('VIIRS_NOAA21_CorrectedReflectance_TrueColor has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_NOAA21_CorrectedReflectance_TrueColor.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_SNPP_NDVI_8Day has date 2025-08-24', () => {
-      expect(bestDates.VIIRS_SNPP_NDVI_8Day.date).toBe('2025-08-24');
+    it('VIIRS_SNPP_NDVI_8Day has date 2026-07-26', () => {
+      expect(bestDates.VIIRS_SNPP_NDVI_8Day.date).toBe('2026-07-26');
     });
   });
 });

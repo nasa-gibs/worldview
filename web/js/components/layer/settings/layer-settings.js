@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { each as lodashEach, get as lodashGet } from 'lodash';
 import {
@@ -54,46 +54,51 @@ import {
 } from '../../../modules/layers/actions';
 import ClassificationToggle from './classification-toggle';
 
-class LayerSettings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIndex: 0,
-      allowGranuleReorder: false,
-    };
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = 120;
-    this.canvas.height = 10;
-  }
+function LayerSettings(props) {
+  const {
+    clearCustomPalette,
+    getPalette,
+    paletteOrder,
+    getDefaultLegend,
+    getCustomPalette,
+    globalTemperatureUnit,
+    setCustomPalette,
+    palettesTranslate,
+    groupName,
+    setThresholdRange,
+    layer,
+    toggleClassification,
+    toggleAllClassifications,
+    screenHeight,
+    getPaletteLegends,
+    getPaletteLegend,
+    granuleOptions,
+    resetGranuleLayerDates,
+    updateGranuleLayerOptions,
+    setOpacity,
+    customPalettesIsActive,
+    palettedAllowed,
+    zot,
+  } = props;
 
-  componentDidMount() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [allowGranuleReorder, setAllowGranuleReorder] = useState(false);
+
+  const canvasRef = useRef(document.createElement('canvas'));
+
+  useEffect(() => {
+    canvasRef.current.width = 120;
+    canvasRef.current.height = 10;
     const { ALLOW_GRANULE_REORDER } = safeLocalStorage.keys;
-    const allowGranuleReorder = safeLocalStorage.getItem(ALLOW_GRANULE_REORDER);
-    this.setState({ allowGranuleReorder });
-  }
+    const allowGranuleReorderStored = safeLocalStorage.getItem(ALLOW_GRANULE_REORDER);
+    setAllowGranuleReorder(allowGranuleReorderStored);
+  }, []);
 
   /**
    * Render multicolormap layers inside a tab pane
    * @param {object} paletteLegends | legend object
    */
-  renderMultiColormapCustoms(paletteLegends) {
-    const {
-      clearCustomPalette,
-      getPalette,
-      paletteOrder,
-      getDefaultLegend,
-      getCustomPalette,
-      globalTemperatureUnit,
-      setCustomPalette,
-      palettesTranslate,
-      groupName,
-      setThresholdRange,
-      layer,
-      toggleClassification,
-      toggleAllClassifications,
-      screenHeight,
-    } = this.props;
-    const { activeIndex } = this.state;
+  function renderMultiColormapCustoms(paletteLegends) {
     const navElements = [];
     const paneElements = [];
     lodashEach(paletteLegends, (legend, i) => {
@@ -104,7 +109,7 @@ class LayerSettings extends React.Component {
           key={`${legend.id}nav`}
           className={`settings-customs-title ${activeClass}${dualStr}`}
         >
-          <NavLink onClick={() => this.setState({ activeIndex: i })}>
+          <NavLink onClick={() => setActiveIndex(i)}>
             {legend.title}
           </NavLink>
         </NavItem>
@@ -172,7 +177,7 @@ class LayerSettings extends React.Component {
               palettesTranslate={palettesTranslate}
               activePalette={palette.custom || '__default'}
               layer={layer}
-              canvas={this.canvas}
+              canvas={canvasRef.current}
               index={i}
               paletteOrder={paletteOrder}
             />
@@ -194,25 +199,7 @@ class LayerSettings extends React.Component {
   /**
    * Render Opacity, threshold, and custom palette options
    */
-  renderCustomPalettes() {
-    const {
-      setCustomPalette,
-      clearCustomPalette,
-      getDefaultLegend,
-      getCustomPalette,
-      globalTemperatureUnit,
-      palettesTranslate,
-      getPaletteLegends,
-      getPalette,
-      getPaletteLegend,
-      setThresholdRange,
-      paletteOrder,
-      groupName,
-      layer,
-      toggleClassification,
-      toggleAllClassifications,
-      screenHeight,
-    } = this.props;
+  function renderCustomPalettes() {
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
     const len = paletteLegends.length;
@@ -222,7 +209,7 @@ class LayerSettings extends React.Component {
     const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
     const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
     if (len > 1) {
-      return this.renderMultiColormapCustoms(paletteLegends);
+      return renderMultiColormapCustoms(paletteLegends);
     } if (legend.type === 'classification' && legend.colors.length > 1) {
       return (
         <ClassificationToggle
@@ -265,7 +252,7 @@ class LayerSettings extends React.Component {
           palettesTranslate={palettesTranslate}
           activePalette={palette.custom || '__default'}
           layer={layer}
-          canvas={this.canvas}
+          canvas={canvasRef.current}
           groupName={groupName}
           index={0}
           paletteOrder={paletteOrder}
@@ -277,15 +264,7 @@ class LayerSettings extends React.Component {
   /**
    * Render Granule count slider and granule date list settings (if granule layer)
    */
-  renderGranuleSettings = () => {
-    const {
-      layer,
-      granuleOptions,
-      screenHeight,
-      resetGranuleLayerDates,
-      updateGranuleLayerOptions,
-    } = this.props;
-    const { allowGranuleReorder } = this.state;
+  const renderGranuleSettings = () => {
     const { count, dates, granulePlatform } = granuleOptions;
     return dates
       ? (
@@ -312,47 +291,38 @@ class LayerSettings extends React.Component {
       : null;
   };
 
-  render() {
-    let renderCustomizations;
-    const {
-      setOpacity,
-      customPalettesIsActive,
-      layer,
-      palettedAllowed,
-      zot,
-    } = this.props;
-    const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
-    const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
-    const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
-    const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
-    const layerGroup = layer.layergroup;
+  let renderCustomizations;
+  const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
+  const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
+  const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+  const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
+  const layerGroup = layer.layergroup;
 
-    if (layer.type !== 'vector') {
-      renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
-        ? this.renderCustomPalettes()
-        : '';
-    } else if (!layer.disableCustomPalettes && layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
-      // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
-      // Reference (MGRS/HLS Grid) has no need for palettes
-      renderCustomizations = this.renderCustomPalettes();
-    }
-
-    if (!layer.id) return '';
-    return (
-      <>
-        <Opacity
-          start={Math.ceil(layer.opacity * 100)}
-          setOpacity={setOpacity}
-          layer={layer}
-        />
-        {this.renderGranuleSettings()}
-        {renderCustomizations}
-        {titilerLayer && <BandSelection layer={layer} />}
-        {granuleMetadata && <ImagerySearch layer={layer} /> }
-        {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
-      </>
-    );
+  if (layer.type !== 'vector') {
+    renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
+      ? renderCustomPalettes()
+      : '';
+  } else if (!layer.disableCustomPalettes && layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
+    // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
+    // Reference (MGRS/HLS Grid) has no need for palettes
+    renderCustomizations = renderCustomPalettes();
   }
+
+  if (!layer.id) return '';
+  return (
+    <>
+      <Opacity
+        start={Math.ceil(layer.opacity * 100)}
+        setOpacity={setOpacity}
+        layer={layer}
+      />
+      {renderGranuleSettings()}
+      {renderCustomizations}
+      {titilerLayer && <BandSelection layer={layer} />}
+      {granuleMetadata && <ImagerySearch layer={layer} /> }
+      {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
+    </>
+  );
 }
 
 function mapStateToProps(state, ownProps) {
