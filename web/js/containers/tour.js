@@ -368,7 +368,7 @@ function Tour(props) {
         isOpen
         timeout={10000}
         onDismiss={endTourProp}
-        message="To view these tours again, click the 'Explore @NAME@' link in the \u201ci\u201d menu."
+        message="To view these tours again, click the 'Explore @NAME@' link in the 'i' menu."
       />
     );
   }
