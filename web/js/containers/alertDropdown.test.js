@@ -39,21 +39,21 @@ describe('AlertDropdown', () => {
     expect(wrapper).not.toHaveAttribute('hidden');
   });
 
-  it('hides the wrapper when distraction free mode is active', () => {
+  it('does not hide the wrapper when distraction free mode is active', () => {
     mockState = makeState({ ui: { isDistractionFreeModeActive: true } });
     const { container } = render(<AlertDropdown isTourActive={false} />);
-    expect(container.querySelector('.wv-alert-dropdown')).toHaveAttribute('hidden');
+    expect(container.querySelector('.wv-alert-dropdown')).not.toHaveAttribute('hidden');
   });
 
-  it('hides the wrapper when the tour is active', () => {
+  it('does not hide the wrapper when the tour is active', () => {
     const { container } = render(<AlertDropdown isTourActive />);
-    expect(container.querySelector('.wv-alert-dropdown')).toHaveAttribute('hidden');
+    expect(container.querySelector('.wv-alert-dropdown')).not.toHaveAttribute('hidden');
   });
 
-  it('hides the wrapper on mobile devices', () => {
+  it('does not hide the wrapper on mobile devices', () => {
     mockState = makeState({ screenSize: { isMobileDevice: true } });
     const { container } = render(<AlertDropdown isTourActive={false} />);
-    expect(container.querySelector('.wv-alert-dropdown')).toHaveAttribute('hidden');
+    expect(container.querySelector('.wv-alert-dropdown')).not.toHaveAttribute('hidden');
   });
 
   it('renders Alerts inside the alert container', () => {
