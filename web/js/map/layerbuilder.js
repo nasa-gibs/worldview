@@ -1421,13 +1421,17 @@ export default function mapLayerBuilder(config, cache, store) {
     const subdomainMatch = configSource.url.match(/\{([a-z])-([a-z])\}/);
     const subdomains = subdomainMatch
       ? Array.from(
-          { length: subdomainMatch[2].charCodeAt(0) - subdomainMatch[1].charCodeAt(0) + 1 },
-          (_, i) => String.fromCharCode(subdomainMatch[1].charCodeAt(0) + i),
-        )
+        { length: subdomainMatch[2].charCodeAt(0) - subdomainMatch[1].charCodeAt(0) + 1 },
+        (_, i) => String.fromCharCode(subdomainMatch[1].charCodeAt(0) + i),
+      )
       : null;
     const getGibsUrl = (z, x, y) => {
-      const sub = subdomains ? subdomains[((z + x + y) % subdomains.length + subdomains.length) % subdomains.length] : null;
-      return sub ? configSource.url.replace(/\{[a-z]-[a-z]\}/, sub) : configSource.url;
+      const idx = subdomains
+        ? ((z + x + y) % subdomains.length + subdomains.length) % subdomains.length
+        : null;
+      return idx !== null
+        ? configSource.url.replace(/\{[a-z]-[a-z]\}/, subdomains[idx])
+        : configSource.url;
     };
     const gibsLayerId = gibsLayerName || id;
 
