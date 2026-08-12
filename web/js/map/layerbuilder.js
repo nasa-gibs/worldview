@@ -1381,6 +1381,9 @@ export default function mapLayerBuilder(config, cache, store) {
       minU, maxU, minV, maxV,
     } = def;
     const { date } = options;
+    const { proj } = state;
+    const projCrs = proj.selected.crs;
+    const projExtent = proj.selected.maxExtent;
 
     // Validate required configuration
     if (!layer) {
@@ -1415,14 +1418,26 @@ export default function mapLayerBuilder(config, cache, store) {
     const isSubdaily = def.period === 'subdaily';
     const dateParam = util.toISOStringSeconds(layerDate, !isSubdaily);
 
-    const gibsBaseUrl = configSource.url.replace('{a-c}', 'a');
+    const subdomainMatch = configSource.url.match(/\{([a-z])-([a-z])\}/);
+    const subdomains = subdomainMatch
+      ? Array.from(
+          { length: subdomainMatch[2].charCodeAt(0) - subdomainMatch[1].charCodeAt(0) + 1 },
+          (_, i) => String.fromCharCode(subdomainMatch[1].charCodeAt(0) + i),
+        )
+      : null;
+    const getGibsUrl = (z, x, y) => {
+      const sub = subdomains ? subdomains[((z + x + y) % subdomains.length + subdomains.length) % subdomains.length] : null;
+      return sub ? configSource.url.replace(/\{[a-z]-[a-z]\}/, sub) : configSource.url;
+    };
     const gibsLayerId = gibsLayerName || id;
 
-    const dataTileProjection = get('EPSG:4326');
+    const dataTileProjection = get(projCrs);
     const dataTileGrid = createForProjection(dataTileProjection, undefined, 256);
     const dataTileSize = 256;
 
+    const MAX_TILE_CACHE = 100;
     const tileImageCache = {};
+    const tileImageCacheKeys = [];
 
     const fetchGibsTile = async (z, x, y) => {
       const cacheKey = `${z}/${x}/${y}/${dateParam}`;
@@ -1430,7 +1445,7 @@ export default function mapLayerBuilder(config, cache, store) {
         return tileImageCache[cacheKey];
       }
 
-      const wmtsUrl = `${gibsBaseUrl}?SERVICE=WMTS&REQUEST=GetTile` +
+      const wmtsUrl = `${getGibsUrl(z, x, y)}?SERVICE=WMTS&REQUEST=GetTile` +
         `&VERSION=1.0.0&LAYER=${gibsLayerId}&STYLE=default` +
         `&FORMAT=image/png&TILEMATRIXSET=${configMatrixSet.id}` +
         `&TILEMATRIX=${z}&TILEROW=${y}&TILECOL=${x}` +
@@ -1454,12 +1469,17 @@ export default function mapLayerBuilder(config, cache, store) {
         };
         img.src = wmtsUrl;
       });
+      if (tileImageCacheKeys.length >= MAX_TILE_CACHE) {
+        const oldest = tileImageCacheKeys.shift();
+        delete tileImageCache[oldest];
+      }
+      tileImageCacheKeys.push(cacheKey);
       tileImageCache[cacheKey] = promise;
       return promise;
     };
 
     const flowDataSource = new DataTileSource({
-      projection: 'EPSG:4326',
+      projection: projCrs,
       tileGrid: dataTileGrid,
       transition: 0,
       wrapX: true,
@@ -1484,7 +1504,7 @@ export default function mapLayerBuilder(config, cache, store) {
           }
 
           const gibsRes = gibsResolutions[bestGibsZ];
-          const gibsOrigin = [-180, 90];
+          const gibsOrigin = [projExtent[0], projExtent[3]];
           const gibsTileWidthDeg = gibsTileSize * gibsRes;
           const gibsTileHeightDeg = gibsTileSize * gibsRes;
 
