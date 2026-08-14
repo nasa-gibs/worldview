@@ -222,7 +222,7 @@
     "simplebar": "^6.3.3",
     "simplebar-react": "^3.3.2",
     "stackblur": "^1.0.0",
-    "supercluster": "^8.0.1",
+    "supercluster": "^9.0.0",
     "tough-cookie": "^6.0.2",
     "upng-js": "^2.1.0",
     "url-template": "^3.1.1"
