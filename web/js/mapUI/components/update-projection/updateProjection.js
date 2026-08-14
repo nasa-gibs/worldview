@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
+import { isEmpty } from 'ol/extent';
 import {
   get as lodashGet,
 } from 'lodash';
@@ -287,7 +288,7 @@ function UpdateProjection(props) {
       const projId = proj.selected.id;
       let extent = null;
       let callback = null;
-      if (models.map.extent) {
+      if (models.map.extent && !isEmpty(models.map.extent)) {
         extent = models.map.extent;
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
