@@ -107,12 +107,15 @@ export function VectorInteractions(props) {
     events.on(MAP_SINGLE_CLICK, singleClick);
 
     return () => {
+      mouseMoveThrottled.cancel();
+      mouseOutThrottled.cancel();
+
       events.off(MAP_MOVE_END, moveEnd);
       events.off(MAP_MOUSE_MOVE, mouseMoveThrottled);
       events.off(MAP_MOUSE_OUT, mouseOutThrottled);
       events.off(MAP_SINGLE_CLICK, singleClick);
     };
-  }, []);
+  }, [proj?.id, proj?.selected?.crs]);
 
   useEffect(() => {
     if (granuleDate && prevGranuleFootprints !== granuleFootprints) {
