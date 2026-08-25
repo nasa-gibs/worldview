@@ -391,7 +391,7 @@ export const areCoordinatesAndPolygonExtentValid = (points, coords, maxExtent) =
   const polygon = new OlGeomPolygon([points]);
 
   const areCoordsWithinPolygon = polygon.intersectsCoordinate(coords);
-  // check is polygon footprint is within max extent, will allow partial corners within max extent
+  // check if polygon footprint is within max extent, will allow partial corners within max extent
   const doesPolygonIntersectMaxExtent = polygon.intersectsExtent(maxExtent);
   // check if polygon is larger than maxExtent - helpful to catch most large polar granules
   const polygonExtent = polygon.getExtent();

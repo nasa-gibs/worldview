@@ -37,7 +37,7 @@ function LoadingIndicator() {
   };
 
   return shouldSpinnerShow && (
-    <div style={spinnerStyle}>
+    <div className="loading-spinner" style={spinnerStyle}>
       <Spinner color="light" size="sm" style={innerSpinnerStyle} />
     </div>
   );

@@ -175,7 +175,7 @@ module.exports = (page) => ({
   layerContainer: page.locator('.layer-container.sidebar-panel'),
   sourceMetadataCollapsed: page.locator('.source-metadata.overflow'),
   sourceMetadataExpanded: page.locator('.source-metadata'),
-  aquaTerraModisHeader: page.locator('#aboutaerosolopticaldepthaod'),
+  aquaTerraModisHeader: page.getByRole('heading', { name: 'About Aerosol Optical Depth (AOD)' }),
   maiacHeader: page.locator('#aerosol-optical-depth-aqua-terra-modis h3:last-of-type'),
   sourceTabs: page.locator('.source-nav-item'),
   aodSearchRow: page.locator('#MODIS_Aqua_Aerosol-search-row'),
