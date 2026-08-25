@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L4_Gross_Primary_Productivity_8Day": {
+      "id": "VIIRS_SNPP_L4_Gross_Primary_Productivity_8Day",
+      "description": "viirs/snpp/VIIRS_SNPP_L4_Gross_Primary_Productivity_8Day",
+      "group": "overlays",
+      "tags": "gross primary productivity gpp",
+      "layergroup": "Gross Primary Productivity"
+    }
+    }
+  }

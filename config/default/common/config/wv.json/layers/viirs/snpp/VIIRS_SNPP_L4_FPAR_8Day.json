@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L4_FPAR_8Day": {
+      "id": "VIIRS_SNPP_L4_FPAR_8Day",
+      "description": "viirs/snpp/VIIRS_SNPP_L4_FPAR_8Day",
+      "group": "overlays",
+      "tags": "fpar fraction of photosynthetically active radiation",
+      "layergroup": "FPAR"
+    }
+  }
+}

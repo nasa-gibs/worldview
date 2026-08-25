@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_L4_Net_Photosynthesis_8Day": {
+      "id": "VIIRS_NOAA20_L4_Net_Photosynthesis_8Day",
+      "description": "viirs/NOAA20/VIIRS_NOAA20_L4_Net_Photosynthesis_8Day",
+      "group": "overlays",
+      "tags": "net photosynthesis psn",
+      "layergroup": "Photosynthesis, Net"
+    }
+    }
+  }

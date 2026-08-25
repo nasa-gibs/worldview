@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_Daily": {
+      "id": "VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+      "description": "viirs/snpp/VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+      "tags": "natural color cr s-npp snpp",
+      "layergroup": "Land Surface Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_SNPP_CorrectedReflectance_TrueColor"],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}
