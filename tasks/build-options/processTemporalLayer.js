@@ -87,95 +87,66 @@ function rangesHelper (wvLayer, ranges) {
   return [dateRangeStart, dateRangeEnd, rangeInterval]
 }
 
-async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic', cacheMode) {
+async function createDateRanges (url, wvLayer, cacheMode) {
   const fetchOpts = cacheMode === 'no-store' ? { cache: cacheMode } : undefined
+  let invalidRanges = false
+  let ranges = []
+  const dateRangeStart = []
+  const dateRangeEnd = []
+  const rangeInterval = []
+  let nextPage
+  const parser = new xml2js.Parser()
   try {
-    let ranges = toList(value)
-    let rangesAll, startYear
-    let dateRangeStart = []
-    let dateRangeEnd = []
-    let rangeInterval = []
-    const parser = new xml2js.Parser()
-    // Fetch from 'all' endpoint to get starting year
+    const describeDomainsResponse = await fetch(url, fetchOpts)
+    if (describeDomainsResponse?.ok) {
+      const describeDomainsText = await describeDomainsResponse?.text?.() || ''
+      const describeDomainsJson = await parser.parseStringPromise(describeDomainsText)
+      nextPage = describeDomainsJson?.Domains?.DimensionDomain?.[0]?.NextPage?.[0]
+      const domain = describeDomainsJson?.Domains?.DimensionDomain?.[0]?.Domain?.[0] || ''
+      const domains = domain.split(',')
+      if (domain && domains?.length) {
+        const formattedDomains = domains.map((d) => {
+          return {
+            _text: d
+          }
+        })
+        ranges = toList(formattedDomains)
+      } else {
+        invalidRanges = true
+      }
+    }
+  } catch (error) {
+    invalidRanges = true
+    console.error(`Error fetching ${url}: ${error}`)
+  } finally {
+    if (!invalidRanges) {
+      const [dateRangeStartYear, dateRangeEndYear, rangeIntervalYear] = rangesHelper(wvLayer, ranges)
+      dateRangeStart.push(...dateRangeStartYear)
+      dateRangeEnd.push(...dateRangeEndYear)
+      rangeInterval.push(...rangeIntervalYear)
+    }
+    // Fetch next page recursively if one exists
+    if (nextPage) {
+      const [dateRangeStartOut, dateRangeEndOut, rangeIntervalOut] = await createDateRanges(nextPage, wvLayer, cacheMode)
+      dateRangeStart.push(...dateRangeStartOut)
+      dateRangeEnd.push(...dateRangeEndOut)
+      rangeInterval.push(...rangeIntervalOut)
+    }
+  }
+  return [dateRangeStart, dateRangeEnd, rangeInterval]
+}
+
+async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic', cacheMode) {
+  try {
     const describeDomainsAllUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[source]}/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
-    try {
-      const describeDomainsAllResponse = await fetch(describeDomainsAllUrl, fetchOpts)
-      if (describeDomainsAllResponse?.ok) {
-        const describeDomainsAllText = await describeDomainsAllResponse?.text?.() || ''
-        const describeDomainsAllJson = await parser.parseStringPromise(describeDomainsAllText)
-        const domainAll = describeDomainsAllJson?.Domains?.DimensionDomain?.[0]?.Domain?.[0] || ''
-        const domainsAll = domainAll.split(',')
-        if (domainsAll?.length) {
-          const formattedDomainsAll = domainsAll.map((d) => {
-            return {
-              _text: d
-            }
-          })
-          rangesAll = toList(formattedDomainsAll)
-          if (rangesAll[0]._text && rangesAll[0]._text.length) {
-            const startDate = rangesAll[0]._text.split('/')[0]
-            startYear = Number(startDate.split('-')[0])
-          }
-        }
-      }
-    } catch (error) {
-      console.error(`Error fetching ${describeDomainsAllUrl}: ${error}`)
-    }
+    let [dateRangeStart, dateRangeEnd, rangeInterval] = await createDateRanges(describeDomainsAllUrl, wvLayer, cacheMode)
     // Fall back to original ranges if the 'all' endpoint fetch failed
-    if (!rangesAll) {
-      rangesAll = ranges
-    }
-    // Fetch ranges year-by-year if more than 10,000 ranges, as they may not all be present in all.xml
-    if (rangesAll.length > 10000 && startYear) {
-      const endYear = new Date().getFullYear()
-      const requestDates = [];
-      // Create an array of request ranges, split into 6-month chunks
-      for (let year = startYear; year <= endYear; year++) {
-        requestDates.push({
-          start: `${year}-01-01T00:00:00Z`,
-          end: `${year}-06-30T23:59:59Z`,
-        })
-        requestDates.push({
-          start: `${year}-07-01T00:00:00Z`,
-          end: `${year}-12-31T23:59:59Z`,
-        })
-      }
-      for (const index in requestDates) {
-        let invalidRanges = false
-        const { start, end } = requestDates[index];
-        const describeDomainsUrl = `https://gibs.earthdata.nasa.gov/wmts/${projDict[source]}/best/1.0.0/${wvLayer.id}/default/250m/all/${start}--${end}.xml`
-        try {
-          const describeDomainsResponse = await fetch(describeDomainsUrl, fetchOpts)
-          if (describeDomainsResponse?.ok) {
-            const describeDomainsText = await describeDomainsResponse?.text?.() || ''
-            const describeDomainsJson = await parser.parseStringPromise(describeDomainsText)
-            const domain = describeDomainsJson?.Domains?.DimensionDomain?.[0]?.Domain?.[0] || ''
-            const domains = domain.split(',')
-            if (domain && domains?.length) {
-              const formattedDomains = domains.map((d) => {
-                return {
-                  _text: d
-                }
-              })
-              ranges = toList(formattedDomains)
-            } else {
-              invalidRanges = true
-            }
-          }
-        } catch (error) {
-          invalidRanges = true
-          console.error(`Error fetching ${describeDomainsUrl}: ${error}`)
-        } finally {
-          if (!invalidRanges) {
-            const [dateRangeStartYear, dateRangeEndYear, rangeIntervalYear] = rangesHelper(wvLayer, ranges)
-            dateRangeStart.push(...dateRangeStartYear)
-            dateRangeEnd.push(...dateRangeEndYear)
-            rangeInterval.push(...rangeIntervalYear)
-          }
-        }
-      }
-    } else {
-      [dateRangeStart, dateRangeEnd, rangeInterval] = rangesHelper(wvLayer, rangesAll)
+    if (!dateRangeStart) {
+      const rangesBackup = toList(value)
+      const backupRangesObj = rangesHelper(wvLayer, rangesBackup)
+      dateRangeStart = backupRangesObj[0]
+      dateRangeEnd = backupRangesObj[1]
+      rangeInterval = backupRangesObj[2]
     }
     if (dateRangeStart.length && dateRangeEnd.length) {
       const dateRangesObj = dateRangeStart.map((s, i) => ({
