@@ -648,6 +648,10 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
+      // Only render a single world. OpenLayers does not apply the layer extent
+      // clip to the canvas it draws on when opacity is less than 1, which would
+      // otherwise leave adjacent world copies visible outside of layerExtent
+      wrapX: false,
       loader: async () => {
         const allDataKey = `AERONET:${date.getUTCFullYear()}`;
 
