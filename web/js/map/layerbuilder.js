@@ -435,7 +435,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj } = state;
     const {
       id, layer, format, matrixIds, matrixSet, matrixSetLimits,
-      period, source, style, wrapadjacentdays, type,
+      period, source, style, wrapadjacentdays, type, projections,
     } = def;
     const configSource = config.sources[source];
     const { date, shifted } = options;
@@ -472,14 +472,25 @@ export default function mapLayerBuilder(config, cache, store) {
       : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
     const calcMatrixIds = matrixIds || resolutions.map((set, index) => index);
 
+    // POC HACK: Check if the layer definition natively supports the current map projection.
+    const hasNativeProj = projections && !!projections[proj.id];
+    const isPolar = proj.selected.id === 'arctic' || proj.selected.id === 'antarctic';
+    const isReprojecting = !hasNativeProj && isPolar;
+
+    // Standard geographic bounds and top-left origin for EPSG:4326
+    const GEOGRAPHIC_EXTENT = [-180, -90, 180, 90];
+    const GEOGRAPHIC_ORIGIN = [-180, 90];
+
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
-      origin: shifted ? RIGHT_WING_ORIGIN : origin,
-      extent: shifted ? RIGHT_WING_EXTENT : extent,
-      sizes,
+      // Override origin and extent when reprojecting to avoid polar meter contamination
+      origin: isReprojecting ? GEOGRAPHIC_ORIGIN : (shifted ? RIGHT_WING_ORIGIN : origin),
+      extent: isReprojecting ? GEOGRAPHIC_EXTENT : (shifted ? RIGHT_WING_EXTENT : extent),
       resolutions,
       matrixIds: calcMatrixIds,
       tileSize: tileSize[0],
+      // Clear sizes when reprojecting so OpenLayers relies on full global geographic tile ranges
+      ...(isReprojecting ? {} : { sizes }),
     };
 
     // force currently selected time to be 59 seconds.
@@ -489,6 +500,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileGrid = new OlTileGridWMTS(tileGridOptions);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
+    const sourceProjection = hasNativeProj ? undefined : 'EPSG:4326';
     const sourceOptions = {
       interpolate: false,
       url: `${sourceURL}${urlParameters}`,
@@ -499,8 +511,10 @@ export default function mapLayerBuilder(config, cache, store) {
       transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
       tileGrid,
-      wrapX: false,
+      wrapX: !isReprojecting,
       style: typeof style === 'undefined' ? 'default' : style,
+      // Only override projection when reprojecting geographic-only layers
+      ...(sourceProjection && { projection: sourceProjection }),
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
@@ -512,11 +526,16 @@ export default function mapLayerBuilder(config, cache, store) {
       className: `wv-layer-${id}`,
       preload: 0,
       source: tileSource,
+      // POC HACK: Prevent OpenLayers from hiding reprojected layers due to scale mismatch
+      ...(isReprojecting && {
+        minResolution: 0,
+        maxResolution: Infinity,
+      }),
     });
 
     // Because granule footprints from CMR are imprecise, setting an extent on granule
     // layers can crop valid imagery. So extents are only applied to non-granule layers.
-    if (!isGranule) {
+    if (!isGranule && !isReprojecting) {
       layerTile.setExtent(extent);
     }
     return layerTile;
@@ -1406,7 +1425,11 @@ export default function mapLayerBuilder(config, cache, store) {
           { cmrRebuildAttempts: options.cmrRebuildAttempts }),
       };
       def = lodashCloneDeep(def);
-      lodashMerge(def, projections[proj.id]);
+      // lodashMerge(def, projections[proj.id]);
+      // POC HACK: Fall back to geographic projection if target polar projection is missing
+      const targetProjConfig = projections[proj.id] || projections['geographic'] || projections['epsg4326'];
+      lodashMerge(def, targetProjConfig);
+
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
