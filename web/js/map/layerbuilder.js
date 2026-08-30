@@ -5,8 +5,10 @@ import OlSourceXYZ from 'ol/source/XYZ';
 import OlImageTile from 'ol/source/ImageTile';
 import OlLayerGroup from 'ol/layer/Group';
 import OlLayerTile from 'ol/layer/Tile';
+import Flow from 'ol/layer/Flow';
+import DataTileSource from 'ol/source/DataTile';
 import { get } from 'ol/proj';
-import { TileGrid as OlTileGridTileGrid, createXYZ } from 'ol/tilegrid';
+import { TileGrid as OlTileGridTileGrid, createXYZ, createForProjection, wrapX as olWrapX } from 'ol/tilegrid';
 import MVT from 'ol/format/MVT';
 import GeoJSON from 'ol/format/GeoJSON';
 import SourceVectorTile from 'ol/source/VectorTile';
@@ -1362,6 +1364,314 @@ export default function mapLayerBuilder(config, cache, store) {
   };
 
   /**
+   * Create a new Flow Layer that reads GIBS WMTS tiles and extracts R/G channels
+   * as u/v velocity data for animated particle flow visualization.
+   *
+   * @method createLayerFlow
+   * @static
+   * @param {object} def - Layer Specs
+   * @param {object} options - Layer options
+   * @param {number/null} day
+   * @param {object} state
+   * @returns {object} OpenLayers Flow layer
+   */
+  const createLayerFlow = (def, options, day, state) => {
+    const {
+      id, maxSpeed: flowMaxSpeed, layer, matrixSet, source,
+      minU, maxU, minV, maxV,
+    } = def;
+    const { date } = options;
+    const { proj } = state;
+    const projCrs = proj.selected.crs;
+    const projExtent = proj.selected.maxExtent;
+
+    // Validate required configuration
+    if (!layer) {
+      throw new Error(`${id}: Missing 'layer' property in layer configuration`);
+    }
+    if (!matrixSet) {
+      throw new Error(`${id}: Missing 'matrixSet' property in layer configuration`);
+    }
+    if (minU === undefined || maxU === undefined || minV === undefined || maxV === undefined) {
+      throw new Error(`${id}: Missing velocity encoding parameters (minU/maxU/minV/maxV)`);
+    }
+
+    const gibsLayerName = layer;
+
+    const configSource = config.sources[source];
+    if (!configSource) {
+      throw new Error(`${id}: Invalid source: ${source}`);
+    }
+    const configMatrixSet = configSource.matrixSets[matrixSet];
+    if (!configMatrixSet) {
+      throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
+    }
+
+    const deltaU = maxU - minU;
+    const deltaV = maxV - minV;
+
+    let layerDate = date || getSelectedDate(state);
+    if (day && def.wrapadjacentdays) {
+      layerDate = util.dateAdd(layerDate, 'day', day);
+    }
+
+    const isSubdaily = def.period === 'subdaily';
+    const dateParam = util.toISOStringSeconds(layerDate, !isSubdaily);
+
+    const subdomainMatch = configSource.url.match(/\{([a-z])-([a-z])\}/);
+    const subdomains = subdomainMatch
+      ? Array.from(
+        { length: subdomainMatch[2].charCodeAt(0) - subdomainMatch[1].charCodeAt(0) + 1 },
+        (_, i) => String.fromCharCode(subdomainMatch[1].charCodeAt(0) + i),
+      )
+      : null;
+    const getGibsUrl = (z, x, y) => {
+      const idx = subdomains
+        ? ((z + x + y) % subdomains.length + subdomains.length) % subdomains.length
+        : null;
+      return idx !== null
+        ? configSource.url.replace(/\{[a-z]-[a-z]\}/, subdomains[idx])
+        : configSource.url;
+    };
+    const gibsLayerId = gibsLayerName || id;
+
+    const dataTileProjection = get(projCrs);
+    const dataTileGrid = createForProjection(dataTileProjection, undefined, 256);
+    const dataTileSize = 256;
+
+    const MAX_TILE_CACHE = 100;
+    const tileImageCache = {};
+    const tileImageCacheKeys = [];
+
+    const fetchGibsTile = async (z, x, y) => {
+      const cacheKey = `${z}/${x}/${y}/${dateParam}`;
+      if (tileImageCache[cacheKey]) {
+        return tileImageCache[cacheKey];
+      }
+
+      const wmtsUrl = `${getGibsUrl(z, x, y)}?SERVICE=WMTS&REQUEST=GetTile` +
+        `&VERSION=1.0.0&LAYER=${gibsLayerId}&STYLE=default` +
+        `&FORMAT=image/png&TILEMATRIXSET=${configMatrixSet.id}` +
+        `&TILEMATRIX=${z}&TILEROW=${y}&TILECOL=${x}` +
+        `&TIME=${dateParam}`;
+
+      const promise = new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const imageData = ctx.getImageData(0, 0, img.width, img.height);
+          resolve(imageData);
+        };
+        img.onerror = () => {
+          delete tileImageCache[cacheKey];
+          resolve(null);
+        };
+        img.src = wmtsUrl;
+      });
+      if (tileImageCacheKeys.length >= MAX_TILE_CACHE) {
+        const oldest = tileImageCacheKeys.shift();
+        delete tileImageCache[oldest];
+      }
+      tileImageCacheKeys.push(cacheKey);
+      tileImageCache[cacheKey] = promise;
+      return promise;
+    };
+
+    const flowDataSource = new DataTileSource({
+      projection: projCrs,
+      tileGrid: dataTileGrid,
+      transition: 0,
+      wrapX: true,
+      bandCount: 3,
+      async loader(z, x, y) {
+        const data = new Float32Array(dataTileSize * dataTileSize * 3);
+        try {
+          const tileCoord = olWrapX(dataTileGrid, [z, x, y], dataTileProjection);
+          const extent = dataTileGrid.getTileCoordExtent(tileCoord);
+          const resolution = dataTileGrid.getResolution(z);
+
+          const gibsTileSize = configMatrixSet.tileSize[0];
+          const gibsResolutions = configMatrixSet.resolutions;
+
+          let bestGibsZ = 0;
+          for (let gz = 0; gz < gibsResolutions.length; gz++) {
+            if (gibsResolutions[gz] <= resolution * 2) {
+              bestGibsZ = gz;
+              break;
+            }
+            bestGibsZ = gz;
+          }
+
+          const gibsRes = gibsResolutions[bestGibsZ];
+          const gibsOrigin = [projExtent[0], projExtent[3]];
+          const gibsTileWidthDeg = gibsTileSize * gibsRes;
+          const gibsTileHeightDeg = gibsTileSize * gibsRes;
+
+          const colMin = Math.floor((extent[0] - gibsOrigin[0]) / gibsTileWidthDeg);
+          const colMax = Math.floor((extent[2] - gibsOrigin[0] - 1e-10) / gibsTileWidthDeg);
+          const rowMin = Math.floor((gibsOrigin[1] - extent[3]) / gibsTileHeightDeg);
+          const rowMax = Math.floor((gibsOrigin[1] - extent[1] - 1e-10) / gibsTileHeightDeg);
+
+          const tilePromises = [];
+          for (let row = rowMin; row <= rowMax; row++) {
+            for (let col = colMin; col <= colMax; col++) {
+              tilePromises.push(
+                fetchGibsTile(bestGibsZ, col, row).then((imageData) => ({
+                  col, row, imageData,
+                })),
+              );
+            }
+          }
+          const tiles = await Promise.all(tilePromises);
+
+          for (let pixRow = 0; pixRow < dataTileSize; pixRow++) {
+            let offset = pixRow * dataTileSize * 3;
+            const lat = extent[3] - pixRow * resolution;
+            for (let pixCol = 0; pixCol < dataTileSize; pixCol++) {
+              const lon = extent[0] + pixCol * resolution;
+
+              const gibsCol = Math.floor((lon - gibsOrigin[0]) / gibsTileWidthDeg);
+              const gibsRow = Math.floor((gibsOrigin[1] - lat) / gibsTileHeightDeg);
+
+              const tile = tiles.find((t) => t.col === gibsCol && t.row === gibsRow);
+
+              if (tile && tile.imageData) {
+                const tileWest = gibsOrigin[0] + gibsCol * gibsTileWidthDeg;
+                const tileNorth = gibsOrigin[1] - gibsRow * gibsTileHeightDeg;
+
+                const px = Math.floor(((lon - tileWest) / gibsTileWidthDeg) * gibsTileSize);
+                const py = Math.floor(((tileNorth - lat) / gibsTileHeightDeg) * gibsTileSize);
+
+                const clampedPx = Math.max(0, Math.min(px, gibsTileSize - 1));
+                const clampedPy = Math.max(0, Math.min(py, gibsTileSize - 1));
+
+                const idx = (clampedPy * gibsTileSize + clampedPx) * 4;
+                const r = tile.imageData.data[idx];
+                const g = tile.imageData.data[idx + 1];
+
+                data[offset] = minU + (deltaU * r) / 255;
+                data[offset + 1] = minV + (deltaV * g) / 255;
+              }
+              offset += 3;
+            }
+          }
+        } catch (e) {
+          console.warn(`Flow tile loader error at z=${z} x=${x} y=${y}:`, e);
+        }
+        return data;
+      },
+    });
+
+    const viridisColors = ['#440154', '#414487', '#2a788e', '#22a884', '#7ad151', '#fde725'];
+    const colorStops = [];
+    for (let i = 0; i < viridisColors.length; i++) {
+      colorStops.push((i * flowMaxSpeed) / (viridisColors.length - 1));
+      colorStops.push(viridisColors[i]);
+    }
+
+    const flowColorExpression = [
+      'case',
+      ['>', ['get', 'speed'], flowMaxSpeed],
+      'rgba(0, 0, 0, 0)',
+      ['interpolate', ['linear'], ['get', 'speed'], ...colorStops],
+    ];
+
+    let warmUpId = null;
+
+    const makeFlow = () => {
+      const flowLayer = new Flow({
+        className: `wv-layer-${id}`,
+        source: flowDataSource,
+        maxSpeed: flowMaxSpeed,
+        style: { color: flowColorExpression },
+      });
+      flowLayer.setOpacity(0);
+
+      flowLayer.on('postrender', (evt) => {
+        if (evt.frameState) {
+          evt.frameState.animate = false;
+        }
+        const map = flowLayer.getMapInternal && flowLayer.getMapInternal();
+        if (map) {
+          map.render();
+        }
+      });
+
+      return flowLayer;
+    };
+
+    const startWarmUp = (flow) => {
+      if (warmUpId !== null) {
+        cancelAnimationFrame(warmUpId);
+        warmUpId = null;
+      }
+      flow.once('prerender', () => {
+        let frames = 0;
+        const doWarmUp = () => {
+          if (++frames < 10) {
+            warmUpId = requestAnimationFrame(doWarmUp);
+          } else {
+            flow.setOpacity(def.opacity || 1.0);
+            warmUpId = null;
+          }
+        };
+        warmUpId = requestAnimationFrame(doWarmUp);
+      });
+    };
+
+    let currentFlow = makeFlow();
+    const wrapper = new OlLayerGroup({ layers: [currentFlow] });
+
+    const olMap = state.map && state.map.ui && state.map.ui.selected;
+    if (olMap) {
+      startWarmUp(currentFlow);
+
+      const onMoveStart = () => {
+        if (warmUpId !== null) {
+          cancelAnimationFrame(warmUpId);
+          warmUpId = null;
+        }
+        currentFlow.setOpacity(0);
+      };
+
+      const onMoveEnd = () => {
+        const oldFlow = currentFlow;
+        currentFlow = makeFlow();
+        wrapper.getLayers().push(currentFlow);
+
+        if (warmUpId !== null) {
+          cancelAnimationFrame(warmUpId);
+          warmUpId = null;
+        }
+
+        currentFlow.once('prerender', () => {
+          let frames = 0;
+          const doWarmUp = () => {
+            if (++frames < 10) {
+              warmUpId = requestAnimationFrame(doWarmUp);
+            } else {
+              currentFlow.setOpacity(def.opacity || 1.0);
+              wrapper.getLayers().remove(oldFlow);
+              warmUpId = null;
+            }
+          };
+          warmUpId = requestAnimationFrame(doWarmUp);
+        });
+      };
+
+      olMap.on('movestart', onMoveStart);
+      olMap.on('moveend', onMoveEnd);
+    }
+
+    return wrapper;
+  };
+
+  /**
    * Create a new OpenLayers Layer
    * @param {object} definition
    * @param {object} key
@@ -1390,7 +1700,7 @@ export default function mapLayerBuilder(config, cache, store) {
     let layer = cache.getItem(key);
     const isGranule = type === 'granule';
 
-    if (!layer || isGranule || def.type === 'titiler') {
+    if (!layer || isGranule || def.type === 'titiler' || def.type === 'harmony-flow') {
       if (!date) date = options.date || getSelectedDate(state);
       const cacheOptions = getCacheOptions(period, date);
       const attributes = {
@@ -1437,6 +1747,9 @@ export default function mapLayerBuilder(config, cache, store) {
         case 'esriMapServer':
           layer = await getLayer(createLayerEsri, def, options, attributes, wrapLayer);
           break;
+        case 'harmony-flow':
+          layer = await getLayer(createLayerFlow, def, options, attributes, wrapLayer);
+          break;
         case 'granule':
           layer = await getGranuleLayer(def, attributes, options);
           break;
@@ -1446,7 +1759,7 @@ export default function mapLayerBuilder(config, cache, store) {
       if (def.type !== 'granule') {
         layer.wv = attributes;
         cache.setItem(key, layer, cacheOptions);
-        if (def.type !== 'titiler') layer.setVisible(false);
+        if (def.type !== 'titiler' && def.type !== 'harmony-flow') layer.setVisible(false);
       }
     }
     layer.setOpacity(opacity || 1.0);
