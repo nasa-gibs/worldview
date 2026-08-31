@@ -78,7 +78,7 @@ test('Disabling groups puts all overlays into a single group', async () => {
   await expect(firesLayer).toBeVisible()
   await expect(firesGroup).not.toBeVisible()
   const overlayGroupItems = await page.locator('#active-overlays ul > li')
-  await expect(overlayGroupItems).toHaveCount(5)
+  await expect(overlayGroupItems).toHaveCount(6)
 })
 
 test('Re-enabling groups restores grouping', async () => {
@@ -127,5 +127,5 @@ test('Load with groups disabled from permalink', async () => {
   await expect(aodGroup).not.toBeVisible()
   await expect(overlaysGroup).toBeVisible()
   const overlayGroupItems = await page.locator('#active-overlays ul > li')
-  await expect(overlayGroupItems).toHaveCount(5)
+  await expect(overlayGroupItems).toHaveCount(6)
 })

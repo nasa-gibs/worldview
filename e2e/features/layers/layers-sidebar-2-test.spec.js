@@ -12,14 +12,16 @@ const twoGroupsQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6
 const mixedLayersGroupsDisabledQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features_15m,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false'
 
 const mixedLayerIdOrder = [
-  'active-Reference_Features_15m',
+  'active-DoS_International_Boundaries',
+  'active-Coastlines_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth'
 ]
 const groupedLayerIdOrder = [
-  'active-Reference_Features_15m',
+  'active-DoS_International_Boundaries',
+  'active-Coastlines_15m',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
   'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
   'active-MODIS_Combined_Value_Added_AOD',
@@ -27,11 +29,12 @@ const groupedLayerIdOrder = [
   'active-MODIS_Terra_CorrectedReflectance_TrueColor'
 ]
 const ungroupedReorderdLayerIdOrder = [
+  'active-DoS_International_Boundaries',
+  'active-Coastlines_15m',
   'active-MODIS_Combined_Value_Added_AOD',
   'active-MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth',
   'active-VIIRS_SNPP_Thermal_Anomalies_375m_All',
-  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All',
-  'active-Reference_Features_15m'
+  'active-VIIRS_NOAA20_Thermal_Anomalies_375m_All'
 ]
 
 test.describe.configure({ mode: 'serial' })
