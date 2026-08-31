@@ -4,6 +4,7 @@
       "id": "DoS_International_Boundaries",
       "title": "International Boundaries",
       "subtitle": "U.S. Department of State, Office of the Geographer and Global Issues",
+      "description": "reference/DoS_International_Boundaries",
       "group": "overlays",
       "type": "vector",
       "layergroup": "Reference",
