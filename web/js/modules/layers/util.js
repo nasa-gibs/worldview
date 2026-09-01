@@ -1258,43 +1258,52 @@ export function layersParse12(stateObj, config) {
     const lstates = [];
     lodashEach(layerDefs, (layerDef) => {
       // Get the text before any paren or comma
-      let layerId = layerDef.match(/[^(,]+/)[0];
+      const layerId = layerDef.match(/[^(,]+/)[0];
+      const newLayerIds = [];
       if (config.redirects && config.redirects.layers) {
-        layerId = config.redirects.layers[layerId] || layerId;
+        if (config.redirects.layers[layerId] && Array.isArray(config.redirects.layers[layerId])) {
+          newLayerIds.push(...config.redirects.layers[layerId]);
+        } else {
+          newLayerIds.push(config.redirects.layers[layerId] || layerId);
+        }
+      } else {
+        newLayerIds.push(layerId);
       }
-      const lstate = {
-        id: layerId,
-        attributes: [],
-      };
-      googleTagManager.pushEvent({
-        event: 'layer_included_in_url',
-        layers: {
-          id: layerId,
-        },
-      });
-      // Everything inside parens
-      const arrayAttr = layerDef.match(/\(.*\)/);
-      if (arrayAttr) {
-        // Get single match and remove parens
-        const strAttr = arrayAttr[0].replace(/[()]/g, '');
-        // Key value pairs
-        const kvps = strAttr.split(',');
-        lodashEach(kvps, (kvp) => {
-          parts = kvp.split('=');
-          if (parts.length === 1) {
-            lstate.attributes.push({
-              id: parts[0],
-              value: true,
-            });
-          } else {
-            lstate.attributes.push({
-              id: parts[0],
-              value: parts[1],
-            });
-          }
+      newLayerIds.forEach((newLayerId) => {
+        const lstate = {
+          id: newLayerId,
+          attributes: [],
+        };
+        googleTagManager.pushEvent({
+          event: 'layer_included_in_url',
+          layers: {
+            id: newLayerId,
+          },
         });
-      }
-      lstates.push(lstate);
+        // Everything inside parens
+        const arrayAttr = layerDef.match(/\(.*\)/);
+        if (arrayAttr) {
+          // Get single match and remove parens
+          const strAttr = arrayAttr[0].replace(/[()]/g, '');
+          // Key value pairs
+          const kvps = strAttr.split(',');
+          lodashEach(kvps, (kvp) => {
+            parts = kvp.split('=');
+            if (parts.length === 1) {
+              lstate.attributes.push({
+                id: parts[0],
+                value: true,
+              });
+            } else {
+              lstate.attributes.push({
+                id: parts[0],
+                value: parts[1],
+              });
+            }
+          });
+        }
+        lstates.push(lstate);
+      });
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {

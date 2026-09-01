@@ -31,7 +31,7 @@ test('List layers in draw order', async () => {
 
   // Verify the layers are loaded by checking they exist in the layer list
   const layerItems = page.locator('li.layer-visible')
-  await expect(layerItems).toHaveCount(3)
+  await expect(layerItems).toHaveCount(4)
 
   // Start download and verify progress indicator appears
   await clickDownload(page)
@@ -89,7 +89,7 @@ test('Do not include obscured layers', async () => {
 
   // Verify layers are loaded
   const layerItems = page.locator('li.layer-visible')
-  await expect(layerItems).toHaveCount(3)
+  await expect(layerItems).toHaveCount(4)
 
   // Start download and verify progress indicator appears
   await clickDownload(page)

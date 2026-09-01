@@ -1,0 +1,30 @@
+{
+  "layers": {
+    "DoS_International_Boundaries": {
+      "id": "DoS_International_Boundaries",
+      "title": "International Boundaries",
+      "subtitle": "U.S. Department of State, Office of the Geographer and Global Issues",
+      "description": "reference/DoS_International_Boundaries",
+      "tags": "borders reference",
+      "group": "overlays",
+      "type": "vector",
+      "layergroup": "Reference",
+      "modalShouldFollowClicks": true,
+      "vectorStyle": {
+        "id": "DoS_International_Boundaries"
+        },
+      "projections": {
+          "geographic": {
+          "id": "DoS_International_Boundaries",
+          "source": "GIBS:geographic",
+          "matrixSet": "15.625m"
+          },
+        "arctic": {
+          "id": "DoS_International_Boundaries",
+          "source": "GIBS:arctic",
+          "matrixSet": "250m"
+        }
+        }
+      }
+    }
+  }
