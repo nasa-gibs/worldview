@@ -464,6 +464,20 @@ describe('adjustStartDates', () => {
     expect(layer.startDate).toBeDefined();
     expect(layer.startDate).not.toBe('2000-01-01');
   });
+
+  test('uses historical ranges when GetCapabilities dateRanges are missing [adjust-start-dates-missing-date-ranges]', () => {
+    const config = buildConfig({ dateRanges: undefined });
+    const layer = config.layers['test-layer'];
+    const expectedRanges = [...layer.availability.historicalRanges];
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+    adjustStartDates(config.layers);
+
+    expect(warnSpy).toHaveBeenCalledWith('GetCapabilities is missing the time value for test-layer');
+    expect(layer.startDate).toBe(expectedRanges[0].startDate);
+    expect(layer.dateRanges).toEqual(expectedRanges);
+    warnSpy.mockRestore();
+  });
 });
 
 describe('getCacheOptions', () => {
