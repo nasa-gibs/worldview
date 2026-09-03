@@ -459,6 +459,17 @@ describe('adjustStartDates', () => {
 
   test('sets layer startDate from adjustDate when no historicalRanges [adjust-start-dates-no-historical-ranges]', () => {
     const config = buildConfig();
+    delete config.layers['test-layer'].availability.historicalRanges;
+    adjustStartDates(config.layers);
+    const layer = config.layers['test-layer'];
+    expect(layer.startDate).toBeDefined();
+    expect(layer.startDate).not.toBe('2000-01-01');
+  });
+
+  test('initializes empty dateRanges when no dateRanges [adjust-start-dates-empty-date-ranges]', () => {
+    const config = buildConfig();
+    delete config.layers['test-layer'].dateRanges;
+    console.warn(config);
     adjustStartDates(config.layers);
     const layer = config.layers['test-layer'];
     expect(layer.startDate).toBeDefined();
