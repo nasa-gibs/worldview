@@ -76,3 +76,12 @@
 .wv-snapshot-progress-overlay.opaque {
   background-color: #000;
 }
+
+/* Frozen image of the map, shown in place of a blank screen during capture */
+.wv-snapshot-progress-backdrop {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}

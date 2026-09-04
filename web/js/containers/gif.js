@@ -21,6 +21,7 @@ import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
   captureAnimationFrames,
+  captureMapBackdrop,
 } from '../modules/image-download/util';
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
@@ -64,6 +65,7 @@ class GIF extends Component {
       boundaries,
     };
     this.abortController = null;
+    this.backdropUrl = null;
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
     this.createGIF = this.createGIF.bind(this);
@@ -81,6 +83,10 @@ class GIF extends Component {
     if (isDownloading) {
       this.abortController?.abort();
       gifStream.cancel();
+    }
+    if (this.backdropUrl) {
+      URL.revokeObjectURL(this.backdropUrl);
+      this.backdropUrl = null;
     }
   }
 
@@ -264,7 +270,18 @@ class GIF extends Component {
     this.abortController = abortController;
     const timeout = setTimeout(this.onCancel, CAPTURE_TIMEOUT_MS);
 
-    this.setState({ isDownloading: true, isCapturing: true, progress: 0 });
+    // Freeze the map's current appearance before it is scaled for capture, so
+    // the overlay can show it instead of a blank screen
+    const backdropUrl = await captureMapBackdrop(map.ui.selected.getTargetElement());
+    if (!this.mounted) {
+      if (backdropUrl) URL.revokeObjectURL(backdropUrl);
+      clearTimeout(timeout);
+      return;
+    }
+    this.backdropUrl = backdropUrl;
+    this.setState({
+      isDownloading: true, isCapturing: true, progress: 0, backdropUrl,
+    });
 
     let urls = [];
     try {
@@ -312,7 +329,16 @@ class GIF extends Component {
     } finally {
       clearTimeout(timeout);
       this.abortController = null;
+      this.releaseBackdrop();
     }
+  }
+
+  releaseBackdrop() {
+    if (this.backdropUrl) {
+      URL.revokeObjectURL(this.backdropUrl);
+      this.backdropUrl = null;
+    }
+    if (this.mounted) this.setState({ backdropUrl: null });
   }
 
   // Per-frame capture cost, to decide whether further optimization is warranted
@@ -447,6 +473,7 @@ class GIF extends Component {
       progress,
       downloadedObject,
       boundaries,
+      backdropUrl,
     } = this.state;
 
     const spinnerStyle = {
@@ -468,7 +495,11 @@ class GIF extends Component {
         <>
           {/* Masks the map while it is scaled up for capture */}
           {isCapturing && createPortal(
-            <div className="wv-snapshot-progress-overlay opaque" />,
+            <div className="wv-snapshot-progress-overlay opaque">
+              {backdropUrl && (
+                <img className="wv-snapshot-progress-backdrop" src={backdropUrl} alt="" />
+              )}
+            </div>,
             document.querySelector('.wv-content') || document.body,
           )}
           <Modal

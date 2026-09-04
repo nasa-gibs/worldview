@@ -769,6 +769,35 @@ export async function captureFrame(mapElement, captureRect) {
 const FRAME_SETTLE_MS = 250;
 
 /**
+ * Rasterize the map at its current size for use as a static backdrop while
+ * capture mutates the real map. Nothing is ignored here — the backdrop should
+ * look exactly like what the user was just looking at.
+ * @param {HTMLElement} mapElement
+ * @returns {Promise<String|null>} object URL the caller must revoke
+ */
+export async function captureMapBackdrop(mapElement) {
+  try {
+    const canvas = await html2canvas(mapElement, {
+      backgroundColor: null,
+      useCORS: true,
+      allowTaint: true,
+      scrollX: 0,
+      scrollY: 0,
+      scale: 1,
+      logging: false,
+      imageTimeout: 0,
+      removeContainer: true,
+    });
+    return await new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob ? URL.createObjectURL(blob) : null), 'image/png');
+    });
+  } catch {
+    // A backdrop is cosmetic; fall back to the plain overlay
+    return null;
+  }
+}
+
+/**
  * Capture one PNG frame per date by stepping the live map.
  * Prepares and restores the map once, regardless of frame count.
  * @param {Object} options - map, pixelBbox, metersPerPixel, projection, dates,

@@ -83,6 +83,7 @@ jest.mock('../modules/image-download/util', () => ({
     frames: [new Blob(), new Blob()],
     timings: [{ load: 1, capture: 2, encode: 3 }],
   })),
+  captureMapBackdrop: jest.fn(() => Promise.resolve('blob:backdrop')),
 }));
 
 jest.mock('../modules/map/util', () => ({
@@ -141,7 +142,7 @@ jest.mock('../modules/date/util', () => ({
 
 const Gif = require('./gif').default;
 const getAnimationFrames = require('../modules/animation/selectors').default;
-const { captureAnimationFrames } = require('../modules/image-download/util');
+const { captureAnimationFrames, captureMapBackdrop } = require('../modules/image-download/util');
 const { promiseImageryForTime } = require('../modules/map/util');
 const { getStampProps, svgToPng, getNumberOfSteps } = require('../modules/animation/util');
 const { changeCropBounds } = require('../modules/animation/actions');
@@ -166,6 +167,7 @@ const defaultProps = {
           getZoom: jest.fn(() => 3),
           getCenter: jest.fn(() => [0, 0]),
         })),
+        getTargetElement: jest.fn(() => document.createElement('div')),
         getCoordinateFromPixel: jest.fn(() => [0, 0]),
       },
     },
@@ -180,6 +182,12 @@ const defaultProps = {
 };
 
 const renderComponent = (props = {}) => render(<Gif {...defaultProps} {...props} />);
+
+// jsdom implements neither object-URL helper
+beforeAll(() => {
+  URL.createObjectURL = jest.fn(() => 'blob:frame');
+  URL.revokeObjectURL = jest.fn();
+});
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -334,6 +342,29 @@ describe('GIF creation flow', () => {
     options.images.forEach((image) => {
       expect(typeof image.src).toBe('string');
     });
+  });
+
+  it('freezes the map backdrop before the map is scaled for capture', async () => {
+    renderComponent();
+    await clickCreate();
+    expect(captureMapBackdrop).toHaveBeenCalled();
+    // The backdrop must be grabbed before prepareMapForCapture mutates the map
+    expect(captureMapBackdrop.mock.invocationCallOrder[0])
+      .toBeLessThan(captureAnimationFrames.mock.invocationCallOrder[0]);
+  });
+
+  it('revokes the backdrop object URL once capture finishes', async () => {
+    renderComponent();
+    await clickCreate();
+    expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:backdrop');
+  });
+
+  it('still captures when the backdrop cannot be produced', async () => {
+    captureMapBackdrop.mockResolvedValueOnce(null);
+    renderComponent();
+    await clickCreate();
+    expect(captureAnimationFrames).toHaveBeenCalled();
+    expect(mockCreateGIF).toHaveBeenCalled();
   });
 
   it('resets state when GIF creation errors', async () => {
