@@ -4,4 +4,4 @@ Aerosols absorb and scatter incoming sunlight, which reduces visibility and incr
 
 The OMI Aerosol Index layer is a science parameter of the Ozone Monitoring Instrument (OMI) Level 2 Near UV Aerosol Optical Depth and Single Scattering Albedo Swath 13x24 km (OMAERUV) available from the OMI instrument on the Aura satellite. The sensor resolution is 25 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: OMAERUV NRT and OMAERUV [doi:10.5067/Aura/OMI/DATA2004](https://doi.org/10.5067/Aura/OMI/DATA2004); [Ozone Monitoring Instrument (OMI) Data User’s Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)
+References: [OMAERUV NRT](https://cmr.earthdata.nasa.gov/search/concepts/C4181303860-OMINRT.html) and OMAERUV [doi:10.5067/Aura/OMI/DATA2004](https://doi.org/10.5067/Aura/OMI/DATA2004); [Ozone Monitoring Instrument (OMI) Data User’s Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)

@@ -2,4 +2,4 @@ The OMI Aerosol Single Scattering Albedo is one of the parameters contained in t
 
 The OMAERUVd product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km, and sensor/algorithm resolution of 1.0 x 1.0 degrees.
 
-References: OMAERUVd [doi:10.5067/Aura/OMI/DATA3003](https://doi.org/10.5067/Aura/OMI/DATA3003); [Ozone Monitoring Instrument (OMI) Data User’s Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)
+References: [OMAERUV NRT](https://cmr.earthdata.nasa.gov/search/concepts/C4181303860-OMINRT.html); OMAERUVd [doi:10.5067/Aura/OMI/DATA3003](https://doi.org/10.5067/Aura/OMI/DATA3003); [Ozone Monitoring Instrument (OMI) Data User’s Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)

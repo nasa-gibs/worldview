@@ -2,4 +2,4 @@ The OMI Cloud Pressure layer indicates the effective cloud pressure (in fact, a 
 
 The Ozone Monitoring Instrument (OMI) instrument on board the Aura satellite. The OMI Cloud Pressure layer is a science parameter of the OMI Cloud Pressure and Fraction (Raman Scattering) dataset. The sensor resolution is 25 km, imagery resolution is 2 km, and the temporal resolution is daily.
 
-References: OMCLDRR [doi:10.5067/Aura/OMI/DATA2010](https://doi.org/10.5067/Aura/OMI/DATA2010)
+References: [OMCLDRR NRT](https://cmr.earthdata.nasa.gov/search/concepts/C4181257396-OMINRT.html); OMCLDRR [doi:10.5067/Aura/OMI/DATA2010](https://doi.org/10.5067/Aura/OMI/DATA2010)
