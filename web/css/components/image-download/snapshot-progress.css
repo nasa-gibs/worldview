@@ -70,3 +70,9 @@
   height: 100%;
   z-index: 2;
 }
+
+/* GIF capture steps the map through many dates; stay fully opaque so the
+   frame-to-frame changes don't show through */
+.wv-snapshot-progress-overlay.opaque {
+  background-color: #000;
+}

@@ -79,6 +79,27 @@ jest.mock('../util/util', () => ({
 jest.mock('../modules/image-download/util', () => ({
   imageUtilCalculateResolution: jest.fn(() => '1km'),
   imageUtilGetCoordsFromPixelValues: jest.fn(() => [[0, 0], [10, 10]]),
+  captureAnimationFrames: jest.fn(() => Promise.resolve({
+    frames: [new Blob(), new Blob()],
+    timings: [{ load: 1, capture: 2, encode: 3 }],
+  })),
+}));
+
+jest.mock('../modules/map/util', () => ({
+  promiseImageryForTime: jest.fn(() => Promise.resolve()),
+}));
+
+jest.mock('../modules/date/actions', () => ({
+  selectDate: jest.fn((date) => ({ type: 'SELECT_DATE', date })),
+}));
+
+jest.mock('../modules/date/selectors', () => ({
+  getSelectedDate: jest.fn(() => new Date('2020-01-05T00:00:00Z')),
+}));
+
+jest.mock('googleTagManager', () => ({
+  __esModule: true,
+  default: { pushEvent: jest.fn() },
 }));
 
 jest.mock('../modules/date/constants', () => ({
@@ -89,7 +110,10 @@ jest.mock('../modules/date/constants', () => ({
 
 jest.mock('../modules/animation/selectors', () => ({
   __esModule: true,
-  default: jest.fn(() => ['image1', 'image2']),
+  default: jest.fn(() => [
+    { date: new Date('2020-01-01T00:00:00Z'), text: 'a', delay: 100 },
+    { date: new Date('2020-01-02T00:00:00Z'), text: 'b', delay: 100 },
+  ]),
 }));
 
 jest.mock('../modules/animation/util', () => ({
@@ -116,8 +140,9 @@ jest.mock('../modules/date/util', () => ({
 }));
 
 const Gif = require('./gif').default;
-const util = require('../util/util').default;
-const getImageArray = require('../modules/animation/selectors').default;
+const getAnimationFrames = require('../modules/animation/selectors').default;
+const { captureAnimationFrames } = require('../modules/image-download/util');
+const { promiseImageryForTime } = require('../modules/map/util');
 const { getStampProps, svgToPng, getNumberOfSteps } = require('../modules/animation/util');
 const { changeCropBounds } = require('../modules/animation/actions');
 
@@ -127,12 +152,20 @@ const defaultProps = {
   endDate: new Date('2020-01-10T00:00:00Z'),
   startDateStr: '2020 JAN 01',
   endDateStr: '2020 JAN 10',
-  getImageArrayFunc: jest.fn(() => ['img']),
+  getFramesFunc: jest.fn(() => [
+    { date: new Date('2020-01-01T00:00:00Z'), text: 'a', delay: 100 },
+  ]),
+  promiseImagery: jest.fn(() => Promise.resolve()),
+  selectDate: jest.fn(),
+  currentDate: new Date('2020-01-05T00:00:00Z'),
   increment: '1 day Between Frames',
   map: {
     ui: {
       selected: {
-        getView: jest.fn(() => ({ getZoom: jest.fn(() => 3) })),
+        getView: jest.fn(() => ({
+          getZoom: jest.fn(() => 3),
+          getCenter: jest.fn(() => [0, 0]),
+        })),
         getCoordinateFromPixel: jest.fn(() => [0, 0]),
       },
     },
@@ -144,7 +177,6 @@ const defaultProps = {
   screenHeight: 800,
   screenWidth: 1200,
   speed: 3,
-  url: 'http://snapshot.test',
 };
 
 const renderComponent = (props = {}) => render(<Gif {...defaultProps} {...props} />);
@@ -246,43 +278,67 @@ describe('getModalOffsets placement', () => {
 });
 
 describe('GIF creation flow', () => {
-  it('creates a GIF and shows results on success', () => {
-    const getImageArrayFunc = jest.fn(() => ['img1', 'img2']);
-    const { getByTestId, queryByTestId } = renderComponent({ getImageArrayFunc });
-    act(() => {
-      mockGifPanelProps.onClick(300, 200);
+  const clickCreate = async (width = 300, height = 200, resolution = 250) => {
+    await act(async () => {
+      await mockGifPanelProps.onClick(width, height, resolution);
     });
+  };
+
+  it('captures frames then encodes and shows results on success', async () => {
+    const { getByTestId } = renderComponent();
+    await clickCreate();
+
+    expect(captureAnimationFrames).toHaveBeenCalledWith(
+      expect.objectContaining({
+        metersPerPixel: 250,
+        pixelBbox: [500, 300, 700, 500],
+        originalDate: defaultProps.currentDate,
+      }),
+    );
     expect(getStampProps).toHaveBeenCalled();
     expect(svgToPng).toHaveBeenCalled();
-    expect(getImageArrayFunc).toHaveBeenCalledWith(
-      expect.objectContaining({ url: 'http://snapshot.test', showDates: true }),
-      { width: 300, height: 200 },
-    );
     expect(mockCreateGIF).toHaveBeenCalled();
-    // while downloading, the requesting imagery modal shows a spinner
-    expect(getByTestId('spinner')).toBeInTheDocument();
 
     const [options, onComplete] = mockCreateGIF.mock.calls[0];
+    // Encoding progress occupies the upper half of the bar
     act(() => {
       options.progressCallback(42);
     });
-    expect(getByTestId('progress')).toHaveAttribute('data-value', '42');
-    expect(queryByTestId('spinner')).toBeNull();
+    expect(getByTestId('progress')).toHaveAttribute('data-value', '71');
 
     act(() => {
       onComplete({ blob: { size: 1024000 } });
     });
     expect(getByTestId('gif-results')).toBeInTheDocument();
     expect(mockGifResultsProps.gifObject.width).toBe(300);
-    // size = round((1024000 / 1024) * 0.001, 2) MB
     expect(mockGifResultsProps.gifObject.size).toBe(1);
   });
 
-  it('resets state when GIF creation errors', () => {
-    const { getByTestId, queryByTestId } = renderComponent();
-    act(() => {
-      mockGifPanelProps.onClick(300, 200);
+  it('passes each frame date to the capture routine', async () => {
+    renderComponent({
+      getFramesFunc: jest.fn(() => [
+        { date: new Date('2020-01-01T00:00:00Z'), text: 'a', delay: 100 },
+        { date: new Date('2020-01-02T00:00:00Z'), text: 'b', delay: 100 },
+      ]),
     });
+    await clickCreate();
+    const { dates } = captureAnimationFrames.mock.calls[0][0];
+    expect(dates).toHaveLength(2);
+    expect(dates[0]).toEqual(new Date('2020-01-01T00:00:00Z'));
+  });
+
+  it('attaches a captured object URL to every frame', async () => {
+    renderComponent();
+    await clickCreate();
+    const [options] = mockCreateGIF.mock.calls[0];
+    options.images.forEach((image) => {
+      expect(typeof image.src).toBe('string');
+    });
+  });
+
+  it('resets state when GIF creation errors', async () => {
+    const { getByTestId, queryByTestId } = renderComponent();
+    await clickCreate();
     const [, onComplete] = mockCreateGIF.mock.calls[0];
     act(() => {
       onComplete({ error: 'failed' });
@@ -291,11 +347,9 @@ describe('GIF creation flow', () => {
     expect(getByTestId('gif-panel')).toBeInTheDocument();
   });
 
-  it('resets state when GIF creation is cancelled while mounted', () => {
+  it('resets state when GIF creation is cancelled while mounted', async () => {
     const { getByTestId } = renderComponent();
-    act(() => {
-      mockGifPanelProps.onClick(300, 200);
-    });
+    await clickCreate();
     const [, onComplete] = mockCreateGIF.mock.calls[0];
     act(() => {
       onComplete({ cancelled: true });
@@ -303,20 +357,26 @@ describe('GIF creation flow', () => {
     expect(getByTestId('gif-panel')).toBeInTheDocument();
   });
 
-  it('does not build a GIF when image array is unavailable (too many frames)', () => {
-    const getImageArrayFunc = jest.fn(() => false);
-    renderComponent({ getImageArrayFunc });
-    act(() => {
-      mockGifPanelProps.onClick(300, 200);
-    });
+  it('returns to the panel when capture is aborted', async () => {
+    const abortError = new DOMException('cancelled', 'AbortError');
+    captureAnimationFrames.mockRejectedValueOnce(abortError);
+    const { getByTestId } = renderComponent();
+    await clickCreate();
+    expect(mockCreateGIF).not.toHaveBeenCalled();
+    expect(getByTestId('gif-panel')).toBeInTheDocument();
+  });
+
+  it('does not capture when the frame list is unavailable (too many frames)', async () => {
+    const getFramesFunc = jest.fn(() => false);
+    renderComponent({ getFramesFunc });
+    await clickCreate();
+    expect(captureAnimationFrames).not.toHaveBeenCalled();
     expect(mockCreateGIF).not.toHaveBeenCalled();
   });
 
-  it('cancels the gif stream when unmounted while downloading', () => {
+  it('cancels the gif stream when unmounted while downloading', async () => {
     const { unmount } = renderComponent();
-    act(() => {
-      mockGifPanelProps.onClick(300, 200);
-    });
+    await clickCreate();
     unmount();
     expect(mockCancel).toHaveBeenCalled();
   });
@@ -357,7 +417,6 @@ describe('mapStateToProps', () => {
     expect(result.increment).toBe('1 day Between Frames');
     expect(result.speed).toBe(5);
     expect(result.isActive).toBe(true);
-    expect(result.url).toBe('http://localhost:3002/api/v1/snapshot');
     expect(result.numberOfFrames).toBe(12);
     expect(getNumberOfSteps).toHaveBeenCalled();
   });
@@ -376,27 +435,19 @@ describe('mapStateToProps', () => {
     expect(result.increment).toBe('Auto Interval Between Frames');
   });
 
-  it('uses configured imageDownload url', () => {
-    const state = makeState({
-      config: { features: { imageDownload: { url: 'https://snapshots.example' } }, parameters: {} },
-    });
-    expect(capturedMapState(state).url).toBe('https://snapshots.example');
-  });
-
-  it('redirects to parameters.imageDownload with a warning', () => {
-    const state = makeState({
-      config: { features: {}, parameters: { imageDownload: 'https://override.example' } },
-    });
-    expect(capturedMapState(state).url).toBe('https://override.example');
-    expect(util.warn).toHaveBeenCalledWith('Redirecting GIF download to: https://override.example');
-  });
-
-  it('getImageArrayFunc proxies to getImageArray with state', () => {
+  it('getFramesFunc proxies to getAnimationFrames with state', () => {
     const state = makeState();
     const result = capturedMapState(state);
-    const arr = result.getImageArrayFunc({ opt: 1 }, { width: 5, height: 5 });
-    expect(getImageArray).toHaveBeenCalledWith({ opt: 1 }, { width: 5, height: 5 }, state);
-    expect(arr).toEqual(['image1', 'image2']);
+    result.getFramesFunc({ opt: 1 });
+    expect(getAnimationFrames).toHaveBeenCalledWith({ opt: 1 }, state);
+  });
+
+  it('promiseImagery proxies to promiseImageryForTime with state', () => {
+    const state = makeState();
+    const result = capturedMapState(state);
+    const date = new Date('2020-01-02T00:00:00Z');
+    result.promiseImagery(date);
+    expect(promiseImageryForTime).toHaveBeenCalledWith(state, date);
   });
 });
 
@@ -407,5 +458,13 @@ describe('mapDispatchToProps', () => {
     props.onBoundaryChange({ x: 9 });
     expect(changeCropBounds).toHaveBeenCalledWith({ x: 9 });
     expect(dispatch).toHaveBeenCalledWith({ type: 'CHANGE_CROP_BOUNDS', bounds: { x: 9 } });
+  });
+
+  it('selectDate dispatches the date action', () => {
+    const dispatch = jest.fn();
+    const props = capturedMapDispatch(dispatch);
+    const date = new Date('2020-01-03T00:00:00Z');
+    props.selectDate(date);
+    expect(dispatch).toHaveBeenCalledWith({ type: 'SELECT_DATE', date });
   });
 });
