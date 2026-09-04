@@ -1,0 +1,7 @@
+The Gross Primary Production - Gap Filled (L4, 8-Day) layer is created from the NOAA-20 Visible Infrared Imaging Radiometer Suite (VIIRS) Gross Primary Productivity (GPP) and Net Photosynthesis (PSN) Gap-Filled (VJ117A2GF) Version 2 data product. It is a cumulative composite of GPP values based on the radiation-use efficiency concept that is potentially used as inputs to data models to calculate terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.
+
+The VJ117A2GF will be generated at the end of each year when the entire yearly 8-day VJ115A2H is available. Hence, the gap-filled VJ117A2GF is the improved VJ117A2, which has cleaned the poor-quality inputs from 8-day Leaf Area Index and Fraction of Photosynthetically Active Radiation (LAI/FPAR) based on the Quality Control (QC) label for every pixel. If any LAI/FPAR pixel did not meet the quality screening criteria, its value is determined through linear interpolation. However, users cannot get VJ117A2GF in near-real time because it will be generated only at the end of a given year.
+
+The imagery resolution is 500 m, and the temporal resolution is 8 days, but generated only at the end of a given year.
+
+References: VJ117A2GF [doi:10.5067/VIIRS/VJ117A2GF.002](https://doi.org/10.5067/VIIRS/VJ117A2GF.002)

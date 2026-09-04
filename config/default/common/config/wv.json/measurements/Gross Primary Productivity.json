@@ -3,7 +3,7 @@
         "Gross Primary Productivity": {
             "id": "gross-primary-productivity",
             "title":    "Gross Primary Productivity",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, SMAP/Model Value-Added",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS, SMAP/Model Value-Added",
             "sources": {
                 "Aqua/MODIS": {
                       "id": "aqua-modis",
@@ -23,7 +23,27 @@
       			                "MODIS_Terra_L4_Gross_Primary_Productivity_8Day"
                           ]
                       },
-                "SMAP/Model Value-Added": {
+                "NOAA-20/VIIRS": {
+                      "id": "noaa-20-viirs",
+                      "title": "NOAA-20/VIIRS",
+                      "description": "",
+                      "image": "",
+                      "settings": [
+                          "VIIRS_NOAA20_L4_Gross_Primary_Productivity_8Day",
+                          "VIIRS_NOAA20_L4_Gross_Primary_Productivity_Gap_Filled_8Day"
+                      ]
+                  },
+                "Suomi NPP/VIIRS": {
+                      "id": "suomi-npp-viirs",
+                      "title": "Suomi NPP/VIIRS",
+                      "description": "",
+                      "image": "",
+                      "settings": [
+                          "VIIRS_SNPP_L4_Gross_Primary_Productivity_8Day",
+                          "VIIRS_SNPP_L4_Gross_Primary_Productivity_Gap_Filled_8Day"
+                      ]
+                  },
+                    "SMAP/Model Value-Added": {
                     "id": "smap-model-value-added",
                     "title": "SMAP/Model Value-Added",
                     "description": "",

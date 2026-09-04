@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_L4_Gross_Primary_Productivity_Gap_Filled_8Day": {
+      "id": "VIIRS_NOAA20_L4_Gross_Primary_Productivity_Gap_Filled_8Day",
+      "description": "viirs/NOAA20/VIIRS_NOAA20_L4_Gross_Primary_Productivity_Gap_Filled_8Day",
+      "group": "overlays",
+      "tags": "gross primary productivity gpp gf",
+      "layergroup": "Gross Primary Productivity"
+    }
+    }
+  }

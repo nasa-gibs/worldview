@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L3_Sea_Ice_Daily": {
+      "id": "VIIRS_SNPP_L3_Sea_Ice_Daily",
+      "description": "viirs/snpp/VIIRS_SNPP_L3_Sea_Ice_Daily",
+      "tags": "iceberg",
+      "group": "overlays",
+      "layergroup": "Sea Ice",
+      "wrapadjacentdays": true
+    }
+  }
+}

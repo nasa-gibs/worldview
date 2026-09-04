@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L4_Net_Photosynthesis_8Day": {
+      "id": "VIIRS_SNPP_L4_Net_Photosynthesis_8Day",
+      "description": "viirs/snpp/VIIRS_SNPP_L4_Net_Photosynthesis_8Day",
+      "group": "overlays",
+      "tags": "net photosynthesis psn",
+      "layergroup": "Photosynthesis, Net"
+    }
+    }
+  }

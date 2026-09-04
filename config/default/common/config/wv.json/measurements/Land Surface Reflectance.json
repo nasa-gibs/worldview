@@ -14,6 +14,10 @@
                         "VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3",
                         "VIIRS_SNPP_SurfaceReflectance_BandsM11-M7-M5",
                         "VIIRS_SNPP_SurfaceReflectance_BandsI1-I2-I1",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_8Day",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsM11-M7-M5_8Day",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsI1-I2-I1_8Day",
                         "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 },
@@ -26,6 +30,10 @@
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM5-M4-M3",
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM11-M7-M5",
                         "VIIRS_NOAA20_SurfaceReflectance_BandsI1-I2-I1",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_8Day",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM11-M7-M5_8Day",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsI1-I2-I1_8Day",
                         "OrbitTracks_NOAA-20_Ascending"
                     ]
                 },
