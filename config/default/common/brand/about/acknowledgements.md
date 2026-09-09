@@ -94,7 +94,7 @@
                         rel="noopener noreferrer">Short-term Prediction Research and Transition Center (SPoRT)</a> at
                 NASA
                 Marshall Space Flight Center.</li>
-        <li>Geostationary Ring imagery layers (Natural Color, Infrared, Air Mass, Volcanic Ash, Dust) are accessed through an API service provided by the European Organisation for the Exploitation of Meteorological Satellites (<a href="http://www.eumetsat.int/" target="_blank" rel="noopener noreferrer"> EUMETSAT</a>).
+        <li>Geostationary Ring imagery layers (Natural Color, Infrared, Air Mass, Volcanic Ash, Dust) are accessed through an API service provided by the European Organisation for the Exploitation of Meteorological Satellites (<a href="http://www.eumetsat.int/" target="_blank" rel="noopener noreferrer">EUMETSAT</a>).
         <li>Precipitation products provided by <a href="https://pps.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Precipitation Processing System (PPS)</a> and <a
                         href="https://www.earthdata.nasa.gov/centers/amsr-sips"
