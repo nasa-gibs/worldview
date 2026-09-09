@@ -211,6 +211,14 @@ export default class GifStream {
   }
 
   getImagePromise(frame) {
+    // Frames captured from the map arrive as canvases, which drawImage accepts
+    // directly -- no PNG encode/decode round trip needed
+    if (frame.canvas) {
+      const { canvas } = frame;
+      canvas.text = frame.text;
+      canvas.delay = frame.delay;
+      return Promise.resolve(canvas);
+    }
     return new Promise((resolve, reject, onCancel) => {
       const img = new Image();
       img.width = this.options.gifWidth;

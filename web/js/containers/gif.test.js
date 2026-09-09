@@ -79,10 +79,7 @@ jest.mock('../util/util', () => ({
 jest.mock('../modules/image-download/util', () => ({
   imageUtilCalculateResolution: jest.fn(() => '1km'),
   imageUtilGetCoordsFromPixelValues: jest.fn(() => [[0, 0], [10, 10]]),
-  captureAnimationFrames: jest.fn(() => Promise.resolve({
-    frames: [new Blob(), new Blob()],
-    timings: [{ load: 1, capture: 2, encode: 3 }],
-  })),
+  captureAnimationFrames: jest.fn(() => Promise.resolve([{ id: 'canvas-0' }, { id: 'canvas-1' }])),
   captureMapBackdrop: jest.fn(() => Promise.resolve('blob:backdrop')),
 }));
 
@@ -96,11 +93,6 @@ jest.mock('../modules/date/actions', () => ({
 
 jest.mock('../modules/date/selectors', () => ({
   getSelectedDate: jest.fn(() => new Date('2020-01-05T00:00:00Z')),
-}));
-
-jest.mock('googleTagManager', () => ({
-  __esModule: true,
-  default: { pushEvent: jest.fn() },
 }));
 
 jest.mock('../modules/date/constants', () => ({
@@ -335,13 +327,21 @@ describe('GIF creation flow', () => {
     expect(dates[0]).toEqual(new Date('2020-01-01T00:00:00Z'));
   });
 
-  it('attaches a captured object URL to every frame', async () => {
-    renderComponent();
+  it('hands captured canvases to the encoder without a PNG round trip', async () => {
+    renderComponent({
+      getFramesFunc: jest.fn(() => [
+        { date: new Date('2020-01-01T00:00:00Z'), text: 'a', delay: 100 },
+        { date: new Date('2020-01-02T00:00:00Z'), text: 'b', delay: 100 },
+      ]),
+    });
     await clickCreate();
     const [options] = mockCreateGIF.mock.calls[0];
+    expect(options.images).toHaveLength(2);
     options.images.forEach((image) => {
-      expect(typeof image.src).toBe('string');
+      expect(image.canvas).toBeDefined();
+      expect(image.src).toBeUndefined();
     });
+    expect(URL.createObjectURL).not.toHaveBeenCalledWith(expect.anything());
   });
 
   it('freezes the map backdrop before the map is scaled for capture', async () => {

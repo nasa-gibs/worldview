@@ -802,7 +802,7 @@ export async function captureMapBackdrop(mapElement) {
  * Prepares and restores the map once, regardless of frame count.
  * @param {Object} options - map, pixelBbox, metersPerPixel, projection, dates,
  *   originalDate, selectDate, promiseImagery, abortSignal, onProgress, onerror
- * @returns {Promise<Object>} - { frames, timings }
+ * @returns {Promise<Array>} - one canvas per date
  */
 export async function captureAnimationFrames(options) {
   const {
@@ -835,7 +835,6 @@ export async function captureAnimationFrames(options) {
   });
 
   const frames = [];
-  const timings = [];
 
   try {
     // Warm every frame's imagery concurrently so the serial loop below hits
@@ -845,7 +844,6 @@ export async function captureAnimationFrames(options) {
 
     for (let i = 0; i < dates.length; i += 1) {
       throwIfAborted();
-      const stepStart = Date.now();
 
       // selectDate drives UpdateDate to swap layers; promiseImagery is a cache hit here
       selectDate(dates[i]);
@@ -858,19 +856,11 @@ export async function captureAnimationFrames(options) {
           setTimeout(resolve, FRAME_SETTLE_MS);
         });
       }
-      const loaded = Date.now();
 
       throwIfAborted();
-      const canvas = await captureFrame(mapElement, captureRect);
-      const captured = Date.now();
-
-      frames.push(await canvas.convertToBlob({ type: 'image/png' }));
-
-      timings.push({
-        load: loaded - stepStart,
-        capture: captured - loaded,
-        encode: Date.now() - captured,
-      });
+      // Canvases are handed to the encoder as-is; encoding them to PNG here
+      // only to decode them again downstream is wasted work
+      frames.push(await captureFrame(mapElement, captureRect));
 
       if (onProgress) onProgress(i + 1, dates.length);
     }
@@ -879,7 +869,7 @@ export async function captureAnimationFrames(options) {
     if (originalDate) selectDate(originalDate);
   }
 
-  return { frames, timings };
+  return frames;
 }
 
 /**

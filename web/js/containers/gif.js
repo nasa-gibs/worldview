@@ -7,7 +7,6 @@ import {
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
 import { debounce as lodashDebounce, round as lodashRound } from 'lodash';
-import googleTagManager from 'googleTagManager';
 
 import GifStream from '../modules/animation/gifstream';
 import GifPanel from '../components/animation-widget/gif-panel';
@@ -283,9 +282,8 @@ class GIF extends Component {
       isDownloading: true, isCapturing: true, progress: 0, backdropUrl,
     });
 
-    let urls = [];
     try {
-      const { frames: blobs, timings } = await captureAnimationFrames({
+      const canvases = await captureAnimationFrames({
         map: map.ui.selected,
         pixelBbox: [boundaries.x, boundaries.y, boundaries.x2, boundaries.y2],
         metersPerPixel: Number(resolution),
@@ -302,19 +300,15 @@ class GIF extends Component {
         },
       });
 
-      this.reportTimings(timings, Number(resolution));
       if (!this.mounted) return;
 
-      // GifStream revokes each object URL once its frame is decoded
-      urls = blobs.map((blob) => URL.createObjectURL(blob));
       this.setState({ isCapturing: false });
       this.encodeGIF(
-        frames.map((frame, i) => ({ ...frame, src: urls[i] })),
+        frames.map((frame, i) => ({ ...frame, canvas: canvases[i] })),
         width,
         height,
       );
     } catch (error) {
-      urls.forEach((url) => URL.revokeObjectURL(url));
       if (error.name !== 'AbortError') {
         console.error('GIF capture failed', error);
       }
@@ -339,21 +333,6 @@ class GIF extends Component {
       this.backdropUrl = null;
     }
     if (this.mounted) this.setState({ backdropUrl: null });
-  }
-
-  // Per-frame capture cost, to decide whether further optimization is warranted
-  reportTimings(timings, resolution) {
-    const sum = (key) => timings.reduce((acc, t) => acc + t[key], 0);
-    googleTagManager.pushEvent({
-      event: 'gif_capture',
-      frames: timings.length,
-      resolution,
-      duration: {
-        load: sum('load'),
-        capture: sum('capture'),
-        encode: sum('encode'),
-      },
-    });
   }
 
   onCancel() {
