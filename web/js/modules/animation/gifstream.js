@@ -21,14 +21,13 @@ function componentizedPaletteToArray(paletteRGB) {
 }
 // part of neuquant conversion
 function dataToRGB(data, width, height) {
-  let i = 0;
-  const length = width * height * 4;
-  const rgb = [];
-  while (i < length) {
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    i++;
+  const numPixels = width * height;
+  const rgb = new Uint8Array(numPixels * 3);
+  let j = 0;
+  for (let i = 0; i < numPixels * 4; i += 4) {
+    rgb[j++] = data[i];
+    rgb[j++] = data[i + 1];
+    rgb[j++] = data[i + 2];
   }
   return rgb;
 }
