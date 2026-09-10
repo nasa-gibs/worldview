@@ -22,7 +22,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
                         "Coastlines_15m",
                         "Land_Mask",
                         "Land_Water_Map"

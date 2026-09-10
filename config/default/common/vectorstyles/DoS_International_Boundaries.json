@@ -1,0 +1,87 @@
+{
+  "version": 8,
+  "name": "DoS International Boundaries",
+  "sources": {
+    "DoS_International_Boundaries": {
+      "type": "vector",
+      "tiles": [
+        "https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/DoS_International_Boundaries/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.mvt"
+      ]
+    }
+  },
+  "layers": [
+    {
+      "id": "Line_Glow",
+      "source": "DoS_International_Boundaries",
+      "source-layer": "DoS_International_Boundaries",
+      "source-description": "Default",
+      "type": "line",
+      "paint": {
+        "line-color": [
+          "case",
+          [ "==", ["get", "RANK"], "3"], ["rgba", 16, 18, 18, 0.1],
+          ["rgba", 16, 18, 18, 0.4]
+        ],
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          3,[
+              "match", ["get", "RANK"],
+              "3", 1,
+              3
+          ],
+          5,[
+              "match", ["get", "RANK"],
+              "3", 1.5,
+              4.5
+          ],
+          7,[
+              "match", ["get", "RANK"],
+              "3", 2,
+              6
+          ]
+        ]
+      }
+    },
+    {
+      "id": "Line_Core",
+      "source": "DoS_International_Boundaries",
+      "source-layer": "DoS_International_Boundaries",
+      "source-description": "Default",
+      "type": "line",
+      "paint": {
+        "line-color": [
+          "case",
+          [ "==", ["get", "RANK"], "3"], ["rgba", 177, 193, 193, 0.25],
+          ["rgba", 177, 193, 193, 1]
+        ],
+        "line-width": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          3,[
+              "match", ["get", "RANK"],
+              "3", 0.75,
+              1
+          ],
+          5,[
+              "match", ["get", "RANK"],
+              "3", 1,
+              1.5
+          ],
+          7,[
+              "match", ["get", "RANK"],
+              "3", 1.75,
+              2
+          ]
+        ],
+        "line-dasharray": [
+          "case",
+          ["==", ["get", "RANK"], "2"], ["literal", [6, 4]],
+          ["literal", [0, 0]]
+        ]
+      }
+    }
+  ]
+}

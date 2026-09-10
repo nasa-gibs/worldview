@@ -77,7 +77,7 @@ const paramDict = {
 const standaloneLayers = [
   'Graticule_15m',
   'Coastlines_15m',
-  'Reference_Features_15m',
+  'DoS_International_Boundaries',
   'Reference_Labels_15m'
 ]
 const destImgDir = './web/images/layers/previews/'
