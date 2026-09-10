@@ -180,6 +180,7 @@
     "coordinate-parser": "^1.0.7",
     "copy-to-clipboard": "^4.0.2",
     "dom-scroll-into-view": "^2.0.1",
+    "dompurify": "^3.4.14",
     "element-resize-detector": "^1.2.4",
     "elm-pep": "^1.0.6",
     "eslint-plugin-react-hooks": "^7.1.1",
