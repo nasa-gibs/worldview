@@ -1,5 +1,7 @@
 The Gross Primary Production (L4, 8-Day) layer is created from the NASA/NOAA Suomi National Polar-orbiting Partnership (Suomi NPP) Visible Infrared Imaging Radiometer Suite (VIIRS) Gross Primary Productivity (GPP) and Net Photosynthesis (PSN) (VNP17A2) Version 2 data product. It is a cumulative composite of GPP values based on the radiation use efficiency concept that is potentially used as inputs to data models to calculate terrestrial energy, carbon, water cycle processes, and biogeochemistry of vegetation.
 
+For previous years, the Gross Primary Production (L4, 8-Day) is created from the VNP17A2 product. The VNP17A2GF is generated at the end of each year when the entire yearly 8-day VNP15A2H is available. Hence, the gap-filled VNP17A2GF is the improved VNP17A2, which has cleaned the poor-quality inputs from 8-day Leaf Area Index and Fraction of Photosynthetically Active Radiation (LAI/FPAR) based on the Quality Control (QC) label for every pixel. If any LAI/FPAR pixel did not meet the quality screening criteria, its value is determined through linear interpolation.
+
 The imagery resolution is 500 m, and the temporal resolution is 8 days.
 
-References: VNP17A2 [doi:10.5067/VIIRS/VNP17A2.002](https://doi.org/10.5067/VIIRS/VNP17A2.002)
+References: VNP17A2 [doi:10.5067/VIIRS/VNP17A2.002](https://doi.org/10.5067/VIIRS/VNP17A2.002); VNP17A2GF [doi:10.5067/VIIRS/VNP17A2GF.002](https://doi.org/10.5067/VIIRS/VNP17A2GF.002)

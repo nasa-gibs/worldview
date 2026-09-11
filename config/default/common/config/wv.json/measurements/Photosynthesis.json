@@ -29,8 +29,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_NOAA20_L4_Net_Photosynthesis_8Day",
-                        "VIIRS_NOAA20_L4_Net_Photosynthesis_Gap_Filled_8Day"
+                        "VIIRS_NOAA20_L4_Net_Photosynthesis_8Day"
                     ]
                 },
                 "Suomi NPP/VIIRS": {
@@ -39,8 +38,7 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_SNPP_L4_Net_Photosynthesis_8Day",
-                        "VIIRS_SNPP_L4_Net_Photosynthesis_Gap_Filled_8Day"
+                        "VIIRS_SNPP_L4_Net_Photosynthesis_8Day"
                     ]
                 }
             }
