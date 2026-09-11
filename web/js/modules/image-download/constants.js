@@ -64,4 +64,5 @@ export const DRIVER_DICT = {
   jpg: 'JPEG',
   jpeg: 'JPEG',
   png: 'PNG',
+  kml: 'PNG',
 };
