@@ -3,7 +3,7 @@
         "Reference Map": {
             "id": "reference-map",
             "title": "Reference Map",
-            "subtitle": "Esri, OpenStreetMap.org, WDPA",
+            "subtitle": "Esri, U.S. Department of State, OpenStreetMap.org, WDPA, Natural Earth/Polarview",
             "multichoice": true,
             "sources": {
                 "Esri": {
@@ -16,13 +16,21 @@
                         "Reference_Labels_15m"
                     ]
                 },
+                "U.S. Department of State": {
+                    "id": "statedept",
+                    "title": "U.S. Department of State",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "DoS_International_Boundaries"
+                    ]
+                },
                 "OpenStreetMap.org": {
                     "id": "openstreetmap",
                     "title": "OpenStreetMap.org",
                     "description": "",
                     "image": "",
                     "settings": [
-                        "DoS_International_Boundaries",
                         "Coastlines_15m",
                         "Land_Mask",
                         "Land_Water_Map"
@@ -35,6 +43,15 @@
                     "image": "",
                     "settings": [
                         "World_Database_on_Protected_Areas"
+                    ]
+                },
+                "Natural Earth/Polarview": {
+                  "id": "natural-earth-polarview",
+                 "title": "Natural Earth/Polarview",
+                 "description": "",
+                    "image": "",
+                    "settings": [
+                        "Graticule_15m"
                     ]
                 }
             }
