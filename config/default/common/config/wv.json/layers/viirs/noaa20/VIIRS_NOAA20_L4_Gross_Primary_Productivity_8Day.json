@@ -4,7 +4,7 @@
       "id": "VIIRS_NOAA20_L4_Gross_Primary_Productivity_8Day",
       "description": "viirs/NOAA20/VIIRS_NOAA20_L4_Gross_Primary_Productivity_8Day",
       "group": "overlays",
-      "tags": "gross primary productivity gpp",
+      "tags": "gross primary productivity gpp gap filled",
       "layergroup": "Gross Primary Productivity"
     }
     }
