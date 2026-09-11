@@ -612,13 +612,16 @@ export async function prepareMapForCapture(options) {
   const restoreMap = createMapRestore(map, extent, abortSignal, tileMatrixID, onerror);
   const view = map.getView();
 
-  // Add abort event listener to clean up if cancelled
-  const abortHandler = () => {
+  // An abort and the caller's own cleanup can both reach this
+  let restored = false;
+  const restoreOnce = () => {
+    if (restored) return;
+    restored = true;
     restoreMap();
   };
 
   if (abortSignal) {
-    abortSignal.addEventListener('abort', abortHandler);
+    abortSignal.addEventListener('abort', restoreOnce, { once: true });
   }
 
   await fitViewToExtent(map, extent);
@@ -685,7 +688,7 @@ export async function prepareMapForCapture(options) {
   };
 
   return {
-    restore: restoreMap,
+    restore: restoreOnce,
     extent,
     mapElement,
     captureRect,
@@ -834,6 +837,24 @@ export async function captureAnimationFrames(options) {
     onerror,
   });
 
+  // Aborting during prepare already restored the map, and no date was changed
+  throwIfAborted();
+
+  // html2canvas cannot be aborted, so a cancelled run reaches its finally late.
+  // Tear down on the abort itself, or it lands on top of the next capture and
+  // undoes that one's setup instead.
+  let torndown = false;
+  const teardown = () => {
+    if (torndown) return;
+    torndown = true;
+    restore();
+    if (originalDate) selectDate(originalDate);
+  };
+
+  if (abortSignal) {
+    abortSignal.addEventListener('abort', teardown, { once: true });
+  }
+
   const frames = [];
 
   try {
@@ -860,13 +881,20 @@ export async function captureAnimationFrames(options) {
       throwIfAborted();
       // Canvases are handed to the encoder as-is; encoding them to PNG here
       // only to decode them again downstream is wasted work
-      frames.push(await captureFrame(mapElement, captureRect));
+      let canvas;
+      try {
+        canvas = await captureFrame(mapElement, captureRect);
+      } catch (error) {
+        // Restoring the map mid-capture makes html2canvas fail on its own terms
+        throwIfAborted();
+        throw error;
+      }
+      frames.push(canvas);
 
       if (onProgress) onProgress(i + 1, dates.length);
     }
   } finally {
-    restore();
-    if (originalDate) selectDate(originalDate);
+    teardown();
   }
 
   return frames;

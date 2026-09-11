@@ -91,6 +91,8 @@ export default class GifStream {
     const textToUse = frameText && options.showFrameText ? frameText : text;
 
     try {
+      // Transparent no-data areas would otherwise show the previous frame's stamp
+      ctx.clearRect(0, 0, gifWidth, gifHeight);
       ctx.drawImage(img, 0, 0, gifWidth, gifHeight);
       if (textToUse) {
         ctx.font = font;
