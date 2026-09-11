@@ -1523,10 +1523,12 @@ export function adjustStartDates(layers) {
       console.warn(`GetCapabilities is missing the time value for ${layer.id}`);
     }
 
-    if (Array.isArray(historicalRanges) && historicalRanges.length &&
-      Array.isArray(dateRanges) && dateRanges.length) {
+    if (Array.isArray(historicalRanges) && historicalRanges.length) {
       layer.startDate = historicalRanges[0].startDate;
       historicalRanges.reverse().forEach((range) => {
+        if (!layer.dateRanges) {
+          layer.dateRanges = [];
+        }
         layer.dateRanges.unshift(range);
       });
     } else {

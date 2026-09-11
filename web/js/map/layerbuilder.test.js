@@ -579,6 +579,22 @@ describe('mapLayerBuilder', () => {
       expect(layer).toBeDefined();
     });
 
+    it('disables wrapX on the AERONET source so points stay within the layer extent', async () => {
+      const OlSourceVector = require('ol/source/Vector');
+      builder = mapLayerBuilder(
+        buildConfig({ AERONET: { url: 'https://aeronet.example.com', matrixSets: {} } }),
+        cache,
+        store,
+      );
+      await builder.createLayer(
+        buildDef({ type: 'vector', source: 'AERONET', projections: { geographic: {} } }),
+        buildOptions(),
+      );
+      expect(OlSourceVector).toHaveBeenCalledWith(
+        expect.objectContaining({ wrapX: false }),
+      );
+    });
+
     it('throws error for AERONET with missing source config', async () => {
       const noAeronetConfig = buildConfig();
       delete noAeronetConfig.sources.AERONET;

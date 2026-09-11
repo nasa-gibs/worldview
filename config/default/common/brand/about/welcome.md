@@ -2,12 +2,12 @@
             target="_blank" rel="noopener noreferrer">Release
             Notes</a>)</span></h1>
 <div class="right">
-    <div class="caption"><a href="https://www.earthdata.nasa.gov/news?field_tools_target_id[21910]=21910&items_per_page=8"
+    <div class="caption"><a href="https://www.earthdata.nasa.gov/news?data_tools[22235]=22235&data_tools[21910]=21910&data_tools[22138]=22138&items_per_page=8&field_tools_target_id[21910]=21910"
             target="_blank" rel="noopener noreferrer"> What's new in @OFFICIAL_NAME@! </a></div>
 </div>
 <p>This <a href="https://github.com/nasa-gibs/worldview" target="_blank" rel="noopener noreferrer">open source
         code</a> app from NASA's <a href="https://earthdata.nasa.gov/esdis" target="_blank"
-        rel="noopener noreferrer">ESDIS</a> provides the capability to interactively browse over 1000 global,
+        rel="noopener noreferrer">ESDIS</a> provides the capability to interactively browse over 1200 global,
     full-resolution satellite imagery layers and then download the underlying data. Many of the imagery layers are
     updated daily and are available within three hours of observation - essentially showing the entire Earth as it
     looks "right now". This supports time-critical application areas such as wildfire management, air quality
