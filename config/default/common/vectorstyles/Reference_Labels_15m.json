@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "sprite": "https://www.arcgis.com/sharing/rest/content/items/bd9172805cb044ccab2fac5abe9e8308/resources/sprites/sprite-1788370786432",
+  "sprite": "https://www.arcgis.com/sharing/rest/content/items/bd9172805cb044ccab2fac5abe9e8308/resources/sprites/sprite-1789153163956",
   "glyphs": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_GCS_v2/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
   "sources": {
     "esri": {
@@ -4060,57 +4060,21 @@
       "minzoom": 7,
       "maxzoom": 11,
       "layout": {
-        "visibility": "visible",
         "text-size": 11,
-        "icon-size": 1,
         "text-font": [
           "Arial Italic"
         ],
         "text-max-width": 5,
-        "text-line-height": 1.2,
-        "text-padding": 2,
         "text-letter-spacing": 0.05,
         "text-allow-overlap": true,
-        "text-ignore-placement": false,
-        "text-justify": "center",
-        "text-rotation-alignment": "auto",
-        "text-optional": false,
-        "icon-allow-overlap": false,
-        "icon-optional": false,
-        "icon-ignore-placement": false,
-        "icon-rotation-alignment": "auto",
-        "symbol-placement": "point",
         "symbol-avoid-edges": true,
-        "symbol-spacing": 250,
-        "text-anchor": "center",
-        "icon-anchor": "center",
-        "icon-offset": [
-          0,
-          0
-        ],
-        "text-offset": [
-          0,
-          0
-        ],
-        "icon-rotate": 0,
-        "text-rotate": 0,
-        "text-max-angle": 45,
-        "text-field": "Lake America",
-        "text-transform": "none"
+        "text-field": "Lake America"
       },
       "paint": {
-        "icon-opacity": 1,
-        "text-opacity": 1,
         "text-color": "#64c2ea",
         "text-halo-color": "#000000",
         "text-halo-width": 1,
         "text-halo-blur": 1,
-        "text-translate-anchor": "map",
-        "icon-translate-anchor": "map",
-        "icon-translate": [
-          0,
-          0
-        ],
         "text-translate": {
           "base": 1,
           "stops": [
@@ -58712,7 +58676,7 @@
       "filter": [
         "all",
         [
-          "==",
+          "!=",
           "_label_class",
           2
         ],
@@ -58774,70 +58738,10 @@
         "spatialReference": {
           "wkid": 4326
         },
-        "xmin": -438.0463893348409,
-        "ymin": 43.406881892838186,
-        "xmax": -437.4098689490987,
-        "ymax": 43.92735918776006
-      },
-      {
-        "spatialReference": {
-          "latestWkid": 3857,
-          "wkid": 102100,
-          "falseM": -100000,
-          "falseX": -20037700,
-          "falseY": -30241100,
-          "falseZ": -100000,
-          "mTolerance": 0.001,
-          "mUnits": 10000,
-          "xyTolerance": 0.001,
-          "xyUnits": 10000,
-          "zTolerance": 0.001,
-          "zUnits": 10000
-        },
-        "xmin": -25203428.46240802,
-        "ymin": -15475683.268139668,
-        "xmax": 25203428.46240802,
-        "ymax": 15519837.449604359
-      },
-      {
-        "spatialReference": {
-          "latestWkid": 3857,
-          "wkid": 102100,
-          "falseM": -100000,
-          "falseX": -20037700,
-          "falseY": -30241100,
-          "falseZ": -100000,
-          "mTolerance": 0.001,
-          "mUnits": 10000,
-          "xyTolerance": 0.001,
-          "xyUnits": 10000,
-          "zTolerance": 0.001,
-          "zUnits": 10000
-        },
-        "xmin": -25203428.46240802,
-        "ymin": -15475683.268139668,
-        "xmax": 25203428.46240802,
-        "ymax": 15519837.449604359
-      },
-      {
-        "spatialReference": {
-          "latestWkid": 3857,
-          "wkid": 102100,
-          "falseM": -100000,
-          "falseX": -20037700,
-          "falseY": -30241100,
-          "falseZ": -100000,
-          "mTolerance": 0.001,
-          "mUnits": 10000,
-          "xyTolerance": 0.001,
-          "xyUnits": 10000,
-          "zTolerance": 0.001,
-          "zUnits": 10000
-        },
-        "xmin": -25203428.46240802,
-        "ymin": -15475683.268139668,
-        "xmax": 25203428.46240802,
-        "ymax": 15519837.449604359
+        "xmin": -428.9847929412553,
+        "ymin": -6.6003088115075315,
+        "xmax": -289.0629179412553,
+        "ymax": 58.790316188492454
       }
     ],
     "arcgisMinimapVisibility": false,
