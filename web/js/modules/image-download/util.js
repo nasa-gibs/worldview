@@ -51,7 +51,7 @@ export function getLatestIntervalTime(layerDefs, dateTime) {
 
 /**
  * KMZ Only: Process original orbit track layers to split into two separate
- * ayers and repeat wrap and opacity values for original
+ * layers and repeat wrap and opacity values for original
  * @param {Array} layersArray
  * @param {Array} layerWraps
  * @param {Array} opacities
@@ -474,10 +474,6 @@ export function convertPngToKml(pngBlob, options) {
 
       reader.onload = () => {
         try {
-          // Extract the base64 part of the data URL
-          const dataUrl = reader.result;
-          const base64Data = dataUrl.split(',')[1];
-
           const [minX, minY, maxX, maxY] = options.extent;
 
           // Create the KML document
@@ -489,7 +485,7 @@ export function convertPngToKml(pngBlob, options) {
                   <name>${options.name || 'Image Overlay'}</name>
                   ${options.description ? `<description>${options.description}</description>` : ''}
                   <Icon>
-                    <href>data:image/png;base64,${base64Data}</href>
+                    <href>image.png</href>
                   </Icon>
                   <LatLonBox>
                     <north>${maxY}</north>
@@ -550,16 +546,6 @@ export async function georeference (inputBlob, options) {
   if (outputFormat === 'tiff' || outputFormat === 'geotiff') outputFormat = 'tif';
   // Normalize jpg to jpeg for consistency
   if (outputFormat === 'jpeg') outputFormat = 'jpg';
-  if (outputFormat === 'kml') {
-    const blob = await convertPngToKml(inputBlob, options);
-
-    return [
-      {
-        name: 'image.kml',
-        blob,
-      },
-    ];
-  }
   const worldfile = options.worldfile ? 'YES' : 'NO';
 
   const file = new File([inputBlob], `image.${inputFormat}`, { type: `image/${inputFormat}` });
@@ -602,7 +588,7 @@ export async function georeference (inputBlob, options) {
   gdal.close(dataset);
 
   const files = translate.all.map((p) => ({ path: p.local }));
-  const imageFilePath = files.find((f) => f.path.endsWith(`.${outputFormat}`))?.path;
+  const imageFilePath = files.find((f) => f.path.endsWith(`.${outputFormat === 'kml' ? 'png' : outputFormat}`))?.path;
   const worldFilePath = files.find((f) => f.path.endsWith('.wld') || f.path.endsWith('.tfw'))?.path;
   const imageFileBytes = await gdal.getFileBytes(imageFilePath);
   const imageFileName = imageFilePath.split('/').pop();
@@ -613,6 +599,14 @@ export async function georeference (inputBlob, options) {
       blob: imageFileBlob,
     },
   ];
+  if (outputFormat === 'kml') {
+    const blob = await convertPngToKml(inputBlob, options);
+
+    output.push({
+      name: 'image.kml',
+      blob,
+    });
+  }
   if (worldFilePath) {
     const worldfileBytes = await gdal.getFileBytes(worldFilePath);
     const worldFileName = worldFilePath.split('/').pop();

@@ -145,11 +145,20 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  const promises = layerOrder.map((layerId) => {
-    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
-    return Promise.reject(new Error(`Skipped layer: ${layerId}`))
-  })
-  const results = await Promise.allSettled(promises)
+
+  const BATCH_SIZE = 15
+  const results = []
+
+  for (let i = 0; i < layerOrder.length; i += BATCH_SIZE) {
+    const chunk = layerOrder.slice(i, i + BATCH_SIZE)
+    const chunkPromises = chunk.map((layerId) => {
+      if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
+      return Promise.reject(new Error(`Skipped layer: ${layerId}`))
+    })
+    const chunkResults = await Promise.allSettled(chunkPromises)
+    results.push(...chunkResults)
+  }
+
   const { fulfilled = [], rejected = [] } = Object.groupBy(results, (item) => item.status)
 
   rejected.forEach(({ reason }) => {
