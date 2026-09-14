@@ -478,7 +478,7 @@ describe('mapStateToProps', () => {
     const result = capturedMapState(state);
     const date = new Date('2020-01-02T00:00:00Z');
     result.promiseImagery(date);
-    expect(promiseImageryForTime).toHaveBeenCalledWith(state, date);
+    expect(promiseImageryForTime).toHaveBeenCalledWith(state, date, undefined, false);
   });
 });
 

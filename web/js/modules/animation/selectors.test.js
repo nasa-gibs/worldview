@@ -1,7 +1,7 @@
 import getAnimationFrames, { MAX_FRAMES } from './selectors';
 import util from '../../util/util';
 import { subdailyLayersActive } from '../layers/selectors';
-import { formatDisplayDate, getNextImageryDelta } from '../date/util';
+import { formatDisplayDate, getValidDateRanges } from '../date/util';
 
 jest.mock('../../util/util', () => ({
   dateAdd: jest.fn((date) => {
@@ -17,7 +17,7 @@ jest.mock('../layers/selectors', () => ({
 
 jest.mock('../date/util', () => ({
   formatDisplayDate: jest.fn((date) => date.toISOString()),
-  getNextImageryDelta: jest.fn(() => 1),
+  getValidDateRanges: jest.fn(() => []),
 }));
 
 jest.mock('../date/constants', () => ({
@@ -153,7 +153,11 @@ describe('getAnimationFrames', () => {
     expect(util.dateAdd).toHaveBeenCalledWith(expect.any(Date), 'day', 3);
   });
 
-  test('uses getNextImageryDelta when autoSelected is true', () => {
+  test('steps to each date range start when autoSelected is true', () => {
+    getValidDateRanges.mockReturnValueOnce([
+      { startDate: '2023-01-01T00:07:00Z', endDate: '2023-01-01T00:59:00Z' },
+      { startDate: '2023-01-01T01:07:00Z', endDate: '2023-01-01T01:59:00Z' },
+    ]);
     const state = buildState({
       date: {
         customInterval: 1,
@@ -164,8 +168,11 @@ describe('getAnimationFrames', () => {
         autoSelected: true,
       },
     });
-    getAnimationFrames(buildOptions(), state);
-    expect(getNextImageryDelta).toHaveBeenCalled();
+    const result = getAnimationFrames(buildOptions(), state);
+    expect(result.map(({ date }) => date.toISOString())).toEqual([
+      new Date('2023-01-01T00:07:00Z').toISOString(),
+      new Date('2023-01-01T01:07:00Z').toISOString(),
+    ]);
   });
 
   test('passes subdaily flag to formatDisplayDate', () => {

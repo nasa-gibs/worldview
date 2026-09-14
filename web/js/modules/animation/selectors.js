@@ -1,7 +1,7 @@
 import util from '../../util/util';
 import { subdailyLayersActive } from '../layers/selectors';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
-import { formatDisplayDate, getNextImageryDelta } from '../date/util';
+import { formatDisplayDate, getValidDateRanges } from '../date/util';
 
 export const MAX_FRAMES = 40;
 
@@ -20,9 +20,31 @@ export default function getAnimationFrames(options, state) {
   const {
     customInterval, interval, customDelta, delta, customSelected, autoSelected,
   } = date;
+  const isSubDaily = subdailyLayersActive(state);
+
+  const toFrame = (frameDate) => ({
+    date: frameDate,
+    text: showDates ? formatDisplayDate(frameDate, isSubDaily) : '',
+    delay: 1000 / animation.speed,
+  });
+
+  // Auto steps to each available imagery date rather than by a fixed amount,
+  // matching the play queue. Deriving a delta instead would depend on `interval`,
+  // which auto does not set, and can land off an imagery date entirely.
+  if (autoSelected) {
+    const dateRanges = getValidDateRanges(
+      layers.active.layers,
+      new Date(startDate),
+      new Date(endDate),
+    );
+    if (dateRanges.length > MAX_FRAMES) return false;
+    // Layers without imagery still render, so keep a frame to capture them
+    if (!dateRanges.length) return [toFrame(new Date(startDate))];
+    return dateRanges.map(({ startDate: rangeStart }) => toFrame(new Date(rangeStart)));
+  }
+
   const frames = [];
   const toDate = new Date(endDate);
-  const isSubDaily = subdailyLayersActive(state);
   let current = new Date(startDate);
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const increment = customSelected
@@ -31,14 +53,8 @@ export default function getAnimationFrames(options, state) {
 
   while (current <= toDate) {
     if (frames.length >= MAX_FRAMES) return false;
-    frames.push({
-      date: current,
-      text: showDates ? formatDisplayDate(current, isSubDaily) : '',
-      delay: 1000 / animation.speed,
-    });
-    current = util.dateAdd(current, increment, autoSelected
-      ? getNextImageryDelta(layers.active.layers, current, 1)
-      : useDelta);
+    frames.push(toFrame(current));
+    current = util.dateAdd(current, increment, useDelta);
   }
   return frames;
 }

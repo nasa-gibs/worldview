@@ -563,7 +563,10 @@ function mapStateToProps(state) {
       customSelected ? customDelta : 1,
     ),
     getFramesFunc: (options) => getAnimationFrames(options, state),
-    promiseImagery: (imageryDate) => promiseImageryForTime(state, imageryDate),
+    // Granule layers are skipped unless the auto flag is passed through
+    promiseImagery: (imageryDate) => promiseImageryForTime(
+      state, imageryDate, undefined, autoSelected,
+    ),
   };
 }
 const mapDispatchToProps = (dispatch) => ({
