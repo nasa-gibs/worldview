@@ -1,0 +1,18 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_Daily": {
+      "id": "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+      "description": "viirs/NOAA20/VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+      "tags": "natural color cr NOAA-20 NOAA20",
+      "layergroup": "Land Surface Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true,
+      "associatedLayers": ["VIIRS_NOAA20_CorrectedReflectance_TrueColor"],
+      "projections": {
+        "geographic": {
+          "source": "GIBS:geographic"
+        }
+      }
+    }
+  }
+}
