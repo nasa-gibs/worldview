@@ -5,7 +5,7 @@
       "title": "Ozone (L2, UV Aerosol Index, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_Ozone_UV_Aerosol_Index_Granule",
-      "tags": "",
+      "tags": "o3",
       "group": "overlays",
       "layergroup": "Aerosol Index",
       "type": "granule",
