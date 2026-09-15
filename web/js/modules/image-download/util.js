@@ -1,19 +1,14 @@
 /* eslint no-underscore-dangle: 0 */
 import html2canvas from 'html2canvas';
-import {
-  get as lodashGet,
-} from 'lodash';
 import JSZip from 'jszip';
 import canvasSize from 'canvas-size';
 import { evaluate } from 'mathjs';
-import { transform, get } from 'ol/proj';
+import { get } from 'ol/proj';
 import * as olExtent from 'ol/extent';
 import olTileState from 'ol/TileState';
 import initGdalJs from 'gdal3.js';
 import util from '../../util/util';
 import { formatDisplayDate } from '../date/util';
-import { nearestInterval } from '../layers/util';
-import { CRS } from '../map/constants';
 import {
   GDAL_WASM_PATH,
   DRIVER_DICT,
@@ -24,98 +19,6 @@ import {
 const GEO_ESTIMATION_CONSTANT = 256.0;
 const POLAR_ESTIMATION_CONSTANT = 0.002197265625;
 export const GRANULE_LIMIT = 30;
-
-/**
- * Get a date time snapped to the interval of the layer with the shortest interval.
- * This should give us the snapped time closest to the current app time.
- * @param {Object} layerDefs - layer definitions for all visible layers
- * @param {Date} dateTime - current application dateTime
- * @returns {Date}
- */
-export function getLatestIntervalTime(layerDefs, dateTime) {
-  const subDailyDefs = layerDefs.filter((def) => def.period === 'subdaily') || [];
-  const tempoDefs = subDailyDefs.filter((def) => def.id.includes('TEMPO')) || [];
-  if (tempoDefs.length > 0) {
-    return dateTime;
-  }
-  const defsSortedByInterval = subDailyDefs.sort((defA, defB) => {
-    const intervalA = Number(lodashGet(defA, 'dateRanges[0].dateInterval'));
-    const intervalB = Number(lodashGet(defB, 'dateRanges[0].dateInterval'));
-    return intervalA - intervalB;
-  });
-
-  return subDailyDefs.length
-    ? nearestInterval(defsSortedByInterval[0], dateTime)
-    : new Date(dateTime.setUTCHours(0, 0, 0, 0));
-}
-
-/**
- * KMZ Only: Process original orbit track layers to split into two separate
- * layers and repeat wrap and opacity values for original
- * @param {Array} layersArray
- * @param {Array} layerWraps
- * @param {Array} opacities
- * @returns {Object} layersArray, layerWraps, opacities
- */
-const imageUtilProcessKMZOrbitTracks = (layersArray, layerWraps, opacities) => {
-  const processedLayersArray = [...layersArray];
-  const processedLayerWraps = [...layerWraps];
-  const processedOpacities = [...opacities];
-
-  let mod = 0;
-  // check for OrbitTracks in layersArray
-  for (let i = 0; i < layersArray.length; i += 1) {
-    const layerId = layersArray[i];
-    if (layerId.includes('OrbitTracks')) {
-      // track index for modifications from splicing
-      const idx = i + mod;
-      // revise OrbitTracks layerId requested to individual 'Lines' and 'Points' layers
-      // ex: 'OrbitTracks_Aqua_Ascending' is revised in the request as:
-      // 'OrbitTracks_Aqua_Ascending_Points' and 'OrbitTracks_Aqua_Ascending_Lines'
-      processedLayersArray.splice(idx, 1, `${layerId}_Lines`, `${layerId}_Points`);
-      // repeat wrap and opacity values for revised 'Lines' and 'Points' layers
-      const wrap = processedLayerWraps[idx];
-      processedLayerWraps.splice(idx, 0, wrap);
-      if (opacities.length > 0) {
-        const opacity = processedOpacities[idx];
-        processedOpacities.splice(idx, 0, opacity);
-      }
-
-      mod += 1;
-    }
-  }
-
-  return {
-    layersArray: processedLayersArray,
-    layerWraps: processedLayerWraps,
-    opacities: processedOpacities,
-  };
-};
-
-/**
- * Wrap to handle image util processes with additional KMZ processing if applicable
- * @param {String/Boolean} fileType (false for default 'image/jpeg')
- * @param {Array} layersArray
- * @param {Array} layerWraps
- * @param {Array} opacities
- * @returns {Object} layersArray, layerWraps, opacities
- */
-const imageUtilProcessWrap = (fileType, layersArray, layerWraps, opacities) => {
-  if (fileType === 'application/vnd.google-earth.kmz') {
-    return imageUtilProcessKMZOrbitTracks(layersArray, layerWraps, opacities);
-  }
-  return {
-    layersArray,
-    layerWraps,
-    opacities,
-  };
-};
-
-export function imageUtilEstimateResolution(resolution, isGeoProjection) {
-  return isGeoProjection
-    ? resolution / POLAR_ESTIMATION_CONSTANT
-    : resolution / GEO_ESTIMATION_CONSTANT;
-}
 
 function getMetersPerUnit(projection, center = [0, 0]) {
   const units = projection.getUnits();
@@ -205,95 +108,6 @@ export function imageUtilCalculateResolution(
   return resolution;
 }
 
-/*
- * Retrieves active layers by day
- *
- * @method getLayersForDay
- * @private
- *
- * @param {array} array of layers
- *
- * @returns {array} array of layer ids
- *
- */
-export function imageUtilGetLayers(products, proj, activePalettes) {
-  const layers = products.map((layer) => {
-    let layerId = layer.id;
-    if (layer.downloadId) {
-      layerId = layer.downloadId;
-    } else if (layer.projections[proj].id) {
-      layerId = layer.projections[proj].id;
-    } else if (layer.projections[proj].layer) {
-      layerId = layer.projections[proj].layer;
-    }
-    const disabled = activePalettes?.[layer.id]?.maps?.[0]?.disabled;
-    if (Array.isArray(disabled)) {
-      return `${layerId}%28disabled=${disabled.join('-')}%29`;
-    }
-    return layerId;
-  });
-  return layers;
-}
-
-/*
- * Retrieves opacities from palettes
- *
- * @method getOpacities
- * @private
- *
- * @param {array} array of layers
- *
- * @returns {array} array of opacities
- *
- */
-export function imageUtilGetLayerOpacities(layers) {
-  const opacities = [];
-  let found = false;
-  layers.forEach((layer) => {
-    let opacity = '';
-    if ('opacity' in layer && layer.opacity !== 1) {
-      opacity = layer.opacity;
-      found = true;
-    } else {
-      opacity = '';
-    }
-    opacities.push(opacity);
-  });
-  if (!found) {
-    return [];
-  }
-  return opacities;
-}
-
-export function imageUtilGetLayerWrap(layers) {
-  return layers.map((layer) => {
-    if (layer.wrapX) {
-      return 'x';
-    }
-    if (layer.wrapadjacentdays) {
-      return 'day';
-    }
-    return 'none';
-  }) || [];
-}
-
-/**
- * Given a bounding box as an array of a lower left coordinate pair
- * and an upper right coordinate pair, return the BBOX parameter value
- * suitable in a WMS 1.3 call. For EPSG:4326, the coordinates are in
- * Y,X order, otherwise in X,Y order.
- */
-export function bboxWMS13(lonlats, crs) {
-  if (crs === CRS.GEOGRAPHIC) {
-    return `${lonlats[0][1]},${lonlats[0][0]},${lonlats[1][1]},${
-      lonlats[1][0]
-    }`;
-  }
-  return `${lonlats[0][0]},${lonlats[0][1]},${lonlats[1][0]},${
-    lonlats[1][1]
-  }`;
-}
-
 /**
  * Get the granule date string for each layer and whether or not the granule dates were truncated
  * @param {Array} layerDefs
@@ -367,82 +181,6 @@ export async function estimateMaxImageSize() {
     height: Math.floor(aoiMaxHeight),
     width: Math.floor(aoiMaxWidth),
   };
-}
-
-/**
- * Get the snapshots URL to download an image
- * @param {String} url
- * @param {Object} proj
- * @param {Array} layer(s) objects
- * @param {Array} lonlats
- * @param {Object} dimensions
- * @param {Date} dateTime
- * @param {String/Boolean} fileType (false for default 'image/jpeg')
- * @param {Boolean} isWorldfile
- * @param {Array} markerCoordinates
- */
-export function getDownloadUrl(
-  url,
-  proj,
-  layerDefs,
-  bbox,
-  dimensions,
-  dateTime,
-  fileType,
-  isWorldfile,
-  markerCoordinates,
-  activePalettes,
-) {
-  const { crs } = proj.selected;
-  const {
-    layersArray,
-    layerWraps,
-    opacities,
-  } = imageUtilProcessWrap(
-    fileType,
-    imageUtilGetLayers(layerDefs, proj.id, activePalettes),
-    imageUtilGetLayerWrap(layerDefs),
-    imageUtilGetLayerOpacities(layerDefs),
-  );
-
-  const imgFormat = fileType || 'image/jpeg';
-  const { height, width } = dimensions;
-  const snappedDateTime = getLatestIntervalTime(layerDefs, dateTime);
-  const granuleDates = getTruncatedGranuleDates(layerDefs).value;
-  const colormaps = layerDefs.map((layer) => layer.palette?.id);
-  const params = [
-    'REQUEST=GetSnapshot',
-    `TIME=${util.toISOStringSeconds(snappedDateTime)}`,
-    `BBOX=${bboxWMS13(bbox, crs)}`,
-    `CRS=${crs}`,
-    `LAYERS=${layersArray.join(',')}`,
-    `WRAP=${layerWraps.join(',')}`,
-    `FORMAT=${imgFormat}`,
-    `WIDTH=${width}`,
-    `HEIGHT=${height}`,
-  ];
-  if (Array.isArray(colormaps) && colormaps.length > 0) {
-    params.push(`colormaps=${colormaps.join(',')}`);
-  }
-  if (granuleDates.length > 0) {
-    params.push(`granule_dates=${granuleDates}`);
-  }
-  if (opacities.length > 0) {
-    params.push(`OPACITIES=${opacities.join(',')}`);
-  }
-  if (isWorldfile) {
-    params.push('WORLDFILE=true');
-  }
-
-  // handle adding coordinates marker
-  if (markerCoordinates.length > 0) {
-    const coords = markerCoordinates.reduce((validCoords, { longitude: lon, latitude: lat }) => {
-      const mCoord = transform([lon, lat], CRS.GEOGRAPHIC, crs);
-      return validCoords.concat([mCoord[0], mCoord[1]]);
-    }, []);
-    params.push(`MARKER=${coords.join(',')}`);
-  }
-  return `${url}?${params.join('&')}&ts=${Date.now()}`;
 }
 
 /**
@@ -832,33 +570,21 @@ function ignoreElementsFunc(element) {
 }
 
 /**
- * Create a snapshot of the map with the given options
- * @param {Object} options - Snapshot configuration options
- * @param {String} options.format - Output format (e.g., 'tif', 'png', 'kmz')
- * @param {Number} options.metersPerPixel - Target spatial resolution in meters per pixel
- * @param {Array} options.pixelBbox - Pixel bounding box [minX, minY, maxX, maxY]
- * @param {Object} options.map - OpenLayers map instance
- * @param {Boolean} options.worldfile - Whether to include a worldfile
- * @param {Boolean} options.useHighResTileGrids - Whether to use high resolution tile grids
- * @param {AbortSignal} options.abortSignal - Optional AbortController signal to cancel operation
- * @returns {Promise<void>} - Promise that resolves when snapshot is complete
- * @throws {DOMException} - Throws AbortError if the operation is cancelled
+ * Scale the map to a target resolution and compute the AOI pixel rect.
+ * Mutates the live map; run once per export and always pair with restore().
+ * @param {Object} options - map, pixelBbox, metersPerPixel, projection, abortSignal, onerror
+ * @returns {Promise<Object>} - { restore, extent, mapElement, captureRect }
  */
-export async function snapshot(options) {
+export async function prepareMapForCapture(options) {
   const { height: maxHeight = 0, width: maxWidth = 0 } = await estimateMaxCanvasSize();
 
   const {
-    format,
-    metersPerPixel,
-    pixelBbox,
     map,
-    worldfile,
-    abortSignal,
-    filename = 'Worldview Snapshot',
+    pixelBbox,
+    metersPerPixel,
     projection,
+    abortSignal,
     onerror,
-    width,
-    height,
   } = options;
 
   // Check if operation was cancelled before starting
@@ -880,13 +606,16 @@ export async function snapshot(options) {
   const restoreMap = createMapRestore(map, extent, abortSignal, tileMatrixID, onerror);
   const view = map.getView();
 
-  // Add abort event listener to clean up if cancelled
-  const abortHandler = () => {
+  // An abort and the caller's own cleanup can both reach this
+  let restored = false;
+  const restoreOnce = () => {
+    if (restored) return;
+    restored = true;
     restoreMap();
   };
 
   if (abortSignal) {
-    abortSignal.addEventListener('abort', abortHandler);
+    abortSignal.addEventListener('abort', restoreOnce, { once: true });
   }
 
   await fitViewToExtent(map, extent);
@@ -905,9 +634,9 @@ export async function snapshot(options) {
   // Scale the entire map up to the target resolution
   const scaledMapWidth = evaluate(`${originalWidth} * ${scaleFactor}`);
   const scaledMapHeight = evaluate(`${originalHeight} * ${scaleFactor}`);
-  const devicePixelRatio = window.devicePixelRatio || 1;
-  const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${devicePixelRatio}`);
-  const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${devicePixelRatio}`);
+  const dpr = window.devicePixelRatio || 1;
+  const scaledMapWidthWithDPR = evaluate(`${scaledMapWidth} * ${dpr}`);
+  const scaledMapHeightWithDPR = evaluate(`${scaledMapHeight} * ${dpr}`);
 
   if (scaledMapWidthWithDPR > maxWidth || scaledMapHeightWithDPR > maxHeight) {
     throw new Error(`Scaled area exceeds maximum allowed size: ${maxWidth}x${maxHeight}.
@@ -937,18 +666,47 @@ export async function snapshot(options) {
   const aoiPixelBottomLeft = map.getPixelFromCoordinate(bottomLeft);
   const aoiPixelTopRight = map.getPixelFromCoordinate(topRight);
 
-  const aoiPixelXOffset = aoiPixelTopLeft[0];
-  const aoiPixelYOffset = aoiPixelTopLeft[1];
   const aoiPixelWidth = Math.abs(evaluate(`${aoiPixelTopRight[0]} - ${aoiPixelTopLeft[0]}`));
   const aoiPixelHeight = Math.abs(evaluate(`${aoiPixelBottomLeft[1]} - ${aoiPixelTopLeft[1]}`));
 
   const [mapWidth, mapHeight] = map.getSize();
 
-  const dpr = window.devicePixelRatio || 1;
+  const captureRect = {
+    aoiPixelXOffset: aoiPixelTopLeft[0],
+    aoiPixelYOffset: aoiPixelTopLeft[1],
+    outputWidth: evaluate(`${aoiPixelWidth} * ${dpr}`),
+    outputHeight: evaluate(`${aoiPixelHeight} * ${dpr}`),
+    mapWidth,
+    mapHeight,
+    dpr,
+  };
 
-  // Create our output canvas with exact dimensions we want
-  const outputWidth = evaluate(`${aoiPixelWidth} * ${dpr}`);
-  const outputHeight = evaluate(`${aoiPixelHeight} * ${dpr}`);
+  return {
+    restore: restoreOnce,
+    extent,
+    mapElement,
+    captureRect,
+  };
+}
+
+/**
+ * Rasterize the prepared map and crop to the AOI.
+ * Does not wait for renders; callers must ensure the map has settled.
+ * @param {HTMLElement} mapElement
+ * @param {Object} captureRect - from prepareMapForCapture
+ * @returns {Promise<OffscreenCanvas>}
+ */
+export async function captureFrame(mapElement, captureRect) {
+  const {
+    aoiPixelXOffset,
+    aoiPixelYOffset,
+    outputWidth,
+    outputHeight,
+    mapWidth,
+    mapHeight,
+    dpr,
+  } = captureRect;
+
   const outputCanvas = new OffscreenCanvas(outputWidth, outputHeight);
 
   const ctx = outputCanvas.getContext('2d');
@@ -1000,6 +758,185 @@ export async function snapshot(options) {
     sourceWidth, // dest width
     sourceHeight, // dest height
   );
+
+  return outputCanvas;
+}
+
+// Allows time for tracks to re-adjust after a date change
+const FRAME_SETTLE_MS = 250;
+
+/**
+ * Rasterize the map at its current size for use as a static backdrop while
+ * capture mutates the real map. Nothing is ignored here — the backdrop should
+ * look exactly like what the user was just looking at.
+ * @param {HTMLElement} mapElement
+ * @returns {Promise<String|null>} object URL the caller must revoke
+ */
+export async function captureMapBackdrop(mapElement) {
+  try {
+    const canvas = await html2canvas(mapElement, {
+      backgroundColor: null,
+      useCORS: true,
+      allowTaint: true,
+      scrollX: 0,
+      scrollY: 0,
+      scale: 1,
+      logging: false,
+      imageTimeout: 0,
+      removeContainer: true,
+    });
+    return await new Promise((resolve) => {
+      canvas.toBlob((blob) => resolve(blob ? URL.createObjectURL(blob) : null), 'image/png');
+    });
+  } catch {
+    // A backdrop is cosmetic; fall back to the plain overlay
+    return null;
+  }
+}
+
+/**
+ * Capture one PNG frame per date by stepping the live map.
+ * Prepares and restores the map once, regardless of frame count.
+ * @param {Object} options - map, pixelBbox, metersPerPixel, projection, dates,
+ *   originalDate, selectDate, promiseImagery, abortSignal, onProgress, onerror
+ * @returns {Promise<Array>} - one canvas per date
+ */
+export async function captureAnimationFrames(options) {
+  const {
+    map,
+    pixelBbox,
+    metersPerPixel,
+    projection,
+    dates,
+    originalDate,
+    selectDate,
+    promiseImagery,
+    abortSignal,
+    onProgress,
+    onerror,
+  } = options;
+
+  const throwIfAborted = () => {
+    if (abortSignal?.aborted) {
+      throw new DOMException('GIF capture was cancelled', 'AbortError');
+    }
+  };
+
+  const { restore, mapElement, captureRect } = await prepareMapForCapture({
+    map,
+    pixelBbox,
+    metersPerPixel,
+    projection,
+    abortSignal,
+    onerror,
+  });
+
+  // Aborting during prepare already restored the map, and no date was changed
+  throwIfAborted();
+
+  // html2canvas cannot be aborted, so a cancelled run reaches its finally late.
+  // Tear down on the abort itself, or it lands on top of the next capture and
+  // undoes that one's setup instead.
+  let torndown = false;
+  const teardown = () => {
+    if (torndown) return;
+    torndown = true;
+    restore();
+    if (originalDate) selectDate(originalDate);
+  };
+
+  if (abortSignal) {
+    abortSignal.addEventListener('abort', teardown, { once: true });
+  }
+
+  const frames = [];
+
+  try {
+    // Warm every frame's imagery concurrently so the serial loop below hits
+    // the layer cache instead of waiting on the network frame by frame
+    await Promise.all(dates.map((date) => promiseImagery(date)));
+    throwIfAborted();
+
+    for (let i = 0; i < dates.length; i += 1) {
+      throwIfAborted();
+
+      // selectDate drives UpdateDate to swap layers; promiseImagery is a cache hit here
+      selectDate(dates[i]);
+      await promiseImagery(dates[i]);
+      await waitForRenderComplete(map);
+      // Map geometry is fixed after prepare, so only the first frame needs
+      // time for tracks to re-adjust
+      if (i === 0) {
+        await new Promise((resolve) => {
+          setTimeout(resolve, FRAME_SETTLE_MS);
+        });
+      }
+
+      throwIfAborted();
+      // Canvases are handed to the encoder as-is; encoding them to PNG here
+      // only to decode them again downstream is wasted work
+      let canvas;
+      try {
+        canvas = await captureFrame(mapElement, captureRect);
+      } catch (error) {
+        // Restoring the map mid-capture makes html2canvas fail on its own terms
+        throwIfAborted();
+        throw error;
+      }
+      frames.push(canvas);
+
+      if (onProgress) onProgress(i + 1, dates.length);
+    }
+  } finally {
+    teardown();
+  }
+
+  return frames;
+}
+
+/**
+ * Create a snapshot of the map with the given options
+ * @param {Object} options - Snapshot configuration options
+ * @param {String} options.format - Output format (e.g., 'tif', 'png', 'kmz')
+ * @param {Number} options.metersPerPixel - Target spatial resolution in meters per pixel
+ * @param {Array} options.pixelBbox - Pixel bounding box [minX, minY, maxX, maxY]
+ * @param {Object} options.map - OpenLayers map instance
+ * @param {Boolean} options.worldfile - Whether to include a worldfile
+ * @param {Boolean} options.useHighResTileGrids - Whether to use high resolution tile grids
+ * @param {AbortSignal} options.abortSignal - Optional AbortController signal to cancel operation
+ * @returns {Promise<void>} - Promise that resolves when snapshot is complete
+ * @throws {DOMException} - Throws AbortError if the operation is cancelled
+ */
+export async function snapshot(options) {
+  const {
+    format,
+    metersPerPixel,
+    pixelBbox,
+    map,
+    worldfile,
+    abortSignal,
+    filename = 'Worldview Snapshot',
+    projection,
+    onerror,
+    width,
+    height,
+  } = options;
+
+  const {
+    restore: restoreMap,
+    extent,
+    mapElement,
+    captureRect,
+  } = await prepareMapForCapture({
+    map,
+    pixelBbox,
+    metersPerPixel,
+    projection,
+    abortSignal,
+    onerror,
+  });
+
+  const outputCanvas = await captureFrame(mapElement, captureRect);
 
   // Reset map to original size
   restoreMap();
