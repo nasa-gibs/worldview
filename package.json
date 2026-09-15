@@ -176,7 +176,7 @@
     "bootstrap": "^5.3.8",
     "cachai": "^1.0.2",
     "canvas-size": "^2.0.0",
-    "compression": "^1.8.1",
+    "compression": "^1.8.2",
     "coordinate-parser": "^1.0.7",
     "copy-to-clipboard": "^4.0.2",
     "dom-scroll-into-view": "^2.0.1",
