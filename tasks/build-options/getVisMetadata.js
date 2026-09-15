@@ -229,7 +229,7 @@ async function getMetadata (layerId, baseUrl, count) {
     }
     return [layerId, daac]
   } catch (error) {
-    return await handleException(error, layerId, url, count)
+    return await handleException(error, layerId, baseUrl, count)
   }
 }
 
