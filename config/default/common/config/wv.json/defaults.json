@@ -33,6 +33,10 @@
                 "hidden": "true"
             },
             {
+                "id": "Admin_Boundaries",
+                "hidden": "true"
+            },
+            {
                 "id": "Reference_Labels_15m",
                 "hidden": "true"
             }
