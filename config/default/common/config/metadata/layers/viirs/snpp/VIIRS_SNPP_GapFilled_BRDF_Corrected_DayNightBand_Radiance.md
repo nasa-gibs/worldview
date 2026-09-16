@@ -4,4 +4,4 @@ The VIIRS DNB’s ultra-sensitivity in lowlight conditions enable us to generate
 
 The Black Marble Gap-Filled BRDF Corrected Nighttime Lights (Day/Night Band) layer is available in near real-time from the Visible Infrared Imaging Radiometer Suite (VIIRS) aboard the joint NASA/NOAA Suomi National Polar orbiting Partnership (Suomi NPP) satellite. The sensor resolution is 750 m at nadir, imagery resolution is 500 m, and the temporal resolution is daily.
 
-References: VNP46A2_NRT [doi:10.5067/VIIRS/VNP46A2_NRT.002](https://doi.org/10.5067/VIIRS/VNP46A2_NRT.002)
+References: VNP46A2_NRT [doi:10.5067/VIIRS/VNP46A2_NRT.002](https://doi.org/10.5067/VIIRS/VNP46A2_NRT.002); VNP46A2 [doi:10.5067/VIIRS/VNP46A2.002](https://doi.org/10.5067/VIIRS/VNP46A2.002)

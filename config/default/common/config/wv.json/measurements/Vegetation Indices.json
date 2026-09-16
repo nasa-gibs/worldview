@@ -38,7 +38,11 @@
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_NDVI_8Day",
-                        "VIIRS_SNPP_EVI_8Day"
+                        "VIIRS_SNPP_EVI_8Day",
+                        "VIIRS_SNPP_L3_EVI_16Day",
+                        "VIIRS_SNPP_L3_NDVI_16Day",
+                        "VIIRS_SNPP_L3_EVI_Monthly",
+                        "VIIRS_SNPP_L3_NDVI_Monthly"
                     ]
                 },
                 "NOAA-20/VIIRS": {
@@ -48,7 +52,11 @@
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_NDVI_8Day",
-                        "VIIRS_NOAA20_EVI_8Day"
+                        "VIIRS_NOAA20_EVI_8Day",
+                        "VIIRS_NOAA20_L3_EVI_16Day",
+                        "VIIRS_NOAA20_L3_NDVI_16Day",
+                        "VIIRS_NOAA20_L3_EVI_Monthly",
+                        "VIIRS_NOAA20_L3_NDVI_Monthly"
                     ]
                 },
                 "HLS-Sentinel": {
