@@ -14,6 +14,20 @@ import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
 import { getSelectedDate } from '../date/selectors';
 
+/**
+ * Helper to check if a layer supports a given projection or can be reprojected.
+ */
+export const supportsProjection = (layerDef, projId, forceReproject = true) => {
+  if (!layerDef || !layerDef.projections) return false;
+
+  if (layerDef.projections[projId]) return true;
+
+  const isPolar = projId === 'arctic' || projId === 'antarctic';
+  const hasGeographic = !!(layerDef.projections.geographic || layerDef.projections.epsg4326);
+
+  return forceReproject && isPolar && hasGeographic;
+};
+
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
@@ -254,25 +268,6 @@ export const getActiveLayersMap = createSelector(
  *
  * @param {Object} state
  */
-const getActiveOverlayGroupsEmbed = (state) => {
-  const {
-    compare, layers, proj,
-  } = state;
-  const { overlayGroups } = layers[compare.activeString];
-  const activeLayersMap = getActiveLayersMap(state);
-  const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
-  return (overlayGroupsFiltered || []).filter(
-    (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id] &&
-          !!activeLayersMap[id].visible,
-    ).length,
-  );
-};
-
-/**
- * Return an array of overlay groups for the currently active compare state
- * that are available for the currently active projection
- */
 export const getActiveOverlayGroups = (state) => {
   const {
     embed, compare, layers, proj,
@@ -284,7 +279,7 @@ export const getActiveOverlayGroups = (state) => {
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id]?.projections?.[proj.id],
+      (id) => supportsProjection(activeLayersMap[id], proj.id),
     ).length,
   );
 };
@@ -439,10 +434,8 @@ function forGroup(group, activeLayers, state, spec = {}) {
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
-    // const notInProj = !def.projections[projId];
-    // To this (POC HACK):
-    const hasProj = def.projections[projId] || def.projections['geographic'] || def.projections['epsg4326'];
-    const notInProj = !hasProj;
+    // POC HACK: Allow reprojected geographic layers in polar views
+    const notInProj = !supportsProjection(def, projId);
 
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
@@ -535,8 +528,7 @@ export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
   const layers = getActiveLayers(state, activeString);
   const baseLayers = layers.filter(({ group }) => group === 'baselayers');
   return layers.filter(
-    // (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
-    (l) => !!(l.projections[proj.id] || l.projections['geographic'] || l.projections['epsg4326']) && isRenderable(l.id, layers, date, baseLayers, {}),
+    (l) => supportsProjection(l, proj.id) && isRenderable(l.id, layers, date, baseLayers, {}),
   );
 };
 
