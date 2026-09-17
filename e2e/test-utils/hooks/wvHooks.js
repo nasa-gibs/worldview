@@ -63,7 +63,7 @@ const dateSelectorMonthDay = async (page) => {
 const assertDefaultLayers = async (page) => {
   const layerItem = page.locator('.item.productsitem')
   const refLabels = page.locator('#active-Reference_Labels_15m')
-  const refFeatures = page.locator('#active-Reference_Features_15m')
+  const refFeatures = page.locator('#active-DoS_International_Boundaries')
   const coastlines = page.locator('#active-Coastlines_15m')
   const trueColorNOAA21 = page.locator('#active-VIIRS_NOAA21_CorrectedReflectance_TrueColor')
   const trueColorSNPP = page.locator('#active-VIIRS_SNPP_CorrectedReflectance_TrueColor')
