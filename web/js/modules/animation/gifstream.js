@@ -21,14 +21,13 @@ function componentizedPaletteToArray(paletteRGB) {
 }
 // part of neuquant conversion
 function dataToRGB(data, width, height) {
-  let i = 0;
-  const length = width * height * 4;
-  const rgb = [];
-  while (i < length) {
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    i++;
+  const numPixels = width * height;
+  const rgb = new Uint8Array(numPixels * 3);
+  let j = 0;
+  for (let i = 0; i < numPixels * 4; i += 4) {
+    rgb[j++] = data[i];
+    rgb[j++] = data[i + 1];
+    rgb[j++] = data[i + 2];
   }
   return rgb;
 }
@@ -92,6 +91,8 @@ export default class GifStream {
     const textToUse = frameText && options.showFrameText ? frameText : text;
 
     try {
+      // Transparent no-data areas would otherwise show the previous frame's stamp
+      ctx.clearRect(0, 0, gifWidth, gifHeight);
       ctx.drawImage(img, 0, 0, gifWidth, gifHeight);
       if (textToUse) {
         ctx.font = font;
@@ -211,6 +212,14 @@ export default class GifStream {
   }
 
   getImagePromise(frame) {
+    // Frames captured from the map arrive as canvases, which drawImage accepts
+    // directly -- no PNG encode/decode round trip needed
+    if (frame.canvas) {
+      const { canvas } = frame;
+      canvas.text = frame.text;
+      canvas.delay = frame.delay;
+      return Promise.resolve(canvas);
+    }
     return new Promise((resolve, reject, onCancel) => {
       const img = new Image();
       img.width = this.options.gifWidth;

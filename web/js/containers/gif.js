@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import {
   Progress, Modal, ModalBody, ModalHeader, Spinner,
@@ -14,21 +15,28 @@ import Crop from '../components/util/image-crop';
 import {
   RESOLUTIONS_GEO,
   RESOLUTIONS_POLAR,
-} from '../modules/gif-download/constants';
+} from '../modules/image-download/constants';
 import {
   imageUtilCalculateResolution,
   imageUtilGetCoordsFromPixelValues,
-} from '../modules/gif-download/util';
+  captureAnimationFrames,
+  captureMapBackdrop,
+} from '../modules/image-download/util';
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
-import getImageArray from '../modules/animation/selectors';
+import getAnimationFrames from '../modules/animation/selectors';
 import { getStampProps, svgToPng, getNumberOfSteps } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
+import { selectDate as selectDateAction } from '../modules/date/actions';
+import { promiseImageryForTime } from '../modules/map/util';
 import { subdailyLayersActive } from '../modules/layers/selectors';
+import { getSelectedDate } from '../modules/date/selectors';
 import { formatDisplayDate } from '../modules/date/util';
 import { CRS } from '../modules/map/constants';
 
-const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
+import '../../css/components/image-download/snapshot-progress.css';
+
+const CAPTURE_TIMEOUT_MS = 180_000;
 const gifStream = new GifStream();
 
 class GIF extends Component {
@@ -55,9 +63,12 @@ class GIF extends Component {
       offsetTop,
       boundaries,
     };
+    this.abortController = null;
+    this.backdropUrl = null;
     this.onBoundaryChange = this.onBoundaryChange.bind(this);
     this.onGifProgress = this.onGifProgress.bind(this);
     this.createGIF = this.createGIF.bind(this);
+    this.onCancel = this.onCancel.bind(this);
     this.toggleShowDates = this.toggleShowDates.bind(this);
   }
 
@@ -69,7 +80,12 @@ class GIF extends Component {
     this.mounted = false;
     const { isDownloading } = this.state;
     if (isDownloading) {
+      this.abortController?.abort();
       gifStream.cancel();
+    }
+    if (this.backdropUrl) {
+      URL.revokeObjectURL(this.backdropUrl);
+      this.backdropUrl = null;
     }
   }
 
@@ -118,10 +134,11 @@ class GIF extends Component {
     const { crs } = proj;
     const geolonlat1 = olProj.transform(lonlats[0], crs, CRS.GEOGRAPHIC);
     const geolonlat2 = olProj.transform(lonlats[1], crs, CRS.GEOGRAPHIC);
+    const mapView = map.ui.selected.getView();
     const resolution = imageUtilCalculateResolution(
-      Math.round(map.ui.selected.getView().getZoom()),
-      isGeoProjection,
-      proj.resolutions,
+      Math.round(mapView.getZoom()),
+      proj,
+      mapView.getCenter(),
     );
 
     const closeBtn = this.renderCloseBtn();
@@ -143,7 +160,7 @@ class GIF extends Component {
             resolution={resolution}
             showDates={showDates}
             increment={increment}
-            projId={proj.id}
+            map={map.ui.selected}
             lonlats={lonlats}
             startDate={startDateStr}
             endDate={endDateStr}
@@ -177,11 +194,8 @@ class GIF extends Component {
     this.setState({ showDates: !showDates });
   }
 
-  createGIF(width, height) {
-    const {
-      getImageArrayFunc, startDate, endDate, url,
-    } = this.props;
-    const { boundaries, showDates } = this.state;
+  encodeGIF(images, width, height) {
+    const { boundaries } = this.state;
     const dimensions = {
       w: boundaries.y2 - boundaries.y,
       h: boundaries.x2 - boundaries.x,
@@ -190,52 +204,7 @@ class GIF extends Component {
     const breakPointOne = 300;
     const stampWidthRatio = 4.889;
 
-    const build = (stamp, dateStamp, stampHeight) => {
-      const options = {
-        startDate,
-        endDate,
-        url,
-        boundaries,
-        showDates,
-      };
-      const imageArray = getImageArrayFunc(options, { width, height });
-      if (!imageArray) return; // won't be true if there are too many frames
-
-      gifStream.createGIF(
-        {
-          gifWidth: width,
-          gifHeight: height,
-          images: imageArray,
-          waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
-          waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
-          waterMarkHeight: stamp.height,
-          waterMark: stampHeight > 20 ? stamp : null,
-          waterMarkWidth: stamp.width,
-          fontSize: `${dateStamp.fontSize}px`,
-          textXCoordinate: dateStamp.x,
-          textYCoordinate: dateStamp.y, // date location based on Dimensions
-          textAlign: dateStamp.align, // If textXCoordinate is null this takes precedence
-          textBaseline: 'top', // If textYCoordinate is null this takes precedence
-          fontColor: '#fff',
-          fontWeight: '300',
-          fontFamily: 'Open Sans, sans-serif',
-          progressCallback: this.onGifProgress,
-          showFrameText: stampHeight > 20,
-          extraLastFrameDelay: 1000,
-          text: '',
-          stroke: {
-            color: '#000',
-            pixels: dateStamp.fontSize * 0.05,
-          },
-          pause: 1,
-        },
-        (obj) => {
-          this.onGifComplete(obj, width, height);
-        },
-      );
-    };
-
-    const stampProps = getStampProps(
+    const { stampHeight, dateStamp } = getStampProps(
       stampWidthRatio,
       breakPointOne,
       stampWidth,
@@ -244,13 +213,139 @@ class GIF extends Component {
       height,
     );
 
-    const newImage = svgToPng(
-      'brand/images/wv-logo-w-shadow.svg',
-      stampProps.stampHeight,
-    );
+    const stamp = svgToPng('brand/images/wv-logo-w-shadow.svg', stampHeight);
 
-    build(newImage, stampProps.dateStamp, stampProps.stampHeight);
-    this.setState({ isDownloading: true });
+    gifStream.createGIF(
+      {
+        gifWidth: width,
+        gifHeight: height,
+        images,
+        waterMarkXCoordinate: stampHeight * 0.01, // Margin based on GIF Height
+        waterMarkYCoordinate: stampHeight * 0.01, // Margin based on GIF Height
+        waterMarkHeight: stamp.height,
+        waterMark: stampHeight > 20 ? stamp : null,
+        waterMarkWidth: stamp.width,
+        fontSize: `${dateStamp.fontSize}px`,
+        textXCoordinate: dateStamp.x,
+        textYCoordinate: dateStamp.y, // date location based on Dimensions
+        textAlign: dateStamp.align, // If textXCoordinate is null this takes precedence
+        textBaseline: 'top', // If textYCoordinate is null this takes precedence
+        fontColor: '#fff',
+        fontWeight: '300',
+        fontFamily: 'Open Sans, sans-serif',
+        progressCallback: this.onGifProgress,
+        showFrameText: stampHeight > 20,
+        extraLastFrameDelay: 1000,
+        text: '',
+        stroke: {
+          color: '#000',
+          pixels: dateStamp.fontSize * 0.05,
+        },
+        pause: 1,
+      },
+      (obj) => {
+        this.onGifComplete(obj, width, height);
+      },
+    );
+  }
+
+  async createGIF(width, height, resolution) {
+    const {
+      getFramesFunc,
+      map,
+      proj,
+      startDate,
+      endDate,
+      selectDate,
+      promiseImagery,
+      currentDate,
+    } = this.props;
+    const { boundaries, showDates } = this.state;
+
+    const frames = getFramesFunc({ startDate, endDate, showDates });
+    if (!frames) return; // too many frames
+
+    const abortController = new AbortController();
+    this.abortController = abortController;
+    const timeout = setTimeout(this.onCancel, CAPTURE_TIMEOUT_MS);
+
+    // Freeze the map's current appearance before it is scaled for capture, so
+    // the overlay can show it instead of a blank screen
+    const backdropUrl = await captureMapBackdrop(map.ui.selected.getTargetElement());
+    if (!this.mounted) {
+      if (backdropUrl) URL.revokeObjectURL(backdropUrl);
+      clearTimeout(timeout);
+      return;
+    }
+    this.backdropUrl = backdropUrl;
+    this.setState({
+      isDownloading: true, isCapturing: true, progress: 0, backdropUrl,
+    });
+
+    try {
+      const canvases = await captureAnimationFrames({
+        map: map.ui.selected,
+        pixelBbox: [boundaries.x, boundaries.y, boundaries.x2, boundaries.y2],
+        metersPerPixel: Number(resolution),
+        projection: proj,
+        dates: frames.map(({ date }) => date),
+        originalDate: currentDate,
+        selectDate,
+        promiseImagery,
+        abortSignal: abortController.signal,
+        onProgress: (done, total) => {
+          if (this.mounted) {
+            this.setState({ progress: Math.round((done / total) * 50) });
+          }
+        },
+      });
+
+      if (!this.mounted) return;
+
+      this.setState({ isCapturing: false });
+      this.encodeGIF(
+        frames.map((frame, i) => ({ ...frame, canvas: canvases[i] })),
+        width,
+        height,
+      );
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('GIF capture failed', error);
+      }
+      if (this.mounted) {
+        this.setState({
+          isDownloading: false,
+          isCapturing: false,
+          progress: 0,
+          downloadedObject: {},
+        });
+      }
+    } finally {
+      clearTimeout(timeout);
+      this.abortController = null;
+      this.releaseBackdrop();
+    }
+  }
+
+  releaseBackdrop() {
+    if (this.backdropUrl) {
+      URL.revokeObjectURL(this.backdropUrl);
+      this.backdropUrl = null;
+    }
+    if (this.mounted) this.setState({ backdropUrl: null });
+  }
+
+  onCancel() {
+    this.abortController?.abort();
+    gifStream.cancel();
+    if (this.mounted) {
+      this.setState({
+        isDownloading: false,
+        isCapturing: false,
+        progress: 0,
+        downloadedObject: {},
+      });
+    }
   }
 
   onGifComplete(obj, width, height) {
@@ -283,9 +378,10 @@ class GIF extends Component {
     }
   }
 
+  // Encoding occupies the upper half of the bar; capture fills the lower half
   onGifProgress(val) {
     this.setState({
-      progress: val,
+      progress: 50 + Math.round(val / 2),
     });
   }
 
@@ -352,9 +448,11 @@ class GIF extends Component {
     const {
       isDownloaded,
       isDownloading,
+      isCapturing,
       progress,
       downloadedObject,
       boundaries,
+      backdropUrl,
     } = this.state;
 
     const spinnerStyle = {
@@ -366,24 +464,43 @@ class GIF extends Component {
     const closeBtn = this.renderCloseBtn();
 
     if (isDownloading) {
-      const headerText = progress ? 'Creating GIF' : 'Requesting Imagery';
+      const headerText = isCapturing ? 'Capturing Frames' : 'Creating GIF';
+      const cancelBtn = (
+        <button className="modal-close-btn" onClick={this.onCancel} type="button">
+          &times;
+        </button>
+      );
       return (
-        <Modal
-          isOpen
-          toggle={onClose}
-          size={progress === 0 ? 'sm' : 'md'}
-        >
-          <ModalHeader close={closeBtn}>{headerText}</ModalHeader>
-          <ModalBody>
-            {progress > 0
-              ? <Progress value={progress} />
-              : (
-                <div style={spinnerStyle}>
-                  <Spinner color="light" />
-                </div>
+        <>
+          {/* Masks the map while it is scaled up for capture */}
+          {isCapturing && createPortal(
+            <div className="wv-snapshot-progress-overlay opaque">
+              {backdropUrl && (
+                <img className="wv-snapshot-progress-backdrop" src={backdropUrl} alt="" />
               )}
-          </ModalBody>
-        </Modal>
+            </div>,
+            document.querySelector('.wv-content') || document.body,
+          )}
+          {/* Only the X cancels; backdrop clicks and Esc must not abort a capture */}
+          <Modal
+            isOpen
+            toggle={this.onCancel}
+            backdrop="static"
+            keyboard={false}
+            size={progress === 0 ? 'sm' : 'md'}
+          >
+            <ModalHeader close={cancelBtn}>{headerText}</ModalHeader>
+            <ModalBody>
+              {progress > 0
+                ? <Progress value={progress} />
+                : (
+                  <div style={spinnerStyle}>
+                    <Spinner color="light" />
+                  </div>
+                )}
+            </ModalBody>
+          </Modal>
+        </>
       );
     }
     if (isDownloaded) {
@@ -408,7 +525,7 @@ class GIF extends Component {
 
 function mapStateToProps(state) {
   const {
-    screenSize, proj, animation, map, date, config, layers,
+    screenSize, proj, animation, map, date, layers,
   } = state;
   const {
     speed, startDate, endDate, boundaries,
@@ -423,15 +540,6 @@ function mapStateToProps(state) {
   const increment = autoSelected
     ? 'Auto Interval'
     : customIncrement;
-  let url = DEFAULT_URL;
-  if (config.features.imageDownload && config.features.imageDownload.url) {
-    url = config.features.imageDownload.url;
-  }
-  if ('imageDownload' in config.parameters) {
-    url = config.parameters.imageDownload;
-    util.warn(`Redirecting GIF download to: ${url}`);
-  }
-
   return {
     screenWidth,
     screenHeight,
@@ -445,7 +553,7 @@ function mapStateToProps(state) {
     increment: `${increment} Between Frames`,
     speed,
     map,
-    url,
+    currentDate: getSelectedDate(state),
     numberOfFrames: getNumberOfSteps(
       startDate,
       endDate,
@@ -457,16 +565,19 @@ function mapStateToProps(state) {
       layers.active.layers,
       customSelected ? customDelta : 1,
     ),
-    getImageArrayFunc: (options, dimensions) => getImageArray(
-      options,
-      dimensions,
-      state,
+    getFramesFunc: (options) => getAnimationFrames(options, state),
+    // Granule layers are skipped unless the auto flag is passed through
+    promiseImagery: (imageryDate) => promiseImageryForTime(
+      state, imageryDate, undefined, autoSelected,
     ),
   };
 }
 const mapDispatchToProps = (dispatch) => ({
   onBoundaryChange: (bounds) => {
     dispatch(changeCropBounds(bounds));
+  },
+  selectDate: (date) => {
+    dispatch(selectDateAction(date));
   },
 });
 
@@ -481,15 +592,17 @@ GIF.propTypes = {
   endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   startDateStr: PropTypes.string,
   endDateStr: PropTypes.string,
-  getImageArrayFunc: PropTypes.func,
+  currentDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  getFramesFunc: PropTypes.func,
   increment: PropTypes.string,
   map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onBoundaryChange: PropTypes.func,
   onClose: PropTypes.func,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  promiseImagery: PropTypes.func,
   screenHeight: PropTypes.number,
   screenWidth: PropTypes.number,
+  selectDate: PropTypes.func,
   speed: PropTypes.number,
-  url: PropTypes.string,
 };
