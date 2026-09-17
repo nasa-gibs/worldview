@@ -439,7 +439,10 @@ function forGroup(group, activeLayers, state, spec = {}) {
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
-    const notInProj = !def.projections[projId];
+    // const notInProj = !def.projections[projId];
+    // To this (POC HACK):
+    const hasProj = def.projections[projId] || def.projections['geographic'] || def.projections['epsg4326'];
+    const notInProj = !hasProj;
 
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
@@ -532,7 +535,8 @@ export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
   const layers = getActiveLayers(state, activeString);
   const baseLayers = layers.filter(({ group }) => group === 'baselayers');
   return layers.filter(
-    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+    // (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+    (l) => !!(l.projections[proj.id] || l.projections['geographic'] || l.projections['epsg4326']) && isRenderable(l.id, layers, date, baseLayers, {}),
   );
 };
 
