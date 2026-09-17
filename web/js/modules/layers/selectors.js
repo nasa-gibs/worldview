@@ -268,6 +268,25 @@ export const getActiveLayersMap = createSelector(
  *
  * @param {Object} state
  */
+const getActiveOverlayGroupsEmbed = (state) => {
+  const {
+    compare, layers, proj,
+  } = state;
+  const { overlayGroups } = layers[compare.activeString];
+  const activeLayersMap = getActiveLayersMap(state);
+  const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
+  return (overlayGroupsFiltered || []).filter(
+    (group) => group.layers.filter(
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id] &&
+          !!activeLayersMap[id].visible,
+    ).length,
+  );
+};
+
+/**
+ * Return an array of overlay groups for the currently active compare state
+ * that are available for the currently active projection
+ */
 export const getActiveOverlayGroups = (state) => {
   const {
     embed, compare, layers, proj,
