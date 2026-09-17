@@ -7,8 +7,8 @@
       "group": "overlays",
       "format": "image/png",
       "noTransition": true,
-      
-      "layergroup": "Latitude-Longitude Lines",
+
+      "layergroup": "Reference",
       "projections": {
         "arctic": {
           "id": "Graticule",
