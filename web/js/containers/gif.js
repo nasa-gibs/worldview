@@ -481,9 +481,12 @@ class GIF extends Component {
             </div>,
             document.querySelector('.wv-content') || document.body,
           )}
+          {/* Only the X cancels; backdrop clicks and Esc must not abort a capture */}
           <Modal
             isOpen
             toggle={this.onCancel}
+            backdrop="static"
+            keyboard={false}
             size={progress === 0 ? 'sm' : 'md'}
           >
             <ModalHeader close={cancelBtn}>{headerText}</ModalHeader>
