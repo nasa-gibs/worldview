@@ -450,8 +450,8 @@ export default function mapLayerBuilder(config, cache, store) {
     const matrixSet = isReprojecting ? (geoProj?.matrixSet || '2km') : (def.matrixSet || targetProjConfig?.matrixSet);
 
     const {
-      id, layer, format, matrixIds,matrixSetLimits,
-      period, style, wrapadjacentdays, type
+      id, layer, format, matrixIds, matrixSetLimits,
+      period, style, wrapadjacentdays, type,
     } = def;
     const configSource = config.sources[sourceKey];
     if (!configSource) {
@@ -494,7 +494,7 @@ export default function mapLayerBuilder(config, cache, store) {
       matrixIds: calcMatrixIds,
       tileSize: tileSize[0],
       ...(!isReprojecting && tileMatrices && {
-        sizes: tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight])
+        sizes: tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]),
       }),
     };
 
@@ -1416,7 +1416,7 @@ export default function mapLayerBuilder(config, cache, store) {
       id,
       opacity,
       period,
-      projections,
+      // projections,
       type,
       wrapadjacentdays,
       wrapX,

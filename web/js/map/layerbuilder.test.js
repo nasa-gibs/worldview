@@ -893,7 +893,12 @@ describe('mapLayerBuilder', () => {
       let mockWorker;
 
       beforeEach(() => {
-        mockWorker = { postMessage: jest.fn(), terminate: jest.fn(), onmessage: null, onerror: null };
+        mockWorker = {
+          postMessage: jest.fn(),
+          terminate: jest.fn(),
+          onmessage: null,
+          onerror: null,
+        };
         global.Worker = jest.fn().mockImplementation(() => mockWorker);
         global.DOMParser = jest.fn().mockImplementation(() => ({
           parseFromString: jest.fn().mockReturnValue({
@@ -1182,7 +1187,12 @@ describe('mapLayerBuilder', () => {
       let mockWorker;
 
       beforeEach(() => {
-        mockWorker = { postMessage: jest.fn(), terminate: jest.fn(), onmessage: null, onerror: null };
+        mockWorker = {
+          postMessage: jest.fn(),
+          terminate: jest.fn(),
+          onmessage: null,
+          onerror: null,
+        };
         global.Worker = jest.fn().mockImplementation(() => mockWorker);
         global.DOMParser = jest.fn().mockImplementation(() => ({
           parseFromString: jest.fn().mockReturnValue({
