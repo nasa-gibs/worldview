@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@babel/core": "^8.0.6",
-    "@babel/eslint-parser": "^7.29.9",
+    "@babel/eslint-parser": "^8.0.5",
     "@babel/plugin-transform-class-properties": "^8.0.1",
     "@babel/plugin-transform-private-methods": "^8.0.1",
     "@babel/preset-env": "^8.0.6",
