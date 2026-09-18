@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import DOMPurify from 'dompurify';
 import { dateOverlap } from '../../../modules/layers/util';
 import DateRanges from './date-ranges';
 import { coverageDateFormatter } from '../../../modules/date/util';
+
+// Keep target attribute for opening links in new tab
+const purifyConfig = {
+  ADD_ATTR: ['target'],
+};
 
 export default function LayerInfo ({ layer, measurementDescriptionPath, describeDomainsUrl }) {
   const {
@@ -28,7 +34,7 @@ export default function LayerInfo ({ layer, measurementDescriptionPath, describe
         const data = await fetch(`config/metadata/layers/${path}.html`, options);
         const metadataHtml = await data.text();
         controller = null;
-        setFn(metadataHtml || 'No description was found for this layer.');
+        setFn(DOMPurify.sanitize(metadataHtml, purifyConfig) || 'No description was found for this layer.');
       } catch (e) {
         if (!controller.signal.aborted) {
           console.error(e);
