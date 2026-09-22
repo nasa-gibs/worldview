@@ -36,6 +36,7 @@ import {
   UPDATE_DDV_LAYER,
   ADD_GRANULE_DATE_RANGES,
   ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -271,6 +272,18 @@ export function setOpacity(id, opacity) {
       type: UPDATE_OPACITY,
       id,
       opacity: Number(opacity),
+      activeString: compare.activeString,
+    });
+  };
+}
+
+export function updateDayCount(id, dayCount) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    return dispatch({
+      type: UPDATE_DAY_COUNT,
+      id,
+      dayCount: Number(dayCount),
       activeString: compare.activeString,
     });
   };

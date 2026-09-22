@@ -26,6 +26,8 @@ import {
   activateLayersForEventCategory,
   getZotsForActiveLayers,
   getMaxZoomLevelLayerCollection,
+  getMaxDayRange,
+  getLayerDayCount,
 } from './selectors';
 
 const config = fixtures.config();
@@ -1410,4 +1412,63 @@ test('returns fallback zoom when all layers are non-qualifying', () => {
 
 test('returns fallback zoom of 0 when passed 0 and no qualifying layers', () => {
   expect(getMaxZoomLevelLayerCollection([], 0, 'geographic', {})).toBe(0);
+});
+
+describe('getMaxDayRange', () => {
+  test('returns 0 when layer has no maxDayRange', () => {
+    expect(getMaxDayRange({ id: 'foo' })).toBe(0);
+  });
+
+  test('returns 0 when maxDayRange is 1 (no aggregation possible)', () => {
+    expect(getMaxDayRange({ id: 'foo', maxDayRange: 1 })).toBe(0);
+  });
+
+  test('returns the configured maxDayRange', () => {
+    expect(getMaxDayRange({ id: 'foo', maxDayRange: 12 })).toBe(12);
+  });
+
+  test('clamps to MAX_DAY_COUNT', () => {
+    expect(getMaxDayRange({ id: 'foo', maxDayRange: 999 })).toBe(12);
+  });
+});
+
+describe('getLayerDayCount', () => {
+  function getDayCountState(layer, activeString = 'active') {
+    return {
+      layers: {
+        [activeString]: { layers: [layer] },
+      },
+      compare: { activeString: 'active' },
+    };
+  }
+
+  test('defaults to 1 when layer has no maxDayRange', () => {
+    const state = getDayCountState({ id: 'foo', dayCount: 5 });
+    expect(getLayerDayCount(state, 'foo')).toBe(1);
+  });
+
+  test('reads dayCount when within maxDayRange', () => {
+    const state = getDayCountState({ id: 'foo', maxDayRange: 12, dayCount: 5 });
+    expect(getLayerDayCount(state, 'foo')).toBe(5);
+  });
+
+  test('clamps dayCount above maxDayRange', () => {
+    const state = getDayCountState({ id: 'foo', maxDayRange: 12, dayCount: 99 });
+    expect(getLayerDayCount(state, 'foo')).toBe(12);
+  });
+
+  test('defaults to 1 when dayCount is unset', () => {
+    const state = getDayCountState({ id: 'foo', maxDayRange: 12 });
+    expect(getLayerDayCount(state, 'foo')).toBe(1);
+  });
+
+  test('reads the requested side in compare mode', () => {
+    const state = getDayCountState({ id: 'foo', maxDayRange: 12, dayCount: 7 }, 'activeB');
+    expect(getLayerDayCount(state, 'foo', 'activeB')).toBe(7);
+  });
+
+  test('tolerates a side with no layers array', () => {
+    const state = { layers: { active: {} }, compare: { activeString: 'active' } };
+    expect(getLayerDayCount(state, 'foo')).toBe(1);
+  });
 });

@@ -33,6 +33,7 @@ import {
   mergeBreakpointLayerAttributes,
 } from './util';
 import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange, nearestInterval } from '../modules/layers/util';
+import { getLayerDayCount } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -208,7 +209,9 @@ export default function mapLayerBuilder(config, cache, store) {
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
       style = getVectorStyleKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, style, activeGroupStr].join(':');
+    const dayCount = getLayerDayCount(state, def.id, activeGroupStr);
+    const dayStr = dayCount > 1 ? `d${dayCount}` : '';
+    return [layerId, projId, date, style, activeGroupStr, dayStr].join(':');
   };
 
   /**
@@ -1411,6 +1414,10 @@ export default function mapLayerBuilder(config, cache, store) {
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);
+      if (!def.dayRange) {
+        const dayCount = getLayerDayCount(state, id, options.group);
+        if (dayCount > 1) def.dayRange = dayCount - 1;
+      }
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;

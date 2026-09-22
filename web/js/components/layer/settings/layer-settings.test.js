@@ -9,6 +9,7 @@ jest.mock('./palette-threshold', () => function MockPaletteThreshold() { return 
 jest.mock('./classification-toggle', () => function MockClassificationToggle() { return <div data-testid="classification-toggle" />; });
 jest.mock('./granule-date-list', () => function MockGranuleDateList() { return <div data-testid="granule-date-list" />; });
 jest.mock('./granule-count-slider', () => function MockGranuleCountSlider() { return <div data-testid="granule-count-slider" />; });
+jest.mock('./day-range-slider', () => function MockDayRangeSlider() { return <div data-testid="day-range-slider" />; });
 jest.mock('./imagery-search', () => function MockImagerySearch() { return <div data-testid="imagery-search" />; });
 jest.mock('./associated-layers-toggle', () => function MockAssociatedLayers() { return <div data-testid="associated-layers" />; });
 jest.mock('./band-selection/band-selection-parent-info-menu', () => function MockBandSelection() { return <div data-testid="band-selection" />; });
@@ -29,6 +30,8 @@ jest.mock('../../../modules/layers/selectors', () => ({
   getGranuleLayer: jest.fn(() => null),
   getGranulePlatform: jest.fn(() => 'Terra'),
   getActiveLayersMap: jest.fn(() => ({})),
+  getMaxDayRange: jest.fn(() => 0),
+  getLayerDayCount: jest.fn(() => 1),
 }));
 jest.mock('../../../modules/vector-styles/selectors', () => ({ getVectorStyle: jest.fn() }));
 jest.mock('../../../modules/palettes/actions', () => ({
@@ -47,6 +50,7 @@ jest.mock('../../../modules/layers/actions', () => ({
   updateGranuleLayerOptions: jest.fn(() => ({ type: 'UPDATE_GRANULE' })),
   resetGranuleLayerDates: jest.fn(() => ({ type: 'RESET_GRANULE' })),
   setOpacity: jest.fn(() => ({ type: 'SET_OPACITY' })),
+  updateDayCount: jest.fn(() => ({ type: 'UPDATE_DAY_COUNT' })),
 }));
 
 import LayerSettings from './layer-settings';

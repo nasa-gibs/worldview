@@ -25,6 +25,7 @@ import {
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
   ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -214,6 +215,20 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
+
+    case UPDATE_DAY_COUNT: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [layerIndex]: {
+              dayCount: { $set: action.dayCount },
+            },
+          },
+        },
+      });
+    }
 
     case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_DISABLED_CLASSIFICATION: {

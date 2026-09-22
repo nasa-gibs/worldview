@@ -25,6 +25,7 @@ import {
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
   ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import {
   SET_VECTORSTYLE,
@@ -287,6 +288,26 @@ describe('layer Reducer tests', () => {
       id: 'terra-cr',
     });
     expect(getTestLayer(response.active.layers).opacity).toEqual(0.4);
+  });
+
+  test('UPDATE_DAY_COUNT action updates dayCount for given layer [layers-reducer-update-day-count]', () => {
+    const response = layerReducer(initialState, {
+      type: UPDATE_DAY_COUNT,
+      activeString: 'active',
+      dayCount: 5,
+      id: 'terra-cr',
+    });
+    expect(getTestLayer(response.active.layers).dayCount).toEqual(5);
+  });
+
+  test('UPDATE_DAY_COUNT returns unchanged state when layer id not found [layers-reducer-update-day-count-not-found]', () => {
+    const response = layerReducer(initialState, {
+      type: UPDATE_DAY_COUNT,
+      activeString: 'active',
+      dayCount: 5,
+      id: 'non-existent-layer',
+    });
+    expect(response).toEqual(initialState);
   });
 
   test('TOGGLE_LAYER_VISIBILITY returns unchanged state when layer id not found [layers-reducer-toggle-visibility-not-found]', () => {
