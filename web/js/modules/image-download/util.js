@@ -343,7 +343,7 @@ export function getTruncatedGranuleDates(layerDefs) {
  * @param {Array} center - Map center coordinates
  * @returns {Number} - Scale factor to apply to map
  */
-function calculateScaleFactor(targetMetersPerPixel, projection, mapResolution, center) {
+export function calculateScaleFactor(targetMetersPerPixel, projection, mapResolution, center) {
   const currentResolutionInMeters = convertResolutionToMetersPerPixel(
     mapResolution,
     projection,
