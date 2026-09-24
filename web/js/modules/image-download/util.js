@@ -354,6 +354,16 @@ export function calculateScaleFactor(targetMetersPerPixel, projection, mapResolu
   return evaluate(`${currentResolutionInMeters} / ${targetMetersPerPixel}`);
 }
 
+/**
+ * Calculate scaled resolution from starting resolution and scale factor
+ * @param {Number} mapResolution - Current map resolution
+ * @param {Number} scaleFactor - Factor to scale by
+ * @returns {Number} - Scaled resolution
+ */
+export function calculateScaledResolution(mapResolution, scaleFactor) {
+  return evaluate(`${mapResolution} / ${scaleFactor}`);
+}
+
 export const estimateMaxCanvasSize = () => canvasSize.maxArea();
 
 export async function estimateMaxImageSize() {

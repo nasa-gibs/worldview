@@ -6,6 +6,7 @@ import {
   imageSizeValid,
   estimateMaxImageSize,
   calculateScaleFactor,
+  calculateScaledResolution,
   getDimensions,
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
@@ -290,14 +291,16 @@ function ImageDownloadPanel(props) {
     pixelBbox: boundaries,
   });
   const view = map.getView();
+  const viewResolution = view.getResolution();
   const scaleFactor = calculateScaleFactor(
     Number(currResolution),
     view.getProjection(),
-    view.getResolution(),
+    viewResolution,
     view.getCenter(),
   );
-  const currentZoom = view.getZoom();
-  const isOverZoomed = getAnyOverZoom(currentZoom * scaleFactor);
+  const scaledResolution = calculateScaledResolution(viewResolution, scaleFactor);
+  const scaledZoom = view.getZoomForResolution(scaledResolution);
+  const isOverZoomed = getAnyOverZoom(scaledZoom);
 
   return (
     <>
