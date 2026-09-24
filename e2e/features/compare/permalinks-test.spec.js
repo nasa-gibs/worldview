@@ -65,7 +65,7 @@ test('Click B tab to ensure that loaded layers are correct', async () => {
   const snppLayer = page.locator('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden')
   const refLabels = page.locator('#activeB-Reference_Labels_15m.layer-hidden')
   const refFeatures = page.locator('#activeB-DoS_International_Boundaries.layer-hidden')
-  const refFeatures2 = page.locator('#activeB-DoS_International_Boundaries.layer-hidden')
+  const refFeatures2 = page.locator('#activeB-Admin_Boundaries.layer-hidden')
   const coastlines = page.locator('#activeB-Coastlines_15m.layer-visible')
   const terraLayer = page.locator('#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible')
   await bTab.click()
