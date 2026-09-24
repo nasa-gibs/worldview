@@ -702,6 +702,23 @@ export async function fetchSubdailyDateRanges(id) {
 }
 
 /**
+   * Return the vectorstyles object of a given layer for live-reloading development purposes
+   *
+   * @method fetchVectorstyle
+   * @param  {String} def            The layer id
+   * @return {Promise<Object>}       The vectorstyles object
+   */
+export async function fetchVectorstyle(id) {
+  try {
+    const response = await fetch(`config/${id}.json`);
+    const result = await response.json();
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+/**
    * Return an array of dates based on the dateRange the current date falls in.
    *
    * @method datesInDateRanges
