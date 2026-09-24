@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Night": {
+      "id": "VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Night",
+      "description": "viirs/NOAA20/VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Night",
+      "tags": "NOAA-20",
+      "group": "overlays",
+      "layergroup": "Land Surface Temperature"
+    }
+  }
+}

@@ -283,8 +283,8 @@ test('Searching in arctic projection', async () => {
     layersModalCloseButton
   } = selectors
   await layersSearchField.fill('sea')
-  await expect(layersSearchRow).toHaveCount(21)
-  await expect(layerResultsCountText).toContainText('Showing 21 out of')
+  await expect(layersSearchRow).toHaveCount(23)
+  await expect(layerResultsCountText).toContainText('Showing 23 out of')
   await layerPickerBackButton.click()
   await expect(layerBrowseDetail).toBeVisible()
   await layersModalCloseButton.click()

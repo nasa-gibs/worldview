@@ -5,7 +5,7 @@
       "title": "Formaldehyde (L2, Vertical Column, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_Formaldehyde_Vertical_Column_Granule",
-      "tags": "",
+      "tags": "hcho",
       "group": "overlays",
       "layergroup": "Formaldehyde",
       "type": "granule",

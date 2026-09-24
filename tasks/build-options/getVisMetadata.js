@@ -123,7 +123,8 @@ const defaultSkipLayers = [
   'EUMETSAT_MSG_IDOC_IR108_10min',
   'OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day',
   'NISAR_L2_Geocoded_Polarimetric_Covariance_12Day',
-  'Admin_Boundaries'
+  'Admin_Boundaries',
+  'DoS_International_Boundaries'
 ]
 
 const skipLayers = defaultSkipLayers.concat(configuredSkipLayers)
@@ -230,18 +231,24 @@ async function getMetadata (layerId, baseUrl, count) {
     }
     return [layerId, daac]
   } catch (error) {
-    return await handleException(error, layerId, url, count)
+    return await handleException(error, layerId, baseUrl, count)
   }
 }
 
 async function handleException (error, layerId, url, count) {
+  if (error.response && error.response.status === 404) {
+    console.warn(`\n ${prog} WARN: Layer ${layerId} not found (404) at ${url}${layerId}.json`)
+    return Promise.reject(new Error(`Layer ${layerId} returned 404`))
+  }
+
   if (!count) count = 0
   count++
   if (count <= 5) {
     return getMetadata(layerId, url, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
-    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${error}`))
+    const msg = error.msg || error
+    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${msg}`))
   }
 }
 

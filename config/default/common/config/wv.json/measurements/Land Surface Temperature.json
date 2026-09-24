@@ -13,6 +13,12 @@
                     "settings": [
                         "VIIRS_SNPP_Land_Surface_Temp_Day",
                         "VIIRS_SNPP_Land_Surface_Temp_Night",
+                        "VIIRS_SNPP_L3_Land_Surface_Temp_Daily_Day",
+                        "VIIRS_SNPP_L3_Land_Surface_Temp_Daily_Night",
+                        "VIIRS_SNPP_L3_Land_Surface_Temp_8Day_Day",
+                        "VIIRS_SNPP_L3_Land_Surface_Temp_8Day_Night",
+                        "VIIRS_SNPP_L3_Land_Surface_Temp_Monthly_Day",
+                        "VIIRS_SNPP_L3_Land_Surface_Temp_Monthly_Night",
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]
@@ -25,6 +31,12 @@
                     "settings": [
                         "VIIRS_NOAA20_Land_Surface_Temp_Day",
                         "VIIRS_NOAA20_Land_Surface_Temp_Night",
+                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Day",
+                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Night",
+                        "VIIRS_NOAA20_L3_Land_Surface_Temp_8Day_Day",
+                        "VIIRS_NOAA20_L3_Land_Surface_Temp_8Day_Night",
+                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Monthly_Day",
+                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Monthly_Night",
                         "OrbitTracks_NOAA-20_Ascending",
                         "OrbitTracks_NOAA-20_Descending"
                     ]

@@ -2,6 +2,8 @@ import { assign } from 'lodash';
 import {
   adjustActiveDateRanges,
   datesInDateRanges,
+  fetchSubdailyDateRanges,
+  fetchVectorstyle,
   serializeLayers,
   layersParse12,
   mapLocationToLayerState,
@@ -288,6 +290,14 @@ describe('Date range building', () => {
     const { dateRanges } = activeLayers[0];
     expect(dateRanges.length).toBe(4);
     expect(dateRanges[3].endDate).toBe('2021-04-30T16:00:00Z');
+  });
+  test('test invalid layerid returns empty array [invalid-fetch-subdaily-dateranges]', async () => {
+    const dateRanges = await fetchSubdailyDateRanges('non-valid-layer-id');
+    expect(dateRanges.length).toBe(0);
+  });
+  test('test invalid layerid returns null [invalid-fetch-vectorstyle]', async () => {
+    const vectorstyleObject = await fetchVectorstyle('non-valid-layer-id');
+    expect(vectorstyleObject).toBe(null);
   });
   test('test limited date range returned for layer with single date range and interval [layers-limited-date-range]', async () => {
     const parameters = {

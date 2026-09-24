@@ -5,7 +5,7 @@
       "title": "Nitrogen Dioxide (L2, Vertical Column Stratosphere, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_NO2_Vertical_Column_Stratosphere_Granule",
-      "tags": "",
+      "tags": "no2",
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "type": "granule",
