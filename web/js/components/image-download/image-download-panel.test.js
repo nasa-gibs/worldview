@@ -28,7 +28,6 @@ jest.mock('../../modules/image-download/util', () => ({
   calculateScaleFactor: jest.fn(() => 2),
   calculateScaledResolution: jest.fn(() => 1),
   getDimensions: jest.fn(() => ({ width: 10, height: 20 })),
-  getDownloadUrl: jest.fn((url) => `${url}?download=true`),
   getTruncatedGranuleDates: jest.fn(() => ({ truncated: true })),
   snapshot: jest.fn(),
   GRANULE_LIMIT: 42,
