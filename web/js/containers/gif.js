@@ -188,7 +188,7 @@ class GIF extends Component {
     };
     let stampWidth;
     const breakPointOne = 300;
-    const stampWidthRatio = 4.889;
+    const stampWidthRatio = 4.515;
 
     const build = (stamp, dateStamp, stampHeight) => {
       const options = {
@@ -218,7 +218,7 @@ class GIF extends Component {
           textBaseline: 'top', // If textYCoordinate is null this takes precedence
           fontColor: '#fff',
           fontWeight: '300',
-          fontFamily: 'Open Sans, sans-serif',
+          fontFamily: 'Inter, sans-serif',
           progressCallback: this.onGifProgress,
           showFrameText: stampHeight > 20,
           extraLastFrameDelay: 1000,
