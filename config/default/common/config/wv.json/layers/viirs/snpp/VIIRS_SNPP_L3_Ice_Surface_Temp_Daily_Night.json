@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L3_Ice_Surface_Temp_Daily_Night": {
+      "id": "VIIRS_SNPP_L3_Ice_Surface_Temp_Daily_Night",
+      "description": "viirs/snpp/VIIRS_SNPP_L3_Ice_Surface_Temp_Daily_Night",
+      "tags": "suomi npp",
+      "group": "overlays",
+      "layergroup": "Ice Surface Temperature"
+    }
+  }
+}
