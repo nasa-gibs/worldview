@@ -5,7 +5,7 @@
       "title": "Ozone Profile (L2, Total Ozone Column, Subdaily) (BETA)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_Ozone_Profile_Total_Column_Granule",
-      "tags": "",
+      "tags": "o3",
       "group": "overlays",
       "layergroup": "Ozone",
       "type": "granule",

@@ -162,6 +162,14 @@
 .wv-snapshot-warning-icon {
   font-size: 1.2em;
   margin-right: 8px;
+
+  .image-download-warning-icon {
+    color: #ffd445;
+  }
+
+  .image-download-error-icon {
+    color: #ff5c59;
+  }
 }
 
 .snapshot-feedback {
