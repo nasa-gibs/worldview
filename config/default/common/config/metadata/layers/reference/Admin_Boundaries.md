@@ -1,4 +1,4 @@
-The Administrative Boundaries 1 layer is a reference layer that displays the first-level administrative division below the national level such as states, provices, and regions.
+The Administrative Boundaries layer is a reference layer that displays the first-level administrative division below the national level such as states, provices, and regions.
 
 Administrative boundaries information are provided by Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community via the [Hybrid Reference Layer (WGS84)](https://www.arcgis.com/home/item.html?id=a70340a048224752915ddbed9d2101a7).
 
