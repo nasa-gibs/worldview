@@ -2,10 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import googleTagManager from 'googleTagManager';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   imageSizeValid,
   estimateMaxImageSize,
+  calculateScaleFactor,
+  calculateScaledResolution,
   getDimensions,
   getTruncatedGranuleDates,
   GRANULE_LIMIT,
@@ -21,7 +22,8 @@ import WaitOverlay from './wait';
 import SnapshotError from './snapshot-error';
 import onClickFeedback from '../../modules/feedback/util';
 import initFeedback from '../../modules/feedback/actions';
-import { subdailyLayersActive } from '../../modules/layers/selectors';
+import { getAnyOverZoom as getAnyOverZoomAction, subdailyLayersActive } from '../../modules/layers/selectors';
+import ImageDownloadWarning from './image-download-warning';
 
 const RESOLUTION_KEY = {
   0.075: '7.5cm',
@@ -65,6 +67,7 @@ function ImageDownloadPanel(props) {
     sendFeedback,
     onResolutionChange,
     onProgressChange,
+    getAnyOverZoom,
   } = props;
 
   const [currFileType, setFileType] = useState(fileType);
@@ -280,6 +283,24 @@ function ImageDownloadPanel(props) {
   const filetypeSelect = renderFileTypeSelect();
   const worldfileSelect = renderWorldfileSelect();
   const layerList = getLayers();
+  const isValidSize = imageSizeValid({
+    maxHeight,
+    maxWidth,
+    map,
+    resolution: Number(currResolution),
+    pixelBbox: boundaries,
+  });
+  const view = map.getView();
+  const viewResolution = view.getResolution();
+  const scaleFactor = calculateScaleFactor(
+    Number(currResolution),
+    view.getProjection(),
+    viewResolution,
+    view.getCenter(),
+  );
+  const scaledResolution = calculateScaledResolution(viewResolution, scaleFactor);
+  const scaledZoom = view.getZoomForResolution(scaledResolution);
+  const isOverZoomed = getAnyOverZoom(scaledZoom);
 
   return (
     <>
@@ -330,42 +351,45 @@ function ImageDownloadPanel(props) {
           height={height}
           fileSize={(((width * height) ** 0.89) * 6.88 / 8388608).toFixed(2)}
           maxImageSize={`${maxWidth}px x ${maxHeight}px`}
-          validSize={imageSizeValid({
-            maxHeight,
-            maxWidth,
-            map,
-            resolution: Number(currResolution),
-            pixelBbox: boundaries,
-          })}
+          validSize={isValidSize}
           validLayers={layerList.length > 0}
           onClick={onDownload}
           isSnapshotInProgress={isSnapshotInProgress}
         />
         <hr />
-        <p className="wv-snapshot-warning">
-          <span className="wv-snapshot-warning-icon">
-            <FontAwesomeIcon
-              icon="exclamation-triangle"
-              className="wv-alert-icon"
-              size="1x"
-              widthAuto
-            />
-          </span>
-          This snapshot feature has been upgraded to capture anything on the map,
-          including customized color palettes. If you notice any issues, please
-          {' '}
-          <span
-            className="snapshot-feedback"
-            role="link"
-            tabIndex={0}
-            onKeyDown={(e, feedbackIsInitiatedArg, isMobileArg) =>
-              handleKeyDown(e, feedbackIsInitiatedArg, isMobileArg)}
-            onClick={() => sendFeedback(feedbackIsInitiated, isMobile)}
-          >
-            contact us
-          </span>
-          .
-        </p>
+        {!isValidSize && (
+          <ImageDownloadWarning
+            type={'error'}
+            message={'Selected bounding box and resolution are too large. Adjust bounding box size and/or resolution.'}
+          />
+        )}
+        {isOverZoomed && isValidSize && (
+          <ImageDownloadWarning
+            type={'warning'}
+            message={'The zoom level set for this data may result in a poor quality snapshot.'}
+          />
+        )}
+        <ImageDownloadWarning
+          type={'info'}
+          message={
+            <>
+              This snapshot feature has been upgraded to capture anything on the map,
+              including customized color palettes. If you notice any issues, please
+              {' '}
+              <span
+                className="snapshot-feedback"
+                role="link"
+                tabIndex={0}
+                onKeyDown={(e, feedbackIsInitiatedArg, isMobileArg) =>
+                  handleKeyDown(e, feedbackIsInitiatedArg, isMobileArg)}
+                onClick={() => sendFeedback(feedbackIsInitiated, isMobile)}
+              >
+                contact us
+              </span>
+              .
+            </>
+          }
+        />
       </div>
     </>
   );
@@ -379,6 +403,7 @@ const mapStateToProps = (state) => {
     feedbackIsInitiated: feedback.isInitiated,
     isMobile: screenSize.isMobileDevice,
     isSubdaily: subdailyLayersActive(state),
+    getAnyOverZoom: (zoom) => getAnyOverZoomAction(state, zoom),
   };
 };
 
@@ -445,4 +470,5 @@ ImageDownloadPanel.propTypes = {
   sendFeedback: PropTypes.func,
   onResolutionChange: PropTypes.func,
   onProgressChange: PropTypes.func,
+  getAnyOverZoom: PropTypes.func,
 };

@@ -25,6 +25,8 @@ global.ResizeObserver = jest.fn().mockImplementation(() => ({
 jest.mock('../../modules/image-download/util', () => ({
   imageSizeValid: jest.fn(() => true),
   estimateMaxImageSize: jest.fn(() => ({ width: 8192, height: 8192 })),
+  calculateScaleFactor: jest.fn(() => 2),
+  calculateScaledResolution: jest.fn(() => 1),
   getDimensions: jest.fn(() => ({ width: 10, height: 20 })),
   getDownloadUrl: jest.fn((url) => `${url}?download=true`),
   getTruncatedGranuleDates: jest.fn(() => ({ truncated: true })),
@@ -85,6 +87,13 @@ describe('ImageDownloadPanel', () => {
     datelineMessage: 'Crosses dateline',
     map: {
       getLayers: () => ({ getArray: () => [{ wv: { id: 'L1', granuleDates: [] } }] }),
+      getView: () => ({
+        getProjection: () => ({ getUnits: () => 'degrees', getMetersPerUnit: () => 111000 }),
+        getCenter: () => [0, 0],
+        getResolution: () => 1000,
+        getZoom: () => 5,
+        getZoomForResolution: () => 1,
+      }),
     },
     viewExtent: null,
     resolutions: ['1', '2'],
@@ -92,6 +101,7 @@ describe('ImageDownloadPanel', () => {
     onLatLongChange: jest.fn(),
     onResolutionChange: jest.fn(),
     onProgressChange: jest.fn(),
+    getAnyOverZoom: jest.fn(() => false),
   };
 
   beforeEach(() => {

@@ -863,6 +863,24 @@ export function getZotsForActiveLayers(state) {
   return zotObj;
 }
 
+export function getAnyOverZoom(state, zoom) {
+  const {
+    config, proj,
+  } = state;
+  let isOverZoomed = false;
+  const { sources } = config;
+  const projection = proj.selected.id;
+  lodashEach(getActiveLayersMap(state), (layer) => {
+    if (layer.projections[projection]) {
+      const overZoomValue = getZoomLevel(layer, zoom, projection, sources);
+      if (overZoomValue) {
+        isOverZoomed = true;
+      }
+    }
+  });
+  return isOverZoomed;
+}
+
 export function getMaxZoomLevelLayerCollection(layers, zoom, proj, sources) {
   const zoomOffset = proj === 'arctic' || proj === 'antarctic' ? 1 : 0;
   let maxZoom;
