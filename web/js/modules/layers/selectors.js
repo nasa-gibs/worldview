@@ -14,6 +14,20 @@ import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
 import { getSelectedDate } from '../date/selectors';
 
+/**
+ * Helper to check if a layer supports a given projection or can be reprojected.
+ */
+export const supportsProjection = (layerDef, projId, forceReproject = true) => {
+  if (!layerDef || !layerDef.projections) return false;
+
+  if (layerDef.projections[projId]) return true;
+
+  const isPolar = projId === 'arctic' || projId === 'antarctic';
+  const hasGeographic = !!(layerDef.projections.geographic || layerDef.projections.epsg4326);
+
+  return forceReproject && isPolar && hasGeographic;
+};
+
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
 const getCompareState = ({ compare }) => compare;
@@ -284,7 +298,7 @@ export const getActiveOverlayGroups = (state) => {
   const activeLayersMap = getActiveLayersMap(state);
   return (overlayGroups || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id]?.projections?.[proj.id],
+      (id) => supportsProjection(activeLayersMap[id], proj.id),
     ).length,
   );
 };
@@ -439,7 +453,8 @@ function forGroup(group, activeLayers, state, spec = {}) {
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
-    const notInProj = !def.projections[projId];
+    // POC HACK: Allow reprojected geographic layers in polar views
+    const notInProj = !supportsProjection(def, projId);
 
     const notRenderable = spec.renderable && !isRenderable(
       def.id,
@@ -532,7 +547,7 @@ export const getActiveVisibleLayersAtDate = (state, date, activeString) => {
   const layers = getActiveLayers(state, activeString);
   const baseLayers = layers.filter(({ group }) => group === 'baselayers');
   return layers.filter(
-    (l) => !!l.projections[proj.id] && isRenderable(l.id, layers, date, baseLayers, {}),
+    (l) => supportsProjection(l, proj.id) && isRenderable(l.id, layers, date, baseLayers, {}),
   );
 };
 
