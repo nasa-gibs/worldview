@@ -13,6 +13,7 @@ import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
 import { getSelectedDate } from '../date/selectors';
+import { DEFAULT_DAY_COUNT, MIN_DAY_COUNT, MAX_DAY_COUNT } from './constants';
 
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
@@ -49,6 +50,7 @@ export function addLayer(
   def.noclip = spec.noclip || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || def.count || undefined;
+  def.dayCount = spec.dayCount || def.dayCount || undefined;
 
   if (Array.isArray(spec.bandCombo)) {
     def.bandCombo = {
@@ -210,6 +212,21 @@ export const getGranulePlatform = (state, activeString) => {
   return granulePlatform;
 };
 
+export const getMaxDayRange = (def) => {
+  const max = Number(def && def.maxDayRange);
+  return Number.isFinite(max) && max > 1 ? Math.min(max, MAX_DAY_COUNT) : 0;
+};
+
+export const getLayerDayCount = (state, id, activeString) => {
+  const { compare, layers } = state;
+  const side = activeString || (compare && compare.activeString) || 'active';
+  const sideLayers = (layers[side] && layers[side].layers) || [];
+  const def = lodashFind(sideLayers, { id });
+  const max = getMaxDayRange(def);
+  if (!max) return DEFAULT_DAY_COUNT;
+  return util.clamp(def.dayCount || DEFAULT_DAY_COUNT, MIN_DAY_COUNT, max);
+};
+
 export const getActiveGranuleFootPrints = (state) => {
   const { layers, compare: { activeString } } = state;
   const granuleLayers = getActiveGranuleLayers(state);
@@ -223,17 +240,6 @@ export const getActiveGranuleFootPrints = (state) => {
   });
 
   return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
-};
-
-export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
-  const activeLayersArray = Object.entries(activeLayers);
-  const platformLayers = [];
-  activeLayersArray.forEach(([key, value]) => {
-    if (value.granulePlatform === platform) {
-      platformLayers.push(key);
-    }
-  });
-  return platformLayers;
 };
 
 /**

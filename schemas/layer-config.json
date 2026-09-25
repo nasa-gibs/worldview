@@ -275,6 +275,10 @@
           "type": "number",
           "minimum": 1
         },
+        "maxDayRange": {
+          "type": "number",
+          "minimum": 1
+        },
         "ongoing": {
           "type": "boolean"
         },

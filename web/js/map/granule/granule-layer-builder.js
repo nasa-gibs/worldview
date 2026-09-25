@@ -228,11 +228,12 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
     return { visibleGranules, invisibleGranules };
   };
 
-  const getGranuleAttributes = async (def, options) => {
+  const getGranuleAttributes = async (def, options, group) => {
     const state = store.getState();
     const { proj: { selected: { crs } } } = state;
     const { granuleCount, date } = options;
-    const { count: currentCount } = getGranuleLayer(state, def.id) || {};
+    // Read the count for the compare side being built, not the side being edited
+    const { count: currentCount } = getGranuleLayer(state, def.id, group) || {};
     const count = currentCount || granuleCount || def.count || DEFAULT_NUM_GRANULES;
 
     // Use cached ranges if they cover the selected date; re-fetch otherwise.
@@ -288,7 +289,7 @@ export default function granuleLayerBuilder(cache, store, createLayerWMTS) {
       return granuleLayer;
     }
 
-    const granuleAttributes = await getGranuleAttributes(def, options);
+    const granuleAttributes = await getGranuleAttributes(def, options, group);
     const { visibleGranules, invisibleGranules } = granuleAttributes;
     const shouldShift = def.shiftadjacentdays ?? true; // defaults to true
     const shiftedVisibleGranules = shouldShift

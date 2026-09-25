@@ -9,6 +9,7 @@ jest.mock('./palette-threshold', () => function MockPaletteThreshold() { return 
 jest.mock('./classification-toggle', () => function MockClassificationToggle() { return <div data-testid="classification-toggle" />; });
 jest.mock('./granule-date-list', () => function MockGranuleDateList() { return <div data-testid="granule-date-list" />; });
 jest.mock('./granule-count-slider', () => function MockGranuleCountSlider() { return <div data-testid="granule-count-slider" />; });
+jest.mock('./day-range-slider', () => function MockDayRangeSlider() { return <div data-testid="day-range-slider" />; });
 jest.mock('./imagery-search', () => function MockImagerySearch() { return <div data-testid="imagery-search" />; });
 jest.mock('./associated-layers-toggle', () => function MockAssociatedLayers() { return <div data-testid="associated-layers" />; });
 jest.mock('./band-selection/band-selection-parent-info-menu', () => function MockBandSelection() { return <div data-testid="band-selection" />; });
@@ -29,6 +30,8 @@ jest.mock('../../../modules/layers/selectors', () => ({
   getGranuleLayer: jest.fn(() => null),
   getGranulePlatform: jest.fn(() => 'Terra'),
   getActiveLayersMap: jest.fn(() => ({})),
+  getMaxDayRange: jest.fn(() => 0),
+  getLayerDayCount: jest.fn(() => 1),
 }));
 jest.mock('../../../modules/vector-styles/selectors', () => ({ getVectorStyle: jest.fn() }));
 jest.mock('../../../modules/palettes/actions', () => ({
@@ -47,6 +50,7 @@ jest.mock('../../../modules/layers/actions', () => ({
   updateGranuleLayerOptions: jest.fn(() => ({ type: 'UPDATE_GRANULE' })),
   resetGranuleLayerDates: jest.fn(() => ({ type: 'RESET_GRANULE' })),
   setOpacity: jest.fn(() => ({ type: 'SET_OPACITY' })),
+  updateDayCount: jest.fn(() => ({ type: 'UPDATE_DAY_COUNT' })),
 }));
 
 import LayerSettings from './layer-settings';
@@ -257,23 +261,25 @@ describe('LayerSettings', () => {
   });
 
   describe('granule settings', () => {
-    it('renders GranuleCountSlider when granuleOptions has dates', () => {
+    const granuleLayer = { ...standardLayer, type: 'granule' };
+
+    it('renders GranuleCountSlider for a granule layer with granule state', () => {
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
       getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
-      renderSettings(standardLayer);
+      renderSettings(granuleLayer);
       expect(screen.getByTestId('granule-count-slider')).toBeInTheDocument();
     });
 
-    it('does not render GranuleCountSlider when getGranuleLayer returns null', () => {
+    it('renders GranuleCountSlider before the granule layer has been built', () => {
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
       getGranuleLayer.mockReturnValue(null);
-      renderSettings();
-      expect(screen.queryByTestId('granule-count-slider')).not.toBeInTheDocument();
+      renderSettings(granuleLayer);
+      expect(screen.getByTestId('granule-count-slider')).toBeInTheDocument();
     });
 
-    it('does not render GranuleCountSlider when granule dates are null', () => {
+    it('does not render GranuleCountSlider for non-granule layers', () => {
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
-      getGranuleLayer.mockReturnValue({ dates: null, count: 5 });
+      getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
       renderSettings(standardLayer);
       expect(screen.queryByTestId('granule-count-slider')).not.toBeInTheDocument();
     });
@@ -283,8 +289,17 @@ describe('LayerSettings', () => {
       getItem.mockReturnValue('true');
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
       getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
-      renderSettings(standardLayer);
+      renderSettings(granuleLayer);
       expect(screen.getByTestId('granule-date-list')).toBeInTheDocument();
+    });
+
+    it('does not render GranuleDateList until granule dates are available', () => {
+      const { getItem } = require('../../../util/local-storage');
+      getItem.mockReturnValue('true');
+      const { getGranuleLayer } = require('../../../modules/layers/selectors');
+      getGranuleLayer.mockReturnValue(null);
+      renderSettings(granuleLayer);
+      expect(screen.queryByTestId('granule-date-list')).not.toBeInTheDocument();
     });
   });
 
