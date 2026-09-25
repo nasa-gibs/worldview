@@ -242,17 +242,6 @@ export const getActiveGranuleFootPrints = (state) => {
   return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
 };
 
-export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
-  const activeLayersArray = Object.entries(activeLayers);
-  const platformLayers = [];
-  activeLayersArray.forEach(([key, value]) => {
-    if (value.granulePlatform === platform) {
-      platformLayers.push(key);
-    }
-  });
-  return platformLayers;
-};
-
 /**
  * Return a map of active layers where key is layer id
  */

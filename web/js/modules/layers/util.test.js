@@ -159,6 +159,31 @@ describe('multi-day aggregation permalink', () => {
   });
 });
 
+describe('granule count permalink', () => {
+  const getGranuleState = (granuleLayers) => ({
+    palettes: {
+      active: {},
+      rendered: config.palettes.rendered,
+      custom: config.palettes.custom,
+    },
+    config,
+    layers: { active: { granuleLayers } },
+  });
+  const layer = {
+    id: 'terra-aod', type: 'granule', visible: true, opacity: 1,
+  };
+
+  test('serializes count when it differs from the default', () => {
+    const state = getGranuleState({ 'terra-aod': { count: 12 } });
+    expect(serializeLayers([layer], state, 'active')[0]).toBe('terra-aod(count=12)');
+  });
+
+  test('omits count at the default value of 10', () => {
+    const state = getGranuleState({ 'terra-aod': { count: 10 } });
+    expect(serializeLayers([layer], state, 'active')[0]).toBe('terra-aod');
+  });
+});
+
 // Permalink 1.0
 describe('permalink 1.0', () => {
   beforeEach(() => {

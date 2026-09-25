@@ -56,6 +56,7 @@ import {
   setOpacity as setOpacityAction,
   updateDayCount as updateDayCountAction,
 } from '../../../modules/layers/actions';
+import { DEFAULT_NUM_GRANULES } from '../../../modules/layers/constants';
 import ClassificationToggle from './classification-toggle';
 
 function LayerSettings(props) {
@@ -274,16 +275,17 @@ function LayerSettings(props) {
    */
   const renderGranuleSettings = () => {
     const { count, dates, granulePlatform } = granuleOptions;
-    return dates
+    return count
       ? (
         <>
           <GranuleCountSlider
             def={layer}
             count={count}
             granuleDates={dates}
+            isMobile={isMobile}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
           />
-          {allowGranuleReorder && (
+          {allowGranuleReorder && dates && (
             <GranuleLayerDateList
               def={layer}
               screenHeight={screenHeight}
@@ -350,12 +352,11 @@ function mapStateToProps(state, ownProps) {
   const groupName = compare.activeString;
   const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
 
-  const granuleState = getGranuleLayer(state, ownProps.layer.id);
   const granuleOptions = {};
-  if (granuleState) {
-    const { dates, count } = granuleState;
-    granuleOptions.dates = dates;
-    granuleOptions.count = count || 20;
+  if (ownProps.layer.type === 'granule') {
+    const granuleState = getGranuleLayer(state, ownProps.layer.id) || {};
+    granuleOptions.dates = granuleState.dates;
+    granuleOptions.count = granuleState.count || ownProps.layer.count || DEFAULT_NUM_GRANULES;
     granuleOptions.granulePlatform = getGranulePlatform(state);
   }
 

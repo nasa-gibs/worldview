@@ -24,7 +24,7 @@ import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
 import { parseDate } from '../date/util';
-import { DEFAULT_DAY_COUNT, MIN_DAY_COUNT, MAX_DAY_COUNT } from './constants';
+import { DEFAULT_DAY_COUNT, MIN_DAY_COUNT, MAX_DAY_COUNT, DEFAULT_NUM_GRANULES } from './constants';
 
 /**
  * Given a layer definition, returns formatted string
@@ -912,6 +912,15 @@ export function serializeLayers(layers, state, groupName) {
         value: def.dayCount,
       });
     }
+    if (def.type === 'granule') {
+      const { count } = getGranuleLayer(state, def.id, groupName) || {};
+      if (count && count !== DEFAULT_NUM_GRANULES) {
+        item.attributes.push({
+          id: 'count',
+          value: count,
+        });
+      }
+    }
     if (def.palette &&
       (def.custom || def.min || def.max || def.squash || def.noclip || def.disabled ||
         (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
@@ -931,14 +940,6 @@ export function serializeLayers(layers, state, groupName) {
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
-    } else if (def.type === 'granule') {
-      const granuleLayer = getGranuleLayer(state, def.id);
-      if (granuleLayer) {
-        const { count } = granuleLayer;
-        item.attributes = count !== 20
-          ? item.attributes.concat({ id: 'count', value: count })
-          : item.attributes;
-      }
     }
 
     return util.appendAttributesForURL(item);

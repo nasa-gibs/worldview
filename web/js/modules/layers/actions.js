@@ -10,7 +10,6 @@ import {
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
   findEventLayers,
   getGranuleLayer,
-  getGranuleLayersOfActivePlatform,
   getActiveGranuleLayers,
 } from './selectors';
 import {
@@ -308,7 +307,8 @@ export function showLayers(layers) {
 function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
-    const { activeString } = compare;
+    // Write to the compare side the layer was built for
+    const activeString = layer.wv.group || compare.activeString;
     const { id, count } = layer.wv;
     const layerDef = layers.layerConfig[id];
     const granulePlatform = `${layerDef.subtitle}`;
@@ -334,7 +334,9 @@ function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
 
 function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
   return (dispatch, getState) => {
-    const { compare: { activeString } } = getState();
+    const { compare } = getState();
+    // Write to the compare side the layer was built for
+    const activeString = layer.wv.group || compare.activeString;
     const { id, granuleDates, count } = layer.wv;
 
     dispatch({
@@ -360,7 +362,7 @@ export function updateGranuleLayerState(layer) {
     const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
     const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
     const granuleFootprints = getGranuleFootprints(layer);
-    const existingLayer = getGranuleLayer(state, id);
+    const existingLayer = getGranuleLayer(state, id, layer.wv.group);
 
     if (existingLayer) {
       dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
@@ -412,21 +414,13 @@ export function addGranuleDateRanges(layer, granuleDateRanges) {
 
 export function updateGranuleLayerOptions(dates, def, count) {
   return (dispatch, getState) => {
-    const state = getState();
-    const { activeString } = state.compare;
-
-    const granulePlatform = def.subtitle;
-    const activeGranuleLayers = getActiveGranuleLayers(state);
-    const platformLayers = getGranuleLayersOfActivePlatform(granulePlatform, activeGranuleLayers);
-
-    platformLayers.forEach((layer) => {
-      dispatch({
-        type: UPDATE_GRANULE_LAYER_OPTIONS,
-        id: layer,
-        activeKey: activeString,
-        dates,
-        count,
-      });
+    const { activeString } = getState().compare;
+    dispatch({
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id: def.id,
+      activeKey: activeString,
+      dates,
+      count,
     });
   };
 }

@@ -966,6 +966,17 @@ describe('mapStateToProps', () => {
     expect(msp(makeState({ screenSize: { isMobileDevice: true } }), ownProps).isMobile).toBe(true);
   });
 
+  describe('granuleCount', () => {
+    const { getGranuleLayer } = jest.requireMock('../../modules/layers/selectors');
+    const granuleOwnProps = (layer) => ({ ...ownProps, layer: { ...ownProps.layer, type: 'granule', ...layer } });
+
+    it('defaults to DEFAULT_NUM_GRANULES before the granule layer is built', () => {
+      getGranuleLayer.mockReturnValueOnce(null);
+      const msp = capturedMakeMapStateToProps();
+      expect(msp(makeState(), granuleOwnProps()).granuleCount).toBe(10);
+    });
+  });
+
   it('maps isEmbedModeActive from embed', () => {
     const msp = capturedMakeMapStateToProps();
     expect(msp(makeState({

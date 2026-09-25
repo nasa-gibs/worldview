@@ -261,23 +261,25 @@ describe('LayerSettings', () => {
   });
 
   describe('granule settings', () => {
-    it('renders GranuleCountSlider when granuleOptions has dates', () => {
+    const granuleLayer = { ...standardLayer, type: 'granule' };
+
+    it('renders GranuleCountSlider for a granule layer with granule state', () => {
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
       getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
-      renderSettings(standardLayer);
+      renderSettings(granuleLayer);
       expect(screen.getByTestId('granule-count-slider')).toBeInTheDocument();
     });
 
-    it('does not render GranuleCountSlider when getGranuleLayer returns null', () => {
+    it('renders GranuleCountSlider before the granule layer has been built', () => {
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
       getGranuleLayer.mockReturnValue(null);
-      renderSettings();
-      expect(screen.queryByTestId('granule-count-slider')).not.toBeInTheDocument();
+      renderSettings(granuleLayer);
+      expect(screen.getByTestId('granule-count-slider')).toBeInTheDocument();
     });
 
-    it('does not render GranuleCountSlider when granule dates are null', () => {
+    it('does not render GranuleCountSlider for non-granule layers', () => {
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
-      getGranuleLayer.mockReturnValue({ dates: null, count: 5 });
+      getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
       renderSettings(standardLayer);
       expect(screen.queryByTestId('granule-count-slider')).not.toBeInTheDocument();
     });
@@ -287,8 +289,17 @@ describe('LayerSettings', () => {
       getItem.mockReturnValue('true');
       const { getGranuleLayer } = require('../../../modules/layers/selectors');
       getGranuleLayer.mockReturnValue({ dates: ['2023-01-01'], count: 5 });
-      renderSettings(standardLayer);
+      renderSettings(granuleLayer);
       expect(screen.getByTestId('granule-date-list')).toBeInTheDocument();
+    });
+
+    it('does not render GranuleDateList until granule dates are available', () => {
+      const { getItem } = require('../../../util/local-storage');
+      getItem.mockReturnValue('true');
+      const { getGranuleLayer } = require('../../../modules/layers/selectors');
+      getGranuleLayer.mockReturnValue(null);
+      renderSettings(granuleLayer);
+      expect(screen.queryByTestId('granule-date-list')).not.toBeInTheDocument();
     });
   });
 

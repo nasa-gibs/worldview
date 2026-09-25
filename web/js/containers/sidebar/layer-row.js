@@ -37,7 +37,7 @@ import {
   getActiveLayers, makeGetDescription, getCollections,
   getMaxDayRange, getLayerDayCount, getGranuleLayer,
 } from '../../modules/layers/selectors';
-import { MAX_GRANULES, DEFAULT_DAY_COUNT } from '../../modules/layers/constants';
+import { MAX_GRANULES, DEFAULT_NUM_GRANULES, DEFAULT_DAY_COUNT } from '../../modules/layers/constants';
 import { formatDailyDate, formatSubdailyDate } from '../../mapUI/components/kiosk/tile-measurement/utils/date-util';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
@@ -864,7 +864,9 @@ const makeMapStateToProps = () => {
       cmrBaseUrl,
       maxDayRange,
       dayCount,
-      granuleCount: granuleState ? granuleState.count : null,
+      granuleCount: layer.type === 'granule'
+        ? (granuleState?.count || layer.count || DEFAULT_NUM_GRANULES)
+        : null,
       granuleDates: granuleState ? granuleState.dates : null,
     };
   };
