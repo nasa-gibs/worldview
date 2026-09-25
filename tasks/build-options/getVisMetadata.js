@@ -231,24 +231,18 @@ async function getMetadata (layerId, baseUrl, count) {
     }
     return [layerId, daac]
   } catch (error) {
-    return await handleException(error, layerId, baseUrl, count)
+    return await handleException(error, layerId, url, count)
   }
 }
 
 async function handleException (error, layerId, url, count) {
-  if (error.response && error.response.status === 404) {
-    console.warn(`\n ${prog} WARN: Layer ${layerId} not found (404) at ${url}${layerId}.json`)
-    return Promise.reject(new Error(`Layer ${layerId} returned 404`))
-  }
-
   if (!count) count = 0
   count++
   if (count <= 5) {
     return getMetadata(layerId, url, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
-    const msg = error.msg || error
-    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${msg}`))
+    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${error}`))
   }
 }
 

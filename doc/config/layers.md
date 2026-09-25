@@ -189,7 +189,7 @@ Note:
 
 Granule layers rely on Common Metadata Repository (CMR) metadata to collect footprint polygon metadata for visible granules.
 
-The following parameters need to be present in the CMR response for the granule layer:
+The following parameters need to be present in the CMR responsefor the granule layer:
 ```js
 "feed.entry" [
   {
