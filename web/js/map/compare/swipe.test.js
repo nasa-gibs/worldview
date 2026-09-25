@@ -600,3 +600,45 @@ describe('window resize handler', () => {
     expect(document.querySelector('.ab-swipe-line')).toBeNull();
   });
 });
+
+// ─────────────────────────────────────────────
+// Regression: window resize listener leak
+// The 'resize' listener was registered with no stored reference and never
+// removed in destroy(). compare.js destroys + recreates the Swipe on every
+// completed drag, so each drag leaked one window 'resize' listener for the
+// rest of the session. destroy() must remove the listener it registered.
+// (registeredResizeListeners is tracked by the window.addEventListener shim
+// defined at the top of this file.)
+// ─────────────────────────────────────────────
+
+describe('window resize listener cleanup (regression: listener leak)', () => {
+  it('removes the window resize listener on destroy', () => {
+    document.body.innerHTML = '';
+    const map = makeMockMap();
+    const store = makeMockStore();
+
+    const before = registeredResizeListeners.length;
+    const swipe = new Swipe(map, store, defaultListenerObj, 50);
+    expect(registeredResizeListeners.length).toBe(before + 1);
+
+    swipe.destroy();
+    expect(registeredResizeListeners.length).toBe(before);
+  });
+
+  it('does not accumulate resize listeners across repeated destroy/create cycles', () => {
+    document.body.innerHTML = '';
+    const map = makeMockMap();
+    const store = makeMockStore();
+
+    const before = registeredResizeListeners.length;
+    const swipe = new Swipe(map, store, defaultListenerObj, 50);
+    // Mirror the destroy()+create() churn compare.js drives on every drag-end.
+    swipe.destroy();
+    swipe.create(store);
+    swipe.destroy();
+    swipe.create(store);
+    swipe.destroy();
+
+    expect(registeredResizeListeners.length).toBe(before);
+  });
+});
