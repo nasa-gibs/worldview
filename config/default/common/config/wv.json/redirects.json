@@ -21,7 +21,7 @@
       "land_mask": "Land_Mask",
       "ol_graticule": "Graticule_15m",
       "sedac_bound": "Coastlines_15m",
-      "cartographic:esri-administrative-boundaries_level-1": ["DoS_International_Boundaries", "Coastlines_15m"],
+      "cartographic:esri-administrative-boundaries_level-1": ["Admin_Boundaries", "DoS_International_Boundaries", "Coastlines_15m"],
       "cartographic:00-global-labels": "Reference_Labels_15m",
       "grump-v1-population-count_2000": "GPW_Population_Density_2000",
       "Aqua_Orbit_Asc": "OrbitTracks_Aqua_Ascending",
@@ -78,7 +78,7 @@
       "Reference_Features": ["DoS_International_Boundaries", "Coastlines_15m"],
       "Reference_Labels": "Reference_Labels_15m",
       "Coastlines": "Coastlines_15m",
-      "Reference_Features_15m": ["DoS_International_Boundaries", "Coastlines_15m"]
+      "Reference_Features_15m": ["Admin_Boundaries", "DoS_International_Boundaries", "Coastlines_15m"]
     }
   }
 }

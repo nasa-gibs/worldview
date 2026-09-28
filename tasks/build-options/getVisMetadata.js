@@ -123,6 +123,7 @@ const defaultSkipLayers = [
   'EUMETSAT_MSG_IDOC_IR108_10min',
   'OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day',
   'NISAR_L2_Geocoded_Polarimetric_Covariance_12Day',
+  'Admin_Boundaries',
   'DoS_International_Boundaries'
 ]
 
