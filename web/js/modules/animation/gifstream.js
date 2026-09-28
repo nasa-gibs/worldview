@@ -258,6 +258,8 @@ export default class GifStream {
     const height = options.gifHeight;
     const totalImages = frames.length;
     let processedImages = 0;
+    let nq;
+    let paletteArray;
     const self = this;
     const rs = new ReadableStream({
       pull: function pull(controller) {
@@ -275,9 +277,12 @@ export default class GifStream {
         ctx = self.addFrameDetails(ctx, frame);
         const imgData = ctx.getImageData(0, 0, width, height);
         const rgbComponents = dataToRGB(imgData.data, imgData.width, imgData.height);
-        const nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
-        const paletteRGB = nq.process();
-        const paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
+        if (!nq) {
+          // cache the color palette so the NASA swish don't change color
+          // and keep color consistant across all frames..
+          nq = new NeuQuant(rgbComponents, rgbComponents.length, 1);
+          paletteArray = new Uint32Array(componentizedPaletteToArray(nq.process()));
+        }
         const numberPixels = imgData.height * imgData.width;
         const pixels = new Uint8Array(imgData.height * imgData.width);
         for (let i = 0; i < numberPixels; i++) {
