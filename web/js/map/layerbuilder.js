@@ -433,18 +433,34 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const createLayerWMTS = (def, options, day, state) => {
     const { proj } = state;
+
+    const isPolar = proj.id === 'arctic' || proj.id === 'antarctic' || proj.id === 'epsg3413' || proj.id === 'epsg3575';
+    const hasNativeProj = !!(def.projections && def.projections[proj.id]);
+
+    // Force reprojection flag
+    const forceReproject = true;
+    const isReprojecting = forceReproject || (isPolar && !hasNativeProj);
+
+    // Ensure we fetch geographic config if reprojecting
+    const geoProj = def.projections?.['geographic'] || def.projections?.['epsg4326'];
+    const targetProjConfig = isReprojecting ? geoProj : (def.projections?.[proj.id] || {});
+
+    // Resolve source key and matrixSet ID
+    const sourceKey = isReprojecting ? (geoProj?.source || 'GIBS:geographic') : def.source;
+    const matrixSet = isReprojecting ? (geoProj?.matrixSet || '2km') : (def.matrixSet || targetProjConfig?.matrixSet);
+
     const {
-      id, layer, format, matrixIds, matrixSet, matrixSetLimits,
-      period, source, style, wrapadjacentdays, type,
+      id, layer, format, matrixIds, matrixSetLimits,
+      period, style, wrapadjacentdays, type,
     } = def;
-    const configSource = config.sources[source];
+    const configSource = config.sources[sourceKey];
+    if (!configSource) {
+      throw new Error(`${id}: Invalid source: ${sourceKey}`);
+    }
     const { date, shifted } = options;
     const isSubdaily = period === 'subdaily';
     const isGranule = type === 'granule';
 
-    if (!source) {
-      throw new Error(`${id}: Invalid source: ${source}`);
-    }
     const configMatrixSet = configSource.matrixSets[matrixSet];
     if (!configMatrixSet) {
       throw new Error(`${id}: Undefined matrix set: ${matrixSet}`);
@@ -467,40 +483,53 @@ export default function mapLayerBuilder(config, cache, store) {
       dayForExtent,
       proj.selected,
     );
-    const sizes = !tileMatrices
-      ? []
-      : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
     const calcMatrixIds = matrixIds || resolutions.map((set, index) => index);
 
-    // Also need to shift this if granule is shifted
+    // Construct TileGrid using Geographic coordinates when reprojecting
     const tileGridOptions = {
-      origin: shifted ? RIGHT_WING_ORIGIN : origin,
-      extent: shifted ? RIGHT_WING_EXTENT : extent,
-      sizes,
+      ...(isReprojecting && { projection: 'EPSG:4326' }),
+      origin: isReprojecting ? [-180, 90] : (shifted ? RIGHT_WING_ORIGIN : origin),
+      extent: isReprojecting ? [-180, -90, 180, 90] : (shifted ? RIGHT_WING_EXTENT : extent),
       resolutions,
       matrixIds: calcMatrixIds,
       tileSize: tileSize[0],
+      ...(!isReprojecting && tileMatrices && {
+        sizes: tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]),
+      }),
     };
 
-    // force currently selected time to be 59 seconds.
-    // This is to compensate for the inability to select seconds in the timeline
     layerDate = new Date(layerDate.getTime());
     layerDate.setSeconds(59);
     const tileGrid = new OlTileGridWMTS(tileGridOptions);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
-    const sourceURL = def.sourceOverride || configSource.url;
+
+    // Resolve geographic layer identifier
+    let wmtsLayer = layer || id;
+    if (isReprojecting) {
+      if (geoProj && geoProj.layer) {
+        wmtsLayer = geoProj.layer;
+      } else if (def.description && def.description.includes('/')) {
+        wmtsLayer = def.description.split('/').pop();
+      } else {
+        wmtsLayer = wmtsLayer.replace(/_Polar$/, '_Day');
+      }
+    }
+
+    const sourceURL = configSource.url;
+
     const sourceOptions = {
       interpolate: false,
       url: `${sourceURL}${urlParameters}`,
-      layer: layer || id,
+      layer: wmtsLayer,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
       transition: isGranule ? 350 : 0,
-      matrixSet: configMatrixSet.id,
+      matrixSet,
       tileGrid,
-      wrapX: false,
+      wrapX: !isReprojecting,
       style: typeof style === 'undefined' ? 'default' : style,
+      projection: isReprojecting ? 'EPSG:4326' : undefined,
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
@@ -512,11 +541,14 @@ export default function mapLayerBuilder(config, cache, store) {
       className: `wv-layer-${id}`,
       preload: 0,
       source: tileSource,
+      ...(isReprojecting && {
+        minResolution: 0,
+        maxResolution: Infinity,
+      }),
     });
-
     // Because granule footprints from CMR are imprecise, setting an extent on granule
     // layers can crop valid imagery. So extents are only applied to non-granule layers.
-    if (!isGranule) {
+    if (!isGranule && !isReprojecting) {
       layerTile.setExtent(extent);
     }
     return layerTile;
@@ -1384,7 +1416,7 @@ export default function mapLayerBuilder(config, cache, store) {
       id,
       opacity,
       period,
-      projections,
+      // projections,
       type,
       wrapadjacentdays,
       wrapX,
@@ -1410,7 +1442,15 @@ export default function mapLayerBuilder(config, cache, store) {
           { cmrRebuildAttempts: options.cmrRebuildAttempts }),
       };
       def = lodashCloneDeep(def);
-      lodashMerge(def, projections[proj.id]);
+      // lodashMerge(def, projections[proj.id]);
+      // POC HACK: Fall back to geographic projection if target polar projection is missing
+      const hasNativeProj = def.projections && !!def.projections[proj.id];
+      const targetProjConfig = hasNativeProj
+        ? def.projections[proj.id]
+        : (def.projections['geographic'] || def.projections['epsg4326']);
+
+      lodashMerge(def, targetProjConfig);
+
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;
