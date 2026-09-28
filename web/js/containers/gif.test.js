@@ -116,7 +116,7 @@ jest.mock('../modules/animation/util', () => ({
       fontSize: 20, x: 5, y: 6, align: 'left',
     },
   })),
-  svgToPng: jest.fn(() => ({ width: 100, height: 30 })),
+  svgToCanvas: jest.fn(() => ({ width: 100, height: 30 })),
   getNumberOfSteps: jest.fn(() => 12),
 }));
 
@@ -136,7 +136,7 @@ const Gif = require('./gif').default;
 const getAnimationFrames = require('../modules/animation/selectors').default;
 const { captureAnimationFrames, captureMapBackdrop } = require('../modules/image-download/util');
 const { promiseImageryForTime } = require('../modules/map/util');
-const { getStampProps, svgToPng, getNumberOfSteps } = require('../modules/animation/util');
+const { getStampProps, svgToCanvas, getNumberOfSteps } = require('../modules/animation/util');
 const { changeCropBounds } = require('../modules/animation/actions');
 
 const defaultProps = {
@@ -296,7 +296,7 @@ describe('GIF creation flow', () => {
       }),
     );
     expect(getStampProps).toHaveBeenCalled();
-    expect(svgToPng).toHaveBeenCalled();
+    expect(svgToCanvas).toHaveBeenCalled();
     expect(mockCreateGIF).toHaveBeenCalled();
 
     const [options, onComplete] = mockCreateGIF.mock.calls[0];
