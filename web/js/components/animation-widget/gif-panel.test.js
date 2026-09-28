@@ -3,10 +3,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import GifPanel from './gif-panel';
-import { getDimensions } from '../../modules/gif-download/util';
+import { getDimensions } from '../../modules/image-download/util';
 
-jest.mock('../../modules/gif-download/util', () => ({
+jest.mock('../../modules/image-download/util', () => ({
   getDimensions: jest.fn(),
+  estimateMaxImageSize: jest.fn(() => Promise.resolve({ height: 8200, width: 8200 })),
 }));
 
 jest.mock('../util/selector', () => {
@@ -70,7 +71,7 @@ describe('GifPanel Component', () => {
     jest.clearAllMocks();
 
     defaultProps = {
-      projId: 'geographic',
+      map: {},
       lonlats: [0, 0, 10, 10],
       startDate: '2026-05-01',
       endDate: '2026-05-20',
@@ -104,16 +105,16 @@ describe('GifPanel Component', () => {
     const selector = screen.getByTestId('selection-list');
     fireEvent.change(selector, { target: { value: '2km' } });
 
-    expect(getDimensions).toHaveBeenLastCalledWith('geographic', [0, 0, 10, 10], '2km');
+    expect(getDimensions).toHaveBeenLastCalledWith({}, [0, 0, 10, 10], '2km');
   });
 
-  it('triggers onClick handler with width and height for Create GIF button', () => {
+  it('triggers onClick handler with width, height and resolution for Create GIF button', () => {
     render(<GifPanel {...defaultProps} />);
 
     const createBtn = screen.getByTestId('button-Create-GIF');
     fireEvent.click(createBtn);
 
-    expect(defaultProps.onClick).toHaveBeenCalledWith(1000, 1000);
+    expect(defaultProps.onClick).toHaveBeenCalledWith(1000, 1000, '1km');
   });
 
   it('triggers onCheck handler for checkbox', () => {

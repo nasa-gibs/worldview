@@ -5,7 +5,7 @@
       "title": "Nitrogen Dioxide (L3, Vertical Column Troposphere, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_NO2_Vertical_Column_Troposphere",
-      "tags": "",
+      "tags": "no2",
       "group": "overlays",
       "layergroup": "Nitrogen Dioxide",
       "dataAvailability": "dd",

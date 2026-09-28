@@ -1,21 +1,21 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import SelectionList from '../util/selector';
 import GifPanelGrid from './gif-panel-grid';
 import Button from '../util/button';
 import Checkbox from '../util/checkbox';
-import { getDimensions } from '../../modules/gif-download/util';
+import { getDimensions, estimateMaxImageSize } from '../../modules/image-download/util';
 
 const MAX_GIF_SIZE = 250;
 const MAX_IMAGE_DIMENSION_SIZE = 8200;
 
-const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
+const isFileSizeValid = function(requestSize, imgHeight, imgWidth, maxHeight, maxWidth) {
   return (
     requestSize < MAX_GIF_SIZE &&
     imgHeight !== 0 &&
     imgWidth !== 0 &&
-    imgHeight <= MAX_IMAGE_DIMENSION_SIZE &&
-    imgWidth <= MAX_IMAGE_DIMENSION_SIZE
+    imgHeight <= Math.min(MAX_IMAGE_DIMENSION_SIZE, maxHeight || MAX_IMAGE_DIMENSION_SIZE) &&
+    imgWidth <= Math.min(MAX_IMAGE_DIMENSION_SIZE, maxWidth || MAX_IMAGE_DIMENSION_SIZE)
   );
 };
 
@@ -26,7 +26,7 @@ const isFileSizeValid = function(requestSize, imgHeight, imgWidth) {
  * @function GifPanel
  */
 export default function GifPanel({
-  projId,
+  map,
   lonlats,
   startDate,
   endDate,
@@ -45,16 +45,21 @@ export default function GifPanel({
   const [resolutions] = useState(resolutionsProp);
   const [resolution, setResolution] = useState(resolutionProp);
   const [increment] = useState(incrementProp);
+  const [maxSize, setMaxSize] = useState({ height: 0, width: 0 });
+
+  useEffect(() => {
+    estimateMaxImageSize().then(setMaxSize);
+  }, []);
 
   const handleChange = (type, value) => {
     setResolution(value);
   };
 
-  const dimensions = getDimensions(projId, lonlats, resolution);
+  const dimensions = getDimensions(map, lonlats, resolution);
   const { height } = dimensions;
   const { width } = dimensions;
   const requestSize = ((width * height * 24) / 8388608).toFixed(2) * numberOfFrames;
-  const valid = isFileSizeValid(requestSize, height, width);
+  const valid = isFileSizeValid(requestSize, height, width, maxSize.height, maxSize.width);
 
   return (
     <div className="gif-dialog">
@@ -83,7 +88,7 @@ export default function GifPanel({
           increment={increment}
         />
         <Button
-          onClick={() => onClick(width, height)}
+          onClick={() => onClick(width, height, resolution)}
           text="Create GIF"
           valid={valid}
         />
@@ -105,12 +110,12 @@ GifPanel.propTypes = {
   firstLabel: PropTypes.string,
   increment: PropTypes.string,
   lonlats: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onCheck: PropTypes.func,
   onClick: PropTypes.func,
   onDownloadClick: PropTypes.func,
-  projId: PropTypes.string,
-  resolution: PropTypes.string,
+  resolution: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   resolutions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showDates: PropTypes.bool,
   speed: PropTypes.number,

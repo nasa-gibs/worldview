@@ -1,0 +1,32 @@
+{
+  "layers": {
+    "Admin_Boundaries": {
+      "id": "Admin_Boundaries",
+      "layerName": "World_Basemap_GCS_v2",
+      "title": "Administrative Boundaries",
+      "subtitle": "Sources: Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community",
+      "description": "reference/Admin_Boundaries",
+      "group": "overlays",
+      "tags": "esri world basemap gcs v2, country, countries, state, province, region",
+      "format": "application/x-protobuf",
+      "type": "indexedVector",
+      "disableGIF": true,
+      "layergroup": "Reference",
+      "wrapX": true,
+      "noTransition": true,
+      "serviceName": "VectorTileServer",
+      "tiles": [
+        "tile/{z}/{y}/{x}.pbf"
+      ],
+      "projections": {
+        "geographic": {
+          "source": "ESRI:basemaps"
+        }
+      },
+      "vectorStyle": {
+        "id": "Admin_Boundaries",
+        "source": "esri"
+      }
+    }
+  }
+}
