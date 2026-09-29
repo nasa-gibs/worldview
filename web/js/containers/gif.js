@@ -25,7 +25,7 @@ import {
 import { TIME_SCALE_FROM_NUMBER } from '../modules/date/constants';
 import GifResults from '../components/animation-widget/gif-post-creation';
 import getAnimationFrames from '../modules/animation/selectors';
-import { getStampProps, svgToPng, getNumberOfSteps } from '../modules/animation/util';
+import { getStampProps, svgToCanvas, getNumberOfSteps } from '../modules/animation/util';
 import { changeCropBounds } from '../modules/animation/actions';
 import { selectDate as selectDateAction } from '../modules/date/actions';
 import { promiseImageryForTime } from '../modules/map/util';
@@ -213,7 +213,7 @@ class GIF extends Component {
       height,
     );
 
-    const stamp = svgToPng('brand/images/wv-logo-w-shadow.svg', stampHeight);
+    const stamp = svgToCanvas('brand/images/wv-logo-w-shadow.svg', stampHeight);
 
     gifStream.createGIF(
       {
