@@ -1,0 +1,7 @@
+The Enhanced Vegetation Index (EVI) is also used as a measure of the greenness and health of vegetation. It is calculated in a similar fashion as NDVI but it corrects for distortions caused by ground cover beneath the canopy vegetation and distortions in reflected light caused by particles in the air by using the blue band to remove residual atmosphere contamination caused by smoke and sub-pixel thin cirrus clouds. The EVI is more effective in areas with large amounts of chlorophyll such as rainforests. The index values range from -0.2 to 1 where higher values (0.3 to 1) indicate areas covered by green, leafy vegetation and lower values (0 to 0.3) indicate areas where there is little or no vegetation. EVI is a slightly different vegetation index that is more sensitive to canopy cover, while NDVI is more sensitive to chlorophyll.
+
+The Vegetation Indices (VJ113A3) Version 2 data product provides vegetation indices by a process of selecting the best available pixel over a monthly acquisition period at 1 kilometer (km) resolution. The VJ113 data products are designed after the Moderate Resolution Imaging Spectroradiometer (MODIS) Terra and Aqua Vegetation Indices product suite to promote the continuity of the Earth Observation System (EOS) mission.
+
+The imagery resolution is 1km, and the temporal resolution is monthly.
+
+References: VJ113A3 [doi:10.5067/VIIRS/VJ113A3.002](https://doi.org/10.5067/VIIRS/VJ113A3.002)

@@ -25,6 +25,7 @@ import {
   getSmallestIntervalValue,
   activateLayersForEventCategory,
   getZotsForActiveLayers,
+  getAnyOverZoom,
   getMaxZoomLevelLayerCollection,
 } from './selectors';
 
@@ -1327,6 +1328,27 @@ test('returns entries for multiple layers with independent zot conditions', () =
   expect(result['layer-a']).toBeDefined();
   expect(result['layer-b']).toBeDefined();
   expect(result['layer-c']).toBeUndefined();
+});
+
+test('returns false when no layers are active', () => {
+  const state = getZotState({ activeLayers: [] });
+  expect(getAnyOverZoom(state, 5)).toEqual(false);
+});
+
+test('returns false when not overzoomed', () => {
+  const layer = makeSimpleLayer('terra-aod');
+  const state = getZotState({ activeLayers: [layer] });
+  const result = getAnyOverZoom(state, 3);
+  expect(result).toEqual(false);
+});
+
+test('returns true when overzoomed', () => {
+  const resolutionCount = 4; // zoomLimit = 3
+  const layer = makeZoomableLayer('terra-aod', resolutionCount);
+  const sources = makeZoomableSources(resolutionCount);
+  const state = getZotState({ activeLayers: [layer], sources });
+  const result = getAnyOverZoom(state, 5);
+  expect(result).toEqual(true);
 });
 
 test('returns fallback zoom when layers array is empty', () => {

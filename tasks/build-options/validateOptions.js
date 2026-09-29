@@ -20,6 +20,12 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'config directory'
   })
+  .option('features', {
+    demandOption: true,
+    alias: 'f',
+    type: 'string',
+    description: 'features.json file'
+  })
   .option('cacheMode', {
     demandOption: false,
     alias: 'cm',
@@ -29,13 +35,23 @@ const options = yargs(hideBin(process.argv))
   .epilog('Validates and corrects the configuration files.')
 
 const { argv } = options
-if (!argv.optionsFile && !argv.configDir) {
+if (!argv.optionsFile && !argv.configDir && !argv.features) {
   throw new Error('Invalid number of arguments')
 }
 
 const optionsFile = argv.optionsFile
 const configDir = argv.configDir
 const cacheMode = argv.cacheMode
+const featuresFile = argv.features
+
+let featuresData = fs.readFileSync(featuresFile)
+let features = JSON.parse(featuresData)
+if (fs.existsSync(featuresFile)) {
+  featuresData = fs.readFileSync(featuresFile)
+  features = JSON.parse(featuresData)
+} else {
+  throw new Error(`Error: ${featuresFile} feature file does not exist`)
+}
 
 let errorCount = 0
 let warningCount = 0
@@ -117,7 +133,7 @@ async function main () {
     }
     if ('temporal' in layer) {
       warn(`[${layerId}] GC Layer temporal values overwritten by Options`)
-      layer = await processTemporalLayer(layer, layer.temporal, undefined, cacheMode)
+      layer = await processTemporalLayer(layer, layer.temporal, undefined, cacheMode, features)
     }
     if (layer.futureTime) {
       if ('endDate' in layer) delete layer.endDate
