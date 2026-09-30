@@ -58,6 +58,34 @@
     }
   }
 
+  .form-range.form-range-compact {
+    &::-webkit-slider-thumb {
+      margin-top: -8px;
+      width: 18px;
+      height: 18px;
+      background-color: #333;
+      border-color: #333;
+    }
+
+    &::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      background-color: #333;
+      border-color: #333;
+    }
+
+    &::-ms-thumb {
+      width: 18px;
+      height: 18px;
+      background-color: #333;
+      border-color: #333;
+    }
+
+    &::-webkit-slider-runnable-track {
+      height: 3px;
+    }
+  }
+
   .form-range.range-mobile {
     &::-webkit-slider-runnable-track {
       height: 10px;

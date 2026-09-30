@@ -5,6 +5,7 @@
       "title": "NISAR Normalized Radar Backscatter (False Color) PROVISIONAL",
       "subtitle": "NISAR GCOV",
       "enableCMRDataFinder": true,
+      "maxDayRange": 12,
       "description": "nisar/NISAR_L2_Geocoded_Polarimetric_Covariance",
       "tags": "asf asfdaac synthetic aperture radar backscatter nisar",
       "group": "overlays",

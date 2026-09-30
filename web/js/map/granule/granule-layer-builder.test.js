@@ -106,6 +106,29 @@ describe('granule layer builder', () => {
       expect(granuleLayer.get('layerId')).toBe(`${granuleLayerDef.id}-${options.group}`);
     });
 
+    it('uses the granule count of the compare side being built', async () => {
+      const state = fixtures.getState();
+      const sideWithCount = (count) => ({
+        granuleLayers: { [granuleLayerDef.id]: { count } },
+      });
+      store = mockStore({
+        ...state,
+        compare: { ...state.compare, activeString: 'active' },
+        layers: {
+          ...state.layers,
+          active: { ...state.layers.active, ...sideWithCount(7) },
+          activeB: { ...state.layers.activeB, ...sideWithCount(3) },
+        },
+      });
+      const { createLayerWMTS } = layerbuilder(config, cache, store);
+      const builder = granuleLayerBuilder(cache, store, createLayerWMTS);
+      const { options, attributes } = buildOptionsAndAttributes(IN_RANGE_DATE, { group: 'activeB' });
+
+      const granuleLayer = await builder.getGranuleLayer(granuleLayerDef, attributes, options);
+
+      expect(granuleLayer.wv.count).toBe(3);
+    });
+
     it('attaches wv.visibleGranules and wv.invisibleGranules arrays to the layer', async () => {
       const { options, attributes } = buildOptionsAndAttributes(IN_RANGE_DATE);
 

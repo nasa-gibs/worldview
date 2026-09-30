@@ -252,6 +252,14 @@ li.item.productsitem.inmotion,
   border: 1px solid #333;
   overflow: hidden;
 
+  &.has-row-slider {
+    min-height: 58px;
+
+    .layer-main {
+      min-height: 58px;
+    }
+  }
+
   &.mini {
     min-height: 22px;
 
@@ -261,6 +269,22 @@ li.item.productsitem.inmotion,
 
     .layer-main {
       min-height: 22px;
+    }
+  }
+}
+
+.layer-row-slider-container {
+  display: flex;
+  align-items: center;
+  padding: 2px 6px 4px 4px;
+
+  .layer-row-slider {
+    flex: 1;
+    min-width: 0;
+
+    input {
+      width: 100%;
+      margin: 0;
     }
   }
 }
