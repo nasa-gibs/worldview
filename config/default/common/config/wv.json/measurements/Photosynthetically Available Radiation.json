@@ -58,7 +58,7 @@
                 "PACE/OCI": {
                     "id": "pace-oci",
                     "title": "PACE/OCI",
-                    "description": "",
+                    "description": "oci/oci",
                     "image": "",
                     "settings": [
                         "OCI_PACE_Photosynthetically_Available_Radiation",

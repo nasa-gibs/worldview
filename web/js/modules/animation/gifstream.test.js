@@ -215,6 +215,16 @@ describe('GifStream', () => {
       expect(img).toBe(mockImg);
     });
 
+    it('resolves a canvas frame directly, bypassing Image decoding', async () => {
+      const imageSpy = jest.spyOn(global, 'Image');
+      const canvas = { width: 10, height: 10 };
+      const result = await gs.getImagePromise({ canvas, text: 'hi', delay: 200 });
+      expect(result).toBe(canvas);
+      expect(result.text).toBe('hi');
+      expect(result.delay).toBe(200);
+      expect(imageSpy).not.toHaveBeenCalled();
+    });
+
     it('rejects on error', async () => {
       const mockImg = {
         onload: null,

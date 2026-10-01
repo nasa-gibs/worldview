@@ -5,7 +5,7 @@
       "title": "Ozone (L2, Column Amount O3, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L2_Ozone_Column_Amount_Granule",
-      "tags": "",
+      "tags": "o3",
       "group": "overlays",
       "layergroup": "Ozone",
       "type": "granule",
@@ -13,7 +13,6 @@
       "count": 1,
       "dataAvailability": "dd",
       "startDate": "2023-08-02T15:12:49Z",
-      "disableGIF": true,
       "shiftadjacentdays": false
     }
   }

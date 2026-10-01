@@ -1,117 +1,60 @@
-import { each as lodashEach } from 'lodash';
 import util from '../../util/util';
-import {
-  imageUtilGetCoordsFromPixelValues,
-  getDownloadUrl,
-} from '../image-download/util';
-import { subdailyLayersActive, getLayers } from '../layers/selectors';
+import { subdailyLayersActive } from '../layers/selectors';
 import { TIME_SCALE_FROM_NUMBER } from '../date/constants';
-import { formatDisplayDate, getNextImageryDelta } from '../date/util';
+import { formatDisplayDate, getValidDateRanges } from '../date/util';
+
+export const MAX_FRAMES = 40;
 
 /*
- * retrieves renderable layers
+ * Build the ordered frame list for an animation. Frames are captured from the
+ * map by date, so no imagery URLs are built here.
  *
- * @method getProducts
- * @private
+ * @method getAnimationFrames
  *
- * @returns {array} array of layer objects
- *
+ * @returns {array|boolean} array of {date, text, delay}, or false if the
+ * frame count exceeds MAX_FRAMES
  */
-function getProducts(date, state) {
-  const layersArray = [];
-  const products = getLayers(
-    state,
-    {
-      reverse: true,
-      renderable: true,
-      date,
-    },
-  );
-  lodashEach(products, (layer) => {
-    const layerDate = new Date(date);
-    if (layer.endDate) {
-      if (layerDate > new Date(layer.endDate)) return;
-    }
-    if (layer.visible && new Date(layer.startDate) <= layerDate) {
-      layersArray.push(layer);
-    } else if (!layer.startDate) {
-      layersArray.push(layer);
-    }
-  });
-  return layersArray;
-}
-
-/*
- * loops through dates and created image
- * download urls and pushs them to an
- * array
- *
- * @method getImageArray
- * @private
- *
- * @returns {array} array of jpg urls
- *
- */
-export default function getImageArray(
-  options,
-  dimensions,
-  state,
-) {
-  const {
-    animation, proj, map, date, locationSearch, layers,
-  } = state;
-  const {
-    boundaries, showDates, startDate, endDate, url,
-  } = options;
+export default function getAnimationFrames(options, state) {
+  const { animation, date, layers } = state;
+  const { showDates, startDate, endDate } = options;
   const {
     customInterval, interval, customDelta, delta, customSelected, autoSelected,
   } = date;
-  const a = [];
-  const fromDate = new Date(startDate);
-  const toDate = new Date(endDate);
-  const markerCoordinates = locationSearch.coordinates;
   const isSubDaily = subdailyLayersActive(state);
-  let current = fromDate;
-  let j = 0;
-  let src;
-  let strDate;
-  let products;
+
+  const toFrame = (frameDate) => ({
+    date: frameDate,
+    text: showDates ? formatDisplayDate(frameDate, isSubDaily) : '',
+    delay: 1000 / animation.speed,
+  });
+
+  // Auto steps to each available imagery date rather than by a fixed amount,
+  // matching the play queue. Deriving a delta instead would depend on `interval`,
+  // which auto does not set, and can land off an imagery date entirely.
+  if (autoSelected) {
+    const dateRanges = getValidDateRanges(
+      layers.active.layers,
+      new Date(startDate),
+      new Date(endDate),
+    );
+    if (dateRanges.length > MAX_FRAMES) return false;
+    // Layers without imagery still render, so keep a frame to capture them
+    if (!dateRanges.length) return [toFrame(new Date(startDate))];
+    return dateRanges.map(({ startDate: rangeStart }) => toFrame(new Date(rangeStart)));
+  }
+
+  const frames = [];
+  const toDate = new Date(endDate);
+  let current = new Date(startDate);
   const useDelta = customSelected && customDelta ? customDelta : delta;
   const increment = customSelected
     ? TIME_SCALE_FROM_NUMBER[customInterval]
     : TIME_SCALE_FROM_NUMBER[interval];
 
   while (current <= toDate) {
-    j += 1;
-    strDate = formatDisplayDate(current, isSubDaily);
-    products = getProducts(current, state);
-
-    const lonlats = imageUtilGetCoordsFromPixelValues(boundaries, map.ui.selected);
-    const dlURL = getDownloadUrl(
-      url,
-      proj,
-      products,
-      lonlats,
-      dimensions,
-      current,
-      false,
-      false,
-      markerCoordinates,
-    );
-
-    src = util.format(dlURL, strDate);
-    a.push({
-      src,
-      text: showDates ? strDate : '',
-      delay: 1000 / animation.speed,
-    });
-    current = util.dateAdd(current, increment, autoSelected
-      ? getNextImageryDelta(layers.active.layers, current, 1)
-      : useDelta);
-    if (j > 40) {
-      // too many frames
-      return false;
-    }
+    if (frames.length >= MAX_FRAMES) return false;
+    frames.push(toFrame(current));
+    current = util.dateAdd(current, increment, useDelta);
   }
-  return a;
+  return frames;
 }

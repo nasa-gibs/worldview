@@ -3,7 +3,7 @@
         "Leaf Area Index": {
             "id": "leaf-area-index",
             "title":    "Leaf Area Index",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
@@ -31,6 +31,24 @@
                     "settings": [
                         "MODIS_Combined_L4_LAI_4Day",
                         "MODIS_Combined_L4_LAI_8Day"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa-20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_L4_LAI_8Day"
+                    ]
+                },
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_L4_LAI_8Day"
                     ]
                 }
             }

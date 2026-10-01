@@ -3,7 +3,7 @@
     "VIIRS_SNPP_GapFilled_BRDF_Corrected_DayNightBand_Radiance": {
       "id": "VIIRS_SNPP_GapFilled_BRDF_Corrected_DayNightBand_Radiance",
       "description": "viirs/snpp/VIIRS_SNPP_GapFilled_BRDF_Corrected_DayNightBand_Radiance",
-      "tags": "dnb night s-npp snpp lights city urban nighttime black marble vnp46a2",
+      "tags": "dnb night s-npp snpp lights city urban nighttime black marble vnp46a2 gf",
       "layergroup": "Earth at Night",
       "group": "overlays"
     }

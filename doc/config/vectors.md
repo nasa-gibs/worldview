@@ -110,3 +110,11 @@ For more information on how to configure a mapbox-gl-js style spec, please refer
 ## Vector Metadata
 
 Vector layers created from the Global Imagery Browse Services (GIBS) will have a metadata JSON file associated with the layer defined in the GIBS WMTS GetCapabilities document. This metadata document describes features contained within the MVT file. This data is available to give context to the features stored within a layer. This information can be seen when a user clicks on a vector data point. A modal will appear with labels, values and tooltips. The data from this document appears within the tooltip element.
+
+## Vectorstyle Live-Reloading for Development
+
+To have a live-reloading vectorstyle for a particular layer:
+1. Create a copy of the vectorstyle json file from `config/default/common/vectorstyles` and place it in `web/config`.
+2. Add the layer ID to the **liveFetchLayers** array in `vector-styles/selectors.js`.
+
+The vectorstyle json file in `web/config` can now be modified as needed, and the style will update after the page refreshes. This process should only be used for faster development of the vector styling, and should not be used in deployment.

@@ -21,14 +21,13 @@ function componentizedPaletteToArray(paletteRGB) {
 }
 // part of neuquant conversion
 function dataToRGB(data, width, height) {
-  let i = 0;
-  const length = width * height * 4;
-  const rgb = [];
-  while (i < length) {
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    rgb.push(data[i++]);
-    i++;
+  const numPixels = width * height;
+  const rgb = new Uint8Array(numPixels * 3);
+  let j = 0;
+  for (let i = 0; i < numPixels * 4; i += 4) {
+    rgb[j++] = data[i];
+    rgb[j++] = data[i + 1];
+    rgb[j++] = data[i + 2];
   }
   return rgb;
 }
@@ -92,6 +91,8 @@ export default class GifStream {
     const textToUse = frameText && options.showFrameText ? frameText : text;
 
     try {
+      // Transparent no-data areas would otherwise show the previous frame's stamp
+      ctx.clearRect(0, 0, gifWidth, gifHeight);
       ctx.drawImage(img, 0, 0, gifWidth, gifHeight);
       if (textToUse) {
         ctx.font = font;
@@ -211,6 +212,14 @@ export default class GifStream {
   }
 
   getImagePromise(frame) {
+    // Frames captured from the map arrive as canvases, which drawImage accepts
+    // directly -- no PNG encode/decode round trip needed
+    if (frame.canvas) {
+      const { canvas } = frame;
+      canvas.text = frame.text;
+      canvas.delay = frame.delay;
+      return Promise.resolve(canvas);
+    }
     return new Promise((resolve, reject, onCancel) => {
       const img = new Image();
       img.width = this.options.gifWidth;
@@ -249,6 +258,8 @@ export default class GifStream {
     const height = options.gifHeight;
     const totalImages = frames.length;
     let processedImages = 0;
+    let nq;
+    let paletteArray;
     const self = this;
     const rs = new ReadableStream({
       pull: function pull(controller) {
@@ -266,9 +277,12 @@ export default class GifStream {
         ctx = self.addFrameDetails(ctx, frame);
         const imgData = ctx.getImageData(0, 0, width, height);
         const rgbComponents = dataToRGB(imgData.data, imgData.width, imgData.height);
-        const nq = new NeuQuant(rgbComponents, rgbComponents.length, 15);
-        const paletteRGB = nq.process();
-        const paletteArray = new Uint32Array(componentizedPaletteToArray(paletteRGB));
+        if (!nq) {
+          // cache the color palette so the NASA swish don't change color
+          // and keep color consistant across all frames..
+          nq = new NeuQuant(rgbComponents, rgbComponents.length, 1);
+          paletteArray = new Uint32Array(componentizedPaletteToArray(nq.process()));
+        }
         const numberPixels = imgData.height * imgData.width;
         const pixels = new Uint8Array(imgData.height * imgData.width);
         for (let i = 0; i < numberPixels; i++) {

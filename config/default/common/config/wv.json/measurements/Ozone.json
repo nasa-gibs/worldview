@@ -48,7 +48,7 @@
                 },
                 "DCOTSS/NASA ER-2 UCATS": {
                   "id": "DCOTSS_ER-2_UCATS_Ozone",
-                  "title": "DCOTSS//NASA ER-2 UCATS",
+                  "title": "DCOTSS/NASA ER-2 UCATS",
                   "description": "",
                   "image": "",
                   "settings": [
@@ -57,7 +57,7 @@
               },
                 "DCOTSS/NASA ER-2 ROZE": {
                   "id": "DCOTSS_ER-2_ROZE_Ozone",
-                  "title": "DCOTSS//NASA ER-2 ROZE",
+                  "title": "DCOTSS/NASA ER-2 ROZE",
                   "description": "",
                   "image": "",
                   "settings": [
@@ -96,7 +96,7 @@
                         "TEMPO_L3_Ozone_Column_Amount",
                         "TEMPO_L3_Ozone_Cloud_Fraction",
                         "TEMPO_L3_Ozone_Profile_Total_Column",
-                         "TEMPO_L3_Ozone_Profile_Troposphere_Column"
+                        "TEMPO_L3_Ozone_Profile_Troposphere_Column"
                     ]
                 },
                 "MERRA-2": {

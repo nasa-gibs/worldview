@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L3_EVI_Monthly": {
+      "id": "VIIRS_SNPP_L3_EVI_Monthly",
+      "description": "viirs/snpp/VIIRS_SNPP_L3_EVI_Monthly",
+      "group": "overlays",
+      "layergroup": "Vegetation Indices"
+    }
+  }
+}

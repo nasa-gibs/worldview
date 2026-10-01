@@ -13,7 +13,8 @@
                     "image": "",
                     "settings": [
                         "World_Imagery",
-                        "Reference_Labels_15m"
+                        "Reference_Labels_15m",
+                        "Admin_Boundaries"
                     ]
                 },
                 "U.S. Department of State": {

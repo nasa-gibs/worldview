@@ -11,7 +11,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_SNPP_Sea_Ice"
+                        "VIIRS_SNPP_Sea_Ice",
+                        "VIIRS_SNPP_L3_Sea_Ice_Daily"
                     ]
                 },
                 "NOAA-20/VIIRS": {
@@ -20,7 +21,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_NOAA20_Sea_Ice"
+                        "VIIRS_NOAA20_Sea_Ice",
+                        "VIIRS_NOAA20_L3_Sea_Ice_Daily"
                     ]
                 },
                 "Aqua/MODIS": {

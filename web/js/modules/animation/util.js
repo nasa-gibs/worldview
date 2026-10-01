@@ -131,7 +131,7 @@ export function getStampProps(
   return { stampHeight, dateStamp };
 }
 
-export function svgToPng(svgURL, stampHeight) {
+export function svgToCanvas(svgURL, stampHeight) {
   const canvasEl = document.createElement('canvas');
   const canvgOptions = {
     log: false,
@@ -139,12 +139,7 @@ export function svgToPng(svgURL, stampHeight) {
     scaleHeight: stampHeight,
   };
   canvg(canvasEl, svgURL, canvgOptions);
-  const newImage = new Image();
-  newImage.src = canvasEl.toDataURL('image/png');
-  newImage.width = canvasEl.width;
-  newImage.height = canvasEl.height;
-
-  return newImage;
+  return canvasEl;
 }
 
 export function mapLocationToAnimationState(

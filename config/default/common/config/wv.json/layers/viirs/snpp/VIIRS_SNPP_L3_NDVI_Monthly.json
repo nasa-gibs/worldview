@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L3_NDVI_Monthly": {
+      "id": "VIIRS_SNPP_L3_NDVI_Monthly",
+      "description": "viirs/snpp/VIIRS_SNPP_L3_NDVI_Monthly",
+      "group": "overlays",
+      "tags": "ndvi normalized difference vegetation index",
+      "layergroup": "Vegetation Indices"
+    }
+  }
+}

@@ -17,6 +17,11 @@ import {
   getLookup as getPaletteLookup,
 } from '../palettes/selectors';
 import util from '../../util/util';
+import { fetchVectorstyle } from '../layers/util';
+
+// Array of vector layer IDs to have their vectorstyle live fetched from `web/config`
+// * For use in local dev environment only *
+const liveFetchLayers = [];
 
 /**
  * Get OpenLayers layers from state that were created from WV vector
@@ -169,6 +174,7 @@ export function setStyleFunction(opts) {
     state,
     vectorStyleSource,
     styleSelection = false,
+    manualStyle,
   } = opts;
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return undefined;
@@ -190,6 +196,10 @@ export function setStyleFunction(opts) {
     if (customDefaultStyle !== undefined) {
       glStyle = customDefaultStyle;
     }
+  }
+
+  if (manualStyle) {
+    glStyle = manualStyle;
   }
 
   // De-reference the glState object prior to applying the palette to the layer
@@ -356,7 +366,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, s
  * @param {Object} state
  * @param {Object} options
  */
-export const applyStyle = (def, olVectorLayer, state, options, resolutions) => {
+export const applyStyle = async (def, olVectorLayer, state, options, resolutions) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
@@ -376,6 +386,14 @@ export const applyStyle = (def, olVectorLayer, state, options, resolutions) => {
     styleSelection: false,
     ...resolutions && { resolutions },
   };
+
+  // Fetch live vectorstyle if layer is in liveFetchLayers
+  if (liveFetchLayers.includes(def.id)) {
+    const fetchedStyle = await fetchVectorstyle(def.id);
+    if (fetchedStyle) {
+      opts.manualStyle = fetchedStyle;
+    }
+  }
 
   setStyleFunction(opts);
 };
