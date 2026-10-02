@@ -1,0 +1,31 @@
+{
+  "layers": {
+    "Roads": {
+      "id": "Roads",
+      "layerName": "World_Basemap_GCS_v2",
+      "title": "Roads",
+      "subtitle": "Sources: Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community",
+      "description": "reference/Roads",
+      "group": "overlays",
+      "tags": "esri world basemap gcs v2, roads, interstate, highway",
+      "format": "application/x-protobuf",
+      "type": "indexedVector",
+      "layergroup": "Reference",
+      "wrapX": true,
+      "noTransition": true,
+      "serviceName": "VectorTileServer",
+      "tiles": [
+        "tile/{z}/{y}/{x}.pbf"
+      ],
+      "projections": {
+        "geographic": {
+          "source": "ESRI:basemaps"
+        }
+      },
+      "vectorStyle": {
+        "id": "Roads",
+        "source": "esri"
+      }
+    }
+  }
+}
