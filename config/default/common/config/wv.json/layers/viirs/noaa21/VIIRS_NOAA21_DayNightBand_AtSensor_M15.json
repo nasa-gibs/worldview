@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_DayNightBand_AtSensor_M15": {
+      "id": "VIIRS_NOAA21_DayNightBand_AtSensor_M15",
+      "description": "viirs/noaa21/VIIRS_NOAA21_DayNightBand_AtSensor_M15",
+      "tags": "dnb night jpss-2 lights city urban nighttime black marble vj246a1 m15 blue yellow",
+      "layergroup": "Earth at Night",
+      "group": "overlays"
+    }
+  }
+}

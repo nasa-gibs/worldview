@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_SurfaceReflectance_BandsM11-M7-M5": {
+      "id": "VIIRS_NOAA21_SurfaceReflectance_BandsM11-M7-M5",
+      "description": "viirs/noaa21/VIIRS_NOAA21_SurfaceReflectance_BandsM11-M7-M5",
+      "tags": "false color lsr noaa-21 jpss 2 jpss-2",
+      "layergroup": "Land Surface Reflectance",
+      "group": "baselayers",
+      "wrapadjacentdays": true
+    }
+  }
+}
