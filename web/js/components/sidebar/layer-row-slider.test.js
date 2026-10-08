@@ -122,11 +122,5 @@ describe('LayerRowSlider', () => {
       fireEvent.mouseLeave(pill);
       expect(screen.queryByTestId('tooltip')).not.toBeInTheDocument();
     });
-
-    it('stays open while actively sliding, even without hover', () => {
-      renderSlider();
-      fireEvent.change(screen.getByRole('slider'), { target: { value: '6' } });
-      expect(screen.getByTestId('tooltip')).toBeInTheDocument();
-    });
   });
 });

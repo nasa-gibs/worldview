@@ -16,11 +16,11 @@ function LayerRowSlider(props) {
     stopDndActivation,
   } = props;
 
-  const [value, onSlide, isSliding] = useDebouncedSliderValue(propValue, onChange);
+  const [value, onSlide] = useDebouncedSliderValue(propValue, onChange);
   const [isHovered, setIsHovered] = useState(false);
 
   const pillId = `${sliderId}-pill`;
-  const pillText = `${value} ${unitLabel}${value === 1 ? '' : 'S'}`;
+  const formatLabel = (count) => `${count} ${unitLabel}${count === 1 ? '' : 'S'}`;
 
   return (
     <>
@@ -48,19 +48,20 @@ function LayerRowSlider(props) {
       </div>
       <span
         id={pillId}
-        className="day-range-pill badge rounded-pill text-light bg-dark"
+        className="day-range-pill badge rounded-pill"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        {pillText}
+        <span className="day-range-pill-sizer" aria-hidden="true">{formatLabel(max)}</span>
+        <span>{formatLabel(value)}</span>
       </span>
       {!isMobile && (
         <Tooltip
           id="center-align-tooltip"
-          placement="top"
+          placement="right"
           target={pillId}
           boundariesElement="wv-content"
-          isOpen={isHovered || isSliding.current}
+          isOpen={isHovered}
           delay={{ show: 250, hide: 0 }}
         >
           {tooltipText}

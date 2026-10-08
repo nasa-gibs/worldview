@@ -1080,12 +1080,25 @@
 }
 
 .day-range-pill {
-  margin-left: 6px;
-  font-size: 12px;
-  padding: 0.35em 0.75em;
+  display: inline-grid;
+  flex-shrink: 0;
+  justify-items: center;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0.3em 0.7em;
   letter-spacing: 0.3px;
   white-space: nowrap;
-  cursor: pointer;
+  color: #333;
+  background-color: #bdbdbd;
+
+  > span {
+    grid-area: 1 / 1;
+  }
+
+  .day-range-pill-sizer {
+    visibility: hidden;
+  }
 }
 
 .instrument-collection {
