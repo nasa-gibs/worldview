@@ -1166,6 +1166,7 @@ export default function mapLayerBuilder(config, cache, store) {
       vectorStyle,
       matrixSet,
       matrixSetLimits,
+      period,
     } = def;
 
     const projection = get(crs);
@@ -1183,13 +1184,21 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, selected);
 
-    const sourceOptions = {
-      url: `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`,
-      projection,
-      format: new MVT(),
-      tileGrid,
-    };
-    const source = new SourceVectorTile(sourceOptions);
+    const sourceUrl = `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`;
+    let source = cache.getItem(sourceUrl);
+
+    // If source is not cached, create new source
+    if (!source) {
+      const sourceOptions = {
+        url: sourceUrl,
+        projection,
+        format: new MVT(),
+        tileGrid,
+      };
+      source = new SourceVectorTile(sourceOptions);
+      const cacheOptions = getCacheOptions(period, options.date);
+      cache.setItem(sourceUrl, source, cacheOptions);
+    }
 
     const layer = new LayerVectorTile({
       source,
