@@ -23,7 +23,7 @@ The first objective of DISCOVER-AQ was to determine and investigate correlations
 measurements and satellite column observations for the trace gases ozone (O3), nitrogen dioxide
 (NO2), and formaldehyde (CH2O) to understand how satellite column observations can diagnose surface
 conditions. The research team also gathered surface-level measurements to understand how satellites
-measure diurnal variability and to understand what factors it. Lastly, DISCOVER-AQ aimed to explore
+measure diurnal variability and to understand what factors affect it. Lastly, DISCOVER-AQ aimed to explore
 horizontal scales of variability, such as regions with steep gradients and urban plumes.
 
 DISCOVER-AQ employed NASA's P-3B and King Air aircraft. The P-3B completed in situ spiral profiling
