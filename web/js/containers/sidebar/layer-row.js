@@ -12,6 +12,7 @@ import {
 import { faCircleDot, faCircle } from '@fortawesome/free-solid-svg-icons';
 import googleTagManager from 'googleTagManager';
 import PaletteLegend from '../../components/sidebar/paletteLegend';
+import LayerRowSlider from '../../components/sidebar/layer-row-slider';
 import util from '../../util/util';
 import { buildGranulesUrl, cmrFetch } from '../../util/cmr';
 import {
@@ -25,6 +26,8 @@ import { requestPalette as requestPaletteAction } from '../../modules/palettes/a
 import {
   toggleVisibility as toggleVisibilityAction,
   removeLayer as removeLayerAction,
+  updateDayCount as updateDayCountAction,
+  updateGranuleLayerOptions as updateGranuleLayerOptionsAction,
 } from '../../modules/layers/actions';
 import OrbitTrack from './orbit-track';
 import Zot from './zot';
@@ -32,7 +35,9 @@ import { isVectorLayerClickable } from '../../modules/layers/util';
 import { MODAL_PROPERTIES } from '../../modules/alerts/constants';
 import {
   getActiveLayers, makeGetDescription, getCollections,
+  getMaxDayRange, getLayerDayCount, getGranuleLayer,
 } from '../../modules/layers/selectors';
+import { MAX_GRANULES, DEFAULT_NUM_GRANULES, DEFAULT_DAY_COUNT } from '../../modules/layers/constants';
 import { formatDailyDate, formatSubdailyDate } from '../../mapUI/components/kiosk/tile-measurement/utils/date-util';
 import { coverageDateFormatter } from '../../modules/date/util';
 import { SIDEBAR_LAYER_HOVER, MAP_RUNNING_DATA } from '../../util/constants';
@@ -107,6 +112,12 @@ function LayerRow (props) {
     selectedDate,
     describeDomainsUrl,
     cmrBaseUrl,
+    maxDayRange,
+    dayCount,
+    granuleCount,
+    granuleDates,
+    updateDayCount,
+    updateGranuleLayerOptions,
   } = props;
 
   const encodedLayerId = util.encodeId(layer.id);
@@ -115,6 +126,8 @@ function LayerRow (props) {
   const removeLayerBtnId = `close-${compareState}${encodedLayerId}`;
   const removeLayerBtnTitle = 'Remove Layer';
   const collectionIdentifierDescription = 'Dataset version and the source of data processing, Near Real-Time (NRT) or Standard (STD)';
+  const inRowSlider = !isEmbedModeActive && !isAnimating && !isChartingActive &&
+    !layer.shouldHide && isVisible && (!!maxDayRange || granuleCount != null);
 
   const layerOptionsBtnId = `layer-options-btn-${encodedLayerId}`;
   const layerOptionsBtnTitle = 'View Options';
@@ -533,6 +546,7 @@ function LayerRow (props) {
     }
     if (activeZot || zot) baseClasses += ' zotted';
     if (layer.shouldHide) baseClasses += ' mini';
+    if (inRowSlider) baseClasses += ' has-row-slider';
     return baseClasses;
   };
 
@@ -558,7 +572,21 @@ function LayerRow (props) {
   const visibilityIconClass = disabled ? 'ban' : visibilityIcon;
 
   const collectionClass = collections?.type === 'NRT' ? 'collection-title badge rounded-pill bg-secondary' : 'collection-title badge rounded-pill text-dark bg-light';
+  const collectionIdentifierId = `collection-identifier-${compareState}-${encodedLayerId}`;
   const vectorLayerMinHeight = isVectorLayer ? '60px' : '40px';
+  const rowMinHeight = layer.shouldHide
+    ? '22px'
+    : (isVectorLayer ? vectorLayerMinHeight : (inRowSlider ? '58px' : '40px'));
+
+  const dayRangeSliderValue = maxDayRange ? (dayCount || DEFAULT_DAY_COUNT) : granuleCount;
+  const sliderMax = maxDayRange || MAX_GRANULES;
+  const sliderUnitLabel = maxDayRange ? 'DAY' : 'GRANULE';
+  const sliderTooltipText = maxDayRange
+    ? `${dayRangeSliderValue}-day aggregation`
+    : `${dayRangeSliderValue} granules aggregated`;
+  const onSliderChange = maxDayRange
+    ? (val) => updateDayCount(layer.id, val)
+    : (val) => updateGranuleLayerOptions(granuleDates, layer, val);
 
   const makeActiveForCharting = (layerArg) => {
     if (layerArg !== activeChartingLayer) {
@@ -646,7 +674,7 @@ function LayerRow (props) {
         <div
           className="layer-info"
           style={{
-            minHeight: layer.shouldHide ? '22px' : vectorLayerMinHeight,
+            minHeight: rowMinHeight,
             cursor: isDragDisabled ? undefined : (isDragging ? 'grabbing' : 'grab'),
           }}
           ref={setActivatorNodeRef}
@@ -664,15 +692,30 @@ function LayerRow (props) {
               {collections && isVisible
                 ? (
                   <h6>
-                    <span id="collection-identifier" className={collectionClass}>
+                    <span id={collectionIdentifierId} className={collectionClass}>
                       {collections.version} {collections.type}
-                      <UncontrolledTooltip id="center-align-tooltip" placement="right" target="collection-identifier" boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
+                      <UncontrolledTooltip id="center-align-tooltip" placement="right" target={collectionIdentifierId} boundariesElement="wv-content" delay={{ show: 250, hide: 0 }}>
                         {collectionIdentifierDescription}
                       </UncontrolledTooltip>
                     </span>
                   </h6>
                 )
                 : ''}
+            </div>
+          )}
+          {inRowSlider && (
+            <div className="layer-row-slider-container">
+              <LayerRowSlider
+                sliderId={`layer-row-slider-${compareState}-${encodedLayerId}`}
+                min={1}
+                max={sliderMax}
+                value={dayRangeSliderValue}
+                unitLabel={sliderUnitLabel}
+                tooltipText={sliderTooltipText}
+                onChange={onSliderChange}
+                isMobile={isMobile}
+                stopDndActivation={stopDndActivation}
+              />
             </div>
           )}
 
@@ -787,6 +830,9 @@ const makeMapStateToProps = () => {
     const { ddvZoomAlerts, ddvLocationAlerts } = state.alerts;
     const describeDomainsUrl = config?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
     const cmrBaseUrl = config?.features?.cmr?.url;
+    const maxDayRange = getMaxDayRange(layer);
+    const dayCount = maxDayRange ? getLayerDayCount(state, layer.id, compareState) : undefined;
+    const granuleState = layer.type === 'granule' ? getGranuleLayer(state, layer.id, compareState) : null;
 
     return {
       compare,
@@ -816,6 +862,12 @@ const makeMapStateToProps = () => {
       renderedPalette: renderedPalettes[paletteName],
       describeDomainsUrl,
       cmrBaseUrl,
+      maxDayRange,
+      dayCount,
+      granuleCount: layer.type === 'granule'
+        ? (granuleState?.count || layer.count || DEFAULT_NUM_GRANULES)
+        : null,
+      granuleDates: granuleState ? granuleState.dates : null,
     };
   };
 };
@@ -838,6 +890,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onRemoveClick: (id) => {
     dispatch(removeLayerAction(id));
+  },
+  updateDayCount: (id, dayCount) => {
+    dispatch(updateDayCountAction(id, dayCount));
+  },
+  updateGranuleLayerOptions: (dates, def, count) => {
+    dispatch(updateGranuleLayerOptionsAction(dates, def, count));
   },
   onOptionsClick: (layer, title, zot) => {
     const key = `LAYER_OPTIONS_MODAL-${layer.id}`;
@@ -966,4 +1024,10 @@ LayerRow.propTypes = {
   selectedDate: PropTypes.instanceOf(Date),
   describeDomainsUrl: PropTypes.string,
   cmrBaseUrl: PropTypes.string,
+  maxDayRange: PropTypes.number,
+  dayCount: PropTypes.number,
+  granuleCount: PropTypes.number,
+  granuleDates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  updateDayCount: PropTypes.func,
+  updateGranuleLayerOptions: PropTypes.func,
 };

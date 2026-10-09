@@ -115,6 +115,77 @@ test('serialize layers and palettes [layers-serialize]', () => {
   expect(layerStr).toBe('terra-aod(hidden,opacity=0.54)');
 });
 
+describe('multi-day aggregation permalink', () => {
+  const paletteState = {
+    palettes: {
+      active: {},
+      rendered: config.palettes.rendered,
+      custom: config.palettes.custom,
+    },
+    config,
+  };
+  const state = assign({}, paletteState, { layers: initialState });
+
+  test('serializes days attribute when dayCount is set above default', () => {
+    const layer = {
+      id: 'terra-aod', visible: true, opacity: 1, maxDayRange: 12, dayCount: 10,
+    };
+    const layerStr = serializeLayers([layer], state, 'active')[0];
+    expect(layerStr).toBe('terra-aod(days=10)');
+  });
+
+  test('omits days attribute at the default value of 1', () => {
+    const layer = {
+      id: 'terra-aod', visible: true, opacity: 1, maxDayRange: 12, dayCount: 1,
+    };
+    const layerStr = serializeLayers([layer], state, 'active')[0];
+    expect(layerStr).toBe('terra-aod');
+  });
+
+  test('omits days attribute when layer has no maxDayRange', () => {
+    const layer = {
+      id: 'terra-aod', visible: true, opacity: 1, dayCount: 10,
+    };
+    const layerStr = serializeLayers([layer], state, 'active')[0];
+    expect(layerStr).toBe('terra-aod');
+  });
+
+  test('parses days attribute from permalink string', () => {
+    const layers = layersParse12('terra-aod(days=10)', config);
+    expect(layers[0].dayCount).toBe(10);
+  });
+
+  test('clamps a hostile days value from permalink string', () => {
+    const layers = layersParse12('terra-aod(days=99)', config);
+    expect(layers[0].dayCount).toBe(12);
+  });
+});
+
+describe('granule count permalink', () => {
+  const getGranuleState = (granuleLayers) => ({
+    palettes: {
+      active: {},
+      rendered: config.palettes.rendered,
+      custom: config.palettes.custom,
+    },
+    config,
+    layers: { active: { granuleLayers } },
+  });
+  const layer = {
+    id: 'terra-aod', type: 'granule', visible: true, opacity: 1,
+  };
+
+  test('serializes count when it differs from the default', () => {
+    const state = getGranuleState({ 'terra-aod': { count: 12 } });
+    expect(serializeLayers([layer], state, 'active')[0]).toBe('terra-aod(count=12)');
+  });
+
+  test('omits count at the default value of 10', () => {
+    const state = getGranuleState({ 'terra-aod': { count: 10 } });
+    expect(serializeLayers([layer], state, 'active')[0]).toBe('terra-aod');
+  });
+});
+
 // Permalink 1.0
 describe('permalink 1.0', () => {
   beforeEach(() => {
