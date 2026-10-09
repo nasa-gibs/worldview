@@ -3,7 +3,7 @@
         "Snow Cover": {
             "id": "snow-cover",
             "title":    "Snow Cover",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -23,6 +23,16 @@
                     "settings": [
                         "VIIRS_NOAA20_NDSI_Snow_Cover",
                         "OrbitTracks_NOAA-20_Ascending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_NDSI_Snow_Cover",
+                        "OrbitTracks_NOAA-21_Ascending"
                     ]
                 },
                 "Aqua/MODIS": {
