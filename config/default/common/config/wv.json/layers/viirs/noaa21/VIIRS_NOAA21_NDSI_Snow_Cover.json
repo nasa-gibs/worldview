@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_NDSI_Snow_Cover": {
+      "id": "VIIRS_NOAA21_NDSI_Snow_Cover",
+      "description": "viirs/noaa21/VIIRS_NOAA21_NDSI_Snow_Cover",
+      "tags": "snow cover",
+      "group": "overlays",
+      "layergroup": "Snow Cover",
+      "wrapadjacentdays": true
+    }
+  }
+}
