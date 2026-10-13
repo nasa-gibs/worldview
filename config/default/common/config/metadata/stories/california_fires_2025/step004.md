@@ -1,1 +1,1 @@
-Comparison of Ozone and UV Aerosol Index
+This side-by-side comparison of Ozone (UV Aerosol Index) and Nitrogen Dioxide show the dispersion of the wildfire smoke. The nitrogen dioxide layer also highlights big cities, where vehicle emissions can also contribute to nitrogen dioxide in the atmosphere.
