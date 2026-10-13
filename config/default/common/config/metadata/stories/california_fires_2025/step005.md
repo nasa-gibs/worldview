@@ -1,1 +1,1 @@
-Broader US region showcasing varying Nitrogen Dioxide levels around the US. Sources include wildfires, factories, cities and cars.
+Zooming out to the broader US region, varying sources of nitrogen dioxide can be seen on the map. These include wildfires, factories, cities, and cars.

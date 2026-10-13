@@ -1,1 +1,1 @@
-The Tropospheric Emissions: Monitoring of Pollution (TEMPO) geostationary satellite was there to monitor the fires.
+The Tropospheric Emissions: Monitoring of Pollution (TEMPO) geostationary satellite was there to monitor the fires. Here we see Ozone (L3, UV Aerosol Index) overlaid on the Nitrogen Dioxide (L3, Vertical Column Troposphere) layers which highlight the smoke emanating from the fires.
