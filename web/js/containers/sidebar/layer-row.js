@@ -170,7 +170,11 @@ function LayerRow (props) {
   // All DDV layer notices are dismissable + Reflectance (Nadir BRDF-Adjusted) + DSWx-HLS
   const isLayerNotificationDismissable = layer.type === 'titiler' || layer.title === 'Reflectance (Nadir BRDF-Adjusted)' || layer.subtitle === 'DSWx-HLS';
 
+  // Days before the selected date that the map has aggregated
+  const lookbackDays = layer.dayRange || (dayCount > 1 ? dayCount - 1 : 0);
+
   useEffect(() => {
+    let cancelled = false;
     const asyncFunc = async () => {
       if (layer.enableCMRDataFinder && isVisible) {
         const conceptID = layer?.conceptIds?.[0]?.value || layer?.collectionConceptID;
@@ -190,7 +194,7 @@ function LayerRow (props) {
         const olderUrl = buildGranulesUrl(cmrBaseUrl, {
           conceptId: conceptID,
           bbox: extent.join(','),
-          temporal: `P0Y0M0DT0H0M/${zeroedDate}`,
+          temporal: `P0Y0M${lookbackDays}DT0H0M/${zeroedDate}`,
           sortKey: '-start_date',
           pageSize: 1,
         });
@@ -202,11 +206,13 @@ function LayerRow (props) {
           pageSize: 1,
         });
         const requests = [cmrFetch(olderUrl), cmrFetch(newerUrl)];
+        if (cancelled) return;
         const responses = await Promise.allSettled(requests);
         const [olderRes, newerRes] = responses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
         if (!olderRes?.ok || !newerRes?.ok) return;
         const jsonRequests = [olderRes.json(), newerRes.json()];
         const jsonResponses = await Promise.allSettled(jsonRequests);
+        if (cancelled) return;
         const [olderGranules, newerGranules] = jsonResponses.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
         const olderEntries = olderGranules?.feed?.entry || [];
         const newerEntries = newerGranules?.feed?.entry || [];
@@ -231,7 +237,8 @@ function LayerRow (props) {
       }
     };
     asyncFunc();
-  }, [map.extent, zot, selectedDate, isVisible]);
+    return () => { cancelled = true; };
+  }, [map.extent, zot, selectedDate, isVisible, lookbackDays]);
 
   // hook that checks if the ddv layer zoom alert should be enabled or disabled
   useEffect(() => {

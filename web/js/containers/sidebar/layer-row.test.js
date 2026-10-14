@@ -1333,6 +1333,29 @@ describe('Async CMR effect', () => {
     await waitFor(() => expect(cmrFetch).toHaveBeenCalled());
     expect(queryByTestId('alert-granule-alert')).not.toBeInTheDocument();
   });
+
+  it('widens the older CMR query to cover for aggregated day ranges', async () => {
+    const { buildGranulesUrl } = jest.requireMock('../../util/cmr');
+    renderComponent({ layer: cmrLayer, isVisible: true, dayCount: 5 });
+    await waitFor(() => expect(buildGranulesUrl).toHaveBeenCalled());
+    expect(buildGranulesUrl.mock.calls[0][1].temporal).toMatch(/^P0Y0M4DT0H0M\//);
+  });
+
+  it('re-runs the CMR check and clears the granule alert when dayCount grows into data', async () => {
+    const { cmrFetch } = jest.requireMock('../../util/cmr');
+    const props = {layer: cmrLayer, isVisible: true, zot: null, dayCount: 1};
+    const {findByTestId, queryByTestId, rerender} = renderComponent(props);
+    await findByTestId('alert-granule-alert');
+
+    cmrFetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({feed: {entry: [{id: 'G1'}]}}),
+    });
+    const callsBefore = cmrFetch.mock.calls.length;
+    rerender(<LayerRow {...defaultProps} {...props} dayCount={5} />);
+    await waitFor(() => expect(cmrFetch.mock.calls.length).toBeGreaterThan(callsBefore));
+    await waitFor(() => expect(queryByTestId('alert-granule-alert')).not.toBeInTheDocument());
+  });
 });
 
 // ─── Additional mapStateToProps branches ──────────────────────────────────────
