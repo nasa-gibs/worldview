@@ -1,0 +1,5 @@
+The Snow Cover (Normalized Difference Snow Index (NDSI)) layer shows an estimate of snow cover. It is derived from radiance data acquired by the Visible Infrared Imaging Radiometer Suite (VIIRS) aboard the NOAA-21 satellite (JPSS-2). Snow-covered land typically has very high reflectance in visible bands and very low reflectance in the shortwave infrared bands. The Normalized Difference Snow Index (NDSI) reveals the magnitude of this difference, with values greater than 0 typically indicating the presence of at least some snow. The VIIRS snow cover algorithm computes NDSI using VIIRS image bands I1 (0.64 µm, visible red) and I3 (1.61 µm, shortwave near-infrared) and then applies a series of data screens designed to alleviate likely errors and flag uncertain snow detections.
+
+The sensor resolution is 375 m, imagery resolution is 500 m, and the temporal resolution is daily.
+
+References: VJ210_NRT [doi:10.5067/VIIRS/VJ210_NRT.002](https://doi.org/10.5067/VIIRS/VJ210_NRT.002)

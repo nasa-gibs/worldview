@@ -575,9 +575,9 @@ describe('Layer actions', () => {
     });
   });
 
-  test('UPDATE_GRANULE_LAYER_OPTIONS dispatches for each matching platform layer [layers-action-update-granule-layer-options]', () => {
+  test('UPDATE_GRANULE_LAYER_OPTIONS dispatches only for the given layer [layers-action-update-granule-layer-options]', () => {
     const dates = ['2021-01-01', '2021-01-02'];
-    const def = { subtitle: 'Aqua / MODIS' };
+    const def = { id: 'aqua-aod', subtitle: 'Aqua / MODIS' };
     const count = 20;
     const granuleState = {
       ...getState(layers),
@@ -585,24 +585,26 @@ describe('Layer actions', () => {
         ...getState(layers).layers,
         active: {
           ...getState(layers).layers.active,
-          granuleLayers: { 'aqua-aod': { count, dates, granulePlatform: 'Aqua / MODIS' } },
+          granuleLayers: {
+            'aqua-aod': { count, dates, granulePlatform: 'Aqua / MODIS' },
+            'aqua-cr': { count, dates, granulePlatform: 'Aqua / MODIS' },
+          },
           granulePlatform: 'Aqua / MODIS',
         },
       },
     };
     const granuleStore = mockStore(granuleState);
     granuleStore.dispatch(updateGranuleLayerOptions(dates, def, count));
-    const actions = granuleStore.getActions();
-    expect(actions.length).toBeGreaterThanOrEqual(1);
-    actions.forEach((action) => {
-      expect(action.type).toBe(LAYER_CONSTANTS.UPDATE_GRANULE_LAYER_OPTIONS);
-      expect(action.dates).toEqual(dates);
-      expect(action.count).toBe(count);
-      expect(action.activeKey).toBe('active');
-    });
+    expect(granuleStore.getActions()).toEqual([{
+      type: LAYER_CONSTANTS.UPDATE_GRANULE_LAYER_OPTIONS,
+      id: 'aqua-aod',
+      activeKey: 'active',
+      dates,
+      count,
+    }]);
   });
 
-  test('UPDATE_GRANULE_LAYER_OPTIONS dispatches no actions when no matching platform layers [layers-action-update-granule-layer-options-no-match]', () => {
+  test('UPDATE_GRANULE_LAYER_OPTIONS dispatches before the layer has granule state [layers-action-update-granule-layer-options-no-state]', () => {
     const granuleState = {
       ...getState(layers),
       layers: {
@@ -610,13 +612,15 @@ describe('Layer actions', () => {
         active: {
           ...getState(layers).layers.active,
           granuleLayers: {},
-          granulePlatform: 'Aqua / MODIS',
         },
       },
     };
     const granuleStore = mockStore(granuleState);
-    granuleStore.dispatch(updateGranuleLayerOptions(['2021-01-01'], { subtitle: 'Terra / MODIS' }, 10));
-    expect(granuleStore.getActions()).toHaveLength(0);
+    granuleStore.dispatch(updateGranuleLayerOptions(null, { id: 'terra-cr', subtitle: 'Terra / MODIS' }, 12));
+    const actions = granuleStore.getActions();
+    expect(actions).toHaveLength(1);
+    expect(actions[0].id).toBe('terra-cr');
+    expect(actions[0].count).toBe(12);
   });
 
   test('updateGranuleLayerState dispatches only ADD_GRANULE_LAYER_DATES when no existing layer [layers-action-update-granule-layer-state-new]', () => {
@@ -645,6 +649,24 @@ describe('Layer actions', () => {
       granulePlatform: 'Aqua / MODIS',
       count: 20,
     });
+  });
+
+  test('updateGranuleLayerState writes to the compare side the layer was built for [layers-action-update-granule-layer-state-group]', () => {
+    const mockLayer = {
+      wv: {
+        id: 'aqua-aod',
+        group: 'activeB',
+        count: 3,
+        granuleDates: ['2021-01-03T00:00:00Z'],
+        reorderedGranules: null,
+        def: { endDate: '2030-01-01T00:00:00Z', subtitle: 'Aqua / MODIS' },
+      },
+    };
+    getGranuleFootprints.mockReturnValue({});
+    getGranuleLayer.mockReturnValue(null);
+    store.dispatch(updateGranuleLayerState(mockLayer));
+    expect(getGranuleLayer).toHaveBeenCalledWith(expect.anything(), 'aqua-aod', 'activeB');
+    expect(store.getActions()[0].activeKey).toBe('activeB');
   });
 
   test('updateGranuleLayerState dispatches UPDATE_GRANULE_LAYER_GEOMETRY and ADD_GRANULE_LAYER_DATES when layer exists [layers-action-update-granule-layer-state-existing]', () => {

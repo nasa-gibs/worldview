@@ -18,11 +18,13 @@ import {
   getFutureLayerEndDate,
   getActiveLayersMap,
   getGranuleLayer,
+  getMaxDayRange,
 } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
 import { parseDate } from '../date/util';
+import { DEFAULT_DAY_COUNT, MIN_DAY_COUNT, MAX_DAY_COUNT, DEFAULT_NUM_GRANULES } from './constants';
 
 /**
  * Given a layer definition, returns formatted string
@@ -921,6 +923,21 @@ export function serializeLayers(layers, state, groupName) {
         value: bandComboString,
       });
     }
+    if (def.dayCount > DEFAULT_DAY_COUNT && getMaxDayRange(def)) {
+      item.attributes.push({
+        id: 'days',
+        value: def.dayCount,
+      });
+    }
+    if (def.type === 'granule') {
+      const { count } = getGranuleLayer(state, def.id, groupName) || {};
+      if (count && count !== DEFAULT_NUM_GRANULES) {
+        item.attributes.push({
+          id: 'count',
+          value: count,
+        });
+      }
+    }
     if (def.palette &&
       (def.custom || def.min || def.max || def.squash || def.noclip || def.disabled ||
         (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
@@ -940,14 +957,6 @@ export function serializeLayers(layers, state, groupName) {
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
-    } else if (def.type === 'granule') {
-      const granuleLayer = getGranuleLayer(state, def.id);
-      if (granuleLayer) {
-        const { count } = granuleLayer;
-        item.attributes = count !== 20
-          ? item.attributes.concat({ id: 'count', value: count })
-          : item.attributes;
-      }
     }
 
     return util.appendAttributesForURL(item);
@@ -991,6 +1000,7 @@ const getLayerSpec = (attributes) => {
   let custom;
   let disabled;
   let count;
+  let dayCount;
   let bandCombo;
 
   lodashEach(attributes, (attr) => {
@@ -1097,12 +1107,20 @@ const getLayerSpec = (attributes) => {
     if (attr.id === 'count') {
       count = Number(attr.value);
     }
+    // multi-day aggregation count (defaults to 1 if no param)
+    if (attr.id === 'days') {
+      const parsed = parseInt(attr.value, 10);
+      if (!lodashIsNaN(parsed)) {
+        dayCount = util.clamp(parsed, MIN_DAY_COUNT, MAX_DAY_COUNT);
+      }
+    }
   });
 
   return {
     hidden,
     opacity,
     count,
+    dayCount,
     bandCombo,
 
     // only include palette attributes if Array.length condition

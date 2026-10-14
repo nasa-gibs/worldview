@@ -367,6 +367,8 @@ function UpdateProjection(props) {
         };
         return reloadLayers(granuleOptions);
       }
+      case layerConstants.UPDATE_DAY_COUNT:
+        return reloadLayers();
       case compareConstants.CHANGE_STATE:
         if (compareMode === 'spy') {
           return reloadLayers();

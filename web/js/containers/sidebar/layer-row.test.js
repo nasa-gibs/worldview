@@ -81,6 +81,11 @@ jest.mock('../../components/sidebar/paletteLegend', () => function MockPaletteLe
   return React.createElement('div', { 'data-testid': `palette-legend-${layer.id}` });
 });
 
+jest.mock('../../components/sidebar/layer-row-slider', () => function MockLayerRowSlider({ sliderId }) {
+  const React = require('react');
+  return React.createElement('div', { 'data-testid': 'layer-row-slider', id: sliderId });
+});
+
 jest.mock('../../util/util', () => ({
   encodeId: jest.fn((id) => id),
   events: {
@@ -130,6 +135,8 @@ jest.mock('../../modules/palettes/actions', () => ({
 jest.mock('../../modules/layers/actions', () => ({
   toggleVisibility: jest.fn(() => ({ type: 'TOGGLE_VISIBILITY' })),
   removeLayer: jest.fn(() => ({ type: 'REMOVE_LAYER' })),
+  updateDayCount: jest.fn(() => ({ type: 'UPDATE_DAY_COUNT' })),
+  updateGranuleLayerOptions: jest.fn(() => ({ type: 'UPDATE_GRANULE_LAYER_OPTIONS' })),
 }));
 
 jest.mock('./orbit-track', () => function MockOrbitTrack({ trackLayer }) {
@@ -158,6 +165,9 @@ jest.mock('../../modules/layers/selectors', () => ({
   getActiveLayers: jest.fn(() => []),
   makeGetDescription: jest.fn(() => jest.fn(() => 'mock-description-path')),
   getCollections: jest.fn(() => null),
+  getMaxDayRange: jest.fn(() => 0),
+  getLayerDayCount: jest.fn(() => 1),
+  getGranuleLayer: jest.fn(() => null),
 }));
 
 jest.mock('../../mapUI/components/kiosk/tile-measurement/utils/date-util', () => ({
@@ -828,7 +838,7 @@ describe('Orbit tracks', () => {
 describe('Collection display', () => {
   it('renders collection identifier when collections truthy and isVisible', () => {
     const { container } = renderComponent({ collections: { version: '6.0', type: 'NRT' }, isVisible: true });
-    const span = container.querySelector('#collection-identifier');
+    const span = container.querySelector('.collection-title');
     expect(span).toBeInTheDocument();
     expect(span.textContent).toContain('6.0');
     expect(span.textContent).toContain('NRT');
@@ -836,17 +846,17 @@ describe('Collection display', () => {
 
   it('does not render collection when isVisible is false', () => {
     const { container } = renderComponent({ collections: { version: '6.0', type: 'NRT' }, isVisible: false });
-    expect(container.querySelector('#collection-identifier')).not.toBeInTheDocument();
+    expect(container.querySelector('.collection-title')).not.toBeInTheDocument();
   });
 
   it('uses bg-secondary badge for NRT type', () => {
     const { container } = renderComponent({ collections: { version: '6.0', type: 'NRT' }, isVisible: true });
-    expect(container.querySelector('#collection-identifier').className).toContain('bg-secondary');
+    expect(container.querySelector('.collection-title').className).toContain('bg-secondary');
   });
 
   it('uses bg-light badge for non-NRT type', () => {
     const { container } = renderComponent({ collections: { version: '6.0', type: 'STD' }, isVisible: true });
-    expect(container.querySelector('#collection-identifier').className).toContain('bg-light');
+    expect(container.querySelector('.collection-title').className).toContain('bg-light');
   });
 });
 
@@ -954,6 +964,17 @@ describe('mapStateToProps', () => {
   it('maps isMobile from screenSize.isMobileDevice', () => {
     const msp = capturedMakeMapStateToProps();
     expect(msp(makeState({ screenSize: { isMobileDevice: true } }), ownProps).isMobile).toBe(true);
+  });
+
+  describe('granuleCount', () => {
+    const { getGranuleLayer } = jest.requireMock('../../modules/layers/selectors');
+    const granuleOwnProps = (layer) => ({ ...ownProps, layer: { ...ownProps.layer, type: 'granule', ...layer } });
+
+    it('defaults to DEFAULT_NUM_GRANULES before the granule layer is built', () => {
+      getGranuleLayer.mockReturnValueOnce(null);
+      const msp = capturedMakeMapStateToProps();
+      expect(msp(makeState(), granuleOwnProps()).granuleCount).toBe(10);
+    });
   });
 
   it('maps isEmbedModeActive from embed', () => {
@@ -1311,6 +1332,29 @@ describe('Async CMR effect', () => {
     const { queryByTestId } = renderComponent({ layer: cmrLayer, isVisible: true });
     await waitFor(() => expect(cmrFetch).toHaveBeenCalled());
     expect(queryByTestId('alert-granule-alert')).not.toBeInTheDocument();
+  });
+
+  it('widens the older CMR query to cover for aggregated day ranges', async () => {
+    const { buildGranulesUrl } = jest.requireMock('../../util/cmr');
+    renderComponent({ layer: cmrLayer, isVisible: true, dayCount: 5 });
+    await waitFor(() => expect(buildGranulesUrl).toHaveBeenCalled());
+    expect(buildGranulesUrl.mock.calls[0][1].temporal).toMatch(/^P0Y0M4DT0H0M\//);
+  });
+
+  it('re-runs the CMR check and clears the granule alert when dayCount grows into data', async () => {
+    const { cmrFetch } = jest.requireMock('../../util/cmr');
+    const props = {layer: cmrLayer, isVisible: true, zot: null, dayCount: 1};
+    const {findByTestId, queryByTestId, rerender} = renderComponent(props);
+    await findByTestId('alert-granule-alert');
+
+    cmrFetch.mockResolvedValue({
+      ok: true,
+      json: jest.fn().mockResolvedValue({feed: {entry: [{id: 'G1'}]}}),
+    });
+    const callsBefore = cmrFetch.mock.calls.length;
+    rerender(<LayerRow {...defaultProps} {...props} dayCount={5} />);
+    await waitFor(() => expect(cmrFetch.mock.calls.length).toBeGreaterThan(callsBefore));
+    await waitFor(() => expect(queryByTestId('alert-granule-alert')).not.toBeInTheDocument());
   });
 });
 

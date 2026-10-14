@@ -25,6 +25,7 @@ import {
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
   ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import {
   SET_VECTORSTYLE,
@@ -289,6 +290,26 @@ describe('layer Reducer tests', () => {
     expect(getTestLayer(response.active.layers).opacity).toEqual(0.4);
   });
 
+  test('UPDATE_DAY_COUNT action updates dayCount for given layer [layers-reducer-update-day-count]', () => {
+    const response = layerReducer(initialState, {
+      type: UPDATE_DAY_COUNT,
+      activeString: 'active',
+      dayCount: 5,
+      id: 'terra-cr',
+    });
+    expect(getTestLayer(response.active.layers).dayCount).toEqual(5);
+  });
+
+  test('UPDATE_DAY_COUNT returns unchanged state when layer id not found [layers-reducer-update-day-count-not-found]', () => {
+    const response = layerReducer(initialState, {
+      type: UPDATE_DAY_COUNT,
+      activeString: 'active',
+      dayCount: 5,
+      id: 'non-existent-layer',
+    });
+    expect(response).toEqual(initialState);
+  });
+
   test('TOGGLE_LAYER_VISIBILITY returns unchanged state when layer id not found [layers-reducer-toggle-visibility-not-found]', () => {
     const response = layerReducer(initialState, {
       type: TOGGLE_LAYER_VISIBILITY,
@@ -341,6 +362,41 @@ describe('layer Reducer tests', () => {
     const bIds = response.activeB.layers.map((l) => l.id);
     expect(bIds).not.toContain('aqua-cr');
     expect(bIds).toContain('terra-cr');
+  });
+
+  test('SYNC_SECOND_LAYER_GROUP removes layers that were removed from A while compare was off [layers-reducer-sync-second-layer-group-removes-layers]', () => {
+    const removedLayer = { id: 'granule-cr', group: 'overlays', layergroup: 'Granules' };
+    const stateWithB = {
+      ...initialState,
+      activeB: {
+        ...initialState.activeB,
+        layers: [removedLayer, ...initialLayers],
+        granuleLayers: { 'granule-cr': { count: 10 } },
+      },
+    };
+    const response = layerReducer(stateWithB, {
+      type: SYNC_SECOND_LAYER_GROUP,
+      lastExitALayerIds: ['granule-cr', 'aqua-cr', 'terra-cr'],
+    });
+    expect(response.activeB.layers.map((l) => l.id)).not.toContain('granule-cr');
+    expect(response.activeB.granuleLayers).toEqual({});
+    expect(response.activeB.overlayGroups.map((g) => g.groupName)).not.toContain('Granules');
+  });
+
+  test('SYNC_SECOND_LAYER_GROUP keeps layers added to B during compare [layers-reducer-sync-second-layer-group-keeps-b-layers]', () => {
+    const bOnlyLayer = { id: 'b-only', group: 'overlays', layergroup: 'Other' };
+    const stateWithB = {
+      ...initialState,
+      activeB: {
+        ...initialState.activeB,
+        layers: [bOnlyLayer, ...initialLayers],
+      },
+    };
+    const response = layerReducer(stateWithB, {
+      type: SYNC_SECOND_LAYER_GROUP,
+      lastExitALayerIds: ['aqua-cr', 'terra-cr'],
+    });
+    expect(response.activeB.layers.map((l) => l.id)).toContain('b-only');
   });
 
   test('ADD_LAYERS_FOR_EVENT sets eventLayers when provided [layers-reducer-add-layer-for-event-with-event-layers]', () => {
@@ -470,6 +526,36 @@ describe('layer Reducer tests', () => {
     });
     expect(response.active.granuleLayers['terra-cr'].count).toEqual(5);
     expect(response.active.granuleLayers['terra-cr'].dates).toEqual(newDates);
+  });
+
+  test('UPDATE_GRANULE_LAYER_OPTIONS creates the granule layer entry when missing [layers-reducer-update-granule-layer-options-missing]', () => {
+    const response = layerReducer(initialState, {
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id: 'terra-cr',
+      activeKey: 'active',
+      count: 12,
+      dates: null,
+    });
+    expect(response.active.granuleLayers['terra-cr'].count).toEqual(12);
+  });
+
+  test('UPDATE_GRANULE_LAYER_OPTIONS keeps existing dates when none are passed [layers-reducer-update-granule-layer-options-keep-dates]', () => {
+    const dates = ['2022-05-01'];
+    const initialWithGranule = update(initialState, {
+      active: {
+        granuleLayers: {
+          $merge: { 'terra-cr': { dates, count: 10 } },
+        },
+      },
+    });
+    const response = layerReducer(initialWithGranule, {
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id: 'terra-cr',
+      activeKey: 'active',
+      count: 3,
+      dates: null,
+    });
+    expect(response.active.granuleLayers['terra-cr']).toEqual({ dates, count: 3 });
   });
 
   test('UPDATE_GRANULE_LAYER_GEOMETRY updates geometry and footprints for granule layer [layers-reducer-update-granule-layer-geometry]', () => {

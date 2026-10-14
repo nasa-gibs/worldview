@@ -1,6 +1,7 @@
 import {
   cloneDeep as lodashCloneDeep,
   findIndex as lodashFindIndex,
+  omitBy as lodashOmitBy,
 } from 'lodash';
 import update from 'immutability-helper';
 import {
@@ -25,6 +26,7 @@ import {
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
   ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
@@ -168,23 +170,30 @@ export function layerReducer(state = initialState, action) {
         activeB: lodashCloneDeep(state.active),
       };
 
-    // Add layers that were added to A after compare was last exited.
-    // Layers missing from B because the user removed them are NOT re-added.
+    // Apply changes made to A while compare was off: add layers added to A,
+    // and remove layers removed from A. Layers the user removed from or
+    // added to B during compare are left alone.
     case SYNC_SECOND_LAYER_GROUP: {
+      const aLayerIds = new Set(state.active.layers.map((l) => l.id));
       const bLayerIds = new Set(state.activeB.layers.map((l) => l.id));
       const lastExitIds = new Set(action.lastExitALayerIds || []);
       const newLayers = state.active.layers.filter(
         (l) => !bLayerIds.has(l.id) && !lastExitIds.has(l.id),
       );
-      if (!newLayers.length) return state;
+      const isRemovedFromA = (id) => lastExitIds.has(id) && !aLayerIds.has(id);
+      const keptLayers = state.activeB.layers.filter((l) => !isRemovedFromA(l.id));
+      if (!newLayers.length && keptLayers.length === state.activeB.layers.length) return state;
+      const layers = [...keptLayers, ...lodashCloneDeep(newLayers)];
       return {
         ...state,
         activeB: {
           ...state.activeB,
-          layers: [
-            ...state.activeB.layers,
-            ...lodashCloneDeep(newLayers),
-          ],
+          layers,
+          overlayGroups: getOverlayGroups(layers, state.activeB.overlayGroups),
+          granuleLayers: lodashOmitBy(
+            state.activeB.granuleLayers,
+            (_granuleLayer, id) => isRemovedFromA(id),
+          ),
         },
       };
     }
@@ -214,6 +223,20 @@ export function layerReducer(state = initialState, action) {
           },
         },
       });
+
+    case UPDATE_DAY_COUNT: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [layerIndex]: {
+              dayCount: { $set: action.dayCount },
+            },
+          },
+        },
+      });
+    }
 
     case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_DISABLED_CLASSIFICATION: {
@@ -350,11 +373,16 @@ export function layerReducer(state = initialState, action) {
         id, activeKey, count, dates,
       } = action;
 
+      // The entry may not exist yet if the map hasn't built this layer
       return update(state, {
         [activeKey]: {
           granuleLayers: {
             [id]: {
-              $merge: { count, dates },
+              $apply: (granuleLayer = {}) => ({
+                ...granuleLayer,
+                count,
+                dates: dates || granuleLayer.dates,
+              }),
             },
           },
         },

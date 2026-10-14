@@ -3,7 +3,7 @@
         "Ozone": {
             "id": "ozone",
             "title":    "Ozone",
-            "subtitle": "ACTIVATE/NASA HU-25 Falcon, AJAX/Alpha Jet, Aura/MLS, Aura/OMI, DCOTSS/NASA ER-2 UCATS and ROZE, KORUS-AQ/NASA DC-8, Suomi NPP/OMPS, TEMPO, MERRA-2",
+            "subtitle": "ACTIVATE/NASA HU-25 Falcon, AJAX/Alpha Jet, Aura/MLS, Aura/OMI, DCOTSS/NASA ER-2 UCATS and ROZE, DISCOVER-AQ/P-3B, KORUS-AQ/NASA DC-8, Suomi NPP/OMPS, TEMPO, MERRA-2",
             "sources": {
                 "ACTIVATE/NASA HU-25 Falcon": {
                   "id": "activate-nasa-hu25-falcon",
@@ -62,6 +62,18 @@
                   "image": "",
                   "settings": [
                   "DCOTSS_ER-2_ROZE_Ozone"
+                  ]
+              },
+                "DISCOVER-AQ/P-3B": {
+                  "id": "DISCOVER-AQ/P-3B",
+                  "title": "DISCOVER-AQ/P-3B",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  	"DISCOVER-AQ_MD_P3B_Ozone",
+		            "DISCOVER-AQ_CA_P3B_Ozone",
+		            "DISCOVER-AQ_TX_P3B_Ozone",
+		            "DISCOVER-AQ_CO_P3B_Ozone"
                   ]
               },
                 "KORUS-AQ/NASA DC-8": {

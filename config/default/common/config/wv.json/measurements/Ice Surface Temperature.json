@@ -3,7 +3,7 @@
         "Ice Surface Temperature": {
             "id": "ice-surface-temperature",
             "title":    "Ice Surface Temperature",
-            "subtitle": "Aqua/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS",
+            "subtitle": "Aqua/MODIS, NOAA-21/VIIRS,NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -31,6 +31,18 @@
                         "VIIRS_NOAA20_L3_Ice_Surface_Temp_Daily_Night",
                         "OrbitTracks_NOAA-20_Ascending",
                         "OrbitTracks_NOAA-20_Descending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Ice_Surface_Temp_Day",
+                        "VIIRS_NOAA21_Ice_Surface_Temp_Night",
+                        "OrbitTracks_NOAA-21_Ascending",
+                        "OrbitTracks_NOAA-21_Descending"
                     ]
                 },
                     "Aqua/MODIS": {

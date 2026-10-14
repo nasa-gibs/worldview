@@ -58,6 +58,60 @@
     }
   }
 
+  .form-range.form-range-compact {
+    height: 14px;
+    cursor: pointer;
+
+    &::-webkit-slider-thumb {
+      margin-top: -5px;
+      width: 14px;
+      height: 14px;
+      background-color: #444;
+      border-color: #444;
+    }
+
+    &::-moz-range-thumb {
+      width: 14px;
+      height: 14px;
+      background-color: #444;
+      border-color: #444;
+    }
+
+    &::-ms-thumb {
+      width: 14px;
+      height: 14px;
+      background-color: #444;
+      border-color: #444;
+    }
+
+    &::-webkit-slider-runnable-track {
+      height: 4px;
+      background: linear-gradient(
+        to right,
+        #3e7ac1 0%,
+        #3e7ac1 var(--value-percent, 0%),
+        #b5b5b5 var(--value-percent, 0%),
+        #b5b5b5 100%
+      );
+    }
+
+    &::-moz-range-track {
+      height: 4px;
+      background-color: #b5b5b5;
+    }
+
+    // Only show the focus ring for keyboard focus
+    &:focus:not(:focus-visible) {
+      &::-webkit-slider-thumb {
+        box-shadow: none;
+      }
+
+      &::-moz-range-thumb {
+        box-shadow: none;
+      }
+    }
+  }
+
   .form-range.range-mobile {
     &::-webkit-slider-runnable-track {
       height: 10px;
