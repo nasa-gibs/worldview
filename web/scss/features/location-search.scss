@@ -249,6 +249,19 @@
   }
 }
 
-.location-dialog-pin-wrapper {
-  text-align: center;
+.location-dialog-pin-wrapper-parent {
+  pointer-events: none !important;
+
+  & > div {
+    pointer-events: none;
+  }
+
+  .location-dialog-pin-wrapper {
+    text-align: center;
+    pointer-events: none;
+
+    img {
+      pointer-events: all;
+    }
+  }
 }
