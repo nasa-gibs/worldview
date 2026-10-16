@@ -106,11 +106,11 @@
     "css-loader": "^7.1.5",
     "css-minimizer-webpack-plugin": "^8.0.0",
     "css-url-relative-plugin": "^1.1.0",
-    "cssnano": "^9.4.0",
+    "cssnano": "^9.8.0",
     "eslint": "^9.39.5",
     "eslint-import-resolver-webpack": "^0.13.11",
     "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-jest": "^29.16.6",
+    "eslint-plugin-jest": "^29.17.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-n": "^18.4.1",
     "eslint-plugin-no-storage": "^1.0.2",
@@ -133,7 +133,7 @@
     "node-fetch": "^3.3.2",
     "node-ssh": "^13.2.1",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.5.29",
+    "postcss": "^8.5.30",
     "postcss-loader": "^8.2.1",
     "react-refresh": "^0.19.0",
     "react-test-renderer": "^19.3.0",
@@ -147,7 +147,7 @@
     "stylelint-high-performance-animation": "^2.0.0",
     "tar": "^7.5.20",
     "terser-webpack-plugin": "^5.6.1",
-    "uuid": "^14.0.2",
+    "uuid": "^14.0.3",
     "webpack": "^5.111.1",
     "webpack-bundle-analyzer": "^5.4.0",
     "webpack-cli": "^7.2.3",
@@ -180,7 +180,7 @@
     "coordinate-parser": "^1.0.7",
     "copy-to-clipboard": "^4.0.2",
     "dom-scroll-into-view": "^2.0.1",
-    "dompurify": "^3.4.15",
+    "dompurify": "^3.4.17",
     "element-resize-detector": "^1.2.4",
     "elm-pep": "^1.0.6",
     "eslint-plugin-react-hooks": "^7.1.1",
@@ -201,7 +201,7 @@
     "node-dir": "^0.1.17",
     "ol": "^10.11.0",
     "ol-mapbox-style": "^13.5.1",
-    "p-queue": "^9.3.3",
+    "p-queue": "^10.0.0",
     "proj4": "^2.22.0",
     "prop-types": "^15.8.1",
     "react": "^19.3.0",
@@ -234,6 +234,10 @@
     "not dead",
     "> 1%"
   ],
+  "overrides": {
+    "qs": "6.16.1",
+    "zod": "4.6.6"
+  },
   "prettier": {
     "singleQuote": true
   }
