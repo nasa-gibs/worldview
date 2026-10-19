@@ -439,6 +439,8 @@ const CoverageItemList = ({
   );
 };
 
+CoverageItemList.getFormattedTimePeriod = getFormattedTimePeriod;
+
 CoverageItemList.propTypes = {
   activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
