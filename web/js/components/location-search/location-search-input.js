@@ -33,7 +33,7 @@ class SearchBox extends Component {
           this.locationSearchInput.focus();
           // handle hide results menu when expanding with pending suggestions
           if (suggestions.length > 0) {
-            this.locationSearchInput.setState({ isOpen: false });
+            this.locationSearchInput.setOpen(false);
           }
         }
       }, 1);

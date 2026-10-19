@@ -393,7 +393,7 @@ function PaletteLegend(props) {
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
-    const activeKeyObj = isRunningData && colorHexState &&
+    const activeKeyObj = isRunningDataState && colorHexState &&
       getLegendObject(legend, colorHexState, 5, palette);
     const legendClass = activeKeyObj
       ? 'wv-running wv-palettes-legend wv-palettes-classes'

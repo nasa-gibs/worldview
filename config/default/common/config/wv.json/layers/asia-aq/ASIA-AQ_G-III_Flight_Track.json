@@ -11,7 +11,7 @@
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "disableCustomPalettes": true,
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "G_Alt_m_",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {

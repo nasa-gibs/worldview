@@ -8,7 +8,7 @@
               "ISS/GEDI": {
                   "id": "tempo",
                   "title": "TEMPO",
-                  "description": "",
+                  "description": "tempo/Formaldehyde",
                   "image": "",
                   "settings": [
                   "TEMPO_L2_Formaldehyde_Vertical_Column_Granule",

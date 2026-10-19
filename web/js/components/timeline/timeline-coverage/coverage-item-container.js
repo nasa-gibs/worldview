@@ -24,10 +24,15 @@ const CoverageItemContainer = ({
 }) => {
   const [layerDateRanges, setlayerDateRanges] = useState([]);
 
+  async callDateRangeHelper(dateRanges) {
+    const dateRangesToDisplay = await this.getDateRangeToDisplay(dateRanges);
+    this.updateDateRangeState(dateRangesToDisplay);
+  }
+
   /**
   * @desc getDateRangeToDisplay
   * @param {Array} dateRanges
-  * @returns {ArrayBuffer} multiDateToDisplay
+  * @returns {Promise() <ArrayBuffer>} multiDateToDisplay
   */
   const getDateRangeToDisplay = async (dateRanges) => {
     const multiDateToDisplay = dateRanges.reduce((dates, range, innerIndex) => {
@@ -40,7 +45,8 @@ const CoverageItemContainer = ({
       // get dates based on date ranges
       const startDateTime = new Date(startDate).getTime();
       const endDateTime = new Date(endDate).getTime();
-      const dateIntervalStartDates = getDatesInDateRange(layer, range, endDateLimit, isLastInRange);
+      const dateIntervalStartDates = await getDatesInDateRange(
+        layer, range, endDateLimit, isLastInRange);
 
       // add date intervals to multiCoverageDates object to catch repeats
       dateIntervalStartDates.forEach((dateIntStartDate) => {

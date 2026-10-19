@@ -3,7 +3,7 @@
         "Land Surface Reflectance": {
             "id": "land-surface-reflectance",
             "title":    "Land Surface Reflectance",
-            "subtitle": "Aqua & Terra/MODIS, Aqua/MODIS, Harmonized Landsat Sentinel-2 (HLS), NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, Terra/MISR",
+            "subtitle": "Aqua & Terra/MODIS, Aqua/MODIS, Harmonized Landsat Sentinel-2 (HLS), NOAA_21/VIIRS,NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, Terra/MISR",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -14,6 +14,10 @@
                         "VIIRS_SNPP_SurfaceReflectance_BandsM5-M4-M3",
                         "VIIRS_SNPP_SurfaceReflectance_BandsM11-M7-M5",
                         "VIIRS_SNPP_SurfaceReflectance_BandsI1-I2-I1",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsM5-M4-M3_8Day",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsM11-M7-M5_8Day",
+                        "VIIRS_SNPP_L3_SurfaceReflectance_BandsI1-I2-I1_8Day",
                         "OrbitTracks_Suomi_NPP_Ascending"
                     ]
                 },
@@ -26,7 +30,23 @@
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM5-M4-M3",
                         "VIIRS_NOAA20_SurfaceReflectance_BandsM11-M7-M5",
                         "VIIRS_NOAA20_SurfaceReflectance_BandsI1-I2-I1",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_Daily",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM5-M4-M3_8Day",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsM11-M7-M5_8Day",
+                        "VIIRS_NOAA20_L3_SurfaceReflectance_BandsI1-I2-I1_8Day",
                         "OrbitTracks_NOAA-20_Ascending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_SurfaceReflectance_BandsM5-M4-M3",
+                        "VIIRS_NOAA21_SurfaceReflectance_BandsM11-M7-M5",
+                        "VIIRS_NOAA21_SurfaceReflectance_BandsI1-I2-I1",
+                        "OrbitTracks_NOAA-21_Ascending"
                     ]
                 },
                 "Aqua/MODIS": {
@@ -80,9 +100,9 @@
                         "MISR_Directional_Hemispherical_Reflectance_Average_Natural_Color_Monthly"
                     ]
                  },
-                "HLS-Sentinel2": {
+                "HLS-Sentinel": {
                     "id": "HLS: Sentinel-2",
-                    "title": "HLS: Sentinel-2A & 2B/MSI",
+                    "title": "HLS: Sentinel-2/MSI",
                     "description": "multi-mission/hls/Reflectance",
                     "image": "",
                     "settings": [
@@ -98,7 +118,7 @@
                         "OrbitTracks_Sentinel-2C_Descending"
                     ]
                 },
-                "HLS-Landsat8": {
+                "HLS-Landsat": {
                     "id": "HLS: Landsat 8 & 9",
                     "title": "HLS: Landsat 8 & 9/OLI",
                     "description": "multi-mission/hls/Reflectance",

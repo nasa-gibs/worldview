@@ -5,6 +5,7 @@ import canvg from '../../util/canvg';
 import util from '../../util/util';
 import {
   getNextImageryDelta,
+  getValidDateRanges,
 } from '../date/util';
 
 /**
@@ -61,10 +62,10 @@ export function getNumberOfSteps(
   layers,
   stateDelta = 1,
 ) {
-  let delta = stateDelta;
   if (autoSelected) {
-    delta = getNextImageryDelta(layers, start, 1);
+    return getValidDateRanges(layers, start, end).length;
   }
+  let delta = stateDelta;
   let i = 1;
   let currentDate = start;
   let nextDate = util.dateAdd(start, interval, delta);
@@ -72,14 +73,12 @@ export function getNumberOfSteps(
     i = 1;
     return i;
   }
-  while (currentDate < end) {
+  while (currentDate < end && delta > 0) {
     i += 1;
-    if (autoSelected) {
-      delta = getNextImageryDelta(layers, currentDate, 1);
-    }
     currentDate = util.dateAdd(currentDate, interval, delta);
     if (autoSelected) {
-      delta = getNextImageryDelta(layers, currentDate, 1);
+      delta = getNextImageryDelta(layers, nextDate, 1);
+      currentDate = nextDate;
     }
     nextDate = util.dateAdd(currentDate, interval, delta);
     // checking to see if next date is after end date to prevent creation of extra frame
@@ -132,7 +131,7 @@ export function getStampProps(
   return { stampHeight, dateStamp };
 }
 
-export function svgToPng(svgURL, stampHeight) {
+export function svgToCanvas(svgURL, stampHeight) {
   const canvasEl = document.createElement('canvas');
   const canvgOptions = {
     log: false,
@@ -140,12 +139,7 @@ export function svgToPng(svgURL, stampHeight) {
     scaleHeight: stampHeight,
   };
   canvg(canvasEl, svgURL, canvgOptions);
-  const newImage = new Image();
-  newImage.src = canvasEl.toDataURL('image/png');
-  newImage.width = canvasEl.width;
-  newImage.height = canvasEl.height;
-
-  return newImage;
+  return canvasEl;
 }
 
 export function mapLocationToAnimationState(

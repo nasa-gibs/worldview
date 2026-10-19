@@ -1,0 +1,5 @@
+The Sea Ice Extent layer contain estimates of sea ice cover. It is derived from radiance data acquired by the Visible Infrared Imaging Radiometer Suite (VIIRS) aboard the NOAA-21 satellite (JPSS-2). Following the approach used by MODIS, the algorithm assumes that sea ice is snow covered and can be detected using the Normalized Difference Snow Index (NDSI). Snow-covered sea ice typically has very high reflectance in visible bands and very low reflectance in the shortwave infrared bands; the NDSI reveals the magnitude of this difference. The VIIRS sea ice cover algorithm computes NDSI using VIIRS image bands I1 (0.64 µm, visible red) and I3 (1.61 µm, shortwave near-infrared) and then applies a series of data screens designed to alleviate likely errors and flag uncertain sea ice detections.
+
+The sensor resolution is 375 m, imagery resolution is 1 km, and the temporal resolution is daily.
+
+References: VJ229_NRT [doi:10.5067/VIIRS/VJ229_NRT.002](https://doi.org/10.5067/VIIRS/VJ229_NRT.002)

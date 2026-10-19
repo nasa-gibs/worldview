@@ -148,6 +148,7 @@ jest.mock('../modules/layers/util', () => ({
     previous: new Date('2020-12-31'),
   }),
   nearestInterval: jest.fn().mockReturnValue(new Date('2021-01-01')),
+  fetchSubdailyDateRanges: jest.fn(),
 }));
 
 jest.mock('../modules/date/selectors', () => ({
@@ -576,6 +577,22 @@ describe('mapLayerBuilder', () => {
         buildOptions(),
       );
       expect(layer).toBeDefined();
+    });
+
+    it('disables wrapX on the AERONET source so points stay within the layer extent', async () => {
+      const OlSourceVector = require('ol/source/Vector');
+      builder = mapLayerBuilder(
+        buildConfig({ AERONET: { url: 'https://aeronet.example.com', matrixSets: {} } }),
+        cache,
+        store,
+      );
+      await builder.createLayer(
+        buildDef({ type: 'vector', source: 'AERONET', projections: { geographic: {} } }),
+        buildOptions(),
+      );
+      expect(OlSourceVector).toHaveBeenCalledWith(
+        expect.objectContaining({ wrapX: false }),
+      );
     });
 
     it('throws error for AERONET with missing source config', async () => {
@@ -1173,27 +1190,27 @@ describe('mapLayerBuilder', () => {
       }));
     });
 
-    it('handles worker onmessage with final array data format', () => {
+    it('handles worker onmessage with final array data format', async () => {
       const tempoCallback = jest.fn();
       const def = buildDef({
         id: 'TEMPO_NO2_Hourly',
         projections: { geographic: {} },
         dateRanges: [{ startDate: '2021-01-01', endDate: '2021-01-02', dateInterval: '60' }],
       });
-      builder.createLayer(def, buildOptions({ tempoCallback }));
+      await builder.createLayer(def, buildOptions({ tempoCallback }));
       mockWorker.onmessage({ data: [['2021-01-01T00:00:00Z', '2021-01-02T00:00:00Z', '60']] });
       expect(mockWorker.terminate).toHaveBeenCalled();
       expect(tempoCallback).toHaveBeenCalledTimes(2);
     });
 
-    it('handles worker onmessage with xml string and valid Domain element', () => {
+    it('handles worker onmessage with xml string and valid Domain element', async () => {
       global.DOMParser = jest.fn().mockImplementation(() => ({
         parseFromString: jest.fn().mockReturnValue({
           querySelector: jest.fn().mockReturnValue({ textContent: 'domain1 domain2' }),
         }),
       }));
       const tempoCallback = jest.fn();
-      builder.createLayer(
+      await builder.createLayer(
         buildDef({ id: 'TEMPO_NO2_Hourly', projections: { geographic: {} } }),
         buildOptions({ tempoCallback }),
       );
@@ -1201,14 +1218,14 @@ describe('mapLayerBuilder', () => {
       expect(mockWorker.postMessage).toHaveBeenCalledTimes(2);
     });
 
-    it('handles worker onmessage with xml string and null Domain element', () => {
+    it('handles worker onmessage with xml string and null Domain element', async () => {
       global.DOMParser = jest.fn().mockImplementation(() => ({
         parseFromString: jest.fn().mockReturnValue({
           querySelector: jest.fn().mockReturnValue(null),
         }),
       }));
       const tempoCallback = jest.fn();
-      builder.createLayer(
+      await builder.createLayer(
         buildDef({ id: 'TEMPO_NO2_Hourly', projections: { geographic: {} } }),
         buildOptions({ tempoCallback }),
       );
@@ -1217,9 +1234,9 @@ describe('mapLayerBuilder', () => {
       expect(tempoCallback).toHaveBeenCalledTimes(2);
     });
 
-    it('handles worker onerror by terminating and calling callback', () => {
+    it('handles worker onerror by terminating and calling callback', async () => {
       const tempoCallback = jest.fn();
-      builder.createLayer(
+      await builder.createLayer(
         buildDef({ id: 'TEMPO_NO2_Hourly', projections: { geographic: {} } }),
         buildOptions({ tempoCallback }),
       );
@@ -1228,7 +1245,7 @@ describe('mapLayerBuilder', () => {
       expect(tempoCallback).toHaveBeenCalledTimes(2);
     });
 
-    it('formats existing dateRanges where startDate equals endDate', () => {
+    it('formats existing dateRanges where startDate equals endDate', async () => {
       const tempoCallback = jest.fn();
       const sameDate = '2021-01-01T00:00:00.000Z';
       const def = buildDef({
@@ -1236,7 +1253,7 @@ describe('mapLayerBuilder', () => {
         projections: { geographic: {} },
         dateRanges: [{ startDate: sameDate, endDate: sameDate, dateInterval: '60' }],
       });
-      builder.createLayer(def, buildOptions({ tempoCallback }));
+      await builder.createLayer(def, buildOptions({ tempoCallback }));
       mockWorker.onmessage({ data: [['2021-01-01T00:00:00Z', '2021-01-02T00:00:00Z', '60']] });
       expect(tempoCallback).toHaveBeenCalledTimes(2);
     });

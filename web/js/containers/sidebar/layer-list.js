@@ -137,6 +137,7 @@ function LayerList(props) {
         names={getNames(id)}
         isDisabled={!available(id)}
         isVisible={visible}
+        palette={layer.palette}
       />
     );
   };
@@ -185,6 +186,7 @@ function LayerList(props) {
   const renderHeader = () => (
     <div
       className="layer-group-header"
+      style={{ touchAction: 'none' }}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
       {...dragHandleProps}

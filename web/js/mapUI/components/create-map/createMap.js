@@ -135,7 +135,7 @@ function CreateMap(props) {
       ],
       loadTilesWhileAnimating: true,
       loadTilesWhileInteracting: true,
-      maxTilesLoading: 32,
+      maxTilesLoading: Number.MAX_SAFE_INTEGER,
     });
     map.wv = {
       scaleMetric,

@@ -31,6 +31,19 @@ edit `config/default/common/features.json` and set `"smartHandoffs": true`.
 This feature uses the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm) to find addresses based on input text, coordinates, and by clicking a spot on the map. To enable,
 edit `config/default/common/features.json` and set `"locationSearch"` object `"url"` to use the ArcGIS request URL used by the [ArcGIS World Geocoding Service](https://developers.arcgis.com/rest/geocode/api-reference/overview-world-geocoding-service.htm).
 
+## Skipping Layer Metadata
+
+During the build process, Worldview fetches imagery layer metadata from the GIBS Layer Metadata API (see `vismetadata.url` in `config/default/common/features.json`) for every layer in the layer order. By default a fixed set of layers that do not exist in GIBS is skipped and won't be fetched. If you are serving your own layers, you can skip additional layers by adding their IDs to the `vismetadata.skipLayers` array:
+
+```
+"vismetadata": {
+    "url": "https://gibs.earthdata.nasa.gov/layer-metadata/v1.0/",
+    "skipLayers": ["your_internal_layer"]
+}
+```
+
+Layers listed here are skipped in addition to the default set, so existing behavior is preserved.
+
 ## URL Shortening
 
 This feature uses

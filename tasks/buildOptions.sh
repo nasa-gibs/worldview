@@ -113,6 +113,7 @@ else
 
   # Run extractConfigFromWMTS.js script with config.json
   if [ -e "$BUILD_DIR/config.json" ] ; then
+    mkdir -p "$DEST_DIR"/config/dateRanges
     if [ "$MODE" == "verbose" ] ; then
       echo "Run extractConfigFromWMTS.js script with config.json"
     fi
@@ -121,6 +122,7 @@ else
       --inputDir "$BUILD_DIR/gc" \
       --outputDir  "$BUILD_DIR/_wmts" \
       --mode "$MODE" \
+      --features "$BUILD_DIR/features.json" \
       --cacheMode "$CACHE_MODE"`
   fi
 
@@ -225,6 +227,7 @@ else
     --optionsFile "$BUILD_DIR/config.json" \
     --configDir "$DEST_DIR/config" \
     --mode "$MODE" \
+    --features "$BUILD_DIR/features.json" \
     --cacheMode "$CACHE_MODE"`
 
   # Fetch preview images from WV Snapshots for any layers which they are missing

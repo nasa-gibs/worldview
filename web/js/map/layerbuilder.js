@@ -32,7 +32,8 @@ import {
   getGeographicResolutionWMS,
   mergeBreakpointLayerAttributes,
 } from './util';
-import { datesInDateRanges, prevDateInDateRange } from '../modules/layers/util';
+import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange, nearestInterval } from '../modules/layers/util';
+import { getLayerDayCount } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -44,7 +45,6 @@ import {
   getKey as getVectorStyleKeys,
   applyStyle,
 } from '../modules/vector-styles/selectors';
-import { nearestInterval } from '../modules/layers/util';
 import {
   LEFT_WING_EXTENT, RIGHT_WING_EXTENT, LEFT_WING_ORIGIN, RIGHT_WING_ORIGIN, CENTER_MAP_ORIGIN,
 } from '../modules/map/constants';
@@ -65,6 +65,19 @@ export default function mapLayerBuilder(config, cache, store) {
    */
   const getLayer = async (createLayerFunc, def, options, attributes, wrapLayer) => {
     const state = store.getState();
+
+    // For dayRange layers, create one WMTS layer per day in the range
+    // Oldest first (bottom) so newest imagery renders on top
+    if (def.dayRange) {
+      const layers = [];
+      for (let dayOffset = -def.dayRange; dayOffset <= 0; dayOffset += 1) {
+        const dayLayer = await createLayerFunc(def, options, dayOffset, state, attributes);
+        dayLayer.wv = attributes;
+        layers.push(dayLayer);
+      }
+      return new OlLayerGroup({ layers });
+    }
+
     const layer = await createLayerFunc(def, options, null, state, attributes);
     layer.wv = attributes;
     if (!wrapLayer) {
@@ -76,6 +89,7 @@ export default function mapLayerBuilder(config, cache, store) {
     layerPrior.wv = attributes;
     layerNext.wv = attributes;
     return new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
       layers: [layer, layerNext, layerPrior],
     });
   };
@@ -101,7 +115,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * For TEMPO layers, get and set the product's dateRanges
    * so that they are up-to-date and not stale from build-time
    */
-  const getUpdatedDateRanges = (def, callback, group) => {
+  const getUpdatedDateRanges = async (def, callback, group) => {
     const state = store.getState();
     const { config: stateConfig, proj } = state;
     const describeDomainsUrl = stateConfig?.features?.describeDomains?.url ||
@@ -110,6 +124,10 @@ export default function mapLayerBuilder(config, cache, store) {
       id,
     } = def;
     let oldRanges = [];
+    const result = await fetchSubdailyDateRanges(def.id);
+    if (result) {
+      def.dateRanges = result;
+    }
     const worker = new Worker('js/workers/describe-domains.worker.js');
     worker.onmessage = (event) => {
       if (Array.isArray(event.data)) { // our final format is an array
@@ -191,7 +209,9 @@ export default function mapLayerBuilder(config, cache, store) {
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
       style = getVectorStyleKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, style, activeGroupStr].join(':');
+    const dayCount = getLayerDayCount(state, def.id, activeGroupStr);
+    const dayStr = dayCount > 1 ? `d${dayCount}` : '';
+    return [layerId, projId, date, style, activeGroupStr, dayStr].join(':');
   };
 
   /**
@@ -201,7 +221,7 @@ export default function mapLayerBuilder(config, cache, store) {
    * @param  {object} options Layer options
    * @return {object}         Closest date
    */
-  const getRequestDates = (def, options) => {
+  const getRequestDates = async (def, options) => {
     const state = store.getState();
     const { date } = state;
     const { appNow } = date;
@@ -221,10 +241,16 @@ export default function mapLayerBuilder(config, cache, store) {
     ) {
       previousDateFromRange = previousLayerDate;
     } else {
+      if (!def.dateRanges && def.period === 'subdaily') {
+        const result = await fetchSubdailyDateRanges(def.id);
+        if (result) {
+          def.dateRanges = result;
+        }
+      }
       const { dateRanges, ongoing, period } = def;
       let dateRange;
       if (!ongoing) {
-        dateRange = datesInDateRanges(def, closestDate);
+        dateRange = await datesInDateRanges(def, closestDate);
       } else {
         let endDateLimit;
         let startDateLimit;
@@ -282,7 +308,9 @@ export default function mapLayerBuilder(config, cache, store) {
     const projectionURL = `images/map/bluemarble-${id}.jpg`;
 
     const layer = new ImageLayer({
+      className: `wv-layer-static-${id}`,
       source: new Static({
+        interpolate: false,
         url: projectionURL,
         projection: crs,
         imageExtent: maxExtent,
@@ -305,19 +333,19 @@ export default function mapLayerBuilder(config, cache, store) {
     const options = optionsObj;
     const state = store.getState();
     const { compare: { activeString } } = state;
-    const { ui: { isKioskModeActive, displayStaticMap } } = state;
+    const { ui: { displayStaticMap } } = state;
     const { tempoCallback } = options;
 
     options.group = options.group || activeString;
 
     // If layer is a TEMPO layer, fetch updated date ranges
-    if (def.id.includes('TEMPO') && !def.tempoDateRanges && tempoCallback) {
+    if (def?.id?.includes('TEMPO') && !def?.tempoDateRanges && tempoCallback) {
       tempoCallback(def, [], options.group);
-      getUpdatedDateRanges(def, tempoCallback, options.group);
+      await getUpdatedDateRanges(def, tempoCallback, options.group);
     }
 
     // if gibs/dns failure, display static image layer
-    if (displayStaticMap && isKioskModeActive) {
+    if (displayStaticMap) {
       const layer = await createStaticImageLayer();
       return layer;
     }
@@ -326,7 +354,7 @@ export default function mapLayerBuilder(config, cache, store) {
       closestDate,
       nextDate,
       previousDate,
-    } = getRequestDates(def, options);
+    } = await getRequestDates(def, options);
     const date = closestDate;
     if (date && !options.date) {
       options.date = date;
@@ -430,20 +458,22 @@ export default function mapLayerBuilder(config, cache, store) {
       layerDate = getRequestDates(def, options).closestDate;
       layerDate = new Date(layerDate.getTime());
     }
-    if (day && wrapadjacentdays && !isSubdaily) {
+    if (day && (wrapadjacentdays || def.dayRange) && !isSubdaily) {
       layerDate = util.dateAdd(layerDate, 'day', day);
     }
 
     const { tileMatrices, resolutions, tileSize } = configMatrixSet;
+    const dayForExtent = def.dayRange ? null : day;
     const { origin, extent } = calcExtentsFromLimits(
       configMatrixSet,
       matrixSetLimits,
-      day,
+      dayForExtent,
       proj.selected,
     );
     const sizes = !tileMatrices
       ? []
       : tileMatrices.map(({ matrixWidth, matrixHeight }) => [matrixWidth, matrixHeight]);
+    const calcMatrixIds = matrixIds || resolutions.map((set, index) => index);
 
     // Also need to shift this if granule is shifted
     const tileGridOptions = {
@@ -451,7 +481,7 @@ export default function mapLayerBuilder(config, cache, store) {
       extent: shifted ? RIGHT_WING_EXTENT : extent,
       sizes,
       resolutions,
-      matrixIds: matrixIds || resolutions.map((set, index) => index),
+      matrixIds: calcMatrixIds,
       tileSize: tileSize[0],
     };
 
@@ -459,17 +489,19 @@ export default function mapLayerBuilder(config, cache, store) {
     // This is to compensate for the inability to select seconds in the timeline
     layerDate = new Date(layerDate.getTime());
     layerDate.setSeconds(59);
+    const tileGrid = new OlTileGridWMTS(tileGridOptions);
     const urlParameters = `?TIME=${util.toISOStringSeconds(layerDate, !isSubdaily)}`;
     const sourceURL = def.sourceOverride || configSource.url;
     const sourceOptions = {
-      url: sourceURL + urlParameters,
+      interpolate: false,
+      url: `${sourceURL}${urlParameters}`,
       layer: layer || id,
       cacheSize: 4096,
       crossOrigin: 'anonymous',
       format,
       transition: isGranule ? 350 : 0,
       matrixSet: configMatrixSet.id,
-      tileGrid: new OlTileGridWMTS(tileGridOptions),
+      tileGrid,
       wrapX: false,
       style: typeof style === 'undefined' ? 'default' : style,
     };
@@ -480,6 +512,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceWMTS(sourceOptions);
 
     const layerTile = new OlLayerTile({
+      className: `wv-layer-${id}`,
       preload: 0,
       source: tileSource,
     });
@@ -556,6 +589,7 @@ export default function mapLayerBuilder(config, cache, store) {
     urlParameters = `?TIME=${util.toISOStringSeconds(util.roundTimeOneMinute(date), !isSubdaily)}`;
 
     const sourceOptions = {
+      interpolate: false,
       url: source.url + urlParameters,
       cacheSize: 4096,
       wrapX: true,
@@ -577,6 +611,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const tileSource = new OlSourceTileWMS(sourceOptions);
 
     const layer = new OlLayerTile({
+      className: `wv-layer-${def.id}`,
       preload: 0,
       extent,
       ...!!resolutionBreakPoint && { minResolution: resolutionBreakPoint },
@@ -616,6 +651,10 @@ export default function mapLayerBuilder(config, cache, store) {
 
     const vectorSource = new OlSourceVector({
       format: new GeoJSON(),
+      // Only render a single world. OpenLayers does not apply the layer extent
+      // clip to the canvas it draws on when opacity is less than 1, which would
+      // otherwise leave adjacent world copies visible outside of layerExtent
+      wrapX: false,
       loader: async () => {
         const allDataKey = `AERONET:${date.getUTCFullYear()}`;
 
@@ -734,6 +773,7 @@ export default function mapLayerBuilder(config, cache, store) {
     }
 
     const layer = new OlLayerVector({
+      className: `wv-layer-${def.id}`,
       extent: layerExtent,
       source: vectorSource,
       style (feature, resolution) {
@@ -902,6 +942,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const layer = new LayerVectorTile({
+      className: `wv-layer-${def.id}`,
       renderOrder: orderFunction,
       extent: layerExtent,
       source: tileSource,
@@ -919,6 +960,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const newDef = { ...def, ...breakPointLayerDef };
       const wmsLayer = createLayerWMS(newDef, options, day, state);
       const layerGroup = new OlLayerGroup({
+        className: `wv-layer-group-${def.id}`,
         layers: [layer, wmsLayer],
       });
       wmsLayer.wv = attributes;
@@ -1019,20 +1061,21 @@ export default function mapLayerBuilder(config, cache, store) {
 
       const assets = [r, g, b, ...def.bandCombo.assets || []].filter((bArg) => bArg);
 
-      const params = assets.map((asset) => `bands=${asset}`);
+      const params = assets.map((asset) => `assets=${asset}`);
       params.push(`expression=${encodeURIComponent(def?.bandCombo?.expression)}`);
       params.push(`rescale=${encodeURIComponent(def?.bandCombo?.rescale)}`);
       params.push(`colormap_name=${def?.bandCombo?.colormap_name}`);
       params.push(`asset_as_band=${def?.bandCombo?.asset_as_band}`);
-      params.push(`bands_regex=${def?.bandCombo?.bands_regex}`);
+      params.push(`assets_regex=${def?.bandCombo?.bands_regex}`);
       params.push(`color_formula=${def?.bandCombo?.color_formula}`);
 
-      const urlParams = `tiles/WGS1984Quad/${z}/${x}/${y}@1x?concept_id=${def.collectionConceptID}&datetime=${zeroedDateTile}/${lastDateTile}&post_process=swir&backend=rasterio&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
+      const urlParams = `rasterio/tiles/WGS1984Quad/${z}/${x}/${y}?collection_concept_id=${def.collectionConceptID}&temporal=${zeroedDateTile}/${lastDateTile}&post_process=swir&${params.filter((p) => !p.split('=').includes('undefined')).join('&')}`;
 
       return source.url + urlParams;
     };
 
     const xyzSourceOptions = {
+      interpolate: false,
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
@@ -1055,6 +1098,7 @@ export default function mapLayerBuilder(config, cache, store) {
       maxZoom: def.minZoom,
     });
     const layerGroup = new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
       layers: [footprintLayer, layer],
     });
 
@@ -1078,6 +1122,7 @@ export default function mapLayerBuilder(config, cache, store) {
     };
 
     const xyzSourceOptions = {
+      interpolate: false,
       crossOrigin: 'anonymous',
       projection: get(crs),
       tileUrlFunction,
@@ -1124,6 +1169,7 @@ export default function mapLayerBuilder(config, cache, store) {
       vectorStyle,
       matrixSet,
       matrixSetLimits,
+      period,
     } = def;
 
     const projection = get(crs);
@@ -1141,13 +1187,21 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, selected);
 
-    const sourceOptions = {
-      url: `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`,
-      projection,
-      format: new MVT(),
-      tileGrid,
-    };
-    const source = new SourceVectorTile(sourceOptions);
+    const sourceUrl = `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`;
+    let source = cache.getItem(sourceUrl);
+
+    // If source is not cached, create new source
+    if (!source) {
+      const sourceOptions = {
+        url: sourceUrl,
+        projection,
+        format: new MVT(),
+        tileGrid,
+      };
+      source = new SourceVectorTile(sourceOptions);
+      const cacheOptions = getCacheOptions(period, options.date);
+      cache.setItem(sourceUrl, source, cacheOptions);
+    }
 
     const layer = new LayerVectorTile({
       source,
@@ -1215,6 +1269,7 @@ export default function mapLayerBuilder(config, cache, store) {
       const isMaxarSource = source === 'MAXAR:wmts';
 
       const sourceOptions = {
+        interpolate: false,
         url: `${baseUrl}/{z}/{x}/{y}`,
         layer: layerName,
         crossOrigin: 'anonymous',
@@ -1315,7 +1370,10 @@ export default function mapLayerBuilder(config, cache, store) {
         extent: shifted ? RIGHT_WING_EXTENT : extent,
       });
     });
-    const layer = new OlLayerGroup({ layers });
+    const layer = new OlLayerGroup({
+      className: `wv-layer-group-${def.id}`,
+      layers,
+    });
     return layer;
   };
 
@@ -1365,6 +1423,10 @@ export default function mapLayerBuilder(config, cache, store) {
       };
       def = lodashCloneDeep(def);
       lodashMerge(def, projections[proj.id]);
+      if (!def.dayRange) {
+        const dayCount = getLayerDayCount(state, id, options.group);
+        if (dayCount > 1) def.dayRange = dayCount - 1;
+      }
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';
       const wrapDefined = wrapadjacentdays === true || wrapX;

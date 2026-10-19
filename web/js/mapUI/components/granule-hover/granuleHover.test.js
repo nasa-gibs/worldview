@@ -10,6 +10,7 @@ jest.mock('../../../util/util', () => ({
   default: {
     events: {
       on: jest.fn(),
+      off: jest.fn(),
     },
   },
 }));

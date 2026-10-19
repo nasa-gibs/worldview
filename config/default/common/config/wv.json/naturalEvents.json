@@ -150,7 +150,11 @@
                         false
                     ],
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -160,7 +164,11 @@
                 ],
                 "Sea and Lake Ice": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -246,7 +254,11 @@
                 ],
                 "Water Color": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -276,7 +288,11 @@
                 ],
                 "Severe Storms": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -306,7 +322,11 @@
                 ],
                 "Snow": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -428,7 +448,11 @@
                         false
                     ],
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -552,7 +576,11 @@
                         false
                     ],
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -562,7 +590,11 @@
                 ],
                 "Sea and Lake Ice": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -664,7 +696,11 @@
                 ],
                 "Floods": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -746,7 +782,11 @@
                 ],
                 "Water Color": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -796,7 +836,11 @@
                 ],
                 "Severe Storms": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -850,7 +894,11 @@
                 ],
                 "Snow": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -1036,7 +1084,11 @@
                         false
                     ],
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -1260,7 +1312,11 @@
                         false
                     ],
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [
@@ -1270,7 +1326,7 @@
                 ],
                 "Sea and Lake Ice": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
                         true
                     ],
                     [
@@ -1360,7 +1416,7 @@
                 ],
                 "Severe Storms": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
                         true
                     ],
                     [
@@ -1395,7 +1451,11 @@
                 ],
                 "Snow": [
                     [
-                        "Reference_Features_15m",
+                        "DoS_International_Boundaries",
+                        true
+                    ],
+                    [
+                        "Coastlines_15m",
                         true
                     ],
                     [

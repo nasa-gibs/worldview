@@ -2,7 +2,7 @@
   "layers": {
     "EUMETSAT_RING_IR108": {
       "id": "EUMETSAT_RING_IR108",
-      "title": "Infrared 10.8 μm (3 hour, Geostationary Ring)",
+      "title": "Infrared (10.8 μm, Geostationary Ring, 3 hour)",
       "subtitle": "MSG/SEVIRI, Himawari/AHI, GOES/ABI",
       "description": "eumetsat/EUMETSAT_RING_IR108",
       "tags": "eumetsat ring",
@@ -10,7 +10,7 @@
       "type": "wms",
       "format": "image/png",
       "wrapX": true,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "period": "subdaily",
       "layergroup": "Geostationary",
       "startDate": "2021-02-06T00:00:00Z",

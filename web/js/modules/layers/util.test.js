@@ -2,12 +2,20 @@ import { assign } from 'lodash';
 import {
   adjustActiveDateRanges,
   datesInDateRanges,
+  fetchSubdailyDateRanges,
+  fetchVectorstyle,
   serializeLayers,
   layersParse12,
   mapLocationToLayerState,
   isVectorLayerClickable,
   hasNonClickableVectorLayer,
   hasVectorLayers,
+  adjustStartDates,
+  adjustEndDates,
+  getCacheOptions,
+  mockFutureTimeLayerOptions,
+  getLayersFromGroups,
+  adjustMeasurementsValidUnitConversion,
 } from './util';
 import { initialState } from './reducers';
 import fixtures from '../../fixtures';
@@ -105,6 +113,77 @@ test('serialize layers and palettes [layers-serialize]', () => {
   terraAodLayer.opacity = [0.54];
   const layerStr = serializeLayers([terraAodLayer], state, 'active')[0];
   expect(layerStr).toBe('terra-aod(hidden,opacity=0.54)');
+});
+
+describe('multi-day aggregation permalink', () => {
+  const paletteState = {
+    palettes: {
+      active: {},
+      rendered: config.palettes.rendered,
+      custom: config.palettes.custom,
+    },
+    config,
+  };
+  const state = assign({}, paletteState, { layers: initialState });
+
+  test('serializes days attribute when dayCount is set above default', () => {
+    const layer = {
+      id: 'terra-aod', visible: true, opacity: 1, maxDayRange: 12, dayCount: 10,
+    };
+    const layerStr = serializeLayers([layer], state, 'active')[0];
+    expect(layerStr).toBe('terra-aod(days=10)');
+  });
+
+  test('omits days attribute at the default value of 1', () => {
+    const layer = {
+      id: 'terra-aod', visible: true, opacity: 1, maxDayRange: 12, dayCount: 1,
+    };
+    const layerStr = serializeLayers([layer], state, 'active')[0];
+    expect(layerStr).toBe('terra-aod');
+  });
+
+  test('omits days attribute when layer has no maxDayRange', () => {
+    const layer = {
+      id: 'terra-aod', visible: true, opacity: 1, dayCount: 10,
+    };
+    const layerStr = serializeLayers([layer], state, 'active')[0];
+    expect(layerStr).toBe('terra-aod');
+  });
+
+  test('parses days attribute from permalink string', () => {
+    const layers = layersParse12('terra-aod(days=10)', config);
+    expect(layers[0].dayCount).toBe(10);
+  });
+
+  test('clamps a hostile days value from permalink string', () => {
+    const layers = layersParse12('terra-aod(days=99)', config);
+    expect(layers[0].dayCount).toBe(12);
+  });
+});
+
+describe('granule count permalink', () => {
+  const getGranuleState = (granuleLayers) => ({
+    palettes: {
+      active: {},
+      rendered: config.palettes.rendered,
+      custom: config.palettes.custom,
+    },
+    config,
+    layers: { active: { granuleLayers } },
+  });
+  const layer = {
+    id: 'terra-aod', type: 'granule', visible: true, opacity: 1,
+  };
+
+  test('serializes count when it differs from the default', () => {
+    const state = getGranuleState({ 'terra-aod': { count: 12 } });
+    expect(serializeLayers([layer], state, 'active')[0]).toBe('terra-aod(count=12)');
+  });
+
+  test('omits count at the default value of 10', () => {
+    const state = getGranuleState({ 'terra-aod': { count: 10 } });
+    expect(serializeLayers([layer], state, 'active')[0]).toBe('terra-aod');
+  });
 });
 
 // Permalink 1.0
@@ -283,7 +362,15 @@ describe('Date range building', () => {
     expect(dateRanges.length).toBe(4);
     expect(dateRanges[3].endDate).toBe('2021-04-30T16:00:00Z');
   });
-  test('test limited date range returned for layer with single date range and interval [layers-limited-date-range]', () => {
+  test('test invalid layerid returns empty array [invalid-fetch-subdaily-dateranges]', async () => {
+    const dateRanges = await fetchSubdailyDateRanges('non-valid-layer-id');
+    expect(dateRanges.length).toBe(0);
+  });
+  test('test invalid layerid returns null [invalid-fetch-vectorstyle]', async () => {
+    const vectorstyleObject = await fetchVectorstyle('non-valid-layer-id');
+    expect(vectorstyleObject).toBe(null);
+  });
+  test('test limited date range returned for layer with single date range and interval [layers-limited-date-range]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -295,10 +382,10 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('2020-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('2020-01-01'));
     expect(dates.length).toBe(3);
   });
-  test('test only next date returned (out of range past) [layers-out-of-range-past]', () => {
+  test('test only next date returned (out of range past) [layers-out-of-range-past]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -310,10 +397,10 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('1990-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('1990-01-01'));
     expect(dates.length).toBe(1);
   });
-  test('test no dates returned (out of range future) [layers-out-of-range-future]', () => {
+  test('test no dates returned (out of range future) [layers-out-of-range-future]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -325,10 +412,10 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('2030-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('2030-01-01'));
     expect(dates.length).toBe(0);
   });
-  test('test date range returned from given start/end date range for layer coverage panel [layers-coverage-panel]', () => {
+  test('test date range returned from given start/end date range for layer coverage panel [layers-coverage-panel]', async () => {
     const parameters = {
       products: 'terra-cr',
     };
@@ -340,7 +427,7 @@ describe('Date range building', () => {
       config,
     );
     const activeLayers = stateFromLocation.layers.active.layers;
-    const dates = datesInDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));
+    const dates = await datesInDateRanges(activeLayers[0], new Date('2018-01-01'), new Date('2017-12-01'), new Date('2018-02-01'), new Date('2020-01-01'));
     const isFirstDateEqual = dates[0].toISOString() === '2017-12-01T00:00:00.000Z';
     const isLastDateEqual = dates[dates.length - 1].toISOString() === '2018-01-31T00:00:00.000Z';
     expect(dates.length).toBe(62);
@@ -413,5 +500,312 @@ describe('Vector layers', () => {
     expect(false1).toBe(false);
     expect(false2).toBe(false);
     expect(true1).toBe(true);
+  });
+});
+
+describe('adjustStartDates', () => {
+  const buildConfig = (layerOverrides = {}) => ({
+    timeBounds: {
+      time: '2020-06-15T00:00:00Z',
+    },
+    layers: {
+      'test-layer': {
+        id: 'test-layer',
+        availability: {
+          rollingWindow: 30,
+          historicalRanges: [
+            { startDate: '2010-01-01T00:00:00Z', endDate: '2015-01-01T00:00:00Z', dateInterval: '1' },
+            { startDate: '2015-01-02T00:00:00Z', endDate: '2019-12-31T00:00:00Z', dateInterval: '1' },
+          ],
+        },
+        startDate: '2000-01-01',
+        dateRanges: [
+          {
+            startDate: '2020-06-01T00:00:00Z',
+            endDate: '2021-01-01T00:00:00Z',
+            dateInterval: '1',
+          },
+        ],
+        ...layerOverrides,
+      },
+    },
+  });
+
+  test('skips layer without rollingWindow [adjust-start-dates-no-rolling-window]', () => {
+    const config = buildConfig({ rollingWindow: undefined });
+    const originalStartDate = config.layers['test-layer'].startDate;
+    adjustStartDates(config);
+    expect(config.layers['test-layer'].startDate).toBe(originalStartDate);
+  });
+
+  test('sets layer startDate from adjustDate when no historicalRanges [adjust-start-dates-no-historical-ranges]', () => {
+    const config = buildConfig();
+    delete config.layers['test-layer'].availability.historicalRanges;
+    adjustStartDates(config.layers);
+    const layer = config.layers['test-layer'];
+    expect(layer.startDate).toBeDefined();
+    expect(layer.startDate).not.toBe('2000-01-01');
+  });
+
+  test('initializes empty dateRanges when no dateRanges [adjust-start-dates-empty-date-ranges]', () => {
+    const config = buildConfig();
+    delete config.layers['test-layer'].dateRanges;
+    console.warn(config);
+    adjustStartDates(config.layers);
+    const layer = config.layers['test-layer'];
+    expect(layer.startDate).toBeDefined();
+    expect(layer.startDate).not.toBe('2000-01-01');
+  });
+});
+
+describe('getCacheOptions', () => {
+  test('returns empty object when not subdaily', () => {
+    const options = getCacheOptions('daily', new Date());
+    expect(options).toEqual({});
+  });
+
+  test('returns expirationAbsolute when subdaily', () => {
+    const options = getCacheOptions('subdaily', new Date());
+    const tenMin = 10 * 60000;
+    const now = new Date().getTime();
+    expect(options).toEqual({ expirationAbsolute: new Date(now + tenMin)});
+  });
+});
+
+describe('adjustEndDates', () => {
+  const buildConfig = (layerOverrides = {}) => ({
+    timeBounds: {
+      time: '2020-06-15T00:00:00Z',
+    },
+    layers: {
+      'test-layer': {
+        id: 'test-layer',
+        availability: {
+          rollingWindow: 30,
+          historicalRanges: [
+            { startDate: '2010-01-01T00:00:00Z', endDate: '2015-01-01T00:00:00Z', dateInterval: '1' },
+            { startDate: '2015-01-02T00:00:00Z', endDate: '2019-12-31T00:00:00Z', dateInterval: '1' },
+          ],
+        },
+        endDate: '2022-01-01',
+        dateRanges: [
+          {
+            startDate: '2020-06-01T00:00:00Z',
+            endDate: '2021-01-01T00:00:00Z',
+            dateInterval: '1',
+          },
+        ],
+        ...layerOverrides,
+      },
+    },
+  });
+
+  test('skips layer without rollingWindow [adjust-end-dates-no-rolling-window]', () => {
+    const config = buildConfig({ rollingWindow: undefined });
+    const originalEndDate = config.layers['test-layer'].endDate;
+    adjustEndDates(config);
+    expect(config.layers['test-layer'].endDate).toBe(originalEndDate);
+  });
+
+  test('sets layer endDate from adjustDate when no historicalRanges [adjust-end-dates-no-historical-ranges]', () => {
+    const config = buildConfig({ futureTime: '2023-01-01T00:00:00Z' });
+    adjustEndDates(config.layers);
+    const layer = config.layers['test-layer'];
+    expect(layer.endDate).toBeDefined();
+    expect(layer.endDate).not.toBe('2022-01-01');
+  });
+});
+
+describe('mockFutureTimeLayerOptions', () => {
+  test('sets futureTime on target layer when valid parameters provided [mock-future-time-sets-value]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'terra-cr,2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBe('2030-01-01');
+  });
+
+  test('does not modify layer when targetLayerId does not exist in layers [mock-future-time-missing-layer]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'aqua-cr,2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('does not set futureTime when mockFutureTime is missing from parameters [mock-future-time-missing-time]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'terra-cr');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('does not set futureTime when targetLayerId is missing from parameters [mock-future-time-missing-id]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, ',2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('sets futureTime on correct layer when multiple layers exist [mock-future-time-multiple-layers]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr' },
+      'aqua-cr': { id: 'aqua-cr' },
+    };
+    mockFutureTimeLayerOptions(layers, 'aqua-cr,2030-06-15');
+    expect(layers['aqua-cr'].futureTime).toBe('2030-06-15');
+    expect(layers['terra-cr'].futureTime).toBeUndefined();
+  });
+
+  test('overwrites existing futureTime value on target layer [mock-future-time-overwrite]', () => {
+    const layers = {
+      'terra-cr': { id: 'terra-cr', futureTime: '2025-01-01' },
+    };
+    mockFutureTimeLayerOptions(layers, 'terra-cr,2030-01-01');
+    expect(layers['terra-cr'].futureTime).toBe('2030-01-01');
+  });
+});
+
+describe('getLayersFromGroups', () => {
+  test('returns empty array when groups is falsy [get-layers-from-groups-no-groups]', () => {
+    const result = getLayersFromGroups(globalState, null);
+    expect(result).toEqual([]);
+  });
+
+  test('returns empty array when groups is undefined [get-layers-from-groups-undefined]', () => {
+    const result = getLayersFromGroups(globalState, undefined);
+    expect(result).toEqual([]);
+  });
+
+  test('returns baselayers concatenated when groups is an empty array [get-layers-from-groups-empty-array]', () => {
+    const result = getLayersFromGroups(globalState, []);
+    result.forEach((layer) => {
+      expect(layer.group).toBe('baselayers');
+    });
+  });
+
+  test('returns mapped overlay layers plus baselayers when groups provided [get-layers-from-groups-with-groups]', () => {
+    const overlayGroups = globalState.layers.active.overlayGroups;
+    if (!overlayGroups || !overlayGroups.length) return;
+    const result = getLayersFromGroups(globalState, overlayGroups);
+    expect(Array.isArray(result)).toBe(true);
+    expect(result.length).toBeGreaterThan(0);
+  });
+});
+
+describe('adjustMeasurementsValidUnitConversion', () => {
+  test('sets disableUnitConversion on layer when measurement has disableUnitConversion true [adjust-measurements-disable-conversion]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'test-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: true,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBe(true);
+  });
+
+  test('does not set disableUnitConversion when measurement does not have disableUnitConversion [adjust-measurements-no-disable]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'test-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {},
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
+  });
+
+  test('does not modify layer when layergroup is not present on layer [adjust-measurements-no-layergroup]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: true,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
+  });
+
+  test('does not modify layer when layergroup has no matching measurement [adjust-measurements-no-matching-measurement]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'nonexistent-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: true,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
+  });
+
+  test('processes multiple layers independently [adjust-measurements-multiple-layers]', () => {
+    const layerA = { id: 'layer-a', layergroup: 'group-disable' };
+    const layerB = { id: 'layer-b', layergroup: 'group-allow' };
+    const layerC = { id: 'layer-c' };
+    const measurementConfig = {
+      measurements: {
+        'group-disable': { disableUnitConversion: true },
+        'group-allow': {},
+      },
+      layers: {
+        'layer-a': layerA,
+        'layer-b': layerB,
+        'layer-c': layerC,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerA.disableUnitConversion).toBe(true);
+    expect(layerB.disableUnitConversion).toBeUndefined();
+    expect(layerC.disableUnitConversion).toBeUndefined();
+  });
+
+  test('does not set disableUnitConversion when measurement disableUnitConversion is false [adjust-measurements-disable-false]', () => {
+    const layerConfig = {
+      id: 'test-layer',
+      layergroup: 'test-group',
+    };
+    const measurementConfig = {
+      measurements: {
+        'test-group': {
+          disableUnitConversion: false,
+        },
+      },
+      layers: {
+        'test-layer': layerConfig,
+      },
+    };
+    adjustMeasurementsValidUnitConversion(measurementConfig);
+    expect(layerConfig.disableUnitConversion).toBeUndefined();
   });
 });

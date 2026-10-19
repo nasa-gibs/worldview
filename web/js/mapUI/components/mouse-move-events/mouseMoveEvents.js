@@ -48,11 +48,21 @@ function MouseMoveEvents(props) {
     throttledOnMouseMove(mouseMove);
   }, [mouseMove]);
 
-  events.on(MAP_MOUSE_MOVE, setMouseMove);
-  events.on(MAP_MOUSE_OUT, (e) => {
-    throttledOnMouseMove.cancel();
-    ui.runningdata.clearAll();
-  });
+  useEffect(() => {
+    events.on(MAP_MOUSE_MOVE, setMouseMove);
+    events.on(MAP_MOUSE_OUT, (e) => {
+      throttledOnMouseMove.cancel();
+      ui.runningdata.clearAll();
+    });
+
+    return () => {
+      events.off(MAP_MOUSE_MOVE, setMouseMove);
+      events.off(MAP_MOUSE_OUT, (e) => {
+        throttledOnMouseMove.cancel();
+        ui.runningdata.clearAll();
+      });
+    };
+  }, []);
 
   return null;
 }

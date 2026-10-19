@@ -100,8 +100,7 @@ function MapUI(props) {
   const [vectorActions, setVectorActions] = useState({});
   const [preloadAction, setPreloadAction] = useState({});
 
-  // eslint-disable-next-line no-unused-vars
-  const [devTestMode, setDevTestMode] = useState(false);
+  const devTestMode = false;
 
   const subscribeToStore = function(action) {
     switch (action.type) {
@@ -117,6 +116,7 @@ function MapUI(props) {
       case LOCATION_POP_ACTION:
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS:
       case layerConstants.RESET_GRANULE_LAYER_OPTIONS:
+      case layerConstants.UPDATE_DAY_COUNT:
       case compareConstants.CHANGE_STATE:
       case layerConstants.REORDER_LAYERS:
       case layerConstants.REORDER_OVERLAY_GROUPS:

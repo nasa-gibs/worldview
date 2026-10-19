@@ -28,7 +28,7 @@ test('Initial state indicates layer count', async () => {
   await page.goto(url)
   await closeModal(page)
   await expect(layerCount).toBeVisible()
-  await expect(layerCount).toContainText('9')
+  await expect(layerCount).toContainText('10')
 })
 
 test('Expand layer list and show default layers', async () => {
@@ -143,7 +143,7 @@ test('Searching for layers', async () => {
     aodCheckbox
   } = selectors
   await layersSearchField.fill('aerosol optical depth')
-  await expect(layersSearchRow).toHaveCount(24)
+  await expect(layersSearchRow).toHaveCount(27)
   await expect(aodCheckbox).toBeVisible()
 })
 
@@ -190,5 +190,5 @@ test('Collapse sidebar and confirm layer count updated', async () => {
   const { layerCount } = selectors
   await page.locator('.layer-btn-close').click()
   await page.locator('#toggleIconHolder').click()
-  await expect(layerCount).toContainText('10')
+  await expect(layerCount).toContainText('11')
 })

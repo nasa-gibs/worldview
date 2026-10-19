@@ -47,8 +47,8 @@ function PaletteSelect (props) {
     const color = palette.classes
       ? palette.classes.colors[0]
       : palette.colors[0];
-    const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
-    const checkedClassName = isSelected ? 'checked' : '';
+    const caseDefaultClassName = 'wv-palette-selector-row wv-radio';
+    const checkedClassName = isSelected ? ' checked' : '';
     const isInvisible = color === '00000000';
 
     return (
@@ -59,9 +59,6 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
-        {isSelected && (
-          <span className="dot" />
-        )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <span
             className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
@@ -83,8 +80,8 @@ function PaletteSelect (props) {
    * @param {Boolean} isSelected | is this colormap active
    */
   const renderSelectorItemScale = (palette, id, legend, isSelected) => {
-    const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
-    const checkedClassName = isSelected ? 'checked' : '';
+    const caseDefaultClassName = 'wv-palette-selector-row wv-radio';
+    const checkedClassName = isSelected ? ' checked' : '';
     const ctx = canvas.getContext('2d');
     drawPaletteOnCanvas(
       ctx,
@@ -102,9 +99,6 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
-        {isSelected && (
-          <span className="dot" />
-        )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>

@@ -29,10 +29,13 @@ function buildMockCanvas(ctx) {
 
 function buildMockTile(state, imageOverride) {
   const defaultImage = { complete: true, naturalWidth: 1, width: 2, height: 2 };
-  return {
+  const tile = {
     getState: jest.fn(() => state),
-    image_: imageOverride ?? defaultImage,
+    getImage: jest.fn(() => imageOverride ?? defaultImage),
+    tileCoord: [0, 0, 0],
   };
+  tile.getTileCoord = jest.fn(() => tile.tileCoord);
+  return tile;
 }
 
 function buildMockTileGrid(tiles = []) {
@@ -53,6 +56,13 @@ function buildMockSource(tiles = [], projectionOverride = null) {
     getProjection: jest.fn(() => projectionOverride),
     getTileGridForProjection: jest.fn(() => tileGrid),
     getTile: jest.fn((z, x) => tileMap[x] ?? tiles[x]),
+    sourceTiles: tiles,
+  };
+}
+
+function buildMockTileCache(tiles = []) {
+  return {
+    forEach: jest.fn((cb) => tiles.forEach((tile) => cb(tile))),
   };
 }
 
@@ -60,6 +70,10 @@ function buildMockTileLayer(source, id = 'test-layer-id') {
   const layer = new TileLayer();
   layer.getSource = jest.fn(() => source);
   layer.wv = { id };
+  const tiles = source.sourceTiles ?? [];
+  tiles.forEach((tile, i) => { tile.tileCoord = [5, i, 0]; });
+  const tileCache = buildMockTileCache(tiles);
+  layer.getRenderer = jest.fn(() => ({ getTileCache: jest.fn(() => tileCache) }));
   return layer;
 }
 
@@ -487,7 +501,7 @@ describe('countTilesForSpecifiedLayers', () => {
       expect(source.getTileGridForProjection).toHaveBeenCalledWith(view.getProjection());
     });
 
-    it('calls source.getTile with correct tileCoord arguments', async () => {
+    it('looks up tiles from the renderer tile cache by tileCoord', async () => {
       const tile = buildMockTile(4);
       const source = buildMockSource([tile]);
       const layer = buildMockTileLayer(source, 'layer-a');
@@ -495,7 +509,8 @@ describe('countTilesForSpecifiedLayers', () => {
 
       countTilesForSpecifiedLayers(buildUi(map), ['layer-a']);
       await Promise.resolve();
-      expect(source.getTile).toHaveBeenCalledWith(5, 0, 0, 1, expect.anything());
+      expect(layer.getRenderer).toHaveBeenCalled();
+      expect(tile.getTileCoord).toHaveBeenCalled();
     });
 
     it('calls tileGrid.getZForResolution with the view resolution', async () => {

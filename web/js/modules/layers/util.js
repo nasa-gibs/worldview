@@ -18,11 +18,13 @@ import {
   getFutureLayerEndDate,
   getActiveLayersMap,
   getGranuleLayer,
+  getMaxDayRange,
 } from './selectors';
 import { getPaletteAttributeArray } from '../palettes/util';
 import { getVectorStyleAttributeArray } from '../vector-styles/util';
 import util from '../../util/util';
 import { parseDate } from '../date/util';
+import { DEFAULT_DAY_COUNT, MIN_DAY_COUNT, MAX_DAY_COUNT, DEFAULT_NUM_GRANULES } from './constants';
 
 /**
  * Given a layer definition, returns formatted string
@@ -685,6 +687,40 @@ const getSubdailyDateRange = ({
 };
 
 /**
+   * Return an array of dateRanges for subdaily layers
+   *
+   * @method fetchSubdailyDateRanges
+   * @param  {String} def            The layer id
+   * @return {Array}                 An array of dateRanges
+   */
+export async function fetchSubdailyDateRanges(id) {
+  try {
+    const response = await fetch(`config/dateRanges/${id}.json`);
+    const result = await response.json();
+    return result;
+  } catch {
+    return [];
+  }
+}
+
+/**
+   * Return the vectorstyles object of a given layer for live-reloading development purposes
+   *
+   * @method fetchVectorstyle
+   * @param  {String} def            The layer id
+   * @return {Promise<Object>}       The vectorstyles object
+   */
+export async function fetchVectorstyle(id) {
+  try {
+    const response = await fetch(`config/${id}.json`);
+    const result = await response.json();
+    return result;
+  } catch {
+    return null;
+  }
+}
+
+/**
    * Return an array of dates based on the dateRange the current date falls in.
    *
    * @method datesInDateRanges
@@ -697,14 +733,22 @@ const getSubdailyDateRange = ({
    * @param  {Object} appNow         A date object of appNow (current date or set explicitly)
    * @return {Array}                 An array of dates with normalized timezones
    */
-export function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
+export async function datesInDateRanges(def, date, startDateLimit, endDateLimit, appNow) {
   const {
-    dateRanges,
     futureTime,
     period,
     ongoing,
   } = def;
   let dateArray = [];
+  if (!def.dateRanges && def.period === 'subdaily') {
+    const result = await fetchSubdailyDateRanges(def.id);
+    if (result) {
+      def.dateRanges = result;
+    }
+  }
+  const {
+    dateRanges,
+  } = def;
   if (!dateRanges) { return dateArray; }
   const rangeLimitsProvided = !!(startDateLimit && endDateLimit);
   let currentDate = new Date(date);
@@ -879,6 +923,21 @@ export function serializeLayers(layers, state, groupName) {
         value: bandComboString,
       });
     }
+    if (def.dayCount > DEFAULT_DAY_COUNT && getMaxDayRange(def)) {
+      item.attributes.push({
+        id: 'days',
+        value: def.dayCount,
+      });
+    }
+    if (def.type === 'granule') {
+      const { count } = getGranuleLayer(state, def.id, groupName) || {};
+      if (count && count !== DEFAULT_NUM_GRANULES) {
+        item.attributes.push({
+          id: 'count',
+          value: count,
+        });
+      }
+    }
     if (def.palette &&
       (def.custom || def.min || def.max || def.squash || def.noclip || def.disabled ||
         (palettes[def.id] && palettes[def.id].maps && palettes[def.id].maps.length > 1))) {
@@ -898,14 +957,6 @@ export function serializeLayers(layers, state, groupName) {
       item.attributes = vectorStyleAttributeArray.length
         ? item.attributes.concat(vectorStyleAttributeArray)
         : item.attributes;
-    } else if (def.type === 'granule') {
-      const granuleLayer = getGranuleLayer(state, def.id);
-      if (granuleLayer) {
-        const { count } = granuleLayer;
-        item.attributes = count !== 20
-          ? item.attributes.concat({ id: 'count', value: count })
-          : item.attributes;
-      }
     }
 
     return util.appendAttributesForURL(item);
@@ -949,6 +1000,7 @@ const getLayerSpec = (attributes) => {
   let custom;
   let disabled;
   let count;
+  let dayCount;
   let bandCombo;
 
   lodashEach(attributes, (attr) => {
@@ -1055,12 +1107,20 @@ const getLayerSpec = (attributes) => {
     if (attr.id === 'count') {
       count = Number(attr.value);
     }
+    // multi-day aggregation count (defaults to 1 if no param)
+    if (attr.id === 'days') {
+      const parsed = parseInt(attr.value, 10);
+      if (!lodashIsNaN(parsed)) {
+        dayCount = util.clamp(parsed, MIN_DAY_COUNT, MAX_DAY_COUNT);
+      }
+    }
   });
 
   return {
     hidden,
     opacity,
     count,
+    dayCount,
     bandCombo,
 
     // only include palette attributes if Array.length condition
@@ -1233,43 +1293,52 @@ export function layersParse12(stateObj, config) {
     const lstates = [];
     lodashEach(layerDefs, (layerDef) => {
       // Get the text before any paren or comma
-      let layerId = layerDef.match(/[^(,]+/)[0];
+      const layerId = layerDef.match(/[^(,]+/)[0];
+      const newLayerIds = [];
       if (config.redirects && config.redirects.layers) {
-        layerId = config.redirects.layers[layerId] || layerId;
+        if (config.redirects.layers[layerId] && Array.isArray(config.redirects.layers[layerId])) {
+          newLayerIds.push(...config.redirects.layers[layerId]);
+        } else {
+          newLayerIds.push(config.redirects.layers[layerId] || layerId);
+        }
+      } else {
+        newLayerIds.push(layerId);
       }
-      const lstate = {
-        id: layerId,
-        attributes: [],
-      };
-      googleTagManager.pushEvent({
-        event: 'layer_included_in_url',
-        layers: {
-          id: layerId,
-        },
-      });
-      // Everything inside parens
-      const arrayAttr = layerDef.match(/\(.*\)/);
-      if (arrayAttr) {
-        // Get single match and remove parens
-        const strAttr = arrayAttr[0].replace(/[()]/g, '');
-        // Key value pairs
-        const kvps = strAttr.split(',');
-        lodashEach(kvps, (kvp) => {
-          parts = kvp.split('=');
-          if (parts.length === 1) {
-            lstate.attributes.push({
-              id: parts[0],
-              value: true,
-            });
-          } else {
-            lstate.attributes.push({
-              id: parts[0],
-              value: parts[1],
-            });
-          }
+      newLayerIds.forEach((newLayerId) => {
+        const lstate = {
+          id: newLayerId,
+          attributes: [],
+        };
+        googleTagManager.pushEvent({
+          event: 'layer_included_in_url',
+          layers: {
+            id: newLayerId,
+          },
         });
-      }
-      lstates.push(lstate);
+        // Everything inside parens
+        const arrayAttr = layerDef.match(/\(.*\)/);
+        if (arrayAttr) {
+          // Get single match and remove parens
+          const strAttr = arrayAttr[0].replace(/[()]/g, '');
+          // Key value pairs
+          const kvps = strAttr.split(',');
+          lodashEach(kvps, (kvp) => {
+            parts = kvp.split('=');
+            if (parts.length === 1) {
+              lstate.attributes.push({
+                id: parts[0],
+                value: true,
+              });
+            } else {
+              lstate.attributes.push({
+                id: parts[0],
+                value: parts[1],
+              });
+            }
+          });
+        }
+        lstates.push(lstate);
+      });
     });
     return createLayerArrayFromState(lstates, config);
   } catch (e) {
@@ -1492,6 +1561,9 @@ export function adjustStartDates(layers) {
     if (Array.isArray(historicalRanges) && historicalRanges.length) {
       layer.startDate = historicalRanges[0].startDate;
       historicalRanges.reverse().forEach((range) => {
+        if (!layer.dateRanges) {
+          layer.dateRanges = [];
+        }
         layer.dateRanges.unshift(range);
       });
     } else {

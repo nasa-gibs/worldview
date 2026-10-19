@@ -61,7 +61,10 @@ export function chartingReducer(state = initialChartingState, action) {
         isChartOpen: action.status,
       });
     case UPDATE_AOI_COORDINATES:
-      // action.extent = the geometry from the drawn AOI box
+      // Don't update the coordinates if charting mode isn't active
+      if (!state.active) {
+        return state;
+      }
       return lodashAssign({}, state, {
         aoiCoordinates: action.extent,
       });

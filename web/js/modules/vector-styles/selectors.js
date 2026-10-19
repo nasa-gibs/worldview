@@ -17,6 +17,11 @@ import {
   getLookup as getPaletteLookup,
 } from '../palettes/selectors';
 import util from '../../util/util';
+import { fetchVectorstyle } from '../layers/util';
+
+// Array of vector layer IDs to have their vectorstyle live fetched from `web/config`
+// * For use in local dev environment only *
+const liveFetchLayers = [];
 
 /**
  * Get OpenLayers layers from state that were created from WV vector
@@ -169,6 +174,7 @@ export function setStyleFunction(opts) {
     state,
     vectorStyleSource,
     styleSelection = false,
+    manualStyle,
   } = opts;
   const map = lodashGet(state, 'map.ui.selected');
   if (!map) return undefined;
@@ -190,6 +196,10 @@ export function setStyleFunction(opts) {
     if (customDefaultStyle !== undefined) {
       glStyle = customDefaultStyle;
     }
+  }
+
+  if (manualStyle) {
+    glStyle = manualStyle;
   }
 
   // De-reference the glState object prior to applying the palette to the layer
@@ -245,6 +255,47 @@ export function setStyleFunction(opts) {
       return undefined;
     });
   }
+
+  // Modify Sea Ice Motion points to symbols (triangle) indicating the direction of motion
+  if (glStyle.name === 'AMSRU2_Sea_Ice_Motion_12km') {
+    const targetColor = glStyle.layers[0].paint?.['circle-color'] || glStyle.layers[0].paint?.['line-color'];
+    glStyle.layers = glStyle.layers.flatMap(layer => {
+      if (layer.id.includes('_Point')) {
+        layer.type = 'symbol';
+        layer.paint = { 'text-color': targetColor };
+        layer.layout = {
+          'text-field': '\u25B4', // triangle pointing right
+          'text-size': 35,
+        };
+        layer.filter = ['==', ['get', 'type'], 'endpoint'];
+      }
+      return [layer];
+    });
+
+    layer.setStyle((feature, resolution) => {
+      const styles = styleFunction(feature, resolution);
+
+      if (feature.getGeometry().getType() === 'Point') {
+        const props = feature.getProperties();
+        const dx = props.end_x_projected - props.start_x_projected;
+        const dy = props.end_y_projected - props.start_y_projected;
+
+        const rotation = Math.atan2(dx, dy);
+
+        if (styles) {
+          const stylesArray = Array.isArray(styles) ? styles : [styles];
+          stylesArray.forEach(style => {
+            const text = style.getText();
+            if (text && typeof text.setRotation === 'function') {
+              text.setRotation(rotation);
+            }
+          });
+          return stylesArray;
+        }
+      }
+      return styles;
+    });
+  };
 
   return vectorStyleId;
 }
@@ -315,7 +366,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, s
  * @param {Object} state
  * @param {Object} options
  */
-export const applyStyle = (def, olVectorLayer, state, options, resolutions) => {
+export const applyStyle = async (def, olVectorLayer, state, options, resolutions) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
@@ -335,6 +386,14 @@ export const applyStyle = (def, olVectorLayer, state, options, resolutions) => {
     styleSelection: false,
     ...resolutions && { resolutions },
   };
+
+  // Fetch live vectorstyle if layer is in liveFetchLayers
+  if (liveFetchLayers.includes(def.id)) {
+    const fetchedStyle = await fetchVectorstyle(def.id);
+    if (fetchedStyle) {
+      opts.manualStyle = fetchedStyle;
+    }
+  }
 
   setStyleFunction(opts);
 };

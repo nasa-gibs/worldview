@@ -11,7 +11,7 @@
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "disableCustomPalettes": true,
       "layergroup": "Nitrogen Dioxide",
       "vectorStyle": {
@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "MSL_GPS_AI",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {

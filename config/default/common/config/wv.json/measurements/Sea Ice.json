@@ -3,7 +3,7 @@
         "Sea Ice": {
             "id": "sea-ice",
             "title":    "Sea Ice",
-            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, Aqua/AMSRU-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
+            "subtitle": "Aqua/MODIS, Aqua/AMSR-E, Aqua/AMSRU-E, GCOM-W1/AMSR2, Multi-mission/GHRSST, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, SSMI, SSMIS, MEaSUREs",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -11,7 +11,8 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_SNPP_Sea_Ice"
+                        "VIIRS_SNPP_Sea_Ice",
+                        "VIIRS_SNPP_L3_Sea_Ice_Daily"
                     ]
                 },
                 "NOAA-20/VIIRS": {
@@ -20,13 +21,23 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_NOAA20_Sea_Ice"
+                        "VIIRS_NOAA20_Sea_Ice",
+                        "VIIRS_NOAA20_L3_Sea_Ice_Daily"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Sea_Ice"
                     ]
                 },
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/SeaIce",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_Sea_Ice",
@@ -36,7 +47,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/terra/SeaIce",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_Sea_Ice",

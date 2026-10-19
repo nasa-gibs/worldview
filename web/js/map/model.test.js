@@ -1,507 +1,256 @@
-import {
-  CRS_WGS_84,
-  CRS_WGS_84_QUERY_EXTENT,
-  mapIsExtentValid,
-  mapParser,
-  mapIsPolygonValid,
-  mapAdjustAntiMeridian,
-  mapDistance2D,
-  mapDistanceX,
-  mapInterpolate2D,
-  mapToPolys,
-  setVisibility,
-  setOpacity,
-  getLayerByName,
-} from './map';
+import mapModel from './model';
 
-// ─── Mock OlGeomPolygon so it never touches real OL geometry ─────────────────
-jest.mock('ol/geom/Polygon', () =>
-  jest.fn().mockImplementation((coords) => ({ coords, type: 'Polygon' })),
-);
+const mockProj4Defs = jest.fn();
+jest.mock('proj4', () => ({
+  __esModule: true,
+  default: {
+    defs: (...args) => mockProj4Defs(...args),
+  },
+}));
 
-// =============================================================================
-// Constants
-// =============================================================================
+const mockRegister = jest.fn();
+jest.mock('ol/proj/proj4', () => ({
+  register: (...args) => mockRegister(...args),
+}));
 
-describe('CRS_WGS_84', () => {
-  test('is EPSG:4326', () => {
-    expect(CRS_WGS_84).toBe('EPSG:4326');
+const mockSetExtent = jest.fn();
+const mockOlProjGet = jest.fn(() => ({ setExtent: mockSetExtent }));
+jest.mock('ol/proj', () => ({
+  get: (...args) => mockOlProjGet(...args),
+}));
+
+const mockIntersects = jest.fn();
+jest.mock('ol/extent', () => ({
+  intersects: (...args) => mockIntersects(...args),
+}));
+
+const geographicDef = {
+  id: 'geographic',
+  crs: 'EPSG:4326',
+  proj4: '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs',
+  maxExtent: [-180, -90, 180, 90],
+};
+
+const arcticDef = {
+  id: 'arctic',
+  crs: 'EPSG:3413',
+  proj4: '+proj=stere +lat_0=90 +lat_ts=70',
+  maxExtent: [-4194304, -4194304, 4194304, 4194304],
+};
+
+const buildConfig = (projections) => ({ projections });
+
+const buildModels = (selectedId = 'geographic') => ({
+  proj: { selected: { id: selectedId } },
+});
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockIntersects.mockReturnValue(true);
+});
+
+describe('mapModel construction (init)', () => {
+  test('exposes default state', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    expect(self.extent).toBeNull();
+    expect(self.selectedMap).toBeNull();
+    expect(self.ui).toBeNull();
+    expect(self.rotation).toBe(0);
+  });
+
+  test('does nothing when config has no projections', () => {
+    mapModel(buildModels(), {});
+    expect(mockProj4Defs).not.toHaveBeenCalled();
+    expect(mockRegister).not.toHaveBeenCalled();
+  });
+
+  test('registers projections that have both crs and proj4', () => {
+    mapModel(buildModels(), buildConfig({ geographic: geographicDef, arctic: arcticDef }));
+    expect(mockProj4Defs).toHaveBeenCalledTimes(2);
+    expect(mockProj4Defs).toHaveBeenCalledWith(geographicDef.crs, geographicDef.proj4);
+    expect(mockProj4Defs).toHaveBeenCalledWith(arcticDef.crs, arcticDef.proj4);
+  });
+
+  test('skips projections missing crs or proj4', () => {
+    const partial = { crs: 'EPSG:4326' };
+    mapModel(buildModels(), buildConfig({ partial }));
+    expect(mockProj4Defs).not.toHaveBeenCalled();
   });
 });
 
-describe('CRS_WGS_84_QUERY_EXTENT', () => {
-  test('is the correct bounding box', () => {
-    expect(CRS_WGS_84_QUERY_EXTENT).toEqual([-180, -60, 180, 60]);
+describe('self.register', () => {
+  test('registers a valid definition and sets the extent', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    self.register(geographicDef);
+    expect(mockProj4Defs).toHaveBeenCalledWith(geographicDef.crs, geographicDef.proj4);
+    expect(mockRegister).toHaveBeenCalled();
+    expect(mockOlProjGet).toHaveBeenCalledWith(geographicDef.crs);
+    expect(mockSetExtent).toHaveBeenCalledWith(geographicDef.maxExtent);
+  });
+
+  test('does nothing for a definition without proj4', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    self.register({ crs: 'EPSG:4326' });
+    expect(mockProj4Defs).not.toHaveBeenCalled();
+  });
+
+  test('does nothing for an undefined definition', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    self.register(undefined);
+    expect(mockProj4Defs).not.toHaveBeenCalled();
   });
 });
 
-// =============================================================================
-// mapIsExtentValid
-// =============================================================================
-
-describe('mapIsExtentValid', () => {
-  test('returns false when extent is undefined', () => {
-    expect(mapIsExtentValid(undefined)).toBe(false);
-  });
-
-  test('returns true for a valid numeric array extent', () => {
-    expect(mapIsExtentValid([-180, -90, 180, 90])).toBe(true);
-  });
-
-  test('returns true for an all-zero extent', () => {
-    expect(mapIsExtentValid([0, 0, 0, 0])).toBe(true);
-  });
-
-  test('returns false when one value in the array is NaN', () => {
-    expect(mapIsExtentValid([-180, NaN, 180, 90])).toBe(false);
-  });
-
-  test('returns false when a non-numeric string is in the array (parses as NaN)', () => {
-    expect(mapIsExtentValid([-180, -90, 'x', 90])).toBe(false);
-  });
-
-  test('returns true for an extent object that has a toArray() method returning valid values', () => {
-    const extentObj = { toArray: () => [-180, -90, 180, 90] };
-    expect(mapIsExtentValid(extentObj)).toBe(true);
-  });
-
-  test('returns false for an extent object whose toArray() returns a NaN value', () => {
-    const extentObj = { toArray: () => [-180, NaN, 180, 90] };
-    expect(mapIsExtentValid(extentObj)).toBe(false);
+describe('self.update', () => {
+  test('stores the extent', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    const extent = [-10, -10, 10, 10];
+    self.update(extent);
+    expect(self.extent).toBe(extent);
   });
 });
 
-// =============================================================================
-// mapParser
-// =============================================================================
-
-describe('mapParser', () => {
-  describe('permalink 1.1 — map key', () => {
-    test('moves map value to v, parses into numeric array, no errors', () => {
-      const errors = [];
-      const state = { map: '0,1,2,3' };
-      mapParser(state, errors);
-      expect(state.v).toEqual([0, 1, 2, 3]);
-      expect(state.map).toBeUndefined();
-      expect(errors).toHaveLength(0);
-    });
-
-    test('pushes an error and deletes v when map value contains a non-numeric token', () => {
-      const errors = [];
-      const state = { map: '0,1,x,3' };
-      mapParser(state, errors);
-      expect(state.v).toBeUndefined();
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toMatch(/Invalid extent/);
-    });
-  });
-
-  describe('permalink 1.2 — v key', () => {
-    test('parses valid v string into numeric array, no errors', () => {
-      const errors = [];
-      const state = { v: '0,1,2,3' };
-      mapParser(state, errors);
-      expect(state.v).toEqual([0, 1, 2, 3]);
-      expect(errors).toHaveLength(0);
-    });
-
-    test('pushes an error and deletes v when v value contains a non-numeric token', () => {
-      const errors = [];
-      const state = { v: 'a,b,c,d' };
-      mapParser(state, errors);
-      expect(state.v).toBeUndefined();
-      expect(errors).toHaveLength(1);
-      expect(errors[0].message).toMatch(/Invalid extent/);
-    });
-
-    test('parses negative coordinates correctly', () => {
-      const errors = [];
-      const state = { v: '-180,-90,180,90' };
-      mapParser(state, errors);
-      expect(state.v).toEqual([-180, -90, 180, 90]);
-      expect(errors).toHaveLength(0);
-    });
-  });
-
-  describe('no map or v key present', () => {
-    test('does nothing when state has neither map nor v', () => {
-      const errors = [];
-      const state = {};
-      mapParser(state, errors);
-      expect(state.v).toBeUndefined();
-      expect(errors).toHaveLength(0);
-    });
+describe('self.updateMap', () => {
+  test('stores the map and ui references', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    const map = {};
+    const ui = {};
+    self.updateMap(map, ui);
+    expect(self.selectedMap).toBe(map);
+    expect(self.ui).toBe(ui);
   });
 });
 
-// =============================================================================
-// mapIsPolygonValid
-// =============================================================================
-
-describe('mapIsPolygonValid', () => {
-  // Helper to build a mock OL polygon whose outer ring has the given coordinates
-  const buildPolygon = (coords) => ({
-    getLinearRing: () => ({
-      getCoordinates: () => coords,
-    }),
+describe('self.getZoom', () => {
+  test('returns null when no map is selected', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    expect(self.getZoom()).toBeNull();
   });
 
-  test('returns true when no consecutive points exceed maxDistance', () => {
-    const polygon = buildPolygon([[0, 0], [5, 0], [5, 5], [0, 5], [0, 0]]);
-    expect(mapIsPolygonValid(polygon, 10)).toBe(true);
-  });
-
-  test('returns false when a consecutive x-distance exceeds maxDistance', () => {
-    // jump of 15 in x between first and second point
-    const polygon = buildPolygon([[0, 0], [15, 0], [15, 5], [0, 5], [0, 0]]);
-    expect(mapIsPolygonValid(polygon, 10)).toBe(false);
-  });
-
-  test('returns true for a single-segment polygon within maxDistance', () => {
-    const polygon = buildPolygon([[0, 0], [10, 0]]);
-    expect(mapIsPolygonValid(polygon, 10)).toBe(true);
-  });
-
-  test('returns false when the distance exactly exceeds maxDistance', () => {
-    // Math.abs(11 - 0) = 11 > 10
-    const polygon = buildPolygon([[0, 0], [11, 0], [11, 5]]);
-    expect(mapIsPolygonValid(polygon, 10)).toBe(false);
-  });
-
-  test('handles negative x-direction crossing (abs value compared)', () => {
-    // jump from 10 to -5 → abs diff = 15 > 10
-    const polygon = buildPolygon([[10, 0], [-5, 0], [-5, 5]]);
-    expect(mapIsPolygonValid(polygon, 10)).toBe(false);
-  });
-
-  test('returns true for an empty coordinate list', () => {
-    const polygon = buildPolygon([]);
-    expect(mapIsPolygonValid(polygon, 10)).toBe(true);
+  test('returns the zoom from the selected map view', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    const map = { getView: () => ({ getZoom: () => 5 }) };
+    self.updateMap(map, {});
+    expect(self.getZoom()).toBe(5);
   });
 });
 
-// =============================================================================
-// mapAdjustAntiMeridian
-// =============================================================================
-
-describe('mapAdjustAntiMeridian', () => {
-  // mapAdjustAntiMeridian takes an OL polygon and an adjustSign value.
-  // It reads outer ring coords, adjusts them, and returns a new OlGeomPolygon.
-  const buildPolygon = (coords) => ({
-    getLinearRing: () => ({
-      getCoordinates: () => coords.map((c) => [...c]), // return copies
-    }),
+describe('self.load', () => {
+  test('sets extent when within range', () => {
+    const config = buildConfig({ geographic: geographicDef });
+    const self = mapModel(buildModels(), config);
+    const errors = [];
+    const state = { v: [-10, -10, 10, 10], p: 'geographic' };
+    mockIntersects.mockReturnValue(true);
+    self.load(state, errors);
+    expect(self.extent).toEqual(state.v);
+    expect(errors).toHaveLength(0);
+    expect(self.loaded).toBe(true);
   });
 
-  test('returns an OlGeomPolygon object', () => {
-    const polygon = buildPolygon([[0, 0], [10, 0], [10, 10], [0, 10], [0, 0]]);
-    const result = mapAdjustAntiMeridian(polygon, 0);
-    expect(result).toBeDefined();
+  test('defaults the projection to geographic when state.p is absent', () => {
+    const config = buildConfig({ geographic: geographicDef });
+    const self = mapModel(buildModels(), config);
+    const state = { v: [-10, -10, 10, 10] };
+    self.load(state, []);
+    expect(self.extent).toEqual(state.v);
   });
 
-  test('does not shift coordinates when adjustSign is 0', () => {
-    const OlGeomPolygon = require('ol/geom/Polygon');
-    OlGeomPolygon.mockClear();
-    const coords = [[-10, 0], [10, 0], [10, 10], [-10, 10], [-10, 0]];
-    const polygon = buildPolygon(coords);
-    mapAdjustAntiMeridian(polygon, 0);
-    const passedCoords = OlGeomPolygon.mock.calls[0][0][0];
-    expect(passedCoords).toEqual([[-10, 0], [10, 0], [10, 10], [-10, 10], [-10, 0]]);
+  test('overrides geographic maxExtent and sets wrapExtent', () => {
+    const geoDef = { ...geographicDef };
+    const config = buildConfig({ geographic: geoDef });
+    const self = mapModel(buildModels(), config);
+    self.load({ v: [-10, -10, 10, 10], p: 'geographic' }, []);
+    expect(geoDef.wrapExtent).toEqual([-250, -90, 250, 90]);
   });
 
-  test('adds 360 to negative x-coordinates when adjustSign is positive (+1)', () => {
-    const OlGeomPolygon = require('ol/geom/Polygon');
-    OlGeomPolygon.mockClear();
-    const coords = [[-10, 0], [10, 0], [10, 10], [-10, 10], [-10, 0]];
-    const polygon = buildPolygon(coords);
-    mapAdjustAntiMeridian(polygon, 1);
-    const passedCoords = OlGeomPolygon.mock.calls[0][0][0];
-    // -10 → 350, 10 stays 10
-    expect(passedCoords[0][0]).toBe(350);
-    expect(passedCoords[1][0]).toBe(10);
-    expect(passedCoords[3][0]).toBe(350);
+  test('falls back to maxExtent and pushes an error when out of range', () => {
+    const config = buildConfig({ arctic: arcticDef });
+    const self = mapModel(buildModels(), config);
+    const errors = [];
+    mockIntersects.mockReturnValue(false);
+    self.load({ v: [9e9, 9e9, 1e10, 1e10], p: 'arctic' }, errors);
+    expect(self.extent).toEqual(arcticDef.maxExtent);
+    expect(self.extent).not.toBe(arcticDef.maxExtent);
+    expect(errors).toEqual([{ message: 'Extent outside of range' }]);
   });
 
-  test('leaves positive x-coordinates unchanged when adjustSign is positive', () => {
-    const OlGeomPolygon = require('ol/geom/Polygon');
-    OlGeomPolygon.mockClear();
-    const coords = [[10, 0], [20, 0], [20, 5], [10, 5], [10, 0]];
-    const polygon = buildPolygon(coords);
-    mapAdjustAntiMeridian(polygon, 1);
-    const passedCoords = OlGeomPolygon.mock.calls[0][0][0];
-    expect(passedCoords[0][0]).toBe(10);
-    expect(passedCoords[1][0]).toBe(20);
+  test('pushes an error when the projection does not exist', () => {
+    const config = buildConfig({ geographic: geographicDef });
+    const self = mapModel(buildModels(), config);
+    const errors = [];
+    self.load({ v: [-10, -10, 10, 10], p: 'does-not-exist' }, errors);
+    expect(errors).toEqual([{ message: 'Projection does not exist' }]);
   });
 
-  test('subtracts 360 from positive x-coordinates when adjustSign is negative (-1)', () => {
-    const OlGeomPolygon = require('ol/geom/Polygon');
-    OlGeomPolygon.mockClear();
-    const coords = [[10, 0], [170, 0], [170, 10], [10, 10], [10, 0]];
-    const polygon = buildPolygon(coords);
-    mapAdjustAntiMeridian(polygon, -1);
-    const passedCoords = OlGeomPolygon.mock.calls[0][0][0];
-    // 10 → -350, 170 → -190
-    expect(passedCoords[0][0]).toBe(10 - 360);
-    expect(passedCoords[1][0]).toBe(170 - 360);
+  test('ignores extent logic when state.v is absent', () => {
+    const config = buildConfig({ geographic: geographicDef });
+    const self = mapModel(buildModels(), config);
+    const errors = [];
+    self.load({ p: 'geographic' }, errors);
+    expect(self.extent).toBeNull();
+    expect(errors).toHaveLength(0);
   });
 
-  test('leaves negative x-coordinates unchanged when adjustSign is negative', () => {
-    const OlGeomPolygon = require('ol/geom/Polygon');
-    OlGeomPolygon.mockClear();
-    const coords = [[-10, 0], [-20, 0], [-20, 5], [-10, 5], [-10, 0]];
-    const polygon = buildPolygon(coords);
-    mapAdjustAntiMeridian(polygon, -1);
-    const passedCoords = OlGeomPolygon.mock.calls[0][0][0];
-    expect(passedCoords[0][0]).toBe(-10);
-    expect(passedCoords[1][0]).toBe(-20);
-  });
-});
-
-// =============================================================================
-// mapDistance2D
-// =============================================================================
-
-describe('mapDistance2D', () => {
-  test('returns 0 for identical points', () => {
-    expect(mapDistance2D([0, 0], [0, 0])).toBe(0);
+  test('converts rotation to radians for polar projections', () => {
+    const config = buildConfig({ arctic: arcticDef });
+    const self = mapModel(buildModels(), config);
+    self.load({ p: 'arctic', r: 90 }, []);
+    expect(self.rotation).toBeCloseTo(Math.PI / 2);
   });
 
-  test('returns 5 for a 3-4-5 right triangle', () => {
-    expect(mapDistance2D([0, 0], [3, 4])).toBe(5);
+  test('handles antarctic rotation', () => {
+    const config = buildConfig({ arctic: arcticDef });
+    const self = mapModel(buildModels(), config);
+    self.load({ p: 'antarctic', r: 180 }, []);
+    expect(self.rotation).toBeCloseTo(Math.PI);
   });
 
-  test('works correctly with negative coordinates', () => {
-    expect(mapDistance2D([-3, -4], [0, 0])).toBe(5);
+  test('leaves rotation untouched when r is NaN', () => {
+    const config = buildConfig({ arctic: arcticDef });
+    const self = mapModel(buildModels(), config);
+    self.load({ p: 'arctic', r: NaN }, []);
+    expect(self.rotation).toBe(0);
   });
 
-  test('returns the horizontal distance when y values are equal', () => {
-    expect(mapDistance2D([0, 0], [10, 0])).toBe(10);
-  });
-
-  test('returns the vertical distance when x values are equal', () => {
-    expect(mapDistance2D([0, 0], [0, 7])).toBe(7);
-  });
-
-  test('is symmetric (order of points does not matter)', () => {
-    expect(mapDistance2D([1, 2], [4, 6])).toBeCloseTo(mapDistance2D([4, 6], [1, 2]));
+  test('returns self', () => {
+    const config = buildConfig({ geographic: geographicDef });
+    const self = mapModel(buildModels(), config);
+    expect(self.load({}, [])).toBe(self);
   });
 });
 
-// =============================================================================
-// mapDistanceX
-// =============================================================================
-
-describe('mapDistanceX', () => {
-  test('returns 0 when both values are equal', () => {
-    expect(mapDistanceX(5, 5)).toBe(0);
+describe('self.save', () => {
+  test('saves a clone of the extent', () => {
+    const self = mapModel(buildModels(), buildConfig({}));
+    self.extent = [-10, -10, 10, 10];
+    const stateObj = {};
+    self.save(stateObj);
+    expect(stateObj.v).toEqual(self.extent);
+    expect(stateObj.v).not.toBe(self.extent);
   });
 
-  test('returns positive distance when p2 > p1', () => {
-    expect(mapDistanceX(3, 10)).toBe(7);
+  test('saves rotation in degrees for non-geographic projections', () => {
+    const self = mapModel(buildModels('arctic'), buildConfig({}));
+    self.rotation = Math.PI / 2;
+    const stateObj = {};
+    self.save(stateObj);
+    expect(Number(stateObj.r)).toBeCloseTo(90);
   });
 
-  test('returns positive distance when p1 > p2 (absolute value)', () => {
-    expect(mapDistanceX(10, 3)).toBe(7);
+  test('does not save rotation when it is zero', () => {
+    const self = mapModel(buildModels('arctic'), buildConfig({}));
+    self.rotation = 0;
+    const stateObj = {};
+    self.save(stateObj);
+    expect(stateObj.r).toBeUndefined();
   });
 
-  test('handles negative values', () => {
-    expect(mapDistanceX(-5, 5)).toBe(10);
-  });
-
-  test('handles both negative values', () => {
-    expect(mapDistanceX(-10, -3)).toBe(7);
-  });
-});
-
-// =============================================================================
-// mapInterpolate2D
-// =============================================================================
-
-describe('mapInterpolate2D', () => {
-  test('returns p1 exactly when amount is 0', () => {
-    expect(mapInterpolate2D([0, 0], [10, 10], 0)).toEqual([0, 0]);
-  });
-
-  test('returns p2 exactly when amount is 1', () => {
-    expect(mapInterpolate2D([0, 0], [10, 10], 1)).toEqual([10, 10]);
-  });
-
-  test('returns the midpoint when amount is 0.5', () => {
-    expect(mapInterpolate2D([0, 0], [10, 10], 0.5)).toEqual([5, 5]);
-  });
-
-  test('interpolates correctly with a non-zero starting point', () => {
-    expect(mapInterpolate2D([2, 4], [6, 8], 0.5)).toEqual([4, 6]);
-  });
-
-  test('handles negative coordinates', () => {
-    expect(mapInterpolate2D([-10, -10], [10, 10], 0.5)).toEqual([0, 0]);
-  });
-
-  test('handles amount greater than 1 (extrapolation)', () => {
-    expect(mapInterpolate2D([0, 0], [10, 10], 2)).toEqual([20, 20]);
-  });
-});
-
-// =============================================================================
-// mapToPolys
-// =============================================================================
-
-describe('mapToPolys', () => {
-  test('returns getPolygons() result when the geometry has a getPolygons method', () => {
-    const polys = [{ type: 'Polygon' }, { type: 'Polygon' }];
-    const geom = { getPolygons: () => polys };
-    expect(mapToPolys(geom)).toBe(polys);
-  });
-
-  test('wraps the geometry in an array when it does not have a getPolygons method', () => {
-    const geom = { type: 'Polygon' };
-    expect(mapToPolys(geom)).toEqual([geom]);
-  });
-});
-
-// =============================================================================
-// setVisibility
-// =============================================================================
-
-describe('setVisibility', () => {
-  describe('control layer (isControl = true)', () => {
-    test('calls setVisibility(true) when visible is true', () => {
-      const layer = { isControl: true, setVisibility: jest.fn() };
-      setVisibility(layer, true, 0.8);
-      expect(layer.setVisibility).toHaveBeenCalledWith(true);
-    });
-
-    test('calls setVisibility(false) when visible is false', () => {
-      const layer = { isControl: true, setVisibility: jest.fn() };
-      setVisibility(layer, false, 0.8);
-      expect(layer.setVisibility).toHaveBeenCalledWith(false);
-    });
-  });
-
-  describe('non-control layer (isControl = false / undefined)', () => {
-    const buildLayer = (isCurrentlyVisible = true) => ({
-      isControl: false,
-      div: { style: { opacity: null } },
-      getVisibility: jest.fn().mockReturnValue(isCurrentlyVisible),
-      setVisibility: jest.fn(),
-    });
-
-    test('sets div opacity to the given opacity when visible is true', () => {
-      const layer = buildLayer(true);
-      setVisibility(layer, true, 0.6);
-      expect(layer.div.style.opacity).toBe(0.6);
-    });
-
-    test('sets div opacity to 0 when visible is false', () => {
-      const layer = buildLayer(true);
-      setVisibility(layer, false, 0.6);
-      expect(layer.div.style.opacity).toBe(0);
-    });
-
-    test('calls setVisibility(true) when visible=true, opacity > 0 and layer is currently not visible', () => {
-      const layer = buildLayer(false); // currently invisible
-      setVisibility(layer, true, 0.5);
-      expect(layer.setVisibility).toHaveBeenCalledWith(true);
-    });
-
-    test('does not call setVisibility when layer is already visible', () => {
-      const layer = buildLayer(true); // already visible
-      setVisibility(layer, true, 0.9);
-      expect(layer.setVisibility).not.toHaveBeenCalled();
-    });
-
-    test('does not call setVisibility when visible is true but opacity is 0', () => {
-      const layer = buildLayer(false);
-      setVisibility(layer, true, 0);
-      expect(layer.setVisibility).not.toHaveBeenCalled();
-    });
-
-    test('does not call setVisibility when visible is false', () => {
-      const layer = buildLayer(false);
-      setVisibility(layer, false, 0.8);
-      expect(layer.setVisibility).not.toHaveBeenCalled();
-    });
-  });
-});
-
-// =============================================================================
-// setOpacity
-// =============================================================================
-
-describe('setOpacity', () => {
-  test('always calls layer.setOpacity with the given value', () => {
-    const layer = { setOpacity: jest.fn(), transitionEffect: 'resize', originalTransitionEffect: undefined };
-    setOpacity(layer, 0.5);
-    expect(layer.setOpacity).toHaveBeenCalledWith(0.5);
-  });
-
-  describe('when opacity is exactly 1', () => {
-    test('restores transitionEffect to originalTransitionEffect', () => {
-      const layer = { setOpacity: jest.fn(), transitionEffect: 'none', originalTransitionEffect: 'resize' };
-      setOpacity(layer, 1);
-      expect(layer.transitionEffect).toBe('resize');
-    });
-
-    test('defaults transitionEffect to "resize" when originalTransitionEffect is not set', () => {
-      const layer = { setOpacity: jest.fn(), transitionEffect: 'none', originalTransitionEffect: undefined };
-      setOpacity(layer, 1);
-      expect(layer.transitionEffect).toBe('resize');
-    });
-  });
-
-  describe('when opacity is not 1', () => {
-    test('saves current transitionEffect to originalTransitionEffect', () => {
-      const layer = { setOpacity: jest.fn(), transitionEffect: 'resize', originalTransitionEffect: undefined };
-      setOpacity(layer, 0.5);
-      expect(layer.originalTransitionEffect).toBe('resize');
-    });
-
-    test('sets transitionEffect to "none"', () => {
-      const layer = { setOpacity: jest.fn(), transitionEffect: 'resize', originalTransitionEffect: undefined };
-      setOpacity(layer, 0.5);
-      expect(layer.transitionEffect).toBe('none');
-    });
-
-    test('also sets transitionEffect to "none" for opacity of 0', () => {
-      const layer = { setOpacity: jest.fn(), transitionEffect: 'resize', originalTransitionEffect: undefined };
-      setOpacity(layer, 0);
-      expect(layer.transitionEffect).toBe('none');
-    });
-  });
-});
-
-// =============================================================================
-// getLayerByName
-// =============================================================================
-
-describe('getLayerByName', () => {
-  const buildMap = (layers) => ({
-    getLayers: () => ({ getArray: () => layers }),
-  });
-
-  test('returns the matching layer when found by wvname', () => {
-    const layerA = { wvname: 'layer-a' };
-    const layerB = { wvname: 'layer-b' };
-    const map = buildMap([layerA, layerB]);
-    expect(getLayerByName(map, 'layer-b')).toBe(layerB);
-  });
-
-  test('returns undefined when no layer matches the given name', () => {
-    const layerA = { wvname: 'layer-a' };
-    const map = buildMap([layerA]);
-    expect(getLayerByName(map, 'nonexistent')).toBeUndefined();
-  });
-
-  test('returns undefined when the layers array is empty', () => {
-    const map = buildMap([]);
-    expect(getLayerByName(map, 'any-layer')).toBeUndefined();
-  });
-
-  test('returns the first matching layer when multiple layers share the same wvname', () => {
-    const layerA1 = { wvname: 'layer-a', index: 1 };
-    const layerA2 = { wvname: 'layer-a', index: 2 };
-    const map = buildMap([layerA1, layerA2]);
-    expect(getLayerByName(map, 'layer-a')).toBe(layerA1);
+  test('does not save rotation for the geographic projection', () => {
+    const self = mapModel(buildModels('geographic'), buildConfig({}));
+    self.rotation = Math.PI / 2;
+    const stateObj = {};
+    self.save(stateObj);
+    expect(stateObj.r).toBeUndefined();
   });
 });

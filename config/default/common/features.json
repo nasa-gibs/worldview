@@ -35,7 +35,8 @@
                 "POCLOUD": "PO.DAAC",
                 "SEDAC": "SEDAC",
                 "AERONET": "AERONET"
-            }
+            },
+            "skipLayers": []
         },
         "cmr": {
             "url": "https://cmr.earthdata.nasa.gov/search/"

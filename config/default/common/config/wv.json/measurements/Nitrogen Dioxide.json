@@ -18,7 +18,7 @@
                 "TEMPO": {
                     "id": "tempo",
                     "title": "TEMPO",
-                    "description": "",
+                    "description": "tempo/NitrogenDioxide",
                     "image": "",
                     "settings": [
                         "TEMPO_L2_NO2_Vertical_Column_Stratosphere_Granule",
@@ -40,7 +40,7 @@
               "ASIA-AQ": {
                   "id": "asia-aq",
                   "title": "ASIA-AQ",
-                  "description": "",
+                  "description": "tempo/NitrogenDioxide",
                   "image": "",
                   "settings": [
 		         "ASIA-AQ_DC-8_NO2"

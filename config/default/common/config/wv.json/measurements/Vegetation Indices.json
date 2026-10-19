@@ -3,7 +3,7 @@
         "Vegetation Indices": {
             "id": "vegetation-indices",
             "title":    "Vegetation Indices",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, Harmonized Landsat Sentinel-2 (HLS), Landsat/WELD, Terra/MISR",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Suomi NPP/VIIRS, NOAA-20/VIIRS, NOAA-21/VIIRS, Harmonized Landsat Sentinel-2 (HLS), Landsat/WELD, Terra/MISR",
             "sources": {
                   "Aqua/MODIS": {
                       "id": "aqua-modis",
@@ -38,7 +38,11 @@
                     "image": "",
                     "settings": [
                         "VIIRS_SNPP_NDVI_8Day",
-                        "VIIRS_SNPP_EVI_8Day"
+                        "VIIRS_SNPP_EVI_8Day",
+                        "VIIRS_SNPP_L3_EVI_16Day",
+                        "VIIRS_SNPP_L3_NDVI_16Day",
+                        "VIIRS_SNPP_L3_EVI_Monthly",
+                        "VIIRS_SNPP_L3_NDVI_Monthly"
                     ]
                 },
                 "NOAA-20/VIIRS": {
@@ -48,10 +52,24 @@
                     "image": "",
                     "settings": [
                         "VIIRS_NOAA20_NDVI_8Day",
-                        "VIIRS_NOAA20_EVI_8Day"
+                        "VIIRS_NOAA20_EVI_8Day",
+                        "VIIRS_NOAA20_L3_EVI_16Day",
+                        "VIIRS_NOAA20_L3_NDVI_16Day",
+                        "VIIRS_NOAA20_L3_EVI_Monthly",
+                        "VIIRS_NOAA20_L3_NDVI_Monthly"
                     ]
                 },
-                "HLS-Sentinel2": {
+                "NOAA-21/VIIRS": {
+                    "id": "noaa-21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "viirs/VegetationIndices",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_NDVI_8Day",
+                        "VIIRS_NOAA21_EVI_8Day"
+                    ]
+                },
+                "HLS-Sentinel": {
                     "id": "HLS: Sentinel-2",
                     "title": "HLS: Sentinel-2/MSI",
                     "description": "multi-mission/hls/Reflectance",
@@ -70,7 +88,7 @@
                         "OrbitTracks_Sentinel-2B_Descending"
                     ]
                 },
-                "HLS-Landsat8": {
+                "HLS-Landsat": {
                     "id": "HLS: Landsat 8 & 9",
                     "title": "HLS: Landsat 8 & 9/OLI",
                     "description": "",

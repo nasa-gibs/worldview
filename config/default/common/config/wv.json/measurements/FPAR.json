@@ -3,12 +3,12 @@
         "FPAR": {
             "id": "fpar",
             "title":    "Fraction of Photosynthetically Active Radiation",
-            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS",
+            "subtitle": "Aqua/MODIS, Terra/MODIS, Aqua and Terra/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
                 "Aqua/MODIS": {
                     "id": "aqua-modis",
                     "title": "Aqua/MODIS",
-                    "description": "modis/FPAR",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Aqua_L4_FPAR_8Day"
@@ -17,7 +17,7 @@
                 "Terra/MODIS": {
                     "id": "terra-modis",
                     "title": "Terra/MODIS",
-                    "description": "modis/FPAR",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Terra_L4_FPAR_8Day"
@@ -26,11 +26,29 @@
                 "Aqua and Terra/MODIS": {
                     "id": "aqua-terra-modis",
                     "title": "Aqua and Terra/MODIS",
-                    "description": "modis/FPAR",
+                    "description": "",
                     "image": "",
                     "settings": [
                         "MODIS_Combined_L4_FPAR_4Day",
                         "MODIS_Combined_L4_FPAR_8Day"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa-20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_L4_FPAR_8Day"
+                    ]
+                },
+                "Suomi NPP/VIIRS": {
+                    "id": "suomi-npp-viirs",
+                    "title": "Suomi NPP/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_SNPP_L4_FPAR_8Day"
                     ]
                 }
             }

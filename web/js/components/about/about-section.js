@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 export default function AboutSection(props) {
@@ -29,7 +29,10 @@ export default function AboutSection(props) {
     return controller ? controller.abort() : null;
   };
 
-  fetchHTML();
+  useEffect(() => {
+    return fetchHTML();
+  }, [section]);
+
   return (
     <div dangerouslySetInnerHTML={{ __html: sectionDescription }} />
   );

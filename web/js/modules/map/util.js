@@ -240,7 +240,7 @@ function promiseLayerGroup(layerGroup, map) {
  * @method promiseImageryForTime
  * @return {object} Promise
  */
-export async function promiseImageryForTime(state, date, activeString) {
+export async function promiseImageryForTime(state, date, activeString, isAutoAnimation = false) {
   const { map } = state;
   if (!map.ui.proj) return undefined;
   const {
@@ -248,7 +248,7 @@ export async function promiseImageryForTime(state, date, activeString) {
   } = map.ui;
   const layers = getActiveVisibleLayersAtDate(state, date, activeString);
   await Promise.all(layers.map(async (layer) => {
-    if (layer.type === 'granule' || layer.type === 'titiler') {
+    if ((layer.type === 'granule' && !isAutoAnimation) || layer.type === 'titiler') {
       return Promise.resolve();
     }
     const options = { date, group: activeString };

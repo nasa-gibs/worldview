@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
-const { mockEvents } = require('../../test-utils/global-variables/querystrings')
+const { mockEvents, malformedMockEvents } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
 /** @type {import('@playwright/test').Page} */
@@ -52,3 +52,14 @@ test('Use Mock to make sure appropriate number of event markers are appended to 
   await expect(listOfEvents).toBeVisible()
   await expect(eventIcons).toHaveCount(8)
 })
+
+test('Gracefully handle malformed EONET mock data without crashing', async () => {
+  const { eventIcons, listOfEvents } = selectors;
+
+  await page.goto(malformedMockEvents);
+  await closeModal(page);
+
+  await expect(listOfEvents).toBeVisible();
+
+  await expect(eventIcons).toHaveCount(6);
+});

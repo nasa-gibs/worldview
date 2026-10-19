@@ -67,9 +67,10 @@ const outputFile = argv.layerMetadata
 const metadataConfig = features.features.vismetadata
 const url = metadataConfig.url
 const daacMap = metadataConfig.daacMap || {}
+const configuredSkipLayers = metadataConfig.skipLayers || []
 
-// These are alias or otherwise layers that don't exist in GIBS
-const skipLayers = [
+// These are aliases or otherwise layers that don't exist in GIBS
+const defaultSkipLayers = [
   'Land_Water_Map',
   'Land_Mask',
   'World_Database_on_Protected_Areas',
@@ -114,8 +115,19 @@ const skipLayers = [
   'EUMETSAT_RING_Ash_RGB',
   'EUMETSAT_RING_Dust_RGB',
   'EUMETSAT_RING_Natural_Color_RGB',
-  'EUMETSAT_RING_IR108'
+  'EUMETSAT_RING_IR108',
+  'EUMETSAT_MSG_0Deg_Natural_Color_Enhanced_RGB_15min',
+  'EUMETSAT_MSG_IDOC_Natural_Color_Enhanced_RGB_15min',
+  'EUMETSAT_MTG_0Deg_GeoColor_RGB_10min',
+  'EUMETSAT_MTG_0Deg_IR105_10min',
+  'EUMETSAT_MSG_IDOC_IR108_10min',
+  'OPERA_L2_Radiometric_Terrain_Corrected_SAR_Sentinel-1_12Day',
+  'NISAR_L2_Geocoded_Polarimetric_Covariance_12Day',
+  'Admin_Boundaries',
+  'DoS_International_Boundaries'
 ]
+
+const skipLayers = defaultSkipLayers.concat(configuredSkipLayers)
 
 // NOTE: Only using these properties at this time
 const useKeys = [
@@ -135,11 +147,20 @@ async function main (url) {
   layerOrder = layerOrder.filter(x => !skipLayers.includes(x))
 
   console.warn(`${prog}: Fetching ${layerOrder.length} layer-metadata files`)
-  const promises = layerOrder.map((layerId) => {
-    if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
-    return Promise.reject(new Error(`Skipped layer: ${layerId}`))
-  })
-  const results = await Promise.allSettled(promises)
+
+  const BATCH_SIZE = 15
+  const results = []
+
+  for (let i = 0; i < layerOrder.length; i += BATCH_SIZE) {
+    const chunk = layerOrder.slice(i, i + BATCH_SIZE)
+    const chunkPromises = chunk.map((layerId) => {
+      if (!layerId.includes('_STD') && !layerId.includes('_NRT')) return getMetadata(layerId, url)
+      return Promise.reject(new Error(`Skipped layer: ${layerId}`))
+    })
+    const chunkResults = await Promise.allSettled(chunkPromises)
+    results.push(...chunkResults)
+  }
+
   const { fulfilled = [], rejected = [] } = Object.groupBy(results, (item) => item.status)
 
   rejected.forEach(({ reason }) => {
@@ -210,18 +231,24 @@ async function getMetadata (layerId, baseUrl, count) {
     }
     return [layerId, daac]
   } catch (error) {
-    return await handleException(error, layerId, url, count)
+    return await handleException(error, layerId, baseUrl, count)
   }
 }
 
 async function handleException (error, layerId, url, count) {
+  if (error.response && error.response.status === 404) {
+    console.warn(`\n ${prog} WARN: Layer ${layerId} not found (404) at ${url}${layerId}.json`)
+    return Promise.reject(new Error(`Layer ${layerId} returned 404`))
+  }
+
   if (!count) count = 0
   count++
   if (count <= 5) {
     return getMetadata(layerId, url, count)
   } else {
     console.warn(`\n ${prog} WARN: Unable to fetch ${layerId} ${error}`)
-    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${error}`))
+    const msg = error.msg || error
+    return Promise.reject(new Error(`Failed to fetch layer ${layerId}: ${msg}`))
   }
 }
 

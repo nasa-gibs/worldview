@@ -11,7 +11,7 @@
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "disableCustomPalettes": true,
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
@@ -27,7 +27,7 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "alt",
+        "property": "Altitude",
         "order": "descending"
       },
       "breakPointLayer": {
@@ -39,6 +39,10 @@
           "geographic": {
             "source": "GIBS:wms",
             "resolutionBreakPoint": 0.017578125
+          },
+          "arctic": {
+            "source": "GIBS:wms:arctic",
+            "resolutionBreakPoint": 200
           }
         }
       }

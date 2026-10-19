@@ -1,66 +1,49 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Tooltip } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import util from '../../util/util';
 
-export default class VectorMetaTooltip extends React.Component {
-  constructor(props) {
-    super(props);
+export default function VectorMetaTooltip(props) {
+  const {
+    id,
+    index,
+    description,
+  } = props;
 
-    this.toggle = this.toggle.bind(this);
-    this.mouseEnter = this.mouseEnter.bind(this);
-    this.mouseLeave = this.mouseLeave.bind(this);
-    this.state = {
-      tooltipOpen: false,
-    };
+  const [tooltipOpen, setTooltipOpen] = useState(false);
+
+  function mouseEnter() {
+    setTooltipOpen(true);
   }
 
-  toggle() {
-    this.setState((prevState) => ({
-      tooltipOpen: !prevState.tooltipOpen,
-    }));
+  function mouseLeave() {
+    setTooltipOpen(false);
   }
 
-  mouseEnter() {
-    this.setState({
-      tooltipOpen: true,
-    });
-  }
+  const elId = util.cleanId(String(`tooltip${id}${index}`));
 
-  mouseLeave() {
-    this.setState({
-      tooltipOpen: false,
-    });
-  }
-
-  render() {
-    const { id, index, description } = this.props;
-    const elId = util.cleanId(String(`tooltip${id}${index}`));
-    const { tooltipOpen } = this.state;
-
-    return (
-      <div
-        className="vector-info-tooltip-case"
-        onMouseEnter={this.mouseEnter}
-        onMouseLeave={this.mouseLeave}
-        key={elId}
-      >
-        <div id={elId} className="sub-case">
-          <FontAwesomeIcon icon="info" className="vector-info-icon cursor-pointer" widthAuto />
-        </div>
-        <Tooltip
-          id="center-align-tooltip"
-          dangerouslySetInnerHTML={{ __html: description }}
-          boundariesElement="window"
-          placement="right"
-          isOpen={tooltipOpen}
-          target={elId}
-          fade={false}
-        />
+  return (
+    <div
+      className="vector-info-tooltip-case"
+      onMouseEnter={mouseEnter}
+      onMouseLeave={mouseLeave}
+      key={elId}
+    >
+      <div id={elId} className="sub-case">
+        <FontAwesomeIcon icon="info" className="vector-info-icon cursor-pointer" widthAuto />
       </div>
-    );
-  }
+      <Tooltip
+        id="center-align-tooltip"
+        dangerouslySetInnerHTML={{ __html: description }}
+        boundariesElement="window"
+        placement="right"
+        isOpen={tooltipOpen}
+        target={elId}
+        fade={false}
+      />
+    </div>
+  );
 }
 
 VectorMetaTooltip.propTypes = {

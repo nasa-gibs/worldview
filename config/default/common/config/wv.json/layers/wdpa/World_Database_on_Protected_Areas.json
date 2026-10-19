@@ -12,6 +12,7 @@
       "format": "image/png",
       "type": "xyz",
       "disableSnapshot": true,
+      "disableGIF": true,
       "layergroup": "Reference",
       "wrapX": true,
       "maxZoom": 12,

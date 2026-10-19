@@ -1,5 +1,5 @@
 <h2>Acknowledgements</h2>
-<p>With over 1000 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard
+<p>With over 1200 imagery layers, Worldview acknowledges the data providers of the near real-time (NRT) and standard
         quality imagery layers.</p>
 <p>While Worldview provides the highest priority products/parameters as decided by the data providers and users, not
         all NASA standard products (or all parameters within each product) are available via Worldview, see <a
@@ -9,29 +9,41 @@
                 target="_blank" rel="noopener noreferrer">Land, Atmosphere Near Real-Time Capability for Earth observation (LANCE)</a> data providers:
 </p>
 <ul>
-        <li>AMSR2 and ISS LIS layers from <a
-                        href="https://www.earthdata.nasa.gov/centers/amsr-sips"
-                        target="_blank" rel="noopener noreferrer">AMSR SIPS</a> </li>
-        <li>VIIRS-Atmosphere layers from <a href="https://www.earthdata.nasa.gov/centers/atmosphere-sips" target="_blank"
-                        rel="noopener noreferrer">Atmosphere SIPS</a> </li>
-        <li>MISR layers from <a href="https://www.earthdata.nasa.gov/centers/asdc-daac" target="_blank"
-                        rel="noopener noreferrer">ASDC</a> </li>
         <li>AIRS and MLS layers from <a
                         href="https://www.earthdata.nasa.gov/centers/gesdisc-daac"
                         target="_blank" rel="noopener noreferrer">GES DISC</a> and <a href="https://www.earthdata.nasa.gov/centers/mls-sips" target="_blank" rel="noopener noreferrer">MLS SIPS</a></li>
+        <li>MODIS and VIIRS Fires and Thermal Anomalies layers from <a
+                        href="https://www.earthdata.nasa.gov/data/tools/firms" target="_blank"
+                        rel="noopener noreferrer">FIRMS</a> </li>
         <li>MODIS and VIIRS-Land layers from <a
                         href="https://www.earthdata.nasa.gov/centers/modaps-sips"
                         target="_blank" rel="noopener noreferrer">MODAPS SIPS</a> and <a href="https://www.earthdata.nasa.gov/centers/land-sips" target="_blank" rel="noopener noreferrer">Land SIPS</a></li>
-        <li>MOPITT layer from <a href="https://www.earthdata.nasa.gov/centers/mopitt-sips" target="_blank"
-                        rel="noopener noreferrer">MOPITT SIPS</a> </li>
+        <li>VIIRS-Atmosphere layers from <a href="https://www.earthdata.nasa.gov/centers/atmosphere-sips" target="_blank"
+                        rel="noopener noreferrer">Atmosphere SIPS</a> </li>
         <li>OMI and OMPS layers from <a
                         href="https://www.earthdata.nasa.gov/centers/omi-sips"
                         target="_blank" rel="noopener noreferrer">OMI SIPS</a> and <a
                         href="https://www.earthdata.nasa.gov/centers/omps-sips"
                         target="_blank" rel="noopener noreferrer">OMPS SIPS</a> </li>
-        <li>MODIS and VIIRS Fires and Thermal Anomalies layers from <a
-                        href="https://www.earthdata.nasa.gov/data/tools/firms" target="_blank"
-                        rel="noopener noreferrer">FIRMS</a> </li>
+        <li>SMAP layers from <a
+                        href="https://www.earthdata.nasa.gov/centers/nsidc-daac" target="_blank"
+                        rel="noopener noreferrer">NSIDC
+                        DAAC</a></li>
+        <li>PACE layers from  <a href="https://www.earthdata.nasa.gov/centers/ob-daac" target="_blank"
+                        rel="noopener noreferrer">OB.DAAC</a> </li>
+        <li>TEMPO layers from <a href="https://www.earthdata.nasa.gov/centers/asdc-daac" target="_blank"
+                        rel="noopener noreferrer">ASDC DAAC</a> </li>
+        <li>TROPOMI layers from <a
+                        href="https://www.earthdata.nasa.gov/centers/gesdisc-daac" target="_blank"
+                        rel="noopener noreferrer">GES
+                        DISC</a> </li>
+        <li>AMSR2 and ISS LIS NRT layers were available from <a
+                        href="https://www.earthdata.nasa.gov/centers/amsr-sips"
+                        target="_blank" rel="noopener noreferrer">AMSR SIPS</a> </li>
+        <li>MISR NRT layers were from <a href="https://www.earthdata.nasa.gov/centers/asdc-daac" target="_blank"
+                        rel="noopener noreferrer">ASDC</a> </li>
+        <li>MOPITT NRT layer was from <a href="https://www.earthdata.nasa.gov/centers/mopitt-sips" target="_blank"
+                        rel="noopener noreferrer">MOPITT SIPS</a> </li>
 </ul>
 <p>Standard quality/ Science quality imagery is courtesy of the <a href="https://www.earthdata.nasa.gov/centers"
                 target="_blank" rel="noopener noreferrer">ESDIS Distributed Active Archive Centers (DAACs)</a>:</p>
@@ -48,7 +60,7 @@
                         href="https://www.earthdata.nasa.gov/centers/laads-daac" target="_blank"
                         rel="noopener noreferrer">LAADS
                         DAAC</a></li>
-        <li>Web Enabled Landsat Data (WELD) layers and Digital Elevation Models (DEMs) layers from <a
+        <li>OPERA Disturbance, Web Enabled Landsat Data (WELD) layers and Digital Elevation Models (DEMs) layers from <a
                         href="https://www.earthdata.nasa.gov/centers/lp-daac" target="_blank"
                         rel="noopener noreferrer">LP
                         DAAC</a></li>
@@ -60,11 +72,10 @@
                         rel="noopener noreferrer">OB.DAAC</a></li>
         <li>Daymet layers from <a href="https://www.earthdata.nasa.gov/centers/ornl-daac" target="_blank"
                         rel="noopener noreferrer">ORNL DAAC</a></li>
-        <li>Ocean related layers like Sea Surface Temperature, Sea Surface Height and Sea Surface Salinity from <a
+        <li>Ocean related layers like Sea Surface Temperature, Sea Surface Height and Sea Surface Salinity, OPERA Dynamic Surface Water Extent from <a
                         href="https://www.earthdata.nasa.gov/centers/po-daac" target="_blank"
                         rel="noopener noreferrer">PO.DAAC</a></li>
-        <li>Socioeconomic layers from <a href="https://www.earthdata.nasa.gov/centers/sedac-daac" target="_blank"
-                        rel="noopener noreferrer">SEDAC</a></li>
+        <li>Radar related (NISAR and Sentinel-1) layers from <a href="https://www.earthdata.nasa.gov/centers/asf-daac"target="_blank" rel="noopener noreferrer">ASF DAAC</a></li>
 </ul>
 <p>There are also many DAAC-specific tools for working directly with the data as listed here.</p>
 <p>Please also note that Worldview provides the “best available” layer information to users; this often means
@@ -83,6 +94,7 @@
                         rel="noopener noreferrer">Short-term Prediction Research and Transition Center (SPoRT)</a> at
                 NASA
                 Marshall Space Flight Center.</li>
+        <li>Geostationary Ring imagery layers (Natural Color, Infrared, Air Mass, Volcanic Ash, Dust) are accessed through an API service provided by the European Organisation for the Exploitation of Meteorological Satellites (<a href="http://www.eumetsat.int/" target="_blank" rel="noopener noreferrer">EUMETSAT</a>).
         <li>Precipitation products provided by <a href="https://pps.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Precipitation Processing System (PPS)</a> and <a
                         href="https://www.earthdata.nasa.gov/centers/amsr-sips"
@@ -94,12 +106,11 @@
                         href="https://www.openstreetmap.org/" target="_blank"
                         rel="noopener noreferrer">OpenStreetMap</a>, and <a href="https://www.polarview.aq/"
                         target="_blank" rel="noopener noreferrer">PolarView</a>.</li>
-        <li>Coastlines, borders, and roads courtesy of <a href="https://www.openstreetmap.org/"
-                        target="_blank" rel="noopener noreferrer">OpenStreetMap</a> and <a
-                        href="https://www.naturalearthdata.com/" target="_blank" rel="noopener noreferrer">Natural
-                        Earth</a>.
-                This data is available under the <a href="https://www.openstreetmap.org/copyright" target="_blank"
+        <li>Coastlines courtesy of <a href="https://www.openstreetmap.org/"
+                        target="_blank" rel="noopener noreferrer">OpenStreetMap</a>. This data is available under the <a href="https://www.openstreetmap.org/copyright" target="_blank"
                         rel="noopener noreferrer">Open Database License</a>. © OpenStreetMap contributors.</li>
+        <li>International boundaries courtesy of the <a href="https://geodata.state.gov/geonetwork/srv/eng/catalog.search#/metadata/3bdb81a0-c1b9-439a-a0b1-85dac30c59b2" target="_blank"
+                        rel="noopener noreferrer">U.S. Department of State, Office of the Geographer and Global Issues</a>.</li>
         <li>Place labels are courtesy of Esri, TomTom, Garmin, FAO, NOAA, USGS, © OpenStreetMap contributors, and the GIS User Community via the <a href="https://www.arcgis.com/home/item.html?id=a70340a048224752915ddbed9d2101a7">Hybrid Reference Layer (WGS84)</a>. Alignment of boundaries is a presentation of the feature provided by our data vendors and does not imply endorsement by Esri or any governing authority.</li>
         <li>Natural events database is provided by the <a href="https://eonet.gsfc.nasa.gov/" target="_blank"
                         rel="noopener noreferrer">Earth Observatory Natural Event Tracker (EONET)</a>.</li>
