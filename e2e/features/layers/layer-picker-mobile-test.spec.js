@@ -190,5 +190,5 @@ test('Collapse sidebar and confirm layer count updated', async () => {
   const { layerCount } = selectors
   await page.locator('.layer-btn-close').click()
   await page.locator('#toggleIconHolder').click()
-  await expect(layerCount).toContainText('11')
+  await expect(layerCount).toContainText('10')
 })

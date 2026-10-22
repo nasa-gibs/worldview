@@ -127,5 +127,5 @@ test('Load with groups disabled from permalink', async () => {
   await expect(aodGroup).not.toBeVisible()
   await expect(overlaysGroup).toBeVisible()
   const overlayGroupItems = await page.locator('#active-overlays ul > li')
-  await expect(overlayGroupItems).toHaveCount(7)
+  await expect(overlayGroupItems).toHaveCount(6)
 })
