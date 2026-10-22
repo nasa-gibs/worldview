@@ -236,9 +236,9 @@ const CoverageItemList = ({
   * @param {Object} range
   * @param {Object} endDateLimit
   * @param {Boolean} isLastInRange
-  * @returns {Array} dateIntervalStartDates
+  * @returns {Promise<Array>} dateIntervalStartDates
   */
-  const getDatesInDateRange = (def, range, endDateLimit, isLastInRange) => {
+  const getDatesInDateRange = async (def, range, endDateLimit, isLastInRange) => {
     const {
       futureTime, period, id, ongoing,
     } = def;
@@ -283,7 +283,7 @@ const CoverageItemList = ({
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
       if (cache[id][layerIdDates] === undefined) {
-        dateIntervalStartDates = datesInDateRanges(
+        dateIntervalStartDates = await datesInDateRanges(
           def,
           startDateLimit,
           startDateLimit,
