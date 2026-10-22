@@ -8,8 +8,8 @@ let page
 /** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
 const someGroupsQueryString = 'http://localhost:3000/?l=MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Labels_15m(hidden),Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true'
-const twoGroupsQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_SNPP_Thermal_Anomalies_375m_All,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true'
-const mixedLayersGroupsDisabledQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features_15m,VIIRS_SNPP_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false'
+const twoGroupsQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_Value_Added_AOD,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,Reference_Features_15m,MODIS_Terra_CorrectedReflectance_TrueColor&lg=true'
+const mixedLayersGroupsDisabledQueryString = 'http://localhost:3000/?v=-107.15747724134027,-81.6706340523014,47.81381180183274,89.12472754295932&l=Reference_Features_15m,MODIS_Combined_Value_Added_AOD,VIIRS_NOAA20_Thermal_Anomalies_375m_All,MODIS_Combined_MAIAC_L2G_AerosolOpticalDepth,MODIS_Terra_CorrectedReflectance_TrueColor&lg=false'
 
 test.describe.configure({ mode: 'serial' })
 
