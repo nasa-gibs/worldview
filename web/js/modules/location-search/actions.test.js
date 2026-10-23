@@ -7,6 +7,7 @@ import {
   setSuggestion,
   setPlaceMarker,
   removeMarker,
+  toggleIsHidden,
   setGeocodeResults,
   toggleDialogVisible,
   getSuggestions,
@@ -18,6 +19,7 @@ import {
   SET_SUGGESTION,
   SET_REVERSE_GEOCODE_RESULTS,
   REMOVE_MARKER,
+  TOGGLE_MARKER_HIDDEN,
   TOGGLE_DIALOG_VISIBLE,
   SET_MARKER,
 } from './constants';
@@ -112,6 +114,15 @@ describe('Location Search actions', () => {
       coordinates,
     };
     expect(removeMarker(coordinates)).toEqual(expectedAction);
+  });
+
+  test(`toggleIsHidden action dispatches ${TOGGLE_MARKER_HIDDEN} [locationsearch-actions-toggle-marker-hidden]`, () => {
+    const coordinates = { id: 123, longitude: -73.7075, latitude: 41.59, isHidden: false };
+    const expectedAction = {
+      type: TOGGLE_MARKER_HIDDEN,
+      coordinates,
+    };
+    expect(toggleIsHidden(coordinates)).toEqual(expectedAction);
   });
 
   test(`setGeocodeResults action returns ${SET_REVERSE_GEOCODE_RESULTS} as type and results as value [locationsearch-actions-set-geocode-results]`, () => {

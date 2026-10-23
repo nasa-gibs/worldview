@@ -26,7 +26,12 @@ const getDialogTitle = (geocodeProperties) => {
 };
 
 export default function LocationMarker ({
-  reverseGeocodeResults, removeMarker, coordinatesObject, isMobile, dialogVisible = true,
+  reverseGeocodeResults,
+  removeMarker,
+  toggleHiddenMarker,
+  coordinatesObject,
+  isMobile,
+  dialogVisible = true,
 }) {
   const { longitude, latitude } = coordinatesObject;
   const tooltipId = util.encodeId(`coordinates-map-marker_${longitude},${latitude}`);
@@ -34,14 +39,19 @@ export default function LocationMarker ({
   const title = getDialogTitle(reverseGeocodeResults);
   const [showDialog, setShowDialog] = useState(dialogVisible);
 
+  const toggleDialog = function(val) {
+    setShowDialog(val);
+    toggleHiddenMarker();
+  };
+
   return (
-    <div className="location-dialog-pin-wrapper ">
+    <div className="location-dialog-pin-wrapper">
       {showDialog && (
         <CoordinatesDialog
           title={title}
           coordinates={coordinates}
           removeMarker={removeMarker}
-          removeCoordinatesDialog={() => setShowDialog(false)}
+          removeCoordinatesDialog={() => toggleDialog(false)}
           isMobile={isMobile}
           tooltipId={tooltipId}
         />
@@ -51,7 +61,7 @@ export default function LocationMarker ({
         src="images/map-pin.png"
         height="32"
         width="20"
-        onClick={() => setShowDialog(true)}
+        onClick={() => toggleDialog(true)}
       />
     </div>
   );
@@ -60,6 +70,7 @@ export default function LocationMarker ({
 LocationMarker.propTypes = {
   reverseGeocodeResults: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isMobile: PropTypes.bool,
+  toggleHiddenMarker: PropTypes.func,
   coordinatesObject: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
   dialogVisible: PropTypes.bool,

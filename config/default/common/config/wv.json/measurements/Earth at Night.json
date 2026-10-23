@@ -3,8 +3,29 @@
         "Earth at Night": {
             "id": "earth-at-night",
             "title":    "Earth at Night",
-            "subtitle": "Suomi NPP/VIIRS, NOAA-21/VIIRS, NOAA-20/VIIRS",
+            "subtitle": "NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS",
             "sources": {
+                 "NOAA-21/VIIRS": {
+                    "id": "noaa-21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_DayNightBand"
+                    ]
+                },
+                "NOAA-20/VIIRS": {
+                    "id": "noaa-20-viirs",
+                    "title": "NOAA-20/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA20_DayNightBand",
+                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
+                        "VIIRS_NOAA20_GapFilled_BRDF_Corrected_DayNightBand_Radiance"
+                    ]
+                },
                 "Suomi NPP/VIIRS": {
                     "id": "suomi-npp-viirs",
                     "title": "Suomi NPP/VIIRS",
@@ -19,18 +40,6 @@
                         "VIIRS_Night_Lights",
                         "VIIRS_Black_Marble",
                         "VIIRS_CityLights_2012"
-                    ]
-                },
-                "NOAA-20/VIIRS": {
-                    "id": "noaa-20-viirs",
-                    "title": "NOAA-20/VIIRS",
-                    "description": "",
-                    "image": "",
-                    "settings": [
-                        "VIIRS_NOAA20_DayNightBand",
-                        "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
-                        "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
-                        "VIIRS_NOAA20_GapFilled_BRDF_Corrected_DayNightBand_Radiance"
                     ]
                 }
             }

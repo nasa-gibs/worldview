@@ -10,10 +10,6 @@
                 "hidden": "true"
             },
             {
-                "id": "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                "hidden": "true"
-            },
-            {
                 "id": "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                 "hidden": "true"
             },
