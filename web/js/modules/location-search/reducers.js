@@ -1,6 +1,7 @@
 import {
   CLEAR_SUGGESTIONS,
   REMOVE_MARKER,
+  TOGGLE_MARKER_HIDDEN,
   REQUEST_SUGGEST_PLACE_FAILURE,
   REQUEST_SUGGEST_PLACE_SUCCESS,
   SET_REVERSE_GEOCODE_RESULTS,
@@ -50,6 +51,18 @@ export function locationSearchReducer(state = locationSearchState, action) {
         ...state,
         coordinates: state.coordinates
           .filter((coordinate) => action.coordinates.id !== coordinate.id),
+      };
+    case TOGGLE_MARKER_HIDDEN:
+      return {
+        ...state,
+        coordinates: state.coordinates
+          .map((coordinate) => action.coordinates.id !== coordinate.id
+            ? coordinate
+            : {
+              ...coordinate,
+              isHidden: !coordinate.isHidden,
+            },
+          ),
       };
     case SET_SUGGESTION:
       return {
