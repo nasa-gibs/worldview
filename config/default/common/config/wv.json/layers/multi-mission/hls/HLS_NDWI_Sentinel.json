@@ -5,7 +5,7 @@
         "enableCMRDataFinder": true,
         "collectionConceptID": "C2021957295-LPCLOUD",
         "title": "Water Index (NDWI) *BETA*",
-        "subtitle": "Sentinel-2 / MSI",
+        "subtitle": "HLS Sentinel-2 / MSI",
         "description": "multi-mission/hls/HLS_NDWI_Sentinel",
         "tags": "surface Sentinel msi s30 ndwi 2A 2B 2C",
         "group": "overlays",
