@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_DayNightBand": {
+      "id": "VIIRS_NOAA21_DayNightBand",
+      "description": "viirs/noaa21/VIIRS_NOAA21_DayNightBand",
+      "tags": "dnb night jpss-2 lights city urban nighttime black marble",
+      "layergroup": "Earth at Night",
+      "group": "overlays"
+    }
+  }
+}

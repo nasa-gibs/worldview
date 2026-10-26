@@ -20,27 +20,27 @@ test.afterAll(async () => {
 })
 
 test('Make sure that 4 fire layers are not present in layer list: use mock', async () => {
-  const { sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
+  const { sidebarEvent, thermAnomNOAA21day, thermAnomNOAA21night, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
   await closeModal(page)
   await page.waitForTimeout(500)
   await expect(sidebarEvent).toBeVisible()
-  await expect(thermAnomSNPPday).not.toBeVisible()
-  await expect(thermAnomSNPPnight).not.toBeVisible()
+  await expect(thermAnomNOAA21day).not.toBeVisible()
+  await expect(thermAnomNOAA21night).not.toBeVisible()
   await expect(thermAnomVIIRSday).not.toBeVisible()
   await expect(thermAnomVIIRSnight).not.toBeVisible()
 })
 
 test('Check that 4 fire layers are now present', async ({ browserName }) => {
   test.skip(browserName === 'firefox', 'firefox cant find iceberg event sometimes')
-  const { layersTab, sidebarEvent, thermAnomSNPPday, thermAnomSNPPnight, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
+  const { layersTab, sidebarEvent, thermAnomNOAA21day, thermAnomNOAA21night, thermAnomVIIRSday, thermAnomVIIRSnight } = selectors
   await page.goto(mockEvents)
   await closeModal(page)
   await page.waitForTimeout(1000)
   await sidebarEvent.click()
   await layersTab.click()
-  await expect(thermAnomSNPPday).toBeVisible({ timeout: 10000 })
-  await expect(thermAnomSNPPnight).toBeVisible({ timeout: 10000 })
+  await expect(thermAnomNOAA21day).toBeVisible({ timeout: 10000 })
+  await expect(thermAnomNOAA21night).toBeVisible({ timeout: 10000 })
   await expect(thermAnomVIIRSday).toBeVisible({ timeout: 10000 })
   await expect(thermAnomVIIRSnight).toBeVisible({ timeout: 10000 })
 })
