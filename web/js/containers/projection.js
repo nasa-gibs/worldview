@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
@@ -49,17 +48,19 @@ const getInfoArray = function(projArray) {
   }));
 };
 
-class ProjectionList extends Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
+function ProjectionList(props) {
+  const {
+    updateProjection,
+    projection,
+    onCloseModal,
+    changeTimeScale,
+    changeAutoInterval,
+    layers,
+    projectionArray,
+    isMobile,
+  } = props;
 
-  onClick(id) {
-    const {
-      updateProjection, projection, onCloseModal, changeTimeScale, changeAutoInterval, layers,
-    } = this.props;
-
+  function onClick(id) {
     if (id !== projection) {
       updateProjection(id);
       const enableAuto = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
@@ -77,17 +78,14 @@ class ProjectionList extends Component {
     onCloseModal();
   }
 
-  render() {
-    const { projection, projectionArray, isMobile } = this.props;
-    return (
-      <IconList
-        list={projectionArray}
-        active={projection}
-        onClick={this.onClick}
-        size={isMobile ? 'large' : 'small'}
-      />
-    );
-  }
+  return (
+    <IconList
+      list={projectionArray}
+      active={projection}
+      onClick={onClick}
+      size={isMobile ? 'large' : 'small'}
+    />
+  );
 }
 
 const mapStateToProps = (state) => {
