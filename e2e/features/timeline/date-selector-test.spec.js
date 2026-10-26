@@ -185,7 +185,7 @@ test('Date selector up arrow rolls over from Feb 28 to 1 (non leap year) and the
 })
 
 test('Added future layer and right timeline arrow is not disabled', async () => {
-  const queryString = 'http://localhost:3000/?mockFutureLayer=VIIRS_SNPP_CorrectedReflectance_TrueColor,3D'
+  const queryString = 'http://localhost:3000/?mockFutureLayer=VIIRS_NOAA20_CorrectedReflectance_TrueColor,3D'
   await page.goto(queryString)
   await closeModal(page)
   const rightArrow = await page.locator('#right-arrow-group')

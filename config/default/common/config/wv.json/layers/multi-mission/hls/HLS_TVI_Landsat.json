@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Triangular Vegetation Index (TVI) *BETA*",
-      "subtitle": "Landsat 8 & 9 / OLI",
+      "subtitle": "HLS Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_TVI_Landsat",
       "tags": "surface landsat oli l30 tvi",
       "group": "overlays",

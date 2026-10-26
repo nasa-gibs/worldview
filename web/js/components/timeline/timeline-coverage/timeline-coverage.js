@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,104 +19,47 @@ import Switch from '../../util/switch';
 import LayerCoverageInfoModal from './info-modal';
 import CoverageItemList from './coverage-item-list';
 
-/*
- * Timeline Layer Coverage Panel for temporal coverage.
- *
- * @class TimelineLayerCoveragePanel
+/**
+ * @desc stop event from bubling to the timeline
+ * @param {*} e - event
+ * @returns {void}
  */
+const stopPropagation = (e) => {
+  e.nativeEvent.stopImmediatePropagation();
+  e.stopPropagation();
+  e.preventDefault();
+};
 
-class TimelineLayerCoveragePanel extends Component {
-  static stopPropagation(e) {
-    e.nativeEvent.stopImmediatePropagation();
-    e.stopPropagation();
-    e.preventDefault();
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeLayers: [],
-      shouldIncludeHiddenLayers: false,
-    };
-  }
-
-  componentDidMount() {
-    const { activeLayers } = this.props;
-    const { shouldIncludeHiddenLayers } = this.state;
-
-    const layers = this.getActiveLayers(activeLayers);
-    this.setActiveLayers(layers);
-    // prevent bubbling to parent which the wheel event
-    // is blocked for timeline zoom in/out wheel event
-    document.querySelector('.timeline-layer-coverage-container').addEventListener('wheel', (e) => e.stopPropagation(), { passive: false });
-    // init populate of activeLayers
-    this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, layers);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const {
-      timeScale,
-      frontDate,
-      backDate,
-    } = this.props;
-
-    // prevent repeated rendering on timescale change updates
-    if (nextProps.timeScale !== timeScale) {
-      const isFrontDateSame = nextProps.frontDate === frontDate;
-      const isBackDateSame = nextProps.backDate === backDate;
-      if (isFrontDateSame && isBackDateSame) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      appNow,
-      activeLayers,
-      isProductPickerOpen,
-      isTimelineLayerCoveragePanelOpen,
-      projection,
-    } = this.props;
-    const { shouldIncludeHiddenLayers } = this.state;
-
-    if (!prevProps.isProductPickerOpen && isProductPickerOpen && isTimelineLayerCoveragePanelOpen) {
-      this.togglePanelOpenClose();
-      return;
-    }
-
-    const updatedActiveLayers = this.getActiveLayers(activeLayers);
-
-    const layersChange = !lodashIsEqual(updatedActiveLayers, this.state.activeLayers);
-    const projectionChange = prevProps.projection !== projection;
-    const toggleHiddenChange = prevState.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
-    const appNowUpdated = prevProps.appNow !== appNow;
-    if (projectionChange || toggleHiddenChange || layersChange || appNowUpdated) {
-      // update coverage including layer added/removed and option changes (active/inactive)
-      this.setActiveLayers(updatedActiveLayers);
-      this.addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, updatedActiveLayers);
-    }
-  }
-
-  /**
-  * @desc set active layers
-  * @param {Array} layers
-  * @returns {void}
-  */
-  setActiveLayers = (layers) => {
-    this.setState({
-      activeLayers: layers,
-    });
-  };
+const TimelineLayerCoveragePanel = ({
+  activeLayers: allActiveLayers,
+  appNow,
+  axisWidth,
+  backDate,
+  frontDate,
+  isProductPickerOpen,
+  isTimelineLayerCoveragePanelOpen,
+  onInfoClick,
+  parentOffset,
+  positionTransformX,
+  projection,
+  setMatchingTimelineCoverage,
+  timelineStartDateLimit,
+  timeScale,
+  toggleLayerCoveragePanel,
+}) => {
+  const [activeLayers, setActiveLayers] = useState([]);
+  const [shouldIncludeHiddenLayers, setShouldIncludeHiddenLayers] = useState(false);
+  const containerRef = useRef(null);
+  const prevRef = useRef(null);
 
   /**
   * @desc get active layers
   * @param {Array} layers
   * @returns {Array}
+  *
+  * renamed from getActiveLayers to filterVisibleLayers so it does not conflict
   */
-  getActiveLayers = (layers) => {
-    const { shouldIncludeHiddenLayers } = this.state;
+  const filterVisibleLayers = (layers) => {
     return layers.filter((layer) => (shouldIncludeHiddenLayers ? true : layer.visible));
   };
 
@@ -127,22 +70,13 @@ class TimelineLayerCoveragePanel extends Component {
   * @param {String} rangeEnd
   * @returns {Array} visible, leftOffset, width, isWidthGreaterThanRendered
   */
-  getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
+  const getMatchingCoverageLineDimensions = (layer, rangeStart, rangeEnd) => {
     const {
-      appNow,
-      axisWidth,
-      backDate,
-      frontDate,
-      positionTransformX,
-      timeScale,
-      timelineStartDateLimit,
-    } = this.props;
-    const {
-      futureTime, ongoing,
+      futureTime, granuleDateRanges, ongoing, startDate, endDate,
     } = layer;
 
-    if (layer.granuleDateRanges?.length) {
-      return layer.granuleDateRanges.map(([startDate, endDate]) => {
+    if (granuleDateRanges?.length) {
+      return granuleDateRanges.map(([startDate, endDate]) => {
         const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
         const axisFrontDate = new Date(frontDate).getTime();
         const axisBackDate = new Date(backDate).getTime();
@@ -193,7 +127,6 @@ class TimelineLayerCoveragePanel extends Component {
         };
       });
     }
-    const { startDate, endDate } = layer;
     const { gridWidth } = timeScaleOptions[timeScale].timeAxis;
     const axisFrontDate = new Date(frontDate).getTime();
     const axisBackDate = new Date(backDate).getTime();
@@ -255,29 +188,8 @@ class TimelineLayerCoveragePanel extends Component {
   * @desc handle open/close modal from clicking handle
   * @returns {void}
   */
-  togglePanelOpenClose = () => {
-    const {
-      isTimelineLayerCoveragePanelOpen,
-      toggleLayerCoveragePanel,
-    } = this.props;
+  const togglePanelOpenClose = () => {
     toggleLayerCoveragePanel(!isTimelineLayerCoveragePanelOpen);
-  };
-
-  /**
-  * @desc add matching coverage to timeline
-  * @param {Boolean} isChecked
-  * @param {Array} layers
-  * @returns {void}
-  */
-
-  addMatchingCoverageToTimeline = async (isChecked, layers) => {
-    const { setMatchingTimelineCoverage } = this.props;
-    const dateRange = this.getNewMatchingDatesRange(layers);
-    setMatchingTimelineCoverage(dateRange, isChecked);
-    this.setState({
-      activeLayers: layers,
-      shouldIncludeHiddenLayers: isChecked,
-    });
   };
 
   /**
@@ -287,10 +199,7 @@ class TimelineLayerCoveragePanel extends Component {
     * @param {String} startDate
     * @param {String} endDate
   */
-  getNewMatchingDatesRange = (layers) => {
-    const {
-      appNow,
-    } = this.props;
+  const getNewMatchingDatesRange = (layers) => {
     if (layers.length > 0) {
       return layers.flatMap(({ granuleDateRanges, startDate, endDate }) => {
         if (!granuleDateRanges?.length) {
@@ -304,167 +213,179 @@ class TimelineLayerCoveragePanel extends Component {
   };
 
   /**
-  * @desc render info button for layer coverage panel coverage info modal
-  * @returns {DOM Object}
+  * @desc add matching coverage to timeline
+  * @param {Boolean} isChecked
+  * @param {Array} layers
+  * @returns {void}
   */
-  renderInfoButton = () => {
-    const { onInfoClick } = this.props;
-    const layerInfoBtnId = 'layer-coverage-info-button';
-    const layerInfoBtnTitle = 'Timeline Layer Coverage Information';
 
-    return (
+  const addMatchingCoverageToTimeline = async (isChecked, layers) => {
+    const dateRange = getNewMatchingDatesRange(layers);
+    setMatchingTimelineCoverage(dateRange, isChecked);
+    setActiveLayers(layers);
+    setShouldIncludeHiddenLayers(isChecked);
+  };
+
+  // componentDidMount
+  useEffect(() => {
+    const container = containerRef.current;
+    const onWheel = (e) => e.stopPropagation();
+    container.addEventListener('wheel', onWheel, {passive: false});
+
+    addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, filterVisibleLayers(allActiveLayers));
+
+    return () => {
+      container.removeEventListener('wheel', onWheel);
+    };
+  }, []);
+
+  // componentDidUpdate
+  useEffect(() => {
+    const prev = prevRef.current;
+    prevRef.current = {
+      appNow,
+      isProductPickerOpen,
+      projection,
+      shouldIncludeHiddenLayers,
+    };
+
+    // skip the first render
+    if (!prev) return;
+
+    if (!prev.isProductPickerOpen && isProductPickerOpen && isTimelineLayerCoveragePanelOpen) {
+      togglePanelOpenClose();
+      return;
+    }
+
+    const updatedActiveLayers = filterVisibleLayers(allActiveLayers);
+
+    const layersChange = !lodashIsEqual(updatedActiveLayers, activeLayers);
+    const projectionChange = prev.projection !== projection;
+    const toggleHiddenChange = prev.shouldIncludeHiddenLayers !== shouldIncludeHiddenLayers;
+    const appNowUpdated = prev.appNow !== appNow;
+    if (projectionChange || toggleHiddenChange || layersChange || appNowUpdated) {
+      // update coverage including layer added/removed and option changes (active/inactive)
+      addMatchingCoverageToTimeline(shouldIncludeHiddenLayers, updatedActiveLayers);
+    }
+  });
+
+  // conditional style properties
+  const maxHeightScrollBar = '203px';
+  const layerListItemHeightConstant = Math.max(1, activeLayers.length) * 41;
+  const layerCoveragePanelHandleTopOffset = `${Math.max(-54 - layerListItemHeightConstant, -259)}px`;
+
+  const mainContainerWidth = `${axisWidth + 1}px`;
+  const mainContainerHeight = `${Math.min(35 + layerListItemHeightConstant, 240)}px`;
+  const mainContainerLeftOffset = `${parentOffset - 10}px`;
+
+  // conditional classNames and label text
+  const isPanelOpenClassName = `timeline-layer-coverage-${isTimelineLayerCoveragePanelOpen ? 'open' : 'closed'}`;
+  const panelChevronClassName = `timeline-layer-coverage-panel-handle-chevron-${isTimelineLayerCoveragePanelOpen ? 'open' : 'closed'}`;
+  const panelToggleLabelText = isTimelineLayerCoveragePanelOpen ? 'Collapse layer coverage panel' : 'Show layer coverage panel';
+
+  // conditional style objects
+  const panelHandleStyle = {
+    right: Math.floor((axisWidth + 75) / 2),
+    top: isTimelineLayerCoveragePanelOpen ? layerCoveragePanelHandleTopOffset : '-19px',
+  };
+  const panelContainerStyle = {
+    width: mainContainerWidth,
+    height: isTimelineLayerCoveragePanelOpen ? mainContainerHeight : 0,
+    left: mainContainerLeftOffset,
+    display: isTimelineLayerCoveragePanelOpen ? 'block' : 'none',
+  };
+  const layerCoverageStyle = { width: mainContainerWidth };
+  const scrollbarStyle = { maxHeight: maxHeightScrollBar };
+
+  const layerInfoBtnId = 'layer-coverage-info-button';
+  const layerInfoBtnTitle = 'Timeline Layer Coverage Information';
+
+  return (
+    <>
+      {/* Timeline Layer Coverage Panel open/close handle */}
       <button
         type="button"
-        id={layerInfoBtnId}
-        aria-label={layerInfoBtnTitle}
-        className={layerInfoBtnId}
-        onMouseDown={TimelineLayerCoveragePanel.stopPropagation}
-        onClick={() => onInfoClick()}
+        id="timeline-layer-coverage-panel-handle"
+        aria-label={panelToggleLabelText}
+        onClick={togglePanelOpenClose}
+        style={panelHandleStyle}
       >
-        <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" widthAuto />
+        <UncontrolledTooltip id="center-align-tooltip" placement="top" target="timeline-layer-coverage-panel-handle">
+          {panelToggleLabelText}
+        </UncontrolledTooltip>
+        <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />
       </button>
-    );
-  };
+      <div
+        ref={containerRef}
+        className={`timeline-layer-coverage-container ${isPanelOpenClassName}`}
+        style={panelContainerStyle}
+      >
+        {/* Timeline Layer Coverage Panel */}
+        {isTimelineLayerCoveragePanelOpen &&
+        (
+          <div
+            className="timeline-layer-coverage"
+            style={layerCoverageStyle}
+          >
+            <header className="timeline-layer-coverage-header">
+              <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
+              <button
+                type="button"
+                id={layerInfoBtnId}
+                aria-label={layerInfoBtnTitle}
+                className={layerInfoBtnId}
+                onMouseDown={stopPropagation}
+                onClick={() => onInfoClick()}
+              >
+                <FontAwesomeIcon icon="question-circle" className="layer-coverage-info-button-icon" widthAuto />
+              </button>
+              <Switch
+                active={shouldIncludeHiddenLayers}
+                border
+                color="00457b"
+                id="toggle-layer-coverage-include-hidden"
+                containerClassAddition="toggle-layer-coverage-include-hidden"
+                label="Include Hidden Layers"
+                toggle={() => addMatchingCoverageToTimeline(
+                  !shouldIncludeHiddenLayers,
+                  activeLayers,
+                )}
+              />
+            </header>
+            <Scrollbars style={scrollbarStyle}>
+              <CoverageItemList
+                activeLayers={activeLayers}
+                appNow={appNow}
+                axisWidth={axisWidth}
+                backDate={backDate}
+                frontDate={frontDate}
+                getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
+                timeScale={timeScale}
+                positionTransformX={positionTransformX}
+              />
+            </Scrollbars>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
 
-  /**
-  * @desc handle dynamic conditional container styling, className, and text label generation
-  * @returns {Object}
-  */
-  getConditionalStyles = () => {
-    const {
-      axisWidth,
-      isTimelineLayerCoveragePanelOpen,
-      parentOffset,
-    } = this.props;
-    const {
-      activeLayers,
-    } = this.state;
+/**
+* @desc memo comparator replacing shouldComponentUpdate - returns true to SKIP a render.
+* Prevents repeated rendering on timescale change updates when the axis dates are unchanged.
+* @param {Object} prevProps
+* @param {Object} nextProps
+* @returns {Boolean}
+*/
+const areEqual = (prevProps, nextProps) => nextProps.timeScale !== prevProps.timeScale &&
+  nextProps.frontDate === prevProps.frontDate &&
+  nextProps.backDate === prevProps.backDate;
 
-    // conditional style properties
-    const maxHeightScrollBar = '203px';
-    const layerListItemHeightConstant = Math.max(1, activeLayers.length) * 41;
-    const layerCoveragePanelHandleTopOffset = `${Math.max(-54 - layerListItemHeightConstant, -259)}px`;
+const MemoizedTimelineLayerCoveragePanel = memo(TimelineLayerCoveragePanel, areEqual);
 
-    const mainContainerWidth = `${axisWidth + 1}px`;
-    const mainContainerHeight = `${Math.min(35 + layerListItemHeightConstant, 240)}px`;
-    const mainContainerLeftOffset = `${parentOffset - 10}px`;
-
-    // conditional classNames and label text
-    const isPanelOpenClassName = `timeline-layer-coverage-${isTimelineLayerCoveragePanelOpen ? 'open' : 'closed'}`;
-    const panelChevronClassName = `timeline-layer-coverage-panel-handle-chevron-${isTimelineLayerCoveragePanelOpen ? 'open' : 'closed'}`;
-    const panelToggleLabelText = isTimelineLayerCoveragePanelOpen ? 'Collapse layer coverage panel' : 'Show layer coverage panel';
-
-    // conditional style objects
-    const panelHandleStyle = {
-      right: Math.floor((axisWidth + 75) / 2),
-      top: isTimelineLayerCoveragePanelOpen ? layerCoveragePanelHandleTopOffset : '-19px',
-    };
-    const panelContainerStyle = {
-      width: mainContainerWidth,
-      height: isTimelineLayerCoveragePanelOpen ? mainContainerHeight : 0,
-      left: mainContainerLeftOffset,
-      display: isTimelineLayerCoveragePanelOpen ? 'block' : 'none',
-    };
-    const layerCoverageStyle = { width: mainContainerWidth };
-    const scrollbarStyle = { maxHeight: maxHeightScrollBar };
-
-    return {
-      panelHandleStyle,
-      panelContainerStyle,
-      layerCoverageStyle,
-      scrollbarStyle,
-      panelToggleLabelText,
-      panelChevronClassName,
-      isPanelOpenClassName,
-    };
-  };
-
-  render() {
-    const {
-      appNow,
-      axisWidth,
-      backDate,
-      frontDate,
-      isTimelineLayerCoveragePanelOpen,
-      positionTransformX,
-      timeScale,
-    } = this.props;
-    const {
-      activeLayers,
-      shouldIncludeHiddenLayers,
-    } = this.state;
-
-    const {
-      panelHandleStyle,
-      panelContainerStyle,
-      layerCoverageStyle,
-      scrollbarStyle,
-      panelToggleLabelText,
-      panelChevronClassName,
-      isPanelOpenClassName,
-    } = this.getConditionalStyles();
-
-    return (
-      <>
-        {/* Timeline Layer Coverage Panel open/close handle */}
-        <button
-          type="button"
-          id="timeline-layer-coverage-panel-handle"
-          aria-label={panelToggleLabelText}
-          onClick={this.togglePanelOpenClose}
-          style={panelHandleStyle}
-        >
-          <UncontrolledTooltip id="center-align-tooltip" placement="top" target="timeline-layer-coverage-panel-handle">
-            {panelToggleLabelText}
-          </UncontrolledTooltip>
-          <div className={`timeline-layer-coverage-panel-handle-chevron ${panelChevronClassName}`} />
-        </button>
-        <div
-          className={`timeline-layer-coverage-container ${isPanelOpenClassName}`}
-          style={panelContainerStyle}
-        >
-          {/* Timeline Layer Coverage Panel */}
-          {isTimelineLayerCoveragePanelOpen &&
-          (
-            <div
-              className="timeline-layer-coverage"
-              style={layerCoverageStyle}
-            >
-              <header className="timeline-layer-coverage-header">
-                <h3 className="timeline-layer-coverage-header-title">LAYER COVERAGE</h3>
-                {this.renderInfoButton()}
-                <Switch
-                  active={shouldIncludeHiddenLayers}
-                  border
-                  color="00457b"
-                  id="toggle-layer-coverage-include-hidden"
-                  containerClassAddition="toggle-layer-coverage-include-hidden"
-                  label="Include Hidden Layers"
-                  toggle={() => this.addMatchingCoverageToTimeline(
-                    !shouldIncludeHiddenLayers,
-                    activeLayers,
-                  )}
-                />
-              </header>
-              <Scrollbars style={scrollbarStyle}>
-                <CoverageItemList
-                  activeLayers={activeLayers}
-                  appNow={appNow}
-                  axisWidth={axisWidth}
-                  backDate={backDate}
-                  frontDate={frontDate}
-                  getMatchingCoverageLineDimensions={this.getMatchingCoverageLineDimensions}
-                  timeScale={timeScale}
-                  positionTransformX={positionTransformX}
-                />
-              </Scrollbars>
-            </div>
-          )}
-        </div>
-      </>
-    );
-  }
-}
+// exposed as a static for callers/tests that used the class static method
+MemoizedTimelineLayerCoveragePanel.stopPropagation = stopPropagation;
 
 function mapStateToProps(state) {
   const {
@@ -531,4 +452,4 @@ TimelineLayerCoveragePanel.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(TimelineLayerCoveragePanel);
+)(MemoizedTimelineLayerCoveragePanel);
