@@ -1,4 +1,4 @@
-The MAIAC Aerosol Optical Depth layer is from the Moderate Resolution Imaging Spectroradiometer (MODIS) combined Terra and Aqua Multi-Angle Implementation of Atmospheric Correction (MAIAC) Land Aerosol Optical Depth level 2 product.
+The MAIAC Aerosol Optical Depth layer is from the Moderate Resolution Imaging Spectroradiometer (MODIS) combined Terra and Aqua Multi-Angle Implementation of Atmospheric Correction (MAIAC) Land Aerosol Optical Depth level 2 product. It is available as a single layer that combines both Terra and Aqua observations.
 
 Aerosol Optical Depth (AOD) is a vertically integrated extinction by aerosol particles suspended in the atmosphere. Aerosols absorb and scatter incoming sunlight, which reduces visibility and increases the optical depth. Aerosols affect human health, weather and climate.
 
