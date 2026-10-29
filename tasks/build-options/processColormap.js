@@ -4,6 +4,7 @@ const convert = require('xml-js')
 const { promisify } = require('util')
 const yargs = require('yargs')
 const { hideBin } = require('yargs/helpers')
+const { parseColormapValue } = require('./util')
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -211,23 +212,7 @@ async function processEntries (colormap) {
       colors.push(colorString)
 
       if (mapType === 'continuous' || mapType === 'discrete') {
-        const items = entry._attributes.value.replace(/[()[\]]/g, '').split(',')
-        try {
-          const newItems = []
-          for (const item of items) {
-            let v = parseFloat(item)
-            if (v === Number.POSITIVE_INFINITY) {
-              v = Number.MAX_VALUE
-            }
-            if (v === Number.NEGATIVE_INFINITY) {
-              v = Number.MIN_VALUE
-            }
-            newItems.push(v)
-          }
-          values.push(newItems)
-        } catch (error) {
-          throw new Error(`Invalid value: ${entry._attributes.value}`)
-        }
+        values.push(parseColormapValue(entry._attributes.value))
       }
     })
   )
