@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as olProj from 'ol/proj';
@@ -34,36 +34,46 @@ import { CRS } from '../modules/map/constants';
 
 const DEFAULT_URL = 'http://localhost:3002/api/v1/snapshot';
 
-class ImageDownloadContainer extends Component {
-  constructor(props) {
-    super(props);
-    const { onBoundaryChange, screenHeight, screenWidth } = props;
+function ImageDownloadContainer(props) {
+  const {
+    boundaries,
+    fileType,
+    resolution,
+    isWorldfile,
+    onBoundaryChange,
+    screenHeight,
+    screenWidth,
+    proj,
+    map,
+    url,
+    closeModal,
+    date,
+    getLayers,
+    hasSubdailyLayers,
+    markerCoordinates,
+    onPanelChange,
+    onProgressChange,
+  } = props;
 
-    const boundaries = props.boundaries || {
-      x: screenWidth / 2 - 100,
-      y: screenHeight / 2 - 100,
-      x2: screenWidth / 2 + 100,
-      y2: screenHeight / 2 + 100,
-    };
-    const {
-      x, y, y2, x2,
-    } = boundaries;
-    const bottomLeftLatLong = this.getLatLongFromPixelValue(x, y2);
-    const topRightLatLong = this.getLatLongFromPixelValue(x2, y);
+  const debounceBoundaryStateUpdate = lodashDebounce(onBoundaryChange, 200);
 
-    this.state = {
-      fileType: props.fileType,
-      resolution: props.resolution,
-      isWorldfile: props.isWorldfile,
-      bottomLeftLatLong,
-      topRightLatLong,
-      boundaries,
-    };
-    this.debounceBoundaryStateUpdate = lodashDebounce(onBoundaryChange, 200);
-    this.onBoundaryChange = this.onBoundaryChange.bind(this);
-    this.onLatLongChange = this.onLatLongChange.bind(this);
-    this.onResolutionChange = this.onResolutionChange.bind(this);
-  }
+  const initBoundaries = boundaries || {
+    x: screenWidth / 2 - 100,
+    y: screenHeight / 2 - 100,
+    x2: screenWidth / 2 + 100,
+    y2: screenHeight / 2 + 100,
+  };
+  const {
+    x: initX1, y: initY1, y2: initY2, x2: initX2,
+  } = initBoundaries;
+
+  const [fileTypeState] = useState(fileType);
+  const [resolutionState, setResolutionState] = useState(resolution);
+  const [isWorldfileState] = useState(isWorldfile);
+  const [boundariesState, setBoundariesState] = useState(initBoundaries);
+  const [bottomLeftLatLong, setBottomLeftLatLong] = useState(
+    getLatLongFromPixelValue(initX1, initY2));
+  const [topRightLatLong, setTopRightLatLong] = useState(getLatLongFromPixelValue(initX2, initY1));
 
   /**
    * Convert pixel value to latitude longitude value
@@ -72,8 +82,7 @@ class ImageDownloadContainer extends Component {
    *
    * @returns {Array}
    */
-  getLatLongFromPixelValue(pixelX, pixelY) {
-    const { proj, map } = this.props;
+  function getLatLongFromPixelValue(pixelX, pixelY) {
     const coordinate = map.ui.selected.getCoordinateFromPixel(
       [Math.floor(pixelX), Math.floor(pixelY)],
     );
@@ -90,8 +99,7 @@ class ImageDownloadContainer extends Component {
    *
    * @returns {Object}
    */
-  getBoundaries(lonLat1, lonLat2) {
-    const { map, proj } = this.props;
+  function getBoundaries(lonLat1, lonLat2) {
     const { crs } = proj.selected;
     const lonLatBottomLeft = olProj.transform(lonLat1, CRS.GEOGRAPHIC, crs);
     const lonLatTopRight = olProj.transform(lonLat2, CRS.GEOGRAPHIC, crs);
@@ -111,12 +119,14 @@ class ImageDownloadContainer extends Component {
    *
    * @returns {null}
    */
-  onLatLongChange(coordsArray) {
-    const bottomLeftLatLong = [coordsArray[0], coordsArray[1]];
-    const topRightLatLong = [coordsArray[2], coordsArray[3]];
-    const boundaries = this.getBoundaries(bottomLeftLatLong, topRightLatLong);
-    this.setState({ bottomLeftLatLong, topRightLatLong, boundaries });
-    this.debounceBoundaryStateUpdate(boundaries);
+  function onLatLongChange(coordsArray) {
+    const latLongBL = [coordsArray[0], coordsArray[1]];
+    const latLongTR = [coordsArray[2], coordsArray[3]];
+    const boundariesOut = getBoundaries(latLongBL, latLongTR);
+    setBottomLeftLatLong(latLongBL);
+    setTopRightLatLong(latLongTR);
+    setBoundariesState(boundariesOut);
+    debounceBoundaryStateUpdate(boundariesOut);
   }
 
   /**
@@ -126,20 +136,22 @@ class ImageDownloadContainer extends Component {
   *
   * @returns {null}
   */
-  onBoundaryChange(boundaries) {
+  function onBoundaryChangeFunc(boundariesIn) {
     const {
       x, y, width, height,
-    } = boundaries;
+    } = boundariesIn;
     const newBoundaries = {
       x,
       y,
       x2: x + width,
       y2: y + height,
     };
-    const bottomLeftLatLong = this.getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
-    const topRightLatLong = this.getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
-    this.setState({ bottomLeftLatLong, topRightLatLong, boundaries: newBoundaries });
-    this.debounceBoundaryStateUpdate(newBoundaries);
+    const latLongBL = getLatLongFromPixelValue(newBoundaries.x, newBoundaries.y2);
+    const latLongTR = getLatLongFromPixelValue(newBoundaries.x2, newBoundaries.y);
+    setBottomLeftLatLong(latLongBL);
+    setTopRightLatLong(latLongTR);
+    setBoundariesState(newBoundaries);
+    debounceBoundaryStateUpdate(newBoundaries);
   }
 
   /**
@@ -148,107 +160,88 @@ class ImageDownloadContainer extends Component {
   *
   * @returns {null}
   */
-  onResolutionChange(res) {
-    this.setState({ resolution: res });
+  function onResolutionChange(res) {
+    setResolutionState(res);
   }
 
-  render() {
-    const {
+  const { crs } = proj.selected;
+  const {
+    x, y, x2, y2,
+  } = boundariesState;
+  const lonLat1 = olProj.transform(bottomLeftLatLong, CRS.GEOGRAPHIC, crs);
+  const lonLat2 = olProj.transform(topRightLatLong, CRS.GEOGRAPHIC, crs);
+  const isGeoProjection = proj.id === 'geographic';
+  const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
+  const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
+  const mapView = map.ui.selected.getView();
+  const center = mapView.getCenter();
+  const newResolution = resolutionState ||
+    imageUtilCalculateResolution(
+      Math.round(mapView.getZoom()),
       proj,
-      map,
-      url,
-      closeModal,
-      screenWidth,
-      screenHeight,
-      date,
-      getLayers,
-      hasSubdailyLayers,
-      markerCoordinates,
-      onPanelChange,
-      onProgressChange,
-    } = this.props;
-    const {
-      resolution, isWorldfile, fileType, bottomLeftLatLong, topRightLatLong, boundaries,
-    } = this.state;
-    const { crs } = proj.selected;
-    const {
-      x, y, x2, y2,
-    } = boundaries;
-    const lonLat1 = olProj.transform(bottomLeftLatLong, CRS.GEOGRAPHIC, crs);
-    const lonLat2 = olProj.transform(topRightLatLong, CRS.GEOGRAPHIC, crs);
-    const isGeoProjection = proj.id === 'geographic';
-    const fileTypes = isGeoProjection ? fileTypesGeo : fileTypesPolar;
-    const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
-    const mapView = map.ui.selected.getView();
-    const center = mapView.getCenter();
-    const newResolution = resolution ||
-      imageUtilCalculateResolution(
-        Math.round(mapView.getZoom()),
-        proj,
-        center,
-      );
-    const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
-    const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
-    const normalizedTopRightLatLong = getNormalizedCoordinate(topRightLatLong);
-
-    return (
-      <ErrorBoundary>
-        <ImageDownloadPanel
-          projection={proj}
-          fileTypes={fileTypes}
-          fileType={fileType}
-          resolutions={resolutions}
-          lonlats={[lonLat1, lonLat2]}
-          boundaries={[x, y, x2, y2]}
-          resolution={newResolution}
-          isWorldfile={isWorldfile}
-          hasSubdailyLayers={hasSubdailyLayers}
-          markerCoordinates={markerCoordinates}
-          date={date}
-          datelineMessage={getAlertMessageIfCrossesDateline(
-            date,
-            bottomLeftLatLong,
-            topRightLatLong,
-            proj,
-          )}
-          url={url}
-          viewExtent={viewExtent}
-          getLayers={getLayers}
-          onPanelChange={onPanelChange}
-          onLatLongChange={this.onLatLongChange}
-          geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
-          map={map.ui.selected}
-          onResolutionChange={this.onResolutionChange}
-          onProgressChange={onProgressChange}
-        />
-        <Crop
-          x={x}
-          y={y}
-          width={x2 - x}
-          height={y2 - y}
-          maxHeight={screenHeight}
-          maxWidth={screenWidth}
-          onChange={this.onBoundaryChange}
-          onClose={closeModal}
-          bottomLeftStyle={{
-            left: x,
-            top: y2 + 5,
-            width: x2 - x,
-          }}
-          topRightStyle={{
-            left: x,
-            top: y - 20,
-            width: x2 - x,
-          }}
-          coordinates={{
-            bottomLeft: util.formatCoordinate(bottomLeftLatLong),
-            topRight: util.formatCoordinate(topRightLatLong),
-          }}
-          showCoordinates
-        />
-      </ErrorBoundary>
+      center,
     );
-  }
+  const viewExtent = mapView.calculateExtent(map.ui.selected.getSize());
+  const normalizedBottomLeftLatLong = getNormalizedCoordinate(bottomLeftLatLong);
+  const normalizedTopRightLatLong = getNormalizedCoordinate(topRightLatLong);
+
+  return (
+    <ErrorBoundary>
+      <ImageDownloadPanel
+        projection={proj}
+        fileTypes={fileTypes}
+        fileType={fileTypeState}
+        resolutions={resolutions}
+        lonlats={[lonLat1, lonLat2]}
+        boundaries={[x, y, x2, y2]}
+        resolution={newResolution}
+        isWorldfile={isWorldfileState}
+        hasSubdailyLayers={hasSubdailyLayers}
+        markerCoordinates={markerCoordinates}
+        date={date}
+        datelineMessage={getAlertMessageIfCrossesDateline(
+          date,
+          bottomLeftLatLong,
+          topRightLatLong,
+          proj,
+        )}
+        url={url}
+        viewExtent={viewExtent}
+        getLayers={getLayers}
+        onPanelChange={onPanelChange}
+        onLatLongChange={onLatLongChange}
+        geoLatLong={[normalizedBottomLeftLatLong, normalizedTopRightLatLong]}
+        map={map.ui.selected}
+        onResolutionChange={onResolutionChange}
+        onProgressChange={onProgressChange}
+      />
+      <Crop
+        x={x}
+        y={y}
+        width={x2 - x}
+        height={y2 - y}
+        maxHeight={screenHeight}
+        maxWidth={screenWidth}
+        onChange={onBoundaryChangeFunc}
+        onClose={closeModal}
+        bottomLeftStyle={{
+          left: x,
+          top: y2 + 5,
+          width: x2 - x,
+        }}
+        topRightStyle={{
+          left: x,
+          top: y - 20,
+          width: x2 - x,
+        }}
+        coordinates={{
+          bottomLeft: util.formatCoordinate(bottomLeftLatLong),
+          topRight: util.formatCoordinate(topRightLatLong),
+        }}
+        showCoordinates
+      />
+    </ErrorBoundary>
+  );
 }
 
 function mapStateToProps(state) {

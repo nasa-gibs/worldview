@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ButtonToolbar, Button } from 'reactstrap';
@@ -36,6 +36,7 @@ import { isLocationSearchFeatureEnabled } from '../modules/location-search/util'
 import { getAllActiveLayers } from '../modules/layers/selectors';
 import { hasNonDownloadableVisibleLayer, getNonDownloadableLayerWarning, getNonDownloadableLayers } from '../modules/image-download/util';
 import AboutModal from '../components/about/about';
+import usePrevious from '../util/customHooks';
 
 Promise.config({ cancellation: true });
 
@@ -87,56 +88,68 @@ const CUSTOM_MODAL_PROPS = {
   },
 };
 
-class toolbarContainer extends Component {
-  constructor(props) {
-    super(props);
-    this.requestNotifications();
-    this.openImageDownload = this.openImageDownload.bind(this);
-  }
+function toolbarContainer(props) {
+  const {
+    isAboutOpen,
+    openAboutModal,
+    modalIsOpen,
+    visibleLayersForProj,
+    notify,
+    openModal,
+    isRotated,
+    rotation,
+    refreshStateAfterImageDownload,
+    toggleDialogVisible,
+    hasNonDownloadableLayer,
+    config,
+    requestNotifications,
+    isMobile,
+    faSize,
+    isDistractionFreeModeActive,
+    isProjectionSwitchActive,
+    isChartingActive,
+    isLocationSearchExpanded,
+    shouldBeCollapsed,
+    toggleShowLocationSearch,
+    isImageDownloadActive,
+    isCompareActive,
+    notificationType,
+    notificationContentNumber,
+    toggleDistractionFreeModeAction,
+    isKioskModeActive,
+  } = props;
 
-  componentDidMount() {
-    const { isAboutOpen, openAboutModal } = this.props;
+  const prevModalIsOpen = usePrevious(modalIsOpen);
+
+  useEffect(() => {
+    requestNotificationsFunc();
     if (isAboutOpen) {
       openAboutModal();
     }
-  }
+  }, []);
 
-  componentDidUpdate(prevProps, prevState) {
-    const {
-      isAboutOpen, openAboutModal, modalIsOpen,
-    } = this.props;
-    if (modalIsOpen !== prevProps.modalIsOpen) {
+  useEffect(() => {
+    if (modalIsOpen !== prevModalIsOpen) {
       if (isAboutOpen) {
         openAboutModal();
       }
     }
-  }
+  }, [modalIsOpen, isAboutOpen]);
 
-  getPromise(bool, type, action, title) {
-    const { visibleLayersForProj } = this.props;
-    const { notify } = this.props;
+  function getPromise(bool, type, action, title) {
     if (bool) {
       return notify(type, action, visibleLayersForProj);
     }
     return Promise.resolve(type);
   }
 
-  async openImageDownload() {
-    const {
-      openModal,
-      isRotated,
-      rotation,
-      refreshStateAfterImageDownload,
-      toggleDialogVisible,
-      hasNonDownloadableLayer,
-      visibleLayersForProj,
-    } = this.props;
+  async function openImageDownload() {
     const nonDownloadableLayers = hasNonDownloadableLayer
       ? getNonDownloadableLayers(visibleLayersForProj, true)
       : null;
     toggleDialogVisible(false);
-    await this.getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
-    await this.getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
+    await getPromise(isRotated, 'rotate', clearRotate, 'Reset rotation');
+    await getPromise(hasNonDownloadableLayer, 'layers', hideLayers, 'Remove Layers?');
     // Allow time for view to un-rotate
     if (isRotated) {
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -152,8 +165,7 @@ class toolbarContainer extends Component {
     );
   }
 
-  requestNotifications() {
-    const { config, requestNotifications } = this.props;
+  function requestNotificationsFunc() {
     const { parameters, features } = config;
     const { notification } = features;
     const domain = window.location.origin;
@@ -175,8 +187,7 @@ class toolbarContainer extends Component {
     }
   }
 
-  renderTooltip = (buttonId, labelText) => {
-    const { isMobile } = this.props;
+  const renderTooltip = (buttonId, labelText) => {
     return (
       <HoverTooltip
         isMobile={isMobile}
@@ -186,13 +197,7 @@ class toolbarContainer extends Component {
     );
   };
 
-  renderShareButton() {
-    const {
-      faSize,
-      openModal,
-      isDistractionFreeModeActive,
-      isMobile,
-    } = this.props;
+  function renderShareButton() {
     const buttonId = 'wv-share-button';
     const labelText = 'Share this map';
     const mobileWvToolbarButtonStyle = isMobile
@@ -214,22 +219,13 @@ class toolbarContainer extends Component {
           CUSTOM_MODAL_PROPS.TOOLBAR_SHARE,
         )}
       >
-        {this.renderTooltip(buttonId, labelText)}
+        {renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="share-square" size={faSize} widthAuto />
       </Button>
     );
   }
 
-  renderProjectionButton() {
-    const {
-      config,
-      faSize,
-      isProjectionSwitchActive,
-      isChartingActive,
-      isDistractionFreeModeActive,
-      openModal,
-      isMobile,
-    } = this.props;
+  function renderProjectionButton() {
     const buttonId = 'wv-proj-button';
     const labelText = isChartingActive
       ? 'You must exit charting mode to switch projection'
@@ -259,7 +255,7 @@ class toolbarContainer extends Component {
         disabled={!isProjectionSwitchActive}
         style={mobileWvToolbarButtonStyle}
       >
-        {this.renderTooltip(buttonId, labelText)}
+        {renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="globe-asia" size={faSize} widthAuto />
       </Button>
     );
@@ -268,17 +264,7 @@ class toolbarContainer extends Component {
   // handle rendering of Location Search button
   // 1) visibility and
   // 2) control of click (mobile vs desktop)
-  renderLocationSearchButtonComponent = () => {
-    const {
-      config,
-      faSize,
-      isLocationSearchExpanded,
-      isMobile,
-      openModal,
-      shouldBeCollapsed,
-      toggleShowLocationSearch,
-      isDistractionFreeModeActive,
-    } = this.props;
+  const renderLocationSearchButtonComponent = () => {
     const isFeatureEnabled = isLocationSearchFeatureEnabled(config);
     // do not render if Location Search feature isn't enabled
     if (!isFeatureEnabled) {
@@ -312,22 +298,14 @@ class toolbarContainer extends Component {
           onClick={handleButtonClick}
           style={mobileWvToolbarButtonStyle}
         >
-          {this.renderTooltip(buttonId, labelText)}
+          {renderTooltip(buttonId, labelText)}
           <FontAwesomeIcon icon="search-location" size={faSize} widthAuto />
         </Button>
       </div>
     );
   };
 
-  renderSnapshotsButton () {
-    const {
-      faSize,
-      isImageDownloadActive,
-      isCompareActive,
-      isChartingActive,
-      isDistractionFreeModeActive,
-      isMobile,
-    } = this.props;
+  function renderSnapshotsButton () {
     const buttonId = 'wv-image-button';
     const activeImageDownloadLabel = !isImageDownloadActive
       ? 'You must exit data download mode to use the snapshot feature'
@@ -346,7 +324,7 @@ class toolbarContainer extends Component {
 
     return !isDistractionFreeModeActive && (
       <div id="snapshot-btn-wrapper">
-        {this.renderTooltip('snapshot-btn-wrapper', labelText)}
+        {renderTooltip('snapshot-btn-wrapper', labelText)}
         <Button
           id={buttonId}
           className={
@@ -356,7 +334,7 @@ class toolbarContainer extends Component {
           }
           disabled={!isImageDownloadActive}
           aria-label={labelText}
-          onClick={this.openImageDownload}
+          onClick={openImageDownload}
           style={mobileWVImageButtonStyle}
         >
           <FontAwesomeIcon icon="camera" size={faSize} widthAuto />
@@ -366,15 +344,7 @@ class toolbarContainer extends Component {
     );
   }
 
-  renderInfoButton() {
-    const {
-      faSize,
-      openModal,
-      notificationType,
-      notificationContentNumber,
-      isDistractionFreeModeActive,
-      isMobile,
-    } = this.props;
+  function renderInfoButton() {
     const notificationClass = notificationType
       ? ` wv-status-${notificationType}`
       : ' wv-status-hide';
@@ -398,16 +368,13 @@ class toolbarContainer extends Component {
         data-content={notificationContentNumber}
         style={mobileWvToolbarButtonStyle}
       >
-        {this.renderTooltip(buttonId, labelText)}
+        {renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon="info-circle" size={faSize} widthAuto />
       </Button>
     );
   }
 
-  renderDistractionFreeExitButton() {
-    const {
-      faSize, isDistractionFreeModeActive, toggleDistractionFreeModeAction, isMobile,
-    } = this.props;
+  function renderDistractionFreeExitButton() {
     const mobileButtonStyle = isMobile
       ? {
         fontSize: '14.3px',
@@ -426,30 +393,27 @@ class toolbarContainer extends Component {
         onClick={() => toggleDistractionFreeModeAction()}
         style={mobileButtonStyle}
       >
-        {this.renderTooltip(buttonId, labelText)}
+        {renderTooltip(buttonId, labelText)}
         <FontAwesomeIcon icon={['fas', 'eye']} size={faSize} widthAuto />
       </Button>
     );
   }
 
-  render() {
-    const { isKioskModeActive } = this.props;
-    return (
-      <ErrorBoundary>
-        <ButtonToolbar
-          id="wv-toolbar"
-          className="wv-toolbar"
-        >
-          {!isKioskModeActive && this.renderDistractionFreeExitButton()}
-          {this.renderLocationSearchButtonComponent()}
-          {this.renderShareButton()}
-          {this.renderProjectionButton()}
-          {this.renderSnapshotsButton()}
-          {this.renderInfoButton()}
-        </ButtonToolbar>
-      </ErrorBoundary>
-    );
-  }
+  return (
+    <ErrorBoundary>
+      <ButtonToolbar
+        id="wv-toolbar"
+        className="wv-toolbar"
+      >
+        {!isKioskModeActive && renderDistractionFreeExitButton()}
+        {renderLocationSearchButtonComponent()}
+        {renderShareButton()}
+        {renderProjectionButton()}
+        {renderSnapshotsButton()}
+        {renderInfoButton()}
+      </ButtonToolbar>
+    </ErrorBoundary>
+  );
 }
 
 const mapStateToProps = (state) => {
