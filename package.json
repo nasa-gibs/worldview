@@ -128,7 +128,7 @@
     "jest-fetch-mock": "^4.2.0",
     "markdown-it": "^15.0.3",
     "mini-css-extract-plugin": "^2.10.2",
-    "neostandard": "^0.13.0",
+    "neostandard": "^0.14.1",
     "node-dir": "^0.1.17",
     "node-fetch": "^3.3.2",
     "node-ssh": "^13.2.1",
