@@ -84,7 +84,7 @@
     "upload": "node tasks/util/upload.js"
   },
   "devDependencies": {
-    "@babel/core": "^8.0.7",
+    "@babel/core": "^8.0.9",
     "@babel/eslint-parser": "^8.0.7",
     "@babel/plugin-transform-class-properties": "^8.0.1",
     "@babel/plugin-transform-private-methods": "^8.0.1",
@@ -97,7 +97,7 @@
     "@testing-library/react": "^16.3.3",
     "@types/jest": "^30.0.0",
     "ajv": "^8.20.0",
-    "autoprefixer": "^10.6.1",
+    "autoprefixer": "^10.6.2",
     "babel-loader": "^10.1.1",
     "cheerio": "^1.2.0",
     "clean-webpack-plugin": "^4.0.0",
@@ -133,13 +133,13 @@
     "node-fetch": "^3.3.2",
     "node-ssh": "^13.2.1",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.5.30",
+    "postcss": "^8.5.32",
     "postcss-loader": "^8.2.1",
     "react-refresh": "^0.19.0",
     "react-test-renderer": "^19.3.1",
     "redux-mock-store": "^1.5.5",
     "run-script-os": "^1.1.6",
-    "sass": "^1.105.2",
+    "sass": "^1.106.1",
     "sass-loader": "^17.0.1",
     "shelljs": "^0.10.0",
     "stylelint": "^17.16.0",
@@ -148,7 +148,7 @@
     "tar": "^7.5.20",
     "terser-webpack-plugin": "^5.6.1",
     "uuid": "^14.0.3",
-    "webpack": "^5.111.1",
+    "webpack": "^5.112.2",
     "webpack-bundle-analyzer": "^5.4.0",
     "webpack-cli": "^7.2.3",
     "webpack-dev-middleware": "^8.3.0",
@@ -235,7 +235,7 @@
     "> 1%"
   ],
   "overrides": {
-    "qs": "6.16.1",
+    "qs": "6.16.2",
     "zod": "4.6.6"
   },
   "prettier": {
