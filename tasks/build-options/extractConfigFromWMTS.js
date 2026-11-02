@@ -46,10 +46,16 @@ const options = yargs(hideBin(process.argv))
     type: 'string',
     description: 'Cache mode for fetching data'
   })
+  .option('source', {
+    demandOption: false,
+    alias: 's',
+    type: 'string',
+    description: 'Source file for WMTS configuration'
+  })
   .epilog('Extracts configuration information from a WMTS GetCapabilities file, converts the XML to JSON')
 
 const { argv } = options
-if (!argv.config && !argv.inputDir && !argv.outputDir && !argv.features) {
+if (!argv.config && !argv.inputDir && !argv.outputDir && !argv.feature && !argv.source) {
   throw new Error('Invalid number of arguments')
 }
 
@@ -60,6 +66,7 @@ const outputDir = argv.outputDir
 const mode = argv.mode
 const cacheMode = argv.cacheMode
 const featuresFile = argv.features
+const sourceFile = argv.source
 
 let featuresData = fs.readFileSync(featuresFile)
 let features = JSON.parse(featuresData)
@@ -68,6 +75,15 @@ if (fs.existsSync(featuresFile)) {
   features = JSON.parse(featuresData)
 } else {
   throw new Error(`Error: ${featuresFile} feature file does not exist`)
+}
+
+let sourceData = fs.readFileSync(sourceFile)
+let source = JSON.parse(sourceData)
+if (fs.existsSync(sourceFile)) {
+  sourceData = fs.readFileSync(sourceFile)
+  source = JSON.parse(sourceData)
+} else {
+  throw new Error(`Error: ${sourceFile} feature file does not exist`)
 }
 
 if (!Object.prototype.hasOwnProperty.call(config, 'wv-options-wmts')) {
@@ -346,7 +362,7 @@ async function processLayer (gcLayer, wvLayers, entry) {
   const dimension = gcLayer.Dimension
   if (dimension && dimension['ows:Identifier']?._text === 'Time') {
     try {
-      await processTemporalLayer(wvLayer, dimension.Value, entry.source, cacheMode, features)
+      await processTemporalLayer(wvLayer, dimension.Value, entry.source, cacheMode, features, source)
     } catch (e) {
       console.error(`${prog}: ERROR: [${ident}] Temporal processing failed: ${e}`)
     }
