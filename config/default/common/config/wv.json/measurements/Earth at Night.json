@@ -11,7 +11,9 @@
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_NOAA21_DayNightBand"
+                        "VIIRS_NOAA21_DayNightBand",
+                        "VIIRS_NOAA21_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA21_DayNightBand_AtSensor_M15"
                     ]
                 },
                 "NOAA-20/VIIRS": {
