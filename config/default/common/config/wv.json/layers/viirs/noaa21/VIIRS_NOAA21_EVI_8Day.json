@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_EVI_8Day": {
+      "id": "VIIRS_NOAA21_EVI_8Day",
+      "description": "viirs/noaa21/VIIRS_NOAA21_EVI_8Day",
+      "group": "overlays",
+      "layergroup": "Vegetation Indices"
+    }
+  }
+}

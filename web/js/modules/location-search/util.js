@@ -48,7 +48,7 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  * @param {Object} pinProps
  * @param {Number} id
  */
-const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
+const createPin = function(coordinates, pinProps, id, removeMarkerPin, toggleHiddenMarker) {
   const overlayEl = document.createElement('div');
   const root = createRoot(overlayEl);
   const removeMarker = () => {
@@ -56,7 +56,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
     removeMarkerPin();
   };
   root.render(
-    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
+    React.createElement(LocationMarker, { ...pinProps, removeMarker, toggleHiddenMarker }),
   );
   const markerPin = new OlOverlay({
     element: overlayEl,
@@ -64,6 +64,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
     positioning: 'bottom-center',
     stopEvent: false,
     id,
+    className: 'location-dialog-pin-wrapper-parent',
   });
 
   return markerPin;
@@ -81,6 +82,7 @@ export function getCoordinatesMarker(
   coordinatesObject,
   results,
   removeMarker,
+  toggleHiddenMarker,
   isMobile,
   dialogVisible,
 ) {
@@ -102,7 +104,7 @@ export function getCoordinatesMarker(
   };
 
   // create Ol vector layer map pin
-  const marker = createPin(transformedCoords, pinProps, id, removeMarker);
+  const marker = createPin(transformedCoords, pinProps, id, removeMarker, toggleHiddenMarker);
   return marker;
 }
 
@@ -129,7 +131,7 @@ export function mapLocationToLocationSearchState(
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
   const validatedCoordinatesArray = coordinatesArray.map((coordinate) => {
-    const [longitude, latitude] = coordinate
+    const [longitude, latitude, isHidden] = coordinate
       ? coordinate.split(',')
         .map((coord) => Number(coord))
         .filter((coord) => !lodashIsNaN(parseFloat(coord)))
@@ -140,6 +142,7 @@ export function mapLocationToLocationSearchState(
       id: markerId,
       latitude,
       longitude,
+      isHidden: isHidden === 1,
     };
     return validatedCoordinates;
   });
@@ -159,8 +162,9 @@ export function mapLocationToLocationSearchState(
 
 export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
-  const serializeCoordinates = ({ longitude, latitude }) => {
+  const serializeCoordinates = ({ longitude, latitude, isHidden }) => {
     const coordinateValues = [longitude, latitude];
+    if (isHidden) coordinateValues.push(1);
     if (!map.ui.selected) return undefined;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
     if (!coordinatesWithinExtent) return undefined;

@@ -13,6 +13,7 @@ import AssociatedLayers from './associated-layers-toggle';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
+import DayRangeSlider from './day-range-slider';
 import safeLocalStorage from '../../../util/local-storage';
 import ImagerySearch from './imagery-search';
 
@@ -30,6 +31,8 @@ import {
 import {
   getGranuleLayer,
   getGranulePlatform,
+  getMaxDayRange,
+  getLayerDayCount,
 } from '../../../modules/layers/selectors';
 import {
   setThresholdRangeSquashAndNoClip,
@@ -51,7 +54,9 @@ import {
   updateGranuleLayerOptions as updateGranuleLayerOptionsAction,
   resetGranuleLayerDates as resetGranuleLayerDatesAction,
   setOpacity as setOpacityAction,
+  updateDayCount as updateDayCountAction,
 } from '../../../modules/layers/actions';
+import { DEFAULT_NUM_GRANULES } from '../../../modules/layers/constants';
 import ClassificationToggle from './classification-toggle';
 
 function LayerSettings(props) {
@@ -79,6 +84,10 @@ function LayerSettings(props) {
     customPalettesIsActive,
     palettedAllowed,
     zot,
+    maxDayRange,
+    dayCount,
+    updateDayCount,
+    isMobile,
   } = props;
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -266,16 +275,17 @@ function LayerSettings(props) {
    */
   const renderGranuleSettings = () => {
     const { count, dates, granulePlatform } = granuleOptions;
-    return dates
+    return count
       ? (
         <>
           <GranuleCountSlider
             def={layer}
             count={count}
             granuleDates={dates}
+            isMobile={isMobile}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
           />
-          {allowGranuleReorder && (
+          {allowGranuleReorder && dates && (
             <GranuleLayerDateList
               def={layer}
               screenHeight={screenHeight}
@@ -316,6 +326,15 @@ function LayerSettings(props) {
         setOpacity={setOpacity}
         layer={layer}
       />
+      {!!maxDayRange && (
+        <DayRangeSlider
+          layer={layer}
+          dayCount={dayCount}
+          maxDayRange={maxDayRange}
+          isMobile={isMobile}
+          updateDayCount={updateDayCount}
+        />
+      )}
       {renderGranuleSettings()}
       {renderCustomizations}
       {titilerLayer && <BandSelection layer={layer} />}
@@ -333,19 +352,24 @@ function mapStateToProps(state, ownProps) {
   const groupName = compare.activeString;
   const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
 
-  const granuleState = getGranuleLayer(state, ownProps.layer.id);
   const granuleOptions = {};
-  if (granuleState) {
-    const { dates, count } = granuleState;
-    granuleOptions.dates = dates;
-    granuleOptions.count = count || 20;
+  if (ownProps.layer.type === 'granule') {
+    const granuleState = getGranuleLayer(state, ownProps.layer.id) || {};
+    granuleOptions.dates = granuleState.dates;
+    granuleOptions.count = granuleState.count || ownProps.layer.count || DEFAULT_NUM_GRANULES;
     granuleOptions.granulePlatform = getGranulePlatform(state);
   }
+
+  const maxDayRange = getMaxDayRange(ownProps.layer);
+  const dayCount = maxDayRange ? getLayerDayCount(state, ownProps.layer.id) : undefined;
 
   return {
     paletteOrder: config.paletteOrder,
     granuleOptions,
     groupName,
+    maxDayRange,
+    dayCount,
+    isMobile: screenSize.isMobileDevice,
     screenHeight: screenSize.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
@@ -410,6 +434,9 @@ const mapDispatchToProps = (dispatch) => ({
   resetGranuleLayerDates: (id) => {
     dispatch(resetGranuleLayerDatesAction(id));
   },
+  updateDayCount: (id, dayCount) => {
+    dispatch(updateDayCountAction(id, dayCount));
+  },
 });
 
 export default connect(
@@ -433,6 +460,10 @@ LayerSettings.propTypes = {
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
   layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDayRange: PropTypes.number,
+  dayCount: PropTypes.number,
+  isMobile: PropTypes.bool,
+  updateDayCount: PropTypes.func,
   palettedAllowed: PropTypes.bool,
   paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,

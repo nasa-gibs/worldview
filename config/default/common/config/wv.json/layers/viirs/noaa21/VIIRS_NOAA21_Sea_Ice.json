@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "VIIRS_NOAA21_Sea_Ice": {
+      "id": "VIIRS_NOAA21_Sea_Ice",
+      "description": "viirs/noaa21/VIIRS_NOAA21_Sea_Ice",
+      "tags": "iceberg",
+      "group": "overlays",
+      "layergroup": "Sea Ice",
+      "wrapadjacentdays": true
+    }
+  }
+}

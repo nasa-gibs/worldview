@@ -244,13 +244,15 @@ describe('mapLocationToLocationSearchState', () => {
 
   test('parses multiple coordinates from s parameter separated by + [util-map-location-to-state-multiple]', () => {
     const result = mapLocationToLocationSearchState(
-      { s: '-74,40+-118,34' },
+      { s: '-74,40+-118,34,1' },
       baseStoreFromLocation,
       baseState,
     );
     expect(result.locationSearch.coordinates).toHaveLength(2);
     expect(result.locationSearch.coordinates[0].longitude).toBe(-74);
+    expect(result.locationSearch.coordinates[0].isHidden).toBe(false);
     expect(result.locationSearch.coordinates[1].longitude).toBe(-118);
+    expect(result.locationSearch.coordinates[1].isHidden).toBe(true);
   });
 
   test('returns empty coordinates array when s parameter is absent [util-map-location-to-state-no-s]', () => {

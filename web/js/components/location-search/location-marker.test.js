@@ -24,6 +24,7 @@ jest.mock('../../util/util', () => ({
 const baseProps = {
   coordinatesObject: { latitude: 34.05, longitude: -118.24 },
   reverseGeocodeResults: { address: null, error: null },
+  toggleHiddenMarker: jest.fn(),
   removeMarker: jest.fn(),
   isMobile: false,
   dialogVisible: true,

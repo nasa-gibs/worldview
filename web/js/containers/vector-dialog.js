@@ -64,7 +64,7 @@ function VectorDialog(props) {
               <a
                 style={{ color: '#2222aa' }}
                 href={
-                  `https://aeronet.gsfc.nasa.gov/new_web/photo_db_v3/${activeMetaArray[0].features.name}.html`
+                  `https://aeronet.gsfc.nasa.gov/new_web/photo_db_v5/${activeMetaArray[0].features.name}.html`
                 }
                 rel="noreferrer"
                 target="_blank"

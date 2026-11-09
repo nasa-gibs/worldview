@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Reflectance (Shortwave Infrared, Bands 7-5-4) *BETA*",
-      "subtitle": "Landsat 8 & 9 / OLI",
+      "subtitle": "HLS Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_Shortwave_Infrared_Landsat",
       "tags": "surface oli l30 swir",
       "group": "overlays",

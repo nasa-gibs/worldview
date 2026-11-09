@@ -145,6 +145,7 @@
   &.tooltip-coordinates-container {
     max-width: 420px;
     bottom: 6px;
+    pointer-events: all;
 
     & svg.svg-inline--fa.fa-copy {
       position: absolute;

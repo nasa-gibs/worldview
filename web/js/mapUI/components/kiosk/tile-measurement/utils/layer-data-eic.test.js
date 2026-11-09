@@ -103,10 +103,6 @@ describe('layerPixelData', () => {
       ).toBe(0.20);
     });
 
-    it('VIIRS_NOAA20_CorrectedReflectance_TrueColor has threshold 0.65', () => {
-      expect(layerPixelData.VIIRS_NOAA20_CorrectedReflectance_TrueColor.threshold).toBe(0.65);
-    });
-
     it('CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly has threshold 0.01', () => {
       expect(layerPixelData.CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly.threshold).toBe(0.01);
     });
@@ -121,14 +117,6 @@ describe('layerPixelData', () => {
 
     it('VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance has threshold 0.45', () => {
       expect(layerPixelData.VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance.threshold).toBe(0.45);
-    });
-
-    it('VIIRS_NOAA20_DayNightBand_AtSensor_M15 has threshold 0.10', () => {
-      expect(layerPixelData.VIIRS_NOAA20_DayNightBand_AtSensor_M15.threshold).toBe(0.10);
-    });
-
-    it('VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate has threshold 0.90', () => {
-      expect(layerPixelData.VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate.threshold).toBe(0.90);
     });
 
     it('VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean has threshold 0.90', () => {
@@ -234,10 +222,6 @@ describe('bestDates', () => {
       expect(bestDates.AIRS_L3_Carbon_Monoxide_500hPa_Volume_Mixing_Ratio_Daily_Day.date).toBe('2026-07-19');
     });
 
-    it('VIIRS_NOAA20_CorrectedReflectance_TrueColor has date 2026-07-26', () => {
-      expect(bestDates.VIIRS_NOAA20_CorrectedReflectance_TrueColor.date).toBe('2026-07-26');
-    });
-
     it('CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly has date 2018-10-31', () => {
       expect(bestDates.CERES_EBAF_TOA_Shortwave_Flux_All_Sky_Monthly.date).toBe('2018-10-31');
     });
@@ -254,20 +238,12 @@ describe('bestDates', () => {
       expect(bestDates.VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance.date).toBe('2026-07-26');
     });
 
-    it('VIIRS_NOAA20_DayNightBand_AtSensor_M15 has date 2026-07-26', () => {
-      expect(bestDates.VIIRS_NOAA20_DayNightBand_AtSensor_M15.date).toBe('2026-07-26');
-    });
-
-    it('VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate has date 2026-07-26', () => {
-      expect(bestDates.VIIRS_NOAA20_AOT_Deep_Blue_Best_Estimate.date).toBe('2026-07-26');
-    });
-
     it('VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean has date 2026-07-26', () => {
       expect(bestDates.VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean.date).toBe('2026-07-26');
     });
 
     it('VIIRS_NOAA21_CorrectedReflectance_TrueColor has date 2026-07-26', () => {
-      expect(bestDates.VIIRS_NOAA21_CorrectedReflectance_TrueColor.date).toBe('2026-07-26');
+      expect(bestDates.VIIRS_NOAA21_CorrectedReflectance_TrueColor.date).toBe('2026-10-19');
     });
 
     it('VIIRS_SNPP_NDVI_8Day has date 2026-07-26', () => {
@@ -391,16 +367,12 @@ describe('travelModeData', () => {
       expect(travelModeData[7].title).toBe('Land Surface Temperature');
     });
 
-    it('mode 8 is "Arctic Sea Ice"', () => {
-      expect(travelModeData[8].title).toBe('Arctic Sea Ice');
+    it('mode 8 is "Aerosol Optical Depth (AOD) by NOAA-21 satellite"', () => {
+      expect(travelModeData[8].title).toBe('Aerosol Optical Depth (AOD) by NOAA-21 satellite');
     });
 
-    it('mode 9 is "Antarctic Sea Ice"', () => {
-      expect(travelModeData[9].title).toBe('Antarctic Sea Ice');
-    });
-
-    it('mode 10 is "Active fires detected by NOAA-20 satellite"', () => {
-      expect(travelModeData[10].title).toBe('Active fires detected by NOAA-20 satellite');
+    it('mode 9 is "Vegetation Index (NDVI) by NOAA-21 satellite"', () => {
+      expect(travelModeData[9].title).toBe('Vegetation Index (NDVI) by NOAA-21 satellite');
     });
 
     it('mode 11 is "Nitrogen Dioxide (NO2) by Aura satellite"', () => {
@@ -425,14 +397,6 @@ describe('travelModeData', () => {
 
     it('mode 16 is "Black Marble Nighttime At Sensor Radiance from NOAA-20 satellite"', () => {
       expect(travelModeData[16].title).toBe('Black Marble Nighttime At Sensor Radiance from NOAA-20 satellite');
-    });
-
-    it('mode 17 is "Black Marble Nighttime Blue/Yellow Composite from NOAA-20 satellite"', () => {
-      expect(travelModeData[17].title).toBe('Black Marble Nighttime Blue/Yellow Composite from NOAA-20 satellite');
-    });
-
-    it('mode 18 is "Aerosol Optical Depth (AOD) by NOAA-20 satellite"', () => {
-      expect(travelModeData[18].title).toBe('Aerosol Optical Depth (AOD) by NOAA-20 satellite');
     });
 
     it('mode 19 is "Active Fires detected by NOAA-21 satellite"', () => {

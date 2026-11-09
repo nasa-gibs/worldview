@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "Triangular Vegetation Index (TVI) *BETA*",
-      "subtitle": "Sentinel-2 / MSI",
+      "subtitle": "HLS Sentinel-2 / MSI",
       "description": "multi-mission/hls/HLS_TVI_Sentinel",
       "tags": "surface Sentinel msi s30 tvi 2A 2B 2C",
       "group": "overlays",

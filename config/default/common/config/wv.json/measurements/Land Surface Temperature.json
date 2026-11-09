@@ -3,7 +3,7 @@
         "Land Surface Temperature": {
             "id": "land-surface-temperature",
             "title":    "Land Surface Temperature",
-            "subtitle": "Aqua/MODIS, Aqua/MODIS/ASTER, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, Terra/MODIS/ASTER, SEDAC",
+            "subtitle": "Aqua/MODIS, Aqua/MODIS/ASTER, NOAA-21/VIIRS, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS, Terra/MODIS/ASTER, SEDAC",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -23,22 +23,16 @@
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]
                 },
-                "NOAA-20/VIIRS": {
-                    "id": "noaa20-viirs",
-                    "title": "NOAA-20/VIIRS",
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
                     "description": "",
                     "image": "",
                     "settings": [
-                        "VIIRS_NOAA20_Land_Surface_Temp_Day",
-                        "VIIRS_NOAA20_Land_Surface_Temp_Night",
-                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Day",
-                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Daily_Night",
-                        "VIIRS_NOAA20_L3_Land_Surface_Temp_8Day_Day",
-                        "VIIRS_NOAA20_L3_Land_Surface_Temp_8Day_Night",
-                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Monthly_Day",
-                        "VIIRS_NOAA20_L3_Land_Surface_Temp_Monthly_Night",
-                        "OrbitTracks_NOAA-20_Ascending",
-                        "OrbitTracks_NOAA-20_Descending"
+                        "VIIRS_NOAA21_Land_Surface_Temp_Day",
+                        "VIIRS_NOAA21_Land_Surface_Temp_Night",
+                        "OrbitTracks_NOAA-21_Ascending",
+                        "OrbitTracks_NOAA-21_Descending"
                     ]
                 },
 

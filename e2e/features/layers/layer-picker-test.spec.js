@@ -48,7 +48,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(21)
+  await expect(layersSearchRow).toHaveCount(25)
 })
 
 test('Updating input changes results', async () => {
@@ -159,8 +159,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(19)
-  await expect(layerResultsCountText).toContainText('Showing 19 out of')
+  await expect(layersSearchRow).toHaveCount(20)
+  await expect(layerResultsCountText).toContainText('Showing 20 out of')
 })
 
 test('Finding layer by ID with search', async () => {
@@ -260,7 +260,7 @@ test('Collapsed sidebar shows updated layer count', async () => {
   const { collapsedLayerButton } = selectors
   await page.locator('#toggleIconHolder').click()
   const layerCount = await page.locator('.layer-count')
-  await expect(layerCount).toContainText('12 Layers')
+  await expect(layerCount).toContainText('11 Layers')
   await collapsedLayerButton.click()
 })
 
@@ -283,8 +283,8 @@ test('Searching in arctic projection', async () => {
     layersModalCloseButton
   } = selectors
   await layersSearchField.fill('sea')
-  await expect(layersSearchRow).toHaveCount(23)
-  await expect(layerResultsCountText).toContainText('Showing 23 out of')
+  await expect(layersSearchRow).toHaveCount(24)
+  await expect(layerResultsCountText).toContainText('Showing 24 out of')
   await layerPickerBackButton.click()
   await expect(layerBrowseDetail).toBeVisible()
   await layersModalCloseButton.click()

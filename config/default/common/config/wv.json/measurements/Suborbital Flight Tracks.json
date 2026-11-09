@@ -3,7 +3,7 @@
       "Suborbital Flight Tracks": {
           "id": "Suborbital Flight Tracks",
           "title":    "Suborbital Flight Tracks",
-          "subtitle": "ACTIVATE, AJAX, ARCSIX, ASIA-AQ, DCOTSS, KORUS-AQ, STAQS, TRACER, PACE-PAX",
+          "subtitle": "ACTIVATE, AJAX, ARCSIX, ASIA-AQ, DCOTSS, DISCOVER-AQ, KORUS-AQ, STAQS, TRACER, PACE-PAX",
           "sources": {
             "ACTIVATE": {
                   "id": "activate",
@@ -54,6 +54,18 @@
                   "settings": [
                  "DCOTSS_ER-2_ROZE_Ozone",
 		         "DCOTSS_ER-2_UCATS_Ozone"
+                  ]
+              },
+                "DISCOVER-AQ": {
+                  "id": "DISCOVER-AQ",
+                  "title": "DISCOVER-AQ",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  	"DISCOVER-AQ_MD_P3B_Ozone",
+		            "DISCOVER-AQ_CA_P3B_Ozone",
+		            "DISCOVER-AQ_TX_P3B_Ozone",
+		            "DISCOVER-AQ_CO_P3B_Ozone"
                   ]
               },
               "KORUS-AQ": {

@@ -11,6 +11,7 @@ import {
   SET_REVERSE_GEOCODE_RESULTS,
   SET_SUGGESTION,
   TOGGLE_REVERSE_GEOCODE,
+  TOGGLE_MARKER_HIDDEN,
   TOGGLE_SHOW_LOCATION_SEARCH,
 } from './constants';
 
@@ -23,8 +24,8 @@ const suggestion = [{
   magicKey: 'test1234=',
   text: 'New York, NY, USA',
 }];
-const coordinatesObject = { id: 1234, latitude: 72, longitude: 40 };
-const coordinatesObject2 = { id: 5678, latitude: 34, longitude: -118 };
+const coordinatesObject = { id: 1234, latitude: 72, longitude: 40, isHidden: false };
+const coordinatesObject2 = { id: 5678, latitude: 34, longitude: -118, isHidden: true };
 
 describe('locationSearch', () => {
   test('locationSearch should return the initial state [locationstate-reducer-initial-state]', () => {
@@ -93,6 +94,52 @@ describe('locationSearch', () => {
       ).toEqual({
         ...locationSearchState,
         isCoordinateSearchActive: false,
+      });
+    },
+  );
+
+  test(
+    `${TOGGLE_MARKER_HIDDEN} toggles coordinate.isHidden to true and ` +
+      'should return new state [locationsearch-reducer-marker-hidden]',
+    () => {
+      const stateWithExistingCoord = {
+        ...locationSearchState,
+        coordinates: [coordinatesObject],
+      };
+      expect(
+        locationSearchReducer(stateWithExistingCoord, {
+          type: TOGGLE_MARKER_HIDDEN,
+          coordinates: coordinatesObject,
+        }),
+      ).toEqual({
+        ...locationSearchState,
+        coordinates: [{
+          ...coordinatesObject,
+          isHidden: true,
+        }],
+      });
+    },
+  );
+
+  test(
+    `${TOGGLE_MARKER_HIDDEN} toggles coordinate.isHidden to false and ` +
+      'should return new state [locationsearch-reducer-reverse-marker-hidden]',
+    () => {
+      const stateWithExistingCoord = {
+        ...locationSearchState,
+        coordinates: [coordinatesObject2],
+      };
+      expect(
+        locationSearchReducer(stateWithExistingCoord, {
+          type: TOGGLE_MARKER_HIDDEN,
+          coordinates: coordinatesObject2,
+        }),
+      ).toEqual({
+        ...locationSearchState,
+        coordinates: [{
+          ...coordinatesObject2,
+          isHidden: false,
+        }],
       });
     },
   );

@@ -5,7 +5,7 @@
         "enableCMRDataFinder": true,
         "collectionConceptID": "C2021957657-LPCLOUD",
         "title": "Vegetation Index (NDVI) *BETA*",
-        "subtitle": "Landsat 8 & 9 / OLI",
+        "subtitle": "HLS Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDVI_Landsat",
         "tags": "surface landsat oli l30 ndvi",
         "group": "overlays",

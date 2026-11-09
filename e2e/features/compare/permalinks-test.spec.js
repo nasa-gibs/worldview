@@ -62,7 +62,7 @@ test('A|B loaded with only one layer in A section -- Corrected Reflectance (True
 test('Click B tab to ensure that loaded layers are correct', async () => {
   const { bTab } = selectors
   const aquaLayer = page.locator('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor.layer-hidden')
-  const snppLayer = page.locator('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor.layer-hidden')
+  const noaa20Layer = page.locator('#activeB-VIIRS_NOAA20_CorrectedReflectance_TrueColor.layer-hidden')
   const refLabels = page.locator('#activeB-Reference_Labels_15m.layer-hidden')
   const refFeatures = page.locator('#activeB-DoS_International_Boundaries.layer-hidden')
   const refFeatures2 = page.locator('#activeB-Admin_Boundaries.layer-hidden')
@@ -70,7 +70,7 @@ test('Click B tab to ensure that loaded layers are correct', async () => {
   const terraLayer = page.locator('#activeB-MODIS_Terra_CorrectedReflectance_TrueColor.layer-visible')
   await bTab.click()
   await expect(aquaLayer).toBeVisible()
-  await expect(snppLayer).toBeVisible()
+  await expect(noaa20Layer).toBeVisible()
   await expect(refLabels).toBeVisible()
   await expect(refFeatures).toBeVisible()
   await expect(refFeatures2).toBeVisible()

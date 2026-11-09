@@ -33,6 +33,7 @@ import {
   mergeBreakpointLayerAttributes,
 } from './util';
 import { fetchSubdailyDateRanges, datesInDateRanges, prevDateInDateRange, nearestInterval } from '../modules/layers/util';
+import { getLayerDayCount } from '../modules/layers/selectors';
 import { getSelectedDate } from '../modules/date/selectors';
 import {
   isActive as isPaletteActive,
@@ -208,7 +209,9 @@ export default function mapLayerBuilder(config, cache, store) {
     if (isVectorStyleActive(def.id, activeGroupStr, state)) {
       style = getVectorStyleKeys(def.id, undefined, state);
     }
-    return [layerId, projId, date, style, activeGroupStr].join(':');
+    const dayCount = getLayerDayCount(state, def.id, activeGroupStr);
+    const dayStr = dayCount > 1 ? `d${dayCount}` : '';
+    return [layerId, projId, date, style, activeGroupStr, dayStr].join(':');
   };
 
   /**
@@ -1198,6 +1201,7 @@ export default function mapLayerBuilder(config, cache, store) {
       vectorStyle,
       matrixSet,
       matrixSetLimits,
+      period,
     } = def;
 
     const projection = get(crs);
@@ -1215,13 +1219,21 @@ export default function mapLayerBuilder(config, cache, store) {
     };
     const { extent } = calcExtentsFromLimits(configMatrixSet, matrixSetLimits, day, selected);
 
-    const sourceOptions = {
-      url: `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`,
-      projection,
-      format: new MVT(),
-      tileGrid,
-    };
-    const source = new SourceVectorTile(sourceOptions);
+    const sourceUrl = `${configSource.url}/${layerName}/${serviceName}/${tiles[0]}`;
+    let source = cache.getItem(sourceUrl);
+
+    // If source is not cached, create new source
+    if (!source) {
+      const sourceOptions = {
+        url: sourceUrl,
+        projection,
+        format: new MVT(),
+        tileGrid,
+      };
+      source = new SourceVectorTile(sourceOptions);
+      const cacheOptions = getCacheOptions(period, options.date);
+      cache.setItem(sourceUrl, source, cacheOptions);
+    }
 
     const layer = new LayerVectorTile({
       source,
@@ -1442,6 +1454,7 @@ export default function mapLayerBuilder(config, cache, store) {
           { cmrRebuildAttempts: options.cmrRebuildAttempts }),
       };
       def = lodashCloneDeep(def);
+
       // lodashMerge(def, projections[proj.id]);
       // POC HACK: Fall back to geographic projection if target polar projection is missing
       const hasNativeProj = def.projections && !!def.projections[proj.id];
@@ -1450,6 +1463,10 @@ export default function mapLayerBuilder(config, cache, store) {
         : (def.projections['geographic'] || def.projections['epsg4326']);
 
       lodashMerge(def, targetProjConfig);
+      if (!def.dayRange) {
+        const dayCount = getLayerDayCount(state, id, options.group);
+        if (dayCount > 1) def.dayRange = dayCount - 1;
+      }
 
       if (breakPointLayer) def = mergeBreakpointLayerAttributes(def, proj.id);
       const isDataDownloadTabActive = activeTab === 'download';

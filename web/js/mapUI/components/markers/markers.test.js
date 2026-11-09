@@ -273,6 +273,7 @@ describe('Markers', () => {
         coord,
         results,
         expect.any(Function),
+        expect.any(Function),
         false,
         true,
       );
@@ -377,6 +378,7 @@ describe('Markers', () => {
           { id: 'geographic' },
           mockCoordinatesObject,
           mockResults,
+          expect.any(Function),
           expect.any(Function),
           false,
           true,

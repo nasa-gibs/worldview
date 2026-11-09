@@ -7,6 +7,7 @@ import { animateCoordinates, areCoordinatesWithinExtent, getCoordinatesMarker } 
 import {
   setGeocodeResults as setGeocodeResultsAction,
   removeMarker as removeMarkerAction,
+  toggleIsHidden as toggleIsHiddenAction,
 } from '../../../modules/location-search/actions';
 import { getActiveLayers, getMaxZoomLevelLayerCollection } from '../../../modules/layers/selectors';
 
@@ -22,6 +23,7 @@ function Markers(props) {
     selectedMapMarkers,
     proj,
     removeMarker,
+    toggleIsHidden,
     setGeocodeResults,
     ui,
   } = props;
@@ -90,11 +92,13 @@ function Markers(props) {
     const results = geocodeResults;
     if (!results) return undefined;
     const remove = () => removeMarker(coordinatesObject);
+    const toggleHidden = () => toggleIsHidden(coordinatesObject);
     const marker = getCoordinatesMarker(
       proj,
       coordinatesObject,
       results,
       remove,
+      toggleHidden,
       isMobileDevice,
       showDialog,
     );
@@ -126,11 +130,11 @@ function Markers(props) {
     removeAllCoordinatesMarkers();
     if (coordinates && coordinates.length > 0) {
       coordinates.forEach((coordinatesObject) => {
-        const { longitude, latitude } = coordinatesObject;
+        const { longitude, latitude, isHidden } = coordinatesObject;
         const coord = [longitude, latitude];
         if (!areCoordinatesWithinExtent(proj, coord)) return;
         reverseGeocode(getNormalizedCoordinate(coord), config).then((results) => {
-          addMarkerAndUpdateStore(true, results, null, coordinatesObject);
+          addMarkerAndUpdateStore(!isHidden, results, null, coordinatesObject);
         });
       });
     }
@@ -197,6 +201,9 @@ const mapDispatchToProps = (dispatch) => ({
   removeMarker: (value) => {
     dispatch(removeMarkerAction(value));
   },
+  toggleIsHidden: (value) => {
+    dispatch(toggleIsHiddenAction(value));
+  },
 });
 
 export default React.memo(
@@ -215,6 +222,7 @@ Markers.propTypes = {
   isMobileDevice: PropTypes.bool,
   proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   removeMarker: PropTypes.func,
+  toggleIsHidden: PropTypes.func,
   selectedMap: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedMapMarkers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   setGeocodeResults: PropTypes.func,

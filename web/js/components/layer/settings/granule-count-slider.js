@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UncontrolledTooltip } from 'reactstrap';
+import HoverTooltip from '../../util/hover-tooltip';
+import useDebouncedSliderValue from '../../util/use-debounced-slider-value';
+import util from '../../../util/util';
 import { DEFAULT_NUM_GRANULES, MIN_GRANULES, MAX_GRANULES } from '../../../modules/layers/constants';
 
 function GranuleCountSlider(props) {
@@ -10,49 +10,43 @@ function GranuleCountSlider(props) {
     count,
     def,
     granuleDates,
-    granulePlatform,
+    isMobile,
     updateGranuleLayerOptions,
   } = props;
 
-  const [granuleCount, setGranuleCount] = useState(count);
+  const [value, onSlide] = useDebouncedSliderValue(
+    count,
+    (val) => updateGranuleLayerOptions(granuleDates, def, val),
+  );
 
-  const onChange = (val) => {
-    updateGranuleLayerOptions(granuleDates, def, val);
-  };
-
-  const satelliteInfo = `Updating granule count for all granules layers associated with the ${granulePlatform} satellite.`;
+  const infoId = `granule-count-info-${util.encodeId(def.id)}`;
 
   return (
     <div className="layer-granule-count-select settings-component">
       <div className="d-flex">
         <h2 className="wv-header">Granule Count</h2>
-        <FontAwesomeIcon id="bbox-limit-info" icon="info-circle" className="ms-2" widthAuto />
-        <UncontrolledTooltip
-          id="center-align-tooltip"
+        <FontAwesomeIcon id={infoId} icon="info-circle" className="ms-2" widthAuto />
+        <HoverTooltip
+          target={infoId}
           placement="right"
-          target="bbox-limit-info"
-        >
-          {satelliteInfo}
-        </UncontrolledTooltip>
+          isMobile={isMobile}
+          labelText="Number of most recent granules composited together, ending at the selected time."
+        />
       </div>
       <input
         type="range"
         className="form-range"
         min={MIN_GRANULES}
         max={MAX_GRANULES}
-        defaultValue={count}
-        onChange={(e) => {
-          const val = parseInt(e.target.value, 10);
-          setGranuleCount(val);
-          onChange(val);
-        }}
+        step={1}
+        value={value}
+        onChange={(e) => onSlide(parseInt(e.target.value, 10))}
         style={{
-          '--value-percent': `${((granuleCount - MIN_GRANULES) / (MAX_GRANULES - MIN_GRANULES)) * 100}%`,
+          '--value-percent': `${((value - MIN_GRANULES) / (MAX_GRANULES - MIN_GRANULES)) * 100}%`,
         }}
-
       />
       <div className="wv-label wv-label-granule-count mt-1">
-        {granuleCount}
+        {value === 1 ? '1 granule' : `${value} granules`}
       </div>
     </div>
   );
@@ -65,19 +59,8 @@ GranuleCountSlider.propTypes = {
   granuleDates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   def: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   count: PropTypes.number,
-  granulePlatform: PropTypes.string,
+  isMobile: PropTypes.bool,
   updateGranuleLayerOptions: PropTypes.func,
 };
 
-const mapStateToProps = (state) => {
-  const { layers } = state;
-  const { granulePlatform } = layers.active;
-
-  return {
-    granulePlatform,
-  };
-};
-
-export default connect(
-  mapStateToProps,
-)(GranuleCountSlider);
+export default GranuleCountSlider;

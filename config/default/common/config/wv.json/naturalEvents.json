@@ -78,14 +78,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
@@ -94,19 +86,19 @@
                         false
                     ],
                     [
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
+                        false
+                    ],
+                    [
                         "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         false
                     ],
                     [
                         "VIIRS_NOAA20_DayNightBand_AtSensor_M15",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
                         false
                     ],
                     [
@@ -126,14 +118,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
                         false
                     ],
@@ -142,11 +126,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -184,15 +168,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -212,14 +192,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
                         false
                     ],
@@ -228,11 +200,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Night",
                         false
                     ],
                     [
@@ -248,7 +220,7 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Sea_Ice",
+                        "VIIRS_NOAA21_Sea_Ice",
                         false
                     ]
                 ],
@@ -274,15 +246,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ]
                 ],
@@ -308,15 +276,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         true
                     ],
                     [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ]
                 ],
@@ -346,27 +310,19 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
+                        true
                     ],
                     [
                         "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
@@ -382,7 +338,7 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_NDSI_Snow_Cover",
+                        "VIIRS_NOAA21_NDSI_Snow_Cover",
                         false
                     ]
                 ],
@@ -396,15 +352,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -424,14 +376,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
                         false
                     ],
@@ -440,11 +384,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -480,14 +424,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
@@ -496,19 +432,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
                         false
                     ],
                     [
@@ -522,17 +450,17 @@
                     [
                         "OMPS_NOAA20_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
                         false
-                     ],
-                     [
-                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
-                        false
-                     ],
+                    ],
                     [
-                        "OMPS_Aerosol_Index_PyroCumuloNimbus",
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
                         false
                     ],
                     [
-                        "OMPS_Aerosol_Index",
+                        "OMPS_NOAA21_NadirMapper_AerosolIndex_PyroCumuloNimbus_380",
+                        false
+                    ],
+                    [
+                        "OMPS_NOAA21_NadirMapper_AerosolIndex_380",
                         false
                     ],
                     [
@@ -552,14 +480,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
                         false
                     ],
@@ -568,12 +488,16 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
+                    ],
+                    [
+                        "Admin_Boundaries",
+                        true
                     ],
                     [
                         "DoS_International_Boundaries",
@@ -589,6 +513,10 @@
                     ]
                 ],
                 "Sea and Lake Ice": [
+                    [
+                        "Admin_Boundaries",
+                        true
+                    ],
                     [
                         "DoS_International_Boundaries",
                         true
@@ -610,23 +538,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -654,14 +570,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
                         false
                     ],
@@ -670,11 +578,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Night",
                         false
                     ],
                     [
@@ -690,11 +598,15 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Sea_Ice",
+                        "VIIRS_NOAA21_Sea_Ice",
                         false
                     ]
                 ],
                 "Floods": [
+                    [
+                        "Admin_Boundaries",
+                        true
+                    ],
                     [
                         "DoS_International_Boundaries",
                         true
@@ -724,14 +636,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
@@ -740,7 +644,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        false
+                    ],
+                    [
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
                         false
                     ],
                     [
@@ -782,6 +690,10 @@
                 ],
                 "Water Color": [
                     [
+                        "Admin_Boundaries",
+                        true
+                    ],
+                    [
                         "DoS_International_Boundaries",
                         true
                     ],
@@ -802,15 +714,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -822,20 +730,19 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Chlorophyll_a",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Chlorophyll_a",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_L2_Chlorophyll_A",
+                        "VIIRS_NOAA21_Chlorophyll_a",
                         false
                     ]
                 ],
                 "Severe Storms": [
                     [
+                        "Admin_Boundaries",
+                        true
+                    ],[
                         "DoS_International_Boundaries",
                         true
                     ],
@@ -856,23 +763,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         true
                     ],
                     [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -894,6 +789,9 @@
                 ],
                 "Snow": [
                     [
+                        "Admin_Boundaries",
+                        true
+                    ],[
                         "DoS_International_Boundaries",
                         true
                     ],
@@ -918,27 +816,19 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
+                        true
                     ],
                     [
                         "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
@@ -954,7 +844,7 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_NDSI_Snow_Cover",
+                        "VIIRS_NOAA21_NDSI_Snow_Cover",
                         false
                     ],
                     [
@@ -976,15 +866,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -1012,22 +898,6 @@
                         false
                     ],
                     [
-                        "OMPS_SO2_Upper_Troposphere_and_Stratosphere",
-                        false
-                    ],
-                    [
-                        "OMPS_SO2_Middle_Troposphere",
-                        false
-                    ],
-                    [
-                        "OMPS_SO2_Lower_Troposphere",
-                        true
-                    ],
-                    [
-                        "OMPS_SO2_Planetary_Boundary_Layer",
-                        false
-                    ],
-                    [
                         "MODIS_Terra_Thermal_Anomalies_Day",
                         true
                     ],
@@ -1044,14 +914,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Thermal_Anomalies_375m_Day",
                         false
                     ],
@@ -1060,19 +922,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
@@ -1082,6 +936,10 @@
                     [
                         "VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance",
                         false
+                    ],
+                    [
+                        "Admin_Boundaries",
+                        true
                     ],
                     [
                         "DoS_International_Boundaries",
@@ -1122,23 +980,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         true
                     ],
                     [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_AtSensor_M15",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_DayNightBand_At_Sensor_Radiance",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -1160,15 +1006,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         true
                     ],
                     [
-                        "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -1220,11 +1062,11 @@
                         false
                     ],
                     [
-                        "OMPS_Aerosol_Index",
+                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
                         false
                     ],
                     [
-                        "OMPS_NOAA20_NadirMapper_AerosolIndex_380",
+                        "OMPS_NOAA21_NadirMapper_AerosolIndex_380",
                         false
                     ]
                 ]
@@ -1240,11 +1082,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
+                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
+                        "MODIS_Aqua_CorrectedReflectance_Bands721",
                         false
                     ],
                     [
@@ -1256,19 +1098,11 @@
                         false
                     ],
                     [
-                        "MODIS_Aqua_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "MODIS_Aqua_CorrectedReflectance_Bands721",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM11-I2-I1",
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM11-I2-I1",
                         false
                     ],
                     [
@@ -1280,11 +1114,11 @@
                         true
                     ],
                     [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
+                        "MODIS_Aqua_Thermal_Anomalies_Day",
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
+                        "MODIS_Aqua_Thermal_Anomalies_Night",
                         false
                     ],
                     [
@@ -1296,20 +1130,16 @@
                         false
                     ],
                     [
-                        "MODIS_Aqua_Thermal_Anomalies_Day",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Day",
                         false
                     ],
                     [
-                        "MODIS_Aqua_Thermal_Anomalies_Night",
+                        "VIIRS_NOAA21_Thermal_Anomalies_375m_Night",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_Thermal_Anomalies_375m_Night",
-                        false
+                        "Admin_Boundaries",
+                        true
                     ],
                     [
                         "DoS_International_Boundaries",
@@ -1326,6 +1156,9 @@
                 ],
                 "Sea and Lake Ice": [
                     [
+                        "Admin_Boundaries",
+                        true
+                    ],[
                         "DoS_International_Boundaries",
                         true
                     ],
@@ -1346,15 +1179,11 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -1374,14 +1203,6 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Day",
-                        false
-                    ],
-                    [
-                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Night",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_Brightness_Temp_BandI5_Day",
                         false
                     ],
@@ -1390,11 +1211,11 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Brightness_Temp_BandI5_Day",
+                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Day",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Brightness_Temp_BandI5_Night",
+                        "VIIRS_NOAA21_Brightness_Temp_BandI5_Night",
                         false
                     ],
                     [
@@ -1410,12 +1231,15 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_Sea_Ice",
+                        "VIIRS_NOAA21_Sea_Ice",
                         false
                     ]
                 ],
                 "Severe Storms": [
                     [
+                        "Admin_Boundaries",
+                        true
+                    ],[
                         "DoS_International_Boundaries",
                         true
                     ],
@@ -1434,10 +1258,6 @@
 
                     [
                         "MODIS_Aqua_CorrectedReflectance_TrueColor",
-                        false
-                    ],
-                    [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
@@ -1475,27 +1295,19 @@
                         false
                     ],
                     [
-                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                        true
-                    ],
-                    [
-                        "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
-                        false
-                    ],
-                    [
                         "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
-                        false
+                        true
                     ],
                     [
                         "VIIRS_NOAA20_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_TrueColor",
+                        "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
                         false
                     ],
                     [
-                        "VIIRS_SNPP_CorrectedReflectance_BandsM3-I3-M11",
+                        "VIIRS_NOAA21_CorrectedReflectance_BandsM3-I3-M11",
                         false
                     ],
                     [
@@ -1511,7 +1323,7 @@
                         false
                     ],
                     [
-                        "VIIRS_SNPP_NDSI_Snow_Cover",
+                        "VIIRS_NOAA21_NDSI_Snow_Cover",
                         false
                     ]
                 ]
