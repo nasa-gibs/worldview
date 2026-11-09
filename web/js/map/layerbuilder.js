@@ -438,7 +438,7 @@ export default function mapLayerBuilder(config, cache, store) {
     const { proj } = state;
 
     const isPolar = proj.id === 'arctic' || proj.id === 'antarctic' || proj.id === 'epsg3413' || proj.id === 'epsg3575';
-    const hasNativeProj = !!(def.projections && def.projections[proj.id]);
+    const hasNativeProj = Boolean(def.projections && def.projections[proj.id]);
 
     // Force reprojection flag
     const forceReproject = true;
@@ -448,9 +448,14 @@ export default function mapLayerBuilder(config, cache, store) {
     const geoProj = def.projections?.['geographic'] || def.projections?.['epsg4326'];
     const targetProjConfig = isReprojecting ? geoProj : (def.projections?.[proj.id] || {});
 
-    // Resolve source key and matrixSet ID
+    // Resolve source key: use geographic source configuration when reprojecting
     const sourceKey = isReprojecting ? (geoProj?.source || 'GIBS:geographic') : def.source;
-    const matrixSet = isReprojecting ? (geoProj?.matrixSet || '2km') : (def.matrixSet || targetProjConfig?.matrixSet);
+
+    // When reprojecting, ensure we reference the layer's geographic matrix set definition
+    // so the tile grid resolutions align with the expected overview pyramid levels.
+    const matrixSet = isReprojecting
+      ? (geoProj?.matrixSet || def.geographicMatrixSet || def.matrixSet || '2km')
+      : (def.matrixSet || targetProjConfig?.matrixSet);
 
     const {
       id, layer, format, matrixIds, matrixSetLimits,
@@ -533,6 +538,7 @@ export default function mapLayerBuilder(config, cache, store) {
       wrapX: !isReprojecting,
       style: typeof style === 'undefined' ? 'default' : style,
       projection: isReprojecting ? 'EPSG:4326' : undefined,
+      ...(isReprojecting && { maxReprojectionError: 2.0 }),
     };
     if (isPaletteActive(id, options.group, state)) {
       const lookup = getPaletteLookup(id, options.group, state);
