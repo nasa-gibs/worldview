@@ -1,4 +1,4 @@
-The NISAR Radiometric Terrain Corrected SAR Backscatter from L2 Geocoded Covariance (False Color) PROVISIONAL visualization presents radiometrically terrain corrected backscatter values from NISAR [Provisional](https://www.earthdata.nasa.gov/learn/earth-observation-data-basics/data-maturity-levels) Level-2 (L2) [Geocoded Polarimetric Covariance](https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-provisional-v1-1) (GCOV) products. The imagery is displayed using a false-color RGB decomposition to facilitate visual interpretation of the SAR backscatter data.
+The NISAR Radiometric Terrain Corrected SAR Backscatter from L2 Geocoded Covariance (False Color) visualization presents radiometrically terrain corrected backscatter values from NISAR Level-2 (L2) [Geocoded Polarimetric Covariance](https://www.earthdata.nasa.gov/data/catalog/asf-nisar-l2-gcov-v1-1) (GCOV) products. The imagery is displayed using a false-color RGB decomposition to facilitate visual interpretation of the SAR backscatter data.
 
 The NASA-ISRO Synthetic Aperture Radar (NISAR) can image the Earth’s surface in light or darkness, penetrating through clouds and smoke. Its 12-day repeat cycle provides a reliable source of imagery for monitoring surface conditions. For products acquired using [multiple frequencies](https://nisar-docs.asf.alaska.edu/nisar-intro/#nisar-frequencies), the higher-resolution frequency is displayed. All products are resampled to 15.5 m pixel spacing in this visualization, regardless of the source resolution.
 
@@ -10,4 +10,4 @@ Note that different landcover types may appear similar to each other in this vis
 
 The NISAR GCOV products are produced by the NISAR Project, managed by the Jet Propulsion Laboratory, and distributed by the Alaska Satellite Facility, both under contract with NASA.
 
-References: doi:[10.5067/NIL2GCOV-P1](https://doi.org/10.5067/NIL2GCOV-P1)
+References: doi:[10.5067/NIL2GCOV-V1](https://doi.org/10.5067/NIL2GCOV-V1)
