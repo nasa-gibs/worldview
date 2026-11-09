@@ -5,25 +5,7 @@ const xml2js = require('xml2js')
 const projDict = {
   'GIBS:geographic': 'epsg4326',
   'GIBS:arctic': 'epsg3413',
-  'GIBS:antarctic': 'epsg3031',
-  'gibs:epsg3031:best': 'epsg3031',
-  'GITC:geographic': 'epsg4326',
-  'GITC:arctic': 'epsg3413',
-  'GITC:antarctic': 'epsg3031',
-  'GITC:webmercator': 'epsg3857',
-  'gibs:epsg3857:nrt': 'epsg3857',
-  'gibs-epsg4326-best': 'epsg4326',
-  'gibs-epsg4326-nrt': 'epsg4326',
-  'gibs-epsg4326-std': 'epsg4326',
-  'gibs-epsg3413-best': 'epsg3413',
-  'gibs-epsg3413-nrt': 'epsg3413',
-  'gibs-epsg3413-std': 'epsg3413',
-  'gibs-epsg3031-best': 'epsg3031',
-  'gibs-epsg3031-nrt': 'epsg3031',
-  'gibs-epsg3031-std': 'epsg3031',
-  'gibs-epsg3857-best': 'epsg3857',
-  'gibs-epsg3857-nrt': 'epsg3857',
-  'gibs-epsg3857-std': 'epsg3857',
+  'GIBS:antarctic': 'epsg3031'
 }
 
 function toList (val) {
@@ -150,15 +132,22 @@ async function createDateRanges (url, wvLayer, cacheMode) {
   return [dateRangeStart, dateRangeEnd, rangeInterval]
 }
 
-async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic', cacheMode, features) {
-  const projectionPath = projDict[source]
+async function processTemporalLayer (wvLayer, value, source = 'GIBS:geographic', cacheMode, features, sourceFile) {
+  // Prefer the sourceFile. Fallback to the source argument if the sourceFile is not provided.
+  let projectionPath;
+  if (sourceFile.sources?.[source]?.projection) {
+    projectionPath = sourceFile.sources[source].projection
+  } else {
+    projectionPath = projDict[source]
+  }
+
   if (!projectionPath) {
     console.warn(`Unknown or unmapped source: ${source} for layer ${wvLayer.id}`)
     return wvLayer
   }
   try {
     const describeDomainsBaseUrl = features?.features?.describeDomains?.url || 'https://gibs.earthdata.nasa.gov';
-    const describeDomainsAllUrl = `${describeDomainsBaseUrl}/wmts/${projDict[source]}/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
+    const describeDomainsAllUrl = `${describeDomainsBaseUrl}/wmts/${projectionPath}/best/1.0.0/${wvLayer.id}/default/250m/all/all.xml`
     let [dateRangeStart, dateRangeEnd, rangeInterval] = await createDateRanges(describeDomainsAllUrl, wvLayer, cacheMode)
     // Fall back to original ranges if the 'all' endpoint fetch failed
     if (!dateRangeStart) {
