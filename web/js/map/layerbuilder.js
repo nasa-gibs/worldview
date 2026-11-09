@@ -447,12 +447,9 @@ export default function mapLayerBuilder(config, cache, store) {
     // Ensure we fetch geographic config if reprojecting
     const geoProj = def.projections?.['geographic'] || def.projections?.['epsg4326'];
     const targetProjConfig = isReprojecting ? geoProj : (def.projections?.[proj.id] || {});
-
-    // Resolve source key: use geographic source configuration when reprojecting
     const sourceKey = isReprojecting ? (geoProj?.source || 'GIBS:geographic') : def.source;
 
-    // When reprojecting, ensure we reference the layer's geographic matrix set definition
-    // so the tile grid resolutions align with the expected overview pyramid levels.
+    // When reprojecting, reference the geographic matrix set def
     const matrixSet = isReprojecting
       ? (geoProj?.matrixSet || def.geographicMatrixSet || def.matrixSet || '2km')
       : (def.matrixSet || targetProjConfig?.matrixSet);
