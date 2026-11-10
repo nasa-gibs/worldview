@@ -123,7 +123,8 @@ else
       --outputDir  "$BUILD_DIR/_wmts" \
       --mode "$MODE" \
       --features "$BUILD_DIR/features.json" \
-      --cacheMode "$CACHE_MODE"`
+      --cacheMode "$CACHE_MODE" \
+      --source "$BUILD_DIR/config/wv.json/sources.json"`
   fi
 
   # Run processVectorStyles.js and move vectorstyles where we want them

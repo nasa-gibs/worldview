@@ -56,7 +56,7 @@ export const layerPixelData = {
   VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
   VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean: { threshold: 0.65 },
   VIIRS_NOAA21_AOD_Deep_Blue_Land_Ocean: { threshold: 0.65 },
-  VIIRS_NOAA21_NDVI_8Day: { threshold: 0.60 },
+  VIIRS_NOAA21_NDVI_8Day: { threshold: 0.75 },
   VIIRS_SNPP_NDVI_8Day: { threshold: 0.90 },
 };
 
