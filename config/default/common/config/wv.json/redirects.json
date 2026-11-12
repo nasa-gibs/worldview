@@ -78,7 +78,18 @@
       "Reference_Features": ["DoS_International_Boundaries", "Coastlines_15m"],
       "Reference_Labels": "Reference_Labels_15m",
       "Coastlines": "Coastlines_15m",
-      "Reference_Features_15m": ["Admin_Boundaries", "DoS_International_Boundaries", "Coastlines_15m"]
+      "Reference_Features_15m": ["Admin_Boundaries", "DoS_International_Boundaries", "Coastlines_15m"],
+      "AMSR2_Columnar_Water_Vapor_Night": "AMSRU2_Columnar_Water_Vapor_Night",
+      "AMSR2_Columnar_Water_Vapor_Day": "AMSRU2_Columnar_Water_Vapor_Day",
+      "AMSR2_Wind_Speed_Day": "AMSRU2_Wind_Speed_Day",
+      "AMSR2_Wind_Speed_Night": "AMSRU2_Wind_Speed_Night",
+      "AMSR2_Total_Precipitable_Water_Day": "AMSRU2_Total_Precipitable_Water_Day",
+      "AMSR2_Total_Precipitable_Water_Night": "AMSRU2_Total_Precipitable_Water_Night",
+      "AMSR2_Surface_Precipitation_Day": "AMSRU2_Surface_Precipitation_Day",
+      "AMSR2_Surface_Precipitation_Night": "AMSRU2_Surface_Precipitation_Night",
+      "AMSR2_Cloud_Liquid_Water_Day": "AMSRU2_Cloud_Liquid_Water_Day",
+      "AMSR2_Cloud_Liquid_Water_Night": "AMSRU2_Cloud_Liquid_Water_Night"
+
     }
   }
 }
