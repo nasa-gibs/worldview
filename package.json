@@ -234,9 +234,6 @@
     "not dead",
     "> 1%"
   ],
-  "overrides": {
-    "qs": "6.16.2"
-  },
   "prettier": {
     "singleQuote": true
   }
