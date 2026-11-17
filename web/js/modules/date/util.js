@@ -582,7 +582,23 @@ function getDateRanges(layer) {
 }
 
 /**
- * Gets the dateRanges between two dates for auto increments
+ * Gets the dateInterval of a layer's first dateRange entry, in minutes.
+ * Used to pick the finest-grained subdaily layer when several are active.
+ *
+ * @method getFirstDateInterval
+ * @param  {Array} dateRanges
+ * @returns {Number}
+ */
+function getFirstDateInterval(dateRanges) {
+  const interval = Number(get(dateRanges, '[0].dateInterval'));
+  return Number.isNaN(interval) ? Infinity : interval;
+}
+
+/**
+ * Gets the dateRanges between two dates for auto increments.
+ * Prefers a subdaily layer's dateRanges over lower-resolution ones (when the
+ * subdaily layer actually covers the window), since lower-resolution ranges
+ * span too much time and would otherwise collapse the frame count.
  *
  * @method getValidDateRanges
  * @param  {Array} layers
@@ -591,14 +607,36 @@ function getDateRanges(layer) {
  * @returns {Array} Array of dateRanges.
  */
 export function getValidDateRanges(layers, dateA, dateB) {
+  const inWindow = (element) => new Date(element.startDate) <= dateB &&
+    new Date(element.endDate) >= dateA;
+  let fallbackRanges;
+  let bestSubDailyFiltered;
+  let bestSubDailyInterval = Infinity;
+
   for (let i = 0; i < layers.length; i += 1) {
-    const dateRanges = getDateRanges(layers[i]);
-    if (dateRanges && dateRanges.length && layers[i].visible) {
-      return dateRanges.filter((element) => new Date(element.startDate) <= dateB &&
-        new Date(element.endDate) >= dateA);
+    const layer = layers[i];
+    const dateRanges = getDateRanges(layer);
+    if (dateRanges && dateRanges.length && layer.visible) {
+      if (!fallbackRanges) {
+        fallbackRanges = dateRanges;
+      }
+      if (layer.period === 'subdaily') {
+        const filtered = dateRanges.filter(inWindow);
+        if (filtered.length) {
+          const interval = getFirstDateInterval(dateRanges);
+          if (!bestSubDailyFiltered || interval < bestSubDailyInterval) {
+            bestSubDailyInterval = interval;
+            bestSubDailyFiltered = filtered;
+          }
+        }
+      }
     }
   }
-  return [];
+
+  if (bestSubDailyFiltered) {
+    return bestSubDailyFiltered;
+  }
+  return fallbackRanges ? fallbackRanges.filter(inWindow) : [];
 }
 
 /**
