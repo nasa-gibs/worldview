@@ -1,4 +1,3 @@
-import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ContextMenuTrigger } from '../../util/context-menu';
@@ -12,9 +11,15 @@ import RightClickMenu from '../../components/context-menu/context-menu';
 import NaturalEvents from '../../map/natural-events/natural-events';
 import DateLines from '../../components/dateline/datelines';
 
-class MapInteractions extends PureComponent {
-  getMapClasses = () => {
-    const { isShowingClick, isDistractionFreeModeActive, isCoordinateSearchActive } = this.props;
+function MapInteractions(props) {
+  const {
+    isShowingClick,
+    isDistractionFreeModeActive,
+    isCoordinateSearchActive,
+    isNaturalEventsActive,
+  } = props;
+
+  const getMapClasses = () => {
     let mapClasses = 'wv-map';
     mapClasses += isShowingClick && !isCoordinateSearchActive ? ' cursor-pointer' : '';
     mapClasses += !isDistractionFreeModeActive && isCoordinateSearchActive ? ' cursor-crosshair' : '';
@@ -22,31 +27,25 @@ class MapInteractions extends PureComponent {
     return mapClasses;
   };
 
-  render() {
-    const {
-      isDistractionFreeModeActive,
-      isNaturalEventsActive,
-    } = this.props;
-    const mapClasses = this.getMapClasses();
-    return (
-      <>
-        <ContextMenuTrigger id="context-menu-trigger">
-          <div id="wv-map" className={mapClasses} />
-        </ContextMenuTrigger>
-        <RightClickMenu />
-        <OlZoomButtons />
-        <OlRotationButtons />
-        <OlCoordinates show={!isDistractionFreeModeActive} />
-        <OlVectorInteractions />
-        <OlMeasureTool />
-        <OlCoordinatesMarker />
-        {isNaturalEventsActive && (
-          <NaturalEvents />
-        )}
-        <DateLines />
-      </>
-    );
-  }
+  const mapClasses = getMapClasses();
+  return (
+    <>
+      <ContextMenuTrigger id="context-menu-trigger">
+        <div id="wv-map" className={mapClasses} />
+      </ContextMenuTrigger>
+      <RightClickMenu />
+      <OlZoomButtons />
+      <OlRotationButtons />
+      <OlCoordinates show={!isDistractionFreeModeActive} />
+      <OlVectorInteractions />
+      <OlMeasureTool />
+      <OlCoordinatesMarker />
+      {isNaturalEventsActive && (
+        <NaturalEvents />
+      )}
+      <DateLines />
+    </>
+  );
 }
 function mapStateToProps(state) {
   const {

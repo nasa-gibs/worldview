@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 import {
@@ -39,68 +39,80 @@ import '../../css/components/image-download/snapshot-progress.css';
 const CAPTURE_TIMEOUT_MS = 180_000;
 const gifStream = new GifStream();
 
-class GIF extends Component {
-  constructor(props) {
-    super(props);
-    const { screenHeight } = props;
-    const { screenWidth } = props;
-    const boundaries = props.boundaries || {
-      x: screenWidth / 2 - 100,
-      y: screenHeight / 2 - 100,
-      x2: screenWidth / 2 + 100,
-      y2: screenHeight / 2 + 100,
+function GIF(props) {
+  const {
+    screenWidth,
+    screenHeight,
+    boundaries,
+    onClose,
+    increment,
+    speed,
+    map,
+    proj,
+    endDateStr,
+    startDateStr,
+    numberOfFrames,
+    getFramesFunc,
+    startDate,
+    endDate,
+    selectDate,
+    promiseImagery,
+    currentDate,
+    onBoundaryChange: onBoundaryChangeProps,
+  } = props;
+
+  const bounds = boundaries || {
+    x: screenWidth / 2 - 100,
+    y: screenHeight / 2 - 100,
+    x2: screenWidth / 2 + 100,
+    y2: screenHeight / 2 + 100,
+  };
+
+  const {
+    offsetLeftModal,
+    offsetTopModal,
+  } = getModalOffsets(bounds);
+
+  const [isDownloaded, setIsDownloaded] = useState(false);
+  const [isCapturing, setIsCapturing] = useState(false);
+  const [showDates, setShowDates] = useState(true);
+  const [progress, setProgress] = useState(0);
+  const [downloadedObject, setDownloadedObject] = useState({});
+  const [offsetLeft, setOffsetLeft] = useState(offsetLeftModal);
+  const [offsetTop, setOffsetTop] = useState(offsetTopModal);
+  const [boundariesState, setBoundariesState] = useState(bounds);
+  const [backdropUrlState, setBackdropUrlState] = useState(null);
+
+  const mountedRef = useRef(false);
+  const abortControllerRef = useRef(null);
+  const backdropUrlRef = useRef(null);
+  const isDownloadingRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+      if (isDownloadingRef.current) {
+        abortControllerRef.current?.abort();
+        gifStream.cancel();
+      }
+      if (backdropUrlRef.current) {
+        URL.revokeObjectURL(backdropUrlRef.current);
+        backdropUrlRef.current = null;
+      }
     };
-    const {
-      offsetLeft,
-      offsetTop,
-    } = this.getModalOffsets(boundaries);
-    this.state = {
-      isDownloaded: false,
-      showDates: true,
-      progress: 0,
-      downloadedObject: {},
-      offsetLeft,
-      offsetTop,
-      boundaries,
-    };
-    this.abortController = null;
-    this.backdropUrl = null;
-    this.onBoundaryChange = this.onBoundaryChange.bind(this);
-    this.onGifProgress = this.onGifProgress.bind(this);
-    this.createGIF = this.createGIF.bind(this);
-    this.onCancel = this.onCancel.bind(this);
-    this.toggleShowDates = this.toggleShowDates.bind(this);
-  }
+  }, []);
 
-  componentDidMount() {
-    this.mounted = true;
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
-    const { isDownloading } = this.state;
-    if (isDownloading) {
-      this.abortController?.abort();
-      gifStream.cancel();
-    }
-    if (this.backdropUrl) {
-      URL.revokeObjectURL(this.backdropUrl);
-      this.backdropUrl = null;
-    }
-  }
-
-  getStyle() {
-    const { offsetLeft, offsetRight, offsetTop } = this.state;
+  function getStyle() {
     return {
       left: offsetLeft,
-      right: offsetRight,
       top: offsetTop,
       maxWidth: 342,
     };
   }
 
-  renderCloseBtn() {
-    const { onClose } = this.props;
+  function renderCloseBtn() {
     return (
       <button className="modal-close-btn" onClick={onClose} type="button">
         &times;
@@ -108,27 +120,14 @@ class GIF extends Component {
     );
   }
 
-  renderSelectableBox() {
-    const {
-      increment,
-      speed,
-      map,
-      screenWidth,
-      screenHeight,
-      proj,
-      onClose,
-      endDateStr,
-      startDateStr,
-      numberOfFrames,
-    } = this.props;
-    const { boundaries, showDates } = this.state;
+  function renderSelectableBox() {
     const {
       x, y, x2, y2,
-    } = boundaries;
+    } = boundariesState;
     const isGeoProjection = proj.id === 'geographic';
     const resolutions = isGeoProjection ? RESOLUTIONS_GEO : RESOLUTIONS_POLAR;
     const lonlats = imageUtilGetCoordsFromPixelValues(
-      boundaries,
+      boundariesState,
       map.ui.selected,
     );
     const { crs } = proj;
@@ -141,7 +140,7 @@ class GIF extends Component {
       mapView.getCenter(),
     );
 
-    const closeBtn = this.renderCloseBtn();
+    const closeBtn = renderCloseBtn();
 
     return (
       <Modal
@@ -149,7 +148,7 @@ class GIF extends Component {
         isOpen
         wrapClassName="clickable-behind-modal toolbar_modal_outer"
         className="gif-modal dynamic-modal"
-        style={this.getStyle()}
+        style={getStyle()}
         toggle={onClose}
       >
         <ModalHeader close={closeBtn}>Create An Animated GIF</ModalHeader>
@@ -164,8 +163,8 @@ class GIF extends Component {
             lonlats={lonlats}
             startDate={startDateStr}
             endDate={endDateStr}
-            onClick={this.createGIF}
-            onCheck={this.toggleShowDates}
+            onClick={createGIF}
+            onCheck={toggleShowDates}
             numberOfFrames={numberOfFrames}
           />
 
@@ -176,7 +175,7 @@ class GIF extends Component {
             height={y2 - y}
             maxHeight={screenHeight}
             maxWidth={screenWidth}
-            onChange={lodashDebounce(this.onBoundaryChange, 5)}
+            onChange={lodashDebounce(onBoundaryChange, 5)}
             onClose={onClose}
             coordinates={{
               bottomLeft: util.formatCoordinate([geolonlat1[0], geolonlat1[1]]),
@@ -189,16 +188,14 @@ class GIF extends Component {
     );
   }
 
-  toggleShowDates() {
-    const { showDates } = this.state;
-    this.setState({ showDates: !showDates });
+  function toggleShowDates() {
+    setShowDates(!showDates);
   }
 
-  encodeGIF(images, width, height) {
-    const { boundaries } = this.state;
+  function encodeGIF(images, width, height) {
     const dimensions = {
-      w: boundaries.y2 - boundaries.y,
-      h: boundaries.x2 - boundaries.x,
+      w: boundariesState.y2 - boundariesState.y,
+      h: boundariesState.x2 - boundariesState.x,
     };
     let stampWidth;
     const breakPointOne = 300;
@@ -233,7 +230,7 @@ class GIF extends Component {
         fontColor: '#fff',
         fontWeight: '300',
         fontFamily: 'Inter, sans-serif',
-        progressCallback: this.onGifProgress,
+        progressCallback: onGifProgress,
         showFrameText: stampHeight > 20,
         extraLastFrameDelay: 1000,
         text: '',
@@ -244,48 +241,37 @@ class GIF extends Component {
         pause: 1,
       },
       (obj) => {
-        this.onGifComplete(obj, width, height);
+        onGifComplete(obj, width, height);
       },
     );
   }
 
-  async createGIF(width, height, resolution) {
-    const {
-      getFramesFunc,
-      map,
-      proj,
-      startDate,
-      endDate,
-      selectDate,
-      promiseImagery,
-      currentDate,
-    } = this.props;
-    const { boundaries, showDates } = this.state;
-
+  async function createGIF(width, height, resolution) {
     const frames = getFramesFunc({ startDate, endDate, showDates });
     if (!frames) return; // too many frames
 
     const abortController = new AbortController();
-    this.abortController = abortController;
-    const timeout = setTimeout(this.onCancel, CAPTURE_TIMEOUT_MS);
+    abortControllerRef.current = abortController;
+    const timeout = setTimeout(onCancel, CAPTURE_TIMEOUT_MS);
 
     // Freeze the map's current appearance before it is scaled for capture, so
     // the overlay can show it instead of a blank screen
-    const backdropUrl = await captureMapBackdrop(map.ui.selected.getTargetElement());
-    if (!this.mounted) {
-      if (backdropUrl) URL.revokeObjectURL(backdropUrl);
+    const mapBackdropUrl = await captureMapBackdrop(map.ui.selected.getTargetElement());
+    if (!mountedRef.current) {
+      if (mapBackdropUrl) URL.revokeObjectURL(mapBackdropUrl);
       clearTimeout(timeout);
       return;
     }
-    this.backdropUrl = backdropUrl;
-    this.setState({
-      isDownloading: true, isCapturing: true, progress: 0, backdropUrl,
-    });
+    backdropUrlRef.current = mapBackdropUrl;
+    isDownloadingRef.current = true;
+    setIsCapturing(true);
+    setProgress(0);
+    setBackdropUrlState(mapBackdropUrl);
 
     try {
       const canvases = await captureAnimationFrames({
         map: map.ui.selected,
-        pixelBbox: [boundaries.x, boundaries.y, boundaries.x2, boundaries.y2],
+        pixelBbox: [boundariesState.x, boundariesState.y, boundariesState.x2, boundariesState.y2],
         metersPerPixel: Number(resolution),
         projection: proj,
         dates: frames.map(({ date }) => date),
@@ -294,16 +280,16 @@ class GIF extends Component {
         promiseImagery,
         abortSignal: abortController.signal,
         onProgress: (done, total) => {
-          if (this.mounted) {
-            this.setState({ progress: Math.round((done / total) * 50) });
+          if (mountedRef.current) {
+            setProgress(Math.round((done / total) * 50));
           }
         },
       });
 
-      if (!this.mounted) return;
+      if (!mountedRef.current) return;
 
-      this.setState({ isCapturing: false });
-      this.encodeGIF(
+      setIsCapturing(false);
+      encodeGIF(
         frames.map((frame, i) => ({ ...frame, canvas: canvases[i] })),
         width,
         height,
@@ -312,84 +298,71 @@ class GIF extends Component {
       if (error.name !== 'AbortError') {
         console.error('GIF capture failed', error);
       }
-      if (this.mounted) {
-        this.setState({
-          isDownloading: false,
-          isCapturing: false,
-          progress: 0,
-          downloadedObject: {},
-        });
+      if (mountedRef.current) {
+        isDownloadingRef.current = false;
+        setIsCapturing(false);
+        setProgress(0);
+        setDownloadedObject({});
       }
     } finally {
       clearTimeout(timeout);
-      this.abortController = null;
-      this.releaseBackdrop();
+      abortControllerRef.current = null;
+      releaseBackdrop();
     }
   }
 
-  releaseBackdrop() {
-    if (this.backdropUrl) {
-      URL.revokeObjectURL(this.backdropUrl);
-      this.backdropUrl = null;
+  function releaseBackdrop() {
+    if (backdropUrlRef.current) {
+      URL.revokeObjectURL(backdropUrlRef.current);
+      backdropUrlRef.current = null;
     }
-    if (this.mounted) this.setState({ backdropUrl: null });
+    if (mountedRef.current) setBackdropUrlState(null);
   }
 
-  onCancel() {
-    this.abortController?.abort();
+  function onCancel() {
+    abortControllerRef.current?.abort();
     gifStream.cancel();
-    if (this.mounted) {
-      this.setState({
-        isDownloading: false,
-        isCapturing: false,
-        progress: 0,
-        downloadedObject: {},
-      });
+    if (mountedRef.current) {
+      isDownloadingRef.current = false;
+      setIsCapturing(false);
+      setProgress(0);
+      setDownloadedObject({});
     }
   }
 
-  onGifComplete(obj, width, height) {
+  function onGifComplete(obj, width, height) {
     if (obj.error) {
-      this.setState({
-        isDownloading: false,
-        progress: 0,
-        downloadedObject: {},
-      });
+      isDownloadingRef.current = false;
+      setProgress(0);
+      setDownloadedObject({});
     } else if (obj.cancelled) {
-      if (this.mounted) {
-        this.setState({
-          isDownloading: false,
-          progress: 0,
-          downloadedObject: {},
-        });
+      if (mountedRef.current) {
+        isDownloadingRef.current = false;
+        setProgress(0);
+        setDownloadedObject({});
       }
     } else {
-      this.setState({
-        isDownloaded: true,
-        progress: 0,
-        isDownloading: false,
-        downloadedObject: {
-          blob: obj.blob,
-          size: lodashRound((obj.blob.size / 1024) * 0.001, 2),
-          width,
-          height,
-        },
+      setIsDownloaded(true);
+      setProgress(0);
+      isDownloadingRef.current = false;
+      setDownloadedObject({
+        blob: obj.blob,
+        size: lodashRound((obj.blob.size / 1024) * 0.001, 2),
+        width,
+        height,
       });
     }
   }
 
   // Encoding occupies the upper half of the bar; capture fills the lower half
-  onGifProgress(val) {
-    this.setState({
-      progress: 50 + Math.round(val / 2),
-    });
+  function onGifProgress(val) {
+    setProgress(50 + Math.round(val / 2));
   }
 
-  getModalOffsets(boundaries) {
-    const { screenWidth, screenHeight } = this.props;
+  function getModalOffsets(boundariesIn) {
     const {
       x, y, x2, y2,
-    } = boundaries;
+    } = boundariesIn;
     const width = 342;
     const height = 280;
     const padding = 20;
@@ -410,13 +383,12 @@ class GIF extends Component {
       top = screenHeight - padding - height;
     }
     return {
-      offsetLeft: left,
-      offsetTop: top,
+      offsetLeftModal: left,
+      offsetTopModal: top,
     };
   }
 
-  onBoundaryChange(cropBounds) {
-    const { onBoundaryChange } = this.props;
+  function onBoundaryChange(cropBounds) {
     const {
       x, y, width, height,
     } = cropBounds;
@@ -426,101 +398,78 @@ class GIF extends Component {
       x2: x + width,
       y2: y + height,
     };
-    const { offsetLeft, offsetTop } = this.getModalOffsets(newBoundaries);
-    onBoundaryChange(newBoundaries);
-    this.setState({
-      offsetLeft,
-      offsetTop,
-      boundaries: newBoundaries,
-    });
+    const { offsetLeftModal, offsetTopModal } = getModalOffsets(newBoundaries);
+    onBoundaryChangeProps(newBoundaries);
+    setOffsetLeft(offsetLeftModal);
+    setOffsetTop(offsetTopModal);
+    setBoundariesState(newBoundaries);
   }
 
-  render() {
-    const {
-      increment,
-      speed,
-      endDateStr,
-      startDateStr,
-      screenHeight,
-      screenWidth,
-      onClose,
-    } = this.props;
-    const {
-      isDownloaded,
-      isDownloading,
-      isCapturing,
-      progress,
-      downloadedObject,
-      boundaries,
-      backdropUrl,
-    } = this.state;
+  const spinnerStyle = {
+    margin: '20px 0',
+    position: 'relative',
+    left: '45%',
+  };
 
-    const spinnerStyle = {
-      margin: '20px 0',
-      position: 'relative',
-      left: '45%',
-    };
+  const closeBtn = renderCloseBtn();
 
-    const closeBtn = this.renderCloseBtn();
-
-    if (isDownloading) {
-      const headerText = isCapturing ? 'Capturing Frames' : 'Creating GIF';
-      const cancelBtn = (
-        <button className="modal-close-btn" onClick={this.onCancel} type="button">
-          &times;
-        </button>
-      );
-      return (
-        <>
-          {/* Masks the map while it is scaled up for capture */}
-          {isCapturing && createPortal(
-            <div className="wv-snapshot-progress-overlay opaque">
-              {backdropUrl && (
-                <img className="wv-snapshot-progress-backdrop" src={backdropUrl} alt="" />
+  if (isDownloadingRef.current) {
+    const headerText = isCapturing ? 'Capturing Frames' : 'Creating GIF';
+    const cancelBtn = (
+      <button className="modal-close-btn" onClick={onCancel} type="button">
+        &times;
+      </button>
+    );
+    return (
+      <>
+        {/* Masks the map while it is scaled up for capture */}
+        {isCapturing && createPortal(
+          <div className="wv-snapshot-progress-overlay opaque">
+            {backdropUrlState && (
+              <img className="wv-snapshot-progress-backdrop" src={backdropUrlState} alt="" />
+            )}
+          </div>,
+          document.querySelector('.wv-content') || document.body,
+        )}
+        {/* Only the X cancels; backdrop clicks and Esc must not abort a capture */}
+        <Modal
+          isOpen
+          toggle={onCancel}
+          backdrop="static"
+          keyboard={false}
+          size={progress === 0 ? 'sm' : 'md'}
+        >
+          <ModalHeader close={cancelBtn}>{headerText}</ModalHeader>
+          <ModalBody>
+            {progress > 0
+              ? <Progress value={progress} />
+              : (
+                <div style={spinnerStyle}>
+                  <Spinner color="light" />
+                </div>
               )}
-            </div>,
-            document.querySelector('.wv-content') || document.body,
-          )}
-          {/* Only the X cancels; backdrop clicks and Esc must not abort a capture */}
-          <Modal
-            isOpen
-            toggle={this.onCancel}
-            backdrop="static"
-            keyboard={false}
-            size={progress === 0 ? 'sm' : 'md'}
-          >
-            <ModalHeader close={cancelBtn}>{headerText}</ModalHeader>
-            <ModalBody>
-              {progress > 0
-                ? <Progress value={progress} />
-                : (
-                  <div style={spinnerStyle}>
-                    <Spinner color="light" />
-                  </div>
-                )}
-            </ModalBody>
-          </Modal>
-        </>
-      );
-    }
-    if (isDownloaded) {
-      return (
-        <GifResults
-          speed={speed}
-          gifObject={downloadedObject}
-          startDate={startDateStr}
-          endDate={endDateStr}
-          onClose={onClose}
-          increment={increment}
-          boundaries={boundaries}
-          screenWidth={screenWidth}
-          screenHeight={screenHeight}
-          closeBtn={closeBtn}
-        />
-      );
-    }
-    return this.renderSelectableBox();
+          </ModalBody>
+        </Modal>
+      </>
+    );
   }
+  if (isDownloaded) {
+    return (
+      <GifResults
+        speed={speed}
+        gifObject={downloadedObject}
+        startDate={startDateStr}
+        endDate={endDateStr}
+        onClose={onClose}
+        increment={increment}
+        boundaries={boundariesState}
+        screenWidth={screenWidth}
+        screenHeight={screenHeight}
+        closeBtn={closeBtn}
+      />
+    );
+  }
+  return renderSelectableBox();
 }
 
 function mapStateToProps(state) {
