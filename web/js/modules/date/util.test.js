@@ -21,6 +21,7 @@ import {
   formatISODate,
   parsePermalinkDate,
   getNextImageryDelta,
+  getValidDateRanges,
   checkHasFutureLayers,
 } from './util';
 import fixtures from '../../fixtures';
@@ -808,5 +809,49 @@ describe('getNextImageryDelta', () => {
   test('skips layer with no dateRanges and counts as invalid [imagery-delta-no-ranges-visible]', () => {
     const result = getNextImageryDelta([{ visible: true }], '2022-01-01T00:00:00Z', 1);
     expect(result).toBe(1);
+  });
+});
+
+describe('getValidDateRanges', () => {
+  test('prefers a subdaily layer over a coarser daily layer listed first [valid-date-ranges-subdaily-priority]', () => {
+    const layers = [
+      {
+        visible: true,
+        period: 'daily',
+        dateRanges: [{
+          startDate: '2024-01-01T00:00:00Z',
+          endDate: '2026-12-31T23:59:59Z',
+          dateInterval: ['1'],
+        }],
+      },
+      {
+        visible: true,
+        period: 'subdaily',
+        tempoDateRanges: [
+          { startDate: '2026-11-13T12:00:00Z', endDate: '2026-11-13T13:00:00Z', dateInterval: '60' },
+          { startDate: '2026-11-13T13:00:00Z', endDate: '2026-11-13T14:00:00Z', dateInterval: '60' },
+          { startDate: '2026-11-13T14:00:00Z', endDate: '2026-11-13T15:00:00Z', dateInterval: '60' },
+        ],
+      },
+    ];
+    const result = getValidDateRanges(layers, new Date('2026-11-13T12:00:00Z'), new Date('2026-11-13T15:00:00Z'));
+    expect(result).toHaveLength(3);
+  });
+
+  test('falls back to the first visible layer when no subdaily layer is active [valid-date-ranges-no-subdaily-fallback]', () => {
+    const layers = [
+      {
+        visible: true,
+        period: 'daily',
+        dateRanges: [{ startDate: '2024-01-01T00:00:00Z', endDate: '2026-12-31T23:59:59Z', dateInterval: ['1'] }],
+      },
+      {
+        visible: true,
+        period: 'monthly',
+        dateRanges: [{ startDate: '2024-01-01T00:00:00Z', endDate: '2026-12-31T23:59:59Z', dateInterval: ['1'] }],
+      },
+    ];
+    const result = getValidDateRanges(layers, new Date('2026-11-13T12:00:00Z'), new Date('2026-11-13T15:00:00Z'));
+    expect(result).toEqual(layers[0].dateRanges);
   });
 });
