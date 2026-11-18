@@ -613,21 +613,21 @@ export function getValidDateRanges(layers, dateA, dateB) {
   let bestSubDailyFiltered;
   let bestSubDailyInterval = Infinity;
 
-  for (let i = 0; i < layers.length; i += 1) {
-    const layer = layers[i];
+  for (const layer of layers) {
+    if (!layer.visible) continue;
     const dateRanges = getDateRanges(layer);
-    if (dateRanges && dateRanges.length && layer.visible) {
-      if (!fallbackRanges) {
-        fallbackRanges = dateRanges;
-      }
-      if (layer.period === 'subdaily') {
-        const filtered = dateRanges.filter(inWindow);
-        if (filtered.length) {
-          const interval = getFirstDateInterval(dateRanges);
-          if (!bestSubDailyFiltered || interval < bestSubDailyInterval) {
-            bestSubDailyInterval = interval;
-            bestSubDailyFiltered = filtered;
-          }
+    if (!dateRanges || !dateRanges.length) continue;
+
+    if (!fallbackRanges) {
+      fallbackRanges = dateRanges;
+    }
+    if (layer.period === 'subdaily') {
+      const filtered = dateRanges.filter(inWindow);
+      if (filtered.length) {
+        const interval = getFirstDateInterval(dateRanges);
+        if (!bestSubDailyFiltered || interval < bestSubDailyInterval) {
+          bestSubDailyInterval = interval;
+          bestSubDailyFiltered = filtered;
         }
       }
     }
