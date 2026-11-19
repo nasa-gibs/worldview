@@ -11,11 +11,11 @@
                 "hidden": "true"
             },
             {
-                "id": "VIIRS_NOAA20_CorrectedReflectance_TrueColor"
+                "id": "VIIRS_NOAA20_CorrectedReflectance_TrueColor",
+                "hidden": "true"
             },
             {
-                "id": "VIIRS_NOAA21_CorrectedReflectance_TrueColor",
-                "hidden": "true"
+                "id": "VIIRS_NOAA21_CorrectedReflectance_TrueColor"
             },
              {
                 "id": "OCI_PACE_True_Color",
