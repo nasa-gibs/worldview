@@ -4,7 +4,9 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { mockEvents, stormEventSelected } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
 let trackMarker
 

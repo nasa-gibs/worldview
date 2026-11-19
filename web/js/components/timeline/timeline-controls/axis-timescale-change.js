@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-syntax */
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeControls from './axis-timescale-change-controls';
 import { TIME_SCALE_TO_NUMBER } from '../../../modules/date/constants';
@@ -12,6 +11,16 @@ import { TIME_SCALE_TO_NUMBER } from '../../../modules/date/constants';
  * @extends React.Component
  */
 class AxisTimeScaleChange extends PureComponent {
+  // Toggle visibility of map scales
+  static disableMapScales(disable) {
+    const imperialMapScale = document.getElementsByClassName('wv-map-scale-imperial');
+    const metricMapScale = document.getElementsByClassName('wv-map-scale-metric');
+    const opacity = disable ? '0' : '1';
+    for (const el of [...imperialMapScale, ...metricMapScale]) {
+      el.style.opacity = opacity;
+    }
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -26,7 +35,7 @@ class AxisTimeScaleChange extends PureComponent {
     } = this.props;
     // in event of dragging off axis, prevent tooltip display
     if (!isDraggerDragging) {
-      this.disableMapScales(true);
+      AxisTimeScaleChange.disableMapScales(true);
       this.setState({
         toolTipHovered: true,
       });
@@ -35,20 +44,10 @@ class AxisTimeScaleChange extends PureComponent {
 
   // TimeScale select tooltip off
   toolTipHoverOff = () => {
-    this.disableMapScales(false);
+    AxisTimeScaleChange.disableMapScales(false);
     this.setState({
       toolTipHovered: false,
     });
-  };
-
-  // Toggle visibility of map scales
-  disableMapScales = (disable) => {
-    const imperialMapScale = document.getElementsByClassName('wv-map-scale-imperial');
-    const metricMapScale = document.getElementsByClassName('wv-map-scale-metric');
-    const opacity = disable ? '0' : '1';
-    for (const el of [...imperialMapScale, ...metricMapScale]) {
-      el.style.opacity = opacity;
-    }
   };
 
   // ex: month(2) to day(3)

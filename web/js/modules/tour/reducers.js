@@ -1,4 +1,3 @@
-
 import { assign as lodashAssign } from 'lodash';
 import {
   START, UPDATE_SELECTED, END_TOUR, TOUR_KEY_PRESS_CLOSE,

@@ -5,7 +5,8 @@ export default (function() {
   const self = {};
   const configPromises = {};
 
-  self.config = function(root, attr, url) {
+  self.config = function(rootObj, attr, url) {
+    const root = rootObj;
     let promise = Promise;
 
     // If a request is already outstanding, chain to that one

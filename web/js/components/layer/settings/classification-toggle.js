@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import lodashGet from 'lodash/get';
 import Switch from '../../util/switch';
 import Scrollbar from '../../util/scrollbar';
-
 
 export default function ClassificationToggle(props) {
   const {
@@ -15,13 +14,12 @@ export default function ClassificationToggle(props) {
 
   const { tooltips } = legend;
 
-
   return (
     <div className="layer-classification-toggle settings-component">
       <div className="classification-switch-header">
         <h2 className="wv-header">Disable/Enable</h2>
-        {toggleAll
-          && (
+        {toggleAll &&
+          (
             <Switch
               id="header-disable"
               key="header-disable"
@@ -59,8 +57,8 @@ export default function ClassificationToggle(props) {
 
 ClassificationToggle.propTypes = {
   height: PropTypes.number,
-  legend: PropTypes.object,
-  palette: PropTypes.object,
+  legend: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  palette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   toggle: PropTypes.func,
   toggleAll: PropTypes.func,
 };

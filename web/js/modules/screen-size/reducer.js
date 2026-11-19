@@ -10,14 +10,35 @@ export const initialState = {
   isMobileTablet: false,
 };
 
-export const getInitialState = () => ({
-  breakpoints: {
+export const getInitialState = () => {
+  const breakpoints = {
     extraSmall: 480,
     small: 768,
     medium: 992,
     large: 1200,
-  },
-});
+  };
+
+  // Seed initial screen info synchronously so connected components can render
+  // the correct mobile/desktop layout on first paint.
+  if (typeof window === 'undefined') {
+    return { breakpoints };
+  }
+
+  const screenHeight = window.innerHeight;
+  const screenWidth = window.innerWidth;
+  const isMobileDevice = screenWidth < breakpoints.small;
+  const orientation = screenHeight > screenWidth ? 'portrait' : 'landscape';
+
+  return {
+    breakpoints,
+    screenHeight,
+    screenWidth,
+    isMobileDevice,
+    orientation,
+    isMobilePhone: false,
+    isMobileTablet: false,
+  };
+};
 
 export const screenSizeReducer = (state = initialState, action) => {
   switch (action.type) {

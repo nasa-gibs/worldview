@@ -1,0 +1,3 @@
+The VIIRS Deep Blue Aerosol Type layer provides information related to the aerosol composition over land and ocean.
+
+The VIIRS Deep Blue Aerosol Type layer is available from the joint NASA/NOAA NOAA-20 satellite for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.

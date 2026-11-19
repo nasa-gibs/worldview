@@ -9,9 +9,10 @@ const {
 } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
@@ -30,6 +31,7 @@ test('Clicking the animation widget button opens the widget', async () => {
   await createGifIcon.click()
   await expect(arcticRotationResetButton).toHaveText('-18')
   await rotationDialogOkButton.click()
+  await page.waitForTimeout(1000)
   await expect(arcticRotationResetButton).toHaveText('0')
 })
 
@@ -54,8 +56,8 @@ test('GIF selection preview is Accurate and selections that are too high disable
   await expect(gifBox).toBeChecked()
   const gifResolution = page.locator('#gif-resolution')
   await gifResolution.click()
-  await page.locator('#gif-resolution').selectOption('2')
-  await expect(gifPreviewEndResolutionSelector).toHaveValue('2')
+  await page.locator('#gif-resolution').selectOption('500')
+  await expect(gifPreviewEndResolutionSelector).toHaveValue('500')
   await expect(gifDownloadButton).toBeDisabled()
 })
 

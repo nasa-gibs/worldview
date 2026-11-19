@@ -151,7 +151,7 @@ export const getTrackLines = function(map, trackCoords, eventID, date, callback,
     map.getPixelFromCoordinate(end),
     map.getPixelFromCoordinate(start),
   ]);
-  if (!pixelCoords.length) return;
+  if (!pixelCoords.length) return undefined;
   const first = pixelCoords[0][0];
   const last = pixelCoords[pixelCoords.length - 1][0];
   const topLeft = [first[0], first[1]];
@@ -250,7 +250,8 @@ export const getClusterPointEl = function (proj, cluster, map, pointClusterObj) 
   if (proj.selected.id !== 'geographic') {
     coordinates = olProj.transform(coordinates, CRS.GEOGRAPHIC, proj.selected.crs);
   }
-  const sizeClass = number < 10 ? 'small' : number < 20 ? 'medium' : 'large';
+  const pointCountSizeClass = number < 20 ? 'medium' : 'large';
+  const sizeClass = number < 10 ? 'small' : pointCountSizeClass;
 
   overlayEl.className = 'cluster-track-marker-case track-marker-case';
   textEl.className = 'cluster-track-marker-date track-marker-date';

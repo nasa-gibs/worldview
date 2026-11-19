@@ -1,0 +1,3 @@
+The VIIRS Deep Blue Aerosol Optical Depth layer is useful for studying aerosol optical depth over the ocean as well as retrieving over desert/arid land (bright in the visible wavelengths).
+
+The VIIRS Deep Blue Aerosol Optical Depth layer is available from the joint NASA/NOAA NOAA-20 satellite for the daytime overpass. The sensor/algorithm resolution is 6 km at nadir, imagery resolution is 2 km at nadir, and the temporal resolution is daily. Resolution is much coarser out toward the edge of the swath.

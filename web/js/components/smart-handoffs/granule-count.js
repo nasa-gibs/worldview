@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { get as lodashGet } from 'lodash';
 import PropTypes from 'prop-types';
+import { cmrFetch } from '../../util/cmr';
 
 export default function GranuleCount (props) {
   const {
@@ -28,7 +29,7 @@ export default function GranuleCount (props) {
   } = state;
 
   const requestGranules = async (url) => {
-    const granulesResponse = await fetch(url, { timeout: 5000 });
+    const granulesResponse = await cmrFetch(url);
     const result = await granulesResponse.json();
     return lodashGet(result, 'feed.entry', []);
   };
@@ -121,9 +122,9 @@ export default function GranuleCount (props) {
         { granulesExist && (
           <span className="granule-size fade-in">{`(${sizeText})`}</span>
         )}
-        <span className="help-link" onClick={showGranuleHelpModal}>
+        <button type="button" className="help-link" onClick={showGranuleHelpModal}>
           <FontAwesomeIcon icon="question-circle" widthAuto />
-        </span>
+        </button>
       </>
     );
   };
@@ -139,8 +140,8 @@ export default function GranuleCount (props) {
 
         {!isLoading && (
           <span className="fade-in">
-              {currentExtent && granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
-              {granulesExist ? totalGranules : 'NONE'}
+            {currentExtent && granulesExist && selectedGranules >= 0 && `${selectedGranules} of `}
+            {granulesExist ? totalGranules : 'NONE'}
           </span>
         )}
 
@@ -153,11 +154,11 @@ export default function GranuleCount (props) {
 
 GranuleCount.propTypes = {
   getGranulesUrl: PropTypes.func,
-  currentExtent: PropTypes.object,
+  currentExtent: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   displayDate: PropTypes.string,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
   selectedDate: PropTypes.string,
-  selectedCollection: PropTypes.object,
+  selectedCollection: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   showGranuleHelpModal: PropTypes.func,
 };

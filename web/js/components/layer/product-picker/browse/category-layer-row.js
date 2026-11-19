@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -21,40 +21,41 @@ import {
   hasMeasurementSetting as hasSettingSelector,
 } from '../../../../modules/layers/selectors';
 
-
 /**
  * A single category result row
- * @class CategoryLayerRow
- * @extends React.Component
  */
-class CategoryLayerRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.ref = React.createRef();
-  }
+function CategoryLayerRow(props) {
+  const {
+    measurement,
+    selectedMeasurement,
+    categoryType,
+    layerConfig,
+    projection,
+    selectSource,
+    hasMeasurementSetting,
+    isMobile,
+    sources,
+    selectedMeasurementSourceIndex,
+    category,
+    selectMeasurement,
+    id,
+    isSelected,
+  } = props;
 
-  componentDidMount() {
-    const {
-      measurement,
-      selectedMeasurement,
-      categoryType,
-    } = this.props;
+  const thisRef = useRef();
+
+  useEffect(() => {
     if (selectedMeasurement === measurement.id && categoryType !== 'featured') {
-      this.ref.current.scrollIntoView(true);
+      thisRef.current.scrollIntoView(true);
     }
-  }
+  }, []);
 
   /**
    * Render orbits and layer selections for
    * selected source
    * @param {Object} source | Object containing source info
    */
-  renderSourceSettings(source) {
-    const {
-      layerConfig,
-      measurement,
-      projection,
-    } = this.props;
+  function renderSourceSettings(source) {
     const OrbitSourceList = [];
     const LayerSouceList = [];
     let orbitTitle = '';
@@ -122,8 +123,7 @@ class CategoryLayerRow extends React.Component {
    * @param {Number} index | Index of measurement
    * @param {Number} activeSourceIndex | Index of active measurement
    */
-  renderSourceTabs(source, index, activeSourceIndex) {
-    const { selectSource } = this.props;
+  function renderSourceTabs(source, index, activeSourceIndex) {
     return (
       <NavItem
         key={source.id + index}
@@ -143,15 +143,7 @@ class CategoryLayerRow extends React.Component {
   /**
    * Render content when Active
    */
-  renderContent() {
-    const {
-      hasMeasurementSetting,
-      measurement,
-      isMobile,
-      sources,
-      selectedMeasurementSourceIndex,
-    } = this.props;
-
+  function renderContent() {
     // set first valid index to handle invalid activeSourceIndex indexes after projection change
     let minValidIndex = -1;
     let validActiveIndex = selectedMeasurementSourceIndex;
@@ -167,24 +159,25 @@ class CategoryLayerRow extends React.Component {
                 if (minValidIndex < 0) {
                   minValidIndex = index;
                 }
-                // if activeSourceIndex is less than first valid index, make minValidIndex active tab
+                // if activeSourceIndex is less than first valid index,
+                // make minValidIndex active tab
                 validActiveIndex = minValidIndex > selectedMeasurementSourceIndex
                   ? minValidIndex
                   : selectedMeasurementSourceIndex;
-                return this.renderSourceTabs(source, index, selectedMeasurementSourceIndex);
+                return renderSourceTabs(source, index, selectedMeasurementSourceIndex);
               }
               return '';
             })}
         </Nav>
         <TabContent id={`${measurement.id}-${sources[validActiveIndex].id}`}>
           <TabPane>
-            {this.renderSourceSettings(sources[validActiveIndex])}
-            {isMobile
-              && (
-              <MeasurementMetadataDetail
-                source={sources[validActiveIndex]}
-                isMobile={isMobile}
-              />
+            {renderSourceSettings(sources[validActiveIndex])}
+            {isMobile &&
+              (
+                <MeasurementMetadataDetail
+                  source={sources[validActiveIndex]}
+                  isMobile={isMobile}
+                />
               )}
           </TabPane>
         </TabContent>
@@ -192,55 +185,47 @@ class CategoryLayerRow extends React.Component {
     );
   }
 
-  render() {
-    const {
-      measurement,
-      category,
-      selectMeasurement,
-      id,
-      isSelected,
-    } = this.props;
-    const className = isSelected
-      ? 'measurement-row layers-all-layer selected'
-      : 'measurement-row layers-all-layer';
-    return (
-      <div
-        ref={this.ref}
-        className={className}
-        id={`accordion-${category.id}-${measurement.id}`}
-        key={`${category.id}-${measurement.id}`}
+  const className = isSelected
+    ? 'measurement-row layers-all-layer selected'
+    : 'measurement-row layers-all-layer';
+  return (
+    <div
+      ref={thisRef}
+      className={className}
+      id={`accordion-${category.id}-${measurement.id}`}
+      key={`${category.id}-${measurement.id}`}
+    >
+      <button
+        onClick={() => selectMeasurement(id)}
+        type="button"
+        className="measurement-row-header"
       >
-        <div
-          onClick={() => selectMeasurement(id)}
-          className="measurement-row-header"
-        >
-          <h3>{measurement.title}</h3>
-          {measurement.subtitle && !isSelected && <h5>{measurement.subtitle}</h5>}
-          {isSelected
-            ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" widthAuto />
-            : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" widthAuto />}
-        </div>
-        {isSelected ? this.renderContent() : ''}
-      </div>
-    );
-  }
+        <h3>{measurement.title}</h3>
+        {measurement.subtitle && !isSelected && <h5>{measurement.subtitle}</h5>}
+        {isSelected
+          ? <FontAwesomeIcon icon="chevron-circle-down" className="arrow-icon" widthAuto />
+          : <FontAwesomeIcon icon="chevron-circle-right" className="arrow-icon" widthAuto />}
+      </button>
+      {isSelected ? renderContent() : ''}
+    </div>
+  );
 }
 
 CategoryLayerRow.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   categoryType: PropTypes.string,
   hasMeasurementSetting: PropTypes.func,
   id: PropTypes.string,
   isMobile: PropTypes.bool,
   isSelected: PropTypes.bool,
-  layerConfig: PropTypes.object,
-  measurement: PropTypes.object,
+  layerConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  measurement: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   projection: PropTypes.string,
   selectSource: PropTypes.func,
   selectMeasurement: PropTypes.func,
   selectedMeasurement: PropTypes.string,
   selectedMeasurementSourceIndex: PropTypes.number,
-  sources: PropTypes.array,
+  sources: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };
 
 const mapStateToProps = (state) => {
@@ -265,7 +250,12 @@ const mapStateToProps = (state) => {
     sources: getSourcesForProjection(state),
     selectedMeasurement,
     selectedMeasurementSourceIndex,
-    hasMeasurementSetting: (current, source) => hasSettingSelector(current, source, config, proj.id),
+    hasMeasurementSetting: (current, source) => hasSettingSelector(
+      current,
+      source,
+      config,
+      proj.id,
+    ),
   };
 };
 

@@ -28,14 +28,15 @@ export function parseEvent(eventString) {
 export function serializeEvent(currentItemState) {
   const eventId = lodashGet(currentItemState, 'selected.id');
   const eventDate = lodashGet(currentItemState, 'selected.date');
-  const eventsTabActive = currentItemState.active;
+  const eventsTabActive = currentItemState.active
+    ? 'true'
+    : undefined;
+  const eventIdAndEventsTabActive = eventId && eventsTabActive
+    ? eventId
+    : eventsTabActive;
   return eventsTabActive && eventDate && eventId
     ? [eventId, eventDate].join(',')
-    : eventId && eventsTabActive
-      ? eventId
-      : eventsTabActive
-        ? 'true'
-        : undefined;
+    : eventIdAndEventsTabActive;
 }
 
 export function parseEventFilterDates(eventFilterDatesString) {
@@ -118,7 +119,6 @@ export function getEventsRequestURL (state) {
   const baseUrl = lodashGet(config, 'features.naturalEvents.host');
   const mockEvents = lodashGet(config, 'parameters.mockEvents');
   if (mockEvents) {
-    // eslint-disable-next-line no-console
     console.warn(`Using mock events data: ${mockEvents}`);
     return mockEvents === 'true'
       ? 'mock/events_data.json'
@@ -194,4 +194,29 @@ export const validateGeometryCoords = (geometry, proj) => {
   } if (type === 'Polygon') {
     return coordinates[0].every(passesFilter);
   }
+  return undefined;
 };
+
+/**
+* Helper to safely recover valid EONET events from a malformed JSON payload.
+*/
+export function safeParseEonet(rawText) {
+  try {
+    return JSON.parse(rawText);
+  } catch (err) {
+    console.warn('[EONET] Malformed payload received. Salvaging valid events...', err);
+    const matches = rawText.match(/\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}/g) || [];
+    const events = [];
+
+    for (const match of matches) {
+      if (match.includes('"id"') && match.includes('"geometry"')) {
+        try {
+          events.push(JSON.parse(match));
+        } catch (e) {
+          console.log('Invalid event format:', e);
+        }
+      }
+    }
+    return { events };
+  }
+}

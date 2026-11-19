@@ -3,7 +3,10 @@ const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { assertCategories, switchProjections, closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
 
 const url = 'http://localhost:3000/?t=2013-05-15'
@@ -45,7 +48,7 @@ test('"Unavailable" layers show unavailable icon and tooltip', async () => {
 test('Entering search text transitions to search mode', async () => {
   const { layersSearchField, layersSearchRow } = selectors
   await layersSearchField.fill('ozone')
-  await expect(layersSearchRow).toHaveCount(13)
+  await expect(layersSearchRow).toHaveCount(25)
 })
 
 test('Updating input changes results', async () => {
@@ -114,14 +117,14 @@ test('Closing and reopening layer picker restores state.', async () => {
     layerDetailsDateRange
   } = selectors
   await page.locator('.product-outer-list-case .search-row:nth-child(1)').click()
-  await expect(layerDetailHeader).toContainText('Land Surface Reflectance(True Color)Suomi NPP / VIIRS')
+  await expect(layerDetailHeader).toContainText('Corrected Reflectance(True Color)Terra / MODIS')
   await layersModalCloseButton.click()
   await expect(layersAll).not.toBeVisible()
   await addLayers.click()
   await expect(layersSearchRow).toHaveCount(5)
   await expect(layerResultsCountText).toContainText('Showing 5 out of')
   await expect(layerDetails).toBeVisible()
-  await expect(layerDetailHeader).toContainText('Land Surface Reflectance(True Color)Suomi NPP / VIIRS')
+  await expect(layerDetailHeader).toContainText('Corrected Reflectance(True Color)Terra / MODIS')
   await expect(layerDetailsDateRange).toBeVisible()
   const filterChip = await page.locator('.filter-chip')
   await expect(filterChip).toHaveCount(1)
@@ -130,17 +133,18 @@ test('Closing and reopening layer picker restores state.', async () => {
 test('Changing app date is reflected in coverage facets', async () => {
   const {
     layersModalCloseButton,
-    yearDown,
-    monthDown,
-    dayDown,
+    dateSelectorYearInput,
+    dateSelectorMonthInput,
+    dateSelectorDayInput,
     addLayers,
     availableFilterTextEl,
     availableFilterCheckboxInput
   } = selectors
   await layersModalCloseButton.click()
-  await yearDown.click()
-  await monthDown.click()
-  await dayDown.click()
+  await dateSelectorYearInput.fill('2012')
+  await dateSelectorMonthInput.fill('APR')
+  await dateSelectorDayInput.fill('14')
+  await page.keyboard.press('Enter')
   await addLayers.click()
   await expect(availableFilterTextEl).toContainText('Available 2012 APR 14')
   await expect(availableFilterCheckboxInput).toBeChecked()
@@ -155,8 +159,8 @@ test('Disabling coverage filter updates list', async () => {
   } = selectors
   await availableFilterCheckbox.click()
   await expect(availableFilterCheckboxInput).not.toBeChecked()
-  await expect(layersSearchRow).toHaveCount(19)
-  await expect(layerResultsCountText).toContainText('Showing 19 out of')
+  await expect(layersSearchRow).toHaveCount(20)
+  await expect(layerResultsCountText).toContainText('Showing 20 out of')
 })
 
 test('Finding layer by ID with search', async () => {
@@ -279,8 +283,8 @@ test('Searching in arctic projection', async () => {
     layersModalCloseButton
   } = selectors
   await layersSearchField.fill('sea')
-  await expect(layersSearchRow).toHaveCount(21)
-  await expect(layerResultsCountText).toContainText('Showing 21 out of')
+  await expect(layersSearchRow).toHaveCount(24)
+  await expect(layerResultsCountText).toContainText('Showing 24 out of')
   await layerPickerBackButton.click()
   await expect(layerBrowseDetail).toBeVisible()
   await layersModalCloseButton.click()

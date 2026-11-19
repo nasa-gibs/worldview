@@ -122,7 +122,7 @@
 .wv-animation-widget {
   width: 334px;
   border-radius: 5px;
-  height: 136px;
+  height: 142px;
   background: #212121;
   color: #fff;
   padding: 1px 0;
@@ -162,6 +162,7 @@
   }
 
   & > a,
+  & > button,
   & > div {
     display: inline-block;
     margin: 7px 0 0 10px;
@@ -179,6 +180,8 @@
     background: variables.$wv-dark-blue;
     position: relative;
     border-radius: 5px;
+    border: none;
+    padding: 0;
 
     &.disabled {
       cursor: not-allowed;
@@ -260,7 +263,8 @@
   }
 }
 
-a .wv-animation-widget-icon {
+a .wv-animation-widget-icon,
+button .wv-animation-widget-icon {
   font-size: 23px;
   color: #fff;
   position: absolute;
@@ -437,6 +441,11 @@ a .wv-animation-widget-icon {
     justify-content: flex-end;
     align-items: center;
 
+    & button {
+      border: none;
+      background: none;
+    }
+
     & .wv-minimize {
       font-size: 26px;
       font-weight: 400;
@@ -483,7 +492,6 @@ a .wv-animation-widget-icon {
     height: 100%;
     background: variables.$wv-solid-black;
     border-radius: 0;
-    margin-top: 0;
     padding: 0;
 
     & #loop-button {

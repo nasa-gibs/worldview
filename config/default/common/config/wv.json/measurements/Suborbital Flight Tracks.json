@@ -3,8 +3,18 @@
       "Suborbital Flight Tracks": {
           "id": "Suborbital Flight Tracks",
           "title":    "Suborbital Flight Tracks",
-          "subtitle": "AJAX, ARCSIX, ASIA-AQ, STAQS, PACE-PAX",
+          "subtitle": "ACTIVATE, AJAX, ARCSIX, ASIA-AQ, DCOTSS, DISCOVER-AQ, KORUS-AQ, STAQS, TRACER, PACE-PAX",
           "sources": {
+            "ACTIVATE": {
+                  "id": "activate",
+                  "title": "ACTIVATE",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "ACTIVATE_HU-25_Falcon_Ozone",
+                  "ACTIVATE_King_Air_Flight_Track"
+                  ]
+              },
               "AJAX": {
                   "id": "ajax",
                   "title": "AJAX",
@@ -31,8 +41,41 @@
                   "description": "",
                   "image": "",
                   "settings": [
-                 "ASIA-AQ_G-III_Flight_Track",
-		         "ASIA-AQ_DC-8_NO2"
+                 "ASIA-AQ_DC-8_NO2",
+                 "ASIA-AQ_G-III_Flight_Track"
+
+                  ]
+              },
+              "DCOTSS": {
+                  "id": "dcotss",
+                  "title": "DCOTSS",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                 "DCOTSS_ER-2_ROZE_Ozone",
+		         "DCOTSS_ER-2_UCATS_Ozone"
+                  ]
+              },
+                "DISCOVER-AQ": {
+                  "id": "DISCOVER-AQ",
+                  "title": "DISCOVER-AQ",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  	"DISCOVER-AQ_MD_P3B_Ozone",
+		            "DISCOVER-AQ_CA_P3B_Ozone",
+		            "DISCOVER-AQ_TX_P3B_Ozone",
+		            "DISCOVER-AQ_CO_P3B_Ozone"
+                  ]
+              },
+              "KORUS-AQ": {
+                  "id": "korus-aq",
+                  "title": "KORUS-AQ",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                      "KORUS-AQ_DC-8_Ozone",
+                      "KORUS-AQ_B-200_Flight_Track"
                   ]
               },
                "STAQS": {
@@ -43,6 +86,15 @@
                   "settings": [
                   "STAQS_G-V_Flight_Track",
                   "STAQS_G-III_Flight_Track"
+                  ]
+              },
+               "TRACER": {
+                  "id": "tracer",
+                  "title": "TRACER",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "TRACER-AQ_G-V_Flight_Track"
                   ]
               },
                "PACE-PAX": {

@@ -56,7 +56,6 @@ function lastAction(state = null, action) {
   return action;
 }
 
-
 /**
  * Get initial module states based on config
  * and parameters
@@ -134,7 +133,8 @@ const appReducer = combineReducers(reducers);
 /**
  * Top level reducer function w/ option to reset state
  */
-export default (state, action) => {
+export default (stateObj, action) => {
+  let state = stateObj;
   if (action.type === 'APP_RESET') {
     state = undefined;
   }

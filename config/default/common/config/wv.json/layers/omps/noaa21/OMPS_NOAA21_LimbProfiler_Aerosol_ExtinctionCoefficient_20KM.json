@@ -1,0 +1,12 @@
+{
+  "layers": {
+    "OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_20KM": {
+      "id": "OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_20KM",
+      "description": "omps/noaa21/OMPS_NOAA21_LimbProfiler_Aerosol_ExtinctionCoefficient_20KM",
+      "tags": "AOD",
+      "group": "overlays",
+      "wrapadjacentdays": true,
+      "layergroup": "Aerosol Extinction"
+    }
+  }
+}

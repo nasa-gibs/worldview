@@ -4,4 +4,4 @@ The GPM Microwave Imager (GMI) has a total of 13 channels, each observing the Ea
 
 The GPM Microwave Imager (GMI) is an instrument on the satellite known as the Global Precipitation Measurement (GPM) Core Observatory. The parent data product for the Rain Rate layer is the 2AGPROFGMI data product, which is also known as "Level 2A Goddard Profiling algorithm" or as "GPM_2AGPROFGPMGMI". The imagery resolution is 2 km and sensor resolution is approximately 4 km at the equator, and the rain estimates are reported on footprints that are approximately 6 km across. The temporal resolution is daily.
 
-References: GPM_2AGPROFGPMGMI [doi:10.5067/GPM/GMI/GPM/GPROF/2A/07](https://doi.org/10.5067/GPM/GMI/GPM/GPROF/2A/07); [GMI](https://gpm.nasa.gov/gpm/flight-project/gmi); [Precipitation Measurement Missions](https://pps.gsfc.nasa.gov)
+References: GPM_2AGPROFGPMGMI [doi:10.5067/GPM/GMI/GPM/GPROF/2A/08](https://doi.org/10.5067/GPM/GMI/GPM/GPROF/2A/08); [GMI](https://gpm.nasa.gov/gpm/flight-project/gmi); [Precipitation Measurement Missions](https://pps.gsfc.nasa.gov)

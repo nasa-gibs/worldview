@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withSearch } from '@elastic/react-search-ui';
@@ -20,7 +19,6 @@ function BrowseLayerList (props) {
     <div className="layer-picker-list-case layers-all">
       <div id={`${category.id}-list`}>
         {
-          // eslint-disable-next-line array-callback-return
           category.measurements.map((measurement, index) => {
             const current = measurementConfig[measurement];
             const isSelected = selectedMeasurement === current.id;
@@ -36,6 +34,7 @@ function BrowseLayerList (props) {
                 />
               );
             }
+            return undefined;
           })
         }
       </div>
@@ -44,9 +43,9 @@ function BrowseLayerList (props) {
 }
 
 BrowseLayerList.propTypes = {
-  category: PropTypes.object,
+  category: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   hasMeasurementSource: PropTypes.func,
-  measurementConfig: PropTypes.object,
+  measurementConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   selectedMeasurement: PropTypes.string,
 };
 

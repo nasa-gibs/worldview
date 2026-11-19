@@ -4,4 +4,4 @@ Aerosols absorb and scatter incoming sunlight, which reduces visibility and incr
 
 The OMAEROe product provides daily gridded global coverage with a temporal resolution of 1 day, imagery resolution of 2 km and sensor/algorithm resolution of 0.25 x 0.25 degrees.
 
-References: OMAEROe [doi:10.5067/Aura/OMI/DATA3004](https://doi.org/10.5067/Aura/OMI/DATA3004); [[Ozone Monitoring Instrument (OMI) Data User’s Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)
+References: OMAEROe [doi:10.5067/Aura/OMI/DATA3004](https://doi.org/10.5067/Aura/OMI/DATA3004); [Ozone Monitoring Instrument (OMI) Data User’s Guide](https://docserver.gesdisc.eosdis.nasa.gov/repository/Mission/OMI/3.3_ScienceDataProductDocumentation/3.3.2_ProductRequirements_Designs/README.OMI_DUG.pdf)

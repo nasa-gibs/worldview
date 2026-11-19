@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function MonospaceDate({ date, children }) {
@@ -10,6 +9,6 @@ export default function MonospaceDate({ date, children }) {
   );
 }
 MonospaceDate.propTypes = {
-  children: PropTypes.object,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   date: PropTypes.string,
 };

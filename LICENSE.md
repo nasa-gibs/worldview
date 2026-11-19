@@ -3,11 +3,11 @@
 This code was originally developed at NASA/Goddard Space Flight Center for
 the Earth Science Data and Information System (ESDIS) project.
 
-Copyright © 2013 - 2025 United States Government as represented by the
+Copyright © 2013 - 2026 United States Government as represented by the
 Administrator of the National Aeronautics and Space Administration.
 All Rights Reserved.
 
-## [NASA OPEN SOURCE AGREEMENT VERSION 1.3](https://opensource.gsfc.nasa.gov/nosa.php)
+## [NASA OPEN SOURCE AGREEMENT VERSION 1.3](https://opensource.org/license/nasa1-3-php)
 
 THIS OPEN SOURCE AGREEMENT ("AGREEMENT") DEFINES THE RIGHTS OF USE,
 REPRODUCTION, DISTRIBUTION, MODIFICATION AND REDISTRIBUTION OF CERTAIN
@@ -131,7 +131,7 @@ customarily used for software exchange.
 **B.** Each Recipient must ensure that the following copyright notice appears
 prominently in the Subject Software:
 
-    Copyright © 2012-2025 United States Government
+    Copyright © 2012-2026 United States Government
     as represented by the Administrator of the
     National Aeronautics and Space Administration.
     All Rights Reserved.

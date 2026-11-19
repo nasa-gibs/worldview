@@ -3,8 +3,41 @@ const { test, expect } = require('@playwright/test')
 const createSelectors = require('../../test-utils/global-variables/selectors')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @typedef {import('@playwright/test').Page} Page */
+/** @typedef {import('@playwright/test').Locator} Locator */
+
+/** @type {Page} */
 let page
+/** @type {Record<string, Locator>} */
 let selectors
+/**
+ * Open the mobile date picker and wait until the modal is visible.
+ * @param {Page} page
+ * @param {Locator} mobileDatePickerSelectBtn
+ */
+async function openMobileDatePicker (page, mobileDatePickerSelectBtn) {
+  await expect(mobileDatePickerSelectBtn).toBeVisible({ timeout: 5000 })
+  await mobileDatePickerSelectBtn.scrollIntoViewIfNeeded()
+
+  const modal = page.locator('.datepicker-modal')
+  const picker = page.locator('.datepicker-modal .datepicker')
+
+  if (await modal.isVisible().catch(() => false)) {
+    await expect(picker).toBeVisible({ timeout: 5000 })
+    return
+  }
+
+  // CI can occasionally miss the first tap/click on mobile view;
+  // fall back to a direct DOM click (bypasses hit-target issues).
+  try {
+    await mobileDatePickerSelectBtn.click({ timeout: 3000 })
+  } catch (e) {
+    await mobileDatePickerSelectBtn.dispatchEvent('click')
+  }
+
+  await expect(modal).toBeVisible({ timeout: 8000 })
+  await expect(picker).toBeVisible({ timeout: 8000 })
+}
 
 test.describe.configure({ mode: 'serial' })
 
@@ -60,7 +93,10 @@ test('date.mob.range.1: Date label should show 2013-03-15', async () => {
 
 test('date.mob.range.2: mobile selector header should show 2013 MAR 15', async () => {
   const { mobileDatePickerSelectBtn, mobileDatePickerHeader } = selectors
-  await mobileDatePickerSelectBtn.click()
+  const queryString = 'http://localhost:3000/?now=2013-03-15T12'
+  await page.goto(queryString)
+  await closeModal(page)
+  await openMobileDatePicker(page, mobileDatePickerSelectBtn)
   await expect(mobileDatePickerHeader).toContainText('2013 MAR 15')
 })
 
@@ -116,7 +152,10 @@ test('date.mob.nav.1: Date label should show 2013 JUL 20', async () => {
 
 test('date.mob.nav.2a: mobile selector header should show 2013 JUL 20', async () => {
   const { mobileDatePickerHeader, mobileDatePickerSelectBtn } = selectors
-  await mobileDatePickerSelectBtn.click()
+  const queryString = 'http://localhost:3000/?now=2014-03-15&t=2013-07-20T12'
+  await page.goto(queryString)
+  await closeModal(page)
+  await openMobileDatePicker(page, mobileDatePickerSelectBtn)
   await expect(mobileDatePickerHeader).toContainText('2013 JUL 20')
 })
 

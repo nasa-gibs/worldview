@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Checkbox from '../../util/checkbox';
@@ -77,8 +76,8 @@ export default connect(
 )(AssociatedLayersToggle);
 
 AssociatedLayersToggle.propTypes = {
-  activeLayers: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   addLayer: PropTypes.func,
   removeLayer: PropTypes.func,
-  associatedLayers: PropTypes.array,
+  associatedLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };

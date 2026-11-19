@@ -647,7 +647,7 @@ div#group-overlays-checkbox-case {
 }
 
 .charting-simple.charting-statistics-container {
-  padding: 0 18px;
+  padding: 0 18px 20px;
   margin: auto;
 }
 
@@ -672,7 +672,7 @@ div#group-overlays-checkbox-case {
 .charting-chart-text {
   display: inline-block;
   vertical-align: top;
-  width: 55%;
+  width: 600px;
 }
 
 .charting-chart-container .charting-disclaimer {
@@ -718,6 +718,7 @@ div#group-overlays-checkbox-case {
 
 .charting-disclaimer-dates {
   margin-left: 17px;
+  line-height: 20px;
 }
 
 .error-expand-button {
@@ -729,6 +730,10 @@ div#group-overlays-checkbox-case {
     padding: 5px;
     display: flex;
     justify-content: center;
+    background: none;
+    border: none;
+    color: inherit;
+    width:100%;
 
     svg {
       margin-left: 10px;
@@ -737,7 +742,7 @@ div#group-overlays-checkbox-case {
   }
 }
 
-.charting-disclaimer-block {
+.charting-disclaimer-lower > .charting-disclaimer-block {
   line-height: 35px;
   display: block;
   margin-left: 40px;
@@ -867,6 +872,7 @@ div#group-overlays-checkbox-case {
   margin: 0 !important;
 
   .modal-header {
+    max-height: 5vh;
     cursor: move;
 
     .charting-chart-subheader {
@@ -874,6 +880,42 @@ div#group-overlays-checkbox-case {
       font-weight: normal;
       font-size: 90%;
       color: #c7c7c7;
+    }
+  }
+
+  .modal-body {
+    max-height: 89.5vh;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 1149px) {
+  #charting-chart {
+    max-width: 650px;
+
+    .charting-chart-inner {
+      display:flex;
+      flex-flow: column;
+
+      .charting-chart-text {
+        order: 1;
+      }
+
+      .charting-stat-text {
+        order: 3;
+        width: 600px;
+
+        #charting-minimap-container {
+          width: 61%;
+          margin-right: 0;
+        }
+      }
+
+      .charting-disclaimer {
+        order: 2;
+        width: 600px;
+        margin-top: 0;
+      }
     }
   }
 }
@@ -898,7 +940,7 @@ button#charting-simple-stats-button {
 
 .charting-stat-text {
   display: inline-block;
-  width: 45%;
+  width: 512px;
 }
 
 .charting-stat-text > div {
@@ -1100,6 +1142,10 @@ p.recharts-tooltip-label {
 .layer-settings-modal {
   width: 300px;
 
+  .wv-header {
+    margin-bottom: 12px !important;
+  }
+
   @media (max-width: variables.$mobile-max-width) {
     width: 100%;
   }
@@ -1178,11 +1224,16 @@ p.recharts-tooltip-label {
   }
 
   .layer-threshold-select {
-    margin-bottom: 3rem;
+    margin-bottom: 4rem;
+
+    .wv-checkbox label {
+      margin-left: 5px;
+    }
   }
 
   .wv-label-opacity,
-  .wv-label-granule.count {
+  .wv-label-day-range,
+  .wv-label-granule-count {
     text-align: right;
   }
 
@@ -1199,12 +1250,24 @@ p.recharts-tooltip-label {
   }
 
   .wv-palette-squash {
-    float: right;
-    margin-top: -26px;
+    display: inline-block;
 
     .wv-checkbox.gray span {
       color: #eee;
     }
+  }
+
+  .wv-palette-clip {
+    display: inline-block;
+    margin-left: 20px;
+
+    .wv-checkbox.gray span {
+      color: #eee;
+    }
+  }
+
+  .wv-layer-options-threshold {
+    margin-top: 10px;
   }
 
   /** inline-block extra spacing */
@@ -1212,12 +1275,16 @@ p.recharts-tooltip-label {
     margin-left: 6px;
   }
 
+  .wv-palette-selector .wv-header {
+    margin-bottom: 16px !important;
+  }
+
   .layer-opacity-select .wv-header {
     margin-top: 0;
   }
 
   .layer-orbit-tracks .wv-checkbox {
-    margin: 10px 0 10px 10px;
+    margin: 10px 0;
     display: flex;
     align-items: center;
 

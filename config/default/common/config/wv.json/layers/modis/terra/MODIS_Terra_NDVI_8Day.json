@@ -5,7 +5,6 @@
       "description": "modis/terra/MODIS_Terra_NDVI_8Day",
       "group": "overlays",
       "tags": "ndvi normalized difference vegetation index",
-      "disableCharting": true,
       "layergroup": "Vegetation Indices"
     }
   }

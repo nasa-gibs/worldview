@@ -10,11 +10,12 @@ import { getOverlayGroups } from '../layers/util';
  * @param {Object} parameters | parameters parsed from permalink
  * @param {Object} stateFromLocation | State derived from permalink parsers
  */
-// eslint-disable-next-line import/prefer-default-export
+
 export function mapLocationToEmbedState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   if (parameters.em === 'true') {
     const { layers } = stateFromLocation;
     const layersClone = lodashCloneDeep(layers);

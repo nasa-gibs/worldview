@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { get as lodashGet } from 'lodash';
@@ -6,6 +5,14 @@ import googleTagManager from 'googleTagManager';
 import changeProjection from '../modules/projection/actions';
 import { onToggle } from '../modules/modal/actions';
 import IconList from '../components/util/icon-list';
+import {
+  changeTimeScale as changeTimeScaleAction,
+  selectInterval,
+  changeAutoInterval as changeAutoIntervalAction,
+} from '../modules/date/actions';
+import {
+  TIME_SCALE_TO_NUMBER,
+} from '../modules/date/constants';
 
 const DEFAULT_PROJ_ARRAY = [
   {
@@ -41,19 +48,27 @@ const getInfoArray = function(projArray) {
   }));
 };
 
-class ProjectionList extends Component {
-  constructor(props) {
-    super(props);
-    this.onClick = this.onClick.bind(this);
-  }
+function ProjectionList(props) {
+  const {
+    updateProjection,
+    projection,
+    onCloseModal,
+    changeTimeScale,
+    changeAutoInterval,
+    layers,
+    projectionArray,
+    isMobile,
+  } = props;
 
-  onClick(id) {
-    const {
-      updateProjection, projection, onCloseModal,
-    } = this.props;
-
+  function onClick(id) {
     if (id !== projection) {
       updateProjection(id);
+      const enableAuto = layers.filter((layer) => layer.projections && Object.keys(layer.projections).includes(id) && layer.visible && layer.id.includes('TEMPO')).length > 0;
+      // Defaults to 1 day if new projection has no TEMPO layers present
+      const timescale = enableAuto ? TIME_SCALE_TO_NUMBER.minute : TIME_SCALE_TO_NUMBER.day;
+      changeAutoInterval(enableAuto);
+      selectInterval(1, timescale, false, enableAuto);
+      changeTimeScale(enableAuto ? TIME_SCALE_TO_NUMBER.hour : timescale);
     }
 
     googleTagManager.pushEvent({
@@ -63,22 +78,19 @@ class ProjectionList extends Component {
     onCloseModal();
   }
 
-  render() {
-    const { projection, projectionArray, isMobile } = this.props;
-    return (
-      <IconList
-        list={projectionArray}
-        active={projection}
-        onClick={this.onClick}
-        size={isMobile ? 'large' : 'small'}
-      />
-    );
-  }
+  return (
+    <IconList
+      list={projectionArray}
+      active={projection}
+      onClick={onClick}
+      size={isMobile ? 'large' : 'small'}
+    />
+  );
 }
 
 const mapStateToProps = (state) => {
   const {
-    config, models, proj, screenSize,
+    config, models, proj, screenSize, layers,
   } = state;
   const projArray = lodashGet(config, 'ui.projections');
   const projectionArray = projArray
@@ -90,6 +102,7 @@ const mapStateToProps = (state) => {
     isMobile,
     projection: proj.id,
     projectionArray,
+    layers: layers.active.layers,
   };
 };
 
@@ -99,6 +112,12 @@ const mapDispatchToProps = (dispatch) => ({
   },
   onCloseModal: () => {
     dispatch(onToggle());
+  },
+  changeTimeScale: (val) => {
+    dispatch(changeTimeScaleAction(val));
+  },
+  changeAutoInterval: (autoSelected) => {
+    dispatch(changeAutoIntervalAction(autoSelected));
   },
 });
 
@@ -111,6 +130,9 @@ ProjectionList.propTypes = {
   onCloseModal: PropTypes.func,
   isMobile: PropTypes.bool,
   projection: PropTypes.string,
-  projectionArray: PropTypes.array,
+  projectionArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   updateProjection: PropTypes.func,
+  changeTimeScale: PropTypes.func,
+  changeAutoInterval: PropTypes.func,
+  layers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
 };

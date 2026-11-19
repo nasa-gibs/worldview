@@ -7,11 +7,11 @@
       "description": "pace-pax/PACE-PAX_CIRPAS-TO_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector California",
+      "tags": "vector California suborbital",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
-      "disableSnapshot": true,
+      "disableGIF": true,
       "disableCustomPalettes": true,
       "layergroup": "Suborbital Flight Tracks",
       "vectorStyle": {
@@ -27,8 +27,20 @@
       "wrapX": false,
       "wrapadjacentdays": false,
       "renderOrder": {
-        "property": "GPS_Altitu",
+        "property": "Altitude",
         "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "PACE-PAX_CIRPAS-TO_Flight_Track",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
       }
     }
   }

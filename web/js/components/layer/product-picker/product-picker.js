@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -20,6 +20,7 @@ import {
 } from '../../../modules/product-picker/actions';
 import util from '../../../util/util';
 import { JOYRIDE_INCREMENT } from '../../../util/constants';
+import usePrevious from '../../../util/customHooks';
 
 const { events } = util;
 
@@ -28,88 +29,98 @@ const { events } = util;
  * @class LayerList
  * @extends React.Component
  */
-class ProductPicker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      modalElement: undefined,
+function ProductPicker(props) {
+  const {
+    filters,
+    searchTerm,
+    saveSearchState,
+    mode,
+    categoryType,
+    closeModal,
+    width,
+  } = props;
+
+  const [modalElement, setModalElement] = useState(undefined);
+
+  const filtersRef = useRef(filters);
+  const searchTermRef = useRef(searchTerm);
+
+  const prevMode = usePrevious(mode);
+  const prevCategoryType = usePrevious(categoryType);
+
+  useEffect(() => {
+    const modalElementNew = document.getElementById('layer_picker_component');
+    setModalElement(modalElementNew);
+    return () => {
+      saveSearchState(filtersRef.current, searchTermRef.current);
     };
-  }
+  }, []);
 
-  componentDidMount() {
-    const modalElement = document.getElementById('layer_picker_component');
-    this.setState({ modalElement }, () => {
-      setTimeout(() => {
-        events.trigger(JOYRIDE_INCREMENT);
-      }, 200);
-      this.setModalClass();
-    });
-  }
+  useEffect(() => {
+    if (!modalElement) return;
+    setTimeout(() => {
+      events.trigger(JOYRIDE_INCREMENT);
+    }, 200);
+    setModalClass();
+  }, [modalElement]);
 
-  componentDidUpdate(prevProps) {
-    const { mode, categoryType } = this.props;
-    if (prevProps.mode !== mode || prevProps.categoryType !== categoryType) {
-      this.setModalClass();
+  useEffect(() => {
+    if ((prevMode !== mode || prevCategoryType !== categoryType) && modalElement) {
+      setModalClass();
     }
-  }
+  }, [mode, categoryType]);
 
-  componentWillUnmount() {
-    const { filters, searchTerm, saveSearchState } = this.props;
-    saveSearchState(filters, searchTerm);
-  }
+  useEffect(() => {
+    filtersRef.current = filters;
+  }, [filters]);
 
-  setModalClass() {
-    const { modalElement } = this.state;
-    const { mode, categoryType } = this.props;
+  useEffect(() => {
+    searchTermRef.current = searchTerm;
+  }, [searchTerm]);
+
+  function setModalClass() {
     if (mode === 'category' && categoryType !== 'recent') {
       modalElement.classList.remove('browse-search-width');
       modalElement.classList.add('category-width');
     } else if (
-      mode === 'search'
-        || mode === 'measurements'
-        || categoryType === 'recent'
-        || categoryType === 'featured'
+      mode === 'search' ||
+        mode === 'measurements' ||
+        categoryType === 'recent' ||
+        categoryType === 'featured'
     ) {
       modalElement.classList.remove('category-width');
       modalElement.classList.add('browse-search-width');
     }
   }
 
-  render() {
-    const {
-      closeModal,
-      mode,
-      width,
-    } = this.props;
-    const closeBtn = (
-      <button className="layer-btn-close" onClick={closeModal} style={mode === 'search' ? { top: '-10px' } : {}} type="button">
-        &times;
-      </button>
-    );
-    return (
-      <>
-        <ModalHeader toggle={closeModal} close={closeBtn}>
-          <ProductPickerHeader
-            width={width}
-            toggleFilterByAvailable={this.toggleFilterByAvailable}
-          />
-        </ModalHeader>
-        <ModalBody>
-          <div id="layer-modal-content" className="layer-modal-content">
-            {mode !== 'search'
-              ? (<BrowseLayers width={width} />)
-              : (<SearchLayers />)}
-          </div>
-        </ModalBody>
-      </>
-    );
-  }
+  const closeBtn = (
+    <button className="layer-btn-close" onClick={closeModal} style={mode === 'search' ? { top: '-10px' } : {}} type="button">
+      &times;
+    </button>
+  );
+
+  return (
+    <>
+      <ModalHeader toggle={closeModal} close={closeBtn}>
+        <ProductPickerHeader
+          width={width}
+        />
+      </ModalHeader>
+      <ModalBody>
+        <div id="layer-modal-content" className="layer-modal-content">
+          {mode !== 'search'
+            ? (<BrowseLayers width={width} />)
+            : (<SearchLayers />)}
+        </div>
+      </ModalBody>
+    </>
+  );
 }
 
 ProductPicker.propTypes = {
   categoryType: PropTypes.string,
   closeModal: PropTypes.func,
-  filters: PropTypes.array,
+  filters: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   mode: PropTypes.string,
   saveSearchState: PropTypes.func,
   searchTerm: PropTypes.string,

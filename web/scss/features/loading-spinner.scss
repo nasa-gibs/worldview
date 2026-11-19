@@ -1,0 +1,17 @@
+.loading-spinner {
+  animation: fade-in 1.5s ease-in-out forwards;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  67% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

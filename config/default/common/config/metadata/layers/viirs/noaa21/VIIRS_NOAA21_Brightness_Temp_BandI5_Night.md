@@ -4,4 +4,8 @@ The VIIRS Brightness Temperature layer is calculated from VIIRS Calibrated Radia
 
 Note: The Corrected Reflectance and the Thermal Band I5 imagery from NOAA-21/VIIRS will occasionally show a checkered pattern, especially over the respective polar areas. This is due to overlapping and superimposition of observations from multiple orbits with widely different cloud/snow coverages. The checkered pattern may also arise from the mixture of partial day and night observations. Though all necessary steps have been taken to mitigate this effect, users may still notice this to some extent over the polar areas, depending on the season.
 
-References: VJ203IMG_NRT [doi:10.5067/VIIRS/VJ203IMG_NRT.021](https://doi.org/10.5067/VIIRS/VJ203IMG_NRT.021); VJ202IMG_NRT [doi:10.5067/VIIRS/VJ202IMG_NRT.021](https://doi.org/10.5067/VIIRS/VJ202IMG_NRT.021)
+References<br>
+VJ202IMG_NRT [doi:10.5067/VIIRS/VJ202IMG_NRT.021](https://doi.org/10.5067/VIIRS/VJ202IMG_NRT.021)<br>
+VJ202IMG [doi:10.5067/VIIRS/VJ203IMG.021](https://doi.org/10.5067/VIIRS/VJ203IMG.021)<br>
+VJ203IMG_NRT [doi:10.5067/VIIRS/VJ203IMG_NRT.021](https://doi.org/10.5067/VIIRS/VJ203IMG_NRT.021)<br>
+VJ203IMG [doi:10.5067/VIIRS/VJ202IMG.021](https://doi.org/10.5067/VIIRS/VJ202IMG.021)

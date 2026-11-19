@@ -1,5 +1,4 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import LayerList from './layer-list';
@@ -41,7 +40,8 @@ function ChartingLayerMenu (props) {
 
   useEffect(() => {
     if (!activeChartingLayer && Object.keys(renderedPalettes).length > 0) {
-      updateActiveChartingLayer(activeLayersWithPalettes.filter((layer) => !layer.shouldHide)[0].id);
+      updateActiveChartingLayer(activeLayersWithPalettes
+        .filter((layer) => !layer.shouldHide)[0].id);
     }
   }, [renderedPalettes]);
 
@@ -112,9 +112,11 @@ export default connect(
 )(ChartingLayerMenu);
 
 ChartingLayerMenu.propTypes = {
-  activeLayersWithPalettes: PropTypes.array,
+  activeLayersWithPalettes: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   height: PropTypes.number,
   isActive: PropTypes.bool,
   isEmbedModeActive: PropTypes.bool,
   updateActiveChartingLayer: PropTypes.func,
+  renderedPalettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  activeChartingLayer: PropTypes.string,
 };

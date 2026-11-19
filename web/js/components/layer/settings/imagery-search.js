@@ -1,9 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Spinner,
 } from 'reactstrap';
+import PropTypes from 'prop-types';
 import { selectDate as selectDateAction } from '../../../modules/date/actions';
+import { getBaseCmrUrl } from '../../../modules/smart-handoff/selectors';
+import { buildGranulesUrl, cmrFetch } from '../../../util/cmr';
 
 const dateOptions = {
   year: 'numeric',
@@ -13,7 +16,6 @@ const dateOptions = {
 };
 const parseGranuleTimestamp = (granule) => new Date(granule.time_start);
 const maxExtent = [-180, -90, 180, 90];
-const headers = { 'Client-Id': 'Worldview' };
 
 export default function ImagerySearch({ layer }) {
   const listRef = useRef(null);
@@ -24,6 +26,7 @@ export default function ImagerySearch({ layer }) {
   const date = useSelector((state) => state.date);
   const compare = useSelector((state) => state.compare);
   const map = useSelector((state) => state.map);
+  const cmrBaseUrl = useSelector(getBaseCmrUrl);
   const [granulesStartStatus, setGranulesStartStatus] = useState(undefined);
   const [granulesEndStatus, setGranulesEndStatus] = useState(undefined);
   const [olderGranuleDates, setOlderGranuleDates] = useState([]);
@@ -59,52 +62,72 @@ export default function ImagerySearch({ layer }) {
     return smallerExtent;
   };
 
-  const getOlderGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+  const getOlderGranules = async (layerArg, refDate = selectedDate, pageNum = 1) => {
     const smallerExtent = getSmallerExtent();
     try {
-      const olderUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${smallerExtent.join(',')}&temporal=,${refDate.toISOString()}&sort_key=-start_date&pageSize=25&page_num=${pageNum}`;
-      const olderResponse = await fetch(olderUrl, { headers });
+      const olderUrl = buildGranulesUrl(cmrBaseUrl, {
+        conceptId: conceptID,
+        bbox: smallerExtent.join(','),
+        temporal: `,${refDate.toISOString()}`,
+        sortKey: '-start_date',
+        pageSize: 25,
+        pageNum,
+      });
+      const olderResponse = await cmrFetch(olderUrl);
       const olderGranules = await olderResponse.json();
       const olderDates = olderGranules.feed.entry.map(parseGranuleTimestamp);
 
       return olderDates;
-    } catch (e) {
+    } catch {
       return [];
     }
   };
 
-  const getNewerGranules = async (layer, refDate = selectedDate, pageNum = 1) => {
+  const getNewerGranules = async (layerArg, refDate = selectedDate, pageNum = 1) => {
     const smallerExtent = getSmallerExtent();
     try {
-      const newerUrl = `https://cmr.earthdata.nasa.gov/search/granules.json?collection_concept_id=${conceptID}&bounding_box=${smallerExtent.join(',')}&temporal=${refDate.toISOString()},&sort_key=start_date&pageSize=25&page_num=${pageNum}`;
-      const newerResponse = await fetch(newerUrl, { headers });
+      const newerUrl = buildGranulesUrl(cmrBaseUrl, {
+        conceptId: conceptID,
+        bbox: smallerExtent.join(','),
+        temporal: `${refDate.toISOString()},`,
+        sortKey: 'start_date',
+        pageSize: 25,
+        pageNum,
+      });
+      const newerResponse = await cmrFetch(newerUrl);
       const newerGranules = await newerResponse.json();
       const newerDates = newerGranules.feed.entry.map(parseGranuleTimestamp);
 
       return newerDates;
-    } catch (e) {
+    } catch {
       return [];
     }
   };
 
-  const loadNewerDates = async (layer, pageNum = 1) => {
+  const loadNewerDates = async (layerArg, pageNum = 1) => {
     setGranulesStartStatus('loading');
-    const newerDates = await getNewerGranules(layer, newerGranuleDates[0], pageNum);
-    const dates = [...newerGranuleDates, ...newerDates].sort((a, b) => Date.parse(b) - Date.parse(a));
+    const newerDates = await getNewerGranules(layerArg, newerGranuleDates[0], pageNum);
+    const dates = [
+      ...newerGranuleDates,
+      ...newerDates,
+    ].sort((a, b) => Date.parse(b) - Date.parse(a));
     setNewerGranuleDates(dates);
     setGranulesStartStatus('loaded');
   };
 
-  const loadOlderDates = async (layer, pageNum = 1) => {
+  const loadOlderDates = async (layerArg, pageNum = 1) => {
     setGranulesEndStatus('loading');
-    const olderDates = await getOlderGranules(layer, olderGranuleDates.at(-1), pageNum);
-    const dates = [...olderGranuleDates, ...olderDates].sort((a, b) => Date.parse(b) - Date.parse(a));
+    const olderDates = await getOlderGranules(layerArg, olderGranuleDates.at(-1), pageNum);
+    const dates = [
+      ...olderGranuleDates,
+      ...olderDates,
+    ].sort((a, b) => Date.parse(b) - Date.parse(a));
     setOlderGranuleDates(dates);
     setGranulesEndStatus('loaded');
   };
 
-  const handleSelection = (date) => {
-    selectDate(new Date(date));
+  const handleSelection = (dateArg) => {
+    selectDate(new Date(dateArg));
   };
 
   useEffect(() => {
@@ -120,10 +143,15 @@ export default function ImagerySearch({ layer }) {
   }, [page]);
 
   const renderDates = () => {
-    const granuleDates = [...olderGranuleDates, ...newerGranuleDates].sort((a, b) => Date.parse(b) - Date.parse(a));
-    const renderedDates = [...new Set(granuleDates.map((date) => date.toLocaleDateString('en-US', dateOptions)))].map((date, i) => (
-      <li className="lazyload-list-item" key={date} onClick={() => handleSelection(date)}>
-        {date}
+    const granuleDates = [
+      ...olderGranuleDates,
+      ...newerGranuleDates,
+    ].sort((a, b) => Date.parse(b) - Date.parse(a));
+    const renderedDates = [
+      ...new Set(granuleDates.map((granuleDate) => granuleDate.toLocaleDateString('en-US', dateOptions))),
+    ].map((granuleDate, i) => (
+      <li className="lazyload-list-item" key={granuleDate} onClick={() => handleSelection(granuleDate)}>
+        {granuleDate}
       </li>
     ));
     return renderedDates;
@@ -159,3 +187,7 @@ export default function ImagerySearch({ layer }) {
     </div>
   );
 }
+
+ImagerySearch.propTypes = {
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+};

@@ -4,4 +4,4 @@ The SeaWiFS instrument was launched by Orbital Sciences Corporation on the OrbVi
 
 The SeaWiFS Chlorophyll *a* (Global Area Coverage (GAC)) product is available from the OrbView-2 satellite for September 4, 1997 to December 11, 2010. The sensor and imagery resolution is 4 km, and the temporal resolution is daily.
 
-References: SeaWiFS_L2_GAC_OC [doi:10.5067/ORBVIEW-2/SeaWiFS/L2/GAC/OC/2022](https://doi.org/10.5067/ORBVIEW-2/SeaWiFS/L2/GAC/OC/2022)
+References: SeaWiFS_L2_GAC_OC [doi:10.5067/ORBVIEW-2/SeaWiFS/L2/GAC/OC/2022.0](https://doi.org/10.5067/ORBVIEW-2/SeaWiFS/L2/GAC/OC/2022.0)

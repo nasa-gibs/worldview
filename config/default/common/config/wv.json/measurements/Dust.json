@@ -3,7 +3,7 @@
         "Dust": {
             "id": "dust",
             "title":    "Dust",
-            "subtitle": "Aqua/AIRS, GOES-East/ABI, GOES-West/ABI, MERRA-2",
+            "subtitle": "Aqua/AIRS, Geostationary Ring, GOES-East/ABI, GOES-West/ABI, MERRA-2",
             "sources": {
                 "Aqua/AIRS": {
                     "id": "aqua-airs",
@@ -17,6 +17,15 @@
                         "OrbitTracks_Aqua_Descending"
                     ]
                 },
+                "Geostationary Ring": {
+                    "id": "geostationary-ring",
+                    "title": "Geostationary Ring (MSG/SEVIRI, Himawari/AHI, GOES/ABI)",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                      "EUMETSAT_RING_Dust_RGB"
+                    ]
+                  },
                 "GOES-East/ABI": {
                     "id": "goes-east-abi",
                     "title": "GOES-East/ABI",

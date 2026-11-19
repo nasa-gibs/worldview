@@ -1,5 +1,5 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   throttle as lodashThrottle,
@@ -9,9 +9,10 @@ import { UncontrolledTooltip } from 'reactstrap';
 import Coordinates from './coordinates';
 import util from '../../util/util';
 import { getNormalizedCoordinate } from '../location-search/util';
-import { changeCoordinateFormat } from '../../modules/settings/actions';
+import { changeCoordinateFormat as changeCoordinateFormatAction } from '../../modules/settings/actions';
 import { MAP_MOUSE_MOVE, MAP_MOUSE_OUT } from '../../util/constants';
 import { CRS } from '../../modules/map/constants';
+import usePrevious from '../../util/customHooks';
 
 const { events } = util;
 const getContainerWidth = (format) => {
@@ -23,167 +24,134 @@ const getContainerWidth = (format) => {
   return formatWidth[format];
 };
 
-class OlCoordinates extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasMouse: false,
-      latitude: null,
-      longitude: null,
-      crs: null,
-      format: null,
-      width: null,
-    };
-    const options = { leading: true, trailing: true };
-    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
-    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
-    this.changeFormat = this.changeFormat.bind(this);
-    this.setInitFormat = this.setInitFormat.bind(this);
-  }
+function OlCoordinates({ show }) {
+  const coordinateFormat = useSelector((state) => state.settings.coordinateFormat);
+  const isMobile = useSelector((state) => state.screenSize.isMobileDevice);
+  const dispatch = useDispatch();
 
-  componentDidMount() {
-    events.on(MAP_MOUSE_MOVE, this.mouseMove);
-    events.on(MAP_MOUSE_OUT, this.mouseOut);
-    this.setInitFormat();
-  }
+  const [hasMouse, setHasMouse] = useState(false);
+  const [latitude, setLatitude] = useState(null);
+  const [longitude, setLongitude] = useState(null);
+  const [crs, setCrs] = useState(null);
+  const [format, setFormat] = useState(null);
+  const [width, setWidth] = useState(null);
 
-  // listening to state changes from the settings menu
-  componentDidUpdate(prevProps) {
-    const { coordinateFormat } = this.props;
-    if (prevProps.coordinateFormat !== coordinateFormat) {
-      this.changeFormat(coordinateFormat);
-    }
-  }
+  const prevCoordinateFormat = usePrevious(coordinateFormat);
 
-  componentWillUnmount() {
-    events.off(MAP_MOUSE_MOVE, this.mouseMove);
-    events.off(MAP_MOUSE_OUT, this.mouseOut);
-  }
-
-  mouseMove({ pixel }, map, crs) {
-    const coord = map.getCoordinateFromPixel(pixel);
-    if (!coord) {
-      this.clearCoord();
-      return;
-    }
-    let pcoord = transform(coord, crs, CRS.GEOGRAPHIC);
-    // eslint-disable-next-line prefer-const
-    let [lon, lat] = pcoord;
-    if (Math.abs(lat) > 90) {
-      this.clearCoord();
-      return;
-    }
-    if (Math.abs(lon) > 180) {
-      if (crs === CRS.GEOGRAPHIC && Math.abs(lon) < 250) {
-        pcoord = getNormalizedCoordinate([lon, lat]);
-      } else {
-        this.clearCoord();
-        return;
-      }
-    }
-    this.setState({
-      hasMouse: true,
-      latitude: pcoord[1],
-      longitude: pcoord[0],
-      crs,
-    });
-  }
-
-  mouseOut(event) {
-    if (event.relatedTarget && event.relatedTarget.classList) {
-      const cl = event.relatedTarget.classList;
-      // Ignore when the mouse goes over the coordinate display. Clearing
-      // the coordinates in this situation causes a flicker.
-      if (cl.contains('wv-coords-map')) {
-        return;
-      }
-    }
-    this.clearCoord();
-  }
-
-  clearCoord() {
-    this.setState({ latitude: null, longitude: null });
-  }
-
-  setInitFormat() {
-    const format = util.getCoordinateFormat();
-    const width = getContainerWidth(format);
-    this.setState({
-      format,
-      width,
-    });
-  }
-
-  changeFormat = (format) => {
-    const { changeCoordinateFormat } = this.props;
-    changeCoordinateFormat(format);
-    util.setCoordinateFormat(format);
-    const width = getContainerWidth(format);
-    this.setState({
-      format,
-      width,
-    });
+  const clearCoord = () => {
+    setLatitude(null);
+    setLongitude(null);
   };
 
-  render() {
-    const {
-      hasMouse, format, latitude, longitude, crs, width,
-    } = this.state;
-    const { show, isMobile } = this.props;
-    const coordContainerStyle = isMobile ? {
+  const changeFormat = (newFormat) => {
+    dispatch(changeCoordinateFormatAction(newFormat));
+    util.setCoordinateFormat(newFormat);
+    setFormat(newFormat);
+    setWidth(getContainerWidth(newFormat));
+  };
+
+  const mouseMoveRef = useRef();
+  const mouseOutRef = useRef();
+
+  if (!mouseMoveRef.current) {
+    const options = { leading: true, trailing: true };
+    mouseMoveRef.current = lodashThrottle(({ pixel }, map, eventCrs) => {
+      const coord = map.getCoordinateFromPixel(pixel);
+      if (!coord) {
+        clearCoord();
+        return;
+      }
+      let pcoord = transform(coord, eventCrs, CRS.GEOGRAPHIC);
+
+      const [lon, lat] = pcoord;
+      if (Math.abs(lat) > 90) {
+        clearCoord();
+        return;
+      }
+      if (Math.abs(lon) > 180) {
+        if (eventCrs === CRS.GEOGRAPHIC && Math.abs(lon) < 250) {
+          pcoord = getNormalizedCoordinate([lon, lat]);
+        } else {
+          clearCoord();
+          return;
+        }
+      }
+      setHasMouse(true);
+      setLatitude(pcoord[1]);
+      setLongitude(pcoord[0]);
+      setCrs(eventCrs);
+    }, 200, options);
+
+    mouseOutRef.current = lodashThrottle((event) => {
+      if (event.relatedTarget && event.relatedTarget.classList) {
+        const cl = event.relatedTarget.classList;
+        if (cl.contains('wv-coords-map')) {
+          return;
+        }
+      }
+      clearCoord();
+    }, 200, options);
+  }
+
+  // Subscribe to map events
+  useEffect(() => {
+    const mouseMove = mouseMoveRef.current;
+    const mouseOut = mouseOutRef.current;
+    events.on(MAP_MOUSE_MOVE, mouseMove);
+    events.on(MAP_MOUSE_OUT, mouseOut);
+
+    // Initialize format
+    const initFormat = util.getCoordinateFormat();
+    setFormat(initFormat);
+    setWidth(getContainerWidth(initFormat));
+
+    return () => {
+      events.off(MAP_MOUSE_MOVE, mouseMove);
+      events.off(MAP_MOUSE_OUT, mouseOut);
+      mouseMove.cancel();
+      mouseOut.cancel();
+    };
+  }, []);
+
+  // Sync format when coordinateFormat prop changes from settings
+  useEffect(() => {
+    if (prevCoordinateFormat !== undefined && prevCoordinateFormat !== coordinateFormat) {
+      changeFormat(coordinateFormat);
+    }
+  }, [coordinateFormat]);
+
+  const coordContainerStyle = isMobile
+    ? {
       display: 'none',
     }
-      : {
-        width,
-      };
+    : {
+      width,
+    };
 
-    return (
-      <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>
-        {hasMouse && show && (
-          <>
-            <Coordinates
-              format={format}
-              latitude={latitude}
-              longitude={longitude}
-              crs={crs}
-              onFormatChange={this.changeFormat}
-            />
-            {latitude && latitude && (
-              <UncontrolledTooltip id="center-align-tooltip" placement="bottom" target="ol-coords-case">
-                Change coordinates format
-              </UncontrolledTooltip>
-            )}
-          </>
-        )}
-      </div>
-    );
-  }
+  return (
+    <div id="ol-coords-case" className="wv-coords-container" style={coordContainerStyle}>
+      {hasMouse && show && (
+        <>
+          <Coordinates
+            format={format}
+            latitude={latitude}
+            longitude={longitude}
+            crs={crs}
+            onFormatChange={changeFormat}
+          />
+          {latitude && latitude && (
+            <UncontrolledTooltip id="center-align-tooltip" placement="bottom" target="ol-coords-case">
+              Change coordinates format
+            </UncontrolledTooltip>
+          )}
+        </>
+      )}
+    </div>
+  );
 }
-
-function mapStateToProps (state) {
-  const { settings, screenSize } = state;
-  const { coordinateFormat } = settings;
-  const isMobile = screenSize.isMobileDevice;
-  return {
-    coordinateFormat,
-    isMobile,
-  };
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  changeCoordinateFormat: (value) => {
-    dispatch(changeCoordinateFormat(value));
-  },
-});
 
 OlCoordinates.propTypes = {
   show: PropTypes.bool,
-  changeCoordinateFormat: PropTypes.func,
-  coordinateFormat: PropTypes.string,
-  isMobile: PropTypes.bool,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(OlCoordinates);
+export default OlCoordinates;

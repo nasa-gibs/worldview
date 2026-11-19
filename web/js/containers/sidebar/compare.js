@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -30,10 +29,10 @@ function CompareCase(props) {
             <NavItem>
               <NavLink
                 className={
-                    isCompareA
-                      ? `${tabClasses} first-tab active`
-                      : `${tabClasses} first-tab`
-                  }
+                  isCompareA
+                    ? `${tabClasses} first-tab active`
+                    : `${tabClasses} first-tab`
+                }
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />
@@ -44,10 +43,10 @@ function CompareCase(props) {
             <NavItem>
               <NavLink
                 className={
-                    !isCompareA
-                      ? `${tabClasses} second-tab active`
-                      : `${tabClasses} second-tab`
-                  }
+                  !isCompareA
+                    ? `${tabClasses} second-tab active`
+                    : `${tabClasses} second-tab`
+                }
                 onClick={toggleActiveCompareState}
               >
                 <i className="productsIcon selected icon-layers" />

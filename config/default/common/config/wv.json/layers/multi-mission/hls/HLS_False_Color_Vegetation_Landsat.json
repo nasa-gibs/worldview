@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957657-LPCLOUD",
       "title": "Reflectance (Vegetative Analysis False Color, Bands 6-5-4) *BETA*",
-      "subtitle": "Landsat 8 & 9 / OLI",
+      "subtitle": "HLS Landsat 8 & 9 / OLI",
       "description": "multi-mission/hls/HLS_False_Color_Vegetation_Landsat",
       "tags": "surface oli l30",
       "group": "overlays",
@@ -23,7 +23,6 @@
         "bands_regex": "B[0-9][0-9]"
       },
       "wrapX": false,
-      "disableSnapshot": true,
       "minZoom": 7,
       "projections": {
         "geographic": {
@@ -31,7 +30,7 @@
           "matrixSet": "31.25m"
         }
       },
-      "startDate": "2022-01-01T00:00:00Z"
+      "startDate": "2013-04-11T00:00:00Z"
     }
   }
 }

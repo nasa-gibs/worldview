@@ -3,7 +3,7 @@
         "Ice Surface Temperature": {
             "id": "ice-surface-temperature",
             "title":    "Ice Surface Temperature",
-            "subtitle": "Aqua/MODIS, NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS",
+            "subtitle": "Aqua/MODIS, NOAA-21/VIIRS,NOAA-20/VIIRS, Suomi NPP/VIIRS, Terra/MODIS",
             "sources": {
                 "Suomi NPP/VIIRS": {
                     "id": "suominpp-viirs",
@@ -13,6 +13,8 @@
                     "settings": [
                         "VIIRS_SNPP_Ice_Surface_Temp_Day",
                         "VIIRS_SNPP_Ice_Surface_Temp_Night",
+                        "VIIRS_SNPP_L3_Ice_Surface_Temp_Daily_Day",
+                        "VIIRS_SNPP_L3_Ice_Surface_Temp_Daily_Night",
                         "OrbitTracks_Suomi_NPP_Ascending",
                         "OrbitTracks_Suomi_NPP_Descending"
                     ]
@@ -25,14 +27,28 @@
                     "settings": [
                         "VIIRS_NOAA20_Ice_Surface_Temp_Day",
                         "VIIRS_NOAA20_Ice_Surface_Temp_Night",
+                        "VIIRS_NOAA20_L3_Ice_Surface_Temp_Daily_Day",
+                        "VIIRS_NOAA20_L3_Ice_Surface_Temp_Daily_Night",
                         "OrbitTracks_NOAA-20_Ascending",
                         "OrbitTracks_NOAA-20_Descending"
+                    ]
+                },
+                "NOAA-21/VIIRS": {
+                    "id": "noaa21-viirs",
+                    "title": "NOAA-21/VIIRS",
+                    "description": "",
+                    "image": "",
+                    "settings": [
+                        "VIIRS_NOAA21_Ice_Surface_Temp_Day",
+                        "VIIRS_NOAA21_Ice_Surface_Temp_Night",
+                        "OrbitTracks_NOAA-21_Ascending",
+                        "OrbitTracks_NOAA-21_Descending"
                     ]
                 },
                     "Aqua/MODIS": {
                         "id": "aqua-modis",
                         "title": "Aqua/MODIS",
-                        "description": "modis/IceSurfaceTemperature",
+                        "description": "",
                         "image": "",
                         "settings": [
                             "MODIS_Aqua_Ice_Surface_Temp_Day",
@@ -46,7 +62,7 @@
                     "Terra/MODIS": {
                         "id": "terra-modis",
                         "title": "Terra/MODIS",
-                        "description": "modis/IceSurfaceTemperature",
+                        "description": "",
                         "image": "",
                         "settings": [
                             "MODIS_Terra_Ice_Surface_Temp_Day",

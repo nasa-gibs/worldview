@@ -17,6 +17,7 @@ import {
   UNHIGHLIGHT_EVENT,
 } from './constants';
 import { requestAction } from '../core/actions';
+import { safeParseEonet } from './util';
 
 export function requestEvents() {
   return (dispatch, getState) => {
@@ -27,6 +28,8 @@ export function requestEvents() {
       REQUEST_EVENTS,
       requestUrl,
       'application/json',
+      null,
+      { parser: safeParseEonet },
     );
   };
 }
@@ -39,7 +42,6 @@ export function requestSources() {
     let sourcesURL = `${baseUrl}/sources`;
 
     if (mockSources) {
-      // eslint-disable-next-line no-console
       console.warn(`Using mock sources data: ${mockSources}`);
       sourcesURL = `mock/sources_data.json-${mockSources}`;
     }

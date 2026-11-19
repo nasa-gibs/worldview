@@ -21,7 +21,8 @@ const checkTileImage = (image) => {
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] !== 0) { // If alpha is not 0
         isTransparent = false;
-        if (data[i] !== firstPixel[0] || data[i + 1] !== firstPixel[1] || data[i + 2] !== firstPixel[2] || data[i + 3] !== firstPixel[3]) {
+        if (data[i] !== firstPixel[0] || data[i + 1] !== firstPixel[1] ||
+          data[i + 2] !== firstPixel[2] || data[i + 3] !== firstPixel[3]) {
           isSingleColor = false;
           break;
         }
@@ -62,12 +63,21 @@ const processTileLayer = (layer, map, view) => {
   let emptyTiles = 0; // 4
   const otherTileStates = [];
 
-  const tileCoordFunction = async (tileCoord) => {
-    const tile = source.getTile(tileCoord[0], tileCoord[1], tileCoord[2], 1, sourceProjection);
-    const tileState = tile.getState();
+  const renderer = layer.getRenderer();
+  const tileCache = renderer && renderer.getTileCache ? renderer.getTileCache() : null;
+  const tileByCoord = new Map();
+  if (tileCache) {
+    tileCache.forEach((tile) => {
+      tileByCoord.set(tile.getTileCoord().join('/'), tile);
+    });
+  }
+
+  const tileCoordFunction = (tileCoord) => {
     expectedTileCount += 1;
+    const tile = tileByCoord.get(tileCoord.join('/'));
+    const tileState = tile ? tile.getState() : 0;
     if (tileState === 2) {
-      const image = tile.image_;
+      const image = tile.getImage();
       const isTileImageValid = checkTileImage(image);
       if (!isTileImageValid) {
         loadedTileCount += 1;
@@ -99,7 +109,10 @@ export default function countTilesForSpecifiedLayers (ui, layersToCheck) {
   const map = ui.selected;
   const view = map.getView();
   // Match only the layers that are in the layersToMeasure array
-  const matchingLayers = map.getLayers().getArray().filter((layer) => layer.wv && layer.wv.id && layersToCheck.includes(layer.wv.id));
+  const matchingLayers = map.getLayers().getArray()
+    .filter(
+      (layer) => layer.wv && layer.wv.id && layersToCheck.includes(layer.wv.id),
+    );
 
   let totalExpectedTileCount = 0;
   let totalLoadedTileCount = 0;

@@ -4,4 +4,4 @@ The MERIS Chlorophyll *a* product was available from the ENVISAT satellite. The 
 
 MERIS (Medium Resolution Imaging Spectrometer) was a programmable, medium-spectral resolution, imaging spectrometer operating in the solar reflective spectral range aboard the ENVISAT satellite. It was operational from 2002 to 2012.
 
-References: MERIS_L2_RR_OC [doi:10.5067/ENVISAT/MERIS/L2/RR/OC/2022](https://doi.org/10.5067/ENVISAT/MERIS/L2/RR/OC/2022)
+References: MERIS_L2_RR_OC [doi:10.5067/ENVISAT/MERIS/L2/RR/OC/2022.0](https://doi.org/10.5067/ENVISAT/MERIS/L2/RR/OC/2022.0)

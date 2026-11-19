@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { getIntersection, getArea, isEmpty } from 'ol/extent';
 import {
@@ -59,7 +59,8 @@ function FindOrbitTracksMode () {
 
   const verifyExtent = () => {
     // This is a very loose measurement.. Should find a better way to find values...
-    const unitedStatesExtent = [-125.0799167388867, 22.176358212699427, -62.489596269417106, 57.01542814447728];
+    const unitedStatesExtent = [-125.0799167388867,
+      22.176358212699427, -62.489596269417106, 57.01542814447728];
     const intersection = getIntersection(unitedStatesExtent, currentExtent);
     const intersectionArea = getArea(intersection);
     if (isEmpty(intersection)) {
@@ -93,7 +94,7 @@ function FindOrbitTracksMode () {
         img.onload = async () => {
           // Process the loaded image here
           const blackPixelRatio = parseFloat((await calculatePixels(wmsImage) * 100).toFixed(2));
-          // eslint-disable-next-line no-unsafe-optional-chaining
+
           const currentThreshold = layerPixelData?.[layerSelection?.id]?.threshold * 100 ?? null;
           const pixelMessage = `${blackPixelRatio}% of pixels are black for ${layerSelection.id} on ${date}... `;
           const thresholdMessage = currentThreshold ? `The current threshold for ${layerSelection.id} is ${currentThreshold}%` : `There is no current threshold for ${layerSelection.id} ...`;
@@ -112,6 +113,7 @@ function FindOrbitTracksMode () {
     } catch (error) {
       console.error(`No image available for ${layerSelection.id} on ${date}: `, error);
     }
+    return undefined;
   };
 
   const findOrbitalImagery = async () => {
@@ -119,12 +121,11 @@ function FindOrbitTracksMode () {
     const verifyQuery = verifyExtent();
     if (!verifyQuery) {
       setIsLoading(false);
-      return;
+      return undefined;
     }
     const dateRange = getOrbitalDateRange();
     for (let i = 0; i < dateRange.length; i += 1) {
       const date = dateRange[i];
-      // eslint-disable-next-line no-await-in-loop
       const imageryRequest = await makeMeasurementRequest(date);
       if (imageryRequest === 100 || !imageryRequest) {
         console.log('No imagery found for ', date);
@@ -134,7 +135,7 @@ function FindOrbitTracksMode () {
         return setDateFound(date);
       }
     }
-    setIsLoading(false);
+    return setIsLoading(false);
   };
 
   const orangeStyle = { backgroundColor: '#d54e21' };

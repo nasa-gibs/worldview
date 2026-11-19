@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Button, InputGroup,
@@ -9,25 +9,26 @@ import {
   get as lodashGet,
 } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import googleTagManager from 'googleTagManager';
 import SearchBox from './location-search-input';
 import Alert from '../util/alert';
 import HoverTooltip from '../util/hover-tooltip';
 import { isValidCoordinates } from './util';
 import {
-  clearSuggestions,
-  getSuggestions,
-  setPlaceMarker,
-  setSuggestion,
-  toggleReverseGeocodeActive,
-  toggleShowLocationSearch,
+  clearSuggestions as clearSuggestionsAction,
+  getSuggestions as getSuggestionsAction,
+  setPlaceMarker as setPlaceMarkerAction,
+  setSuggestion as setSuggestionAction,
+  toggleReverseGeocodeActive as toggleReverseGeocodeActiveAction,
+  toggleShowLocationSearch as toggleShowLocationSearchAction,
 } from '../../modules/location-search/actions';
 import {
   areCoordinatesWithinExtent,
 } from '../../modules/location-search/util';
 import {
-  processMagicKey,
-  reverseGeocode,
+  processMagicKey as processMagicKeyUtil,
+  reverseGeocode as reverseGeocodeUtil,
 } from '../../modules/location-search/util-api';
 
 class LocationSearchModal extends Component {
@@ -40,7 +41,14 @@ class LocationSearchModal extends Component {
       showReverseGeocodeAlert: false,
       showNoSuggestionsAlert: false,
     };
-    this.debounceGetSuggestions = lodashDebounce(this.getSuggestions, 400, { leading: true, trailing: true });
+    this.debounceGetSuggestions = lodashDebounce(
+      this.getSuggestions,
+      400,
+      {
+        leading: true,
+        trailing: true,
+      },
+    );
   }
 
   componentDidUpdate(prevProps) {
@@ -66,14 +74,17 @@ class LocationSearchModal extends Component {
     if (inputValue && suggestions.length === 0 && prevProps.suggestions.length > 0) {
       const prevInputValue = prevProps.inputValue;
       const prevSuggestedPlace = prevProps.suggestedPlace;
-      const newSuggestedPlaceSelected = prevInputValue && prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
+      const newSuggestedPlaceSelected = prevInputValue &&
+        prevSuggestedPlace.length > 0 && prevSuggestedPlace[0].text === prevInputValue;
       const isCoordinates = isValidCoordinates(inputValue);
       // prevent flag error on new place/coordinates being copy pasted
       if (!newSuggestedPlaceSelected && !isCoordinates) {
         this.setNoSuggestionsAlert(true);
         this.setInputAlertIcon(true);
       }
-    } else if ((showNoSuggestionsAlert || showInputAlert) && (!inputValue || suggestions.length > 0)) {
+    } else if (
+      (showNoSuggestionsAlert || showInputAlert) &&
+      (!inputValue || suggestions.length > 0)) {
       this.setNoSuggestionsAlert(false);
       this.setInputAlertIcon(false);
     }
@@ -168,7 +179,8 @@ class LocationSearchModal extends Component {
           setPlaceMarker([x, y], addressAttributes);
         }
       }
-    }).catch((error) => console.error(error));
+    })
+      .catch((error) => console.error(error));
   };
 
   // handle input value change including text/coordinates typing, pasting, cutting
@@ -347,14 +359,18 @@ class LocationSearchModal extends Component {
       showInputAlert,
     } = this.state;
 
-    const locationSearchMobileStyle = isMobile ? {
-      position: 'static',
-      width: '100%',
-    } : null;
+    const locationSearchMobileStyle = isMobile
+      ? {
+        position: 'static',
+        width: '100%',
+      }
+      : null;
 
-    const locationSearchInputGroupMobileStyle = isMobile ? {
-      width: '100% !important',
-    } : null;
+    const locationSearchInputGroupMobileStyle = isMobile
+      ? {
+        width: '100% !important',
+      }
+      : null;
 
     return (
       <div id="location-search-wrapper" className="location-search-expanded" style={locationSearchMobileStyle}>
@@ -414,11 +430,14 @@ const mapStateToProps = (state) => {
     preventInputFocus,
     coordinates,
     locationSearchMobileModalOpen,
-    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(proj, targetCoordinates),
+    isCoordinatePairWithinExtent: (targetCoordinates) => areCoordinatesWithinExtent(
+      proj,
+      targetCoordinates,
+    ),
     isCoordinateSearchActive,
     isMobile,
-    processMagicKey: (magicKey) => processMagicKey(magicKey, config),
-    reverseGeocode: (coords) => reverseGeocode(coords, config),
+    processMagicKey: (magicKey) => processMagicKeyUtil(magicKey, config),
+    reverseGeocode: (coords) => reverseGeocodeUtil(coords, config),
     suggestions,
     suggestedPlace,
   };
@@ -426,29 +445,29 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setPlaceMarker: (coordinates, addressAttributes) => {
-    dispatch(setPlaceMarker(coordinates, addressAttributes, true));
+    dispatch(setPlaceMarkerAction(coordinates, addressAttributes, true));
   },
   toggleReverseGeocodeActive: (isActive) => {
-    dispatch(toggleReverseGeocodeActive(isActive));
+    dispatch(toggleReverseGeocodeActiveAction(isActive));
   },
   toggleShowLocationSearch: () => {
-    dispatch(toggleShowLocationSearch());
+    dispatch(toggleShowLocationSearchAction());
   },
   getSuggestions: (val) => {
-    dispatch(getSuggestions(val));
+    dispatch(getSuggestionsAction(val));
   },
   clearSuggestions: () => {
-    dispatch(clearSuggestions());
+    dispatch(clearSuggestionsAction());
   },
   setSuggestion: (suggestion) => {
-    dispatch(setSuggestion(suggestion));
+    dispatch(setSuggestionAction(suggestion));
   },
 });
 
 LocationSearchModal.propTypes = {
   clearSuggestions: PropTypes.func,
-  coordinates: PropTypes.array,
-  coordinatesPending: PropTypes.array,
+  coordinates: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  coordinatesPending: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   locationSearchMobileModalOpen: PropTypes.bool,
   getSuggestions: PropTypes.func,
   inputValue: PropTypes.string,
@@ -460,8 +479,8 @@ LocationSearchModal.propTypes = {
   reverseGeocode: PropTypes.func,
   setPlaceMarker: PropTypes.func,
   setSuggestion: PropTypes.func,
-  suggestions: PropTypes.array,
-  suggestedPlace: PropTypes.array,
+  suggestions: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  suggestedPlace: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   toggleReverseGeocodeActive: PropTypes.func,
   toggleShowLocationSearch: PropTypes.func,
   updatePendingCoordinates: PropTypes.func,

@@ -5,7 +5,7 @@
       "title": "Ozone (L3, Cloud Fraction, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Ozone_Cloud_Fraction",
-      "tags": "",
+      "tags": "o3",
       "group": "overlays",
       "layergroup": "Ozone",
       "dataAvailability": "dd",

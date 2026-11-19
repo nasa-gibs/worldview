@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { Component } from 'react';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import assign from 'object-assign';
@@ -9,10 +9,10 @@ import { callIfExists, cssClasses, store } from './helpers';
 
 export default class MenuItem extends Component {
     static propTypes = {
-        attributes: PropTypes.object,
+        attributes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
         children: PropTypes.node,
         className: PropTypes.string,
-        data: PropTypes.object,
+        data: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
         disabled: PropTypes.bool,
         divider: PropTypes.bool,
         onClick: PropTypes.func,

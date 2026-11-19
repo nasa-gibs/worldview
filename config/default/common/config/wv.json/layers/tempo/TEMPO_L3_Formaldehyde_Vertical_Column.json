@@ -5,7 +5,7 @@
       "title": "Formaldehyde (L3, Vertical Column, Subdaily) (PROVISIONAL)",
       "subtitle": "TEMPO",
       "description": "tempo/TEMPO_L3_Formaldehyde_Vertical_Column",
-      "tags": "",
+      "tags": "hcho",
       "group": "overlays",
       "layergroup": "Formaldehyde",
       "dataAvailability": "dd",

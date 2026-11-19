@@ -2,7 +2,8 @@ import update from 'immutability-helper';
 import { initialCompareState } from './reducers';
 import { formatDisplayDate } from '../date/util';
 
-export function mapLocationToCompareState(parameters, stateFromLocation) {
+export function mapLocationToCompareState(parameters, stateFromLocationObj) {
+  let stateFromLocation = stateFromLocationObj;
   if (parameters.ca !== undefined) {
     stateFromLocation = update(stateFromLocation, {
       compare: {
@@ -28,7 +29,7 @@ export function mapLocationToCompareState(parameters, stateFromLocation) {
  * @param {Array} coords | Coordinates of hover point
  * @param {Object} layerAttributes | Layer Properties
  */
-export function isFromActiveCompareRegion(coords, group, compare = {}, swipeOffset) {
+export function isFromActiveCompareRegion(coords, group, swipeOffset, compare = {}) {
   const { active, mode, isCompareA } = compare;
   if (active) {
     if (mode !== 'swipe') {

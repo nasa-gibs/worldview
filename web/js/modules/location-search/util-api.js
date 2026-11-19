@@ -5,7 +5,8 @@ export const LOCATION_SEARCH_REQUEST_OPTIONS = {
     redirect: 'follow',
   },
   // https://developers.arcgis.com/rest/geocode/api-reference/geocoding-category-filtering.htm
-  // necessary to filter to remove fast food type suggestions, but still include relavant Places of Interest
+  // necessary to filter to remove fast food type suggestions, but still include relavant Places of
+  // Interest
   GEOCODE_SUGGEST_CATEGORIES: [
     'Address',
     'Street Address',

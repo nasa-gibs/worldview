@@ -1,96 +1,72 @@
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-class TourBox extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      styles: { },
-    };
+function TourBox({
+  index, story, storyId, storyOrder, className, title, description,
+  selectTour, backgroundImage, backgroundImageHover,
+}) {
+  const [styles, setStyles] = useState(
+    backgroundImage
+      ? { backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})` }
+      : {},
+  );
 
-    this.onMouseOver = this.onMouseOver.bind(this);
-    this.onMouseOut = this.onMouseOut.bind(this);
-  }
-
-  UNSAFE_componentWillMount() {
-    const { backgroundImage, storyId } = this.props;
-    if (backgroundImage) {
-      this.setState({
-        styles: {
-          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
-        },
-      });
-    }
-  }
-
-  onMouseOver(e) {
-    const { backgroundImageHover, storyId } = this.props;
+  const onMouseOver = (e) => {
     e.preventDefault();
     if (backgroundImageHover) {
-      this.setState({
-        styles: {
-          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImageHover})`,
-        },
+      setStyles({
+        backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImageHover})`,
       });
     }
-  }
+  };
 
-  onMouseOut(e) {
-    const { backgroundImage, storyId } = this.props;
+  const onMouseOut = (e) => {
     e.preventDefault();
     if (backgroundImage) {
-      this.setState({
-        styles: {
-          backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
-        },
+      setStyles({
+        backgroundImage: `url(config/metadata/stories/${storyId}/${backgroundImage})`,
       });
     }
-  }
+  };
 
-  render() {
-    const {
-      index, story, storyId, storyOrder, className, title, description, selectTour,
-    } = this.props;
-    const { styles } = this.state;
-    let floatBox = '';
-    if (storyOrder.length - (index + 1) === 0
-      || storyOrder.length - (index + 2) === 0) {
-      floatBox = ' tour-box-float';
-    }
-    return (
-      <a
-        href="#"
-        style={styles}
-        onMouseOver={(e) => this.onMouseOver(e)}
-        onMouseOut={(e) => this.onMouseOut(e)}
-        className={className + floatBox}
-        onClick={(e) => selectTour(e, story, index, storyId)}
-      >
-        <div className="tour-box-content">
-          <i className="tour-box-icon" aria-hidden="true" />
-          <div className="tour-box-gradient" />
-          <div className="tour-box-header">
-            <h3 className="tour-box-title">{title}</h3>
-          </div>
-          <div className="tour-box-description">
-            <p>{description}</p>
-          </div>
-        </div>
-      </a>
-    );
+  let floatBox = '';
+  if (storyOrder.length - (index + 1) === 0 ||
+    storyOrder.length - (index + 2) === 0) {
+    floatBox = ' tour-box-float';
   }
+  return (
+    <a
+      href="#"
+      style={styles}
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+      className={className + floatBox}
+      onClick={(e) => selectTour(e, story, index, storyId)}
+    >
+      <div className="tour-box-content">
+        <i className="tour-box-icon" aria-hidden="true" />
+        <div className="tour-box-gradient" />
+        <div className="tour-box-header">
+          <h3 className="tour-box-title">{title}</h3>
+        </div>
+        <div className="tour-box-description">
+          <p>{description}</p>
+        </div>
+      </div>
+    </a>
+  );
 }
 
 TourBox.propTypes = {
   index: PropTypes.number.isRequired,
   selectTour: PropTypes.func.isRequired,
-  story: PropTypes.object.isRequired,
+  story: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   storyId: PropTypes.string.isRequired,
   backgroundImage: PropTypes.string,
   backgroundImageHover: PropTypes.string,
   className: PropTypes.string,
   description: PropTypes.string,
-  storyOrder: PropTypes.array,
+  storyOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   title: PropTypes.string,
 };
 

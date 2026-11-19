@@ -1,0 +1,7 @@
+The Infrared (10.8 µm, 10 minute) layer displays rectified (level 1.5) Meteosat SEVIRI image data. The data is transmitted as High Rate transmissions in 12 spectral channels. Level 1.5 image data corresponds to the geolocated and radiometrically pre-processed image data, ready for further processing, e.g. the extraction of meteorological products. Any spacecraft specific effects have been removed, and in particular, linearisation and equalisation of the image radiometry has been performed for all SEVIRI channels. The on-board blackbody data has been processed.
+
+From 1 June 2022, Meteosat-9 at 45.5° E is the prime satellite for the IODC service, replacing Meteosat-8 (located at 41.5° E while in operation).
+
+IR channels provide continuous, day and night, temperature readings of clouds, land and sea surfaces, aids in cloud and other atmospheric feature identification/classification (e.g. estimation of cloud top height). IR channels are so-called atmospheric window channels (where the absorption of the gas molecules is low).
+
+This imagery has been made available through an API service of [High Rate SEVIRI IR10.8 μm Image - MSG - Indian Ocean](https://data.eumetsat.int/product/EO:EUM:DAT:0164) provided by the European Organisation for the Exploitation of Meteorological Satellites ([EUMETSAT](http://www.eumetsat.int/)).

@@ -1,5 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import { drawTravelModePaletteOnCanvas } from '../../../../modules/palettes/util';
 
 function ColorBarRow({ legend, index }) {
@@ -71,7 +72,8 @@ function TravelModeColorbars() {
   const filteredPalettes = Object.values(palettes).map((layer) => ({
     ...layer,
     maps: layer.maps.filter((mapItem) => !(mapItem.legend && mapItem.legend.type === 'classification')),
-  })).filter((layer) => layer.maps.length > 0);
+  }))
+    .filter((layer) => layer.maps.length > 0);
 
   if (filteredPalettes.length === 0) return null;
 
@@ -95,3 +97,8 @@ function TravelModeColorbars() {
 }
 
 export default TravelModeColorbars;
+
+ColorBarRow.propTypes = {
+  legend: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  index: PropTypes.number,
+};

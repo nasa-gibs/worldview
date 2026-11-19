@@ -9,7 +9,8 @@ import safeLocalStorage from './local-storage';
 
 const { COORDINATE_FORMAT } = safeLocalStorage.keys;
 
-export default (function(self) {
+export default (function(selfObj) {
+  const self = selfObj;
   let canvas = null;
 
   // Export other util methods
@@ -25,7 +26,8 @@ export default (function(self) {
     return result;
   };
 
-  self.pad = function(value, width, padding) {
+  self.pad = function(valueStr, width, padding) {
+    let value = valueStr;
     value = `${value}`;
     if (value.length < width) {
       const add = width - value.length;
@@ -54,7 +56,8 @@ export default (function(self) {
    * object.
    * @return {object} object representation of the query string.
    */
-  self.fromQueryString = function(queryString) {
+  self.fromQueryString = function(queryStringValue) {
+    let queryString = queryStringValue;
     if (!queryString) {
       return {};
     }
@@ -168,7 +171,7 @@ export default (function(self) {
       second,
       millisecond,
     ));
-    // eslint-disable-next-line no-restricted-globals
+
     if (isNaN(date.getTime())) {
       throw new Error(`Invalid date: ${dateAsString}`);
     }
@@ -196,10 +199,12 @@ export default (function(self) {
   };
 
   /**
-   * Uses canvas.measureText to compute and return the width of the given text of given font in pixels.
+   * Uses canvas.measureText to compute and return the width of the given text of given font in
+   * pixels.
    *
    * @param {String} text The text to be rendered.
-   * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px verdana").
+   * @param {String} font The css font descriptor that text is to be rendered with (e.g. "bold 14px
+   * verdana").
    *
    * @see https://stackoverflow.com/questions/118241/calculate-text-width-with-javascript/21015393#21015393
    */
@@ -235,7 +240,8 @@ export default (function(self) {
    * @param  {Boolean} shouldRemoveTime if the time should be removed from the date
    * @return {string} ISO string in the form of `YYYY-MM-DDThh:mm:ssZ`.
    */
-  self.toISOStringSeconds = function(date, shouldRemoveTime = false) {
+  self.toISOStringSeconds = function(dateToConvert, shouldRemoveTime = false) {
+    let date = dateToConvert;
     const isString = typeof date === 'string' || date instanceof String;
     if (shouldRemoveTime) date = self.clearTimeUTC(date);
     const dateString = isString ? date : date.toISOString();
@@ -334,6 +340,12 @@ export default (function(self) {
     return newDate;
   };
 
+  self.earliestValidDate = function(date) {
+    const currDate = new Date(date);
+    const earliestDate = self.parseDateUTC('1948-01-01-T00:00:00Z');
+    return currDate < earliestDate ? earliestDate : currDate;
+  };
+
   self.daysInYear = function(date) {
     const jStart = self.parseDateUTC(`${date.getUTCFullYear()}-01-01`);
     const jDate = `00${Math.ceil((date.getTime() - jStart) / 86400000) + 1}`;
@@ -404,7 +416,6 @@ export default (function(self) {
     return val;
   };
 
-
   /**
    * Gets the current time minus minutesOffset for geostationary layers.
    * Use this instead of the Date methods to allow debugging alternate "now" times.
@@ -440,7 +451,8 @@ export default (function(self) {
    * @param {object*} messages Messages to display to the end user.
    */
   self.warn = console && console.warn && console.warn.bind
-    ? console.warn.bind(console) : function() { };
+    ? console.warn.bind(console)
+    : function() { };
 
   self.hexToRGB = function(str) {
     return `rgb(${
@@ -473,23 +485,24 @@ export default (function(self) {
     const g2 = parseInt(hex2.substring(2, 4), 16);
     const b2 = parseInt(hex2.substring(4, 6), 16);
     // calculate differences in 3D Space
-    // eslint-disable-next-line no-restricted-properties
+
     return Math.sqrt((r1 - r2) ** 2 + (g1 - g2) ** 2 + (b1 - b2) ** 2);
   };
 
   self.fetch = function(url, mimeType) {
     return new Promise(
-      (resolve, reject) => fetch(url)
-        .then((response) => (mimeType === 'application/json'
-          ? response.json()
-          : response.text()))
-        .then(resolve)
-        .catch(reject),
+      (resolve, reject) => {
+        fetch(url)
+          .then((response) => (mimeType === 'application/json'
+            ? response.json()
+            : response.text()))
+          .then(resolve)
+          .catch(reject);
+      },
     );
   };
 
   self.errorReport = function(errors) {
-    // eslint-disable-next-line no-unused-vars
     lodashEach(errors, (error) => {
       const cause = error.cause ? `: ${error.cause}` : '';
       self.warn(error.message + cause);
@@ -507,7 +520,7 @@ export default (function(self) {
       try {
         return func.apply(func, args);
       } catch (error) {
-        console.error(error);
+        return console.error(error);
       }
     };
   };
@@ -564,7 +577,8 @@ export default (function(self) {
   // became confusing as element attributes would need one escape character
   // but the selector would need two (\. vs \\.)
   self.encodeId = function(str) {
-    return str.replace(/[.:,]/g, (match) => `__${match.charCodeAt(0).toString(16).toUpperCase()}__`);
+    return str.replace(/[.:,]/g, (match) => `__${match.charCodeAt(0).toString(16)
+      .toUpperCase()}__`);
   };
 
   // Converts an encoded identifier back to its original value.
@@ -582,7 +596,8 @@ export default (function(self) {
     DOWN: 40,
   };
 
-  function formatDegrees(value, type, withSeconds) {
+  function formatDegrees(degreeValue, type, withSeconds) {
+    let value = degreeValue;
     let width; let
       signs;
     if (type === 'longitude') {
@@ -651,7 +666,10 @@ export default (function(self) {
     if (Math.abs(longitude) < 180) return longitude;
     const isNegative = longitude < 0;
     const remainder = longitude % 360;
-    return isNegative && remainder < -180 ? remainder + 360 : !isNegative && remainder > 180 ? remainder - 360 : remainder;
+    const remainderGT180 = !isNegative && remainder > 180 ? remainder - 360 : remainder;
+    return isNegative && remainder < -180
+      ? remainder + 360
+      : remainderGT180;
   };
 
   // Allows simple printf functionality with strings
@@ -667,7 +685,8 @@ export default (function(self) {
     return formatted;
   };
 
-  self.toArray = function(value) {
+  self.toArray = function(nonArrayValue) {
+    let value = nonArrayValue;
     if (!value) {
       return [];
     }
@@ -785,6 +804,7 @@ export default (function(self) {
    * @param {*} scripts
    * @param {*} fn
    */
+
   self.loadScripts = (scripts = [], fn) => {
     const head = document.head || document.getElementsByTagName('head')[0];
     const loadFile = (index) => {

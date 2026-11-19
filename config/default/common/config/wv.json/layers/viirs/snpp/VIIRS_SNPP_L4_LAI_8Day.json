@@ -1,0 +1,11 @@
+{
+  "layers": {
+    "VIIRS_SNPP_L4_LAI_8Day": {
+      "id": "VIIRS_SNPP_L4_LAI_8Day",
+      "description": "viirs/snpp/VIIRS_SNPP_L4_LAI_8Day",
+      "group": "overlays",
+      "tags": "lai leaf area index",
+      "layergroup": "Leaf Area Index"
+    }
+  }
+}

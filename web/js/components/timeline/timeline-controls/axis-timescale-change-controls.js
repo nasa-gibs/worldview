@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import AxisTimeScaleChangeTooltip from './axis-timescale-change-tooltip';
 import Arrow from '../../util/arrow';

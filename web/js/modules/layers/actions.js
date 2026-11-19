@@ -10,12 +10,12 @@ import {
   activateLayersForEventCategory as activateLayersForEventCategorySelector,
   findEventLayers,
   getGranuleLayer,
-  getGranuleLayersOfActivePlatform,
   getActiveGranuleLayers,
 } from './selectors';
 import {
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
+  SYNC_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
   REORDER_OVERLAY_GROUPS,
   TOGGLE_LAYER_VISIBILITY,
@@ -34,6 +34,8 @@ import {
   UPDATE_COLLECTION,
   UPDATE_DDV_LAYER,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import { updateRecentLayers } from '../product-picker/util';
 import { getOverlayGroups, getLayersFromGroups } from './util';
@@ -46,6 +48,13 @@ export function initSecondLayerGroup() {
   };
 }
 
+export function syncSecondLayerGroup(lastExitALayerIds) {
+  return {
+    type: SYNC_SECOND_LAYER_GROUP,
+    lastExitALayerIds,
+  };
+}
+
 export function activateLayersForEventCategory(category) {
   return (dispatch, getState) => {
     const state = getState();
@@ -55,7 +64,10 @@ export function activateLayersForEventCategory(category) {
     const overlayGroups = getOverlayGroups(newLayers);
 
     const newEventLayers = findEventLayers(originalLayers, newLayers);
-    overlayGroups.forEach((group) => { group.collapsed = true; });
+    overlayGroups.forEach((groupObj) => {
+      const group = groupObj;
+      group.collapsed = true;
+    });
 
     dispatch({
       type: ADD_LAYERS_FOR_EVENT,
@@ -118,7 +130,7 @@ export function addLayer(id) {
   return (dispatch, getState) => {
     const state = getState();
     const {
-      layers, compare, proj, config,
+      layers, compare, config,
     } = state;
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
@@ -126,11 +138,10 @@ export function addLayer(id) {
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
+      {},
       overlays.length || 0,
-      proj.id,
       groupOverlays,
     );
     const projections = Object.keys(config.projections);
@@ -179,7 +190,7 @@ export function removeLayer(id) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
     const def = activeLayers[index];
-    dispatch({
+    return dispatch({
       type: REMOVE_LAYER,
       activeString,
       layersToRemove: [def],
@@ -225,14 +236,12 @@ export function toggleGroupVisibility(ids, visible) {
   return (dispatch, getState) => {
     const { compare } = getState();
     const activeLayers = getActiveLayersSelector(getState());
-    activeLayers.forEach((layer) => {
-      if (ids.includes(layer.id)) {
-        layer.visible = visible;
-      }
-    });
+    const updatedLayers = activeLayers.map((layer) => (
+      ids.includes(layer.id) ? { ...layer, visible } : layer
+    ));
     dispatch({
       type: TOGGLE_OVERLAY_GROUP_VISIBILITY,
-      layers: activeLayers,
+      layers: updatedLayers,
       activeString: compare.activeString,
     });
   };
@@ -258,10 +267,22 @@ export function setOpacity(id, opacity) {
     if (index === -1) {
       return console.warn(`Invalid layer ID: ${id}`);
     }
-    dispatch({
+    return dispatch({
       type: UPDATE_OPACITY,
       id,
       opacity: Number(opacity),
+      activeString: compare.activeString,
+    });
+  };
+}
+
+export function updateDayCount(id, dayCount) {
+  return (dispatch, getState) => {
+    const { compare } = getState();
+    return dispatch({
+      type: UPDATE_DAY_COUNT,
+      id,
+      dayCount: Number(dayCount),
       activeString: compare.activeString,
     });
   };
@@ -286,7 +307,8 @@ export function showLayers(layers) {
 function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
   return (dispatch, getState) => {
     const { compare, layers } = getState();
-    const { activeString } = compare;
+    // Write to the compare side the layer was built for
+    const activeString = layer.wv.group || compare.activeString;
     const { id, count } = layer.wv;
     const layerDef = layers.layerConfig[id];
     const granulePlatform = `${layerDef.subtitle}`;
@@ -312,7 +334,9 @@ function updateGranuleLayerGeometry(layer, dates, granuleGeometry) {
 
 function addGranuleLayerDates(layer, granuleFootprints, granulePlatform) {
   return (dispatch, getState) => {
-    const { compare: { activeString } } = getState();
+    const { compare } = getState();
+    // Write to the compare side the layer was built for
+    const activeString = layer.wv.group || compare.activeString;
     const { id, granuleDates, count } = layer.wv;
 
     dispatch({
@@ -338,7 +362,7 @@ export function updateGranuleLayerState(layer) {
     const isMostRecentDateOutOfRange = new Date(mostRecentGranuleDate) > new Date(endDate);
     const updatedDates = isMostRecentDateOutOfRange ? [] : reorderedGranules || granuleDates;
     const granuleFootprints = getGranuleFootprints(layer);
-    const existingLayer = getGranuleLayer(state, id);
+    const existingLayer = getGranuleLayer(state, id, layer.wv.group);
 
     if (existingLayer) {
       dispatch(updateGranuleLayerGeometry(layer, updatedDates, granuleFootprints));
@@ -347,38 +371,56 @@ export function updateGranuleLayerState(layer) {
   };
 }
 
+const granuleRangesEqual = (a, b) => {
+  if (a === b) return true;
+  if (!a || !b || a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i += 1) {
+    if (a[i][0] !== b[i][0] || a[i][1] !== b[i][1]) return false;
+  }
+  return true;
+};
+
 export function addGranuleDateRanges(layer, granuleDateRanges) {
   return (dispatch, getState) => {
-    const state = getState();
-    const { activeString } = state.compare;
+    const { active: compareActive, activeString } = getState().compare;
     const { id } = layer;
 
-    dispatch({
-      type: ADD_GRANULE_DATE_RANGES,
-      activeString,
-      id,
-      granuleDateRanges,
-    });
+    const dispatchForSide = (side) => {
+      // Re-read state so the dedup check sees results of prior dispatches.
+      const freshState = getState();
+      const existingLayer = getActiveLayersSelector(freshState, side).find((l) => l.id === id);
+      if (!existingLayer) return;
+      if (granuleRangesEqual(existingLayer.granuleDateRanges, granuleDateRanges)) {
+        return;
+      }
+      dispatch({
+        type: ADD_GRANULE_DATE_RANGES,
+        activeString: side,
+        id,
+        granuleDateRanges,
+      });
+    };
+
+    dispatchForSide(activeString);
+
+    // In compare mode, sync the same ranges to the other side so the B-side
+    // timeline coverage bar is populated regardless of which side is active.
+    if (compareActive) {
+      const otherSide = activeString === 'active' ? 'activeB' : 'active';
+      dispatchForSide(otherSide);
+    }
   };
 }
 
 export function updateGranuleLayerOptions(dates, def, count) {
   return (dispatch, getState) => {
-    const state = getState();
-    const { activeString } = state.compare;
-
-    const granulePlatform = def.subtitle;
-    const activeGranuleLayers = getActiveGranuleLayers(state);
-    const platformLayers = getGranuleLayersOfActivePlatform(granulePlatform, activeGranuleLayers);
-
-    platformLayers.forEach((layer) => {
-      dispatch({
-        type: UPDATE_GRANULE_LAYER_OPTIONS,
-        id: layer,
-        activeKey: activeString,
-        dates,
-        count,
-      });
+    const { activeString } = getState().compare;
+    dispatch({
+      type: UPDATE_GRANULE_LAYER_OPTIONS,
+      id: def.id,
+      activeKey: activeString,
+      dates,
+      count,
     });
   };
 }
@@ -421,7 +463,7 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
   return (dispatch, getState) => {
     const state = getState();
     const {
-      layers, compare, proj, config,
+      layers, compare, config,
     } = state;
     const layerObj = layers.layerConfig[id];
     const { groupOverlays } = layers[compare.activeString];
@@ -429,11 +471,10 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
     const overlays = getLayersSelector(state, { group: 'overlays' });
     const newLayers = addLayerSelector(
       id,
-      {},
       activeLayers,
       layers.layerConfig,
+      {},
       overlays.length || 0,
-      proj.id,
       groupOverlays,
       bandCombo,
       selectedPreset,
@@ -447,6 +488,19 @@ export function updateBandCombination(id, bandCombo, layerIndex, selectedPreset)
       activeString: compare.activeString,
       layers: newLayers,
       layerIndex,
+    });
+  };
+}
+
+export function addTEMPODateRanges(layer, tempoDateRanges, activeString) {
+  return (dispatch) => {
+    const { id } = layer;
+
+    dispatch({
+      type: ADD_TEMPO_DATE_RANGES,
+      activeString,
+      id,
+      tempoDateRanges,
     });
   };
 }

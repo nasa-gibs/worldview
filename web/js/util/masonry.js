@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { Component } from 'react';
+import  { Component } from 'react';
 import PropTypes from 'prop-types';
 import MasonryLayout from 'masonry-layout';
 import imagesloaded from 'imagesloaded';
@@ -12,8 +12,8 @@ const propTypes = {
   disableImagesLoaded: PropTypes.bool,
   onImagesLoaded: PropTypes.func,
   updateOnEachImageLoad: PropTypes.bool,
-  options: PropTypes.object,
-  imagesLoadedOptions: PropTypes.object,
+  options: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  imagesLoadedOptions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   elementType: PropTypes.string,
   onLayoutComplete: PropTypes.func,
   onRemoveComplete: PropTypes.func

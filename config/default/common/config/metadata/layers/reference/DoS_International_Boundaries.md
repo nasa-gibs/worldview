@@ -1,0 +1,5 @@
+The International Boundaries layer is provided by the U.S. Department of State, Office of the Geographer and Global Issues.
+
+The Office of the Geographer and Global Issues at the U.S. Department of State produces the Large Scale International Boundaries (LSIB) dataset. The current edition is version 11.4 (published 24 February 2025). The 11.4 release contains updated boundary lines and data refinements designed to extend the functionality of the dataset. These data and generalized derivatives are the only international boundary lines approved for U.S. Government use. The contents of this dataset reflect U.S. Government policy on international boundary alignment, political recognition, and dispute status. They do not necessarily reflect de facto limits of control.
+
+Source: [Large Scale International Boundaries, U.S. Department of State](https://geodata.state.gov/geonetwork/srv/eng/catalog.search#/metadata/3bdb81a0-c1b9-439a-a0b1-85dac30c59b2)

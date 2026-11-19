@@ -1,4 +1,4 @@
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { each as lodashEach, get as lodashGet } from 'lodash';
 import {
@@ -10,33 +10,34 @@ import Opacity from './opacity';
 import Palette from './palette';
 import BandSelection from './band-selection/band-selection-parent-info-menu';
 import AssociatedLayers from './associated-layers-toggle';
-import VectorStyle from './vector-style';
 import PaletteThreshold from './palette-threshold';
 import GranuleLayerDateList from './granule-date-list';
 import GranuleCountSlider from './granule-count-slider';
+import DayRangeSlider from './day-range-slider';
 import safeLocalStorage from '../../../util/local-storage';
 import ImagerySearch from './imagery-search';
 
-
 import {
-  palettesTranslate,
+  palettesTranslate as palettesTranslateUtil,
 } from '../../../modules/palettes/util';
 import {
-  getDefaultLegend,
-  getCustomPalette,
-  getPaletteLegends,
-  getPalette,
-  getPaletteLegend,
+  getDefaultLegend as getDefaultLegendSelector,
+  getCustomPalette as getCustomPaletteSelector,
+  getPaletteLegends as getPaletteLegendsSelector,
+  getPalette as getPaletteSelector,
+  getPaletteLegend as getPaletteLegendSelector,
   isPaletteAllowed,
 } from '../../../modules/palettes/selectors';
 import {
   getGranuleLayer,
   getGranulePlatform,
+  getMaxDayRange,
+  getLayerDayCount,
 } from '../../../modules/layers/selectors';
 import {
-  setThresholdRangeAndSquash,
-  setCustomPalette,
-  clearCustomPalette,
+  setThresholdRangeSquashAndNoClip,
+  setCustomPalette as setCustomPaletteAction,
+  clearCustomPalette as clearCustomPaletteAction,
   setToggledClassification,
   refreshDisabledClassification,
 } from '../../../modules/palettes/actions';
@@ -50,52 +51,63 @@ import {
   getVectorStyle,
 } from '../../../modules/vector-styles/selectors';
 import {
-  updateGranuleLayerOptions,
-  resetGranuleLayerDates,
-  setOpacity,
+  updateGranuleLayerOptions as updateGranuleLayerOptionsAction,
+  resetGranuleLayerDates as resetGranuleLayerDatesAction,
+  setOpacity as setOpacityAction,
+  updateDayCount as updateDayCountAction,
 } from '../../../modules/layers/actions';
+import { DEFAULT_NUM_GRANULES } from '../../../modules/layers/constants';
 import ClassificationToggle from './classification-toggle';
 
-class LayerSettings extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      activeIndex: 0,
-      allowGranuleReorder: false,
-    };
-    this.canvas = document.createElement('canvas');
-    this.canvas.width = 120;
-    this.canvas.height = 10;
-  }
+function LayerSettings(props) {
+  const {
+    clearCustomPalette,
+    getPalette,
+    paletteOrder,
+    getDefaultLegend,
+    getCustomPalette,
+    globalTemperatureUnit,
+    setCustomPalette,
+    palettesTranslate,
+    groupName,
+    setThresholdRange,
+    layer,
+    toggleClassification,
+    toggleAllClassifications,
+    screenHeight,
+    getPaletteLegends,
+    getPaletteLegend,
+    granuleOptions,
+    resetGranuleLayerDates,
+    updateGranuleLayerOptions,
+    setOpacity,
+    customPalettesIsActive,
+    palettedAllowed,
+    zot,
+    maxDayRange,
+    dayCount,
+    updateDayCount,
+    isMobile,
+  } = props;
 
-  componentDidMount() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [allowGranuleReorder, setAllowGranuleReorder] = useState(false);
+
+  const canvasRef = useRef(document.createElement('canvas'));
+
+  useEffect(() => {
+    canvasRef.current.width = 120;
+    canvasRef.current.height = 10;
     const { ALLOW_GRANULE_REORDER } = safeLocalStorage.keys;
-    const allowGranuleReorder = safeLocalStorage.getItem(ALLOW_GRANULE_REORDER);
-    this.setState({ allowGranuleReorder });
-  }
+    const allowGranuleReorderStored = safeLocalStorage.getItem(ALLOW_GRANULE_REORDER);
+    setAllowGranuleReorder(allowGranuleReorderStored);
+  }, []);
 
   /**
    * Render multicolormap layers inside a tab pane
    * @param {object} paletteLegends | legend object
    */
-  renderMultiColormapCustoms(paletteLegends) {
-    const {
-      clearCustomPalette,
-      getPalette,
-      paletteOrder,
-      getDefaultLegend,
-      getCustomPalette,
-      globalTemperatureUnit,
-      setCustomPalette,
-      palettesTranslate,
-      groupName,
-      setThresholdRange,
-      layer,
-      toggleClassification,
-      toggleAllClassifications,
-      screenHeight,
-    } = this.props;
-    const { activeIndex } = this.state;
+  function renderMultiColormapCustoms(paletteLegends) {
     const navElements = [];
     const paneElements = [];
     lodashEach(paletteLegends, (legend, i) => {
@@ -106,7 +118,7 @@ class LayerSettings extends React.Component {
           key={`${legend.id}nav`}
           className={`settings-customs-title ${activeClass}${dualStr}`}
         >
-          <NavLink onClick={() => this.setState({ activeIndex: i })}>
+          <NavLink onClick={() => setActiveIndex(i)}>
             {legend.title}
           </NavLink>
         </NavItem>
@@ -125,14 +137,16 @@ class LayerSettings extends React.Component {
               palette={palette}
               toggle={(classIndex) => toggleClassification(layer.id, classIndex, i, groupName)}
               legend={legend}
-              toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, i, groupName); }}
+              toggleAll={(disabledArray) => {
+                toggleAllClassifications(layer.id, disabledArray, i, groupName);
+              }}
             />
           </TabPane>
         );
       } else if (
-        legend.type !== 'continuous'
-        && legend.type !== 'discrete'
-        && legend.colors.length > 1
+        legend.type !== 'continuous' &&
+        legend.type !== 'discrete' &&
+        legend.colors.length > 1
       ) {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
@@ -142,23 +156,26 @@ class LayerSettings extends React.Component {
       } else {
         paneItemEl = (
           <TabPane key={`${legend.id}pane`} tabId={i}>
-            {legend.type !== 'classification' ? (
-              <PaletteThreshold
-                key={`${layer.id + i}_threshold`}
-                legend={legend}
-                setRange={setThresholdRange}
-                globalTemperatureUnit={globalTemperatureUnit}
-                min={0}
-                max={max}
-                start={start}
-                groupName={groupName}
-                end={end}
-                layerId={layer.id}
-                squashed={!!palette.squash}
-                index={i}
-                palette={palette}
-              />
-            ) : null}
+            {legend.type !== 'classification'
+              ? (
+                <PaletteThreshold
+                  key={`${layer.id + i}_threshold`}
+                  legend={legend}
+                  setRange={setThresholdRange}
+                  globalTemperatureUnit={globalTemperatureUnit}
+                  min={0}
+                  max={max}
+                  start={start}
+                  groupName={groupName}
+                  end={end}
+                  layerId={layer.id}
+                  squashed={!!palette.squash}
+                  noclipped={!!palette.noclip}
+                  index={i}
+                  palette={palette}
+                />
+              )
+              : null}
 
             <Palette
               setCustomPalette={setCustomPalette}
@@ -169,7 +186,7 @@ class LayerSettings extends React.Component {
               palettesTranslate={palettesTranslate}
               activePalette={palette.custom || '__default'}
               layer={layer}
-              canvas={this.canvas}
+              canvas={canvasRef.current}
               index={i}
               paletteOrder={paletteOrder}
             />
@@ -191,25 +208,7 @@ class LayerSettings extends React.Component {
   /**
    * Render Opacity, threshold, and custom palette options
    */
-  renderCustomPalettes() {
-    const {
-      setCustomPalette,
-      clearCustomPalette,
-      getDefaultLegend,
-      getCustomPalette,
-      globalTemperatureUnit,
-      palettesTranslate,
-      getPaletteLegends,
-      getPalette,
-      getPaletteLegend,
-      setThresholdRange,
-      paletteOrder,
-      groupName,
-      layer,
-      toggleClassification,
-      toggleAllClassifications,
-      screenHeight,
-    } = this.props;
+  function renderCustomPalettes() {
     const paletteLegends = getPaletteLegends(layer.id);
     if (!paletteLegends) return '';
     const len = paletteLegends.length;
@@ -219,7 +218,7 @@ class LayerSettings extends React.Component {
     const start = palette.min ? legend.refs.indexOf(palette.entries.refs[palette.min]) : 0;
     const end = palette.max ? legend.refs.indexOf(palette.entries.refs[palette.max]) : max;
     if (len > 1) {
-      return this.renderMultiColormapCustoms(paletteLegends);
+      return renderMultiColormapCustoms(paletteLegends);
     } if (legend.type === 'classification' && legend.colors.length > 1) {
       return (
         <ClassificationToggle
@@ -227,14 +226,16 @@ class LayerSettings extends React.Component {
           palette={palette}
           toggle={(classIndex) => toggleClassification(layer.id, classIndex, 0, groupName)}
           legend={legend}
-          toggleAll={(disabledArray) => { toggleAllClassifications(layer.id, disabledArray, 0, groupName); }}
+          toggleAll={(disabledArray) => {
+            toggleAllClassifications(layer.id, disabledArray, 0, groupName);
+          }}
         />
       );
     }
     return (
       <>
-        {legend.type !== 'classification'
-          && (
+        {legend.type !== 'classification' &&
+          (
             <PaletteThreshold
               key={`${layer.id}0_threshold`}
               legend={legend}
@@ -246,6 +247,7 @@ class LayerSettings extends React.Component {
               layerId={layer.id}
               end={end}
               squashed={!!palette.squash}
+              noclipped={!!palette.noclip}
               groupName={groupName}
               index={0}
               palette={palette}
@@ -259,7 +261,7 @@ class LayerSettings extends React.Component {
           palettesTranslate={palettesTranslate}
           activePalette={palette.custom || '__default'}
           layer={layer}
-          canvas={this.canvas}
+          canvas={canvasRef.current}
           groupName={groupName}
           index={0}
           paletteOrder={paletteOrder}
@@ -269,56 +271,21 @@ class LayerSettings extends React.Component {
   }
 
   /**
-   * Render Opacity, threshold, and custom palette options
-   */
-  renderVectorStyles() {
-    const {
-      setStyle,
-      clearStyle,
-      groupName,
-      layer,
-      vectorStyles,
-    } = this.props;
-    let customStyle;
-    if (layer.custom && layer.custom[0]) {
-      [customStyle] = layer.custom;
-    }
-    return (
-      <VectorStyle
-        setStyle={setStyle}
-        clearStyle={clearStyle}
-        activeVectorStyle={customStyle || layer.id}
-        layer={layer}
-        index={0}
-        groupName={groupName}
-        vectorStyles={vectorStyles}
-      />
-    );
-  }
-
-  /**
    * Render Granule count slider and granule date list settings (if granule layer)
    */
-  renderGranuleSettings = () => {
-    const {
-      layer,
-      granuleOptions,
-      screenHeight,
-      resetGranuleLayerDates,
-      updateGranuleLayerOptions,
-    } = this.props;
-    const { allowGranuleReorder } = this.state;
+  const renderGranuleSettings = () => {
     const { count, dates, granulePlatform } = granuleOptions;
-    return dates
+    return count
       ? (
         <>
           <GranuleCountSlider
             def={layer}
             count={count}
             granuleDates={dates}
+            isMobile={isMobile}
             updateGranuleLayerOptions={updateGranuleLayerOptions}
           />
-          {allowGranuleReorder && (
+          {allowGranuleReorder && dates && (
             <GranuleLayerDateList
               def={layer}
               screenHeight={screenHeight}
@@ -330,50 +297,51 @@ class LayerSettings extends React.Component {
             />
           )}
         </>
-      ) : null;
+      )
+      : null;
   };
 
-  render() {
-    let renderCustomizations;
-    const {
-      setOpacity,
-      customPalettesIsActive,
-      layer,
-      palettedAllowed,
-      zot,
-    } = this.props;
-    const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
-    const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
-    const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
-    const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
-    const layerGroup = layer.layergroup;
+  let renderCustomizations;
+  const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
+  const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
+  const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
+  const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
+  const layerGroup = layer.layergroup;
 
-    if (layer.type !== 'vector') {
-      renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
-        ? this.renderCustomPalettes()
-        : '';
-    } else if (!layer.disableCustomPalettes && layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
-      // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
-      // Reference (MGRS/HLS Grid) has no need for palettes
-      renderCustomizations = this.renderCustomPalettes();
-    }
-
-    if (!layer.id) return '';
-    return (
-      <>
-        <Opacity
-          start={Math.ceil(layer.opacity * 100)}
-          setOpacity={setOpacity}
-          layer={layer}
-        />
-        {this.renderGranuleSettings()}
-        {renderCustomizations}
-        {titilerLayer && <BandSelection layer={layer} />}
-        {granuleMetadata && <ImagerySearch layer={layer} /> }
-        {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
-      </>
-    );
+  if (layer.type !== 'vector') {
+    renderCustomizations = customPalettesIsActive && palettedAllowed && layer.palette
+      ? renderCustomPalettes()
+      : '';
+  } else if (!layer.disableCustomPalettes && layerGroup !== 'Orbital Track' && layerGroup !== 'Reference') {
+    // Orbital Tracks palette swap looks bad at WMS zoom levels (white text stamps)
+    // Reference (MGRS/HLS Grid) has no need for palettes
+    renderCustomizations = renderCustomPalettes();
   }
+
+  if (!layer.id) return '';
+  return (
+    <>
+      <Opacity
+        start={Math.ceil(layer.opacity * 100)}
+        setOpacity={setOpacity}
+        layer={layer}
+      />
+      {!!maxDayRange && (
+        <DayRangeSlider
+          layer={layer}
+          dayCount={dayCount}
+          maxDayRange={maxDayRange}
+          isMobile={isMobile}
+          updateDayCount={updateDayCount}
+        />
+      )}
+      {renderGranuleSettings()}
+      {renderCustomizations}
+      {titilerLayer && <BandSelection layer={layer} />}
+      {granuleMetadata && <ImagerySearch layer={layer} /> }
+      {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
+    </>
+  );
 }
 
 function mapStateToProps(state, ownProps) {
@@ -384,29 +352,39 @@ function mapStateToProps(state, ownProps) {
   const groupName = compare.activeString;
   const globalTemperatureUnit = lodashGet(ownProps, 'layer.disableUnitConversion') ? '' : settings.globalTemperatureUnit;
 
-  const granuleState = getGranuleLayer(state, ownProps.layer.id);
   const granuleOptions = {};
-  if (granuleState) {
-    const { dates, count } = granuleState;
-    granuleOptions.dates = dates;
-    granuleOptions.count = count || 20;
+  if (ownProps.layer.type === 'granule') {
+    const granuleState = getGranuleLayer(state, ownProps.layer.id) || {};
+    granuleOptions.dates = granuleState.dates;
+    granuleOptions.count = granuleState.count || ownProps.layer.count || DEFAULT_NUM_GRANULES;
     granuleOptions.granulePlatform = getGranulePlatform(state);
   }
+
+  const maxDayRange = getMaxDayRange(ownProps.layer);
+  const dayCount = maxDayRange ? getLayerDayCount(state, ownProps.layer.id) : undefined;
 
   return {
     paletteOrder: config.paletteOrder,
     granuleOptions,
     groupName,
+    maxDayRange,
+    dayCount,
+    isMobile: screenSize.isMobileDevice,
     screenHeight: screenSize.screenHeight,
     customPalettesIsActive: !!config.features.customPalettes,
     globalTemperatureUnit,
     palettedAllowed: isPaletteAllowed(ownProps.layer.id, config),
-    palettesTranslate,
-    getDefaultLegend: (layerId, index) => getDefaultLegend(layerId, index, state),
-    getCustomPalette: (id) => getCustomPalette(id, custom),
-    getPaletteLegend: (layerId, index) => getPaletteLegend(layerId, index, groupName, state),
-    getPaletteLegends: (layerId) => getPaletteLegends(layerId, groupName, state),
-    getPalette: (layerId, index) => getPalette(layerId, index, groupName, state),
+    palettesTranslate: palettesTranslateUtil,
+    getDefaultLegend: (layerId, index) => getDefaultLegendSelector(layerId, index, state),
+    getCustomPalette: (id) => getCustomPaletteSelector(id, custom),
+    getPaletteLegend: (layerId, index) => getPaletteLegendSelector(
+      layerId,
+      index,
+      groupName,
+      state,
+    ),
+    getPaletteLegends: (layerId) => getPaletteLegendsSelector(layerId, groupName, state),
+    getPalette: (layerId, index) => getPaletteSelector(layerId, index, groupName, state),
     getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
     vectorStyles: config.vectorStyles,
   };
@@ -422,9 +400,12 @@ const mapDispatchToProps = (dispatch) => ({
       refreshDisabledClassification(layerId, disabledArray, index, groupName),
     );
   },
-  setThresholdRange: (layerId, min, max, squash, index, groupName) => {
+  setThresholdRange: (layerId, min, max, squash, noclip, index, groupName) => {
+    const props = {
+      min, max, squash, noclip,
+    };
     dispatch(
-      setThresholdRangeAndSquash(layerId, { min, max, squash }, index, groupName),
+      setThresholdRangeSquashAndNoClip(layerId, props, index, groupName),
     );
   },
   setFilterRange: (layerId, min, max, index, groupName) => {
@@ -433,10 +414,10 @@ const mapDispatchToProps = (dispatch) => ({
     );
   },
   setCustomPalette: (layerId, paletteId, index, groupName) => {
-    dispatch(setCustomPalette(layerId, paletteId, index, groupName));
+    dispatch(setCustomPaletteAction(layerId, paletteId, index, groupName));
   },
   clearCustomPalette: (layerId, index, groupName) => {
-    dispatch(clearCustomPalette(layerId, index, groupName));
+    dispatch(clearCustomPaletteAction(layerId, index, groupName));
   },
   setStyle: (layer, vectorStyleId, groupName) => {
     dispatch(setStyle(layer, vectorStyleId, groupName));
@@ -445,13 +426,16 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(clearStyle(layer, vectorStyleId, groupName));
   },
   setOpacity: (id, opacity) => {
-    dispatch(setOpacity(id, opacity));
+    dispatch(setOpacityAction(id, opacity));
   },
   updateGranuleLayerOptions: (dates, def, count) => {
-    dispatch(updateGranuleLayerOptions(dates, def, count));
+    dispatch(updateGranuleLayerOptionsAction(dates, def, count));
   },
   resetGranuleLayerDates: (id) => {
-    dispatch(resetGranuleLayerDates(id));
+    dispatch(resetGranuleLayerDatesAction(id));
+  },
+  updateDayCount: (id, dayCount) => {
+    dispatch(updateDayCountAction(id, dayCount));
   },
 });
 
@@ -466,30 +450,30 @@ LayerSettings.defaultProps = {
 };
 LayerSettings.propTypes = {
   clearCustomPalette: PropTypes.func,
-  clearStyle: PropTypes.func,
   customPalettesIsActive: PropTypes.bool,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   getPalette: PropTypes.func,
   getPaletteLegend: PropTypes.func,
   getPaletteLegends: PropTypes.func,
-  granuleOptions: PropTypes.object,
+  granuleOptions: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   globalTemperatureUnit: PropTypes.string,
   groupName: PropTypes.string,
-  layer: PropTypes.object,
-  onCustomizeBandClick: PropTypes.func,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  maxDayRange: PropTypes.number,
+  dayCount: PropTypes.number,
+  isMobile: PropTypes.bool,
+  updateDayCount: PropTypes.func,
   palettedAllowed: PropTypes.bool,
-  paletteOrder: PropTypes.array,
+  paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,
   resetGranuleLayerDates: PropTypes.func,
   screenHeight: PropTypes.number,
   setCustomPalette: PropTypes.func,
   setOpacity: PropTypes.func,
-  setStyle: PropTypes.func,
   setThresholdRange: PropTypes.func,
   toggleClassification: PropTypes.func,
   updateGranuleLayerOptions: PropTypes.func,
   toggleAllClassifications: PropTypes.func,
-  vectorStyles: PropTypes.object,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

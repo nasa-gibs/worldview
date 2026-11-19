@@ -14,10 +14,11 @@ const { HIDE_TOUR } = safeLocalStorage.keys;
  */
 export function mapLocationToTourState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const isEmbedModeActive = parameters.em && parameters.em === 'true';
   if (parameters.tr && isEmbedModeActive) {
     stateFromLocation = update(stateFromLocation, {

@@ -5,7 +5,6 @@
       "description": "viirs/snpp/VIIRS_SNPP_NDVI_8Day",
       "group": "overlays",
       "tags": "ndvi normalized difference vegetation index",
-      "disableCharting": true,
       "layergroup": "Vegetation Indices"
     }
   }

@@ -3,8 +3,17 @@
         "Ozone": {
             "id": "ozone",
             "title":    "Ozone",
-            "subtitle": "AJAX/Alpha Jet, Aura/MLS, Aura/OMI, Suomi NPP/OMPS, TEMPO, MERRA-2",
+            "subtitle": "ACTIVATE/NASA HU-25 Falcon, AJAX/Alpha Jet, Aura/MLS, Aura/OMI, DCOTSS/NASA ER-2 UCATS and ROZE, DISCOVER-AQ/P-3B, KORUS-AQ/NASA DC-8, Suomi NPP/OMPS, TEMPO, MERRA-2",
             "sources": {
+                "ACTIVATE/NASA HU-25 Falcon": {
+                  "id": "activate-nasa-hu25-falcon",
+                  "title": "ACTIVATE/NASA HU-25 Falcon",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "ACTIVATE_HU-25_Falcon_Ozone"
+                  ]
+              },
                 "AJAX/Alpha Jet": {
                     "id": "ajax-alpha-jet",
                     "title": "AJAX/Alpha Jet",
@@ -37,6 +46,45 @@
                         "OrbitTracks_Aura_Ascending"
                     ]
                 },
+                "DCOTSS/NASA ER-2 UCATS": {
+                  "id": "DCOTSS_ER-2_UCATS_Ozone",
+                  "title": "DCOTSS/NASA ER-2 UCATS",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "DCOTSS_ER-2_UCATS_Ozone"
+                  ]
+              },
+                "DCOTSS/NASA ER-2 ROZE": {
+                  "id": "DCOTSS_ER-2_ROZE_Ozone",
+                  "title": "DCOTSS/NASA ER-2 ROZE",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  "DCOTSS_ER-2_ROZE_Ozone"
+                  ]
+              },
+                "DISCOVER-AQ/P-3B": {
+                  "id": "DISCOVER-AQ/P-3B",
+                  "title": "DISCOVER-AQ/P-3B",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                  	"DISCOVER-AQ_MD_P3B_Ozone",
+		            "DISCOVER-AQ_CA_P3B_Ozone",
+		            "DISCOVER-AQ_TX_P3B_Ozone",
+		            "DISCOVER-AQ_CO_P3B_Ozone"
+                  ]
+              },
+                "KORUS-AQ/NASA DC-8": {
+                  "id": "KORUS-AQ_DC-8_Ozone",
+                  "title": "KORUS-AQ/NASA DC-8",
+                  "description": "",
+                  "image": "",
+                  "settings": [
+                    "KORUS-AQ_DC-8_Ozone"
+                  ]
+                },
                 "Suomi NPP/OMPS": {
                     "id": "suomi-npp-omps",
                     "title": "Suomi NPP/OMPS",
@@ -55,8 +103,12 @@
                     "settings": [
                         "TEMPO_L2_Ozone_Column_Amount_Granule",
                         "TEMPO_L2_Ozone_Cloud_Fraction_Granule",
+                        "TEMPO_L2_Ozone_Profile_Total_Column_Granule",
+                        "TEMPO_L2_Ozone_Profile_Troposphere_Column_Granule",
                         "TEMPO_L3_Ozone_Column_Amount",
-                        "TEMPO_L3_Ozone_Cloud_Fraction"
+                        "TEMPO_L3_Ozone_Cloud_Fraction",
+                        "TEMPO_L3_Ozone_Profile_Total_Column",
+                        "TEMPO_L3_Ozone_Profile_Troposphere_Column"
                     ]
                 },
                 "MERRA-2": {

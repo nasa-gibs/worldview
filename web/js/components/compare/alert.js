@@ -1,5 +1,3 @@
-import React from 'react';
-
 function CompareAlertModalBody() {
   return (
     <div className="basic-modal compare-dialog">

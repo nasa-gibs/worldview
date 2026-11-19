@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,105 +20,124 @@ const ignoredLayer = {
   GRACE_Tellus_Liquid_Water_Equivalent_Thickness_Mascon_CRI: true,
 };
 
+/**
+* @desc get layer header with title, subtitle, and full date range
+* @param {Object} layer
+* @param {Boolean} visible
+* @param {String} dateRange
+* @param {String} background color
+* @returns {DOM Element} header
+*/
+const getHeaderDOMEl = (layer, visible, layerItemBackground, inactiveLayers) => {
+  const titleColor = visible ? '#000' : '#999';
+  const textColor = visible ? '#222' : '#999';
+  const {
+    subtitle, title, startDate, endDate,
+  } = layer;
+  const formattedStartDate = startDate && formatDisplayDate(new Date(startDate));
+  const formattedEndDate = endDate && formatDisplayDate(new Date(endDate));
+  const baseStyle = { width: '110px', display: 'inline-block' };
+  const getStyle = (date) => (
+    date
+      ? { ...baseStyle, textAlign: 'center' }
+      : { ...baseStyle, paddingLeft: '2px' }
+  );
+
+  return (
+    <div className="layer-coverage-item-header">
+      <div
+        className="layer-coverage-item-title"
+        style={{
+          color: titleColor,
+        }}
+      >
+        {title}
+        {' '}
+        <span
+          className="layer-coverage-item-subtitle"
+          style={{
+            color: textColor,
+          }}
+        >
+          {subtitle}
+        </span>
+      </div>
+      <div
+        className="layer-coverage-item-date-range"
+        style={{
+          background: layerItemBackground,
+          color: textColor,
+          float: 'left',
+          width: inactiveLayers || formattedEndDate ? '205px' : '175px',
+        }}
+      >
+        <MonospaceDate style={getStyle(formattedStartDate)} date={formattedStartDate || ' Start '} />
+        {' -  '}
+        <MonospaceDate style={getStyle(formattedEndDate)} date={formattedEndDate || ' Present '} />
+      </div>
+    </div>
+  );
+};
+
+/**
+* @desc get empty layers message DOM element
+* @returns {DOM Element} div contained message
+*/
+const createEmptyLayersDOMEl = () => {
+  return (
+    <div className="layer-coverage-list-empty">
+      <div className="layer-coverage-item-empty">
+        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" widthAuto />
+        <p>
+          No visible layers with defined coverage. Add layers or toggle
+          &quot;Include Hidden Layers&quot; if current layers are hidden.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+/**
+* @desc get formatted time period name
+* @param {String} period
+* @returns {String} formatted period
+*/
+const getFormattedTimePeriod = (period) => {
+  if (period === 'daily') return 'day';
+  if (period === 'monthly') return 'monthly';
+  if (period === 'yearly') return 'year';
+  return 'minute';
+};
+
 /*
  * Layer Coverage Container item list.
  *
- * @class CoverageItemList
+ * @function CoverageItemList
  */
-class CoverageItemList extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hoveredLayer: undefined,
+const CoverageItemList = ({
+  activeLayers,
+  appNow,
+  axisWidth,
+  backDate,
+  frontDate,
+  getMatchingCoverageLineDimensions,
+  positionTransformX,
+  timeScale,
+}) => {
+  const [hoveredLayer, setHoveredLayer] = useState(undefined);
+
+  // cache for queried date arrays
+  const layerDateArrayCache = useRef({});
+
+  useEffect(() => {
+    const layerHoverCallback = (id, active) => {
+      setHoveredLayer(active ? id : undefined);
     };
-
-    // cache for queried date arrays
-    this.layerDateArrayCache = {};
-  }
-
-  componentDidMount() {
-    events.on(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
-  }
-
-  componentWillUnmount() {
-    events.off(SIDEBAR_LAYER_HOVER, this.layerHoverCallback);
-  }
-
-  layerHoverCallback = (id, active) => {
-    this.setState({ hoveredLayer: active ? id : undefined });
-  };
-
-  /**
-  * @desc get layer header with title, subtitle, and full date range
-  * @param {Object} layer
-  * @param {Boolean} visible
-  * @param {String} dateRange
-  * @param {String} background color
-  * @returns {DOM Element} header
-  */
-  getHeaderDOMEl = (layer, visible, layerItemBackground, inactiveLayers) => {
-    const titleColor = visible ? '#000' : '#999';
-    const textColor = visible ? '#222' : '#999';
-    const {
-      subtitle, title, startDate, endDate,
-    } = layer;
-    const formattedStartDate = startDate && formatDisplayDate(new Date(startDate));
-    const formattedEndDate = endDate && formatDisplayDate(new Date(endDate));
-    const baseStyle = { width: '110px', display: 'inline-block' };
-    const getStyle = (date) => (
-      date
-        ? { ...baseStyle, textAlign: 'center' }
-        : { ...baseStyle, paddingLeft: '2px' }
-    );
-
-    return (
-      <div className="layer-coverage-item-header">
-        <div
-          className="layer-coverage-item-title"
-          style={{
-            color: titleColor,
-          }}
-        >
-          {title}
-          {' '}
-          <span
-            className="layer-coverage-item-subtitle"
-            style={{
-              color: textColor,
-            }}
-          >
-            {subtitle}
-          </span>
-        </div>
-        <div
-          className="layer-coverage-item-date-range"
-          style={{
-            background: layerItemBackground,
-            color: textColor,
-            float: 'left',
-            width: inactiveLayers || formattedEndDate ? '205px' : '175px',
-          }}
-        >
-          <MonospaceDate style={getStyle(formattedStartDate)} date={formattedStartDate || ' Start '} />
-          {' -  '}
-          <MonospaceDate style={getStyle(formattedEndDate)} date={formattedEndDate || ' Present '} />
-        </div>
-      </div>
-    );
-  };
-
-  /**
-  * @desc get formatted time period name
-  * @param {String} period
-  * @returns {String} formatted period
-  */
-  getFormattedTimePeriod = (period) => (period === 'daily'
-    ? 'day'
-    : period === 'monthly'
-      ? 'month'
-      : period === 'yearly'
-        ? 'year'
-        : 'minute');
+    events.on(SIDEBAR_LAYER_HOVER, layerHoverCallback);
+    return () => {
+      events.off(SIDEBAR_LAYER_HOVER, layerHoverCallback);
+    };
+  }, []);
 
   /**
   * @desc get range date end with added interval based on period
@@ -129,8 +148,13 @@ class CoverageItemList extends Component {
   * @param {Object} nextDate range object with date
   * @returns {String} rangeDateEnd date ISO string
   */
-  getRangeDateEndWithAddedInterval = (layer, rangeDate, layerPeriod, itemRangeInterval, nextDate) => {
-    const { appNow } = this.props;
+  const getRangeDateEndWithAddedInterval = (
+    layer,
+    rangeDate,
+    layerPeriod,
+    itemRangeInterval,
+    nextDate,
+  ) => {
     const { endDate, futureTime } = layer;
     const {
       minYear,
@@ -182,11 +206,7 @@ class CoverageItemList extends Component {
   * @param {Boolean} isLastInRange
   * @returns {Object} endDateLimit date object
   */
-  getMaxEndDate = (layer, isLastInRange) => {
-    const {
-      appNow,
-      backDate,
-    } = this.props;
+  const getMaxEndDate = (layer, isLastInRange) => {
     const { endDate, futureTime, ongoing } = layer;
 
     let endDateLimit = new Date(backDate);
@@ -216,20 +236,15 @@ class CoverageItemList extends Component {
   * @param {Object} range
   * @param {Object} endDateLimit
   * @param {Boolean} isLastInRange
-  * @returns {Array} dateIntervalStartDates
+  * @returns {Promise<Array>} dateIntervalStartDates
   */
-  getDatesInDateRange = (def, range, endDateLimit, isLastInRange) => {
-    const {
-      appNow,
-      backDate,
-      frontDate,
-    } = this.props;
+  const getDatesInDateRange = async (def, range, endDateLimit, isLastInRange) => {
     const {
       futureTime, period, id, ongoing,
     } = def;
     const { dateInterval, startDate, endDate } = range;
 
-    const layerPeriod = this.getFormattedTimePeriod(period);
+    const layerPeriod = getFormattedTimePeriod(period);
     const rangeInterval = Number(dateInterval);
     let rangeEnd;
 
@@ -259,17 +274,25 @@ class CoverageItemList extends Component {
     // get dates within given date range
     let dateIntervalStartDates = [];
     const startLessThanOrEqualToEndDateLimit = startDateObj.getTime() <= endDateLimit.getTime();
-    const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd).getTime() >= startDateLimit.getTime();
+    const endGreaterThanOrEqualToStartDateLimit = new Date(rangeEnd)
+      .getTime() >= startDateLimit.getTime();
     if (startLessThanOrEqualToEndDateLimit && endGreaterThanOrEqualToStartDateLimit) {
       // check layer date array cache and use caches date array if available, if not add date array
-      this.layerDateArrayCache[id] ??= {};
+      const cache = layerDateArrayCache.current;
+      cache[id] ??= {};
 
       const layerIdDates = `${appNow.toISOString()}-${frontDate}-${backDate}`;
-      if (this.layerDateArrayCache[id][layerIdDates] === undefined) {
-        dateIntervalStartDates = datesInDateRanges(def, startDateLimit, startDateLimit, endDateLimit, appNow);
-        this.layerDateArrayCache[id][layerIdDates] = dateIntervalStartDates;
+      if (cache[id][layerIdDates] === undefined) {
+        dateIntervalStartDates = await datesInDateRanges(
+          def,
+          startDateLimit,
+          startDateLimit,
+          endDateLimit,
+          appNow,
+        );
+        cache[id][layerIdDates] = dateIntervalStartDates;
       } else {
-        dateIntervalStartDates = this.layerDateArrayCache[id][layerIdDates];
+        dateIntervalStartDates = cache[id][layerIdDates];
       }
     }
     return dateIntervalStartDates;
@@ -284,8 +307,7 @@ class CoverageItemList extends Component {
   *   @param {String} layerItemBackground
   *   @param {String} layerItemOutline
   */
-  getLayerItemStyles = (visible, id) => {
-    const { hoveredLayer } = this.state;
+  const getLayerItemStyles = (visible, id) => {
     // conditional styling for line/background colors
     const containerBackgroundColor = visible
       ? 'rgb(204, 204, 204)'
@@ -314,38 +336,15 @@ class CoverageItemList extends Component {
     };
   };
 
-  /**
-  * @desc get empty layers message DOM element
-  * @returns {DOM Element} div contained message
-  */
-  createEmptyLayersDOMEl = () => (
-    <div className="layer-coverage-list-empty">
-      <div className="layer-coverage-item-empty">
-        <FontAwesomeIcon icon="exclamation-triangle" className="error-icon" widthAuto />
-        <p>No visible layers with defined coverage. Add layers or toggle &quot;Include Hidden Layers&quot; if current layers are hidden.</p>
-      </div>
-    </div>
-  );
+  const emptyLayers = activeLayers.length === 0;
+  const inactiveLayers = activeLayers.some(({ ongoing }) => !ongoing);
+  return (
+    <div className="layer-coverage-layer-list">
+      {/* Empty layer coverage message */
+        emptyLayers && createEmptyLayersDOMEl()
+      }
 
-  render() {
-    const {
-      activeLayers,
-      axisWidth,
-      backDate,
-      frontDate,
-      getMatchingCoverageLineDimensions,
-      timeScale,
-      positionTransformX,
-    } = this.props;
-    const emptyLayers = activeLayers.length === 0;
-    const inactiveLayers = activeLayers.some(({ ongoing }) => !ongoing);
-    return (
-      <div className="layer-coverage-layer-list">
-        {/* Empty layer coverage message */
-          emptyLayers && this.createEmptyLayersDOMEl()
-        }
-
-        {/* Build individual layer coverage components */
+      {/* Build individual layer coverage components */
         activeLayers.map((layer, index) => {
           const {
             dateRanges,
@@ -363,7 +362,7 @@ class CoverageItemList extends Component {
           if (isValidLayer) {
             multipleCoverageRanges = dateRanges.length > 1;
           }
-          let layerPeriod = this.getFormattedTimePeriod(period);
+          let layerPeriod = getFormattedTimePeriod(period);
 
           // get layer scale number to determine relation to current axis zoom level
           const timeScaleNumber = TIME_SCALE_TO_NUMBER[timeScale];
@@ -378,18 +377,22 @@ class CoverageItemList extends Component {
           const {
             layerItemBackground,
             layerItemOutline,
-          } = this.getLayerItemStyles(visible, id);
+          } = getLayerItemStyles(visible, id);
 
           // get date range
           const dateRangeIntervalZeroIndex = dateRanges
             ? Number(dateRanges[0].dateInterval)
             : 1;
 
-          // conditional check to determine how layer coverage line will be built in child component
-          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom && (multipleCoverageRanges || dateRangeIntervalZeroIndex);
-          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom && dateRangeIntervalZeroIndex > 1;
+          // conditional check to determine how layer coverage line
+          // will be built in child component
+          const isLayerGreaterZoomWithMultipleCoverage = isLayerGreaterIncrementThanZoom &&
+        (multipleCoverageRanges || dateRangeIntervalZeroIndex);
+          const isLayerEqualZoomWithMultipleCoverage = isLayerEqualIncrementThanZoom &&
+        dateRangeIntervalZeroIndex > 1;
           // determine date range building vs using startDate to endDate single coverage
-          const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage || isLayerEqualZoomWithMultipleCoverage));
+          const needDateRangeBuilt = !!(isValidLayer && (isLayerGreaterZoomWithMultipleCoverage ||
+          isLayerEqualZoomWithMultipleCoverage));
           const encodedId = util.encodeId(id);
           const key = `layer-coverage-item-${encodedId}-${index}`;
 
@@ -403,7 +406,9 @@ class CoverageItemList extends Component {
               }}
             >
               {/* Layer Header DOM El */
-                this.getHeaderDOMEl(layer, visible, layerItemBackground, inactiveLayers)
+                getHeaderDOMEl(
+                  layer, visible, layerItemBackground, inactiveLayers,
+                )
               }
               <div
                 className="layer-coverage-line-container"
@@ -414,30 +419,31 @@ class CoverageItemList extends Component {
                 <CoverageItemContainer
                   frontDate={frontDate}
                   backDate={backDate}
-                  getLayerItemStyles={this.getLayerItemStyles}
-                  getMaxEndDate={this.getMaxEndDate}
-                  getDatesInDateRange={this.getDatesInDateRange}
+                  getLayerItemStyles={getLayerItemStyles}
+                  getMaxEndDate={getMaxEndDate}
+                  getDatesInDateRange={getDatesInDateRange}
                   axisWidth={axisWidth}
                   positionTransformX={positionTransformX}
                   layer={layer}
                   layerPeriod={layerPeriod}
                   getMatchingCoverageLineDimensions={getMatchingCoverageLineDimensions}
-                  getRangeDateEndWithAddedInterval={this.getRangeDateEndWithAddedInterval}
+                  getRangeDateEndWithAddedInterval={getRangeDateEndWithAddedInterval}
                   needDateRangeBuilt={needDateRangeBuilt}
                 />
               </div>
             </div>
           );
         })
-        }
-      </div>
-    );
-  }
-}
+      }
+    </div>
+  );
+};
+
+CoverageItemList.getFormattedTimePeriod = getFormattedTimePeriod;
 
 CoverageItemList.propTypes = {
-  activeLayers: PropTypes.array,
-  appNow: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  appNow: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   axisWidth: PropTypes.number,
   backDate: PropTypes.string,
   frontDate: PropTypes.string,

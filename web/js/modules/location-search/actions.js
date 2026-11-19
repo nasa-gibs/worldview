@@ -2,6 +2,7 @@ import {
   CLEAR_SUGGESTIONS,
   REMOVE_MARKER,
   SET_MARKER,
+  TOGGLE_MARKER_HIDDEN,
   SET_SUGGESTION,
   SET_REVERSE_GEOCODE_RESULTS,
   TOGGLE_DIALOG_VISIBLE,
@@ -75,7 +76,9 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
       }
     }
 
-    const markerAlreadyExists = coordinates.find(({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude);
+    const markerAlreadyExists = coordinates.find(
+      ({ longitude: lon, latitude: lat }) => lon === longitude && lat === latitude,
+    );
 
     if (markerAlreadyExists) {
       return dispatch({
@@ -88,7 +91,7 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
     }
 
     const markerId = Math.floor(longitude * 1000 + latitude * 1000 + Math.random() * 1000);
-    dispatch({
+    return dispatch({
       type: SET_MARKER,
       coordinates: {
         id: markerId,
@@ -104,6 +107,13 @@ export function setPlaceMarker(coord, reverseGeocodeResults, isInputSearch) {
 export function removeMarker(coordinates) {
   return {
     type: REMOVE_MARKER,
+    coordinates,
+  };
+}
+
+export function toggleIsHidden(coordinates) {
+  return {
+    type: TOGGLE_MARKER_HIDDEN,
     coordinates,
   };
 }

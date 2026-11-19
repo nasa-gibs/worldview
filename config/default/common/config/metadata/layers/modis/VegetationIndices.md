@@ -1,4 +1,2 @@
 ### About Vegetation Indicies
 Vegetation indices are used for monitoring of vegetation conditions and can be used to identify areas undergoing land cover changes. These data may be used as input for modeling global biogeochemical and hydrologic processes and global and regional climate. These data also may be used for characterizing land surface biophysical properties and processes including primary production and land cover conversion. Vegetation indices also provide information on the health of vegetation and can assist farmers and resource managers monitor the health and development of their crops and fields over the growing season.
-
-NOTE: We are reprocessing the entire MODIS Land imagery archive to collection 6.1 but currently the imagery is a mix of collection 6 and collection 6.1. Most of the imagery from mid-May 2021 onwards is collection 6.1 and older imagery is collection 6.

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { UncontrolledTooltip } from 'reactstrap';
 import util from '../../util/util';
@@ -59,5 +58,5 @@ export default function Zot (props) {
 Zot.propTypes = {
   isMobile: PropTypes.bool,
   layer: PropTypes.string,
-  zot: PropTypes.object,
+  zot: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

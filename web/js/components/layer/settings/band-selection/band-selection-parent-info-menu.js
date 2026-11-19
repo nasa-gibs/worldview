@@ -1,14 +1,14 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button } from 'reactstrap';
+import PropTypes from 'prop-types';
 import BandSelectionMenu from './band-selection-menu';
 import { toggleCustomContent } from '../../../../modules/modal/actions';
 
 export default function BandSelectionParentInfoMenu({ layer }) {
   const dispatch = useDispatch();
-  const onCustomizeBandClick = (layer) => {
-    const key = `BAND_SELECTION_MODAL_${layer.id}`;
-    const title = `Customize Bands for the ${layer.title} layer`;
+  const onCustomizeBandClick = (layerObj) => {
+    const key = `BAND_SELECTION_MODAL_${layerObj.id}`;
+    const title = `Customize Bands for the ${layerObj.title} layer`;
     dispatch(
       toggleCustomContent(key, {
         headerText: title,
@@ -19,7 +19,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
         timeout: 150,
         size: 'lg',
         bodyComponentProps: {
-          layer,
+          layerObj,
         },
       }),
     );
@@ -33,7 +33,6 @@ export default function BandSelectionParentInfoMenu({ layer }) {
   } = layer.bandCombo;
 
   const isValidBandSelection = () => (r !== 'undefined' && r !== undefined) && (g !== 'undefined' && g !== undefined) && (b !== 'undefined' && b !== undefined);
-
 
   return (
     <div className="customize-bands-parent-info">
@@ -96,3 +95,7 @@ export default function BandSelectionParentInfoMenu({ layer }) {
     </div>
   );
 }
+
+BandSelectionParentInfoMenu.propTypes = {
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+};

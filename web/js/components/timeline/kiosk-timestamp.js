@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import util from '../../util/util';
 import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
@@ -11,7 +10,8 @@ import { MONTH_STRING_ARRAY } from '../../modules/date/constants';
 function getIsDaylightSavingsTime() {
   const date = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
   const dateObj = new Date(date);
-  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1).getTimezoneOffset();
+  const isDaylightSavingTime = dateObj.getTimezoneOffset() < new Date(dateObj.getFullYear(), 0, 1)
+    .getTimezoneOffset();
   return isDaylightSavingTime;
 }
 
@@ -90,7 +90,7 @@ function KioskTimeStamp({ date, subdaily, isKioskModeActive }) {
 }
 
 KioskTimeStamp.propTypes = {
-  date: PropTypes.object,
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isKioskModeActive: PropTypes.bool,
   subdaily: PropTypes.bool,
 };

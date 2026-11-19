@@ -294,6 +294,10 @@
 
   .layers-all-header {
     padding: 0 0 0 25px;
+    width: 100%;
+    background: inherit;
+    text-align: left;
+    border: none;
 
     &.notice {
       padding: 0 70px 0 25px;
@@ -1075,6 +1079,28 @@
   margin-right: 4px;
 }
 
+.day-range-pill {
+  display: inline-grid;
+  flex-shrink: 0;
+  justify-items: center;
+  margin-left: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0.3em 0.7em;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+  color: #333;
+  background-color: #bdbdbd;
+
+  > span {
+    grid-area: 1 / 1;
+  }
+
+  .day-range-pill-sizer {
+    visibility: hidden;
+  }
+}
+
 .instrument-collection {
   margin-top: 3px;
   display: flex;
@@ -1095,7 +1121,7 @@ a[rel="noreferrer"]:hover {
   (max-width: variables.$mobile-max-width) {
   .instrument-collection {
     h6 {
-      margin-right: 20px;
+      margin-right: 2px;
     }
   }
 }

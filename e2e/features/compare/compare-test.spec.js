@@ -4,9 +4,11 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { swipeAndAIsActive, spyAndBIsActive } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
-let selectors
 
+/** @type {ReturnType<typeof createSelectors>} */
+let selectors
 test.describe.configure({ mode: 'serial' })
 
 test.beforeAll(async ({ browser }) => {
@@ -46,12 +48,14 @@ test('Image download is disabled when compare mode active', async () => {
 test('Data download is disabled when compare mode active', async () => {
   const { dataDownloadTabButton } = selectors
   const disableMessage = 'You must exit comparison mode to download data'
+  await page.goto(swipeAndAIsActive)
+  await closeModal(page)
   await expect(dataDownloadTabButton).toHaveClass(/disabled/)
   await expect(dataDownloadTabButton).toHaveAttribute('aria-label', disableMessage)
   const downloadTab = page.locator('#download-sidebar-tab')
   await downloadTab.hover()
-  const tooltipSelector = page.locator('.tooltip-inner')
-  await expect(tooltipSelector).toContainText(disableMessage)
+  const tooltipSelector = page.getByRole('tooltip', { name: disableMessage })
+  await expect(tooltipSelector).toBeVisible()
   // Clicking does not switch tabs
   await dataDownloadTabButton.click()
   const smartHandoffPanel = page.locator('#smart-handoff-side-panel')
@@ -91,37 +95,43 @@ test('Collapse layer list with B state and test label shows correct number of la
   await toggleButton.click()
   await expect(collapsedToggleButton).toBeVisible()
   const layerCount = page.locator('#accordion-toggler-button .layer-count')
-  await expect(layerCount).toHaveText('6 Layers')
+  await expect(layerCount).toHaveText('7 Layers')
   await collapsedToggleButton.click()
-  const referenceFeatures = page.locator('#activeB-Reference_Features_15m')
+  const referenceFeatures = page.locator('#activeB-DoS_International_Boundaries')
   await expect(referenceFeatures).toBeVisible()
+  const referenceFeatures2 = page.locator('#activeB-Admin_Boundaries')
+  await expect(referenceFeatures2).toBeVisible()
 })
 
 test('If you exit A|B with B selection active, the active state will then be the B state', async () => {
   const { compareButton } = selectors
-  const correctedReflectanceSNPP = page.locator('#activeB-VIIRS_SNPP_CorrectedReflectance_TrueColor')
-  const closeReflectanceSNPP = page.locator('#close-activeBVIIRS_SNPP_CorrectedReflectance_TrueColor')
+  const correctedReflectanceNOAA20 = page.locator('#activeB-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
+  const closeReflectanceNOAA20 = page.locator('#close-activeBVIIRS_NOAA20_CorrectedReflectance_TrueColor')
   const correctedReflectanceAqua = page.locator('#activeB-MODIS_Aqua_CorrectedReflectance_TrueColor')
   const closeReflectanceAqua = page.locator('#close-activeBMODIS_Aqua_CorrectedReflectance_TrueColor')
   const referenceLabels = page.locator('#activeB-Reference_Labels_15m')
   const closeRefLabels = page.locator('#close-activeBReference_Labels_15m')
-  const referenceFeatures = page.locator('#activeB-Reference_Features_15m')
-  const closeRefFeatures = page.locator('#close-activeBReference_Features_15m')
+  const referenceFeatures = page.locator('#activeB-DoS_International_Boundaries')
+  const closeRefFeatures = page.locator('#close-activeBDoS_International_Boundaries')
+  const referenceFeatures2 = page.locator('#activeB-Admin_Boundaries')
+  const closeRefFeatures2 = page.locator('#close-activeBAdmin_Boundaries')
   const coastlines = page.locator('#activeB-Coastlines_15m')
   const correctedReflectanceTerra = page.locator('#activeB-MODIS_Terra_CorrectedReflectance_TrueColor')
-  await expect(correctedReflectanceSNPP).toBeVisible()
+  await expect(correctedReflectanceNOAA20).toBeVisible()
   await expect(correctedReflectanceAqua).toBeVisible()
   await referenceLabels.hover()
   await closeRefLabels.click()
   await referenceFeatures.hover()
   await closeRefFeatures.click()
-  await correctedReflectanceSNPP.hover()
-  await closeReflectanceSNPP.click()
+  await referenceFeatures2.hover()
+  await closeRefFeatures2.click()
+  await correctedReflectanceNOAA20.hover()
+  await closeReflectanceNOAA20.click()
   await correctedReflectanceAqua.hover()
   await closeReflectanceAqua.click()
   await compareButton.click()
   await expect(coastlines).toBeVisible()
   await expect(correctedReflectanceTerra).toBeVisible()
-  await expect(correctedReflectanceSNPP).not.toBeVisible()
+  await expect(correctedReflectanceNOAA20).not.toBeVisible()
   await expect(correctedReflectanceAqua).not.toBeVisible()
 })

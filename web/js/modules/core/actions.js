@@ -27,18 +27,35 @@ export async function requestAction(
   url,
   mimeType,
   id,
-  options,
+  options = {},
 ) {
+  const opts = options || {};
+
   dispatch(startRequest(actionName, id));
   try {
-    const response = await fetch(url, options);
-    const data = mimeType === 'application/json'
-      ? await response.json()
-      : await response.text();
+    const response = await fetch(url, opts);
+
+    let data;
+    if (mimeType === 'application/json') {
+      if (opts.parser) {
+        const rawText = await response.text();
+        data = opts.parser(rawText);
+      } else {
+        if (typeof response.json === 'function') {
+          data = await response.json();
+        } else {
+          const rawText = await response.text();
+          data = rawText ? JSON.parse(rawText) : null;
+        }
+      }
+    } else {
+      data = await response.text();
+    }
+
     dispatch(fetchSuccess(actionName, data, id));
     return data;
   } catch (error) {
     dispatch(fetchFailure(actionName, error, id));
-    console.error(error);
+    return console.error(error);
   }
 }

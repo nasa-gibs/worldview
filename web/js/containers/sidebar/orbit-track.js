@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { isEmpty as lodashIsEmpty, get as lodashGet } from 'lodash';
@@ -60,11 +60,11 @@ OrbitTrack.propTypes = {
   hasPalette: PropTypes.bool,
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  paletteLegends: PropTypes.array,
-  parentLayer: PropTypes.object,
-  renderedPalette: PropTypes.object,
+  paletteLegends: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  parentLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  renderedPalette: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   requestPalette: PropTypes.func,
-  trackLayer: PropTypes.object,
+  trackLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 function mapStateToProps(state, ownProps) {

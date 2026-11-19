@@ -1,5 +1,4 @@
-/* eslint-disable react/no-render-return-value */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Line from './line';
@@ -9,7 +8,8 @@ import { CRS } from '../../modules/map/constants';
 
 function DateLines(props) {
   const {
-    map, proj, date, isCompareActive, mapIsRendered, alwaysShow, hideText, isMobilePhone, isMobileTablet,
+    map, proj, date, isCompareActive, mapIsRendered,
+    alwaysShow, hideText, isMobilePhone, isMobileTablet,
   } = props;
 
   const [height, setHeight] = useState(0);
@@ -59,7 +59,7 @@ function DateLines(props) {
 
   useEffect(() => {
     if (proj.id !== 'geographic' || !mapIsRendered) {
-      return;
+      return undefined;
     }
     map.on('movestart', () => {
       setHideLines(true);
@@ -113,7 +113,7 @@ function DateLines(props) {
 
 const mapStateToProps = (state) => {
   const {
-    proj, map, compare, settings, modal,
+    proj, map, compare, settings, modal, imageDownload,
   } = state;
   const isImageDownload = modal.id === 'TOOLBAR_SNAPSHOT' && modal.isOpen;
   const isGeographic = proj.selected.crs === CRS.GEOGRAPHIC;
@@ -125,16 +125,16 @@ const mapStateToProps = (state) => {
     isCompareActive: compare.active,
     mapIsRendered: map.rendered,
     hideText: isImageDownload || !isGeographic,
-    alwaysShow: isImageDownload || settings.alwaysShowDatelines,
+    alwaysShow: (isImageDownload && !imageDownload.inProgress) || settings.alwaysShowDatelines,
     isMobilePhone,
     isMobileTablet,
   };
 };
 
 DateLines.propTypes = {
-  map: PropTypes.object,
-  proj: PropTypes.object,
-  date: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCompareActive: PropTypes.bool,
   mapIsRendered: PropTypes.bool,
   alwaysShow: PropTypes.bool,

@@ -1,11 +1,13 @@
 import {
   cloneDeep as lodashCloneDeep,
   findIndex as lodashFindIndex,
+  omitBy as lodashOmitBy,
 } from 'lodash';
 import update from 'immutability-helper';
 import {
   ADD_LAYER,
   INIT_SECOND_LAYER_GROUP,
+  SYNC_SECOND_LAYER_GROUP,
   REORDER_LAYERS,
   TOGGLE_LAYER_VISIBILITY,
   TOGGLE_COLLAPSE_OVERLAY_GROUP,
@@ -23,11 +25,13 @@ import {
   UPDATE_DDV_LAYER,
   UPDATE_COLLECTION,
   ADD_GRANULE_DATE_RANGES,
+  ADD_TEMPO_DATE_RANGES,
+  UPDATE_DAY_COUNT,
 } from './constants';
 import {
   SET_CUSTOM as SET_CUSTOM_PALETTE,
   CLEAR_CUSTOM as CLEAR_CUSTOM_PALETTE,
-  SET_THRESHOLD_RANGE_AND_SQUASH,
+  SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP,
   SET_DISABLED_CLASSIFICATION,
 } from '../palettes/constants';
 import {
@@ -79,7 +83,6 @@ export function getInitialState(config) {
   return updatedState;
 }
 
-
 export function layerReducer(state = initialState, action) {
   const compareState = action.activeString;
   const getPrevOverlayGroups = () => state[compareState].overlayGroups;
@@ -120,16 +123,21 @@ export function layerReducer(state = initialState, action) {
       });
 
     case ADD_LAYERS_FOR_EVENT:
-    case REORDER_OVERLAY_GROUPS:
+    case REORDER_OVERLAY_GROUPS: {
+      const handleDefinedEventLayers = action?.eventLayers?.length
+        ? { $set: action.eventLayers }
+        : { $push: [] };
       return update(state, {
         [compareState]: {
           layers: { $set: action.layers },
           overlayGroups: { $set: action.overlayGroups },
           prevLayers: { $set: [] },
         },
-        eventLayers: action.eventLayers === undefined ? { $push: [] } : action.eventLayers.length ? { $set: action.eventLayers } : { $push: [] },
+        eventLayers: action.eventLayers === undefined
+          ? { $push: [] }
+          : handleDefinedEventLayers,
       });
-
+    }
     case TOGGLE_OVERLAY_GROUPS:
       return update(state, {
         [compareState]: {
@@ -142,22 +150,53 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case TOGGLE_COLLAPSE_OVERLAY_GROUP:
+    case TOGGLE_COLLAPSE_OVERLAY_GROUP: {
+      const groupIndex = getGroupIndex();
+      if (groupIndex < 0) return state;
       return update(state, {
         [compareState]: {
           overlayGroups: {
-            [getGroupIndex()]: {
+            [groupIndex]: {
               collapsed: { $set: action.collapsed },
             },
           },
         },
       });
+    }
 
     case INIT_SECOND_LAYER_GROUP:
       return {
         ...state,
         activeB: lodashCloneDeep(state.active),
       };
+
+    // Apply changes made to A while compare was off: add layers added to A,
+    // and remove layers removed from A. Layers the user removed from or
+    // added to B during compare are left alone.
+    case SYNC_SECOND_LAYER_GROUP: {
+      const aLayerIds = new Set(state.active.layers.map((l) => l.id));
+      const bLayerIds = new Set(state.activeB.layers.map((l) => l.id));
+      const lastExitIds = new Set(action.lastExitALayerIds || []);
+      const newLayers = state.active.layers.filter(
+        (l) => !bLayerIds.has(l.id) && !lastExitIds.has(l.id),
+      );
+      const isRemovedFromA = (id) => lastExitIds.has(id) && !aLayerIds.has(id);
+      const keptLayers = state.activeB.layers.filter((l) => !isRemovedFromA(l.id));
+      if (!newLayers.length && keptLayers.length === state.activeB.layers.length) return state;
+      const layers = [...keptLayers, ...lodashCloneDeep(newLayers)];
+      return {
+        ...state,
+        activeB: {
+          ...state.activeB,
+          layers,
+          overlayGroups: getOverlayGroups(layers, state.activeB.overlayGroups),
+          granuleLayers: lodashOmitBy(
+            state.activeB.granuleLayers,
+            (_granuleLayer, id) => isRemovedFromA(id),
+          ),
+        },
+      };
+    }
 
     case TOGGLE_LAYER_VISIBILITY:
       if (getLayerIndex() === -1) return state;
@@ -185,7 +224,21 @@ export function layerReducer(state = initialState, action) {
         },
       });
 
-    case SET_THRESHOLD_RANGE_AND_SQUASH:
+    case UPDATE_DAY_COUNT: {
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [layerIndex]: {
+              dayCount: { $set: action.dayCount },
+            },
+          },
+        },
+      });
+    }
+
+    case SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
     case SET_DISABLED_CLASSIFICATION: {
       const layerIndex = getLayerIndex();
       if (layerIndex < 0) return state;
@@ -302,6 +355,7 @@ export function layerReducer(state = initialState, action) {
         granuleDateRanges,
       } = action;
       const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
 
       return update(state, {
         [compareState]: {
@@ -319,11 +373,16 @@ export function layerReducer(state = initialState, action) {
         id, activeKey, count, dates,
       } = action;
 
+      // The entry may not exist yet if the map hasn't built this layer
       return update(state, {
         [activeKey]: {
           granuleLayers: {
             [id]: {
-              $merge: { count, dates },
+              $apply: (granuleLayer = {}) => ({
+                ...granuleLayer,
+                count,
+                dates: dates || granuleLayer.dates,
+              }),
             },
           },
         },
@@ -403,8 +462,9 @@ export function layerReducer(state = initialState, action) {
       });
     }
 
-    // This is required because to update band combinations we need to actually remove and re-add these layers
-    // This case sets the ddv layer back to its original index before being removed and added again
+    // This is required because to update band combinations we need to actually remove
+    // and re-add these layers. This case sets the ddv layer back to its original index before being
+    // removed and added again
     case UPDATE_DDV_LAYER: {
       const { layerIndex, id, layers } = action;
       const indexToMove = layers.findIndex((activeLayer) => activeLayer.id === id);
@@ -418,6 +478,24 @@ export function layerReducer(state = initialState, action) {
             overlayGroups: getOverlayGroups(layers, getPrevOverlayGroups()),
             prevLayers: [],
             layerIndex: action.layerIndex,
+          },
+        },
+      });
+    }
+
+    case ADD_TEMPO_DATE_RANGES: {
+      const {
+        tempoDateRanges,
+      } = action;
+      const layerIndex = getLayerIndex();
+      if (layerIndex < 0) return state;
+
+      return update(state, {
+        [compareState]: {
+          layers: {
+            [layerIndex]: {
+              tempoDateRanges: { $set: tempoDateRanges },
+            },
           },
         },
       });

@@ -26,7 +26,7 @@ export function animateCoordinates(map, proj, coordinates, zoom, isKioskModeActi
   if (proj !== 'geographic') {
     [x, y] = transform(coordinates, CRS.GEOGRAPHIC, crs);
   }
-  fly(map, proj, [x, y], zoom, isKioskModeActive);
+  fly(map, proj, [x, y], isKioskModeActive, zoom);
 }
 
 /**
@@ -48,15 +48,15 @@ export function areCoordinatesWithinExtent(proj, coordinates) {
  * @param {Object} pinProps
  * @param {Number} id
  */
-const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
+const createPin = function(coordinates, pinProps, id, removeMarkerPin, toggleHiddenMarker) {
   const overlayEl = document.createElement('div');
   const root = createRoot(overlayEl);
   const removeMarker = () => {
-    root.unmount(overlayEl);
+    root.unmount();
     removeMarkerPin();
   };
   root.render(
-    React.createElement(LocationMarker, { ...pinProps, removeMarker }),
+    React.createElement(LocationMarker, { ...pinProps, removeMarker, toggleHiddenMarker }),
   );
   const markerPin = new OlOverlay({
     element: overlayEl,
@@ -64,6 +64,7 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
     positioning: 'bottom-center',
     stopEvent: false,
     id,
+    className: 'location-dialog-pin-wrapper-parent',
   });
 
   return markerPin;
@@ -76,7 +77,15 @@ const createPin = function(coordinates, pinProps, id, removeMarkerPin) {
  * @param {Array} coordinates
  * @param {Object} reverseGeocodeResults
  */
-export function getCoordinatesMarker(proj, coordinatesObject, results, removeMarker, isMobile, dialogVisible) {
+export function getCoordinatesMarker(
+  proj,
+  coordinatesObject,
+  results,
+  removeMarker,
+  toggleHiddenMarker,
+  isMobile,
+  dialogVisible,
+) {
   const { crs } = proj.selected;
   const { id, longitude, latitude } = coordinatesObject;
   const coordinates = [longitude, latitude];
@@ -95,7 +104,7 @@ export function getCoordinatesMarker(proj, coordinatesObject, results, removeMar
   };
 
   // create Ol vector layer map pin
-  const marker = createPin(transformedCoords, pinProps, id, removeMarker);
+  const marker = createPin(transformedCoords, pinProps, id, removeMarker, toggleHiddenMarker);
   return marker;
 }
 
@@ -114,14 +123,15 @@ export function getLocalStorageCollapseState() {
  */
 export function mapLocationToLocationSearchState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const { s } = parameters;
   const coordinatesArray = s ? s.split('+') : [];
   const isValid = coordinatesArray.length >= 1;
   const validatedCoordinatesArray = coordinatesArray.map((coordinate) => {
-    const [longitude, latitude] = coordinate
+    const [longitude, latitude, isHidden] = coordinate
       ? coordinate.split(',')
         .map((coord) => Number(coord))
         .filter((coord) => !lodashIsNaN(parseFloat(coord)))
@@ -132,6 +142,7 @@ export function mapLocationToLocationSearchState(
       id: markerId,
       latitude,
       longitude,
+      isHidden: isHidden === 1,
     };
     return validatedCoordinates;
   });
@@ -151,21 +162,25 @@ export function mapLocationToLocationSearchState(
 
 export function serializeCoordinatesWrapper(coordinates, state) {
   const { map, proj } = state;
-  const serializeCoordinates = ({ longitude, latitude }) => {
+  const serializeCoordinates = ({ longitude, latitude, isHidden }) => {
     const coordinateValues = [longitude, latitude];
-    if (!map.ui.selected) return;
+    if (isHidden) coordinateValues.push(1);
+    if (!map.ui.selected) return undefined;
     const coordinatesWithinExtent = areCoordinatesWithinExtent(proj, coordinateValues);
-    if (!coordinatesWithinExtent) return;
+    if (!coordinatesWithinExtent) return undefined;
     return coordinateValues;
   };
 
   const serializeCoordinatesArray = (coordinatesArray) => coordinatesArray
     .map((coordinate) => serializeCoordinates(coordinate))
     .filter((coordinate) => coordinate);
-  const coordinatesURL = Array.isArray(coordinates) ? serializeCoordinatesArray(coordinates) : serializeCoordinates(coordinates);
+  const coordinatesURL = Array.isArray(coordinates)
+    ? serializeCoordinatesArray(coordinates)
+    : serializeCoordinates(coordinates);
   if (coordinatesURL.length > 0) {
     return coordinatesURL.join('+');
   }
+  return undefined;
 }
 
 /**
@@ -180,4 +195,5 @@ export function setLocalStorageCollapseState(storageValue) {
  * @param {Object} config
  * @return {Boolean} is Location Search feature enabled
  */
-export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch && features.locationSearch.url);
+export const isLocationSearchFeatureEnabled = ({ features }) => !!(features.locationSearch &&
+  features.locationSearch.url);

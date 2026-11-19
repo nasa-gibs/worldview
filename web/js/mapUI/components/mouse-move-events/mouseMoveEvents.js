@@ -48,21 +48,31 @@ function MouseMoveEvents(props) {
     throttledOnMouseMove(mouseMove);
   }, [mouseMove]);
 
-  events.on(MAP_MOUSE_MOVE, setMouseMove);
-  events.on(MAP_MOUSE_OUT, (e) => {
-    throttledOnMouseMove.cancel();
-    ui.runningdata.clearAll();
-  });
+  useEffect(() => {
+    events.on(MAP_MOUSE_MOVE, setMouseMove);
+    events.on(MAP_MOUSE_OUT, (e) => {
+      throttledOnMouseMove.cancel();
+      ui.runningdata.clearAll();
+    });
+
+    return () => {
+      events.off(MAP_MOUSE_MOVE, setMouseMove);
+      events.off(MAP_MOUSE_OUT, (e) => {
+        throttledOnMouseMove.cancel();
+        ui.runningdata.clearAll();
+      });
+    };
+  }, []);
 
   return null;
 }
 
 const mapStateToProps = (state) => {
   const {
-    events, locationSearch, sidebar, animation, measure, screenSize, map,
+    events: stateEvents, locationSearch, sidebar, animation, measure, screenSize, map,
   } = state;
   const { isCoordinateSearchActive } = locationSearch;
-  const isEventsTabActive = typeof events !== 'undefined' && events.active;
+  const isEventsTabActive = typeof stateEvents !== 'undefined' && stateEvents.active;
   const isMobile = screenSize.isMobileDevice;
   const isMeasureActive = measure.isActive;
   const isMapAnimating = animation.isPlaying;
@@ -84,13 +94,13 @@ export default connect(
 )(MouseMoveEvents);
 
 MouseMoveEvents.propTypes = {
-  compareMapUi: PropTypes.object,
+  compareMapUi: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isCoordinateSearchActive: PropTypes.bool,
   isEventsTabActive: PropTypes.bool,
   isMapAnimating: PropTypes.bool,
   isMeasureActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   sidebarActiveTab: PropTypes.string,
-  map: PropTypes.object,
-  ui: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  ui: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };

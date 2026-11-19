@@ -13,6 +13,7 @@ import update from 'immutability-helper';
 import util from '../../util/util';
 import { getLayerNoticesForLayer } from '../notifications/util';
 import { getSelectedDate } from '../date/selectors';
+import { DEFAULT_DAY_COUNT, MIN_DAY_COUNT, MAX_DAY_COUNT } from './constants';
 
 const getConfigParameters = ({ config }) => (config ? config.parameters : {});
 const getProjState = ({ proj }) => proj;
@@ -21,7 +22,16 @@ const getLayerState = ({ layers }) => layers;
 const getConfig = ({ config }) => config;
 const getLayerId = (state, { layer }) => layer && layer.id;
 
-export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength, projection, groupOverlays, bandComboParam, selectedPresetParam) {
+export function addLayer(
+  id,
+  layersParam,
+  layerConfig,
+  spec = {},
+  overlayLength = null,
+  groupOverlays = null,
+  bandComboParam = null,
+  selectedPresetParam = null,
+) {
   const layers = lodashCloneDeep(layersParam);
   if (lodashFind(layers, { id })) {
     return layers;
@@ -37,8 +47,10 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
   def.custom = spec.custom || undefined;
   def.max = spec.max || undefined;
   def.squash = spec.squash || undefined;
+  def.noclip = spec.noclip || undefined;
   def.disabled = spec.disabled || undefined;
   def.count = spec.count || def.count || undefined;
+  def.dayCount = spec.dayCount || def.dayCount || undefined;
 
   if (Array.isArray(spec.bandCombo)) {
     def.bandCombo = {
@@ -70,11 +82,11 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
     // TODO assuming first group in the array again here
     const groupIdx = layers.findIndex(({ layergroup }) => layergroup === def.layergroup);
 
-    const findLastRefLayer = (layers) => {
+    const findLastRefLayer = (layersArg) => {
       let lastRefIndex = 0;
       let index = 0;
 
-      layers.forEach((layer) => {
+      layersArg.forEach((layer) => {
         if (layer.layergroup === 'Reference' && layer.group !== 'baselayers') {
           lastRefIndex = index;
           index += 1;
@@ -109,11 +121,11 @@ export function addLayer(id, spec = {}, layersParam, layerConfig, overlayLength,
  * @param {*} layerConfig
  */
 export function resetLayers(config) {
-  const { defaults: { startingLayers, projection }, layers: layerConfig } = config;
+  const { defaults: { startingLayers }, layers: layerConfig } = config;
   let layers = [];
   if (startingLayers) {
     lodashEach(startingLayers, (start) => {
-      layers = addLayer(start.id, start, layers, layerConfig, null, projection);
+      layers = addLayer(start.id, layers, layerConfig, start);
     });
   }
   return layers;
@@ -121,16 +133,21 @@ export function resetLayers(config) {
 
 export const getStartingLayers = createSelector([getConfig], (config) => resetLayers(config));
 
-export const isGroupingEnabled = ({ compare, layers }) => layers[compare.activeString].groupOverlays;
+export const isGroupingEnabled = ({
+  compare,
+  layers,
+}) => layers[compare.activeString].groupOverlays;
 
 export const getCollections = (layers, dailyDate, subdailyDate, layer, projId) => {
-  if (!layers.collections[layer.id]) return;
+  if (!layers.collections[layer.id]) return undefined;
   const dateCollection = layers.collections[layer.id].dates;
   for (let i = 0; i < dateCollection.length; i += 1) {
-    if ((dateCollection[i].date === dailyDate || dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
+    if ((dateCollection[i].date === dailyDate ||
+      dateCollection[i].date === subdailyDate) && dateCollection[i].projection === projId) {
       return dateCollection[i];
     }
   }
+  return undefined;
 };
 
 /**
@@ -161,12 +178,13 @@ export const getActiveLayerGroup = (state) => {
   const { active, activeString } = compare || {};
   if (active) {
     const layerGroups = map.ui.selected.getLayers().getArray();
+    const selectedLayerGroup = layerGroups[1]?.get('group') === activeString
+      ? layerGroups[1]
+      : map.ui.selected;
     if (layerGroups.length > 1) {
       return layerGroups[0].get('group') === activeString
         ? layerGroups[0]
-        : layerGroups[1].get('group') === activeString
-          ? layerGroups[1]
-          : map.ui.selected;
+        : selectedLayerGroup;
     }
   }
   return map.ui.selected;
@@ -194,6 +212,21 @@ export const getGranulePlatform = (state, activeString) => {
   return granulePlatform;
 };
 
+export const getMaxDayRange = (def) => {
+  const max = Number(def && def.maxDayRange);
+  return Number.isFinite(max) && max > 1 ? Math.min(max, MAX_DAY_COUNT) : 0;
+};
+
+export const getLayerDayCount = (state, id, activeString) => {
+  const { compare, layers } = state;
+  const side = activeString || (compare && compare.activeString) || 'active';
+  const sideLayers = (layers[side] && layers[side].layers) || [];
+  const def = lodashFind(sideLayers, { id });
+  const max = getMaxDayRange(def);
+  if (!max) return DEFAULT_DAY_COUNT;
+  return util.clamp(def.dayCount || DEFAULT_DAY_COUNT, MIN_DAY_COUNT, max);
+};
+
 export const getActiveGranuleFootPrints = (state) => {
   const { layers, compare: { activeString } } = state;
   const granuleLayers = getActiveGranuleLayers(state);
@@ -207,17 +240,6 @@ export const getActiveGranuleFootPrints = (state) => {
   });
 
   return isActiveGranuleVisible.length && granuleLayers ? granuleFootprints : {};
-};
-
-export const getGranuleLayersOfActivePlatform = (platform, activeLayers) => {
-  const activeLayersArray = Object.entries(activeLayers);
-  const platformLayers = [];
-  activeLayersArray.forEach(([key, value]) => {
-    if (value.granulePlatform === platform) {
-      platformLayers.push(key);
-    }
-  });
-  return platformLayers;
 };
 
 /**
@@ -247,8 +269,8 @@ const getActiveOverlayGroupsEmbed = (state) => {
   const overlayGroupsFiltered = overlayGroups.filter((group) => group.groupName !== 'Reference');
   return (overlayGroupsFiltered || []).filter(
     (group) => group.layers.filter(
-      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id]
-          && !!activeLayersMap[id].visible,
+      (id) => !!activeLayersMap[id] && !!activeLayersMap[id].projections[proj.id] &&
+          !!activeLayersMap[id].visible,
     ).length,
   );
 };
@@ -394,6 +416,7 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
       end: new Date(maxDate),
     };
   }
+  return undefined;
 }
 
 /**
@@ -405,20 +428,32 @@ export function dateRange({ layer }, activeLayers, parameters = {}) {
  */
 export function available(id, date, layers, parameters) {
   const range = dateRange({ layer: id }, layers, parameters);
-  if (range && (date < range.start || date > range.end)) {
-    return false;
+  if (range) {
+    // Standardize time by removing milliseconds before comparison
+    range.start.setMilliseconds(0);
+    range.end.setMilliseconds(0);
+    date.setMilliseconds(0);
+    if (date < range.start || date > range.end) {
+      return false;
+    }
   }
   return true;
 }
 
-function forGroup(group, spec = {}, activeLayers, state) {
+function forGroup(group, activeLayers, state, spec = {}) {
   const projId = state.proj.id;
   let results = [];
   const defs = lodashFilter(activeLayers, { group });
   lodashEach(defs, (def) => {
     const notInProj = !def.projections[projId];
-    // eslint-disable-next-line no-use-before-define
-    const notRenderable = spec.renderable && !isRenderable(def.id, activeLayers, spec.date, null, state);
+
+    const notRenderable = spec.renderable && !isRenderable(
+      def.id,
+      activeLayers,
+      spec.date,
+      null,
+      state,
+    );
     if (notInProj || notRenderable) {
       return;
     }
@@ -436,10 +471,10 @@ function forGroup(group, spec = {}, activeLayers, state) {
  * @param {*} spec
  * @param {*} state
  */
-export function getLayers(state, spec = {}, layersParam) {
+export function getLayers(state, spec = {}, layersParam = null) {
   const layers = layersParam || getActiveLayers(state);
-  const baselayers = forGroup('baselayers', spec, layers, state);
-  const overlays = forGroup('overlays', spec, layers, state);
+  const baselayers = forGroup('baselayers', layers, state, spec);
+  const overlays = forGroup('overlays', layers, state, spec);
   if (spec.group === 'baselayers') {
     return baselayers;
   }
@@ -463,7 +498,8 @@ export function getLayers(state, spec = {}, layersParam) {
  * @param {*} date
  * @param {*} state
  */
-export function isRenderable(id, layers, date, bLayers, state) {
+export function isRenderable(id, layers, dateString, bLayers, state) {
+  let date = dateString;
   const { parameters } = state.config || {};
   date = date || getSelectedDate(state);
   const def = lodashFind(layers, { id });
@@ -484,13 +520,14 @@ export function isRenderable(id, layers, date, bLayers, state) {
         return false;
       }
       if (
-        otherDef.visible
-        && otherDef.opacity === 1.0
-        && available(otherDef.id, date, layers, parameters)
+        otherDef.visible &&
+        otherDef.opacity === 1.0 &&
+        available(otherDef.id, date, layers, parameters)
       ) {
         obscured = true;
         return false;
       }
+      return undefined;
     },
   );
   return !obscured;
@@ -553,10 +590,10 @@ export function hasMeasurementSource(current, config, projId) {
 export const makeGetDescription = () => createSelector(
   [getConfig, getLayerId],
   ({ layers, measurements }, layerId) => {
-    if (!layerId) return;
+    if (!layerId) return undefined;
     const { layergroup } = layers[layerId];
     if (layergroup === 'Orbital Track') {
-      return;
+      return undefined;
     }
     const [setting] = Object.keys(measurements)
       .filter((key) => !key.includes('Featured'))
@@ -677,7 +714,11 @@ export const getAllActiveOverlaysBaselayers = createSelector(
  */
 export const memoizedAvailable = createSelector(
   [getSelectedDate, getActiveLayers, getConfigParameters],
-  (currentDate, activeLayers, parameters) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
+  (
+    currentDate,
+    activeLayers,
+    parameters,
+  ) => lodashMemoize((id) => available(id, currentDate, activeLayers, parameters)),
 );
 
 export const findEventLayers = (originalLayers, newLayers) => {
@@ -723,12 +764,10 @@ export function activateLayersForEventCategory(state, category) {
       const overlays = getLayers(state, { group: 'overlays' }, newLayers);
       newLayers = addLayer(
         id,
-        { visible },
         newLayers,
         layerConfig,
+        { visible },
         overlays.length,
-        projection,
-        null,
       );
     }
   });
@@ -828,6 +867,24 @@ export function getZotsForActiveLayers(state) {
     }
   });
   return zotObj;
+}
+
+export function getAnyOverZoom(state, zoom) {
+  const {
+    config, proj,
+  } = state;
+  let isOverZoomed = false;
+  const { sources } = config;
+  const projection = proj.selected.id;
+  lodashEach(getActiveLayersMap(state), (layer) => {
+    if (layer.projections[projection]) {
+      const overZoomValue = getZoomLevel(layer, zoom, projection, sources);
+      if (overZoomValue) {
+        isOverZoomed = true;
+      }
+    }
+  });
+  return isOverZoomed;
 }
 
 export function getMaxZoomLevelLayerCollection(layers, zoom, proj, sources) {

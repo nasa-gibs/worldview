@@ -4,7 +4,6 @@
       "id": "MODIS_Terra_EVI_8Day",
       "description": "modis/terra/MODIS_Terra_EVI_8Day",
       "group": "overlays",
-      "disableCharting": true,
       "layergroup": "Vegetation Indices"
     }
   }

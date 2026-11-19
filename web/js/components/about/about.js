@@ -1,4 +1,3 @@
-import React from 'react';
 import Scrollbar from '../util/scrollbar';
 import AboutSection from './about-section';
 

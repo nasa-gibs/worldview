@@ -1,13 +1,14 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import OlLayerGroup from 'ol/layer/Group';
+import { isEmpty } from 'ol/extent';
 import {
   get as lodashGet,
 } from 'lodash';
 import {
-  fitToLeadingExtent,
-  updateMapUI,
+  fitToLeadingExtent as fitToLeadingExtentAction,
+  updateMapUI as updateMapUIAction,
 } from '../../../modules/map/actions';
 import { getLeadingExtent } from '../../../modules/map/util';
 import {
@@ -24,8 +25,10 @@ import * as vectorStyleConstants from '../../../modules/vector-styles/constants'
 import { LOCATION_POP_ACTION } from '../../../redux-location-state-customs';
 import { EXIT_ANIMATION, STOP_ANIMATION } from '../../../modules/animation/constants';
 import { SET_SCREEN_INFO } from '../../../modules/screen-size/constants';
-import { requestPalette } from '../../../modules/palettes/actions';
+import { requestPalette as requestPaletteAction } from '../../../modules/palettes/actions';
 import usePrevious from '../../../util/customHooks';
+import { addTEMPODateRanges as addTEMPODateRangesAction } from '../../../modules/layers/actions';
+import { loadLayersWithSlots } from '../../util/util';
 
 function UpdateProjection(props) {
   const {
@@ -38,6 +41,7 @@ function UpdateProjection(props) {
     dateCompareState,
     fitToLeadingExtent,
     getGranuleOptions,
+    layerCreationQueue,
     isKioskModeActive,
     isMobile,
     layerState,
@@ -52,6 +56,7 @@ function UpdateProjection(props) {
     ui,
     renderedPalettes,
     requestPalette,
+    addTEMPODateRanges,
   } = props;
 
   const layerStateRef = useRef(layerState);
@@ -84,10 +89,15 @@ function UpdateProjection(props) {
  *
  * @param {string} compareActiveString
  * @param {string} compareDateString
- * @param {object} state object representing the layers, compare, & proj properties from global state
+ * @param {object} state object representing the layers,
+ * compare, & proj properties from global state
  * @param {object} granuleOptions object representing selected granule layer options
  */
-  async function getCompareLayerGroup([compareActiveString, compareDateString], state, granuleOptions) {
+  async function getCompareLayerGroup(
+    [compareActiveString, compareDateString],
+    state,
+    granuleOptions,
+  ) {
     const { createLayer } = ui;
     const compareSideLayers = getActiveLayers(state, compareActiveString);
     const layers = getLayers(state, { reverse: true }, compareSideLayers)
@@ -100,6 +110,9 @@ function UpdateProjection(props) {
         // Check if the layer contains a palette & load if necessary
         if (def.palette) {
           requestPalette(def.id);
+        }
+        if (def.id.includes('TEMPO')) {
+          options.tempoCallback = addTEMPODateRanges;
         }
         return createLayer(def, options);
       });
@@ -131,34 +144,65 @@ function UpdateProjection(props) {
       }
       clearLayers(saveCache);
       const defs = getLayers(layerStateRef.current, { reverse: true });
-      const layerPromises = defs.map((def) => {
-        const options = getGranuleOptions(layerStateRef.current, def, compare.activeString, granuleOptions);
-        return createLayer(def, options);
+
+      // Async loading — each layer renders as soon as it resolves.
+      await loadLayersWithSlots({
+        defs,
+        createLayer,
+        mapUI,
+        queue: saveCache ? null : layerCreationQueue,
+        skipYield: saveCache,
+        updateLayerVisibilities,
+        getLayerOptions: (def) => {
+          const options = getGranuleOptions(
+            layerStateRef.current,
+            def,
+            compare.activeString,
+            granuleOptions,
+          );
+          if (def.id.includes('TEMPO')) {
+            options.tempoCallback = addTEMPODateRanges;
+          }
+          return options;
+        },
       });
-      const layerResults = await Promise.allSettled(layerPromises);
-      const createdLayers = layerResults.filter(({ status }) => status === 'fulfilled').map(({ value }) => value);
-      mapUI?.setLayers(createdLayers);
+      return; // Exit early since we've handled the non-compare case
     } else {
       const stateArray = [['active', 'selected'], ['activeB', 'selectedB']];
       if (compare && !compare.isCompareA && compare.mode === 'spy') {
         stateArray.reverse(); // Set Layer order based on active A|B group
       }
-      clearLayers(saveCache);
-      const stateArrayGroups = stateArray.map(async (arr) => getCompareLayerGroup(arr, layerStateRef.current, granuleOptions));
-      const compareLayerGroups = await Promise.all(stateArrayGroups);
-      mapUI?.setLayers(compareLayerGroups);
-      compareMapUi.create(mapUI, compare.mode);
+      const stateArrayGroups = stateArray
+        .map(async (arr) => getCompareLayerGroup(arr, layerStateRef.current, granuleOptions));
+      // Chain onto any in-flight processingPromise so updateDate
+      // and other async callers wait for this build to finish.
+      const previousPromise = ui.processingPromise || Promise.resolve();
+      const compareLoadPromise = previousPromise
+        .catch(() => {}) // don't let a prior failure block this build
+        .then(() => Promise.all(stateArrayGroups))
+        .then((compareLayerGroups) => {
+          clearLayers(saveCache);
+          mapUI?.setLayers(compareLayerGroups);
+          compareMapUi.create(mapUI, compare.mode);
+        });
+      ui.processingPromise = compareLoadPromise;
+      await compareLoadPromise;
+      // Only clear if we're still the latest — a newer call may have chained on.
+      if (ui.processingPromise === compareLoadPromise) {
+        ui.processingPromise = null;
+      }
     }
     updateLayerVisibilities();
   }
 
   const onStopAnimation = function() {
-    const needsRefresh = activeLayers.some(({ type }) => type === 'granule' || type === 'vector');
-    if (needsRefresh) {
-      // The SELECT_DATE and STOP_ANIMATION actions happen back to back and both
-      // try to modify map layers asynchronously so we need to set a timeout to allow
-      // the updateDate() function to complete before trying to call reloadLayers() here
-      setTimeout(reloadLayers, 100);
+    // Only vector layers need a reload here for style refresh.
+    // Granule layers are already rebuilt by updateDate via SELECT_DATE.
+    const hasVectorLayers = activeLayers.some(({ type }) => type === 'vector');
+    if (hasVectorLayers) {
+      // Wait for any pending updateDate work before rebuilding.
+      const waitFor = ui.processingPromise || Promise.resolve();
+      waitFor.catch(() => {}).then(() => reloadLayers());
     }
   };
 
@@ -168,12 +212,12 @@ function UpdateProjection(props) {
  * @method hideMap
  * @static
  *
- * @param {object} map - Openlayers Map obj
+ * @param {object} mapObj - Openlayers Map obj
  *
  * @returns {void}
  */
-  function hideMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function hideMap(mapObj) {
+    const el = document.getElementById(`${mapObj.getTarget()}`);
     if (el) el.style.display = 'none';
   }
 
@@ -187,8 +231,8 @@ function UpdateProjection(props) {
  *
  * @returns {void}
  */
-  function showMap(map) {
-    const el = document.getElementById(`${map.getTarget()}`);
+  function showMap(mapObj) {
+    const el = document.getElementById(`${mapObj.getTarget()}`);
     if (el) el.style.display = 'block';
   }
 
@@ -218,10 +262,10 @@ function UpdateProjection(props) {
       hideMap(ui.selected);
     }
     ui.selected = ui.proj[proj.id];
-    const map = ui.selected;
+    const mapObj = ui.selected;
 
     const isProjectionRotatable = proj.id !== 'geographic' && proj.id !== 'webmerc';
-    const currentRotation = isProjectionRotatable ? map.getView().getRotation() : 0;
+    const currentRotation = isProjectionRotatable ? mapObj.getView().getRotation() : 0;
     const rotationStart = isProjectionRotatable ? models.map.rotation : 0;
     const rotation = start ? rotationStart : currentRotation;
 
@@ -232,9 +276,9 @@ function UpdateProjection(props) {
     // If the browser was resized, the inactive map was not notified of
     // the event. Force the update no matter what and reposition the center
     // using the previous value.
-    showMap(map);
+    showMap(mapObj);
 
-    map.updateSize();
+    mapObj.updateSize();
 
     if (ui.selected.previousCenter) {
       ui.selected.setCenter(ui.selected.previousCenter);
@@ -244,24 +288,24 @@ function UpdateProjection(props) {
       const projId = proj.selected.id;
       let extent = null;
       let callback = null;
-      if (models.map.extent) {
+      if (models.map.extent && !isEmpty(models.map.extent)) {
         extent = models.map.extent;
       } else if (!models.map.extent && projId === 'geographic') {
         extent = getLeadingExtent(config.pageLoadTime);
         callback = () => {
-          const view = map.getView();
-          const extent = view.calculateExtent(map.getSize());
-          fitToLeadingExtent(extent);
+          const view = mapObj.getView();
+          const calculatedExtent = view.calculateExtent(mapObj.getSize());
+          fitToLeadingExtent(calculatedExtent);
         };
       }
       if (projId !== 'geographic') {
         callback = () => {
-          const view = map.getView();
+          const view = mapObj.getView();
           view.setRotation(rotationStart);
         };
       }
       if (extent) {
-        map.getView().fit(extent, {
+        mapObj.getView().fit(extent, {
           constrainResolution: false,
           callback,
         });
@@ -290,7 +334,7 @@ function UpdateProjection(props) {
     const zoom = ui.selected.getView().getZoomForResolution(resolution);
     // Animate to extent, zoom & rotate:
     // Don't animate when an event is selected (Event selection already animates)
-    return fly(ui.selected, proj, coordinates, zoom, rotation, isKioskModeActive);
+    return fly(ui.selected, proj, coordinates, isKioskModeActive, zoom, rotation);
   };
 
   const actionSwitch = () => {
@@ -307,7 +351,7 @@ function UpdateProjection(props) {
           if (newState.v && !newState.e && extent) {
             flyToNewExtent(extent, rotate);
           }
-        }, 200); return;
+        }, 200); return undefined;
       }
       case layerConstants.UPDATE_GRANULE_LAYER_OPTIONS: {
         const granuleOptions = {
@@ -323,21 +367,23 @@ function UpdateProjection(props) {
         };
         return reloadLayers(granuleOptions);
       }
+      case layerConstants.UPDATE_DAY_COUNT:
+        return reloadLayers();
       case compareConstants.CHANGE_STATE:
         if (compareMode === 'spy') {
           return reloadLayers();
         }
-        return;
+        return undefined;
       case layerConstants.REORDER_LAYERS:
       case layerConstants.REORDER_OVERLAY_GROUPS:
       case compareConstants.TOGGLE_ON_OFF:
       case compareConstants.CHANGE_MODE:
         reloadLayers();
         preloadForCompareMode();
-        return;
+        return undefined;
       case layerConstants.TOGGLE_OVERLAY_GROUPS:
         return reloadLayers();
-      case paletteConstants.SET_THRESHOLD_RANGE_AND_SQUASH:
+      case paletteConstants.SET_THRESHOLD_RANGE_SQUASH_AND_NOCLIP:
       case paletteConstants.SET_CUSTOM:
       case paletteConstants.SET_DISABLED_CLASSIFICATION:
       case paletteConstants.CLEAR_CUSTOM:
@@ -351,6 +397,7 @@ function UpdateProjection(props) {
       default:
         break;
     }
+    return undefined;
   };
 
   useEffect(() => {
@@ -380,18 +427,25 @@ function UpdateProjection(props) {
     .map((layer) => layer.granuleDateRanges);
 
   const prevActiveLayers = usePrevious(activeLayers);
-  const [selectedDate, setSelectedDate] = useState(dateCompareState.date.selected);
+  const prevActiveString = usePrevious(compare.activeString);
 
   useEffect(() => {
     if (!ui.selected) return;
+    // Skip reload on A↔B tab switch — handled by CHANGE_STATE in actionSwitch.
+    if (compare.active && compare.activeString !== prevActiveString) return;
+
     const prevL2Layers = selectL2Layers(prevActiveLayers);
     const activeL2Layers = selectL2Layers(activeLayers);
-    // Check if new date ranges have been added to L2 layers. We don't want to reload every time new ranges are added so also check if there were no ranges before.
-    const hasNewDateRanges = activeL2Layers.some((dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length) && prevL2Layers.includes(undefined);
-    const hasNewLayers = prevActiveLayers.length !== activeLayers.length; // Check if new layers have been added
-    const hasNewDate = selectedDate !== dateCompareState.date.selected; // Check if the date has changed
-    const needsReload = hasNewDateRanges || hasNewLayers || hasNewDate;
-    setSelectedDate(dateCompareState.date.selected);
+    // Check if new date ranges have been added to L2 layers.
+    // We don't want to reload every time new ranges are added so
+    // also check if there were no ranges before.
+    const hasNewDateRanges = activeL2Layers.some(
+      (dateRange, i) => dateRange?.length !== prevL2Layers[i]?.length,
+    ) && prevL2Layers.includes(undefined);
+    // Check if new layers have been added
+    const hasNewLayers = prevActiveLayers.length !== activeLayers.length;
+    // Date changes are handled by updateDate, not here.
+    const needsReload = hasNewDateRanges || hasNewLayers;
     if (needsReload) {
       reloadLayers(null, true);
     }
@@ -422,19 +476,21 @@ const mapStateToProps = (state) => {
     proj,
     map,
     renderedPalettes,
-    requestPalette,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   fitToLeadingExtent: (extent) => {
-    dispatch(fitToLeadingExtent(extent));
+    dispatch(fitToLeadingExtentAction(extent));
   },
   updateMapUI: (ui, rotation) => {
-    dispatch(updateMapUI(ui, rotation));
+    dispatch(updateMapUIAction(ui, rotation));
   },
   requestPalette: (id) => {
-    dispatch(requestPalette(id));
+    dispatch(requestPaletteAction(id));
+  },
+  addTEMPODateRanges: (layer, dateRanges, activeString) => {
+    dispatch(addTEMPODateRangesAction(layer, dateRanges, activeString));
   },
 });
 
@@ -447,11 +503,13 @@ UpdateProjection.propTypes = {
   action: PropTypes.object,
   activeLayers: PropTypes.array,
   compare: PropTypes.object,
+  compareMode: PropTypes.string,
   compareMapUi: PropTypes.object,
   config: PropTypes.object,
   dateCompareState: PropTypes.object,
   fitToLeadingExtent: PropTypes.func,
   getGranuleOptions: PropTypes.func,
+  layerCreationQueue: PropTypes.object,
   isKioskModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   layerState: PropTypes.object,
@@ -463,7 +521,8 @@ UpdateProjection.propTypes = {
   ui: PropTypes.object,
   updateExtent: PropTypes.func,
   updateLayerVisibilities: PropTypes.func,
-  updateMapUi: PropTypes.func,
+  updateMapUI: PropTypes.func,
   renderedPalettes: PropTypes.object,
   requestPalette: PropTypes.func,
+  addTEMPODateRanges: PropTypes.func,
 };

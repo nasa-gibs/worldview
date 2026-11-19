@@ -1,66 +1,53 @@
-
-import React from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-class Tooltip extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovered: false,
-    };
+function Tooltip(props) {
+  const {
+    onClick,
+    text,
+    dataArray,
+  } = props;
+
+  const [hovered, setHovered] = useState(false);
+
+  function mouseOver() {
+    setHovered(true);
   }
 
-  mouseOver() {
-    this.setState({
-      hovered: true,
-    });
+  function mouseOut() {
+    setHovered(false);
   }
 
-  mouseOut() {
-    this.setState({
-      hovered: false,
-    });
-  }
-
-  onClick(str) {
-    const { onClick } = this.props;
-    onClick(str);
-  }
-
-  render() {
-    const { text, dataArray } = this.props;
-    const { hovered } = this.state;
-    return (
+  return (
+    <div
+      onMouseEnter={mouseOver}
+      onMouseLeave={mouseOut}
+      className="wv-tooltip-case"
+    >
+      <span>{text}</span>
       <div
-        onMouseEnter={this.mouseOver.bind(this)}
-        onMouseLeave={this.mouseOut.bind(this)}
-        className="wv-tooltip-case"
+        className="wv-tooltip"
+        style={hovered ? { visibility: 'visible' } : {}}
       >
-        <span>{text}</span>
-        <div
-          className="wv-tooltip"
-          style={hovered ? { visibility: 'visible' } : {}}
-        >
-          <ul>
-            {dataArray.map((dataEl, i) => (
-              <li
-                /* eslint react/no-array-index-key: 1 */
-                key={`tooltip-${dataEl}-${i}`}
-                id={dataEl}
-                onClick={this.onClick.bind(this, dataEl)}
-              >
-                {dataEl}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ul>
+          {dataArray.map((dataEl, i) => (
+            <li
+              /* eslint react/no-array-index-key: 1 */
+              key={`tooltip-${dataEl}-${i}`}
+              id={dataEl}
+              onClick={(dataEl) => onClick(dataEl)}
+            >
+              {dataEl}
+            </li>
+          ))}
+        </ul>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 Tooltip.propTypes = {
-  dataArray: PropTypes.array.isRequired,
+  dataArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 };

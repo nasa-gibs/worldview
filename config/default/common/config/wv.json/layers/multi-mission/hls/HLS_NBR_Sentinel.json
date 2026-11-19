@@ -5,7 +5,7 @@
       "enableCMRDataFinder": true,
       "collectionConceptID": "C2021957295-LPCLOUD",
       "title": "Normalized Burn Ratio (NBR) *BETA*",
-      "subtitle": "Sentinel-2 / MSI",
+      "subtitle": "HLS Sentinel-2 / MSI",
       "description": "multi-mission/hls/HLS_NBR_Sentinel",
       "tags": "surface Sentinel msi s30 nbr 2A 2B 2C",
       "group": "overlays",
@@ -22,7 +22,6 @@
         "colormap_name": "puor",
         "bands_regex": "B[0-9][0-9A-Za-z]"
       },
-      "disableSnapshot": true,
       "minZoom": 7,
       "wrapX": false,
       "projections": {
@@ -31,7 +30,7 @@
           "matrixSet": "31.25m"
         }
       },
-      "startDate": "2022-01-01T00:00:00Z"
+      "startDate": "2015-11-28T00:00:00Z"
     }
   }
 }

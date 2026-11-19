@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Draggable from 'react-draggable';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,13 +10,14 @@ import TimeScaleIntervalChange from '../../components/timeline/timeline-controls
 import CustomIntervalSelector from '../../components/timeline/custom-interval-selector/custom-interval-selector';
 
 function DesktopAnimationWidget(props) {
+  const nodeRef = useRef(null);
   const {
     animationCustomModalOpen,
-    autoplay,
     customModalType,
     endDate,
     handleDragStart,
     hasSubdailyLayers,
+    hasTempoProduct,
     interval,
     isDistractionFreeModeActive,
     isPlaying,
@@ -49,10 +50,11 @@ function DesktopAnimationWidget(props) {
     onSlide(speed);
   };
 
-  const hideWidget = autoplay || isDistractionFreeModeActive ? 'd-none' : '';
+  const hideWidget = isDistractionFreeModeActive ? 'd-none' : '';
 
   return (
     <Draggable
+      nodeRef={nodeRef}
       bounds="body"
       cancel={cancelSelector}
       handle=".wv-animation-widget-header"
@@ -60,7 +62,7 @@ function DesktopAnimationWidget(props) {
       onDrag={onExpandedDrag}
       onStart={handleDragStart}
     >
-      <div className={`wv-animation-widget-wrapper ${hideWidget}`}>
+      <div ref={nodeRef} className={`wv-animation-widget-wrapper ${hideWidget}`}>
         <div
           id="wv-animation-widget"
           className={`wv-animation-widget${subDailyMode ? ' subdaily' : ''}`}
@@ -70,6 +72,7 @@ function DesktopAnimationWidget(props) {
             <TimeScaleIntervalChange
               timeScaleChangeUnit={interval}
               hasSubdailyLayers={hasSubdailyLayers}
+              hasTempoProduct={hasTempoProduct}
               modalType={customModalType.ANIMATION}
               isDisabled={isPlaying}
             />
@@ -135,17 +138,17 @@ function DesktopAnimationWidget(props) {
 
 DesktopAnimationWidget.propTypes = {
   animationCustomModalOpen: PropTypes.bool,
-  autoplay: PropTypes.bool,
-  customModalType: PropTypes.object,
-  endDate: PropTypes.object,
+  customModalType: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  endDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   handleDragStart: PropTypes.func,
   hasSubdailyLayers: PropTypes.bool,
+  hasTempoProduct: PropTypes.bool,
   interval: PropTypes.string,
   isDistractionFreeModeActive: PropTypes.bool,
   isPlaying: PropTypes.bool,
   looping: PropTypes.bool,
-  maxDate: PropTypes.object,
-  minDate: PropTypes.object,
+  maxDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  minDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   numberOfFrames: PropTypes.number,
   onClose: PropTypes.func,
   onDateChange: PropTypes.func,
@@ -159,9 +162,9 @@ DesktopAnimationWidget.propTypes = {
   setSpeed: PropTypes.func,
   sliderLabel: PropTypes.string,
   speed: PropTypes.number,
-  startDate: PropTypes.object,
+  startDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   subDailyMode: PropTypes.bool,
-  widgetPosition: PropTypes.object,
+  widgetPosition: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   zeroDates: PropTypes.func,
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { toggleActiveCompareState as toggleActiveCompareStateAction } from '../../modules/compare/actions';
@@ -31,18 +31,20 @@ function MobileComparisonToggle (props) {
 
   return (
     <div className="comparison-mobile-select-toggle">
-      <div
+      <button
         className={`compare-toggle-selected-btn ${classA}`}
         onClick={() => toggleCompareASelected(true)}
+        type="button"
       >
         A
-      </div>
-      <div
+      </button>
+      <button
         className={`compare-toggle-selected-btn ${classB}`}
         onClick={() => toggleCompareASelected(false)}
+        type="button"
       >
         B
-      </div>
+      </button>
     </div>
   );
 }

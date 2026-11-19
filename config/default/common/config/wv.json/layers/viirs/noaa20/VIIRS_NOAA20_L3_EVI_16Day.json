@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "VIIRS_NOAA20_L3_EVI_16Day": {
+      "id": "VIIRS_NOAA20_L3_EVI_16Day",
+      "description": "viirs/noaa20/VIIRS_NOAA20_L3_EVI_16Day",
+      "group": "overlays",
+      "layergroup": "Vegetation Indices"
+    }
+  }
+}

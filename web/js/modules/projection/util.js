@@ -23,13 +23,19 @@ export function parseProjection(str, config) {
  * @param {Object} stateFromLocation | State derived from permalink parsers
  * @param {Object} state | initial state before location POP action
  */
-export function mapLocationToProjState(parameters, stateFromLocation, state) {
+export function mapLocationToProjState(parameters, stateFromLocationObj, state) {
+  let stateFromLocation = stateFromLocationObj;
   const projId = lodashGet(stateFromLocation, 'proj.id');
   if (parameters.p) {
     const selected = lodashGet(state, `config.projections.${projId}`);
     if (selected) {
       stateFromLocation = update(stateFromLocation, {
-        proj: { selected: { $set: selected } },
+        proj: {
+          $set: {
+            ...(lodashGet(stateFromLocation, 'proj') || {}),
+            selected,
+          },
+        },
       });
     }
   } else if (parameters.switch) {
@@ -45,7 +51,12 @@ export function mapLocationToProjState(parameters, stateFromLocation, state) {
   } else {
     const selected = lodashGet(state, 'config.projections.geographic');
     stateFromLocation = update(stateFromLocation, {
-      proj: { selected: { $set: selected } },
+      proj: {
+        $set: {
+          ...(lodashGet(stateFromLocation, 'proj') || {}),
+          selected,
+        },
+      },
     });
   }
   return stateFromLocation;

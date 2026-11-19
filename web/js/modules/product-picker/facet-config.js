@@ -1,4 +1,3 @@
-
 /**
  * @field - Property name to build this facet on
  * @label - Label text to show for this facet in the UI

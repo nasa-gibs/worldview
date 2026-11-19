@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import {
   UncontrolledTooltip,
@@ -38,7 +37,7 @@ HoverTooltip.defaultProps = {
 };
 
 HoverTooltip.propTypes = {
-  delay: PropTypes.object,
+  delay: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   fade: PropTypes.bool,
   innerClassName: PropTypes.string,
   isMobile: PropTypes.bool,

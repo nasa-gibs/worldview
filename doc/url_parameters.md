@@ -9,8 +9,9 @@
 |  | string | *`layer_id(`**`opacity`**`=value)`* | If present, assigns an opacity value to a layer where `layer_id` is the identifier of the layer, as defined in the configuration file, and `value` is a real number in the range of 0 to 1 where 0 is fully transparent and 1 is fully opaque. Any number of layer to opacity value mappings may be specified. |
 |  | string | *`layer_id(`**`palettes`**`=value1,value2,..,valueN)`* | If `palettes` is present, a custom palette will be assigned to a raster layer where `layer_id` is the identifier of the layer and `value` is the identifier of the palette, as defined in the configuration file. Any number of raster layer to palette mappings may be specified. |
 |  | string | *`layer_id(`**`squash`**`)`* | If `squash` is present and a `min` or `max` value is set, the palette will start or end at the designated min/max values and the palette will adjust to these bounds. |
-|  | string | *`layer_id(`**`min`**`=value1,value2)`* | If `min` is present, the raster layer `palettes` will start at the defined value. This value can be paired with `max` and `squash` to customize the entire palette range. |
-|  | string | *`layer_id(`**`max`**`=value1,value2)`* | If `max` is present, the raster layer `palettes` will end at the defined value. This value can be paired with `min` and `squash` to customize the entire palette range. |
+|  | string | *`layer_id(`**`noclip`**`)`* | If `noclip` is present and a `min` or `max` value is set, the palette will start or end at the designated min/max values and the palette outside the designated min/max will be shown in the palette's edge color. |
+|  | string | *`layer_id(`**`min`**`=value1,value2)`* | If `min` is present, the raster layer `palettes` will start at the defined value. This value can be paired with `max`, `squash`, and `noclip` to customize the entire palette range. |
+|  | string | *`layer_id(`**`max`**`=value1,value2)`* | If `max` is present, the raster layer `palettes` will end at the defined value. This value can be paired with `min`, `squash`, and `noclip` to customize the entire palette range. |
 |  | string | *`layer_id(`**`style`**`=value)`* | If `style` is present, a custom vector style, will be assigned to a vector layer where `layer_id` is the identifier of the layer and `value` is the identifier of the vector style, as defined in the configuration file. |
 | `lg` (`lg1` for B state) | boolean | <i>`true`</i> or <i>`false`</i> | If `false`, layers are not grouped. If this parameter is absent, it is considered `true` and layers will be grouped |
 | `t` (`t1` for B state) | date | *`YYYY-MM-DD-Thh:mm:ssZ`* | Selected UTC day and time.\*\* |
@@ -45,6 +46,7 @@
 | `em` | boolean | <i>`true`</i> or <i>`false`</i> | If `true` value is set, embed mode will be activated. Embed mode is disabled by default. |
 | `tr` | string | *`tour_id`* | The id of the tour story to load. Stories will load from step 1. |
 | `abt` | string | *`on`* | Indicates whether the about modal is open or not. Allows for permalinks that have the about page open |
+| `rt` | string | *`duration`* | The relative time duration (from the current date) to set the selected Date & Time to (within permalinks). Expects the duration in ISO 8601 Duration format (`PnYnMnDTnHnMnS` or `PnW`) |
 
 \* *1 = yearly, 2 = monthly, 3 = daily, 4 = hourly, and 5 = minutely. The subdaily zoom levels (4 & 5) will only be available when subdaily layers are active.*
 

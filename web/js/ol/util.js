@@ -227,7 +227,11 @@ const parsePNG = async (buffer) => {
   if (!ihdrChunk) throw new Error('Missing IHDR chunk');
 
   // Parse IHDR data
-  const ihdrView = new DataView(ihdrChunk.data.buffer, ihdrChunk.data.byteOffset, ihdrChunk.data.byteLength);
+  const ihdrView = new DataView(
+    ihdrChunk.data.buffer,
+    ihdrChunk.data.byteOffset,
+    ihdrChunk.data.byteLength,
+  );
   const width = ihdrView.getUint32(0, false);
   const height = ihdrView.getUint32(4, false);
   const bitDepth = ihdrView.getUint8(8);
@@ -249,8 +253,17 @@ const parsePNG = async (buffer) => {
 
   // Create indexed data if this is an indexed color PNG
   let indexedData = null;
-  // For true indexed PNGs, the pixel data is already indices. We'll need to extract it from the canvas data
-  if (isIndexed && palette) indexedData = extractIndexedData(pixels, palette, width, height, alphaValues);
+  // For true indexed PNGs, the pixel data is already indices.
+  // We'll need to extract it from the canvas data
+  if (isIndexed && palette) {
+    indexedData = extractIndexedData(
+      pixels,
+      palette,
+      width,
+      height,
+      alphaValues,
+    );
+  }
 
   const tabsObj = {
     PLTE: palette,

@@ -41,5 +41,4 @@ See the [end-to-end testing](e2e_testing.md) page for more information on how to
 | `mockAlerts` | string | *`alert`*, *`message`*, *`outage`*, *`no_types`*, or *`all_types`* | Use a static JSON file by passing the notification type. Local sources can be found at mock/notify_{string}.json |
 | `now` | date | *`YYYY-MM-DDThh:mm:ssZ`* | Overrides the current date and time. This can be accessed on `config.initialDate` or `state.date.appNow`. |
 | `showError` | boolean | *`true` or `false`* | If any value is specified, an error dialog will be shown on startup. |
-| `notificationURL` | string | `https://testing.url.com` | Overrides the notification URL found in the features.json configuration file. |
-| `imageDownload` | string | `https://wvs.earthdata.nasa.gov/api/v1/snapshot` | Overrides the image download URL
+| `notificationURL` | string | `https://testing.url.com` | Overrides the domain url param sent along with the notification URL found in the features.json configuration file. |

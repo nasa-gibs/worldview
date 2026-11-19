@@ -1,0 +1,43 @@
+.wv-radio {
+  & input[type="radio"] {
+    margin: 3px 0;
+    vertical-align: middle;
+  }
+
+  input {
+    appearance: none !important;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #b5b5b7;
+    border-radius: 50%;
+    background: none;
+    position: relative;
+    cursor: pointer;
+  }
+
+
+  label {
+    color: #fff;
+    cursor: pointer;
+
+    span {
+      line-height: 22px;
+    }
+  }
+}
+
+.wv-radio.checked input {
+  appearance: none !important;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #eee;
+  border-radius: 50%;
+  background: #1d67e3;
+  box-shadow: 0 0 0 1px #1d67e3;
+  position: relative;
+  margin: 3px 1px;
+}
+
+.wv-radio.gray label {
+  color: #666;
+}

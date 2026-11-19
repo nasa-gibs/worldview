@@ -97,7 +97,6 @@ export default function mapModel(models, config) {
     }
     // get rotation if it exists
     if (state.p === 'arctic' || state.p === 'antarctic') {
-      // eslint-disable-next-line no-restricted-globals
       if (!isNaN(state.r)) {
         self.rotation = state.r * (Math.PI / 180.0);
       } // convert to radians
@@ -113,17 +112,18 @@ export default function mapModel(models, config) {
    * @method save
    * @static
    *
-   * @param state {object} map state object from permalink
+   * @param stateObj {object} map state object from permalink
    *
    *
    * @returns {void}
    */
-  self.save = function(state) {
+  self.save = function(stateObj) {
+    const state = stateObj;
     state.v = lodashClone(self.extent);
     if (
-      self.rotation !== 0.0
-      && self.rotation !== 0
-      && models.proj.selected.id !== 'geographic'
+      self.rotation !== 0.0 &&
+      self.rotation !== 0 &&
+      models.proj.selected.id !== 'geographic'
     ) {
       state.r = (self.rotation * (180.0 / Math.PI)).toPrecision(6);
     } // convert from radians to degrees

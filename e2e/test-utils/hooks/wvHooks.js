@@ -20,6 +20,7 @@ const clickDownload = async (page) => {
 
 const closeImageDownloadPanel = async (page) => {
   await page.locator('.modal-close-btn').click()
+  await page.waitForTimeout(250)
 }
 
 const zoomIn = async (page) => {
@@ -62,19 +63,19 @@ const dateSelectorMonthDay = async (page) => {
 const assertDefaultLayers = async (page) => {
   const layerItem = page.locator('.item.productsitem')
   const refLabels = page.locator('#active-Reference_Labels_15m')
-  const refFeatures = page.locator('#active-Reference_Features_15m')
+  const refFeatures = page.locator('#active-DoS_International_Boundaries')
+  const refFeatures2 = page.locator('#active-Admin_Boundaries')
   const coastlines = page.locator('#active-Coastlines_15m')
   const trueColorNOAA21 = page.locator('#active-VIIRS_NOAA21_CorrectedReflectance_TrueColor')
-  const trueColorSNPP = page.locator('#active-VIIRS_SNPP_CorrectedReflectance_TrueColor')
   const trueColorAqua = page.locator('#active-MODIS_Aqua_CorrectedReflectance_TrueColor')
   const trueColorMODIS = page.locator('#active-MODIS_Terra_CorrectedReflectance_TrueColor')
   const trueColorNOAA20 = page.locator('#active-VIIRS_NOAA20_CorrectedReflectance_TrueColor')
   await expect(layerItem).toHaveCount(9)
   await expect(refLabels).toBeVisible()
   await expect(refFeatures).toBeVisible()
+  await expect(refFeatures2).toBeVisible()
   await expect(coastlines).toBeVisible()
   await expect(trueColorNOAA21).toBeVisible()
-  await expect(trueColorSNPP).toBeVisible()
   await expect(trueColorAqua).toBeVisible()
   await expect(trueColorMODIS).toBeVisible()
   await expect(trueColorNOAA20).toBeVisible()
@@ -134,6 +135,7 @@ const createDistanceMeasurement = async (page, start, finish) => {
   await page.locator('#wv-measure-button').click()
   await page.locator('#measure-distance-button').click()
   await page.mouse.click(start[0], start[1])
+  await page.waitForTimeout(250)
   await page.mouse.dblclick(finish[0], finish[1])
 }
 
@@ -154,7 +156,7 @@ const localStorageEnabled = () => {
       enabled = window.localStorage.getItem(uid) === uid
       window.localStorage.removeItem(uid)
     }
-  } catch (error) {
+  } catch {
     enabled = false
   }
   return !!enabled

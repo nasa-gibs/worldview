@@ -17,7 +17,11 @@ import {
   getLookup as getPaletteLookup,
 } from '../palettes/selectors';
 import util from '../../util/util';
+import { fetchVectorstyle } from '../layers/util';
 
+// Array of vector layer IDs to have their vectorstyle live fetched from `web/config`
+// * For use in local dev environment only *
+const liveFetchLayers = [];
 
 /**
  * Get OpenLayers layers from state that were created from WV vector
@@ -56,14 +60,13 @@ export function getAllVectorStyles(layerId, index, state) {
 /**
  * Gets a single colormap (entries / legend combo)
  *
- * @param str {string} The ID of the layer
- * @param number {Number} The index of the colormap for this layer, default 0
+ * @param layerId {string} The ID of the layer
+ * @param index {Number} The index of the colormap for this layer, default 0
  * object.
  * @return {object} object including the entries and legend
  */
-export function getVectorStyle(layerId, index, groupStr, state) {
-  groupStr = groupStr || state.compare.activeString;
-  index = lodashIsUndefined(index) ? 0 : index;
+export function getVectorStyle(layerId, indexInt, state) {
+  const index = lodashIsUndefined(indexInt) ? 0 : indexInt;
   const renderedVectorStyle = lodashGet(
     state,
     `vectorStyles.${layerId}.layers.${index}`,
@@ -74,21 +77,23 @@ export function getVectorStyle(layerId, index, groupStr, state) {
   return getAllVectorStyles(layerId, index, state);
 }
 
-export function findIndex(layerId, type, value, index, groupStr, state) {
+export function findIndex(layerId, type, value, indexInt, state) {
+  let index = indexInt;
   index = index || 0;
-  const { values } = getVectorStyle(layerId, index, groupStr, state).entries;
+  const { values } = getVectorStyle(layerId, index, state).entries;
   let result;
-  lodashEach(values, (check, index) => {
+  lodashEach(values, (check, indexArg) => {
     const min = getMinValue(check);
     const max = getMaxValue(check);
     if (type === 'min' && value === min) {
-      result = index;
+      result = indexArg;
       return false;
     }
     if (type === 'max' && value === max) {
-      result = index;
+      result = indexArg;
       return false;
     }
+    return true;
   });
   return result;
 }
@@ -156,7 +161,8 @@ const shouldRenderFeature = (feature, acceptableExtent) => {
  * @param {Object} layer | OL layer object
  * @param {Object} options | Layer options object
  * @param {Object} state | The entire state of the application
- * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with vector feature
+ * @param {Boolean} styleSelection | Indicates if the request is triggered by user interaction with
+ * vector feature
  */
 export function setStyleFunction(opts) {
   let { layer } = opts;
@@ -168,12 +174,13 @@ export function setStyleFunction(opts) {
     state,
     vectorStyleSource,
     styleSelection = false,
+    manualStyle,
   } = opts;
   const map = lodashGet(state, 'map.ui.selected');
-  if (!map) return;
+  if (!map) return undefined;
   const { proj } = state;
   const { selected } = state.vectorStyles;
-  const { resolutions } = proj.selected;
+  const resolutions = opts.resolutions || proj.selected.resolutions;
   const layerId = def.id;
   const styleId = lodashGet(def, `vectorStyle.${proj.id}.id`) || vectorStyleId || lodashGet(def, 'vectorStyle.id') || layerId;
   const customPalette = def.custom;
@@ -191,6 +198,10 @@ export function setStyleFunction(opts) {
     }
   }
 
+  if (manualStyle) {
+    glStyle = manualStyle;
+  }
+
   // De-reference the glState object prior to applying the palette to the layer
   glStyle = lodashCloneDeep(glStyle);
 
@@ -203,7 +214,7 @@ export function setStyleFunction(opts) {
   }
 
   if (!layer || layer.isWMS || glStyle === undefined) {
-    return;
+    return undefined;
   }
 
   // This is required to bust the openlayers functionCache
@@ -222,11 +233,12 @@ export function setStyleFunction(opts) {
   // Process style of feature selected/clicked in UI
   if ((glStyle.name !== 'Orbit Tracks') && selectedFeatures) {
     const extentStartX = layer.getExtent()[0];
+    const fallbackExtent = extentStartX === -250
+      ? [110, -90, 180, 90]
+      : null;
     const acceptableExtent = extentStartX === 180
       ? [-180, -90, -110, 90]
-      : extentStartX === -250
-        ? [110, -90, 180, 90]
-        : null;
+      : fallbackExtent;
 
     layer.setStyle((feature, resolution) => {
       const data = state.config.vectorData[def.vectorData.id];
@@ -240,25 +252,70 @@ export function setStyleFunction(opts) {
         }
         return styleFunction(feature, resolution);
       }
+      return undefined;
     });
   }
+
+  // Modify Sea Ice Motion points to symbols (triangle) indicating the direction of motion
+  if (glStyle.name === 'AMSRU2_Sea_Ice_Motion_12km') {
+    const targetColor = glStyle.layers[0].paint?.['circle-color'] || glStyle.layers[0].paint?.['line-color'];
+    glStyle.layers = glStyle.layers.flatMap(layer => {
+      if (layer.id.includes('_Point')) {
+        layer.type = 'symbol';
+        layer.paint = { 'text-color': targetColor };
+        layer.layout = {
+          'text-field': '\u25B4', // triangle pointing right
+          'text-size': 35,
+        };
+        layer.filter = ['==', ['get', 'type'], 'endpoint'];
+      }
+      return [layer];
+    });
+
+    layer.setStyle((feature, resolution) => {
+      const styles = styleFunction(feature, resolution);
+
+      if (feature.getGeometry().getType() === 'Point') {
+        const props = feature.getProperties();
+        const dx = props.end_x_projected - props.start_x_projected;
+        const dy = props.end_y_projected - props.start_y_projected;
+
+        const rotation = Math.atan2(dx, dy);
+
+        if (styles) {
+          const stylesArray = Array.isArray(styles) ? styles : [styles];
+          stylesArray.forEach(style => {
+            const text = style.getText();
+            if (text && typeof text.setRotation === 'function') {
+              text.setRotation(rotation);
+            }
+          });
+          return stylesArray;
+        }
+      }
+      return styles;
+    });
+  };
 
   return vectorStyleId;
 }
 
-export function isActive(layerId, group, state) {
+export function isActive(layerId, groupObj, state) {
+  let group = groupObj;
   group = group || state.compare.activeString;
   if (state.vectorStyles.custom[layerId]) {
     return state.vectorStyles[group][layerId];
   }
+  return undefined;
 }
 
-export function getKey(layerId, groupStr, state) {
+export function getKey(layerId, group, state) {
+  let groupStr = group;
   groupStr = groupStr || state.compare.activeString;
   if (!isActive(layerId, groupStr, state)) {
     return '';
   }
-  const def = getVectorStyle(layerId, undefined, groupStr, state);
+  const def = getVectorStyle(layerId, undefined, state);
   const keys = [];
   if (def.custom) {
     keys.push(`style=${def.custom}`);
@@ -272,7 +329,8 @@ export function getKey(layerId, groupStr, state) {
   return keys.join(',');
 }
 
-export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, state) {
+export function clearStyleFunction(def, vectorStyleId, vectorStyles, layerObj, state) {
+  let layer = layerObj;
   const layerId = def.id;
   const glStyle = vectorStyles[layerId];
   const olMap = lodashGet(state, 'legacy.map.ui.selected');
@@ -295,6 +353,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
       if ((minute && minute[1] % 5 === 0) || feature.getGeometry().getType() === 'LineString') {
         return styleFunction(feature, resolution);
       }
+      return undefined;
     });
   }
   return update(vectorStyles, { layerId: { maps: { $unset: ['custom'] } } });
@@ -307,7 +366,7 @@ export function clearStyleFunction(def, vectorStyleId, vectorStyles, layer, stat
  * @param {Object} state
  * @param {Object} options
  */
-export const applyStyle = (def, olVectorLayer, state, options) => {
+export const applyStyle = async (def, olVectorLayer, state, options, resolutions) => {
   const { config } = state;
   const { vectorStyles } = config;
   const vectorStyleId = def.vectorStyle.id;
@@ -325,7 +384,16 @@ export const applyStyle = (def, olVectorLayer, state, options) => {
     state,
     vectorStyleSource,
     styleSelection: false,
+    ...resolutions && { resolutions },
   };
+
+  // Fetch live vectorstyle if layer is in liveFetchLayers
+  if (liveFetchLayers.includes(def.id)) {
+    const fetchedStyle = await fetchVectorstyle(def.id);
+    if (fetchedStyle) {
+      opts.manualStyle = fetchedStyle;
+    }
+  }
 
   setStyleFunction(opts);
 };

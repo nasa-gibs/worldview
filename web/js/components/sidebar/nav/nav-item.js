@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import { NavItem, NavLink } from 'reactstrap';
 import HoverTooltip from '../../util/hover-tooltip';
@@ -19,10 +18,10 @@ function CustomNavItem(props) {
   return (
     <NavItem
       style={
-          shouldHideInMobile && isMobile
-            ? { display: 'none' }
-            : { display: 'block' }
-        }
+        shouldHideInMobile && isMobile
+          ? { display: 'none' }
+          : { display: 'block' }
+      }
     >
       <NavLink
         disabled={isDisabled}

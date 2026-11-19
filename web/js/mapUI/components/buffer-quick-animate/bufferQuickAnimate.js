@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { getNumberStepsBetween, getNextDateTime } from '../../../modules/date/util';
 import { getSelectedDate } from '../../../modules/date/selectors';
 import { promiseImageryForTime } from '../../../modules/map/util';
-import { setPreload } from '../../../modules/date/actions';
+import { setPreload as setPreloadAction } from '../../../modules/date/actions';
 
 function BufferQuickAnimate(props) {
   const {
@@ -22,7 +22,9 @@ function BufferQuickAnimate(props) {
     const preloadPromises = [];
     const selectedDate = getSelectedDate(dateCompareState);
     const dateState = { date };
-    const currentBuffer = preloaded ? getNumberStepsBetween(dateState, selectedDate, lastPreloadDate) : 0;
+    const currentBuffer = preloaded
+      ? getNumberStepsBetween(dateState, selectedDate, lastPreloadDate)
+      : 0;
 
     if (currentBuffer >= BUFFER_SIZE) {
       return;
@@ -72,7 +74,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   setPreload: (preloaded, lastPreloadDate) => {
-    dispatch(setPreload(preloaded, lastPreloadDate));
+    dispatch(setPreloadAction(preloaded, lastPreloadDate));
   },
 });
 
@@ -82,11 +84,11 @@ export default connect(
 )(BufferQuickAnimate);
 
 BufferQuickAnimate.propTypes = {
-  action: PropTypes.object,
-  date: PropTypes.object,
-  dateCompareState: PropTypes.object,
-  lastPreloadDate: PropTypes.object,
+  action: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  date: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  dateCompareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  lastPreloadDate: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   preloaded: PropTypes.bool,
-  promiseImageryState: PropTypes.object,
+  promiseImageryState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   setPreload: PropTypes.func,
 };

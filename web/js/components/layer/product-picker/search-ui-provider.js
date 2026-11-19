@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -9,26 +9,28 @@ import {
 } from '../../../modules/product-picker/actions';
 import ProductPicker from './product-picker';
 
+function SearchUiProvider(props) {
+  const {
+    initState,
+    searchConfig,
+  } = props;
 
-class SearchUiProvider extends React.Component {
-  componentDidMount() {
-    const { initState } = this.props;
+  useEffect(() => {
     initState();
-  }
+  }, []);
 
-  render() {
-    const { searchConfig } = this.props;
-    return !searchConfig ? null : (
+  return !searchConfig
+    ? null
+    : (
       <SearchProvider config={searchConfig}>
         <ProductPicker />
       </SearchProvider>
     );
-  }
 }
 
 SearchUiProvider.propTypes = {
   initState: PropTypes.func,
-  searchConfig: PropTypes.object,
+  searchConfig: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
 };
 
 const mapDispatchToProps = (dispatch) => ({

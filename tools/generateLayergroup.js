@@ -46,7 +46,7 @@ function setLayerProp (layer, prop, value) {
 
 function generateMeasurements (layers, measurementsConfig) {
   _.forEach(measurementsConfig, (measureObj, measureKey) => {
-    _.forEach(measureObj.sources, ({ settings = [] }, sourceKey) => {
+    _.forEach(measureObj.sources, ({ settings = [] }) => {
       settings.forEach((id) => {
         setLayerProp(layers[id], 'measurements', measureKey)
         if (!measurementsArray.includes(measureKey)) {
@@ -60,7 +60,6 @@ function generateMeasurements (layers, measurementsConfig) {
     if (id.toLowerCase().includes('orbit')) {
       measurementsMap[id] = 'Orbital Track'
     } else {
-      // eslint-disable-next-line prefer-destructuring
       measurementsMap[id] = measurements[0]
     }
   })

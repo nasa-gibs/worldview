@@ -11,7 +11,7 @@ import {
 
 /**
  * @param {String} layerId
- * @param {Object} props | contains min max and squash attributes
+ * @param {Object} props | contains min max squash and noclip attributes
  * @param {Number} index | VectorStyle index value for multi-vectorStyled layers
  * @param {String} groupName | layer group string
  */
@@ -47,7 +47,8 @@ export function setFilterRange(layerId, props, index, groupName) {
 export function setStyle(layer, vectorStyleId, groupName) {
   return (dispatch, getState) => {
     const state = getState();
-    const newActiveVectorStylesObj = setStyleFunction( // should probably place this inside map.ui as it is a rendering
+    // should probably place this inside map.ui as it is a rendering
+    const newActiveVectorStylesObj = setStyleFunction(
       layer,
       vectorStyleId,
       state.vectorStyles.custom,

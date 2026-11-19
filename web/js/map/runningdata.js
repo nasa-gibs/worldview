@@ -35,8 +35,8 @@ export default function MapRunningData(compareUi, store) {
 
     // Determine if we should do anything with this vector layer
     const shouldNotProcessVectorLayer = (layer) => {
-      const state = store.getState();
-      const { sidebar: { isCollapsed } } = state;
+      const storeState = store.getState();
+      const { sidebar: { isCollapsed } } = storeState;
       const def = lodashGet(layer, 'wv.def');
       if (!def) return true;
       const { wrapX, wrapadjacentdays } = def;
@@ -44,41 +44,75 @@ export default function MapRunningData(compareUi, store) {
       const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
       const coords = map.getCoordinateFromPixel(pixel);
       const featureOutsideExtent = !olExtent.containsCoordinate(layer.get('extent'), coords);
-      const inCompareRegion = isFromActiveCompareRegion(pixel, layer.wv.group, compare, swipeOffset);
+      const inCompareRegion = isFromActiveCompareRegion(
+        pixel,
+        layer.wv.group,
+        swipeOffset,
+        compare,
+      );
       const hasPalette = !lodashIsEmpty(def.palette);
-      return !isRenderedFeature || !inCompareRegion || featureOutsideExtent || !hasPalette || isCollapsed;
+      return !isRenderedFeature || !inCompareRegion ||
+      featureOutsideExtent || !hasPalette || isCollapsed;
     };
 
     // Running data for vector layers
     map.forEachFeatureAtPixel(pixel, (feature, layer) => {
       if (shouldNotProcessVectorLayer(layer)) return;
-
       const { id, palette } = layer.wv.def;
+      const isContinuousVectorLayer = layer.wv.def.colormapType === 'continuous' && layer.wv.def.type === 'vector';
       const identifier = palette.styleProperty;
       const paletteLegends = getPalette(id, undefined, undefined, state);
       const { legend } = paletteLegends;
       let color;
 
-      if (!identifier && legend.colors.length > 1) return;
+      if (!isContinuousVectorLayer && !identifier && legend.colors.length > 1) return;
+      const featureProps = feature.getProperties();
       if (identifier) {
-        const properties = feature.getProperties();
-        const value = properties[identifier] || palette.unclassified;
+        const value = featureProps[identifier] || palette.unclassified;
         if (!value) return;
         const tooltips = legend.tooltips.map((c) => c.toLowerCase().replace(/\s/g, ''));
         if (id.includes('AERONET')) {
-          const colorIndex = tooltips.findIndex((range) => value >= range[0] && (range.length < 2 || value < range[1]));
+          const colorIndex = tooltips.findIndex((range) => value >= range[0] &&
+            (range.length < 2 || value < range[1]));
           color = legend.colors[colorIndex];
           if (!color) {
             const paletteLegendsAeronet = getPalette(id, 1, undefined, state);
             const { legend: legendAeronet } = paletteLegendsAeronet;
             const tooltipsAeronet = legendAeronet.tooltips;
-            const colorIndexAeronet = tooltipsAeronet.findIndex((range) => parseFloat(value) >= parseFloat(range.split(' – ')[0]) && (range.split(' – ').length < 2 || parseFloat(value) < parseFloat(range.split(' – ')[1])));
+            const colorIndexAeronet = tooltipsAeronet.findIndex((range) => parseFloat(value) >=
+            parseFloat(range.split(' – ')[0]) && (range.split(' – ').length < 2 ||
+            parseFloat(value) < parseFloat(range.split(' – ')[1])));
             color = legendAeronet.colors[colorIndexAeronet];
           }
         } else {
           const colorIndex = tooltips.indexOf(value.toLowerCase().replace(/\s/g, ''));
           color = legend.colors[colorIndex];
         }
+      } else if (isContinuousVectorLayer) {
+        const measurementValue = featureProps.Value;
+        const numericValue = parseFloat(measurementValue);
+        if (Number.isNaN(numericValue)) return;
+
+        const colorIndex = legend.tooltips.findIndex((tooltip) => {
+          if (tooltip.includes('≥') || tooltip.includes('>')) {
+            const min = parseFloat(tooltip.replace(/[≥>]/g, '').trim());
+            return numericValue >= min;
+          }
+
+          if (tooltip.includes('≤') || tooltip.includes('<')) {
+            const max = parseFloat(tooltip.replace(/[≤<]/g, '').trim());
+            return numericValue <= max;
+          }
+
+          if (tooltip.includes('-')) {
+            const [min, max] = tooltip.split('-').map((s) => parseFloat(s.trim()));
+            return numericValue >= min && numericValue < max;
+          }
+
+          return false;
+        });
+
+        color = legend.colors[colorIndex];
       } else if (legend.colors.length === 1) {
         [color] = legend.colors;
       }
@@ -91,8 +125,8 @@ export default function MapRunningData(compareUi, store) {
 
     // Determine if we should do anything with this raster layer
     const shouldNotProcessRasterLayer = (layer) => {
-      const state = store.getState();
-      const { sidebar: { isCollapsed } } = state;
+      const storeState = store.getState();
+      const { sidebar: { isCollapsed } } = storeState;
       const type = lodashGet(layer, 'wv.def.type');
       const isGranule = type === 'granule' && !layer.get('granuleGroup');
       const hasPalette = !!lodashGet(layer, 'wv.def.palette');

@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
 * @desc Wrapper for TileText to determine what time unit to display
 * @param {Object} item
@@ -19,9 +17,9 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   }
   if (item.timeScale === 'hour') {
     const timeScaleUnit = item.dateObject.hours;
-    dateText = timeScaleUnit === 12
-      || timeScaleUnit === 6
-      || timeScaleUnit === 18
+    dateText = timeScaleUnit === 12 ||
+      timeScaleUnit === 6 ||
+      timeScaleUnit === 18
       ? `${timeScaleUnit}:00`
       : item.date;
   }
@@ -59,5 +57,9 @@ const axisScaleTextElementWrapper = (item, index, gridWidth) => {
   );
 };
 
-const TileText = ({ item, index, gridWidth }) => axisScaleTextElementWrapper(item, index, gridWidth);
+const TileText = ({
+  item,
+  index,
+  gridWidth,
+}) => axisScaleTextElementWrapper(item, index, gridWidth);
 export default TileText;

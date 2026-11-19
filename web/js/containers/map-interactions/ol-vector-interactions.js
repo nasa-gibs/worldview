@@ -5,7 +5,7 @@ import {
   includes as lodashIncludes,
   groupBy as lodashGroupBy,
 } from 'lodash';
-import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import * as olExtent from 'ol/extent';
 import { transform } from 'ol/proj';
@@ -25,6 +25,7 @@ import { changeCursor as changeCursorActionCreator } from '../../modules/map/act
 import { ACTIVATE_VECTOR_ZOOM_ALERT, ACTIVATE_VECTOR_EXCEEDED_ALERT, DISABLE_VECTOR_EXCEEDED_ALERT } from '../../modules/alerts/constants';
 import util from '../../util/util';
 import { CRS, FULL_MAP_EXTENT } from '../../modules/map/constants';
+import usePrevious from '../../util/customHooks';
 import {
   GRANULE_HOVERED,
   GRANULE_HOVER_UPDATE,
@@ -36,127 +37,50 @@ import {
 
 const { events } = util;
 
-export class VectorInteractions extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      granuleDate: null,
-      granulePlatform: null,
-    };
-    const options = { leading: true, trailing: true };
-    this.mouseMove = lodashThrottle(this.mouseMove.bind(this), 200, options);
-    this.mouseOut = lodashThrottle(this.mouseOut.bind(this), 200, options);
-    this.moveEnd = this.moveEnd.bind(this);
-    this.singleClick = this.singleClick.bind(this);
-  }
+export function VectorInteractions(props) {
+  const {
+    granuleFootprints,
+    compareState,
+    granulePlatform,
+    swipeOffset,
+    visibleExtent,
+    isShowingClick,
+    changeCursor,
+    measureIsActive,
+    proj,
+    isCoordinateSearchActive,
+    isMobile,
+    screenSize,
+    lastSelected,
+    openVectorDialog,
+    onCloseModal,
+    selectVectorFeatures,
+    modalState,
+    getDialogObject,
+    activeLayers,
+    activateVectorZoomAlert,
+    activateVectorExceededResultsAlert,
+    clearVectorExceededResultsAlert,
+    isEmbedModeActive,
+    isVectorExceededAlertPresent,
+  } = props;
 
-  componentDidMount() {
-    events.on(MAP_MOVE_END, this.moveEnd);
-    events.on(MAP_MOUSE_MOVE, this.mouseMove);
-    events.on(MAP_MOUSE_OUT, this.mouseOut);
-    events.on(MAP_SINGLE_CLICK, this.singleClick);
-  }
+  const [granuleDate, setGranuleDate] = useState(null);
+  const [, setGranulePlatformState] = useState(null);
 
-  componentWillUnmount() {
-    events.off(MAP_MOVE_END, this.moveEnd);
-    events.off(MAP_MOUSE_MOVE, this.mouseMove);
-    events.off(MAP_MOUSE_OUT, this.mouseOut);
-    events.off(MAP_SINGLE_CLICK, this.singleClick);
-  }
+  const granuleDateRef = useRef(granuleDate);
+  const granulePlatformRef = useRef(granulePlatform);
+  const granuleFootprintsRef = useRef(granuleFootprints);
+  const isShowingClickRef = useRef(isShowingClick);
 
-  clearGranuleFootprint() {
-    this.setState({ granuleDate: null, granulePlatform: null });
-    events.trigger(GRANULE_HOVERED, null);
-  }
+  const prevGranuleFootprints = usePrevious(granuleFootprints);
 
-  /**
-  * Handle mouse over granule geometry and trigger action to show granule date footprint
-  *
-  * @param {Array} pixels
-  * @param {Array} coord
-  */
-  handleGranuleHover = (pixels, mouseCoords) => {
-    const {
-      compareState,
-      granulePlatform,
-      granuleFootprints,
-      swipeOffset,
-      visibleExtent,
-    } = this.props;
-    const { active: compareActive, activeString } = compareState;
-
-    let toggledGranuleFootprint;
-
-    // only allow hover footprints on selected side of A/B comparison
-    if (compareActive && !isFromActiveCompareRegion(pixels, activeString, compareState, swipeOffset)) {
-      return;
-    }
-
-    // check if coordinates and polygon extent are within and not exceeding max extent
-    Object
-      .keys(granuleFootprints)
-      .forEach((date) => {
-        const points = granuleFootprints[date];
-        const isValidPolygon = areCoordinatesAndPolygonExtentValid(points, mouseCoords, visibleExtent);
-        if (isValidPolygon) {
-          toggledGranuleFootprint = true;
-          events.trigger(GRANULE_HOVERED, granulePlatform, date);
-          this.setState({ granulePlatform, granuleDate: date });
-        }
-      });
-
-    if (!toggledGranuleFootprint) {
-      this.clearGranuleFootprint();
-    }
-  };
-
-  handleCursorChange(pixel, map, lon, lat) {
-    const {
-      isShowingClick, changeCursor, measureIsActive, compareState, swipeOffset, proj,
-    } = this.props;
-    const hasFeatures = map.hasFeatureAtPixel(pixel);
-
-    if (hasFeatures && !isShowingClick && !measureIsActive) {
-      let isActiveLayer = false;
-      let isReferenceLayer = false;
-      map.forEachFeatureAtPixel(pixel, (feature, layer) => {
-        if (!layer) return;
-        const def = lodashGet(layer, 'wv.def');
-        if (def.layergroup === 'Reference') isReferenceLayer = true;
-        const layerExtent = layer.get('extent');
-        const pixelCoords = map.getCoordinateFromPixel(pixel);
-        const featureOutsideExtent = layerExtent && !olExtent.containsCoordinate(layerExtent, pixelCoords);
-        if (!def || lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) || featureOutsideExtent) return;
-        const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
-        const isRenderedFeature = isWrapped ? lon > -250 || lon < 250 || lat > -90 || lat < 90 : true;
-        if (isRenderedFeature && isFromActiveCompareRegion(pixel, layer.wv.group, compareState, swipeOffset)) {
-          isActiveLayer = true;
-        }
-      });
-      if (isActiveLayer && !isReferenceLayer) {
-        changeCursor(true);
-      }
-    } else if (!hasFeatures && isShowingClick) {
-      changeCursor(false);
-    }
-  }
-
-  moveEnd() {
-    const { granuleDate, granulePlatform } = this.state;
-    if (granuleDate && granulePlatform) {
-      events.trigger(GRANULE_HOVER_UPDATE, granulePlatform, granuleDate);
-    }
-  }
-
-  mouseOut = () => {
-    this.mouseMove.cancel();
+  function mouseOut() {
+    mouseMoveThrottled.cancel();
     events.trigger(GRANULE_HOVERED, null);
   };
 
-  mouseMove({ pixel }, map, crs) {
-    const {
-      isCoordinateSearchActive, measureIsActive, granuleFootprints, isMobile,
-    } = this.props;
+  function mouseMove({ pixel }, map, crs) {
     const coord = map.getCoordinateFromPixel(pixel);
     const [lon, lat] = transform(coord, crs, CRS.GEOGRAPHIC);
 
@@ -167,48 +91,188 @@ export class VectorInteractions extends React.Component {
       return;
     }
     if (granuleFootprints && !isMobile) {
-      this.handleGranuleHover(pixel, coord);
+      handleGranuleHover(pixel, coord);
     }
-    this.handleCursorChange(pixel, map, lon, lat);
+    handleCursorChange(pixel, map, lon, lat);
   }
 
-  singleClick(e, map) {
-    const {
-      screenSize, lastSelected, openVectorDialog, onCloseModal, selectVectorFeatures,
-      modalState, getDialogObject, measureIsActive, activeLayers, isCoordinateSearchActive,
-      activateVectorZoomAlert, activateVectorExceededResultsAlert, clearVectorExceededResultsAlert,
-      proj, isEmbedModeActive, isVectorExceededAlertPresent, isMobile,
-    } = this.props;
+  const options = { leading: true, trailing: true };
+  const mouseMoveThrottled = lodashThrottle(mouseMove, 200, options);
+  const mouseOutThrottled = lodashThrottle(mouseOut, 200, options);
 
+  useEffect(() => {
+    events.on(MAP_MOVE_END, moveEnd);
+    events.on(MAP_MOUSE_MOVE, mouseMoveThrottled);
+    events.on(MAP_MOUSE_OUT, mouseOutThrottled);
+    events.on(MAP_SINGLE_CLICK, singleClick);
+
+    return () => {
+      mouseMoveThrottled.cancel();
+      mouseOutThrottled.cancel();
+
+      events.off(MAP_MOVE_END, moveEnd);
+      events.off(MAP_MOUSE_MOVE, mouseMoveThrottled);
+      events.off(MAP_MOUSE_OUT, mouseOutThrottled);
+      events.off(MAP_SINGLE_CLICK, singleClick);
+    };
+  }, [proj?.id, proj?.selected?.crs]);
+
+  useEffect(() => {
+    if (granuleDate && prevGranuleFootprints !== granuleFootprints) {
+      clearGranuleFootprint();
+    }
+  }, [granuleDate, granuleFootprints]);
+
+  useEffect(() => {
+    granuleDateRef.current = granuleDate;
+  }, [granuleDate]);
+
+  useEffect(() => {
+    granulePlatformRef.current = granulePlatform;
+  }, [granulePlatform]);
+
+  useEffect(() => {
+    granuleFootprintsRef.current = granuleFootprints;
+  }, [granuleFootprints]);
+
+  useEffect(() => {
+    isShowingClickRef.current = isShowingClick;
+  }, [isShowingClick]);
+
+  function clearGranuleFootprint() {
+    setGranuleDate(null);
+    setGranulePlatformState(null);
+    events.trigger(GRANULE_HOVERED, null);
+  }
+
+  /**
+  * Handle mouse over granule geometry and trigger action to show granule date footprint
+  *
+  * @param {Array} pixels
+  * @param {Array} coord
+  */
+  function handleGranuleHover(pixels, mouseCoords) {
+    const { active: compareActive, activeString } = compareState;
+
+    let toggledGranuleFootprint;
+
+    // only allow hover footprints on selected side of A/B comparison
+    if (compareActive &&
+      !isFromActiveCompareRegion(pixels, activeString, swipeOffset, compareState)) {
+      return;
+    }
+
+    // check if coordinates and polygon extent are within and not exceeding max extent
+    Object
+      .keys(granuleFootprintsRef.current)
+      .forEach((date) => {
+        const points = granuleFootprintsRef.current[date];
+        const isValidPolygon = areCoordinatesAndPolygonExtentValid(
+          points,
+          mouseCoords,
+          visibleExtent,
+        );
+        if (isValidPolygon) {
+          toggledGranuleFootprint = true;
+          events.trigger(GRANULE_HOVERED, granulePlatformRef.current, date);
+          setGranuleDate(date);
+          setGranulePlatformState(granulePlatformRef.current);
+        }
+      });
+
+    if (!toggledGranuleFootprint) {
+      clearGranuleFootprint();
+    }
+  };
+
+  function handleCursorChange(pixel, map, lon, lat) {
+    const hasFeatures = map.hasFeatureAtPixel(pixel);
+
+    if (hasFeatures && !isShowingClickRef.current && !measureIsActive) {
+      let isActiveLayer = false;
+      let isReferenceLayer = false;
+      map.forEachFeatureAtPixel(pixel, (feature, layer) => {
+        if (!layer) return;
+        const def = lodashGet(layer, 'wv.def');
+        if (!def) return;
+        if (def?.layergroup === 'Reference') isReferenceLayer = true;
+        const layerExtent = layer.get('extent');
+        const pixelCoords = map.getCoordinateFromPixel(pixel);
+        const featureOutsideExtent = layerExtent &&
+        !olExtent.containsCoordinate(layerExtent, pixelCoords);
+        if (lodashIncludes(def.clickDisabledFeatures, feature.getGeometry().getType()) ||
+          featureOutsideExtent) return;
+        const isWrapped = proj.id === 'geographic' && (def.wrapadjacentdays || def.wrapX);
+        const isRenderedFeature = isWrapped
+          ? lon > -250 ||
+        lon < 250 || lat > -90 || lat < 90
+          : true;
+        if (isRenderedFeature &&
+          isFromActiveCompareRegion(pixel, layer.wv.group, swipeOffset, compareState)) {
+          isActiveLayer = true;
+        }
+      });
+      if (isActiveLayer && !isReferenceLayer) {
+        changeCursor(true);
+      }
+    } else if (!hasFeatures && isShowingClickRef.current) {
+      changeCursor(false);
+    }
+  }
+
+  function moveEnd() {
+    if (granuleDateRef.current && granulePlatformRef.current) {
+      events.trigger(GRANULE_HOVER_UPDATE, granulePlatformRef.current, granuleDateRef.current);
+    }
+  }
+
+  function singleClick(e, map) {
     if (measureIsActive || isCoordinateSearchActive) return;
     const isVectorModalOpen = modalState.id.includes('vector_dialog') && modalState.isOpen;
     const pixels = e.pixel;
     let clickObj = getDialogObject(pixels, map);
     const metaArray = clickObj.metaArray || [];
     const isAeronet = !!metaArray[0] && metaArray[0].id.includes('AERONET');
-    clickObj = getDialogObject(pixels, map, isMobile ? screenSize.screenWidth : isAeronet ? 250 : 445);
+    const aeronetMobileSize = isAeronet ? 250 : 445;
+    clickObj = getDialogObject(pixels, map, isMobile
+      ? screenSize.screenWidth
+      : aeronetMobileSize);
     const selected = clickObj.selected || {};
     const offsetLeft = clickObj.offsetLeft || 10;
     const offsetTop = clickObj.offsetTop || 100;
     const isCoordinatesMarker = clickObj.isCoordinatesMarker || false;
     const exceededLengthLimit = clickObj.exceededLengthLimit || false;
-    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
+    const vectorModalOpenId = isVectorModalOpen ? modalState.id : `vector_dialog${pixels[0]}${pixels[1]}`;
+    const dialogId = clickObj.modalShouldFollowClicks ? `vector_dialog${pixels[0]}${pixels[1]}` : vectorModalOpenId;
 
     if (isCoordinatesMarker) return;
 
     const mapRes = map.getView().getResolution();
-    const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(activeLayers, mapRes, proj.id, isMobile);
+    const hasNonClickableVectorLayerType = hasNonClickableVectorLayer(
+      activeLayers,
+      mapRes,
+      proj.id,
+      isMobile,
+    );
 
     if (isMobile) {
       const coord = map.getCoordinateFromPixel(pixels);
-      this.handleGranuleHover(pixels, coord);
+      handleGranuleHover(pixels, coord);
     }
 
     if (metaArray.length) {
       if (hasNonClickableVectorLayerType && !isAeronet) {
         activateVectorZoomAlert();
       } else {
-        openVectorDialog(dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet);
+        openVectorDialog(
+          dialogId,
+          metaArray,
+          offsetLeft,
+          offsetTop,
+          screenSize,
+          isEmbedModeActive,
+          isAeronet,
+        );
         if (exceededLengthLimit) {
           activateVectorExceededResultsAlert();
         } else if (isVectorExceededAlertPresent) {
@@ -218,7 +282,8 @@ export class VectorInteractions extends React.Component {
     } else if (hasNonClickableVectorLayerType) {
       activateVectorZoomAlert();
     }
-    if (Object.entries(selected).length || (Object.entries(lastSelected).length && !isVectorModalOpen)) {
+    if (Object.entries(selected).length ||
+    (Object.entries(lastSelected).length && !isVectorModalOpen)) {
       if (isMobile && hasNonClickableVectorLayerType) return;
       selectVectorFeatures(selected);
     } else if (isVectorModalOpen && !Object.entries(selected).length) {
@@ -227,9 +292,7 @@ export class VectorInteractions extends React.Component {
     }
   }
 
-  render() {
-    return null;
-  }
+  return null;
 }
 
 function mapStateToProps(state) {
@@ -275,7 +338,13 @@ function mapStateToProps(state) {
     screenSize,
     isCoordinateSearchActive,
     compareState: compare,
-    getDialogObject: (pixels, olMap, modalWidth) => onMapClickGetVectorFeatures(pixels, olMap, state, swipeOffset, modalWidth),
+    getDialogObject: (pixels, olMap, modalWidth) => onMapClickGetVectorFeatures(
+      pixels,
+      olMap,
+      state,
+      swipeOffset,
+      modalWidth,
+    ),
     isDistractionFreeModeActive: ui.isDistractionFreeModeActive,
     isEmbedModeActive: embed.isEmbedModeActive,
     isVectorExceededAlertPresent,
@@ -311,13 +380,22 @@ const mapDispatchToProps = (dispatch) => ({
   activateVectorZoomAlert: () => dispatch({ type: ACTIVATE_VECTOR_ZOOM_ALERT }),
   activateVectorExceededResultsAlert: () => dispatch({ type: ACTIVATE_VECTOR_EXCEEDED_ALERT }),
   clearVectorExceededResultsAlert: () => dispatch({ type: DISABLE_VECTOR_EXCEEDED_ALERT }),
-  openVectorDialog: (dialogId, metaArray, offsetLeft, offsetTop, screenSize, isEmbedModeActive, isAeronet) => {
+  openVectorDialog: (
+    dialogId,
+    metaArray,
+    offsetLeft,
+    offsetTop,
+    screenSize,
+    isEmbedModeActive,
+    isAeronet,
+  ) => {
     const { screenHeight, screenWidth } = screenSize;
     const isMobile = screenSize.isMobileDevice;
     const dialogKey = new Date().getUTCMilliseconds();
     const modalClassName = isEmbedModeActive && !isMobile ? 'vector-modal light modal-embed' : 'vector-modal light';
     const mobileTopOffset = 106;
-    const modalWidth = isMobile ? screenWidth : isAeronet ? 250 : 445;
+    const aeroNetModalWidth = isAeronet ? 250 : 445;
+    const modalWidth = isMobile ? screenWidth : aeroNetModalWidth;
     const modalHeight = isMobile ? screenHeight - mobileTopOffset : 300;
 
     dispatch(openCustomContent(
@@ -334,7 +412,6 @@ const mapDispatchToProps = (dispatch) => ({
         mobileFullScreen: true,
         dragHandle: '.modal-header',
         dialogKey,
-        key: dialogKey,
         vectorMetaObject: lodashGroupBy(metaArray, 'id'),
         width: modalWidth,
         height: modalHeight,
@@ -355,26 +432,26 @@ VectorInteractions.propTypes = {
   changeCursor: PropTypes.func.isRequired,
   getDialogObject: PropTypes.func.isRequired,
   isShowingClick: PropTypes.bool.isRequired,
-  visibleExtent: PropTypes.array,
+  visibleExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   measureIsActive: PropTypes.bool.isRequired,
-  modalState: PropTypes.object.isRequired,
+  modalState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   onCloseModal: PropTypes.func.isRequired,
   openVectorDialog: PropTypes.func.isRequired,
   selectVectorFeatures: PropTypes.func.isRequired,
-  compareState: PropTypes.object,
-  granuleFootprints: PropTypes.object,
+  compareState: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  granuleFootprints: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   granulePlatform: PropTypes.string,
   activateVectorZoomAlert: PropTypes.func,
   activateVectorExceededResultsAlert: PropTypes.func,
   clearVectorExceededResultsAlert: PropTypes.func,
-  activeLayers: PropTypes.array,
-  screenSize: PropTypes.object,
+  activeLayers: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  screenSize: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   isEmbedModeActive: PropTypes.bool,
   isVectorExceededAlertPresent: PropTypes.bool,
   isCoordinateSearchActive: PropTypes.bool,
   isMobile: PropTypes.bool,
-  lastSelected: PropTypes.object,
-  proj: PropTypes.object,
+  lastSelected: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  proj: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   swipeOffset: PropTypes.number,
 };
 

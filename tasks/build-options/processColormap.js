@@ -82,6 +82,7 @@ async function main () {
       fileCount += 1
     } catch (error) {
       console.error(error)
+
       console.error(`${prog}: ERROR: ${error}`)
       errorCount += 1
     }

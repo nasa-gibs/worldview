@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
-import Joyride, { STATUS, ACTIONS, EVENTS } from 'react-joyride';
+import {
+  Joyride,
+  STATUS,
+  ACTIONS,
+  EVENTS,
+  LIFECYCLE,
+} from 'react-joyride';
 import util from '../../util/util';
 import { JOYRIDE_INCREMENT } from '../../util/constants';
 
@@ -23,17 +30,25 @@ export default function JoyrideWrapper ({
   const stepProj = projParam.length ? projParam[0].substr(2) : 'geographic';
   const projMatches = stepProj === proj;
   const styles = {
-    options: {
-      arrowColor: '#eee',
-      backgroundColor: '#eee',
-      beaconSize: 50,
-      overlayColor: 'rgba(0, 0, 0, 0.5)',
-      primaryColor: '#d54e21',
-      spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
-      lineHeight: '16px',
-      textColor: '#333',
-      width: undefined,
-      zIndex: 1050,
+    buttonClose: {
+      height: 14,
+      padding: 15,
+      width: 14,
+    },
+    buttonPrimary: {
+      color: 'rgb(255, 255, 255)',
+    },
+    overlay: {
+      transition: 'none',
+    },
+    tooltip: {
+      padding: 15,
+    },
+    tooltipContent: {
+      padding: '20px 10px',
+    },
+    tooltipFooter: {
+      marginTop: 15,
     },
   };
 
@@ -48,15 +63,31 @@ export default function JoyrideWrapper ({
     eventTriggersIncrement,
   } = (currentStepObj || {}).joyride || {};
 
-  const [elementPositionKey, setElementPositionKey] = useState(key);
+  const hasTargetCoordinates = !!(steps || []).find((s) => s?.targetCoordinates);
+
+  const [, setElementPositionKey] = useState(key);
   const [stepIndex, setStepIndex] = useState();
   const [run, setRun] = useState(false);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [hasJoyrideOverlay, setHasJoyrideOverlay] = useState(false);
+  const [overlayStarted, setOverlayStarted] = useState(false);
 
   const incrementKey = () => {
     key += 1;
     setElementPositionKey(key);
   };
+
+  function updatePlaceholderLocations() {
+    (steps || []).forEach((step) => {
+      const { target, targetCoordinates } = step || {};
+      if (target && targetCoordinates) {
+        const placeholderEl = document.querySelector(target);
+        if (placeholderEl) {
+          setPlaceholderLocation(placeholderEl, targetCoordinates);
+        }
+      }
+    });
+  }
 
   const currentJoyrideStep = steps && steps[stepIndex];
 
@@ -75,7 +106,7 @@ export default function JoyrideWrapper ({
     return () => {
       events.off(JOYRIDE_INCREMENT, incrementStep);
     };
-  });
+  }, [run, eventTriggersIncrement, stepIndex]);
 
   // For the tutorial tour, we need to reset the product picker to initial state
   useEffect(() => {
@@ -86,10 +117,11 @@ export default function JoyrideWrapper ({
 
   /**
    * Set a placeholder DOM element's position based on map coords
-   * @param {*} element
+   * @param {*} el
    * @param {*} targetCoordinates
    */
-  function setPlaceholderLocation (element, targetCoordinates) {
+  function setPlaceholderLocation (el, targetCoordinates) {
+    const element = { ...el };
     const { topLeft, bottomRight } = targetCoordinates;
     let [x1, y1] = map.getPixelFromCoordinate(topLeft) || [0, 0];
     let [x2, y2] = map.getPixelFromCoordinate(bottomRight) || [0, 0];
@@ -132,43 +164,47 @@ export default function JoyrideWrapper ({
   function updateTargetsOnResize() {
     const { status, action } = joyrideProps || {};
     if (
-      status === STATUS.FINISHED
-      || action === ACTIONS.RESET
-      || !(steps && steps.length)
+      status === STATUS.FINISHED ||
+      action === ACTIONS.RESET ||
+      !(steps && steps.length)
     ) {
       return;
     }
-    (steps || []).forEach((step) => {
-      const { target, targetCoordinates } = step || {};
-      if (target && targetCoordinates) {
-        const placeholderEl = document.querySelector(target);
-        setPlaceholderLocation(placeholderEl, targetCoordinates);
-      }
-    });
+    if (!hasTargetCoordinates) return;
+    updatePlaceholderLocations();
     setIsInitializing(false);
     // Force a re-render so that Joyride updates the beacon location,
     // otherwise it doesn't know the DOM element position was updated
     incrementKey();
   }
 
-  function joyrideStateCallback(data) {
+  const joyrideStateCallback = (data) => {
     joyrideProps = data;
     const {
       action, index, type, status,
     } = data;
 
+    if (data.lifecycle === LIFECYCLE.TOOLTIP) setOverlayStarted(true);
+
     if ([EVENTS.STEP_AFTER, EVENTS.TARGET_NOT_FOUND].includes(type)) {
       const newIndex = index + (action === ACTIONS.PREV ? -1 : 1);
       setStepIndex(newIndex);
-      if (newIndex >= 0 && newIndex < steps.length && steps[newIndex].targetCoordinates) {
-        updateTargetsOnResize();
+      if (
+        hasTargetCoordinates &&
+        newIndex >= 0 &&
+        newIndex < steps.length &&
+        steps[newIndex].targetCoordinates
+      ) {
+        // Let Joyride update its internal state first, then reposition placeholders.
+        requestAnimationFrame(() => updateTargetsOnResize());
       }
     }
     if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
       setStepIndex(0);
       setRun(false);
+      setOverlayStarted(false);
     }
-  }
+  };
 
   /**
    * Forcing a re-render on a target resize (by calling incrementKey())
@@ -189,16 +225,16 @@ export default function JoyrideWrapper ({
   // Handle effects related to changing the tour step
   useEffect(() => {
     addPlaceholderElements();
-    map.getView().changed();
-    incrementKey();
-    setRun(false);
-    setStepIndex(undefined);
-    setTimeout(() => {
-      if (steps && steps.length) {
-        setStepIndex(0);
-        setRun(true);
-      }
-    });
+    updatePlaceholderLocations();
+    setIsInitializing(false);
+    setOverlayStarted(false);
+    if (steps && steps.length) {
+      setStepIndex(0);
+      setRun(true);
+    } else {
+      setStepIndex(undefined);
+      setRun(false);
+    }
   }, [currentTourStep]);
 
   // Force re-render on projection change to reset Joyride
@@ -206,9 +242,35 @@ export default function JoyrideWrapper ({
 
   // Register/de-register evnt listeners for map changes
   useEffect(() => {
+    if (!hasTargetCoordinates) return undefined;
     map.getView().on('change', updateTargetsOnResize);
     return () => map.getView().un('change', updateTargetsOnResize);
-  });
+  }, [map, hasTargetCoordinates]);
+
+  // Joyride's overlay can briefly unmount between steps; keep a fallback overlay
+  // visible during those gaps to prevent a distracting flash.
+  useEffect(() => {
+    if (!run || !projMatches || isInitializing) {
+      setHasJoyrideOverlay(false);
+      setOverlayStarted(false);
+      return undefined;
+    }
+
+    const getOverlayPresent = () => !!document.querySelector('.react-joyride__overlay');
+    const updateOverlayState = () => setHasJoyrideOverlay(getOverlayPresent());
+
+    updateOverlayState();
+
+    const observer = new MutationObserver(updateOverlayState);
+    observer.observe(document.body, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ['class', 'style'],
+    });
+
+    return () => observer.disconnect();
+  }, [run, projMatches, isInitializing]);
 
   // When tour is complete, remove all placeholder elements
   useEffect(() => {
@@ -217,29 +279,53 @@ export default function JoyrideWrapper ({
     }
   });
 
-  return !projMatches || isInitializing ? null : (
-    <Joyride
-      run={run}
-      stepIndex={stepIndex}
-      key={elementPositionKey}
-      steps={steps || []}
-      continuous={checkContinuous()}
-      callback={joyrideStateCallback}
-      spotlightClicks={spotlightClicks}
-      disableOverlayClose={disableOverlayClose}
-      hideCloseButton={hideCloseButton}
-      styles={styles}
-      disableScrolling
-      disableScrollParentFix
-    />
-  );
+  return !projMatches || isInitializing
+    ? null
+    : (
+      <>
+        {run && overlayStarted && !hasJoyrideOverlay && typeof document !== 'undefined' && (
+          createPortal(
+            <div className="react-joyride__overlay-fallback" />,
+            document.body,
+          )
+        )}
+        <Joyride
+          run={run}
+          stepIndex={stepIndex}
+          steps={steps || []}
+          continuous={checkContinuous()}
+          onEvent={joyrideStateCallback}
+          styles={styles}
+          floatingOptions={{
+            disableAnimation: true,
+          }}
+          options={{
+            blockTargetInteraction: !spotlightClicks,
+            hideOverlay: !overlayStarted,
+            overlayClickAction: disableOverlayClose ? false : 'close',
+            arrowColor: '#eee',
+            backgroundColor: '#eee',
+            beaconSize: 50,
+            overlayColor: 'rgba(0, 0, 0, 0.5)',
+            primaryColor: '#d54e21',
+            spotlightShadow: '0 0 25px rgba(0, 0, 0, 0.75)',
+            lineHeight: '16px',
+            textColor: '#333',
+            width: undefined,
+            zIndex: 2000,
+            skipScroll: true,
+            buttons: ['back', 'close', 'primary'],
+          }}
+        />
+      </>
+    );
 }
 
 JoyrideWrapper.propTypes = {
   currentTourStep: PropTypes.number,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   proj: PropTypes.string,
   tourComplete: PropTypes.bool,
-  tourSteps: PropTypes.array,
+  tourSteps: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   resetProductPicker: PropTypes.func,
 };

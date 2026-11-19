@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import lodashIndexOf from 'lodash/indexOf';
 import { drawPaletteOnCanvas } from '../../../modules/palettes/util';
@@ -47,8 +47,8 @@ function PaletteSelect (props) {
     const color = palette.classes
       ? palette.classes.colors[0]
       : palette.colors[0];
-    const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
-    const checkedClassName = isSelected ? 'checked' : '';
+    const caseDefaultClassName = 'wv-palette-selector-row wv-radio';
+    const checkedClassName = isSelected ? ' checked' : '';
     const isInvisible = color === '00000000';
 
     return (
@@ -59,9 +59,6 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
-        {isSelected && (
-          <span class="dot" />
-        )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <span
             className={isInvisible ? 'checkerbox-bg wv-palettes-class' : 'wv-palettes-class'}
@@ -83,8 +80,8 @@ function PaletteSelect (props) {
    * @param {Boolean} isSelected | is this colormap active
    */
   const renderSelectorItemScale = (palette, id, legend, isSelected) => {
-    const caseDefaultClassName = 'wv-palette-selector-row wv-checkbox wv-checkbox-round gray ';
-    const checkedClassName = isSelected ? 'checked' : '';
+    const caseDefaultClassName = 'wv-palette-selector-row wv-radio';
+    const checkedClassName = isSelected ? ' checked' : '';
     const ctx = canvas.getContext('2d');
     drawPaletteOnCanvas(
       ctx,
@@ -102,9 +99,6 @@ function PaletteSelect (props) {
           name="wv-palette-radio"
           onClick={() => onChangePalette(id)}
         />
-        {isSelected && (
-          <span class="dot" />
-        )}
         <label htmlFor={`wv-palette-radio-${id}-${index}`}>
           <img src={dataURL} />
           <span className="wv-palette-label">{legend.name || 'Default'}</span>
@@ -141,8 +135,8 @@ function PaletteSelect (props) {
     const target = getCustomPalette(id);
     const targetType = target.colors.length === 1 ? 'classification' : 'continuous';
 
-    if ((source.type === 'continuous' && targetType === 'continuous')
-       || (source.type === 'discrete' && targetType === 'continuous')) {
+    if ((source.type === 'continuous' && targetType === 'continuous') ||
+       (source.type === 'discrete' && targetType === 'continuous')) {
       const translated = palettesTranslate(source.colors, target.colors);
       return renderSelectorItemScale(
         translated,
@@ -159,6 +153,7 @@ function PaletteSelect (props) {
         activePalette === target.id,
       );
     }
+    return undefined;
   };
 
   const recommended = layer.palette.recommended || [];
@@ -169,10 +164,10 @@ function PaletteSelect (props) {
       id={`wv-palette-selector${index}`}
     >
       <h2 className="wv-header">Color Palette</h2>
-      <Scrollbar style={{ maxHeight: '200px' }}>
+      <Scrollbar style={{ maxHeight: '165px', border: 'solid 1px #535353', paddingLeft: '11px', paddingTop: '5px' }}>
         {renderDefault()}
         {
-          // eslint-disable-next-line array-callback-return
+
           paletteOrder.map((id) => {
             if (lodashIndexOf(recommended, id) < 0) {
               const item = customLegend(id);
@@ -180,6 +175,7 @@ function PaletteSelect (props) {
                 return item;
               }
             }
+            return undefined;
           })
         }
       </Scrollbar>
@@ -189,14 +185,14 @@ function PaletteSelect (props) {
 
 PaletteSelect.propTypes = {
   activePalette: PropTypes.string,
-  canvas: PropTypes.object,
+  canvas: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   clearCustomPalette: PropTypes.func,
   getCustomPalette: PropTypes.func,
   getDefaultLegend: PropTypes.func,
   groupName: PropTypes.string,
   index: PropTypes.number,
-  layer: PropTypes.object,
-  paletteOrder: PropTypes.array,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  paletteOrder: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   palettesTranslate: PropTypes.func,
   setCustomPalette: PropTypes.func,
 };

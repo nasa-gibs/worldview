@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { containsExtent, isEmpty } from 'ol/extent';
 import lodashCloneDeep from 'lodash/cloneDeep';
 import * as olProj from 'ol/proj';
@@ -35,10 +35,10 @@ function Input({
 
       const crsCorrectedExtent = olProj.transformExtent(validExtent, CRS.GEOGRAPHIC, crs);
 
-      if (containsExtent(viewExtent, crsCorrectedExtent)
-      && isValidExtent(clonedBBoxArray)
-      && !isEmpty(crsCorrectedExtent)
-      && !Number.isNaN(newInputValue)) {
+      if (containsExtent(viewExtent, crsCorrectedExtent) &&
+      isValidExtent(clonedBBoxArray) &&
+      !isEmpty(crsCorrectedExtent) &&
+      !Number.isNaN(newInputValue)) {
         onLatLongChange(clonedBBoxArray);
         setInputInvalid(false);
       } else {
@@ -94,11 +94,18 @@ function LatLongSelect(props) {
   const boundingBoxArray = [geoLatLong[0][0], geoLatLong[0][1], geoLatLong[1][0], geoLatLong[1][1]];
   const [showCoordinates, setShowCoordinates] = useState(false);
   const coordText = showCoordinates ? 'Hide Coordinates' : 'Edit Coordinates';
-  const [minLon, minLat, maxLon, maxLat] = boundingBoxArray.map((coord) => coord.toFixed(4).toString());
+  const [minLon, minLat, maxLon, maxLat] = boundingBoxArray.map(
+    (coord) => coord.toFixed(4).toString(),
+  );
 
   return (
     <div className="wv-image-input-case">
-      <div className="wv-image-input-title" onClick={() => { setShowCoordinates(!showCoordinates); }}>
+      <button
+        className="wv-image-input-title"
+        type="button"
+        aria-pressed={showCoordinates}
+        onClick={() => { setShowCoordinates(!showCoordinates); }}
+      >
         <span>{coordText}</span>
         <span
           title="Hide coordinates"
@@ -106,7 +113,7 @@ function LatLongSelect(props) {
         >
           <FontAwesomeIcon icon="caret-right" size="lg" rotation={showCoordinates ? 90 : 0} widthAuto />
         </span>
-      </div>
+      </button>
       {showCoordinates && (
         <>
           <div className="row">
@@ -171,20 +178,20 @@ function LatLongSelect(props) {
 export default LatLongSelect;
 
 const {
-  number, array, func, string,
+  number, func, string,
 } = PropTypes;
 LatLongSelect.propTypes = {
   onLatLongChange: func,
-  geoLatLong: array,
-  viewExtent: array,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   crs: string,
 };
 Input.propTypes = {
   onLatLongChange: func,
   index: number,
   title: string,
-  boundingBoxArray: array,
+  boundingBoxArray: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   inputNumber: string,
-  viewExtent: array,
+  viewExtent: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   crs: string,
 };

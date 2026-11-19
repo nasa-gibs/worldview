@@ -1,10 +1,11 @@
-import React from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import lodashIsNumber from 'lodash/isNumber';
 import lodashIsEqual from 'lodash/isEqual';
 import { Tooltip } from 'reactstrap';
-import VisibilitySensor from 'react-visibility-sensor/visibility-sensor';
+import VisibilitySensor from '../util/visibility-sensor';
 import { connect } from 'react-redux';
+import usePrevious from '../../util/customHooks';
 import { getOrbitTrackTitle } from '../../modules/layers/util';
 import {
   drawSidebarPaletteOnCanvas,
@@ -36,24 +37,45 @@ const getRunningLabelStyle = (xOffset, textWidth, width) => {
   return { transform: `translateX(${Math.floor(xOffset - halfTextWidth)}px)` };
 };
 
+function PaletteLegend(props) {
+  const {
+    isRunningData,
+    colorHex,
+    width,
+    height,
+    getPalette,
+    layer,
+    parentLayer,
+    compareState,
+    toggleAllClassifications,
+    isDistractionFreeModeActive,
+    paletteLegends,
+    globalTemperatureUnit,
+    isEmbedModeActive,
+    isMobile,
+    palettes,
+    paletteId,
+    isCustomPalette,
+    showingVectorHand,
+    showingChartingIcon,
+  } = props;
 
-// `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
+  const [isRunningDataState, setIsRunningDataState] = useState(isRunningData);
+  const [colorHexState, setColorHexState] = useState(colorHex);
+  const [widthState, setWidthState] = useState(width);
+  const [scrollContainerEl, setScrollContainerEl] = useState(null);
+  const [isHoveringLegend, setIsHoveringLegend] = useState(false);
 
-class PaletteLegend extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isRunningData: props.isRunningData,
-      colorHex: props.colorHex,
-      width: props.width,
-      scrollContainerEl: null,
-    };
-  }
+  const prevColorHex = usePrevious(colorHex);
+  const prevIsRunningData = usePrevious(isRunningData);
+  const prevLayer = usePrevious(layer);
+  const prevPaletteLegends = usePrevious(paletteLegends);
+  const prevWidth = usePrevious(widthState);
+  const prevDistractionFree = usePrevious(isDistractionFreeModeActive);
 
-  componentDidMount() {
-    const {
-      getPalette, layer, compareState, toggleAllClassifications,
-    } = this.props;
+  const palettesArrayRef = useRef([]);
+
+  useEffect(() => {
     if (layer.disabled === undefined) {
       // There is not a previous instance, so check the palette defaults
       const palette = getPalette();
@@ -63,146 +85,142 @@ class PaletteLegend extends React.Component {
       }
     }
 
-    this.updateCanvas();
-    this.setState(() => ({
-      scrollContainerEl: document.querySelector('#layers-scroll-container'),
-    }));
-  }
+    updateCanvas();
+    setScrollContainerEl(document.querySelector('#layers-scroll-container'));
+  }, []);
 
-  UNSAFE_componentWillReceiveProps(props) {
-    const { colorHex, isRunningData } = this.state;
-    if (props.colorHex !== colorHex || props.isRunningData !== isRunningData) {
-      this.setState({
-        isRunningData: props.isRunningData,
-        colorHex: props.colorHex,
-      });
+  useEffect(() => {
+    if (prevColorHex !== colorHex) {
+      setColorHexState(colorHex);
     }
-  }
+  }, [colorHex]);
 
-  componentDidUpdate(prevProps) {
-    const {
-      isDistractionFreeModeActive,
-      layer,
-      width,
-      paletteLegends,
-    } = this.props;
-    // Updates when layer options/settings changed, if ZOT changes the width of the palette, or distraction free mode exit
-    const layerChange = !lodashIsEqual(layer, prevProps.layer);
-    const paletteLegendsChange = !lodashIsEqual(paletteLegends, prevProps.paletteLegends);
-    const widthChange = prevProps.width !== width;
-    const distractionFreeChange = prevProps.isDistractionFreeModeActive && !isDistractionFreeModeActive;
+  useEffect(() => {
+    if (prevIsRunningData !== isRunningData) {
+      setIsRunningDataState(isRunningData);
+    }
+  }, [isRunningData]);
+
+  useEffect(() => {
+    // Updates when layer options/settings changed, if ZOT changes the width of the palette,
+    // or distraction free mode exit
+    const layerChange = !lodashIsEqual(layer, prevLayer);
+    const paletteLegendsChange = !lodashIsEqual(paletteLegends, prevPaletteLegends);
+    const widthChange = prevWidth !== widthState;
+    const distractionFreeChange = prevDistractionFree && !isDistractionFreeModeActive;
     if (layerChange || widthChange || distractionFreeChange || paletteLegendsChange) {
-      this.updateCanvas();
+      updateCanvas();
     }
-  }
+  }, [layer, paletteLegends, widthState, isDistractionFreeModeActive]);
 
   /**
    * Get percent of selected point position in parent
    */
-  getPercent(len, index) {
+  const getPercent = (len, index) => {
     let segmentWidth;
     let location;
-    const { width } = this.state;
     if (len < 250) {
-      segmentWidth = width / len;
+      segmentWidth = widthState / len;
       location = segmentWidth * index + 0.5 * segmentWidth;
-      return lodashIsNumber(location / width) ? location / width : 0;
+      return lodashIsNumber(location / widthState) ? location / widthState : 0;
     }
     return lodashIsNumber(index / len) ? index / len : 0;
-  }
+  };
 
   /**
    * OnMouseMove get correct canvas Data
    * @param {Object} canvas | Element
    * @param {Object} e | Event Object
    */
-  onHoverColorbar(canvas, e) {
+  const onHoverColorbar = (canvas, e) => {
     e.preventDefault();
     e.stopPropagation();
     const boundingRec = e.target.getBoundingClientRect();
     const x = e.clientX - boundingRec.left;
     const y = e.clientY - boundingRec.top;
-    const rgba = canvas.current.getContext('2d').getImageData(x, y, 1, 1).data;
+    const rgba = canvas.getContext('2d').getImageData(x, y, 1, 1).data;
     const hex = util.rgbaToHex(rgba[0], rgba[1], rgba[2]);
 
-    this.setState({
-      colorHex: hex,
-    });
-  }
+    setColorHexState(hex);
+  };
 
   /**
    * On Mouse Enter update State
    * @param {*} e
    */
-  onMouseEnter(e) {
+  const onMouseEnter = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({
-      isRunningData: true,
-      isHoveringLegend: true,
-    });
-  }
+    setIsRunningDataState(true);
+    setIsHoveringLegend(true);
+  };
 
   /**
    * Update state on MouseOut
    */
-  hideValue(e) {
+  const hideValue = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({
-      isRunningData: false,
-      isHoveringLegend: false,
-    });
-  }
+    setIsRunningDataState(false);
+    setIsHoveringLegend(false);
+  };
 
   /**
    * Style Canvas bases on updates to legend or canvas-width
    */
-  updateCanvas() {
-    const {
-      height, width, paletteLegends,
-    } = this.props;
-
+  const updateCanvas = () => {
     paletteLegends.forEach((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
         const ctxStr = `canvas_${index}`;
-        if (this[ctxStr]) {
-          const newWidth = this[ctxStr].current.getBoundingClientRect().width;
-          // eslint-disable-next-line react/destructuring-assignment
-          if (newWidth && newWidth !== this.state.width) {
+        if (palettesArrayRef.current[ctxStr]) {
+          const newWidth = palettesArrayRef.current[ctxStr].getBoundingClientRect().width;
+
+          if (newWidth && newWidth !== widthState) {
             // If scrollbar appears canvas width changes.
             // This value is needed for calculating running data offsets
-            this.setState({ width: newWidth });
+            setWidthState(newWidth);
           }
-          const ctx = this[ctxStr].current.getContext('2d');
+          const ctx = palettesArrayRef.current[ctxStr].getContext('2d');
           drawSidebarPaletteOnCanvas(
             ctx,
             colorMap.colors,
-            width,
+            widthState,
             height,
           );
           drawTicksOnCanvas(
             ctx,
             colorMap,
-            width,
+            widthState,
             height,
           );
         }
       }
     });
-  }
+  };
 
   /**
-   * Find wanted legend object from Hex
-   * @param {Object} legend
-   * @param {String} hex
-   * @param {Number} acceptableDifference
+   * Finds the legend object that corresponds to a given hex color.
+   *
+   * @param {Object} legend - The legend object containing colors and tooltips.
+   * @param {string[]} legend.colors - Array of hex color strings in the legend.
+   * @param {string[]} legend.tooltips - Array of tooltip strings corresponding to colors.
+   * @param {string} [legend.units] - Optional units for the legend values.
+   * @param {string} hex - The hex color to match against the legend.
+   * @param {number} acceptableDifference - The maximum allowed difference between colors.
+   *                                        Lower values require closer color matches.
+   * @param {Object} palette - The color palette of the legend
+   *
+   * @returns {Object|null} The matched legend object or null if no match is found.
+   *
    */
-  getLegendObject(legend, hex, acceptableDifference) {
-    const { globalTemperatureUnit } = this.props;
+  const getLegendObject = (legend, hex, acceptableDifference, palette) => {
+    const { min, max, noclip, squash } = palette;
     const units = legend.units || '';
 
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(
+      units,
+      globalTemperatureUnit,
+    );
     for (let i = 0, len = legend.colors.length; i < len; i += 1) {
       if (util.hexColorDelta(legend.colors[i], hex) < acceptableDifference) {
         const tooltipRange = legend.tooltips[i];
@@ -213,6 +231,16 @@ class PaletteLegend extends React.Component {
         } else {
           label = units ? `${tooltipRange} ${units}` : tooltipRange;
         }
+        // If noclip is active, generate labels for indexes out of the min/max range
+        if (noclip) {
+          // If palette is squashed, labels outside range are now <= and >= instead
+          const squashEquals = squash ? '=' : '';
+          if (i < min || (squash && i === min)) {
+            label = `<${squashEquals} ${legend.tooltips[min]}`;
+          } else if (i > max || (squash && i === max)) {
+            label = `>${squashEquals} ${legend.tooltips[max]}`;
+          }
+        }
         return {
           label,
           len,
@@ -221,7 +249,7 @@ class PaletteLegend extends React.Component {
       }
     }
     return null;
-  }
+  };
 
   /**
    * Render scale-type paletteLegends
@@ -229,27 +257,24 @@ class PaletteLegend extends React.Component {
    * @param {Number} index
    * @param {Boolean} isMoreThanOneColorBar
    */
-  renderScale(legend, index, isMoreThanOneColorBar) {
-    const {
-      layer, width, getPalette, isEmbedModeActive, isMobile, globalTemperatureUnit,
-    } = this.props;
-    const {
-      isRunningData, colorHex, isHoveringLegend,
-    } = this.state;
+  const renderScale = (legend, index, isMoreThanOneColorBar) => {
     const palette = getPalette(layer.id, index);
     let percent;
     let textWidth;
     let xOffset;
     let legendObj;
     const toolTipLength = legend.tooltips.length;
-    // eslint-disable-next-line react/destructuring-assignment
-    if (isRunningData && colorHex && this.state.width > 0) {
-      legendObj = this.getLegendObject(legend, colorHex, 3); // {label,len,index}
+
+    if (isRunningDataState && colorHexState && widthState > 0) {
+      const isContinuousVectorLayer = layer.colormapType === 'continuous' && layer.type === 'vector';
+      const acceptableDifference = isContinuousVectorLayer ? 1 : 2;
+      // {label,len,index}
+      legendObj = getLegendObject(legend, colorHexState, acceptableDifference, palette);
       if (legendObj) {
-        percent = this.getPercent(legendObj.len, legendObj.index);
+        percent = getPercent(legendObj.len, legendObj.index);
         textWidth = util.getTextWidth(legendObj.label, '10px Open Sans');
-        // eslint-disable-next-line react/destructuring-assignment
-        xOffset = Math.floor(this.state.width * percent);
+
+        xOffset = Math.floor(widthState * percent);
         if (isEmbedModeActive) {
           // adjust xOffset per css scale transform
           xOffset = Math.floor(xOffset / 0.75);
@@ -258,11 +283,18 @@ class PaletteLegend extends React.Component {
     }
 
     const units = legend.units || '';
-    const { needsConversion, legendTempUnit } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
+    const {
+      needsConversion,
+      legendTempUnit,
+    } = checkTemperatureUnitConversion(units, globalTemperatureUnit);
     let min = legend.minLabel || legend.tooltips[0];
     let max = legend.maxLabel || legend.tooltips[toolTipLength];
-    min = palette.min ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])] : min;
-    max = palette.max ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])] : max;
+    min = palette.min
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.min])]
+      : min;
+    max = palette.max
+      ? legend.tooltips[legend.refs.indexOf(palette.entries.refs[palette.max])]
+      : max;
 
     if (needsConversion) {
       min = `${convertPaletteValue(min, legendTempUnit, globalTemperatureUnit)}`;
@@ -271,12 +303,16 @@ class PaletteLegend extends React.Component {
       min = units ? `${min} ${units}` : min;
       max = units ? `${max} ${units}` : max;
     }
-    const mobileColorbarStyle = isMobile ? {
-      width: '100%',
-      maxWidth: '100%',
-      marginRight: '0',
-      marginLeft: '0',
-    } : null;
+    const mobileColorbarStyle = isMobile
+      ? {
+        width: '100%',
+        maxWidth: '100%',
+        marginRight: '0',
+        marginLeft: '0',
+      }
+      : null;
+
+    const translateXOffset = xOffset > 0 ? xOffset + 0.5 : 0;
     return (
       <div
         className={
@@ -285,23 +321,24 @@ class PaletteLegend extends React.Component {
         id={`${util.encodeId(layer.id)}_${util.encodeId(legend.id)}_${index}`}
         key={`${layer.id}_${legend.id}_${index}`}
       >
-        {isMoreThanOneColorBar ? (
-          <div className="wv-palettes-title">{legend.title}</div>
-        )
+        {isMoreThanOneColorBar
+          ? (
+            <div className="wv-palettes-title">{legend.title}</div>
+          )
           : ''}
         <div className="colorbar-case">
           <canvas
             className="wv-palettes-colorbar"
             id={`${util.encodeId(layer.id)}-${util.encodeId(legend.id)}${index}colorbar`}
             style={mobileColorbarStyle}
-            width={width}
+            width={widthState}
             height={24}
-            ref={this[`canvas_${index}`]}
-            onMouseEnter={!isMobile ? this.onMouseEnter.bind(this) : null}
-            onMouseLeave={!isMobile ? this.hideValue.bind(this) : null}
+            ref={el => { palettesArrayRef.current[`canvas_${index}`] = el; }}
+            onMouseEnter={!isMobile ? onMouseEnter : null}
+            onMouseLeave={!isMobile ? hideValue : null}
             onMouseMove={
               !isMobile
-                ? this.onHoverColorbar.bind(this, this[`canvas_${index}`])
+                ? (event) => onHoverColorbar(palettesArrayRef.current[`canvas_${index}`], event)
                 : null
             }
           />
@@ -309,7 +346,7 @@ class PaletteLegend extends React.Component {
             className="wv-running-bar"
             style={{
               top: 7,
-              transform: `translateX(${isHoveringLegend ? 0 : xOffset > 0 ? xOffset + 0.5 : 0}px)`,
+              transform: `translateX(${isHoveringLegend ? 0 : translateXOffset}px)`,
               visibility: legendObj && !isHoveringLegend ? 'visible' : 'hidden',
             }}
           />
@@ -322,8 +359,8 @@ class PaletteLegend extends React.Component {
         <span
           className="wv-running-label"
           style={
-            isRunningData
-              ? getRunningLabelStyle(xOffset, textWidth, width)
+            isRunningDataState
+              ? getRunningLabelStyle(xOffset, textWidth, widthState)
               : { display: 'none' }
           }
         >
@@ -331,46 +368,43 @@ class PaletteLegend extends React.Component {
         </span>
       </div>
     );
-  }
+  };
 
   /**
    * Update label & Location on Mousemove
    * @param {String} color | Hex
    * @param {Object} e | Event Object
    */
-  onMove(color, e) {
+  const onMove = (color, e) => {
     e.preventDefault();
     e.stopPropagation();
-    this.setState({ colorHex: color });
-  }
+    setColorHexState(color);
+  };
 
   /**
    * Render a legend of class type
    * @param {Object} legend | Legend Object
    * @param {Number} index | Legend Index
    */
-  renderClasses(legend, legendIndex) {
-    const { isRunningData, colorHex, scrollContainerEl } = this.state;
-    const {
-      layer, parentLayer, compareState, getPalette, palettes,
-    } = this.props;
-    const activeKeyObj = isRunningData && colorHex && this.getLegendObject(legend, colorHex, 5);
-    const legendClass = activeKeyObj
-      ? 'wv-running wv-palettes-legend wv-palettes-classes'
-      : 'wv-palettes-legend wv-palettes-classes';
+  const renderClasses = (legend, legendIndex) => {
     const singleKey = legend.colors.length === 1;
     const legendTooltip = legend.tooltips && legend.tooltips.length ? legend.tooltips[0] : '';
     const trackLabel = layer.track && legendTooltip
       ? `${legendTooltip} - ${getOrbitTrackTitle(layer)}`
       : getOrbitTrackTitle(layer);
     const palette = getPalette(layer.id, legendIndex);
+    const activeKeyObj = isRunningDataState && colorHexState &&
+      getLegendObject(legend, colorHexState, 5, palette);
+    const legendClass = activeKeyObj
+      ? 'wv-running wv-palettes-legend wv-palettes-classes'
+      : 'wv-palettes-legend wv-palettes-classes';
     return (
       <VisibilitySensor
         key={`${legend.id}-${legendIndex}vis-sensor`}
         containment={scrollContainerEl}
         partialVisibility
       >
-        {({ isVisible }) => (
+        {() => (
           <div className={legendClass} key={`${legend.id}_${legendIndex}`}>
             {legend.colors.map((color, keyIndex) => {
               const isActiveKey = activeKeyObj?.index === keyIndex;
@@ -380,9 +414,8 @@ class PaletteLegend extends React.Component {
               const keyId = `${util.encodeId(legend.id)}-color${util.encodeId(parentLayerId)}-${util.encodeId(layer.id)}-${compareState}${keyIndex}`;
               const keyLabel = activeKeyObj ? activeKeyObj.label : '';
               const inActive = palette.disabled && palette.disabled.includes(keyIndex);
-              const tooltipText = singleKey
-                ? layer.track ? trackLabel : legendTooltip
-                : keyLabel;
+              const trackLabelOrLegendTooltip = layer.track ? trackLabel : legendTooltip;
+              const tooltipText = singleKey ? trackLabelOrLegendTooltip : keyLabel;
               const isInvisible = color === '00000000';
               palletteClass = isInvisible ? `${palletteClass} checkerbox-bg` : palletteClass;
               let legendColor = color;
@@ -392,14 +425,14 @@ class PaletteLegend extends React.Component {
               }
 
               return (
-                <React.Fragment key={keyId}>
+                <Fragment key={keyId}>
                   <span
                     id={keyId}
                     className={inActive ? `${palletteClass} disabled-classification` : palletteClass}
                     style={isInvisible ? null : { backgroundColor: util.hexToRGBA(legendColor) }}
-                    onMouseMove={this.onMove.bind(this, legendColor)}
-                    onMouseEnter={this.onMouseEnter.bind(this)}
-                    onMouseLeave={this.hideValue.bind(this)}
+                    onMouseMove={(event) => onMove(legendColor, event)}
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={hideValue}
                     dangerouslySetInnerHTML={{ __html: '&nbsp' }}
                   />
 
@@ -411,7 +444,7 @@ class PaletteLegend extends React.Component {
                     </div>
                   )}
 
-                  {isVisible && (
+                  {!isInvisible && (
                     <Tooltip
                       id="center-align-tooltip"
                       placement={singleKey ? 'right' : 'bottom'}
@@ -422,52 +455,46 @@ class PaletteLegend extends React.Component {
                       {tooltipText}
                     </Tooltip>
                   )}
-                </React.Fragment>
+                </Fragment>
               );
             })}
           </div>
         )}
       </VisibilitySensor>
     );
-  }
+  };
 
   /**
    * Loop through colormaps and render correct legend type
    */
-  renderPaletteLegends() {
-    const { paletteLegends } = this.props;
-    // eslint-disable-next-line array-callback-return
+  const renderPaletteLegends = () => {
     return paletteLegends.map((colorMap, index) => {
       if (colorMap.type === 'continuous' || colorMap.type === 'discrete') {
-        this[`canvas_${index}`] = React.createRef();
-        return this.renderScale(colorMap, index, paletteLegends.length > 1);
+        return renderScale(colorMap, index, paletteLegends.length > 1);
       } if (colorMap.type === 'classification') {
-        return this.renderClasses(colorMap, index);
+        return renderClasses(colorMap, index);
       }
+      return undefined;
     });
-  }
+  };
 
-  render() {
-    const {
-      paletteId, layer, isCustomPalette, showingVectorHand, showingChartingIcon,
-    } = this.props;
-    const { isHoveringLegend } = this.state;
-    const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : isCustomPalette ? ' is_custom' : '';
-    if (!layer.palette) return;
-    return (
+  const customPaletteClassName = isCustomPalette ? ' is_custom' : '';
+  const customClass = (showingVectorHand && layer.id.includes('AERONET')) || showingChartingIcon ? ' bottomspace-palette' : customPaletteClassName;
+
+  return !layer.palette
+    ? undefined
+    : (
       <div
         className={
           isHoveringLegend
             ? `active-legend wv-palettes-panel${customClass}`
             : `wv-palettes-panel${customClass}`
         }
-        datalayer={layer.id}
         id={`${paletteId}_panel`}
       >
-        {this.renderPaletteLegends()}
+        {renderPaletteLegends()}
       </div>
     );
-  }
 }
 PaletteLegend.defaultProps = {
   isRunningData: false,
@@ -484,12 +511,14 @@ PaletteLegend.propTypes = {
   isDistractionFreeModeActive: PropTypes.bool,
   isMobile: PropTypes.bool,
   isRunningData: PropTypes.bool,
-  layer: PropTypes.object,
+  layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
   compareState: PropTypes.string,
   paletteId: PropTypes.string,
-  paletteLegends: PropTypes.array,
-  palettes: PropTypes.object,
-  parentLayer: PropTypes.object,
+  paletteLegends: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
+  palettes: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  parentLayer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  showingVectorHand: PropTypes.bool,
+  showingChartingIcon: PropTypes.bool,
   width: PropTypes.number,
   toggleAllClassifications: PropTypes.func,
 };

@@ -4,9 +4,10 @@ const createSelectors = require('../../test-utils/global-variables/selectors')
 const { skipTour } = require('../../test-utils/global-variables/querystrings')
 const { closeModal } = require('../../test-utils/hooks/wvHooks')
 
+/** @type {import('@playwright/test').Page} */
 let page
+/** @type {Record<string, import('@playwright/test').Locator>} */
 let selectors
-
 const markerUrl = 'http://localhost:3000/?v=-176.3167432493038,-16.70650759975561,-16.988618249303812,108.30938074294103&s=-77.032,38.8904'
 const removeMarkerUrl = 'http://localhost:3000/?v=-39.980778604772254,-93.78047406661956,48.73858468999798,-50.229432449264905&s=10,-75'
 const invalidMarkerQuery = 'http://localhost:3000/?s=-51.5,invalidtext'

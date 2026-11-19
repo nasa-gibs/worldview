@@ -3,6 +3,10 @@ import update from 'immutability-helper';
 import moment from 'moment';
 import canvg from '../../util/canvg';
 import util from '../../util/util';
+import {
+  getNextImageryDelta,
+  getValidDateRanges,
+} from '../date/util';
 
 /**
  * Snap the value for the date/time to the closest previous playback step so that
@@ -38,15 +42,30 @@ export function snapToIntervalDelta(currDate, startDate, endDate, interval, delt
 
 /**
  * Calculate the required number of steps (frames) required for the animation
- * @param {Date} start        | The date of the first frame of animation
- * @param {Date} end          | The date of the last frame of animation
- * @param {String} interval   | The animation step value (Year/Month/Day/Custom) separating frames
- * @param {Number} delta      | Rate of change between states; defaults to 1 second
- * @param {Number} maxToCheck | The limit on the total number of frames to be used
+ * @param {Date} start            | The date of the first frame of animation
+ * @param {Date} end              | The date of the last frame of animation
+ * @param {String} interval       | The animation step value (Year/Month/Day/Custom)
+ *                                  separating frames
+ * @param {Number} stateDelta          | Rate of change between states; defaults to 1 second
+ * @param {Number} maxToCheck     | The limit on the total number of frames to be used
+ * @param {Boolean} autoSelected  | Is auto interval selected
+ * @param {Array} layers          | List of layers
  *
  * @return {Number} | The total number of frames required
  */
-export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
+export function getNumberOfSteps(
+  start,
+  end,
+  interval,
+  maxToCheck,
+  autoSelected,
+  layers,
+  stateDelta = 1,
+) {
+  if (autoSelected) {
+    return getValidDateRanges(layers, start, end).length;
+  }
+  let delta = stateDelta;
   let i = 1;
   let currentDate = start;
   let nextDate = util.dateAdd(start, interval, delta);
@@ -54,9 +73,13 @@ export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
     i = 1;
     return i;
   }
-  while (currentDate < end) {
+  while (currentDate < end && delta > 0) {
     i += 1;
     currentDate = util.dateAdd(currentDate, interval, delta);
+    if (autoSelected) {
+      delta = getNextImageryDelta(layers, nextDate, 1);
+      currentDate = nextDate;
+    }
     nextDate = util.dateAdd(currentDate, interval, delta);
     // checking to see if next date is after end date to prevent creation of extra frame
     if (nextDate > end) {
@@ -73,11 +96,12 @@ export function getNumberOfSteps(start, end, interval, delta = 1, maxToCheck) {
 export function getStampProps(
   stampWidthRatio,
   breakPoint,
-  stampWidth,
+  stampWidthInt,
   dimensions,
   width,
   height,
 ) {
+  let stampWidth = stampWidthInt;
   const dateStamp = {};
   let stampHeight;
   let stampHeightByImageWidth;
@@ -93,11 +117,12 @@ export function getStampProps(
   } else {
     stampWidth = width * 0.4;
     stampHeightByImageWidth = stampWidth / stampWidthRatio;
+    const largerStampHeightWidth = stampHeightByImageWidth > 60
+      ? 60
+      : stampHeightByImageWidth;
     stampHeight = stampHeightByImageWidth < 20
       ? 20
-      : stampHeightByImageWidth > 60
-        ? 60
-        : stampHeightByImageWidth;
+      : largerStampHeightWidth;
     dateStamp.fontSize = dimensions.h > stampHeight * 1.5 ? lodashRound(stampHeight * 0.65) : 0;
     dateStamp.y = height - (dateStamp.fontSize + height * 0.01) - 4;
     dateStamp.x = width * 0.01;
@@ -106,7 +131,7 @@ export function getStampProps(
   return { stampHeight, dateStamp };
 }
 
-export function svgToPng(svgURL, stampHeight) {
+export function svgToCanvas(svgURL, stampHeight) {
   const canvasEl = document.createElement('canvas');
   const canvgOptions = {
     log: false,
@@ -114,32 +139,33 @@ export function svgToPng(svgURL, stampHeight) {
     scaleHeight: stampHeight,
   };
   canvg(canvasEl, svgURL, canvgOptions);
-  const newImage = new Image();
-  newImage.src = canvasEl.toDataURL('image/png');
-  newImage.width = canvasEl.width;
-  newImage.height = canvasEl.height;
-
-  return newImage;
+  return canvasEl;
 }
 
 export function mapLocationToAnimationState(
   parameters,
-  stateFromLocation,
+  stateFromLocationObj,
   state,
   config,
 ) {
+  let stateFromLocation = stateFromLocationObj;
   const startDate = lodashGet(stateFromLocation, 'animation.startDate');
   const endDate = lodashGet(stateFromLocation, 'animation.endDate');
-  if (parameters.playanim && parameters.ab) {
-    stateFromLocation = update(stateFromLocation, {
-      animation: { isPlaying: { $set: true } },
-    });
-  } else if (
-    parameters.ab !== 'on'
-    && (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
+  const isActiveFromParams = parameters.ab === 'on' || parameters.ab === true;
+  const isPlayingFromParams = !!parameters.playanim && isActiveFromParams;
+
+  stateFromLocation = update(stateFromLocation, {
+    animation: {
+      isActive: { $set: isActiveFromParams },
+      isPlaying: { $set: isPlayingFromParams },
+    },
+  });
+
+  if (
+    !isActiveFromParams &&
+    (!parameters.ae || (!parameters.as && (!!endDate || !!startDate)))
   ) {
     // wipe anim start & end dates on tour change
-
     stateFromLocation = update(stateFromLocation, {
       animation: { endDate: { $set: undefined } },
     });

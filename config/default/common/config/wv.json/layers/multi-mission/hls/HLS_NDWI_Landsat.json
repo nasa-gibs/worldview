@@ -5,7 +5,7 @@
         "enableCMRDataFinder": true,
         "collectionConceptID": "C2021957657-LPCLOUD",
         "title": "Water Index (NDWI) *BETA*",
-        "subtitle": "Landsat 8 & 9 / OLI",
+        "subtitle": "HLS Landsat 8 & 9 / OLI",
         "description": "multi-mission/hls/HLS_NDWI_Landsat",
         "tags": "surface landsat oli l30 ndwi",
         "group": "overlays",
@@ -22,7 +22,6 @@
             "colormap_name": "gnbu",
             "bands_regex": "B[0-9][0-9]"
         },
-        "disableSnapshot": true,
         "minZoom": 7,
         "wrapX": false,
         "projections": {
@@ -31,7 +30,7 @@
             "matrixSet": "31.25m"
           }
         },
-        "startDate": "2022-01-01T00:00:00Z"
+        "startDate": "2013-04-11T00:00:00Z"
       }
     }
   }

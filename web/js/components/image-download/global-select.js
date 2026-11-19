@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { isEqual } from 'lodash';
 import Checkbox from '../util/checkbox';
@@ -7,13 +7,19 @@ const GLOBAL_LAT_LONG_EXTENT = [-180, -90, 180, 90];
 
 function GlobalSelectCheckbox(props) {
   const {
-    onLatLongChange, geoLatLong, proj, map,
+    onLatLongChange,
+    geoLatLong,
+    proj,
+    map,
+    handleChange = () => null,
   } = props;
 
   const boundingBoxArray = [...geoLatLong[0], ...geoLatLong[1]];
   const globalSelected = isEqual(boundingBoxArray, GLOBAL_LAT_LONG_EXTENT);
-  const [prevExtent, setPrevExtent] = useState(globalSelected ? [-40, -40, 40, 40] : boundingBoxArray);
-  const onCheck = () => {
+  const [prevExtent, setPrevExtent] = useState(globalSelected
+    ? [-40, -40, 40, 40]
+    : boundingBoxArray);
+  const onCheck = (event) => {
     const useExtent = globalSelected ? prevExtent : GLOBAL_LAT_LONG_EXTENT;
     setPrevExtent(boundingBoxArray);
     map.getView().setCenter([0, 0]);
@@ -21,9 +27,11 @@ function GlobalSelectCheckbox(props) {
     setTimeout(() => {
       onLatLongChange(useExtent);
     }, 50);
+    handleChange(event);
   };
 
-  const globalIsNotSelected = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => latLongValue !== boundingBoxArray[index]);
+  const globalIsNotSelected = GLOBAL_LAT_LONG_EXTENT.some((latLongValue, index) => latLongValue !==
+  boundingBoxArray[index]);
   if (proj !== 'geographic') return null;
 
   return (
@@ -41,10 +49,10 @@ function GlobalSelectCheckbox(props) {
 }
 GlobalSelectCheckbox.propTypes = {
   onLatLongChange: PropTypes.func,
-  geoLatLong: PropTypes.array,
+  geoLatLong: PropTypes.oneOfType([PropTypes.array, PropTypes.oneOf(['null'])]),
   proj: PropTypes.string,
-  map: PropTypes.object,
+  map: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  handleChange: PropTypes.func,
 };
 
 export default GlobalSelectCheckbox;
-

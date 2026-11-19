@@ -28,8 +28,12 @@
             {
                 "id": "Coastlines_15m"
             },
+               {
+                "id": "Admin_Boundaries",
+                "hidden": "true"
+            },
             {
-                "id": "Reference_Features_15m",
+                "id": "DoS_International_Boundaries",
                 "hidden": "true"
             },
             {
