@@ -3,7 +3,7 @@
     "FIREXAQ_DC8_Ozone": {
       "id": "FIREXAQ_DC8_Ozone",
       "title": "DC-8 Ozone and Flight Tracks (Per Flight)",
-      "subtitle": "FIREXAQ_DC8_Ozone",
+      "subtitle": "FIREX-AQ/DC-8",
       "description": "fireex-aq/FIREXAQ_DC8_Ozone",
       "group": "overlays",
       "type": "vector",

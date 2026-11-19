@@ -2,12 +2,12 @@
   "layers": {
     "FIREXAQ_ER2_Flight_Track": {
       "id": "FIREXAQ_ER2_Flight_Track",
-      "title": "DC-8 Ozone and Flight Tracks (Per Flight)",
-      "subtitle": "FIREXAQ_ER2_Flight_Track",
+      "title": "Flight Tracks (Per Flight)",
+      "subtitle": "FIREX-AQ/ER-2",
       "description": "fireex-aq/FIREXAQ_ER2_Flight_Track",
       "group": "overlays",
       "type": "vector",
-      "tags": "vector o3",
+      "tags": "vector",
       "ongoing": false,
       "dataAvailability": "dd",
       "disableCharting": true,
