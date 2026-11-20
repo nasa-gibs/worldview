@@ -7,53 +7,87 @@ import { COMPARE_MOVE_END } from '../../util/constants';
 
 const { events } = util;
 
-let value = 50;
+export default function Opacity(olMap, store, eventListenerStringObj, valueOverride) {
+  const self = {};
+  self.map = olMap;
+  self.sliderCase = document.createElement('div');
+  self.root = createRoot(self.sliderCase);
+  self.mapCase = null;
+  self.isDestroyed = false;
 
-export default class Opacity {
-  constructor(olMap, store, eventListenerStringObj, valueOverride) {
-    this.map = olMap;
-    this.sliderCase = document.createElement('div');
-    this.root = createRoot(this.sliderCase);
-    this.mapCase = null;
-    this.isDestroyed = false;
-    value = Number(valueOverride) || value;
-    this.create(store);
+  let value = Number(valueOverride) || 50;
+  let firstLayer;
+  let secondLayer;
+
+  /**
+   * Set opacity of second layer based on opacity slider
+   * @param {Number} newValue
+   */
+  function oninput(newValue) {
+    value = newValue;
+    const convertedValue = value / 100;
+    firstLayer.setOpacity(1 - convertedValue);
+    secondLayer.setOpacity(convertedValue);
+    events.trigger(COMPARE_MOVE_END, value);
   }
 
-  create(store) {
-    const state = store.getState();
+  /**
+   * Render Opacity slider react component
+   * @param {Object} map | OL Map Object
+   * @param {Object} secondLayer | Second layer group on Map
+   */
+  function renderSlider(layerArray) {
+    if (self.isDestroyed || !self.root) return;
+    [firstLayer, secondLayer] = layerArray;
+    if (!self.mapCase) {
+      self.mapCase = document.getElementById('wv-map');
+    }
+    const Props = {
+      onSlide: oninput,
+      value,
+      dateA: self.dateA,
+      dateB: self.dateB,
+    };
+    if (self.mapCase && self.sliderCase.parentNode !== self.mapCase) {
+      self.mapCase.appendChild(self.sliderCase);
+    }
+    self.root.render(React.createElement(OpacitySlider, Props));
+  }
+
+  function create(storeArg) {
+    const state = storeArg.getState();
     const { dateA, dateB } = getCompareDates(state);
-    this.dateA = dateA;
-    this.dateB = dateB;
-    this.renderSlider(this.map.getLayers().getArray());
-    this.oninput(value);
+    self.dateA = dateA;
+    self.dateB = dateB;
+    renderSlider(self.map.getLayers().getArray());
+    oninput(value);
   }
 
   /**
    * Refresh secondLayer layer group (after date change for example)
    */
-  update(store) {
-    const state = store.getState();
+  function update(storeArg) {
+    const state = storeArg.getState();
     const { dateA, dateB } = getCompareDates(state);
-    this.dateA = dateA;
-    this.dateB = dateB;
-    this.renderSlider(this.map.getLayers().getArray());
-    this.oninput(value);
+    self.dateA = dateA;
+    self.dateB = dateB;
+    renderSlider(self.map.getLayers().getArray());
+    oninput(value);
   }
 
   /**
    * Remove all nodes
    */
-  destroy() {
-    if (this.isDestroyed) return;
-    this.isDestroyed = true;
+  function destroy() {
+    if (self.isDestroyed) return;
+    self.isDestroyed = true;
 
-    const root = this.root;
-    const sliderCase = this.sliderCase;
-    const mapCase = this.mapCase;
+    const root = self.root;
+    const sliderCase = self.sliderCase;
+    const mapCase = self.mapCase;
 
     // Prevent further renders immediately.
-    this.root = null;
+    self.root = null;
 
     // Avoid unmounting during an in-progress React render elsewhere.
     setTimeout(() => {
@@ -67,38 +101,13 @@ export default class Opacity {
     }, 0);
   }
 
-  /**
-   * Render Opacity slider react component
-   * @param {Object} map | OL Map Object
-   * @param {Object} secondLayer | Second layer group on Map
-   */
-  renderSlider(layerArray) {
-    if (this.isDestroyed || !this.root) return;
-    [this.firstLayer, this.secondLayer] = layerArray;
-    if (!this.mapCase) {
-      this.mapCase = document.getElementById('wv-map');
-    }
-    const Props = {
-      onSlide: this.oninput.bind(this),
-      value,
-      dateA: this.dateA,
-      dateB: this.dateB,
-    };
-    if (this.mapCase && this.sliderCase.parentNode !== this.mapCase) {
-      this.mapCase.appendChild(this.sliderCase);
-    }
-    this.root.render(React.createElement(OpacitySlider, Props));
-  }
+  self.create = create;
+  self.update = update;
+  self.destroy = destroy;
+  self.renderSlider = renderSlider;
+  self.oninput = oninput;
 
-  /**
-   * Set opacity of second layer based on opacity slider
-   * @param {Number} newValue
-   */
-  oninput(newValue) {
-    value = newValue;
-    const convertedValue = value / 100;
-    this.firstLayer.setOpacity(1 - convertedValue);
-    this.secondLayer.setOpacity(convertedValue);
-    events.trigger(COMPARE_MOVE_END, value);
-  }
+  self.create(store);
+
+  return self;
 }
