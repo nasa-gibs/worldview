@@ -6,8 +6,8 @@
       <ColorMapEntry rgb="128,128,128" transparent="false" sourceValue="0" ref="0"/>
     </Entries>
     <Legend type="classification">
-          <LegendEntry rgb="0,255,0" tooltip="F1" id="2" label="Flight 1" showLabel="true" />
-          <LegendEntry rgb="255,0,0" tooltip="F2" id="3" label="Flight 2" showLabel="true" />
+          <LegendEntry rgb="0,255,0" tooltip="Flight 1" id="2" label="Flight 1" showLabel="true" />
+          <LegendEntry rgb="255,0,0" tooltip="Flight 2" id="3" label="Flight 2" showLabel="true" />
     </Legend>
   </ColorMap>
   <ColorMap title="Ozone" units="ppbv">
