@@ -921,7 +921,6 @@ const mapDispatchToProps = (dispatch) => ({
         timeout: 150,
         bodyComponentProps: {
           layer,
-          zot,
         },
       }),
     );
