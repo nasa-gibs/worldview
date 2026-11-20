@@ -258,6 +258,39 @@ describe('destroy', () => {
     expect(l1.un).toHaveBeenCalledWith('prerender', expect.any(Function));
     expect(l1.un).toHaveBeenCalledWith('postrender', expect.any(Function));
   });
+
+  test('removes mousemove, mouseleave, and mouseenter using the exact references that were added', () => {
+    const l0 = makeLayer(null);
+    const l1 = makeLayer(null);
+    const map = makeMap(l0, l1);
+    const store = makeStore({ compare: { isCompareA: true } });
+    getCompareDates.mockReturnValue({ dateA: '2020-01-01', dateB: '2021-01-01' });
+    const mapCase = document.getElementById('wv-map');
+    const addSpy = jest.spyOn(mapCase, 'addEventListener');
+    const removeSpy = jest.spyOn(mapCase, 'removeEventListener');
+
+    const instance = new Spy(map, store);
+    instance.destroy();
+
+    ['mousemove', 'mouseleave', 'mouseenter'].forEach((type) => {
+      const addedHandler = addSpy.mock.calls.find((call) => call[0] === type)[1];
+      expect(removeSpy).toHaveBeenCalledWith(type, addedHandler);
+    });
+  });
+
+  test('removes pointerdrag using the exact reference that was added', () => {
+    const l0 = makeLayer(null);
+    const l1 = makeLayer(null);
+    const map = makeMap(l0, l1);
+    const store = makeStore({ compare: { isCompareA: true } });
+    getCompareDates.mockReturnValue({ dateA: '2020-01-01', dateB: '2021-01-01' });
+    const instance = new Spy(map, store);
+
+    const addedHandler = map.on.mock.calls.find((call) => call[0] === 'pointerdrag')[1];
+    instance.destroy();
+
+    expect(map.un).toHaveBeenCalledWith('pointerdrag', addedHandler);
+  });
 });
 
 describe('updateSpy', () => {
