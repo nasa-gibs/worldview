@@ -17,7 +17,7 @@ const dateOptions = {
 const parseGranuleTimestamp = (granule) => new Date(granule.time_start);
 const maxExtent = [-180, -90, 180, 90];
 
-export default function ImagerySearch({ layer }) {
+export default function ImagerySearch({ layer, underZoomValue }) {
   const listRef = useRef(null);
   const startRef = useRef(null);
   const endRef = useRef(null);
@@ -131,6 +131,7 @@ export default function ImagerySearch({ layer }) {
   };
 
   useEffect(() => {
+    if (underZoomValue > 0) return;
     const asyncFunc = async () => {
       if (listRef.current.scrollHeight <= listRef.current.clientHeight) {
         await Promise.allSettled([loadOlderDates(layer, page), loadNewerDates(layer, page)]);
@@ -140,7 +141,7 @@ export default function ImagerySearch({ layer }) {
       }
     };
     asyncFunc();
-  }, [page]);
+  }, [page, underZoomValue]);
 
   const renderDates = () => {
     const granuleDates = [
@@ -174,15 +175,24 @@ export default function ImagerySearch({ layer }) {
   return (
     <div className="imagery-search-container">
       <p className="lazyload-title">Available Imagery Dates</p>
-      <ul ref={listRef} className="lazyload-list" onScroll={handleScroll}>
-        <li ref={startRef} className="imagery-search-spinner">
-          {granulesStartStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
-        </li>
-        {renderDates()}
-        <li ref={endRef} className="imagery-search-spinner">
-          {granulesEndStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
-        </li>
-      </ul>
+      {underZoomValue > 0
+        ? (
+          <ul ref={listRef} className="lazyload-list">
+            Current zoom level is not supported for this layer;
+            zoom in to see imagery and available dates.
+          </ul>
+        )
+        : (
+          <ul ref={listRef} className="lazyload-list" onScroll={handleScroll}>
+            <li ref={startRef} className="imagery-search-spinner">
+              {granulesStartStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
+            </li>
+            {renderDates()}
+            <li ref={endRef} className="imagery-search-spinner">
+              {granulesEndStatus === 'loading' && <Spinner size="sm">Loading...</Spinner>}
+            </li>
+          </ul>
+        )}
       <hr />
     </div>
   );
@@ -190,4 +200,5 @@ export default function ImagerySearch({ layer }) {
 
 ImagerySearch.propTypes = {
   layer: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf(['null'])]),
+  underZoomValue: PropTypes.number,
 };

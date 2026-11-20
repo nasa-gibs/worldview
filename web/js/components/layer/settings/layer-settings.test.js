@@ -242,14 +242,6 @@ describe('LayerSettings', () => {
       expect(screen.queryByTestId('imagery-search')).not.toBeInTheDocument();
     });
 
-    it('does not render ImagerySearch when zot.underZoomValue > 0', () => {
-      renderSettings({
-        ...standardLayer,
-        enableCMRDataFinder: true,
-      }, { zot: { underZoomValue: 1 } });
-      expect(screen.queryByTestId('imagery-search')).not.toBeInTheDocument();
-    });
-
     it('renders ImagerySearch when zot.underZoomValue is 0', () => {
       renderSettings({
         ...standardLayer,
