@@ -123,37 +123,37 @@ describe('getLeadingExtent', () => {
     expect(result).toEqual([expectedMinLon, minLat, expectedMaxLon, maxLat]);
   });
 
-  test('hour 2 forces curHour to 23', () => {
-    const result = getLeadingExtent(makeUTCDate(2));
+  test('hour 6 forces curHour to 23', () => {
+    const result = getLeadingExtent(makeUTCDate(6));
     const expectedMinLon = 20.6015625 + 23 * (-200.53125 / 23.0);
     const expectedMaxLon = expectedMinLon + 159.328125;
     expect(result).toEqual([expectedMinLon, minLat, expectedMaxLon, maxLat]);
   });
 
-  test('hour 3 forces curHour to 0', () => {
-    const result = getLeadingExtent(makeUTCDate(3));
+  test('hour 7 forces curHour to 0', () => {
+    const result = getLeadingExtent(makeUTCDate(7));
     const expectedMinLon = 20.6015625 + 0 * (-200.53125 / 23.0);
     const expectedMaxLon = expectedMinLon + 159.328125;
     expect(result).toEqual([expectedMinLon, minLat, expectedMaxLon, maxLat]);
   });
 
-  test('hour 8 forces curHour to 0', () => {
-    const result = getLeadingExtent(makeUTCDate(8));
+  test('hour 11 forces curHour to 0', () => {
+    const result = getLeadingExtent(makeUTCDate(11));
     const expectedMinLon = 20.6015625 + 0 * (-200.53125 / 23.0);
     const expectedMaxLon = expectedMinLon + 159.328125;
     expect(result).toEqual([expectedMinLon, minLat, expectedMaxLon, maxLat]);
   });
 
-  test('hour 9 uses actual hour', () => {
-    const result = getLeadingExtent(makeUTCDate(9));
-    const expectedMinLon = 20.6015625 + 9 * (-200.53125 / 23.0);
+  test('hour 12 uses actual hour', () => {
+    const result = getLeadingExtent(makeUTCDate(12));
+    const expectedMinLon = 20.6015625 + (12 - 7) * (-200.53125 / 23.0);
     const expectedMaxLon = expectedMinLon + 159.328125;
     expect(result).toEqual([expectedMinLon, minLat, expectedMaxLon, maxLat]);
   });
 
   test('hour 23 uses actual hour', () => {
     const result = getLeadingExtent(makeUTCDate(23));
-    const expectedMinLon = 20.6015625 + 23 * (-200.53125 / 23.0);
+    const expectedMinLon = 20.6015625 + (23 - 7) * (-200.53125 / 23.0);
     const expectedMaxLon = expectedMinLon + 159.328125;
     expect(result).toEqual([expectedMinLon, minLat, expectedMaxLon, maxLat]);
   });
