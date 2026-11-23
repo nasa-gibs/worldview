@@ -7,7 +7,7 @@ import { COMPARE_MOVE_END } from '../../util/constants';
 
 const { events } = util;
 
-export default function Opacity(olMap, store, eventListenerStringObj, valueOverride) {
+export default function Opacity(olMap, store, _eventListenerStringObj, valueOverride) {
   const self = {};
   self.map = olMap;
   self.sliderCase = document.createElement('div');
