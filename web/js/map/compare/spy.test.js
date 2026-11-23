@@ -258,6 +258,40 @@ describe('destroy', () => {
     expect(l1.un).toHaveBeenCalledWith('prerender', expect.any(Function));
     expect(l1.un).toHaveBeenCalledWith('postrender', expect.any(Function));
   });
+
+  // Regression: addSpy() previously registered mapCase/map listeners via inline
+  // `.bind(this)`, so destroy() could never remove them (bind returns a new fn
+  // each call) and mouseleave/mouseenter were not removed at all. Every A/B swap
+  // recreates the Spy, permanently leaking 4 listeners. destroy() must remove the
+  // exact same handler references that addSpy() registered.
+  test('removes every listener it registered using the identical handler references', () => {
+    const mapCase = document.getElementById('wv-map');
+    const addSpy = jest.spyOn(mapCase, 'addEventListener');
+    const removeSpy = jest.spyOn(mapCase, 'removeEventListener');
+
+    const l0 = makeLayer(null);
+    const l1 = makeLayer(null);
+    const map = makeMap(l0, l1);
+    const store = makeStore({ compare: { isCompareA: true } });
+    getCompareDates.mockReturnValue({ dateA: '2020-01-01', dateB: '2021-01-01' });
+    const instance = new Spy(map, store);
+
+    // Capture the exact handler reference registered for each DOM event type...
+    const addedByType = {};
+    addSpy.mock.calls.forEach(([type, handler]) => { addedByType[type] = handler; });
+    // ...and the handler registered for pointerdrag on the OL map.
+    const pointerdragCall = map.on.mock.calls.find(([evt]) => evt === 'pointerdrag');
+    const pointerdragHandler = pointerdragCall && pointerdragCall[1];
+
+    instance.destroy();
+
+    ['mousemove', 'mouseleave', 'mouseenter'].forEach((type) => {
+      expect(addedByType[type]).toBeInstanceOf(Function);
+      expect(removeSpy).toHaveBeenCalledWith(type, addedByType[type]);
+    });
+    expect(pointerdragHandler).toBeInstanceOf(Function);
+    expect(map.un).toHaveBeenCalledWith('pointerdrag', pointerdragHandler);
+  });
 });
 
 describe('updateSpy', () => {
