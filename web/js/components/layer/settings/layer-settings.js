@@ -33,6 +33,7 @@ import {
   getGranulePlatform,
   getMaxDayRange,
   getLayerDayCount,
+  getZotsForActiveLayers,
 } from '../../../modules/layers/selectors';
 import {
   setThresholdRangeSquashAndNoClip,
@@ -305,7 +306,8 @@ function LayerSettings(props) {
   const hasAssociatedLayers = layer.associatedLayers && layer.associatedLayers.length;
   const hasTracks = layer.orbitTracks && layer.orbitTracks.length;
   const titilerLayer = layer.id === 'HLS_Customizable_Sentinel' || layer.id === 'HLS_Customizable_Landsat';
-  const granuleMetadata = layer?.enableCMRDataFinder && !(zot?.underZoomValue > 0);
+  const granuleMetadata = layer?.enableCMRDataFinder;
+  const underZoomValue = zot ? zot.underZoomValue : 0;
   const layerGroup = layer.layergroup;
 
   if (layer.type !== 'vector') {
@@ -338,7 +340,7 @@ function LayerSettings(props) {
       {renderGranuleSettings()}
       {renderCustomizations}
       {titilerLayer && <BandSelection layer={layer} />}
-      {granuleMetadata && <ImagerySearch layer={layer} /> }
+      {granuleMetadata && <ImagerySearch layer={layer} underZoomValue={underZoomValue} /> }
       {(hasAssociatedLayers || hasTracks) && <AssociatedLayers layer={layer} />}
     </>
   );
@@ -346,7 +348,7 @@ function LayerSettings(props) {
 
 function mapStateToProps(state, ownProps) {
   const {
-    config, palettes, compare, screenSize, settings,
+    config, palettes, compare, screenSize, settings, map,
   } = state;
   const { custom } = palettes;
   const groupName = compare.activeString;
@@ -362,6 +364,10 @@ function mapStateToProps(state, ownProps) {
 
   const maxDayRange = getMaxDayRange(ownProps.layer);
   const dayCount = maxDayRange ? getLayerDayCount(state, ownProps.layer.id) : undefined;
+
+  const zots = lodashGet(map, 'ui.selected')
+    ? getZotsForActiveLayers(state)
+    : {};
 
   return {
     paletteOrder: config.paletteOrder,
@@ -387,6 +393,7 @@ function mapStateToProps(state, ownProps) {
     getPalette: (layerId, index) => getPaletteSelector(layerId, index, groupName, state),
     getVectorStyle: (layerId, index) => getVectorStyle(layerId, index, groupName, state),
     vectorStyles: config.vectorStyles,
+    zot: zots[ownProps.layer.id],
   };
 }
 const mapDispatchToProps = (dispatch) => ({

@@ -24,8 +24,12 @@ export default class OutsideAlerter extends Component {
   }
 
   componentWillUnmount() {
-    document.addEventListener('touchstart', this.handleClickOutside);
+    document.removeEventListener('touchstart', this.handleClickOutside);
     document.removeEventListener('mousedown', this.handleClickOutside);
+    const mapElement = document.getElementById('wv-map');
+    if (mapElement) {
+      mapElement.removeEventListener('mousedown', this.handleClickOutside);
+    }
   }
 
   /**
