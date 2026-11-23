@@ -83,8 +83,8 @@ describe('Opacity Compare Class', () => {
     // eslint-disable-next-line no-unused-vars
     const opacityInstance = new Opacity(mockMap, mockStore, {});
 
-    expect(mockFirstLayer.setOpacity).toHaveBeenCalledWith(0.25);
-    expect(mockSecondLayer.setOpacity).toHaveBeenCalledWith(0.75);
+    expect(mockFirstLayer.setOpacity).toHaveBeenCalledWith(0.5);
+    expect(mockSecondLayer.setOpacity).toHaveBeenCalledWith(0.5);
   });
 
   it('updates dates and re-renders on update()', () => {

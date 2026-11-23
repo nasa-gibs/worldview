@@ -599,4 +599,18 @@ describe('window resize handler', () => {
     window.dispatchEvent(new Event('resize'));
     expect(document.querySelector('.ab-swipe-line')).toBeNull();
   });
+
+  it('should remove the resize listener it registered when destroyed', () => {
+    document.body.innerHTML = '';
+    const map = makeMockMap();
+    const store = makeMockStore();
+    const swipe = new Swipe(map, store, defaultListenerObj, 50);
+
+    expect(registeredResizeListeners.length).toBe(1);
+    const addedHandler = registeredResizeListeners[0];
+
+    swipe.destroy();
+
+    expect(registeredResizeListeners).not.toContain(addedHandler);
+  });
 });
