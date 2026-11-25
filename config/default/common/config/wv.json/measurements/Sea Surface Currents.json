@@ -12,7 +12,8 @@
                     "image": "",
                     "settings": [
                       "OSCAR_Sea_Surface_Currents_Zonal",
-                      "OSCAR_Sea_Surface_Currents_Meridional"
+                      "OSCAR_Sea_Surface_Currents_Meridional",
+                      "OSCAR_Sea_Surface_Currents_Flow"
                     ]
                 },
                 "TOPEX/POSEIDON, JASON-1, OSTM/Jason-2": {
