@@ -1,0 +1,47 @@
+{
+  "layers": {
+    "FIREXAQ_ER2_Flight_Track": {
+      "id": "FIREXAQ_ER2_Flight_Track",
+      "title": "Flight Tracks (Per Flight)",
+      "subtitle": "FIREX-AQ/ER-2",
+      "description": "fireex-aq/FIREXAQ_ER2_Flight_Track",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableGIF": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "FIREXAQ_ER2_Flight_Track",
+        "geographic": {
+          "id": "FIREXAQ_ER2_Flight_Track"
+        }
+      },
+      "palette": {
+        "id": "FIREXAQ_ER2_Flight_Track",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "Altitude",
+        "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "FIREXAQ_ER2_Flight_Track",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
+      }
+    }
+  }
+}

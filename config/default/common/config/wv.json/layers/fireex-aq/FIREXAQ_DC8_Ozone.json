@@ -1,0 +1,47 @@
+{
+  "layers": {
+    "FIREXAQ_DC8_Ozone": {
+      "id": "FIREXAQ_DC8_Ozone",
+      "title": "DC-8 Ozone and Flight Tracks (Per Flight)",
+      "subtitle": "FIREX-AQ/DC-8",
+      "description": "fireex-aq/FIREXAQ_DC8_Ozone",
+      "group": "overlays",
+      "type": "vector",
+      "tags": "vector o3",
+      "ongoing": false,
+      "dataAvailability": "dd",
+      "disableCharting": true,
+      "disableGIF": true,
+      "disableCustomPalettes": true,
+      "layergroup": "Ozone",
+      "vectorStyle": {
+        "id": "FIREXAQ_DC8_Ozone",
+        "geographic": {
+          "id": "FIREXAQ_DC8_Ozone"
+        }
+      },
+      "palette": {
+        "id": "FIREXAQ_DC8_Ozone",
+        "immutable": true
+      },
+      "wrapX": false,
+      "wrapadjacentdays": false,
+      "renderOrder": {
+        "property": "Altitude",
+        "order": "descending"
+      },
+      "breakPointLayer": {
+        "id": "FIREXAQ_DC8_Ozone",
+        "type": "wms",
+        "format": "image/png",
+        "breakPointType": "max",
+        "projections": {
+          "geographic": {
+            "source": "GIBS:wms",
+            "resolutionBreakPoint": 0.017578125
+          }
+        }
+      }
+    }
+  }
+}

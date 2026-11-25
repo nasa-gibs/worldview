@@ -1,0 +1,13 @@
+The Fire Influence on Regional to Global Environments and Air Quality (FIREX-AQ) mission’s ER-2 aircraft Flight Tracks provide the location of NASA’s Earth Resources-2 (ER-2) aircraft to support the FIREX-AQ mission. From July-September 2019, the ER-2 completed 11 flights to provide critical fire information including temperature, plume heights, and vegetation albedo. The ER-2 was equipped with the NASA Airborne Science Data and Telemetry (NASDAT) System for meteorological and navigational measurements.
+
+The FIREX-AQ campaign was a NOAA/NASA interagency study of North American fires to gain an understanding on the integrated impact of the fire emissions on tropospheric chemistry and composition and to assess the capability of satellites for detecting fires and estimating emissions.
+
+The goals of FIREX-AQ were to measure trace gas and aerosol emissions from wildfires and prescribed fires in great detail; relate them to fuel and fire conditions at the point of emission; characterize the conditions relating to plume rise; follow plumes downwind to understand chemical transformation and air quality impacts; and assess efficacy of satellite detections for estimating the emissions from sampled fires.
+
+Completed during the summer of 2019, FIREX-AQ used a combination of instrumented airplanes, satellites, and ground-based instrumentation. NASA’s ER-2 completed 11 flights partially in support of the FIREX-AQ effort. The ER-2 payload, made up of eight satellite-analog instruments, provided critical fire information, including fire temperature, fire plume heights, and vegetation/soil albedo.
+
+NOAA provided the NOAA-CHEM Twin Otter and the NOAA-MET Twin Otter aircraft to measure chemical processing in the lofted plumes of Western wildfires. The NOAA-CHEM Twin Otter focused on nighttime plume chemistry, from which data is archived at the NASA Atmospheric Science Data Center (ASDC). The NOAA-MET Twin Otter collected measurements of air movements at fire boundaries, with the goal of understanding the local weather impacts of fires and the movement patterns of fires.
+
+Additionally, a ground-based station in McCall, Idaho, and several mobile laboratories provided in situ measurements of aerosol microphysical and optical properties, aerosol chemical compositions, and trace gas species.
+
+References: [FIREX-AQ Overview Publication](https://doi.org/10.1029/2022JD037758), [FIREX-AQ on Earthdata](https://doi.org/10.5067/SUBORBITAL/FIREXAQ2019/DATA001)

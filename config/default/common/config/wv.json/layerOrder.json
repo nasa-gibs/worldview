@@ -82,6 +82,8 @@
 		"DISCOVER-AQ_CA_P3B_Ozone",
 		"DISCOVER-AQ_TX_P3B_Ozone",
 		"DISCOVER-AQ_CO_P3B_Ozone",
+		"FIREXAQ_DC8_Ozone",
+		"FIREXAQ_ER2_Flight_Track",
 		"NOAA_2025_ERI_WMTS",
 		"HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
 		"HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
