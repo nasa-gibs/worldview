@@ -123,8 +123,8 @@ describe('layerPixelData', () => {
       expect(layerPixelData.VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean.threshold).toBe(0.90);
     });
 
-    it('VIIRS_NOAA21_CorrectedReflectance_TrueColor has threshold 0.65', () => {
-      expect(layerPixelData.VIIRS_NOAA21_CorrectedReflectance_TrueColor.threshold).toBe(0.65);
+    it('VIIRS_NOAA21_CorrectedReflectance_TrueColor has threshold 0.95', () => {
+      expect(layerPixelData.VIIRS_NOAA21_CorrectedReflectance_TrueColor.threshold).toBe(0.95);
     });
 
     it('VIIRS_SNPP_NDVI_8Day has threshold 0.90', () => {
@@ -313,8 +313,8 @@ describe('travelModeData', () => {
       expect(travelModeData).not.toBeNull();
     });
 
-    it('has 20 entries', () => {
-      expect(Object.keys(travelModeData)).toHaveLength(20);
+    it('has 21 entries', () => {
+      expect(Object.keys(travelModeData)).toHaveLength(21);
     });
 
     it('keys are numeric (1 through 20)', () => {

@@ -53,7 +53,7 @@ export const layerPixelData = {
   TEMPO_L3_Ozone_Column_Amount: { threshold: 0.99 },
   VIIRS_NOAA20_DayNightBand_At_Sensor_Radiance: { threshold: 0.45 },
   VIIRS_NOAA20_AOD_Dark_Target_Land_Ocean: { threshold: 0.90 },
-  VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.65 },
+  VIIRS_NOAA21_CorrectedReflectance_TrueColor: { threshold: 0.95 },
   VIIRS_NOAA21_AOD_Dark_Target_Land_Ocean: { threshold: 0.65 },
   VIIRS_NOAA21_AOD_Deep_Blue_Land_Ocean: { threshold: 0.65 },
   VIIRS_NOAA21_NDVI_8Day: { threshold: 0.90 },
@@ -151,5 +151,8 @@ export const travelModeData = {
   },
   20: {
     title: 'Vegetation Index (NDVI) by Suomi NPP satellite',
+  },
+  21: {
+    title: 'True Color Imagery from NOAA-21 satellite',
   },
 };
