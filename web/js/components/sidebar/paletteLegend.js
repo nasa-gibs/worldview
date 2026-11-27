@@ -113,6 +113,10 @@ function PaletteLegend(props) {
     }
   }, [layer, paletteLegends, widthState, isDistractionFreeModeActive]);
 
+  useEffect(() => {
+    setWidthState(width);
+  }, [width]);
+
   /**
    * Get percent of selected point position in parent
    */
